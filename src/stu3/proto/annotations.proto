@@ -1,0 +1,87 @@
+//    Copyright 2018 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+// This file defines extensions to FieldOptions and MessageOptions to enable
+// annotation proto fields and messages with their corresponding FHIR types.
+
+syntax = "proto3";
+
+package google.fhir.stu3.proto;
+option java_outer_classname = "Annotations";
+option java_package = "com.google.fhir.stu3.proto";
+
+import "google/protobuf/descriptor.proto";
+
+enum CodeType {
+  CODE_REQUIRED_BUT_TYPE_IS_UNKNOWN = 0;
+  CODE_ACTION_TYPE = 1;  // Coding
+  CODE_ADVERSE_EVENT_OUTCOME = 2;  // CodeableConcept
+  CODE_CLAIM_TYPE = 3;             // CodeableConcept
+  CODE_DESIGNATION_USE = 4;        // Coding
+  CODE_MIME_TYPE = 5;              // Not a FHIR CodeSystem
+  CODE_NOTE_TYPE = 6;              // CodeableConcept
+  CODE_REMITTANCE_OUTCOME = 7;     // CodeableConcept
+  CODE_REQUEST_INTENT = 8;         // CodeableConcept
+  CODE_RESOURCE_TYPE_LINK = 9;     // CodeableConcept
+  CODE_SUPPLYDELIVERY_TYPE = 10;   // CodeableConcept
+  CODE_V3_ACTINCIDENTCODE = 11;    // CodeableConcept
+  CODE_V3_ACTINVOICEGROUPCODE = 12;  // CodeableConcept
+}
+
+// TODO(sundberg): Unify with StructureDefinitionKindCode
+enum StructureDefinitionKindValue {
+  KIND_UNKNOWN = 0;
+  KIND_PRIMITIVE_TYPE = 1;
+  KIND_COMPLEX_TYPE = 2;
+  KIND_RESOURCE = 3;
+  KIND_LOGICAL = 4;
+}
+
+// To annotate cardinality constraints.
+enum Requirement {
+  NOT_REQUIRED = 0;
+  REQUIRED_BY_FHIR = 1;
+}
+
+extend proto2.MessageOptions {
+  // If this message is the proto version of a fhir extension, this is the
+  // extension identifier.
+  optional string fhir_extension_url = 177048773;
+
+  // If this message is a Code constrained to a specific valueset, this is the
+  // valueset identifier.
+  optional string fhir_valueset_url = 180887441;
+
+  // What type of fhir structure does this message represent?
+  optional StructureDefinitionKindValue structure_definition_kind = 182131192;
+}
+
+extend proto2.EnumValueOptions {
+  // If we had to rename this code to make a valid enum identifier, what was
+  // the original name?
+  optional string fhir_original_code = 181000551;
+}
+
+extend proto2.FieldOptions {
+  // Is this field required?
+  optional Requirement validation_requirement = 162282766;
+
+  // When the field is of type Code, what kind of Code is it?
+  optional CodeType fhir_code_type = 162491637;
+}
+
+extend proto2.OneofOptions {
+  // Is this field required?
+  optional Requirement oneof_validation_requirement = 181563459;
+}
