@@ -1,0 +1,1045 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>url</b>: <a>http://hl7.org/fhir/StructureDefinition/example</a></p><p><b>identifier</b>: 1.2.36.90146595217.4.2</p><p><b>version</b>: 2</p><p><b>name</b>: LipidProfileExample</p><p><b>title</b>: Example Lipid Profile</p><p><b>status</b>: draft</p><p><b>experimental</b>: true</p><p><b>date</b>: 12/05/2012</p><p><b>publisher</b>: Health Intersections Pty Ltd</p><p><b>contact</b>: </p><p><b>description</b>: Describes how the lab report is used for a standard Lipid Profile - Cholesterol, Triglyceride and Cholesterol fractions. Uses LOINC codes</p><p><b>useContext</b>: </p><p><b>jurisdiction</b>: Austria <span>(Details : {urn:iso:std:iso:3166 code \'AU\' = \'Austria)</span></p><p><b>purpose</b>: Provide an example to demonstrate how to use StructureDefinition</p><p><b>copyright</b>: Creative Commons 0, per FHIR specification</p><p><b>keyword</b>: Hyperlipidemia screening test (procedure) (Details: SNOMED CT code 314079002 = \'Hyperlipidaemia screening test\', stated as \'Hyperlipidemia screening test (procedure)\')</p><p><b>fhirVersion</b>: 1.0.0</p><h3>Mappings</h3><table><tr><td>-</td><td><b>Identity</b></td><td><b>Uri</b></td><td><b>Name</b></td><td><b>Comment</b></td></tr><tr><td>*</td><td>m1</td><td><a>https://www.rcpa.edu.au/getattachment/0961c6d1-ec80-4500-8dc0-de516500e05b/Lipid-and-lipoprotein-testing.aspx</a></td><td>RCPA Lipid Report recommendations</td><td>Actual mappings haven\'t yet been filled out</td></tr></table><p><b>kind</b>: resource</p><p><b>abstract</b>: false</p><p><b>type</b>: DiagnosticReport</p><p><b>baseDefinition</b>: <a>http://hl7.org/fhir/StructureDefinition/DiagnosticReport</a></p><p><b>derivation</b>: constraint</p><h3>Snapshots</h3><table><tr><td>-</td><td><b>Element</b></td></tr><tr><td>*</td><td>todo-bundle</td></tr></table></div>"
+  }
+}
+url {
+  value: "http://hl7.org/fhir/StructureDefinition/example"
+}
+identifier {
+  system {
+    value: "urn:ietf:rfc:3986"
+  }
+  value {
+    value: "1.2.36.90146595217.4.2"
+  }
+}
+version {
+  value: "2"
+}
+name {
+  value: "LipidProfileExample"
+}
+title {
+  value: "Example Lipid Profile"
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+date {
+  value_us: 1336780800000000
+  precision: DAY
+}
+publisher {
+  value: "Health Intersections Pty Ltd"
+}
+contact {
+  name {
+    value: "Grahame Grieve"
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "grahame@healthintersections.com.au"
+    }
+  }
+}
+description {
+  value: "Describes how the lab report is used for a standard Lipid Profile - Cholesterol, Triglyceride and Cholesterol fractions. Uses LOINC codes"
+}
+use_context {
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+    display {
+      value: "Clinical Focus"
+    }
+  }
+  value_codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "314079002"
+      }
+      display {
+        value: "Hyperlipidemia screening test (procedure)"
+      }
+    }
+  }
+}
+jurisdiction {
+  coding {
+    system {
+      value: "urn:iso:std:iso:3166"
+    }
+    code {
+      value: "AU"
+    }
+  }
+}
+purpose {
+  value: "Provide an example to demonstrate how to use StructureDefinition"
+}
+copyright {
+  value: "Creative Commons 0, per FHIR specification"
+}
+keyword {
+  system {
+    value: "http://snomed.info/sct"
+  }
+  code {
+    value: "314079002"
+  }
+  display {
+    value: "Hyperlipidemia screening test (procedure)"
+  }
+}
+fhir_version {
+  value: "1.0.0"
+}
+mapping {
+  identity {
+    value: "m1"
+  }
+  uri {
+    value: "https://www.rcpa.edu.au/getattachment/0961c6d1-ec80-4500-8dc0-de516500e05b/Lipid-and-lipoprotein-testing.aspx"
+  }
+  name {
+    value: "RCPA Lipid Report recommendations"
+  }
+  comment {
+    value: "Actual mappings haven\'t yet been filled out"
+  }
+}
+kind {
+  value: RESOURCE
+}
+abstract {
+}
+type {
+  value: "DiagnosticReport"
+}
+base_definition {
+  value: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"
+}
+derivation {
+  value: CONSTRAINT
+}
+snapshot {
+  element {
+    id {
+      value: "DiagnosticReport"
+    }
+    path {
+      value: "DiagnosticReport"
+    }
+    short {
+      value: "Lipid Lab Report"
+    }
+    definition {
+      value: "The findings and interpretation of a general lipd lab profile."
+    }
+    comment {
+      value: "In this profile, mustSupport means that authoring systems must include the ability to report these elements, and processing systems must cater for them by either displaying them to the user or considering them appropriately in decision support systems."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport"
+      }
+      min {
+        value: 1
+      }
+      max {
+        value: "1"
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.extension"
+    }
+    path {
+      value: "DiagnosticReport.extension"
+    }
+    slicing {
+      discriminator {
+        type {
+          value: VALUE
+        }
+        path {
+          value: "url"
+        }
+      }
+      ordered {
+      }
+      rules {
+        value: OPEN
+      }
+    }
+    short {
+      value: "Additional Content defined by implementations"
+    }
+    definition {
+      value: "May be used to represent additional information that is not part of the basic definition of the resource. In order to make the use of extensions safe and manageable, there is a strict governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension."
+    }
+    comment {
+      value: "there can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core simplicity for everyone."
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.extension"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Extension"
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.text"
+    }
+    path {
+      value: "DiagnosticReport.text"
+    }
+    short {
+      value: "Text summary of the resource, for human interpretation"
+    }
+    definition {
+      value: "A human-readable narrative that contains a summary of the resource, and may be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it \"clinically safe\" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety."
+    }
+    comment {
+      value: "Contained resources do not have narrative. Resources that are not contained SHOULD have a narrative."
+    }
+    alias {
+      value: "narrative"
+    }
+    alias {
+      value: "html"
+    }
+    alias {
+      value: "xhtml"
+    }
+    alias {
+      value: "display"
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.text"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "Narrative"
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.contained"
+    }
+    path {
+      value: "DiagnosticReport.contained"
+    }
+    short {
+      value: "Contained, inline Resources"
+    }
+    definition {
+      value: "These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope."
+    }
+    comment {
+      value: "This should never be done when the content can be identified properly, as once identification is lost, it is extremely difficult (and context dependent) to restore it again."
+    }
+    alias {
+      value: "inline resources"
+    }
+    alias {
+      value: "anonymous resources"
+    }
+    alias {
+      value: "contained resources"
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.contained"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Resource"
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.status"
+    }
+    path {
+      value: "DiagnosticReport.status"
+    }
+    short {
+      value: "registered|interim|final|amended|cancelled|withdrawn"
+    }
+    definition {
+      value: "The status of the diagnostic report as a whole."
+    }
+    comment {
+      value: "This is labeled as \"Is Modifier\" because applications need to take appropriate action if a report is withdrawn."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.status"
+      }
+      min {
+        value: 1
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "code"
+      }
+    }
+    is_modifier {
+    }
+    binding {
+      strength {
+        value: REQUIRED
+      }
+      value_set_reference {
+        reference {
+          value: "http://hl7.org/fhir/ValueSet/observation-status"
+        }
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.issued"
+    }
+    path {
+      value: "DiagnosticReport.issued"
+    }
+    short {
+      value: "Date this version was released"
+    }
+    definition {
+      value: "The date and/or time that this version of the report was released from the source diagnostic service."
+    }
+    comment {
+      value: "May be different from the update time of the resource itself, because that is the status of the record (potentially a secondary copy), not the actual release time of the report."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.issued"
+      }
+      min {
+        value: 1
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "dateTime"
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.subject"
+    }
+    path {
+      value: "DiagnosticReport.subject"
+    }
+    short {
+      value: "The subject of the report"
+    }
+    definition {
+      value: "The subject of the report. Usually, but not always, this is a patient. However diagnostic services also perform analyses on specimens collected from a variety of other sources."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.subject"
+      }
+      min {
+        value: 1
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Patient"
+      }
+      aggregation {
+        value: BUNDLED
+      }
+      versioning {
+        value: EITHER
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Group"
+      }
+      aggregation {
+        value: BUNDLED
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Device"
+      }
+      aggregation {
+        value: BUNDLED
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.performer"
+    }
+    path {
+      value: "DiagnosticReport.performer"
+    }
+    short {
+      value: "Responsible Diagnostic Service"
+    }
+    definition {
+      value: "The diagnostic service that is responsible for issuing the report."
+    }
+    comment {
+      value: "This is not necessarily the source of the atomic data items - it\'s the entity that takes responsibility for the clinical report."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.performer"
+      }
+      min {
+        value: 1
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Organization"
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.identifier"
+    }
+    path {
+      value: "DiagnosticReport.identifier"
+    }
+    short {
+      value: "Id for external references to this report"
+    }
+    definition {
+      value: "The local ID assigned to the report by the order filler, usually by the Information System of the diagnostic service provider."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.identifier"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Identifier"
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.request"
+    }
+    path {
+      value: "DiagnosticReport.request"
+    }
+    short {
+      value: "What was requested"
+    }
+    definition {
+      value: "Details concerning a single pathology test requested."
+    }
+    comment {
+      value: "Note: Usually there is one test request for each result, however in some circumstances multiple test requests may be represented using a single Pathology test result resource. Note that there are also cases where one request leads to multiple reports."
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.request"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
+      }
+      aggregation {
+        value: REFERENCED
+      }
+      versioning {
+        value: SPECIFIC
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.category"
+    }
+    path {
+      value: "DiagnosticReport.category"
+    }
+    short {
+      value: "Biochemistry, Haematology etc."
+    }
+    definition {
+      value: "The section of the diagnostic service that performs the examination e.g. biochemistry, haematology, MRI."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.category"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "CodeableConcept"
+      }
+    }
+    is_modifier {
+    }
+    binding {
+      strength {
+        value: PREFERRED
+      }
+      value_set_reference {
+        reference {
+          value: "http://hl7.org/fhir/ValueSet/diagnostic-service-sections"
+        }
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.effectiveDateTime"
+    }
+    path {
+      value: "DiagnosticReport.effectiveDateTime"
+    }
+    short {
+      value: "Diagnostically relevant time of diagnostic report"
+    }
+    definition {
+      value: "The diagnostically relevant time for this report - that is, the point in time at which the observations that are reported in this diagnostic report relate to the patient."
+    }
+    comment {
+      value: "If the diagnostic procedure was performed on the patient, this is the time it was performed. If there is specimens, the diagnostically relevant time can be derived from the specimen collection times, but the specimen information is not always available, and the exact relationship between the specimens and the diagnostically relevant time is not always automatic."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.effective[x]"
+      }
+      min {
+        value: 1
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "dateTime"
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slicing {
+      discriminator {
+        type {
+          value: VALUE
+        }
+        path {
+          value: "reference.resolve().code"
+        }
+      }
+      ordered {
+      }
+      rules {
+        value: OPEN
+      }
+    }
+    short {
+      value: "Lipid Lab Results"
+    }
+    definition {
+      value: "Lipid Lab Results."
+    }
+    min {
+      value: 4
+    }
+    max {
+      value: "4"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.result"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Observation"
+      }
+      aggregation {
+        value: BUNDLED
+      }
+      versioning {
+        value: SPECIFIC
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result.Cholesterol"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slice_name {
+      value: "Cholesterol"
+    }
+    short {
+      value: "Cholesterol Result"
+    }
+    definition {
+      value: "Reference to Cholesterol Result."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.result"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/cholesterol"
+      }
+      aggregation {
+        value: BUNDLED
+      }
+      versioning {
+        value: SPECIFIC
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result.Triglyceride"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slice_name {
+      value: "Triglyceride"
+    }
+    short {
+      value: "Triglyceride Result"
+    }
+    definition {
+      value: "Group of elements for Triglyceride result."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.result"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/triglyceride"
+      }
+      aggregation {
+        value: BUNDLED
+      }
+      versioning {
+        value: SPECIFIC
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result.HDLCholesterol"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slice_name {
+      value: "HDLCholesterol"
+    }
+    short {
+      value: "HDL Cholesterol Result"
+    }
+    definition {
+      value: "Group of elements for HDL Cholesterol result."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.result"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/hdlcholesterol"
+      }
+      aggregation {
+        value: BUNDLED
+      }
+      versioning {
+        value: SPECIFIC
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result.LDLCholesterol"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slice_name {
+      value: "LDLCholesterol"
+    }
+    short {
+      value: "LDL Cholesterol result, if reported"
+    }
+    definition {
+      value: "LDL Cholesterol result, if reported."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.result"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/ldlcholesterol"
+      }
+      aggregation {
+        value: BUNDLED
+      }
+      versioning {
+        value: SPECIFIC
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.conclusion"
+    }
+    path {
+      value: "DiagnosticReport.conclusion"
+    }
+    short {
+      value: "Clinical Interpretation of Lipid Panel"
+    }
+    definition {
+      value: "May include diagnosis or suggestions for follow up testing."
+    }
+    comment {
+      value: "It\'s not unusual for the lab to make some kind of interpretative comment on the set of results."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.conclusion"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "string"
+      }
+    }
+    is_modifier {
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.representation"
+    }
+    path {
+      value: "DiagnosticReport.representation"
+    }
+    short {
+      value: "Entire Report as issued"
+    }
+    definition {
+      value: "Rich text representation of the entire result as issued by the diagnostic service. Multiple formats are allowed but they SHALL be semantically equivalent."
+    }
+    comment {
+      value: "Possible formats: text/html, text/plain, text/rtf, application/msword, application/pdf, application/rtf, application/vnd.oasis.opendocument.text, application/vnd.openxmlformats-officedocument.wordprocessingml.document. Application/pdf is recommended as the most reliable and interoperable in this context."
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.representation"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Attachment"
+      }
+    }
+    is_modifier {
+    }
+  }
+}

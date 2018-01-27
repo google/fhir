@@ -1,0 +1,87 @@
+id {
+  value: "signature"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">procedure record authored on 27-June 2015 by Harold Hippocrates, MD Content extracted from Referral received 26-June</div>"
+  }
+}
+target {
+  reference {
+    value: "DocumentReference/example"
+  }
+}
+recorded {
+  value_us: 1440628764000000
+  timezone: "+10:00"
+  precision: SECOND
+}
+reason {
+  system {
+    value: "http://hl7.org/fhir/v3/ActReason"
+  }
+  code {
+    value: "TREAT"
+  }
+  display {
+    value: "treatment"
+  }
+}
+activity {
+  system {
+    value: "http://hl7.org/fhir/v3/DocumentCompletion"
+  }
+  code {
+    value: "AU"
+  }
+  display {
+    value: "authenticated"
+  }
+}
+agent {
+  role {
+    coding {
+      system {
+        value: "http://www.hl7.org/fhir/contractsignertypecodes"
+      }
+      code {
+        value: "VERF"
+      }
+    }
+  }
+  who_uri {
+    value: "mailto://hhd@ssa.gov"
+  }
+}
+signature {
+  type {
+    system {
+      value: "urn:iso-astm:E1762-95:2013"
+    }
+    code {
+      value: "1.2.840.10065.1.12.1.5"
+    }
+    display {
+      value: "Verification Signature"
+    }
+  }
+  when {
+    value_us: 1440628764000000
+    timezone: "+10:00"
+    precision: SECOND
+  }
+  who_reference {
+    reference {
+      value: "Practitioner/xcda-author"
+    }
+  }
+  content_type {
+    value: "application/signature+xml"
+  }
+  blob {
+    value: "..."
+  }
+}

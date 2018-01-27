@@ -1,0 +1,45 @@
+id {
+  value: "family-history"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Family history of cancer of colon</div>"
+  }
+}
+clinical_status {
+  value: ACTIVE
+}
+category {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/condition-category"
+    }
+    code {
+      value: "problem-list-item"
+    }
+    display {
+      value: "Problem List Item"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "312824007"
+    }
+    display {
+      value: "Family history of cancer of colon"
+    }
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+}

@@ -1,0 +1,135 @@
+id {
+  value: "f204"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f204</p><p><b>clinicalStatus</b>: active</p><p><b>verificationStatus</b>: differential</p><p><b>category</b>: Problem <span>(Details : {SNOMED CT code \'55607006\' = \'Problem\', given as \'Problem\'}; {http://hl7.org/fhir/condition-category code \'problem-list-item\' = \'Problem List Item)</span></p><p><b>severity</b>: Severe <span>(Details : {SNOMED CT code \'24484000\' = \'Severe\', given as \'Severe\'})</span></p><p><b>code</b>: Acute renal insufficiency specified as due to procedure <span>(Details : {SNOMED CT code \'36225005\' = \'Acute renal failure due to procedure\', given as \'Acute renal insufficiency specified as due to procedure\'})</span></p><p><b>bodySite</b>: Kidney <span>(Details : {SNOMED CT code \'181414000\' = \'Kidney\', given as \'Kidney\'})</span></p><p><b>subject</b>: <a>Roel</a></p><p><b>context</b>: <a>Roel\'s encounter on March eleventh</a></p><p><b>onset</b>: 11/03/2013</p><p><b>abatement</b>: 20/03/2013</p><p><b>assertedDate</b>: 11/03/2013</p><p><b>asserter</b>: <a>Practitioner/f201</a></p><h3>Stages</h3><table><tr><td>-</td><td><b>Summary</b></td><td><b>Assessment</b></td></tr><tr><td>*</td><td>Temporary <span>(Details : {SNOMED CT code \'14803004\' = \'Transitory\', given as \'Temporary\'})</span></td><td>Genetic analysis master panel</td></tr></table><p><b>note</b>: The patient is anuric.</p></div>"
+  }
+}
+clinical_status {
+  value: ACTIVE
+}
+verification_status {
+  value: DIFFERENTIAL
+}
+category {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "55607006"
+    }
+    display {
+      value: "Problem"
+    }
+  }
+  coding {
+    system {
+      value: "http://hl7.org/fhir/condition-category"
+    }
+    code {
+      value: "problem-list-item"
+    }
+  }
+}
+severity {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "24484000"
+    }
+    display {
+      value: "Severe"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "36225005"
+    }
+    display {
+      value: "Acute renal insufficiency specified as due to procedure"
+    }
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "181414000"
+    }
+    display {
+      value: "Kidney"
+    }
+  }
+}
+subject {
+  reference {
+    value: "Patient/f201"
+  }
+  display {
+    value: "Roel"
+  }
+}
+context {
+  reference {
+    value: "Encounter/f203"
+  }
+  display {
+    value: "Roel\'s encounter on March eleventh"
+  }
+}
+onset_date_time {
+  value_us: 1362960000000000
+  precision: DAY
+}
+abatement_date_time {
+  value_us: 1363737600000000
+  precision: DAY
+}
+asserted_date {
+  value_us: 1362960000000000
+  precision: DAY
+}
+asserter {
+  reference {
+    value: "Practitioner/f201"
+  }
+}
+stage {
+  summary {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "14803004"
+      }
+      display {
+        value: "Temporary"
+      }
+    }
+  }
+  assessment {
+    display {
+      value: "Genetic analysis master panel"
+    }
+  }
+}
+note {
+  text {
+    value: "The patient is anuric."
+  }
+}

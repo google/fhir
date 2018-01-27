@@ -1,0 +1,35 @@
+{
+  "resourceType": "ProcessRequest",
+  "id": "1111",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Poll ProcessRequest</div>"
+  },
+  "identifier": [
+    {
+      "system": "http://happyvalley.com/processrequest",
+      "value": "111"
+    }
+  ],
+  "status": "active",
+  "action": "poll",
+  "target": {
+    "identifier": {
+      "system": "http://ninsurers.org/payorid",
+      "value": "WI12345"
+    }
+  },
+  "created": "2014-08-16",
+  "provider": {
+    "identifier": {
+      "system": "http://npid.org/providerid",
+      "value": "AF12345"
+    }
+  },
+  "organization": {
+    "reference": "Organization/1"
+  },
+  "request": {
+    "reference": "http://benefitco.com/oralhealthclaim/12345"
+  }
+}

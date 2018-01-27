@@ -1,0 +1,553 @@
+id {
+  value: "consent-example-pkb"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>\n        This example demonstrates how to encode this screen shot in a consent resource:\n      </p>\n      <p>\n       <img src=\"pkb.png\" alt=\"Screenshot from Patient Knows Best\"/>\n      </p>\n      <p>\n        Thanks to <a href=\"https://www.patientsknowbest.com/\">Patients Know Best</a> for contributing this example\n      </p>\n    </div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+patient {
+  reference {
+    value: "Patient/example"
+  }
+  display {
+    value: "...example patient..."
+  }
+}
+date_time {
+  value_us: 1466035200000000
+  precision: DAY
+}
+organization {
+  reference {
+    value: "Organization/pkb"
+  }
+  display {
+    value: "Patients Know Best"
+  }
+}
+policy_rule {
+  value: "http://hl7.org/fhir/ConsentPolicy/opt-out"
+}
+except {
+  type {
+    value: PERMIT
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Organization/ich-nmt"
+      }
+      display {
+        value: "Non-migrated Team - Imperial College Healthcare"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/Confidentiality"
+    }
+    code {
+      value: "N"
+    }
+  }
+}
+except {
+  type {
+    value: PERMIT
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Organization/ich-nmt"
+      }
+      display {
+        value: "Non-migrated Team - Imperial College Healthcare"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/ActCode"
+    }
+    code {
+      value: "PSY"
+    }
+  }
+}
+except {
+  type {
+    value: PERMIT
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Organization/ich-nmt"
+      }
+      display {
+        value: "Non-migrated Team - Imperial College Healthcare"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/ActCode"
+    }
+    code {
+      value: "SOC"
+    }
+  }
+}
+except {
+  type {
+    value: PERMIT
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Organization/ich-core"
+      }
+      display {
+        value: "Core Information Exchange team - Imperial College Healthcare"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/Confidentiality"
+    }
+    code {
+      value: "N"
+    }
+  }
+}
+except {
+  type {
+    value: PERMIT
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Organization/ich-core"
+      }
+      display {
+        value: "Core Information Exchange team - Imperial College Healthcare"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/ActCode"
+    }
+    code {
+      value: "PSY"
+    }
+  }
+}
+except {
+  type {
+    value: PERMIT
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Organization/ich-core"
+      }
+      display {
+        value: "Core Information Exchange team - Imperial College Healthcare"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/ActCode"
+    }
+    code {
+      value: "SOC"
+    }
+  }
+}
+except {
+  type {
+    value: PERMIT
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Organization/ich-core"
+      }
+      display {
+        value: "Core Information Exchange team - Imperial College Healthcare"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/ActCode"
+    }
+    code {
+      value: "SEX"
+    }
+  }
+}
+except {
+  type {
+    value: PERMIT
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Organization/tsd-park"
+      }
+      display {
+        value: "Torbay and Source Devon Trust - Parkinson\'s Team"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/Confidentiality"
+    }
+    code {
+      value: "N"
+    }
+  }
+}
+except {
+  type {
+    value: PERMIT
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Organization/tsd-park"
+      }
+      display {
+        value: "Torbay and Source Devon Trust - Parkinson\'s Team"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/ActCode"
+    }
+    code {
+      value: "PSY"
+    }
+  }
+}
+except {
+  type {
+    value: PERMIT
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Organization/tsd-park"
+      }
+      display {
+        value: "Torbay and Source Devon Trust - Parkinson\'s Team"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/ActCode"
+    }
+    code {
+      value: "SOC"
+    }
+  }
+}
+except {
+  type {
+    value: PERMIT
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Organization/tsd-park"
+      }
+      display {
+        value: "Torbay and Source Devon Trust - Parkinson\'s Team"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/ActCode"
+    }
+    code {
+      value: "SEX"
+    }
+  }
+}
+except {
+  type {
+    value: PERMIT
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Organization/ich-non"
+      }
+      display {
+        value: "Imperial Collage Healthcare - Neuro-oncology"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/Confidentiality"
+    }
+    code {
+      value: "N"
+    }
+  }
+}

@@ -1,0 +1,106 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Text</div>"
+  }
+}
+contained {
+  practitioner {
+    id {
+      value: "a1"
+    }
+    name {
+      family {
+        value: "Dopplemeyer"
+      }
+      given {
+        value: "Sherry"
+      }
+    }
+    telecom {
+      system {
+        value: EMAIL
+      }
+      value {
+        value: "john.doe@healthcare.example.org"
+      }
+    }
+  }
+}
+master_identifier {
+  system {
+    value: "http://example.org/documents"
+  }
+  value {
+    value: "23425234234-2346"
+  }
+}
+identifier {
+  system {
+    value: "http://example.org/documents"
+  }
+  value {
+    value: "23425234234-2347"
+  }
+}
+status {
+  value: CURRENT
+}
+type {
+  text {
+    value: "History and Physical"
+  }
+}
+subject {
+  reference {
+    value: "Patient/xcda"
+  }
+}
+created {
+  value_us: 1104036650000000
+  timezone: "-05:00"
+  precision: SECOND
+}
+author {
+  reference {
+    value: "#a1"
+  }
+}
+recipient {
+  reference {
+    value: "Practitioner/xcda1"
+  }
+}
+source {
+  value: "urn:oid:1.3.6.1.4.1.21367.2009.1.2.1"
+}
+description {
+  value: "Physical"
+}
+content {
+  p_reference {
+    reference {
+      value: "DocumentReference/example"
+    }
+  }
+}
+related {
+  identifier {
+    system {
+      value: "http://example.org/documents"
+    }
+    value {
+      value: "23425234234-9999"
+    }
+  }
+  ref {
+    reference {
+      value: "DocumentReference/example"
+    }
+  }
+}

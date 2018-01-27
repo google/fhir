@@ -1,0 +1,30 @@
+{
+  "resourceType": "Device",
+  "id": "example-udi2",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-udi2</p><h3>Udis</h3><table><tr><td>-</td><td><b>DeviceIdentifier</b></td><td><b>Name</b></td><td><b>Jurisdiction</b></td><td><b>Issuer</b></td></tr><tr><td>*</td><td>A9999XYZ100T0474</td><td>Bone,Putty Demineralized</td><td><a>http://hl7.org/fhir/NamingSystem/fda-udi</a></td><td><a>http://hl7.org/fhir/NamingSystem/iccbba-other</a></td></tr></table><p><b>status</b>: inactive</p><p><b>manufacturer</b>: Acme Devices, Inc</p><p><b>manufactureDate</b>: 01/02/2013</p><p><b>expirationDate</b>: 01/02/2014</p><p><b>patient</b>: <a>Patient/example</a></p></div>"
+  },
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/device-din",
+      "valueIdentifier": {
+        "system": "http://hl7.org/fhir/NamingSystem/iccbba-din",
+        "value": "A99971312345600"
+      }
+    }
+  ],
+  "udi": {
+    "deviceIdentifier": "A9999XYZ100T0474",
+    "name": "Bone,Putty Demineralized",
+    "jurisdiction": "http://hl7.org/fhir/NamingSystem/fda-udi",
+    "issuer": "http://hl7.org/fhir/NamingSystem/iccbba-other"
+  },
+  "status": "inactive",
+  "manufacturer": "Acme Devices, Inc",
+  "manufactureDate": "2013-02-01",
+  "expirationDate": "2014-02-01",
+  "patient": {
+    "reference": "Patient/example"
+  }
+}

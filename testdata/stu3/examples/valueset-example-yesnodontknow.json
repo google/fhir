@@ -1,0 +1,51 @@
+{
+  "resourceType": "ValueSet",
+  "id": "yesnodontknow",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <h3>Value Set Contents</h3>\n      <p>This value set contains 3 concepts</p>\n      <table class=\"codes\">\n        <tr>\n          <td>\n            <b>Code</b>\n          </td>\n          <td>\n            <b>System</b>\n          </td>\n          <td>\n            <b>Display</b>\n          </td>\n          <td>\n            <b>Definition</b>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <a name=\"http---hl7.org-fhir-v2-0136-Y\"> </a>\n            <a href=\"v2/0136/index.html#v2-0136-Y\">Y</a>\n          </td>\n          <td>http://hl7.org/fhir/v2/0136</td>\n          <td>Yes</td>\n          <td/>\n        </tr>\n        <tr>\n          <td>\n            <a name=\"http---hl7.org-fhir-v2-0136-N\"> </a>\n            <a href=\"v2/0136/index.html#v2-0136-N\">N</a>\n          </td>\n          <td>http://hl7.org/fhir/v2/0136</td>\n          <td>No</td>\n          <td/>\n        </tr>\n        <tr>\n          <td>\n            <a name=\"http---hl7.org-fhir-data-absent-reason-asked\"> </a>\n            <a href=\"codesystem-data-absent-reason.html#data-absent-reason-asked\">asked</a>\n          </td>\n          <td>http://hl7.org/fhir/data-absent-reason</td>\n          <td>Don't know</td>\n          <td>The source human does not know the value.</td>\n        </tr>\n      </table>\n    </div>"
+  },
+  "url": "http://hl7.org/fhir/ValueSet/yesnodontknow",
+  "name": "Yes/No/Don't Know",
+  "status": "draft",
+  "description": "For Capturing simple yes-no-don't know answers",
+  "compose": {
+    "include": [
+      {
+        "valueSet": [
+          "http://hl7.org/fhir/ValueSet/v2-0136"
+        ]
+      },
+      {
+        "system": "http://hl7.org/fhir/data-absent-reason",
+        "concept": [
+          {
+            "code": "asked",
+            "display": "Don't know"
+          }
+        ]
+      }
+    ]
+  },
+  "expansion": {
+    "identifier": "urn:uuid:bf99fe50-2c2b-41ad-bd63-bee6919810b4",
+    "timestamp": "2015-07-14T10:00:00Z",
+    "contains": [
+      {
+        "system": "http://hl7.org/fhir/v2/0136",
+        "code": "Y",
+        "display": "Yes"
+      },
+      {
+        "system": "http://hl7.org/fhir/v2/0136",
+        "code": "N",
+        "display": "No"
+      },
+      {
+        "system": "http://hl7.org/fhir/data-absent-reason",
+        "code": "asked",
+        "display": "Don't know"
+      }
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+id {
+  value: "ER2500"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the EnrollmentResponse</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/enrollmentresponse"
+  }
+  value {
+    value: "781234"
+  }
+}
+status {
+  value: ACTIVE
+}
+request {
+  reference {
+    value: "http://www.BenefitsInc.com/fhir/eligibility/225476332402"
+  }
+}
+outcome {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/remittance-outcome"
+    }
+    code {
+      value: "complete"
+    }
+  }
+}
+disposition {
+  value: "Dependant added to policy."
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+organization {
+  reference {
+    value: "Organization/2"
+  }
+}

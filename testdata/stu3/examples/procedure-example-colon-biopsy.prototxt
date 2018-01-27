@@ -1,0 +1,68 @@
+id {
+  value: "colon-biopsy"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Biopsy of colon, which was part of colonoscopy</div>"
+  }
+}
+identifier {
+  value {
+    value: "12345"
+  }
+}
+part_of {
+  reference {
+    value: "Procedure/colonoscopy"
+  }
+  display {
+    value: "Colonoscopy"
+  }
+}
+status {
+  value: COMPLETED
+}
+not_done {
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "76164006"
+    }
+    display {
+      value: "Biopsy of colon (procedure)"
+    }
+  }
+  text {
+    value: "Biopsy of colon"
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+}
+performer {
+  actor {
+    reference {
+      value: "Practitioner/example"
+    }
+    display {
+      value: "Dr Adam Careful"
+    }
+  }
+}
+location {
+  reference {
+    value: "Location/1"
+  }
+  display {
+    value: "Burgers University Medical Center, South Wing, second floor"
+  }
+}

@@ -1,0 +1,44 @@
+id {
+  value: "87655"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Status ProcessRequest</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/processrequest"
+  }
+  value {
+    value: "1776543"
+  }
+}
+status {
+  value: ACTIVE
+}
+action {
+  value: STATUS
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+request {
+  reference {
+    value: "http://happyvalley.com/claim/12345"
+  }
+}
+response {
+  reference {
+    value: "http://BenefitsInc.com/fhir/claimresponse/3500"
+  }
+}

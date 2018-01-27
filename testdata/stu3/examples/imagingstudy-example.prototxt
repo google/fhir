@@ -1,0 +1,74 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">CT Chest.  John Smith (MRN: 09236). Accession: W12342398. Performed: 2011-01-01. 3 series, 12 images.</div>"
+  }
+}
+uid {
+  value: "urn:oid:2.16.124.113543.6003.1154777499.30246.19789.3503430045"
+}
+patient {
+  reference {
+    value: "Patient/dicom"
+  }
+}
+started {
+  value_us: 1293868880000000
+  timezone: "+03:00"
+  precision: SECOND
+}
+number_of_series {
+  value: 1
+}
+number_of_instances {
+  value: 1
+}
+series {
+  uid {
+    value: "urn:oid:2.16.124.113543.6003.2588828330.45298.17418.2723805630"
+  }
+  number {
+    value: 3
+  }
+  modality {
+    system {
+      value: "http://dicom.nema.org/resources/ontology/DCM"
+    }
+    code {
+      value: "CT"
+    }
+  }
+  description {
+    value: "CT Surview 180"
+  }
+  number_of_instances {
+    value: 1
+  }
+  body_site {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "67734004"
+    }
+    display {
+      value: "Upper Trunk Structure"
+    }
+  }
+  instance {
+    uid {
+      value: "urn:oid:2.16.124.113543.6003.189642796.63084.16748.2599092903"
+    }
+    number {
+      value: 1
+    }
+    sop_class {
+      value: "urn:oid:1.2.840.10008.5.1.4.1.1.2"
+    }
+  }
+}

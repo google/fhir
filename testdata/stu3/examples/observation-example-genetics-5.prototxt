@@ -1,0 +1,66 @@
+id {
+  value: "example-genetics-5"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-genetics-5</p><p><b>status</b>: final</p><p><b>code</b>: PCR validation <span>(Details )</span></p><p><b>subject</b>: <a>Molecular Lab Patient ID: HOSP-23456</a></p><p><b>issued</b>: 03/04/2013 3:30:10 PM</p><p><b>performer</b>: <a>Sequence Analysis Laboratory</a></p><p><b>value</b>: Negative <span>(Details : {SNOMED CT code \'260385009\' = \'Negative\', given as \'Negative\'})</span></p><h3>Relateds</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Target</b></td></tr><tr><td>*</td><td>sequel-to</td><td><a>ObservationForGenetics profile example 1</a></td></tr></table></div>"
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  text {
+    value: "PCR validation"
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+  display {
+    value: "Molecular Lab Patient ID: HOSP-23456"
+  }
+}
+issued {
+  value_us: 1364999410000000
+  timezone: "+01:00"
+  precision: SECOND
+}
+performer {
+  reference {
+    value: "Practitioner/example"
+  }
+  display {
+    value: "Sequence Analysis Laboratory"
+  }
+}
+value_codeable_concept {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "260385009"
+    }
+    display {
+      value: "Negative"
+    }
+  }
+}
+related {
+  type {
+    value: SEQUEL_TO
+  }
+  target {
+    reference {
+      value: "Observation/example-genetics-1"
+    }
+    display {
+      value: "ObservationForGenetics profile example 1"
+    }
+  }
+}

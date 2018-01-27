@@ -1,0 +1,133 @@
+id {
+  value: "ewg"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Inpatient Admission for Peter James Chalmers Account</div>"
+  }
+}
+identifier {
+  system {
+    value: "urn:oid:0.1.2.3.4.5.6.7"
+  }
+  value {
+    value: "654321"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/v3/ActCode"
+    }
+    code {
+      value: "PBILLACCT"
+    }
+    display {
+      value: "patient billing account"
+    }
+  }
+  text {
+    value: "patient"
+  }
+}
+name {
+  value: "Inpatient: Peter James Chalmers"
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+period {
+  start {
+    value_us: 1451606400000000
+    precision: DAY
+  }
+  end {
+    value_us: 1467244800000000
+    precision: DAY
+  }
+}
+active {
+  start {
+    value_us: 1451606400000000
+    precision: DAY
+  }
+  end {
+    value_us: 1467244800000000
+    precision: DAY
+  }
+}
+balance {
+  value {
+    value: -1200.0
+    precision: 4
+  }
+  unit {
+    value: "USD"
+  }
+  system {
+    value: "urn:iso:std:iso:4217"
+  }
+  code {
+    value: "USD"
+  }
+}
+coverage {
+  coverage {
+    reference {
+      value: "Coverage/9876B1"
+    }
+  }
+  priority {
+    value: 1
+  }
+}
+coverage {
+  coverage {
+    reference {
+      value: "Coverage/7546D"
+    }
+  }
+  priority {
+    value: 2
+  }
+}
+owner {
+  reference {
+    value: "Organization/f001"
+  }
+  display {
+    value: "Burgers University Medical Center"
+  }
+}
+description {
+  value: "Hospital charges"
+}
+guarantor {
+  party {
+    reference {
+      value: "RelatedPerson/benedicte"
+    }
+    display {
+      value: "B\303\251n\303\251dicte du March\303\251"
+    }
+  }
+  on_hold {
+  }
+  period {
+    start {
+      value_us: 1451606400000000
+      precision: DAY
+    }
+  }
+}

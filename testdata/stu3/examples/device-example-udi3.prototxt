@@ -1,0 +1,68 @@
+id {
+  value: "example-udi3"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-udi3</p><p><b>identifier</b>: Serial Number = XYZ456789012345678</p><h3>Udis</h3><table><tr><td>-</td><td><b>Name</b></td><td><b>Jurisdiction</b></td><td><b>CarrierHRF</b></td><td><b>Issuer</b></td><td><b>EntryType</b></td></tr><tr><td>*</td><td>FHIR\302\256 Ulltra Implantable</td><td><a>http://hl7.org/fhir/NamingSystem/fda-udi</a></td><td>+H123PARTNO1234567890120/$$420020216LOT123456789012345/SXYZ456789012345678/16D20130202C</td><td><a>http://hl7.org/fhir/NamingSystem/hibcc</a></td><td>manual</td></tr></table><p><b>status</b>: inactive</p><p><b>lotNumber</b>: LOT123456789012345</p><p><b>manufacturer</b>: GlobalMed, Inc</p><p><b>manufactureDate</b>: 02/02/2013</p><p><b>expirationDate</b>: 02/02/2020</p><p><b>model</b>: Ultra Implantable</p><p><b>patient</b>: <a>Patient/example</a></p></div>"
+  }
+}
+identifier {
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/identifier-type"
+      }
+      code {
+        value: "SNO"
+      }
+    }
+  }
+  value {
+    value: "XYZ456789012345678"
+  }
+}
+udi {
+  name {
+    value: "FHIR\302\256 Ulltra Implantable"
+  }
+  jurisdiction {
+    value: "http://hl7.org/fhir/NamingSystem/fda-udi"
+  }
+  carrier_h_r_f {
+    value: "+H123PARTNO1234567890120/$$420020216LOT123456789012345/SXYZ456789012345678/16D20130202C"
+  }
+  issuer {
+    value: "http://hl7.org/fhir/NamingSystem/hibcc"
+  }
+  entry_type {
+    value: MANUAL
+  }
+}
+status {
+  value: INACTIVE
+}
+lot_number {
+  value: "LOT123456789012345"
+}
+manufacturer {
+  value: "GlobalMed, Inc"
+}
+manufacture_date {
+  value_us: 1359763200000000
+  precision: DAY
+}
+expiration_date {
+  value_us: 1580601600000000
+  precision: DAY
+}
+model {
+  value: "Ultra Implantable"
+}
+patient {
+  reference {
+    value: "Patient/example"
+  }
+}

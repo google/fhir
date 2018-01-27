@@ -1,0 +1,75 @@
+id {
+  value: "77654"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the PaymentNotice</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://benefitsinc.com/paymentnotice"
+  }
+  value {
+    value: "776543"
+  }
+}
+status {
+  value: ACTIVE
+}
+request {
+  reference {
+    value: "http://benefitsinc.com/fhir/claim/12345"
+  }
+}
+response {
+  reference {
+    value: "http://benefitsinc.com/fhir/claimresponse/CR12345"
+  }
+}
+status_date {
+  value_us: 1408060800000000
+  precision: DAY
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+target {
+  identifier {
+    system {
+      value: "http://regulators.gov"
+    }
+    value {
+      value: "AB123"
+    }
+  }
+}
+provider {
+  identifier {
+    system {
+      value: "http://npid.org/provider"
+    }
+    value {
+      value: "PR957857"
+    }
+  }
+}
+organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+payment_status {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/paymentstatus"
+    }
+    code {
+      value: "paid"
+    }
+  }
+}

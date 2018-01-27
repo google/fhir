@@ -1,0 +1,89 @@
+id {
+  value: "example-diplotype1"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-diplotype1</p><p><b>status</b>: final</p><p><b>code</b>: Diplotype Call <span>(Details : {SNOMED CT code \'363779003\' = \'363779003\', given as \'Genotype determination\'})</span></p><p><b>subject</b>: <a>J*********** C***********</a></p><p><b>issued</b>: 03/04/2013 3:30:10 PM</p><p><b>specimen</b>: <a>Molecular Specimen ID: MLD45-Z4-1234</a></p><blockquote><p><b>related</b></p><p><b>type</b>: derived-from</p><p><b>target</b>: <a>Observation/example-haplotype1</a></p></blockquote><blockquote><p><b>related</b></p><p><b>type</b>: derived-from</p><p><b>target</b>: <a>Observation/example-haplotype2</a></p></blockquote></div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
+  }
+  value_codeable_concept {
+    coding {
+      system {
+        value: "http://www.genenames.org"
+      }
+      code {
+        value: "2623"
+      }
+      display {
+        value: "CYP2C9"
+      }
+    }
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info"
+    }
+    code {
+      value: "363779003"
+    }
+    display {
+      value: "Genotype determination"
+    }
+  }
+  text {
+    value: "Diplotype Call"
+  }
+}
+subject {
+  reference {
+    value: "Patient/727127"
+  }
+  display {
+    value: "J*********** C***********"
+  }
+}
+issued {
+  value_us: 1364999410000000
+  timezone: "+01:00"
+  precision: SECOND
+}
+specimen {
+  reference {
+    value: "Specimen/genetics-example1-somatic"
+  }
+  display {
+    value: "Molecular Specimen ID: MLD45-Z4-1234"
+  }
+}
+related {
+  type {
+    value: DERIVED_FROM
+  }
+  target {
+    reference {
+      value: "Observation/example-haplotype1"
+    }
+  }
+}
+related {
+  type {
+    value: DERIVED_FROM
+  }
+  target {
+    reference {
+      value: "Observation/example-haplotype2"
+    }
+  }
+}

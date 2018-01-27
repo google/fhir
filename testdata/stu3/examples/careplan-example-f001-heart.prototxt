@@ -1,0 +1,153 @@
+id {
+  value: "f001"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f001</p><p><b>contained</b>: , </p><p><b>identifier</b>: CP2903 (OFFICIAL)</p><p><b>status</b>: completed</p><p><b>intent</b>: plan</p><p><b>subject</b>: <a>P. van de Heuvel</a></p><p><b>period</b>: 26/06/2011 --&gt; 27/06/2011</p><p><b>careTeam</b>: id: careteam</p><p><b>addresses</b>: <a>?????</a></p><p><b>goal</b>: id: goal; status: achieved; recovery surgery on heart of patient <span>(Details )</span>; P. van de Heuvel; Annotation: goal accomplished without complications</p><blockquote><p><b>activity</b></p><h3>Details</h3><table><tr><td>-</td><td><b>Category</b></td><td><b>Code</b></td><td><b>Status</b></td><td><b>Prohibited</b></td><td><b>Scheduled[x]</b></td><td><b>Performer</b></td></tr><tr><td>*</td><td>Procedure <span>(Details : {http://hl7.org/fhir/care-plan-activity-category code \'procedure\' = \'Procedure)</span></td><td>Operation on heart <span>(Details : {SNOMED CT code \'64915003\' = \'Operative procedure on heart\', given as \'Operation on heart\'})</span></td><td>completed</td><td>true</td><td>2011-06-27T09:30:10+01:00</td><td><a>P. Voigt</a></td></tr></table></blockquote></div>"
+  }
+}
+contained {
+  care_team {
+    id {
+      value: "careteam"
+    }
+    participant {
+      member {
+        reference {
+          value: "Practitioner/f002"
+        }
+        display {
+          value: "P. Voigt"
+        }
+      }
+    }
+  }
+}
+contained {
+  goal {
+    id {
+      value: "goal"
+    }
+    status {
+      value: ACHIEVED
+    }
+    description {
+      text {
+        value: "recovery surgery on heart of patient"
+      }
+    }
+    subject {
+      reference {
+        value: "Patient/f001"
+      }
+      display {
+        value: "P. van de Heuvel"
+      }
+    }
+    note {
+      text {
+        value: "goal accomplished without complications"
+      }
+    }
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.bmc.nl/zorgportal/identifiers/careplans"
+  }
+  value {
+    value: "CP2903"
+  }
+}
+status {
+  value: COMPLETED
+}
+intent {
+  value: PLAN
+}
+subject {
+  reference {
+    value: "Patient/f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+period {
+  start {
+    value_us: 1309046400000000
+    precision: DAY
+  }
+  end {
+    value_us: 1309132800000000
+    precision: DAY
+  }
+}
+care_team {
+  reference {
+    value: "#careteam"
+  }
+}
+addresses {
+  reference {
+    value: "Condition/f201"
+  }
+  display {
+    value: "?????"
+  }
+}
+goal {
+  reference {
+    value: "#goal"
+  }
+}
+activity {
+  detail {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/care-plan-activity-category"
+        }
+        code {
+          value: "procedure"
+        }
+      }
+    }
+    code {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "64915003"
+        }
+        display {
+          value: "Operation on heart"
+        }
+      }
+    }
+    status {
+      value: COMPLETED
+    }
+    prohibited {
+      value: true
+    }
+    scheduled_string {
+      value: "2011-06-27T09:30:10+01:00"
+    }
+    performer {
+      reference {
+        value: "Practitioner/f002"
+      }
+      display {
+        value: "P. Voigt"
+      }
+    }
+  }
+}

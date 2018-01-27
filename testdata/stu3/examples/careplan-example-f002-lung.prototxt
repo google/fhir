@@ -1,0 +1,153 @@
+id {
+  value: "f002"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f002</p><p><b>contained</b>: , </p><p><b>identifier</b>: CP2934 (OFFICIAL)</p><p><b>status</b>: completed</p><p><b>intent</b>: plan</p><p><b>subject</b>: <a>P. van de Heuvel</a></p><p><b>period</b>: 06/07/2011 --&gt; 07/07/2013</p><p><b>careTeam</b>: id: careteam</p><p><b>addresses</b>: <a>?????</a></p><p><b>goal</b>: id: goal; status: achieved; succesful surgery on lung of patient <span>(Details )</span>; P. van de Heuvel; Annotation: goal accomplished with minor complications</p><blockquote><p><b>activity</b></p><h3>Details</h3><table><tr><td>-</td><td><b>Category</b></td><td><b>Code</b></td><td><b>Status</b></td><td><b>Prohibited</b></td><td><b>Scheduled[x]</b></td><td><b>Performer</b></td></tr><tr><td>*</td><td>Procedure <span>(Details : {http://hl7.org/fhir/care-plan-activity-category code \'procedure\' = \'Procedure)</span></td><td>Partial lobectomy of lung <span>(Details : {SNOMED CT code \'359615001\' = \'Partial lobectomy of lung\', given as \'Partial lobectomy of lung\'})</span></td><td>completed</td><td>true</td><td>2011-07-07T09:30:10+01:00</td><td><a>M.I.M. Versteegh</a></td></tr></table></blockquote></div>"
+  }
+}
+contained {
+  care_team {
+    id {
+      value: "careteam"
+    }
+    participant {
+      member {
+        reference {
+          value: "Practitioner/f003"
+        }
+        display {
+          value: "M.I.M. Versteegh"
+        }
+      }
+    }
+  }
+}
+contained {
+  goal {
+    id {
+      value: "goal"
+    }
+    status {
+      value: ACHIEVED
+    }
+    description {
+      text {
+        value: "succesful surgery on lung of patient"
+      }
+    }
+    subject {
+      reference {
+        value: "Patient/f001"
+      }
+      display {
+        value: "P. van de Heuvel"
+      }
+    }
+    note {
+      text {
+        value: "goal accomplished with minor complications"
+      }
+    }
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.bmc.nl/zorgportal/identifiers/careplans"
+  }
+  value {
+    value: "CP2934"
+  }
+}
+status {
+  value: COMPLETED
+}
+intent {
+  value: PLAN
+}
+subject {
+  reference {
+    value: "Patient/f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+period {
+  start {
+    value_us: 1309910400000000
+    precision: DAY
+  }
+  end {
+    value_us: 1373155200000000
+    precision: DAY
+  }
+}
+care_team {
+  reference {
+    value: "#careteam"
+  }
+}
+addresses {
+  reference {
+    value: "Condition/f201"
+  }
+  display {
+    value: "?????"
+  }
+}
+goal {
+  reference {
+    value: "#goal"
+  }
+}
+activity {
+  detail {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/care-plan-activity-category"
+        }
+        code {
+          value: "procedure"
+        }
+      }
+    }
+    code {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "359615001"
+        }
+        display {
+          value: "Partial lobectomy of lung"
+        }
+      }
+    }
+    status {
+      value: COMPLETED
+    }
+    prohibited {
+      value: true
+    }
+    scheduled_string {
+      value: "2011-07-07T09:30:10+01:00"
+    }
+    performer {
+      reference {
+        value: "Practitioner/f003"
+      }
+      display {
+        value: "M.I.M. Versteegh"
+      }
+    }
+  }
+}

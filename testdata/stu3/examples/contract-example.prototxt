@@ -1,0 +1,19 @@
+id {
+  value: "C-123"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the contract</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/contract"
+  }
+  value {
+    value: "12347"
+  }
+}

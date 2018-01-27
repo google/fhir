@@ -1,0 +1,229 @@
+id {
+  value: "example-xr"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">XR Wrist 3+ Views. John Smith (MRN: 09236). Accession: W12342398. Performed: 2017-01-01. 1 series, 2 images.</div>"
+  }
+}
+uid {
+  value: "urn:oid:2.16.124.113543.6003.1154777499.30246.19789.3503430046"
+}
+accession {
+  use {
+    value: USUAL
+  }
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/v2/0203"
+      }
+      code {
+        value: "ACSN"
+      }
+    }
+  }
+  value {
+    value: "W12342398"
+  }
+  assigner {
+    reference {
+      value: "Organization/dicom-organization"
+    }
+  }
+}
+identifier {
+  use {
+    value: SECONDARY
+  }
+  value {
+    value: "55551234"
+  }
+  assigner {
+    reference {
+      value: "Organization/dicom-organization"
+    }
+  }
+}
+availability {
+  value: ONLINE
+}
+modality_list {
+  system {
+    value: "http://dicom.nema.org/resources/ontology/DCM"
+  }
+  code {
+    value: "DX"
+  }
+}
+patient {
+  reference {
+    value: "Patient/dicom"
+  }
+}
+context {
+  reference {
+    value: "Encounter/example"
+  }
+}
+started {
+  value_us: 1483257680000000
+  timezone: "+03:00"
+  precision: SECOND
+}
+based_on {
+  reference {
+    value: "ProcedureRequest/example"
+  }
+}
+referrer {
+  reference {
+    value: "Practitioner/example"
+  }
+}
+interpreter {
+  reference {
+    value: "Practitioner/example"
+  }
+}
+endpoint {
+  reference {
+    value: "Endpoint/example-wadors"
+  }
+}
+number_of_series {
+  value: 1
+}
+number_of_instances {
+  value: 2
+}
+procedure_reference {
+  reference {
+    value: "Procedure/example"
+  }
+}
+procedure_code {
+  coding {
+    system {
+      value: "http://www.radlex.org"
+    }
+    code {
+      value: "RPID2589"
+    }
+    display {
+      value: "XR Wrist 3+ Views"
+    }
+  }
+  text {
+    value: "XR Wrist 3+ Views"
+  }
+}
+reason {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "357009"
+    }
+    display {
+      value: "Closed fracture of trapezoidal bone of wrist"
+    }
+  }
+}
+description {
+  value: "XR Wrist 3+ Views"
+}
+series {
+  uid {
+    value: "urn:oid:2.16.124.113543.6003.1154777499.30246.19789.3503430045.1"
+  }
+  number {
+    value: 3
+  }
+  modality {
+    system {
+      value: "http://dicom.nema.org/resources/ontology/DCM"
+    }
+    code {
+      value: "DX"
+    }
+  }
+  description {
+    value: "XR Wrist 3+ Views"
+  }
+  number_of_instances {
+    value: 2
+  }
+  availability {
+    value: ONLINE
+  }
+  endpoint {
+    reference {
+      value: "Endpoint/example-wadors"
+    }
+  }
+  body_site {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "T-15460"
+    }
+    display {
+      value: "Wrist Joint"
+    }
+  }
+  laterality {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "419161000"
+    }
+    display {
+      value: "Unilateral left"
+    }
+  }
+  started {
+    value_us: 1293868880000000
+    timezone: "+03:00"
+    precision: SECOND
+  }
+  performer {
+    reference {
+      value: "Practitioner/example"
+    }
+  }
+  instance {
+    uid {
+      value: "urn:oid:2.16.124.113543.6003.1154777499.30246.19789.3503430045.1.1"
+    }
+    number {
+      value: 1
+    }
+    sop_class {
+      value: "urn:oid:1.2.840.10008.5.1.4.1.1.2"
+    }
+    title {
+      value: "PA VIEW"
+    }
+  }
+  instance {
+    uid {
+      value: "urn:oid:2.16.124.113543.6003.1154777499.30246.19789.3503430045.1.2"
+    }
+    number {
+      value: 2
+    }
+    sop_class {
+      value: "urn:oid:1.2.840.10008.5.1.4.1.1.2"
+    }
+    title {
+      value: "LL VIEW"
+    }
+  }
+}

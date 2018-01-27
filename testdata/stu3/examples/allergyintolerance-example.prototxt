@@ -1,0 +1,158 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>identifier</b>: 49476534</p><p><b>clinicalStatus</b>: active</p><p><b>verificationStatus</b>: confirmed</p><p><b>type</b>: allergy</p><p><b>category</b>: food</p><p><b>criticality</b>: high</p><p><b>code</b>: Cashew nuts <span>(Details : {SNOMED CT code \'227493005\' = \'Cashew nuts\', given as \'Cashew nuts\'})</span></p><p><b>patient</b>: <a>Patient/example</a></p><p><b>onset</b>: 01/01/2004</p><p><b>assertedDate</b>: 09/10/2014 2:58:00 PM</p><p><b>recorder</b>: <a>Practitioner/example</a></p><p><b>asserter</b>: <a>Patient/example</a></p><p><b>lastOccurrence</b>: 01/06/2012</p><p><b>note</b>: The criticality is high becasue of the observed anaphylactic reaction when challenged with cashew extract.</p><blockquote><p><b>reaction</b></p><p><b>substance</b>: cashew nut allergenic extract Injectable Product <span>(Details : {RxNorm code \'1160593\' = \'1160593\', given as \'cashew nut allergenic extract Injectable Product\'})</span></p><p><b>manifestation</b>: Anaphylactic reaction <span>(Details : {SNOMED CT code \'39579001\' = \'Anaphylaxis\', given as \'Anaphylactic reaction\'})</span></p><p><b>description</b>: Challenge Protocol. Severe reaction to subcutaneous cashew extract. Epinephrine administered</p><p><b>onset</b>: 12/06/2012</p><p><b>severity</b>: severe</p><p><b>exposureRoute</b>: Subcutaneous route <span>(Details : {SNOMED CT code \'34206005\' = \'Subcutaneous route\', given as \'Subcutaneous route\'})</span></p></blockquote><blockquote><p><b>reaction</b></p><p><b>manifestation</b>: Urticaria <span>(Details : {SNOMED CT code \'64305001\' = \'Urticaria\', given as \'Urticaria\'})</span></p><p><b>onset</b>: 01/01/2004</p><p><b>severity</b>: moderate</p><p><b>note</b>: The patient reports that the onset of urticaria was within 15 minutes of eating cashews.</p></blockquote></div>"
+  }
+}
+identifier {
+  system {
+    value: "http://acme.com/ids/patients/risks"
+  }
+  value {
+    value: "49476534"
+  }
+}
+clinical_status {
+  value: ACTIVE
+}
+verification_status {
+  value: CONFIRMED
+}
+type {
+  value: ALLERGY
+}
+category {
+  value: FOOD
+}
+criticality {
+  value: HIGH
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "227493005"
+    }
+    display {
+      value: "Cashew nuts"
+    }
+  }
+}
+patient {
+  reference {
+    value: "Patient/example"
+  }
+}
+onset_date_time {
+  value_us: 1072915200000000
+  precision: YEAR
+}
+asserted_date {
+  value_us: 1412827080000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+recorder {
+  reference {
+    value: "Practitioner/example"
+  }
+}
+asserter {
+  reference {
+    value: "Patient/example"
+  }
+}
+last_occurrence {
+  value_us: 1338508800000000
+  precision: MONTH
+}
+note {
+  text {
+    value: "The criticality is high becasue of the observed anaphylactic reaction when challenged with cashew extract."
+  }
+}
+reaction {
+  substance {
+    coding {
+      system {
+        value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+      }
+      code {
+        value: "1160593"
+      }
+      display {
+        value: "cashew nut allergenic extract Injectable Product"
+      }
+    }
+  }
+  manifestation {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "39579001"
+      }
+      display {
+        value: "Anaphylactic reaction"
+      }
+    }
+  }
+  description {
+    value: "Challenge Protocol. Severe reaction to subcutaneous cashew extract. Epinephrine administered"
+  }
+  onset {
+    value_us: 1339459200000000
+    precision: DAY
+  }
+  severity {
+    value: SEVERE
+  }
+  exposure_route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "34206005"
+      }
+      display {
+        value: "Subcutaneous route"
+      }
+    }
+  }
+}
+reaction {
+  manifestation {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "64305001"
+      }
+      display {
+        value: "Urticaria"
+      }
+    }
+  }
+  onset {
+    value_us: 1072915200000000
+    precision: YEAR
+  }
+  severity {
+    value: MODERATE
+  }
+  note {
+    text {
+      value: "The patient reports that the onset of urticaria was within 15 minutes of eating cashews."
+    }
+  }
+}

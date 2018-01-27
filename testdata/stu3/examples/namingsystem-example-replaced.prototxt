@@ -1,0 +1,43 @@
+id {
+  value: "example-replaced"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n      <p>\n        <b>Deprecated SNOMED CT Spanish Registration</b>\n      </p>\n      \n      <p> oid: 2.16.840.1.113883.6.96.1 - deprecated <b>Do Not Use</b></p>\n    </div>"
+  }
+}
+name {
+  value: "SNOMED CT Spanish"
+}
+status {
+  value: RETIRED
+}
+kind {
+  value: CODESYSTEM
+}
+date {
+  value_us: 1106611200000000
+  precision: DAY
+}
+publisher {
+  value: "Not HL7!"
+}
+description {
+  value: "This was a wrong registration for the spanish editions of SNOMED CT. Do not use"
+}
+unique_id {
+  type {
+    value: OID
+  }
+  value {
+    value: "2.16.840.1.113883.6.96.1"
+  }
+}
+replaced_by {
+  reference {
+    value: "NamingSystem/example"
+  }
+}

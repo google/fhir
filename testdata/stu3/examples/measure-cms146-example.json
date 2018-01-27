@@ -1,0 +1,218 @@
+{
+  "resourceType": "Measure",
+  "id": "measure-cms146-example",
+  "text": {
+    "status": "additional",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"grid dict\"><tr><td><b>Id: </b></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\">Measure/measure-cms146-example</td></tr></table><p/><table class=\"grid dict\"><tr><td><b>Identifier: </b></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><b>system: </b><span>http://hl7.org/fhir/cqi/ecqm/Measure/Identifier/cms</span></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><b>value: </b><span>146</span></td></tr></table><table class=\"grid dict\"><tr><td><b>Identifier: </b></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><b>system: </b><span>http://hl7.org/fhir/cqi/ecqm/Measure/Identifier/nqf</span></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><b>value: </b><span>0002</span></td></tr></table><p/><table class=\"grid dict\"><tr><td><b>Title: </b></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\">Appropriate Testing for Children with Pharyngitis</td></tr></table><p/><table class=\"grid dict\"><tr><td><b>Status: </b></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\">active</td></tr></table><p/><table class=\"grid dict\"><tr><td><b>Description: </b></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\">Percentage of children 2-18 years of age who were diagnosed with pharyngitis, ordered an antibiotic and received a group A streptococcus (strep) test for the episode.</td></tr></table><p/><table class=\"grid dict\"><tr><td><b>Purpose: </b></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\">The Infectious Diseases Society of America (IDSA) &quot;recommends swabbing the throat and testing for GAS pharyngitis by rapid antigen detection test (RADT) and/or culture because the clinical features alone do not reliably discriminate between GAS and viral pharyngitis except when overt viral features like rhinorrhea, cough, oral ulcers, and/or hoarseness are present&quot;</td></tr></table><p/><table class=\"grid dict\"><tr><td><b>Topic: </b></td></tr><tr><td style=\"padding-right: 25px;\"><span><span><span style=\"padding-left: 25px;\"><b>system: </b><span>http://hl7.org/fhir/c80-doc-typecodes</span><br/></span><span style=\"padding-left: 25px;\"><b>code: </b><span>57024-2</span><br/></span></span></span></td></tr></table><p/><table class=\"grid dict\"><tr><td><b>Library: </b></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><b>reference: </b><span>Library/library-cms146-example</span></td></tr></table><p/><table class=\"grid dict\"><tr><td><b>Scoring: </b></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\">proportion</td></tr></table><p/><table class=\"grid dict\"><tr><td><b>Type: </b></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\">process</td></tr></table><p/><table class=\"grid dict\"><tr><td><b>Group:</b></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><b>Identifier:</b><br/><span style=\"padding-left: 25px;\"><b>value: </b><span>CMS146-group-1</span><br/></span></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><b>Population:</b><br/><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>type:</b><span>initial-population</span></p><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>Identifier:</b><br/><span style=\"padding-left: 25px;\"><b>value: </b><span>initial-population-identifier</span><br/></span></p><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>criteria: </b><span>CMS146.InInitialPopulation</span></p></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><b>Population:</b><br/><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>type:</b><span>numerator</span></p><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>Identifier:</b><br/><span style=\"padding-left: 25px;\"><b>value: </b><span>numerator-identifier</span><br/></span></p><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>criteria: </b><span>CMS146.InNumerator</span></p></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><b>Population:</b><br/><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>type:</b><span>denominator</span></p><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>Identifier:</b><br/><span style=\"padding-left: 25px;\"><b>value: </b><span>denominator-identifier</span><br/></span></p><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>criteria: </b><span>CMS146.InDenominator</span></p></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><b>Population:</b><br/><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>type:</b><span>denominator-exclusion</span></p><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>Identifier:</b><br/><span style=\"padding-left: 25px;\"><b>value: </b><span>denominator-exclusions-identifier</span><br/></span></p><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>criteria: </b><span>CMS146.InDenominatorExclusions</span></p></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><b>Stratifier:</b><br/><p style=\"padding-left: 25px; margin-bottom: 5px;\"><b>Identifier:</b><br/><span style=\"padding-left: 25px;\"><b>value: </b><span>stratifier-ages-up-to-9</span><br/></span></p><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>criteria: </b><span>CMS146.AgesUpToNine</span></p></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><b>Stratifier:</b><br/><p style=\"padding-left: 25px; margin-bottom: 5px;\"><b>Identifier:</b><br/><span style=\"padding-left: 25px;\"><b>value: </b><span>stratifier-ages-10-plus</span><br/></span></p><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>criteria: </b><span>CMS146.AgesTenPlus</span></p></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><b>Stratifier:</b><br/><p style=\"padding-left: 25px; margin-bottom: 5px;\"><b>Identifier:</b><br/><span style=\"padding-left: 25px;\"><b>value: </b><span>stratifier-ages-up-to-9</span><br/></span></p><p style=\"margin-bottom: 5px; padding-left: 25px;\"><b>path: </b><span>Patient.gender</span></p></td></tr></table><p/><table class=\"grid dict\"><tr><td><b>Supplemental Data:</b></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><p style=\"margin-bottom: 5px;\"><b>Identifier:</b><br/><span style=\"padding-left: 25px;\"><b>value: </b><span>supplemental-data-gender</span><br/></span></p><p style=\"margin-bottom: 5px;\"><b>path: </b><span>Patient.gender</span></p></td></tr></table><table class=\"grid dict\"><tr><td><b>Supplemental Data:</b></td></tr><tr><td style=\"padding-left: 25px; padding-right: 25px;\"><p style=\"margin-bottom: 5px;\"><b>Identifier:</b><br/><span style=\"padding-left: 25px;\"><b>value: </b><span>supplemental-data-deceased</span><br/></span></p><p style=\"margin-bottom: 5px;\"><b>path: </b><span>deceasedBoolean</span></p></td></tr></table></div>"
+  },
+  "url": "http://hl7.org/fhir/Measure/measure-cms146-example",
+  "identifier": [
+    {
+      "use": "official",
+      "system": "http://hl7.org/fhir/cqi/ecqm/Measure/Identifier/cms",
+      "value": "146"
+    },
+    {
+      "use": "official",
+      "system": "http://hl7.org/fhir/cqi/ecqm/Measure/Identifier/nqf",
+      "value": "0002"
+    }
+  ],
+  "version": "1.0.0",
+  "name": "CMS146",
+  "title": "Appropriate Testing for Children with Pharyngitis",
+  "status": "active",
+  "experimental": true,
+  "date": "2017-03-10",
+  "publisher": "National Committee for Quality Assurance",
+  "description": "Percentage of children 3-18 years of age who were diagnosed with pharyngitis, ordered an antibiotic and received a group A streptococcus (strep) test for the episode.",
+  "purpose": "Measure of children with a group A streptococcus test in the 7-day period from 3 days prior through 3 days after the diagnosis of pharyngitis",
+  "approvalDate": "2016-01-01",
+  "lastReviewDate": "2016-09-01",
+  "effectivePeriod": {
+    "start": "2017-01-01",
+    "end": "2017-12-31"
+  },
+  "useContext": [
+    {
+      "code": {
+        "code": "program"
+      },
+      "valueCodeableConcept": {
+        "text": "eligibile-provider"
+      }
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "US"
+        }
+      ]
+    }
+  ],
+  "topic": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/c80-doc-typecodes",
+          "code": "57024-2"
+        }
+      ]
+    }
+  ],
+  "contributor": [
+    {
+      "type": "author",
+      "name": "National Committee for Quality Assurance"
+    }
+  ],
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://www.ncqa.org/"
+        }
+      ]
+    }
+  ],
+  "copyright": "Physician Performance Measure (Measures) and related data specifications were developed by the National Committee for Quality Assurance (NCQA).   The Measures are copyrighted but can be reproduced and distributed, without modification, for noncommercial purposes (eg, use by healthcare providers in connection with their practices). Commercial use is defined as the sale, licensing, or distribution of the Measures for commercial gain, or incorporation of the Measures into a product or service that is sold, licensed or distributed for commercial gain. Commercial use of the Measures requires a license agreement between the user and NCQA. NCQA is not responsible for any use of the Measures.   (c) 2008-2016 National Committee for Quality Assurance. All Rights Reserved.   Limited proprietary coding is contained in the Measure specifications for user convenience. Users of proprietary code sets should obtain all necessary licenses from the owners of the code sets. NCQA disclaims all liability for use or accuracy of any CPT or other codes contained in the specifications.  CPT(R) contained in the Measure specifications is copyright 2004-2015 American Medical Association. LOINC(R) copyright 2004-2015 Regenstrief Institute, Inc. This material contains SNOMED Clinical Terms(R) (SNOMED CT[R]) copyright 2004-2015 International Health Terminology Standards Development Organisation. ICD-10 copyright 2015 World Health Organization. All Rights Reserved.",
+  "relatedArtifact": [
+    {
+      "type": "documentation",
+      "citation": "Linder, J.A., D.W. Bates, G.M. Lee, J.A. Finkelstein. 2005. \"Antibiotic treatment of children with sore throat.\" JAMA 294(18):2315-2322. "
+    },
+    {
+      "type": "documentation",
+      "citation": "Infectious Diseases Society of America. 2012. \"Clinical Practice Guideline for the Diagnosis and Management of Group A Streptococcal Pharyngitis: 2012 Update.\" "
+    },
+    {
+      "type": "documentation",
+      "citation": "Roberts, R.R., B. Hota, I. Ahmad, et al. \"Hospital and Societal Costs of Antimicrobial-Resistant Infections in a Chicago Teaching Hospital: Implications for Antibiotic Stewardship.\" Clin Infect Dis. Oct 2009; 49(8):1175-84."
+    }
+  ],
+  "library": [
+    {
+      "reference": "Library/library-cms146-example"
+    }
+  ],
+  "disclaimer": "These performance Measures are not clinical guidelines and do not establish a standard of medical care, and have not been tested for all potential applications. THE MEASURES AND SPECIFICATIONS ARE PROVIDED \"AS IS\" WITHOUT WARRANTY OF ANY KIND. Due to technical limitations, registered trademarks are indicated by (R) or [R] and unregistered trademarks are indicated by (TM) or [TM].",
+  "scoring": {
+    "coding": [
+      {
+        "code": "proportion"
+      }
+    ]
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "code": "process"
+        }
+      ]
+    }
+  ],
+  "rationale": "Group A streptococcal bacterial infections and other infections that cause pharyngitis (which are most often viral) often produce the same signs and symptoms (IDSA 2002). The American Academy of Pediatrics, the Centers for Disease Control and Prevention, and the Infectious Diseases Society of America all recommend a diagnostic test for Strep A to improve diagnostic accuracy and avoid unnecessary antibiotic treatment (Linder et al. 2005). Estimated economic costs of pediatric streptococcal pharyngitis in the United States range from $224 million to $539 million per year, including indirect costs related to parental work losses. At a higher level, the economic cost of antibiotic resistance vary but have extended as high as $20 billion in excess direct healthcare costs, with additional costs to society for lost productivity as high as $35 billion a year (2008 dollars) (Roberts et al. 2009).",
+  "clinicalRecommendationStatement": "The Infectious Diseases Society of America (IDSA) \"recommends swabbing the throat and testing for GAS pharyngitis by rapid antigen detection test (RADT) and/or culture because the clinical features alone do not reliably discriminate between GAS and viral pharyngitis except when overt viral features like rhinorrhea, cough, oral ulcers, and/or hoarseness are present\"",
+  "improvementNotation": "Higher score indicates better quality",
+  "guidance": "This is an episode of care measure that examines all eligible episodes for the patient during the measurement period. If the patient has more than one episode, include all episodes in the measure",
+  "group": [
+    {
+      "identifier": {
+        "value": "CMS146-group-1"
+      },
+      "population": [
+        {
+          "identifier": {
+            "value": "initial-population-identifier"
+          },
+          "code": {
+            "coding": [
+              {
+                "code": "initial-population"
+              }
+            ]
+          },
+          "criteria": "CMS146.InInitialPopulation"
+        },
+        {
+          "identifier": {
+            "value": "numerator-identifier"
+          },
+          "code": {
+            "coding": [
+              {
+                "code": "numerator"
+              }
+            ]
+          },
+          "criteria": "CMS146.InNumerator"
+        },
+        {
+          "identifier": {
+            "value": "denominator-identifier"
+          },
+          "code": {
+            "coding": [
+              {
+                "code": "denominator"
+              }
+            ]
+          },
+          "criteria": "CMS146.InDenominator"
+        },
+        {
+          "identifier": {
+            "value": "denominator-exclusions-identifier"
+          },
+          "code": {
+            "coding": [
+              {
+                "code": "denominator-exclusion"
+              }
+            ]
+          },
+          "criteria": "CMS146.InDenominatorExclusions"
+        }
+      ],
+      "stratifier": [
+        {
+          "identifier": {
+            "value": "stratifier-ages-up-to-9"
+          },
+          "criteria": "CMS146.AgesUpToNine"
+        },
+        {
+          "identifier": {
+            "value": "stratifier-ages-10-plus"
+          },
+          "criteria": "CMS146.AgesTenPlus"
+        },
+        {
+          "identifier": {
+            "value": "stratifier-ages-up-to-9"
+          },
+          "path": "Patient.gender"
+        }
+      ]
+    }
+  ],
+  "supplementalData": [
+    {
+      "identifier": {
+        "value": "supplemental-data-gender"
+      },
+      "path": "Patient.gender"
+    },
+    {
+      "identifier": {
+        "value": "supplemental-data-deceased"
+      },
+      "path": "deceasedBoolean"
+    }
+  ]
+}

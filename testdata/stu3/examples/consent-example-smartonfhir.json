@@ -1,0 +1,49 @@
+{
+  "resourceType": "Consent",
+  "id": "consent-example-smartonfhir",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: consent-example-smartonfhir</p><p><b>status</b>: active</p><p><b>patient</b>: <a>Patient/xcda</a></p><p><b>period</b>: 23/06/2016 5:02:33 PM --&gt; 23/06/2016 5:32:33 PM</p><p><b>dateTime</b>: 23/06/2016 5:02:33 PM</p><p><b>consentingParty</b>: <a>RelatedPerson/peter</a></p><p><b>organization</b>: <a>Organization/example</a></p><p><b>policyRule</b>: <a>http://hl7.org/fhir/ConsentPolicy/opt-in</a></p><h3>Excepts</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Action</b></td><td><b>Class</b></td></tr><tr><td>*</td><td>permit</td><td>Access <span>(Details : {http://hl7.org/fhir/consentaction code 'access' = 'Access)</span></td><td>MedicationRequest (Details: http://hl7.org/fhir/resource-types code MedicationRequest = 'MedicationRequest', stated as 'null')</td></tr></table></div>"
+  },
+  "status": "active",
+  "patient": {
+    "reference": "Patient/xcda"
+  },
+  "period": {
+    "start": "2016-06-23T17:02:33+10:00",
+    "end": "2016-06-23T17:32:33+10:00"
+  },
+  "dateTime": "2016-06-23T17:02:33+10:00",
+  "consentingParty": [
+    {
+      "reference": "RelatedPerson/peter"
+    }
+  ],
+  "organization": [
+    {
+      "reference": "Organization/example"
+    }
+  ],
+  "policyRule": "http://hl7.org/fhir/ConsentPolicy/opt-in",
+  "except": [
+    {
+      "type": "permit",
+      "action": [
+        {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/consentaction",
+              "code": "access"
+            }
+          ]
+        }
+      ],
+      "class": [
+        {
+          "system": "http://hl7.org/fhir/resource-types",
+          "code": "MedicationRequest"
+        }
+      ]
+    }
+  ]
+}

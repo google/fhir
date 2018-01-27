@@ -1,0 +1,536 @@
+id {
+  value: "example-double-cousin-relationship"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-double-cousin-relationship</p><p><b>contained</b>: , , , , , </p><p><b>status</b>: current</p><p><b>mode</b>: snapshot</p><p><b>code</b>: TPMT gene mutations found [Identifier] in Blood or Tissue by Sequencing Nominal <span>(Details : {LOINC code \'80738-8\' = \'TPMT gene mutations found [Identifier] in Blood or Tissue by Sequencing Nominal\', given as \'TPMT gene mutations found [Identifier] in Blood or Tissue by Sequencing Nominal\'})</span></p><p><b>subject</b>: <a>Pam Taylor</a></p><blockquote><p><b>entry</b></p><p><b>item</b>: id: 1; status: completed; name: Mary; natural mother <span>(Details : {http://hl7.org/fhir/v3/RoleCode code \'NMTH\' = \'natural mother\', given as \'natural mother\'})</span>; deceased</p></blockquote><blockquote><p><b>entry</b></p><p><b>item</b>: id: 2; status: completed; name: Bob; paternal uncle <span>(Details : {http://hl7.org/fhir/v3/RoleCode code \'PUNCLE\' = \'paternal uncle\', given as \'paternal uncle\'})</span></p></blockquote><blockquote><p><b>entry</b></p><p><b>item</b>: id: 3; status: completed; name: Jon; maternal uncle <span>(Details : {http://hl7.org/fhir/v3/RoleCode code \'MUNCLE\' = \'maternal uncle\', given as \'maternal uncle\'})</span></p></blockquote><blockquote><p><b>entry</b></p><p><b>item</b>: id: 4; status: completed; name: Alica; maternal grandmother <span>(Details : {http://hl7.org/fhir/v3/RoleCode code \'MGRMTH\' = \'maternal grandmother\', given as \'maternal grandmother\'})</span>; 70 yr<span> (Details: UCUM code a = \'a\')</span></p></blockquote><blockquote><p><b>entry</b></p><p><b>item</b>: id: 5; status: completed; name: Aunt with Parent ID; maternal aunt <span>(Details : {http://hl7.org/fhir/v3/RoleCode code \'MAUNT\' = \'maternal aunt\', given as \'maternal aunt\'})</span>; gender: female; 55 yr<span> (Details: UCUM code a = \'a\')</span></p></blockquote><blockquote><p><b>entry</b></p><p><b>item</b>: id: 6; status: completed; name: Paul; Paternal grandfather <span>(Details : {http://hl7.org/fhir/v3/RoleCode code \'PGRFTH\' = \'paternal grandfather\', given as \'Paternal grandfather\'})</span>; 74 yr<span> (Details: UCUM code b = \'b\')</span></p></blockquote></div>"
+  }
+}
+contained {
+  family_memberhistory {
+    id {
+      value: "1"
+    }
+    status {
+      value: COMPLETED
+    }
+    patient {
+      reference {
+        value: "Patient/example"
+      }
+      display {
+        value: "Pam Taylor"
+      }
+    }
+    name {
+      value: "Mary"
+    }
+    relationship {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/RoleCode"
+        }
+        code {
+          value: "NMTH"
+        }
+        display {
+          value: "natural mother"
+        }
+      }
+      text {
+        value: "natural mother"
+      }
+    }
+    deceased_boolean {
+      value: true
+    }
+    condition {
+      code {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "73211009"
+          }
+          display {
+            value: "Diabetes mellitus"
+          }
+        }
+        text {
+          value: "Diabetes mellitus"
+        }
+      }
+      onset_age {
+        value {
+          value: 45.0
+          precision: 2
+        }
+        unit {
+          value: "yr"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+    }
+  }
+}
+contained {
+  family_memberhistory {
+    id {
+      value: "2"
+    }
+    status {
+      value: COMPLETED
+    }
+    patient {
+      reference {
+        value: "Patient/example"
+      }
+      display {
+        value: "Pam Taylor"
+      }
+    }
+    name {
+      value: "Bob"
+    }
+    relationship {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/RoleCode"
+        }
+        code {
+          value: "PUNCLE"
+        }
+        display {
+          value: "paternal uncle"
+        }
+      }
+      text {
+        value: "paternal uncle"
+      }
+    }
+    condition {
+      code {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "1481000119100"
+          }
+          display {
+            value: "Diabetes mellitus type 2 without retinopathy"
+          }
+        }
+        text {
+          value: "Diabetes mellitus type 2 without retinopathy"
+        }
+      }
+      onset_age {
+        value {
+          value: 35.0
+          precision: 2
+        }
+        unit {
+          value: "yr"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+    }
+  }
+}
+contained {
+  family_memberhistory {
+    id {
+      value: "3"
+    }
+    status {
+      value: COMPLETED
+    }
+    patient {
+      reference {
+        value: "Patient/example"
+      }
+      display {
+        value: "Pam Taylor"
+      }
+    }
+    name {
+      value: "Jon"
+    }
+    relationship {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/RoleCode"
+        }
+        code {
+          value: "MUNCLE"
+        }
+        display {
+          value: "maternal uncle"
+        }
+      }
+      text {
+        value: "maternal uncle"
+      }
+    }
+  }
+}
+contained {
+  family_memberhistory {
+    id {
+      value: "4"
+    }
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-sibling"
+      }
+      extension {
+        url {
+          value: "type"
+        }
+        value_codeable_concept {
+          coding {
+            system {
+              value: "http://hl7.org/fhir/v3/RoleCode"
+            }
+            code {
+              value: "NSIS"
+            }
+            display {
+              value: "natural sister"
+            }
+          }
+          text {
+            value: "natural sister"
+          }
+        }
+      }
+      extension {
+        url {
+          value: "reference"
+        }
+        value_reference {
+          reference {
+            value: "FamilyMemberHistory/mother"
+          }
+          display {
+            value: "paternal grandmother"
+          }
+        }
+      }
+    }
+    status {
+      value: COMPLETED
+    }
+    patient {
+      reference {
+        value: "Patient/example"
+      }
+      display {
+        value: "Pam Taylor"
+      }
+    }
+    name {
+      value: "Alica"
+    }
+    relationship {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/RoleCode"
+        }
+        code {
+          value: "MGRMTH"
+        }
+        display {
+          value: "maternal grandmother"
+        }
+      }
+      text {
+        value: "maternal grandmother"
+      }
+    }
+    age_age {
+      value {
+        value: 70.0
+        precision: 2
+      }
+      unit {
+        value: "yr"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "a"
+      }
+    }
+  }
+}
+contained {
+  family_memberhistory {
+    id {
+      value: "5"
+    }
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-parent"
+      }
+      extension {
+        url {
+          value: "type"
+        }
+        value_codeable_concept {
+          coding {
+            system {
+              value: "http://hl7.org/fhir/v3/RoleCode"
+            }
+            code {
+              value: "MTH"
+            }
+            display {
+              value: "mother"
+            }
+          }
+          text {
+            value: "mother"
+          }
+        }
+      }
+      extension {
+        url {
+          value: "reference"
+        }
+        value_reference {
+          reference {
+            value: "FamilyMemberHistory/147146"
+          }
+          display {
+            value: "maternal grandmother"
+          }
+        }
+      }
+    }
+    status {
+      value: COMPLETED
+    }
+    patient {
+      reference {
+        value: "Patient/example"
+      }
+      display {
+        value: "Pam Taylor"
+      }
+    }
+    name {
+      value: "Aunt with Parent ID"
+    }
+    relationship {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/RoleCode"
+        }
+        code {
+          value: "MAUNT"
+        }
+        display {
+          value: "maternal aunt"
+        }
+      }
+      text {
+        value: "maternal aunt"
+      }
+    }
+    gender {
+      value: FEMALE
+    }
+    age_age {
+      value {
+        value: 55.0
+        precision: 2
+      }
+      unit {
+        value: "yr"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "a"
+      }
+    }
+  }
+}
+contained {
+  family_memberhistory {
+    id {
+      value: "6"
+    }
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-sibling"
+      }
+      extension {
+        url {
+          value: "type"
+        }
+        value_codeable_concept {
+          coding {
+            code {
+              value: "NBRO"
+            }
+            display {
+              value: "natural brother"
+            }
+          }
+          text {
+            value: "natural brother"
+          }
+        }
+      }
+      extension {
+        url {
+          value: "reference"
+        }
+        value_reference {
+          reference {
+            value: "FamilyMemberHistory/father"
+          }
+          display {
+            value: "maternal grandfather"
+          }
+        }
+      }
+    }
+    status {
+      value: COMPLETED
+    }
+    patient {
+      reference {
+        value: "Patient/example"
+      }
+      display {
+        value: "Pam Taylor"
+      }
+    }
+    name {
+      value: "Paul"
+    }
+    relationship {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/RoleCode"
+        }
+        code {
+          value: "PGRFTH"
+        }
+        display {
+          value: "Paternal grandfather"
+        }
+      }
+      text {
+        value: "Paternal grandfather"
+      }
+    }
+    age_age {
+      value {
+        value: 74.0
+        precision: 2
+      }
+      unit {
+        value: "yr"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "b"
+      }
+    }
+  }
+}
+status {
+  value: CURRENT
+}
+mode {
+  value: SNAPSHOT
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "80738-8"
+    }
+    display {
+      value: "TPMT gene mutations found [Identifier] in Blood or Tissue by Sequencing Nominal"
+    }
+  }
+  text {
+    value: "TPMT gene mutations found [Identifier] in Blood or Tissue by Sequencing Nominal"
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+  display {
+    value: "Pam Taylor"
+  }
+}
+entry {
+  item {
+    reference {
+      value: "#1"
+    }
+  }
+}
+entry {
+  item {
+    reference {
+      value: "#2"
+    }
+  }
+}
+entry {
+  item {
+    reference {
+      value: "#3"
+    }
+  }
+}
+entry {
+  item {
+    reference {
+      value: "#4"
+    }
+  }
+}
+entry {
+  item {
+    reference {
+      value: "#5"
+    }
+  }
+}
+entry {
+  item {
+    reference {
+      value: "#6"
+    }
+  }
+}

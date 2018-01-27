@@ -1,0 +1,117 @@
+id {
+  value: "SR2499"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A ProcessResponse indicating pended status with a request for additional information.</div>"
+  }
+}
+contained {
+  communication_request {
+    id {
+      value: "comreq-1"
+    }
+    identifier {
+      system {
+        value: "http://www.jurisdiction.com/insurer/123456"
+      }
+      value {
+        value: "ABC123"
+      }
+    }
+    status {
+      value: ACTIVE
+    }
+    category {
+      coding {
+        system {
+          value: "http://acme.org/messagetypes"
+        }
+        code {
+          value: "SolicitedAttachmentRequest"
+        }
+      }
+    }
+    recipient {
+      identifier {
+        system {
+          value: "http://www.jurisdiction.com/provideroffices"
+        }
+        value {
+          value: "3456"
+        }
+      }
+    }
+    payload {
+      content_string {
+        value: "Please provide the accident report and any associated pictures to support your Claim#      DEF5647."
+      }
+    }
+    authored_on {
+      value_us: 1465585270000000
+      timezone: "-08:00"
+      precision: SECOND
+    }
+    sender {
+      identifier {
+        system {
+          value: "http://www.jurisdiction.com/insurer"
+        }
+        value {
+          value: "123456"
+        }
+      }
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/processresponse"
+  }
+  value {
+    value: "881222"
+  }
+}
+status {
+  value: ACTIVE
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+organization {
+  reference {
+    value: "Organization/2"
+  }
+}
+request {
+  reference {
+    value: "http://happyvalley.com/fhir/claim/12345"
+  }
+}
+outcome {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/processoutcomecodes"
+    }
+    code {
+      value: "pended"
+    }
+  }
+}
+disposition {
+  value: "Additional information required."
+}
+request_organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+communication_request {
+  reference {
+    value: "#comreq-1"
+  }
+}

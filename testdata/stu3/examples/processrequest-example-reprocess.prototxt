@@ -1,0 +1,47 @@
+id {
+  value: "44654"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the ReProcess ProcessRequest resource.</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/processrequest"
+  }
+  value {
+    value: "44543"
+  }
+}
+status {
+  value: ACTIVE
+}
+action {
+  value: REPROCESS
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+request {
+  reference {
+    value: "http://BenefitsInc.com/fhir/claim/12345"
+  }
+}
+reference {
+  value: "ABC12345G"
+}
+item {
+  sequence_link_id {
+    value: 1
+  }
+}

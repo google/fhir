@@ -1,0 +1,135 @@
+id {
+  value: "insulinpump"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: insulinpump</p><p><b>identifier</b>: ip_request1.1</p><p><b>definition</b>: DM ambulatory protocol II</p><p><b>basedOn</b>: Homecare - DM follow-up</p><p><b>priorRequest</b>: CGM ambulatory</p><p><b>groupIdentifier</b>: ip_request1</p><p><b>status</b>: active</p><p><b>intent</b>: instance-order <span>(Details )</span></p><p><b>priority</b>: routine</p><p><b>code</b>: Insulin delivery device panel <span>(Details : {LOINC code \'43148-6\' = \'Insulin delivery device panel)</span></p><p><b>subject</b>: <a>Patient/dicom</a></p><p><b>context</b>: Encounter 1</p><p><b>occurrence</b>: 08/05/2013 9:33:27 AM</p><p><b>authoredOn</b>: 08/05/2013 9:33:27 AM</p><h3>Requesters</h3><table><tr><td>-</td><td><b>Agent</b></td><td><b>OnBehalfOf</b></td></tr><tr><td>*</td><td><a>Dr. Adam Careful</a></td><td><a>Organization/2.16.840.1.113883.19.5</a></td></tr></table><p><b>performerType</b>: Nurse <span>(Details : {[not stated] code \'null\' = \'null\', given as \'Qualified nurse\'})</span></p><p><b>performer</b>: Nurse Rossignol</p><p><b>reasonCode</b>: gastroparesis <span>(Details )</span></p><p><b>reasonReference</b>: Gastroparesis</p><p><b>supportingInfo</b>: Previous results</p><p><b>note</b>: this is the right device brand and model</p><p><b>relevantHistory</b>: Request for unspecified device</p></div>"
+  }
+}
+identifier {
+  value {
+    value: "ip_request1.1"
+  }
+}
+definition {
+  display {
+    value: "DM ambulatory protocol II"
+  }
+}
+based_on {
+  display {
+    value: "Homecare - DM follow-up"
+  }
+}
+prior_request {
+  display {
+    value: "CGM ambulatory"
+  }
+}
+group_identifier {
+  value {
+    value: "ip_request1"
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  text {
+    value: "instance-order"
+  }
+}
+priority {
+  value: ROUTINE
+}
+code_codeable_concept {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "43148-6"
+    }
+  }
+  text {
+    value: "Insulin delivery device panel"
+  }
+}
+subject {
+  reference {
+    value: "Patient/dicom"
+  }
+}
+context {
+  display {
+    value: "Encounter 1"
+  }
+}
+occurrence_date_time {
+  value_us: 1367980407000000
+  timezone: "+07:00"
+  precision: SECOND
+}
+authored_on {
+  value_us: 1367980407000000
+  timezone: "+07:00"
+  precision: SECOND
+}
+requester {
+  agent {
+    reference {
+      value: "Practitioner/example"
+    }
+    display {
+      value: "Dr. Adam Careful"
+    }
+  }
+  on_behalf_of {
+    reference {
+      value: "Organization/2.16.840.1.113883.19.5"
+    }
+  }
+}
+performer_type {
+  coding {
+    display {
+      value: "Qualified nurse"
+    }
+  }
+  text {
+    value: "Nurse"
+  }
+}
+performer {
+  display {
+    value: "Nurse Rossignol"
+  }
+}
+reason_code {
+  text {
+    value: "gastroparesis"
+  }
+}
+reason_reference {
+  display {
+    value: "Gastroparesis"
+  }
+}
+supporting_info {
+  display {
+    value: "Previous results"
+  }
+}
+note {
+  text {
+    value: "this is the right device brand and model"
+  }
+}
+relevant_history {
+  display {
+    value: "Request for unspecified device"
+  }
+}

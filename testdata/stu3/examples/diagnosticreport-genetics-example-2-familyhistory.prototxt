@@ -1,0 +1,148 @@
+id {
+  value: "dg2"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n          \n          \n          <h3>Genetic test Report for Marry Chalmers (MRN: 12345) </h3>\n          \n          <pre>\n              Gene                DNAVariation       Status        Interpretation\n              BRCA1                                 Negative\n              BRCA2                 185delAG        Positive         Pathogenic\n          </pre>\n          <p> Method: BRACAnalysis CDx Offered by Myriad Genetic Laboratories, Inc </p>\n          <p> Issued: 2015-05-26T15:30:10+01:00</p>\n          <p> FamilyMemeberHistory: Mother </p>\n          <pre>\n              Gene                 DNAVariation      Status\n              BRCA2                 185delAG        Positive\n          </pre>\n          <p> Method: BRACAnalysis CDx Offered by Myriad Genetic Laboratories, Inc </p>\n          \n      </div>"
+  }
+}
+contained {
+  family_memberhistory {
+    id {
+      value: "f1-genetics"
+    }
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation"
+      }
+      value_reference {
+        reference {
+          value: "Observation/dgf1"
+        }
+      }
+    }
+    status {
+      value: COMPLETED
+    }
+    patient {
+      reference {
+        value: "Patient/example"
+      }
+    }
+    relationship {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/RoleCode"
+        }
+        code {
+          value: "MTH"
+        }
+        display {
+          value: "Mother"
+        }
+      }
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory"
+  }
+  value_reference {
+    reference {
+      value: "#f1-genetics"
+    }
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "15220000"
+    }
+    display {
+      value: "Laboratory test"
+    }
+  }
+  coding {
+    system {
+      value: "http://hl7.org/fhir/v2/0074"
+    }
+    code {
+      value: "LAB"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "55233-1"
+    }
+    display {
+      value: "Genetic analysis master panel"
+    }
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+  display {
+    value: "Peter James Chalmers(MRN: 12345)"
+  }
+}
+effective_date_time {
+  value_us: 1432650610000000
+  timezone: "+01:00"
+  precision: SECOND
+}
+issued {
+  value_us: 1400232480000000
+  timezone: "+01:00"
+  precision: SECOND
+}
+performer {
+  actor {
+    reference {
+      value: "Practitioner/genetics-example2"
+    }
+    display {
+      value: "Molecular Diagnostic Laboratory"
+    }
+  }
+}
+specimen {
+  reference {
+    value: "Specimen/genetics-example2"
+  }
+  display {
+    value: "Molecular Specimen ID: MLD45-Z4-1234"
+  }
+}
+result {
+  reference {
+    value: "Observation/ob-genetics-3-1"
+  }
+  display {
+    value: "Genetic analysis for BRAC -1"
+  }
+}
+result {
+  reference {
+    value: "Observation/ob-genetics-3-2"
+  }
+  display {
+    value: "Genetic analysis for BRAC -2"
+  }
+}

@@ -1,0 +1,35 @@
+id {
+  value: "example-simple-empty"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Patient Admission Waitoing list</p>\n    </div>"
+  }
+}
+status {
+  value: CURRENT
+}
+mode {
+  value: SNAPSHOT
+}
+code {
+  coding {
+    system {
+      value: "http://acme.com/list-codes"
+    }
+    code {
+      value: "346638"
+    }
+    display {
+      value: "Patient Admission List"
+    }
+  }
+}
+date {
+  value_us: 1468461245000000
+  timezone: "+10:00"
+  precision: SECOND
+}

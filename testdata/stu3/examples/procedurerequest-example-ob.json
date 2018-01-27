@@ -1,0 +1,49 @@
+{
+  "resourceType": "ProcedureRequest",
+  "id": "ob",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: ob</p><p><b>status</b>: completed</p><p><b>intent</b>: order</p><p><b>category</b>: OB <span>(Details : {SNOMED CT code '386637004' = 'Obstetric procedure', given as 'Obstetric procedure (procedure)'})</span></p><p><b>code</b>: Vaginal delivery <span>(Details : {SNOMED CT code '22633006' = 'Vaginal delivery, medical personnel present', given as 'Vaginal delivery, medical personnel present (procedure)'})</span></p><p><b>subject</b>: Jane Doe</p><p><b>occurrence</b>: 02/06/2012</p><h3>Requesters</h3><table><tr><td>-</td><td><b>Agent</b></td></tr><tr><td>*</td><td>Women’s Hospital</td></tr></table><p><b>performer</b>: Martha Midwife, RNP</p><p><b>reasonCode</b>: term pregnancy, active labor <span>(Details )</span></p></div>"
+  },
+  "status": "completed",
+  "intent": "order",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "386637004",
+          "display": "Obstetric procedure (procedure)"
+        }
+      ],
+      "text": "OB"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "22633006",
+        "display": "Vaginal delivery, medical personnel present (procedure)"
+      }
+    ],
+    "text": "Vaginal delivery"
+  },
+  "subject": {
+    "display": "Jane Doe"
+  },
+  "occurrenceDateTime": "2012-06-02",
+  "requester": {
+    "agent": {
+      "display": "Women’s Hospital"
+    }
+  },
+  "performer": {
+    "display": "Martha Midwife, RNP"
+  },
+  "reasonCode": [
+    {
+      "text": "term pregnancy, active labor"
+    }
+  ]
+}

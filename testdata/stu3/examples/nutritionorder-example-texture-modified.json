@@ -1,0 +1,79 @@
+{
+  "resourceType": "NutritionOrder",
+  "id": "texturemodified",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: texturemodified</p><p><b>identifier</b>: 123</p><p><b>status</b>: active</p><p><b>patient</b>: <a>Peter Chalmers</a></p><p><b>dateTime</b>: 17/09/2014</p><p><b>orderer</b>: <a>Dr Adam Careful</a></p><blockquote><p><b>oralDiet</b></p><p><b>type</b>: Texture modified diet <span>(Details : {SNOMED CT code '435801000124108' = 'Texture modified diet (regime/therapy)', given as 'Texture modified diet'}; {http://goodhealthhospital.org/diet-type-codes code '1010' = '1010', given as 'Texture modified diet'})</span></p><p><b>schedule</b>: Starting 10/02/2015, Do 3 per 1 days</p><h3>Textures</h3><table><tr><td>-</td><td><b>Modifier</b></td><td><b>FoodType</b></td></tr><tr><td>*</td><td>Regular, Chopped Meat <span>(Details : {SNOMED CT code '228049004' = 'Chopped food', given as 'Chopped food'})</span></td><td>Regular, Chopped Meat <span>(Details : {SNOMED CT code '28647000' = 'Meat', given as 'Meat'})</span></td></tr></table></blockquote></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://goodhealthhospital.org/nutrition-requests",
+      "value": "123"
+    }
+  ],
+  "status": "active",
+  "patient": {
+    "reference": "Patient/example",
+    "display": "Peter Chalmers"
+  },
+  "dateTime": "2014-09-17",
+  "orderer": {
+    "reference": "Practitioner/example",
+    "display": "Dr Adam Careful"
+  },
+  "oralDiet": {
+    "type": [
+      {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "435801000124108",
+            "display": "Texture modified diet"
+          },
+          {
+            "system": "http://goodhealthhospital.org/diet-type-codes",
+            "code": "1010",
+            "display": "Texture modified diet"
+          }
+        ],
+        "text": "Texture modified diet"
+      }
+    ],
+    "schedule": [
+      {
+        "repeat": {
+          "boundsPeriod": {
+            "start": "2015-02-10"
+          },
+          "frequency": 3,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      }
+    ],
+    "texture": [
+      {
+        "modifier": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "228049004",
+              "display": "Chopped food"
+            }
+          ],
+          "text": "Regular, Chopped Meat"
+        },
+        "foodType": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "28647000",
+              "display": "Meat"
+            }
+          ],
+          "text": "Regular, Chopped Meat"
+        }
+      }
+    ]
+  }
+}

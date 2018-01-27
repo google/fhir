@@ -1,0 +1,114 @@
+id {
+  value: "meddisp008"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: meddisp008</p><p><b>contained</b>: </p><p><b>status</b>: completed</p><p><b>medication</b>: id: medexample015; Capecitabine 500mg oral tablet (Xeloda) <span>(Details : {RxNorm code \'213293\' = \'213293\', given as \'Capecitabine 500mg oral tablet (Xeloda)\'})</span>; isBrand</p><p><b>subject</b>: <a>Donald Duck</a></p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td><td><b>OnBehalfOf</b></td></tr><tr><td>*</td><td><a>Practitioner/f006</a></td><td><a>Organization/2.16.840.1.113883.19.5</a></td></tr></table><p><b>authorizingPrescription</b>: <a>MedicationRequest/medrx0309</a></p><p><b>dosageInstruction</b>: </p></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "medexample015"
+    }
+    code {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "213293"
+        }
+        display {
+          value: "Capecitabine 500mg oral tablet (Xeloda)"
+        }
+      }
+    }
+    is_brand {
+      value: true
+    }
+  }
+}
+status {
+  value: COMPLETED
+}
+medication_reference {
+  reference {
+    value: "#medexample015"
+  }
+}
+subject {
+  reference {
+    value: "Patient/pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+performer {
+  actor {
+    reference {
+      value: "Practitioner/f006"
+    }
+  }
+  on_behalf_of {
+    reference {
+      value: "Organization/2.16.840.1.113883.19.5"
+    }
+  }
+}
+authorizing_prescription {
+  reference {
+    value: "MedicationRequest/medrx0309"
+  }
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 2
+      }
+      period {
+        value: 21.0
+        precision: 2
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "394899003"
+      }
+      display {
+        value: "oral administration of treatment"
+      }
+    }
+  }
+  dose_quantity {
+    value {
+      value: 500.0
+      precision: 3
+    }
+    unit {
+      value: "mg"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "mg"
+    }
+  }
+}

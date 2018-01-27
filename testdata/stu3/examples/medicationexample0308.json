@@ -1,0 +1,132 @@
+{
+  "resourceType": "Medication",
+  "id": "med0308",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: med0308</p><p><b>contained</b>: , </p><p><b>code</b>: Percocet tablet <span>(Details : {http://hl7.org/fhir/sid/ndc code '16590-619-30' = '16590-619-30', given as 'Percocet tablet'})</span></p><p><b>isBrand</b>: true</p><p><b>manufacturer</b>: id: org1; name: Stat Rx USA LLC</p><p><b>form</b>: Tablet dose form (qualifier value) <span>(Details : {SNOMED CT code '385055001' = 'Tablet', given as 'Tablet dose form (qualifier value)'})</span></p><blockquote><p><b>ingredient</b></p><p><b>item</b>: Oxycodone HCl <span>(Details : {RxNorm code '82063' = '82063', given as 'Oxycodone HCl'})</span></p><p><b>amount</b>: 5 mg<span> (Details: UCUM code mg = 'mg')</span>/1 TAB<span> (Details: http://hl7.org/fhir/v3/orderableDrugForm code TAB = 'Tablet')</span></p></blockquote><blockquote><p><b>ingredient</b></p><p><b>item</b>: Acetaminophen <span>(Details : {RxNorm code '161' = '161', given as 'Acetaminophen'})</span></p><p><b>amount</b>: 325 mg<span> (Details: UCUM code mg = 'mg')</span>/1 TAB<span> (Details: http://hl7.org/fhir/v3/orderableDrugForm code TAB = 'Tablet')</span></p></blockquote><blockquote><p><b>package</b></p><p><b>container</b>: Bottle - unit of product usage (qualifier value) <span>(Details : {SNOMED CT code '419672006' = 'Bottle', given as 'Bottle - unit of product usage (qualifier value)'})</span></p><h3>Contents</h3><table><tr><td>-</td><td><b>Item[x]</b></td><td><b>Amount</b></td></tr><tr><td>*</td><td>id: med500; </td><td>100 TAB<span> (Details: http://hl7.org/fhir/v3/orderableDrugForm code TAB = 'Tablet')</span></td></tr></table><h3>Batches</h3><table><tr><td>-</td><td><b>LotNumber</b></td><td><b>ExpirationDate</b></td></tr><tr><td>*</td><td>658484</td><td>31/07/2020</td></tr></table></blockquote></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Medication",
+      "id": "med500",
+      "isBrand": false,
+      "ingredient": [
+        {
+          "itemCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+                "code": "1049221",
+                "display": "Acetaminophen 325mg/Oxycodone Hydrochloride 5mg Oral Tablet"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Organization",
+      "id": "org1",
+      "name": "Stat Rx USA LLC"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/sid/ndc",
+        "code": "16590-619-30",
+        "display": "Percocet tablet"
+      }
+    ]
+  },
+  "isBrand": true,
+  "manufacturer": {
+    "reference": "#org1"
+  },
+  "form": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "385055001",
+        "display": "Tablet dose form (qualifier value)"
+      }
+    ]
+  },
+  "ingredient": [
+    {
+      "itemCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+            "code": "82063",
+            "display": "Oxycodone HCl"
+          }
+        ]
+      },
+      "amount": {
+        "numerator": {
+          "value": 5,
+          "system": "http://unitsofmeasure.org",
+          "code": "mg"
+        },
+        "denominator": {
+          "value": 1,
+          "system": "http://hl7.org/fhir/v3/orderableDrugForm",
+          "code": "TAB"
+        }
+      }
+    },
+    {
+      "itemCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+            "code": "161",
+            "display": "Acetaminophen"
+          }
+        ]
+      },
+      "amount": {
+        "numerator": {
+          "value": 325,
+          "system": "http://unitsofmeasure.org",
+          "code": "mg"
+        },
+        "denominator": {
+          "value": 1,
+          "system": "http://hl7.org/fhir/v3/orderableDrugForm",
+          "code": "TAB"
+        }
+      }
+    }
+  ],
+  "package": {
+    "container": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "419672006",
+          "display": "Bottle - unit of product usage (qualifier value)"
+        }
+      ]
+    },
+    "content": [
+      {
+        "itemReference": {
+          "reference": "#med500"
+        },
+        "amount": {
+          "value": 100,
+          "system": "http://hl7.org/fhir/v3/orderableDrugForm",
+          "code": "TAB"
+        }
+      }
+    ],
+    "batch": [
+      {
+        "lotNumber": "658484",
+        "expirationDate": "2020-07-31"
+      }
+    ]
+  }
+}

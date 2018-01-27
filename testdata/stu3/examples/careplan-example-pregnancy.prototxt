@@ -1,0 +1,380 @@
+id {
+  value: "preg"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>A maternity care plan (for a pregnant woman).</p>\n      <p>LMP is 1st Jan, 2013 (a great new years party!) The plan has activities to take prenatal vitamins, schedule first antenatal,\n            and \'placeholders\' for the second antenatal and delivery (there would be lots of others of course)</p>\n      <p>Note that where is a proposed \'status\' element against each activity</p>\n    </div>"
+  }
+}
+contained {
+  condition {
+    id {
+      value: "p1"
+    }
+    clinical_status {
+      value: ACTIVE
+    }
+    verification_status {
+      value: CONFIRMED
+    }
+    code {
+      text {
+        value: "pregnancy"
+      }
+    }
+    subject {
+      reference {
+        value: "Patient/1"
+      }
+      display {
+        value: "Eve Everywoman"
+      }
+    }
+  }
+}
+contained {
+  practitioner {
+    id {
+      value: "pr1"
+    }
+    name {
+      family {
+        value: "Midwife"
+      }
+      given {
+        value: "Mavis"
+      }
+    }
+  }
+}
+contained {
+  practitioner {
+    id {
+      value: "pr2"
+    }
+    name {
+      family {
+        value: "Obstetrician"
+      }
+      given {
+        value: "Oscar"
+      }
+    }
+  }
+}
+contained {
+  care_team {
+    id {
+      value: "careteam"
+    }
+    participant {
+      role {
+        coding {
+          system {
+            value: "http://example.org/mysys"
+          }
+          code {
+            value: "lmc"
+          }
+        }
+        text {
+          value: "Midwife"
+        }
+      }
+      member {
+        reference {
+          value: "#pr1"
+        }
+        display {
+          value: "Mavis Midwife"
+        }
+      }
+    }
+    participant {
+      role {
+        coding {
+          system {
+            value: "http://example.org/mysys"
+          }
+          code {
+            value: "obs"
+          }
+        }
+        text {
+          value: "Obstretitian"
+        }
+      }
+      member {
+        reference {
+          value: "#pr2"
+        }
+        display {
+          value: "Oscar Obstetrician"
+        }
+      }
+    }
+  }
+}
+contained {
+  goal {
+    id {
+      value: "goal"
+    }
+    status {
+      value: IN_PROGRESS
+    }
+    description {
+      text {
+        value: "Maintain patient\'s health throughout pregnancy and ensure a healthy child"
+      }
+    }
+    subject {
+      reference {
+        value: "Patient/1"
+      }
+      display {
+        value: "Eve Everywoman"
+      }
+    }
+  }
+}
+extension {
+  url {
+    value: "http://example.org/fhir/StructureDefinition/careplan#lmp"
+  }
+  value_date_time {
+    value_us: 1356998400000000
+    precision: DAY
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: PLAN
+}
+subject {
+  reference {
+    value: "Patient/1"
+  }
+  display {
+    value: "Eve Everywoman"
+  }
+}
+period {
+  start {
+    value_us: 1356998400000000
+    precision: DAY
+  }
+  end {
+    value_us: 1380585600000000
+    precision: DAY
+  }
+}
+care_team {
+  reference {
+    value: "#careteam"
+  }
+}
+addresses {
+  reference {
+    value: "#p1"
+  }
+  display {
+    value: "pregnancy"
+  }
+}
+goal {
+  reference {
+    value: "#goal"
+  }
+}
+activity {
+  reference {
+    display {
+      value: "Prenatal vitamin MedicationRequest"
+    }
+  }
+}
+activity {
+  extension {
+    url {
+      value: "http://example.org/fhir/StructureDefinition/careplan#andetails"
+    }
+    value_uri {
+      value: "http://orionhealth.com/fhir/careplan/1andetails"
+    }
+  }
+  detail {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/care-plan-activity-category"
+        }
+        code {
+          value: "encounter"
+        }
+      }
+    }
+    code {
+      coding {
+        system {
+          value: "http://example.org/mySystem"
+        }
+        code {
+          value: "1an"
+        }
+      }
+      text {
+        value: "First Antenatal encounter"
+      }
+    }
+    status {
+      value: SCHEDULED
+    }
+    prohibited {
+    }
+    scheduled_timing {
+      repeat {
+        bounds_period {
+          start {
+            value_us: 1360800000000000
+            precision: DAY
+          }
+          end {
+            value_us: 1362009600000000
+            precision: DAY
+          }
+        }
+      }
+    }
+    performer {
+      reference {
+        value: "#pr1"
+      }
+      display {
+        value: "Mavis Midwife"
+      }
+    }
+    description {
+      value: "The first antenatal encounter. This is where a detailed physical examination is performed.             and the pregnanacy discussed with the mother-to-be."
+    }
+  }
+}
+activity {
+  detail {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/care-plan-activity-category"
+        }
+        code {
+          value: "encounter"
+        }
+      }
+    }
+    code {
+      coding {
+        system {
+          value: "http://example.org/mySystem"
+        }
+        code {
+          value: "an"
+        }
+      }
+      text {
+        value: "Follow-up Antenatal encounter"
+      }
+    }
+    status {
+      value: NOT_STARTED
+    }
+    prohibited {
+    }
+    scheduled_timing {
+      repeat {
+        bounds_period {
+          start {
+            value_us: 1362096000000000
+            precision: DAY
+          }
+          end {
+            value_us: 1363219200000000
+            precision: DAY
+          }
+        }
+      }
+    }
+    performer {
+      reference {
+        value: "#pr1"
+      }
+      display {
+        value: "Mavis Midwife"
+      }
+    }
+    description {
+      value: "The second antenatal encounter. Discuss any issues that arose from the first antenatal encounter"
+    }
+  }
+}
+activity {
+  detail {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/care-plan-activity-category"
+        }
+        code {
+          value: "encounter"
+        }
+      }
+    }
+    code {
+      coding {
+        system {
+          value: "http://example.org/mySystem"
+        }
+        code {
+          value: "del"
+        }
+      }
+      text {
+        value: "Delivery"
+      }
+    }
+    status {
+      value: NOT_STARTED
+    }
+    prohibited {
+    }
+    scheduled_timing {
+      repeat {
+        bounds_period {
+          start {
+            value_us: 1377993600000000
+            precision: DAY
+          }
+          end {
+            value_us: 1379116800000000
+            precision: DAY
+          }
+        }
+      }
+    }
+    performer {
+      reference {
+        value: "#pr1"
+      }
+      display {
+        value: "Mavis Midwife"
+      }
+    }
+    description {
+      value: "The delivery."
+    }
+  }
+}

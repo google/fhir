@@ -1,0 +1,56 @@
+{
+  "resourceType": "Location",
+  "id": "2",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Burgers UMC, South Wing, second floor, Neuro Radiology Operation Room 1</div>"
+  },
+  "identifier": [
+    {
+      "value": "B1-S.F2.1.00"
+    }
+  ],
+  "status": "suspended",
+  "operationalStatus": {
+    "system": "http://hl7.org/fhir/v2/0116",
+    "code": "H",
+    "display": "Housekeeping"
+  },
+  "name": "South Wing Neuro OR 1",
+  "alias": [
+    "South Wing OR 5",
+    "Main Wing OR 2"
+  ],
+  "description": "Old South Wing, Neuro Radiology Operation Room 1 on second floor",
+  "mode": "instance",
+  "type": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v3/RoleCode",
+        "code": "RNEU",
+        "display": "Neuroradiology unit"
+      }
+    ]
+  },
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "2329"
+    }
+  ],
+  "physicalType": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/location-physical-type",
+        "code": "ro",
+        "display": "Room"
+      }
+    ]
+  },
+  "managingOrganization": {
+    "reference": "Organization/f001"
+  },
+  "partOf": {
+    "reference": "Location/1"
+  }
+}

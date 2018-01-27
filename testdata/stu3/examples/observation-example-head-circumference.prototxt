@@ -1,0 +1,75 @@
+id {
+  value: "head-circumference"
+}
+meta {
+  profile {
+    value: "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: head-circumference</p><p><b>meta</b>: </p><p><b>status</b>: final</p><p><b>category</b>: Vital Signs <span>(Details : {http://hl7.org/fhir/observation-category code \'vital-signs\' = \'Vital Signs\', given as \'Vital Signs\'})</span></p><p><b>code</b>: Head Circumference <span>(Details : {LOINC code \'8287-5\' = \'Head Occipital-frontal circumference by Tape measure\', given as \'Head Occipital-frontal circumference by Tape measure\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>effective</b>: 02/07/1999</p><p><b>value</b>: 51.2 cm<span> (Details: UCUM code cm = \'cm\')</span></p></div>"
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/observation-category"
+    }
+    code {
+      value: "vital-signs"
+    }
+    display {
+      value: "Vital Signs"
+    }
+  }
+  text {
+    value: "Vital Signs"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "8287-5"
+    }
+    display {
+      value: "Head Occipital-frontal circumference by Tape measure"
+    }
+  }
+  text {
+    value: "Head Circumference"
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+}
+effective_date_time {
+  value_us: 930873600000000
+  precision: DAY
+}
+value_quantity {
+  value {
+    value: 51.2
+    precision: 3
+  }
+  unit {
+    value: "cm"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "cm"
+  }
+}

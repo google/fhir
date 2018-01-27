@@ -1,0 +1,62 @@
+id {
+  value: "consent-example-Out"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">The following scenario is based on existing jurisdictional policy and are realized in existing systems in Canada. \n\tThe default policy is one of implied consent for the provision of care, so these scenarios all deal with withdrawal or withholding consent for that purpose. \n\tIn other jurisdictions, where an express consent model is used (Opt-In), these would examples would contain the phrase &quot;consent to&quot; rather \n\tthan &quot;withhold&quot; or &quot;withdraw&quot; consent for.\n    <p>\n\tSpecific to use-case 0) Withhold Authorization of sharing data for Treatment\n\t</p><p>\n    Patient &quot;P. van de Heuvel&quot; wishes to have no data at the Good Health Psychiatric Hospital \n   available for normal treatment use.\n   </p>\n   </div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+patient {
+  reference {
+    value: "Patient/f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+date_time {
+  value_us: 1447804800000000
+  precision: DAY
+}
+actor {
+  role {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/v3/ParticipationType"
+      }
+      code {
+        value: "CST"
+      }
+    }
+  }
+  reference {
+    reference {
+      value: "Organization/2.16.840.1.113883.19.6"
+    }
+    display {
+      value: "Good Health Psychiatric Hospital"
+    }
+  }
+}
+organization {
+  reference {
+    value: "Organization/Infoway"
+  }
+  display {
+    value: "Canada Infoway"
+  }
+}
+source_attachment {
+  title {
+    value: "The terms of the consent in lawyer speak."
+  }
+}
+policy_rule {
+  value: "http://hl7.org/fhir/ConsentPolicy/opt-out"
+}

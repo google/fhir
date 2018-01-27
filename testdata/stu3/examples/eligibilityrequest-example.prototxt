@@ -1,0 +1,53 @@
+id {
+  value: "52345"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the EligibilityRequest</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/elegibilityrequest"
+  }
+  value {
+    value: "52345"
+  }
+}
+status {
+  value: ACTIVE
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+patient {
+  reference {
+    value: "Patient/pat1"
+  }
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+insurer {
+  reference {
+    value: "Organization/2"
+  }
+}
+coverage {
+  reference {
+    value: "Coverage/9876B1"
+  }
+}

@@ -1,0 +1,54 @@
+id {
+  value: "SR2500"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the ProcessResponse</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/processresponse"
+  }
+  value {
+    value: "881234"
+  }
+}
+status {
+  value: ACTIVE
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+organization {
+  reference {
+    value: "Organization/2"
+  }
+}
+request {
+  reference {
+    value: "http://happyvalley.com/fhir/claim/12345"
+  }
+}
+outcome {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/processoutcomecodes"
+    }
+    code {
+      value: "complete"
+    }
+  }
+}
+disposition {
+  value: "Adjudication processing completed, ClaimResponse and EOB ready for retrieval."
+}
+request_organization {
+  reference {
+    value: "Organization/1"
+  }
+}

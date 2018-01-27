@@ -1,0 +1,225 @@
+id {
+  value: "ER2500"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the PaymentReconciliation</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/enrollmentresponse"
+  }
+  value {
+    value: "781234"
+  }
+}
+status {
+  value: ACTIVE
+}
+period {
+  start {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+  end {
+    value_us: 1409443200000000
+    precision: DAY
+  }
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+organization {
+  reference {
+    value: "Organization/2"
+  }
+}
+request {
+  reference {
+    value: "http://www.BenefitsInc.com/fhir/eligibility/225476332402"
+  }
+}
+outcome {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/remittance-outcome"
+    }
+    code {
+      value: "complete"
+    }
+  }
+}
+disposition {
+  value: "2014 August mid-month settlement."
+}
+request_provider {
+  reference {
+    value: "Practitioner/example"
+  }
+}
+request_organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+detail {
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/payment-type"
+      }
+      code {
+        value: "payment"
+      }
+    }
+  }
+  request {
+    identifier {
+      system {
+        value: "http://happyvalleyclinic.com/claim"
+      }
+      value {
+        value: "AB12345"
+      }
+    }
+  }
+  response {
+    identifier {
+      system {
+        value: "http://www.BenefitsInc.com/fhir/claimresponse"
+      }
+      value {
+        value: "CR20140815-AB12345"
+      }
+    }
+  }
+  submitter {
+    reference {
+      value: "Organization/1"
+    }
+  }
+  payee {
+    reference {
+      value: "Organization/1"
+    }
+  }
+  date {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+  amount {
+    value {
+      value: 1000.0
+      precision: 6
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+}
+detail {
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/payment-type"
+      }
+      code {
+        value: "payment"
+      }
+    }
+  }
+  request {
+    reference {
+      value: "http://www.BenefitsInc.com/fhir/oralhealthclaim/225476332699"
+    }
+  }
+  date {
+    value_us: 1407801600000000
+    precision: DAY
+  }
+  amount {
+    value {
+      value: 4000.0
+      precision: 6
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+}
+detail {
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/payment-type"
+      }
+      code {
+        value: "advance"
+      }
+    }
+  }
+  date {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+  amount {
+    value {
+      value: -1500.0
+      precision: 6
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+}
+form {
+  coding {
+    system {
+      value: "http://ncforms.org/formid"
+    }
+    code {
+      value: "PAYREC/2016/01B"
+    }
+  }
+}
+total {
+  value {
+    value: 3500.0
+    precision: 6
+  }
+  system {
+    value: "urn:iso:std:iso:4217"
+  }
+  code {
+    value: "USD"
+  }
+}
+process_note {
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/note-type"
+      }
+      code {
+        value: "display"
+      }
+    }
+  }
+  text {
+    value: "Due to the year end holiday the cutoff for submissions for December will be the 28th."
+  }
+}

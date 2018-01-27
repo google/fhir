@@ -1,0 +1,195 @@
+id {
+  value: "f001"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f001</p><p><b>contained</b>: </p><p><b>identifier</b>: nr1239044 (OFFICIAL)</p><p><b>basedOn</b>: id: req; L2381; status: active; intent: original-order; Complete blood count (hemogram) panel - Blood by Automated count <span>(Details : {LOINC code \'58410-2\' = \'Complete blood count (hemogram) panel - Blood by Automated count\', given as \'Complete blood count (hemogram) panel - Blood by Automated count\'})</span>; P. van den Heuvel; ????; Annotation: patient almost fainted during procedure</p><p><b>status</b>: final</p><p><b>category</b>: Haematology test <span>(Details : {SNOMED CT code \'252275004\' = \'Haematology test\', given as \'Haematology test\'}; {http://hl7.org/fhir/v2/0074 code \'HM\' = \'Hematology)</span></p><p><b>code</b>: Complete blood count (hemogram) panel - Blood by Automated count <span>(Details : {LOINC code \'58410-2\' = \'Complete blood count (hemogram) panel - Blood by Automated count\', given as \'Complete blood count (hemogram) panel - Blood by Automated count\'})</span></p><p><b>subject</b>: <a>P. van den Heuvel</a></p><p><b>issued</b>: 15/05/2013 7:32:52 PM</p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Burgers University Medical Centre</a></td></tr></table><p><b>result</b>: </p><ul><li><a>Observation/f001</a></li><li><a>Observation/f002</a></li><li><a>Observation/f003</a></li><li><a>Observation/f004</a></li><li><a>Observation/f005</a></li></ul><p><b>conclusion</b>: Core lab</p></div>"
+  }
+}
+contained {
+  procedure_request {
+    id {
+      value: "req"
+    }
+    extension {
+      url {
+        value: "http://example.org/bodysitecode"
+      }
+      value_codeable_concept {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "14975008"
+          }
+          display {
+            value: "Forearm structure"
+          }
+        }
+      }
+    }
+    identifier {
+      system {
+        value: "http://www.bmc.nl/zorgportal/identifiers/labresults"
+      }
+      value {
+        value: "L2381"
+      }
+    }
+    status {
+      value: ACTIVE
+    }
+    intent {
+      value: ORIGINAL_ORDER
+    }
+    code {
+      coding {
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "58410-2"
+        }
+        display {
+          value: "Complete blood count (hemogram) panel - Blood by Automated count"
+        }
+      }
+    }
+    subject {
+      reference {
+        value: "Patient/f001"
+      }
+      display {
+        value: "P. van den Heuvel"
+      }
+    }
+    context {
+      reference {
+        value: "Encounter/f001"
+      }
+    }
+    requester {
+      agent {
+        reference {
+          value: "Practitioner/f001"
+        }
+        display {
+          value: "E.van den Broek"
+        }
+      }
+    }
+    note {
+      text {
+        value: "patient almost fainted during procedure"
+      }
+    }
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.bmc.nl/zorgportal/identifiers/reports"
+  }
+  value {
+    value: "nr1239044"
+  }
+}
+based_on {
+  reference {
+    value: "#req"
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "252275004"
+    }
+    display {
+      value: "Haematology test"
+    }
+  }
+  coding {
+    system {
+      value: "http://hl7.org/fhir/v2/0074"
+    }
+    code {
+      value: "HM"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "58410-2"
+    }
+    display {
+      value: "Complete blood count (hemogram) panel - Blood by Automated count"
+    }
+  }
+}
+subject {
+  reference {
+    value: "Patient/f001"
+  }
+  display {
+    value: "P. van den Heuvel"
+  }
+}
+issued {
+  value_us: 1368642772000000
+  timezone: "+01:00"
+  precision: SECOND
+}
+performer {
+  actor {
+    reference {
+      value: "Organization/f001"
+    }
+    display {
+      value: "Burgers University Medical Centre"
+    }
+  }
+}
+result {
+  reference {
+    value: "Observation/f001"
+  }
+}
+result {
+  reference {
+    value: "Observation/f002"
+  }
+}
+result {
+  reference {
+    value: "Observation/f003"
+  }
+}
+result {
+  reference {
+    value: "Observation/f004"
+  }
+}
+result {
+  reference {
+    value: "Observation/f005"
+  }
+}
+conclusion {
+  value: "Core lab"
+}

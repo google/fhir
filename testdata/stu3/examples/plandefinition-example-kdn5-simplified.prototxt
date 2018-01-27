@@ -1,0 +1,447 @@
+id {
+  value: "KDN5"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <table style=\"width: 100%;\">\n        <tr>\n          <td>\n              <!-- link to NCCN image -->\n            <div style=\"width: 200px; height: 100px; vertical-align: top;\">National Comprehensive Cancer Network</div>\n          </td>\n          <td>\n            <h3>Chemotherapy Order Template</h3>\n            <h1>Kidney Cancer</h1>\n            <h2>Gemcitabine/CARBOplatin</h2>\n          </td>\n          <td style=\"text-align: right; vertical-align: top;\">KDN5</td>\n        </tr>\n      </table>\n      <table style=\"width: 100%; border-top: 1px solid; border-bottom: 1px solid;\">\n        <tr>\n          <td style=\"width: 33%; border-right: 1px solid; vertical-align: top\">\n            <h4>INDICATION:</h4>\n            <p>Metastatic or Relapsed \342\200\223 Collecting Duct/Medullary Subtypes</p>\n          </td>\n          <td style=\"width: 34%; border-right: 1px solid; vertical-align: top\">\n            <h4>REFERENCES:</h4>\n            <ol>\n              <li><a href=\"http://www.example.org/professionals/physician_gls/PDF/kidney.pdf\">NCCN Guidelines\302\256 for Kidney Cancer. V.3.2015.</a></li>\n              <li><a href=\"http://www.ncbi.nlm.nih.gov/pubmed?term=%22The+Journal+of+urology%22%5BJour%5D+AND+1698%5Bpage%5D+AND+2007%5Bpdat%5D+AND+Oudard+S%5Bauthor%5D\">Oudard S, et al. <em>J Urol</em>. 2007;177(5):1698-702.</a><sup>\n                  <a href=\"http://www.example.org/OrderTemplates/PDF/appendix_E.pdf\">a</a></sup>\n              </li>\n            </ol>\n          </td>\n          <td style=\"width: 33%; vertical-align: top\">\n            <h4>NCCN SUPPORTIVE CARE:</h4>\n            <ol>\n              <li>\n                <i>Emetic Risk:</i>\n                <table>\n                  <tr>\n                    <td>Day 1</td>\n                    <td>Moderate</td>\n                  </tr>\n                  <tr>\n                    <td>Day 8</td>\n                    <td>Low</td>\n                  </tr>\n                </table>\n              </li>\n              <li>\n                <i>Fever Neutropenia Risk:</i><br/>\n                Refer to <a href=\"http://www.example.org/professionals/physician_gls/PDF/myeloid_growth.pdf\">NCCN Guidelines for Myeloid Growth Factors. V.2.2014</a>\n              </li>\n            </ol>\n          </td>\n        </tr>\n      </table>\n        <!-- same as the regimen section of the Composition resource only this version is without the style guide notes -->\n      <h4>CHEMOTHERAPY REGIMEN</h4>\n      <p>\n        <i>21-day cycle for 6 cycles</i>\n      </p>\n      <ul>\n        <li>Gemcitabine 1250 mg/m<sup>2</sup> IV over 30 minutes on Days 1 and 8</li>\n        <li>CARBOplatin AUC 5 IV over 30 minutes on Day 1</li>\n      </ul>\n    </div>"
+  }
+}
+contained {
+  activity_definition {
+    id {
+      value: "1111"
+    }
+    status {
+      value: DRAFT
+    }
+    product_codeable_concept {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "12574"
+        }
+        display {
+          value: "gemcitabine"
+        }
+      }
+      text {
+        value: "gemcitabine"
+      }
+    }
+    dosage {
+      text {
+        value: "1250 mg/m\302\262 IV over 30 minutes"
+      }
+      timing {
+        repeat {
+          duration {
+            value: 30.0
+            precision: 2
+          }
+          duration_unit {
+            value: MIN
+          }
+        }
+      }
+      route {
+        text {
+          value: "IV"
+        }
+      }
+      dose_quantity {
+        value {
+          value: 1250.0
+          precision: 4
+        }
+        unit {
+          value: "mg/m\302\262"
+        }
+      }
+    }
+  }
+}
+contained {
+  activity_definition {
+    id {
+      value: "2222"
+    }
+    status {
+      value: DRAFT
+    }
+    product_codeable_concept {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "40048"
+        }
+        display {
+          value: "Carboplatin"
+        }
+      }
+      text {
+        value: "CARBOplatin"
+      }
+    }
+    dosage {
+      text {
+        value: "AUC 5 IV over 30 minutes"
+      }
+      timing {
+        repeat {
+          duration {
+            value: 30.0
+            precision: 2
+          }
+          duration_unit {
+            value: MIN
+          }
+        }
+      }
+      route {
+        text {
+          value: "IV"
+        }
+      }
+      dose_quantity {
+        extension {
+          url {
+            value: "http://example.org/fhir/AUC-dose"
+          }
+          value_integer {
+            value: 5
+          }
+        }
+      }
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://example.org/ordertemplates"
+  }
+  value {
+    value: "KDN5"
+  }
+}
+version {
+  value: "1"
+}
+title {
+  value: "Gemcitabine/CARBOplatin"
+}
+type {
+  text {
+    value: "Chemotherapy Order Template"
+  }
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+publisher {
+  value: "National Comprehensive Cancer Network, Inc."
+}
+approval_date {
+  value_us: 1469577600000000
+  precision: DAY
+}
+last_review_date {
+  value_us: 1469577600000000
+  precision: DAY
+}
+use_context {
+  extension {
+    url {
+      value: "http://hl7.org/fhir/StructureDefinition/usagecontext-group"
+    }
+    value_string {
+      value: "A"
+    }
+  }
+  code {
+    system {
+      value: "http://example.org/fhir/CodeSystem/indications"
+    }
+    code {
+      value: "treamentSetting-or-diseaseStatus"
+    }
+  }
+  value_codeable_concept {
+    text {
+      value: "Metastatic"
+    }
+  }
+}
+use_context {
+  extension {
+    url {
+      value: "http://hl7.org/fhir/StructureDefinition/usagecontext-group"
+    }
+    value_string {
+      value: "A"
+    }
+  }
+  code {
+    system {
+      value: "http://example.org/fhir/CodeSystem/indications"
+    }
+    code {
+      value: "disease-or-histology"
+    }
+  }
+  value_codeable_concept {
+    text {
+      value: "Collecting Duct/Medullary Subtypes"
+    }
+  }
+}
+use_context {
+  extension {
+    url {
+      value: "http://hl7.org/fhir/StructureDefinition/usagecontext-group"
+    }
+    value_string {
+      value: "A"
+    }
+  }
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value_codeable_concept {
+    text {
+      value: "Kidney Cancer"
+    }
+  }
+}
+use_context {
+  extension {
+    url {
+      value: "http://hl7.org/fhir/StructureDefinition/usagecontext-group"
+    }
+    value_string {
+      value: "B"
+    }
+  }
+  code {
+    system {
+      value: "http://example.org/fhir/CodeSystem/indications"
+    }
+    code {
+      value: "treatmentSetting-or-diseaseStatus"
+    }
+  }
+  value_codeable_concept {
+    text {
+      value: "Relapsed"
+    }
+  }
+}
+use_context {
+  extension {
+    url {
+      value: "http://hl7.org/fhir/StructureDefinition/usagecontext-group"
+    }
+    value_string {
+      value: "B"
+    }
+  }
+  code {
+    system {
+      value: "http://example.org/fhir/CodeSystem/indications"
+    }
+    code {
+      value: "disease-or-histology"
+    }
+  }
+  value_codeable_concept {
+    text {
+      value: "Collecting Duct/Medullary Subtypes"
+    }
+  }
+}
+use_context {
+  extension {
+    url {
+      value: "http://hl7.org/fhir/StructureDefinition/usagecontext-group"
+    }
+    value_string {
+      value: "B"
+    }
+  }
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value_codeable_concept {
+    text {
+      value: "Kidney Cancer \342\200\223 Collecting Duct/Medullary Subtypes - Metastatic"
+    }
+  }
+}
+contributor {
+  type {
+    value: AUTHOR
+  }
+  name {
+    value: "Lee Surprenant"
+  }
+}
+copyright {
+  value: "All rights reserved."
+}
+related_artifact {
+  type {
+    value: DERIVED_FROM
+  }
+  display {
+    value: "NCCN Guidelines for Kidney Cancer. V.2.2016"
+  }
+  url {
+    value: "http://www.example.org/professionals/physician_gls/PDF/kidney.pdf"
+  }
+}
+related_artifact {
+  type {
+    value: CITATION
+    extension {
+      url {
+        value: "http://example.org/fhir/regimenReferenceType"
+      }
+      value_code {
+        value: "a"
+      }
+    }
+  }
+  citation {
+    value: "Oudard S, et al. J Urol. 2007;177(5):1698-702"
+  }
+  url {
+    value: "http://www.ncbi.nlm.nih.gov/pubmed/17437788"
+  }
+}
+action {
+  selection_behavior {
+    value: EXACTLY_ONE
+  }
+  action {
+    selection_behavior {
+      value: ALL
+    }
+    action {
+      grouping_behavior {
+        value: SENTENCE_GROUP
+      }
+      selection_behavior {
+        value: EXACTLY_ONE
+      }
+      action {
+        id {
+          value: "cycle-definition-1"
+        }
+        text_equivalent {
+          value: "21-day cycle for 6 cycles"
+        }
+        timing_timing {
+          repeat {
+            count {
+              value: 6
+            }
+            duration {
+              value: 21.0
+              precision: 2
+            }
+            duration_unit {
+              value: D
+            }
+          }
+        }
+        action {
+          id {
+            value: "action-1"
+          }
+          extension {
+            url {
+              value: "http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle"
+            }
+            extension {
+              url {
+                value: "day"
+              }
+              value_integer {
+                value: 1
+              }
+            }
+            extension {
+              url {
+                value: "day"
+              }
+              value_integer {
+                value: 8
+              }
+            }
+          }
+          text_equivalent {
+            value: "Gemcitabine 1250 mg/m\302\262 IV over 30 minutes on days 1 and 8"
+          }
+          definition {
+            reference {
+              value: "#1111"
+            }
+          }
+        }
+        action {
+          id {
+            value: "action-2"
+          }
+          extension {
+            url {
+              value: "http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle"
+            }
+            extension {
+              url {
+                value: "day"
+              }
+              value_integer {
+                value: 1
+              }
+            }
+          }
+          text_equivalent {
+            value: "CARBOplatin AUC 5 IV over 30 minutes on Day 1"
+          }
+          related_action {
+            action_id {
+              value: "action-1"
+            }
+            relationship {
+              value: CONCURRENT_WITH_START
+            }
+          }
+          definition {
+            reference {
+              value: "#2222"
+            }
+          }
+        }
+      }
+    }
+  }
+}

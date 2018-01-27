@@ -1,0 +1,99 @@
+id {
+  value: "list-example-codes"
+}
+meta {
+  last_updated {
+    value_us: 1492551883294000
+    timezone: "+10:00"
+    precision: MILLISECOND
+  }
+  profile {
+    value: "http://hl7.org/fhir/StructureDefinition/shareablevalueset"
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><h2>Example Use Codes for List</h2><div><p>Example use codes for the List resource - typical kinds of use.</p>\n</div><p>This value set includes codes from the following code systems:</p><ul><li>Include all codes defined in <a href=\"codesystem-list-example-codes.html\"><code>http://hl7.org/fhir/list-example-use-codes</code></a></li></ul></div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-ballot-status"
+  }
+  value_string {
+    value: "Informative"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value_integer {
+    value: 1
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg"
+  }
+  value_code {
+    value: "fhir"
+  }
+}
+url {
+  value: "http://hl7.org/fhir/ValueSet/list-example-codes"
+}
+identifier {
+  system {
+    value: "urn:ietf:rfc:3986"
+  }
+  value {
+    value: "urn:oid:2.16.840.1.113883.4.642.3.307"
+  }
+}
+version {
+  value: "3.0.1"
+}
+name {
+  value: "Example Use Codes for List"
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+date {
+  value_us: 1492551883000000
+  timezone: "+10:00"
+  precision: SECOND
+}
+publisher {
+  value: "FHIR Project"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+}
+description {
+  value: "Example use codes for the List resource - typical kinds of use."
+}
+immutable {
+  value: true
+}
+compose {
+  include {
+    system {
+      value: "http://hl7.org/fhir/list-example-use-codes"
+    }
+  }
+}

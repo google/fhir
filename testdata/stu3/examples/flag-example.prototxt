@@ -1,0 +1,77 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Large Dog warning for Peter Patient</div>"
+  }
+}
+identifier {
+  value {
+    value: "12345"
+  }
+}
+status {
+  value: INACTIVE
+}
+category {
+  coding {
+    system {
+      value: "http://example.org/local"
+    }
+    code {
+      value: "admin"
+    }
+    display {
+      value: "Admin"
+    }
+  }
+  text {
+    value: "admin"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://example.org/local"
+    }
+    code {
+      value: "bigdog"
+    }
+    display {
+      value: "Big dog"
+    }
+  }
+  text {
+    value: "Patient has a big dog at his home. Always always wear a suit of armor or take other active counter-measures"
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+  display {
+    value: "Peter Patient"
+  }
+}
+period {
+  start {
+    value_us: 1421452800000000
+    precision: DAY
+  }
+  end {
+    value_us: 1480550400000000
+    precision: DAY
+  }
+}
+author {
+  reference {
+    value: "Practitioner/example"
+  }
+  display {
+    value: "Nancy Nurse"
+  }
+}

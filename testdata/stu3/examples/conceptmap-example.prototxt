@@ -1,0 +1,176 @@
+id {
+  value: "101"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <h2>FHIR-v3-Address-Use (http://hl7.org/fhir/ConceptMap/101)</h2>\n      <p>Mapping from \n        <a href=\"valueset-address-use.html\">http://hl7.org/fhir/ValueSet/address-use</a> to \n        <a href=\"v3/AddressUse/vs.html\">http://hl7.org/fhir/ValueSet/v3-AddressUse</a>\n      </p>\n      <p>DRAFT (not intended for production usage). Published on 13/06/2012 by HL7, Inc (FHIR project team (example): \n        <a href=\"http://hl7.org/fhir\">http://hl7.org/fhir</a>). Creative Commons 0\n      </p>\n      <div>\n        <p>A mapping between the FHIR and HL7 v3 AddressUse Code systems</p>\n\n      </div>\n      <br/>\n      <table class=\"grid\">\n        <tr>\n          <td>\n            <b>Source Code</b>\n          </td>\n          <td>\n            <b>Equivalence</b>\n          </td>\n          <td>\n            <b>Destination Code</b>\n          </td>\n          <td>\n            <b>Comment</b>\n          </td>\n        </tr>\n        <tr>\n          <td>home (Home)</td>\n          <td/>\n          <td>H (home address)</td>\n          <td/>\n        </tr>\n        <tr>\n          <td>work (Work)</td>\n          <td/>\n          <td>WP (work place)</td>\n          <td/>\n        </tr>\n        <tr>\n          <td>temp (Temporary)</td>\n          <td/>\n          <td>TMP (temporary address)</td>\n          <td/>\n        </tr>\n        <tr>\n          <td>old (Old / Incorrect)</td>\n          <td>disjoint</td>\n          <td>BAD (bad address)</td>\n          <td>In the HL7 v3 AD, old is handled by the usablePeriod element, but you have to provide a time, there\'s no simple equivalent of flagging an address as old</td>\n        </tr>\n      </table>\n    </div>"
+  }
+}
+url {
+  value: "http://hl7.org/fhir/ConceptMap/101"
+}
+identifier {
+  system {
+    value: "urn:ietf:rfc:3986"
+  }
+  value {
+    value: "urn:uuid:53cd62ee-033e-414c-9f58-3ca97b5ffc3b"
+  }
+}
+version {
+  value: "20120613"
+}
+name {
+  value: "FHIR-v3-Address-Use"
+}
+title {
+  value: "FHIR/v3 Address Use Mapping"
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+date {
+  value_us: 1339545600000000
+  precision: DAY
+}
+publisher {
+  value: "HL7, Inc"
+}
+contact {
+  name {
+    value: "FHIR project team (example)"
+  }
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+}
+description {
+  value: "A mapping between the FHIR and HL7 v3 AddressUse Code systems"
+}
+use_context {
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "venue"
+    }
+  }
+  value_codeable_concept {
+    text {
+      value: "for CDA Usage"
+    }
+  }
+}
+purpose {
+  value: "To help implementers map from HL7 v3/CDA to FHIR"
+}
+copyright {
+  value: "Creative Commons 0"
+}
+source_uri {
+  value: "http://hl7.org/fhir/ValueSet/address-use"
+}
+target_uri {
+  value: "http://hl7.org/fhir/ValueSet/v3-AddressUse"
+}
+group {
+  source {
+    value: "http://hl7.org/fhir/address-use"
+  }
+  target {
+    value: "http://hl7.org/fhir/v3/AddressUse"
+  }
+  element {
+    code {
+      value: "home"
+    }
+    display {
+      value: "home"
+    }
+    target {
+      code {
+        value: "H"
+      }
+      display {
+        value: "home"
+      }
+    }
+  }
+  element {
+    code {
+      value: "work"
+    }
+    display {
+      value: "work"
+    }
+    target {
+      code {
+        value: "WP"
+      }
+      display {
+        value: "work place"
+      }
+    }
+  }
+  element {
+    code {
+      value: "temp"
+    }
+    display {
+      value: "temp"
+    }
+    target {
+      code {
+        value: "TMP"
+      }
+      display {
+        value: "temporary address"
+      }
+    }
+  }
+  element {
+    code {
+      value: "old"
+    }
+    display {
+      value: "old"
+    }
+    target {
+      code {
+        value: "BAD"
+      }
+      display {
+        value: "bad address"
+      }
+      equivalence {
+        value: DISJOINT
+      }
+      comment {
+        value: "In the HL7 v3 AD, old is handled by the usablePeriod element, but you have to provide a time, there\'s no simple equivalent of flagging an address as old"
+      }
+    }
+  }
+  unmapped {
+    mode {
+      value: FIXED
+    }
+    code {
+      value: "temp"
+    }
+    display {
+      value: "temp"
+    }
+  }
+}

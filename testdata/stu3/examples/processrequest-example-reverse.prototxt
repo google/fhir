@@ -1,0 +1,41 @@
+id {
+  value: "87654"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Reversal ProcessRequest</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/processrequest"
+  }
+  value {
+    value: "76543"
+  }
+}
+status {
+  value: ACTIVE
+}
+action {
+  value: CANCEL
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+request {
+  reference {
+    value: "http://BenefitsInc.com/fhir/claim/12345"
+  }
+}
+nullify {
+}

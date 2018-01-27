@@ -1,0 +1,47 @@
+id {
+  value: "f205"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f205</p><p><b>clinicalStatus</b>: active</p><p><b>verificationStatus</b>: differential</p><p><b>code</b>: Bacterial infectious disease <span>(Details : {SNOMED CT code \'87628006\' = \'Bacterial infectious disease\', given as \'Bacterial infectious disease\'})</span></p><p><b>subject</b>: <a>Roel</a></p><p><b>assertedDate</b>: 04/04/2013</p><p><b>asserter</b>: <a>Practitioner/f201</a></p></div>"
+  }
+}
+clinical_status {
+  value: ACTIVE
+}
+verification_status {
+  value: DIFFERENTIAL
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "87628006"
+    }
+    display {
+      value: "Bacterial infectious disease"
+    }
+  }
+}
+subject {
+  reference {
+    value: "Patient/f201"
+  }
+  display {
+    value: "Roel"
+  }
+}
+asserted_date {
+  value_us: 1365033600000000
+  precision: DAY
+}
+asserter {
+  reference {
+    value: "Practitioner/f201"
+  }
+}

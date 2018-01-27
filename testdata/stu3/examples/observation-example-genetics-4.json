@@ -1,0 +1,59 @@
+{
+  "resourceType": "Observation",
+  "id": "example-genetics-4",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-genetics-4</p><p><b>status</b>: final</p><p><b>code</b>: Allele ABC <span>(Details )</span></p><p><b>subject</b>: <a>Molecular Lab Patient ID: HOSP-23456</a></p><p><b>issued</b>: 03/04/2013 3:30:10 PM</p><p><b>performer</b>: <a>Molecular Diagnostics Laboratory</a></p><p><b>interpretation</b>: Positive <span>(Details : {http://hl7.org/fhir/v2/0078 code 'POS' = 'Positive)</span></p><p><b>specimen</b>: <a>Molecular Specimen ID: MLD45-Z4-1234</a></p><blockquote><p><b>related</b></p><p><b>type</b>: has-member</p><p><b>target</b>: <a>Variant-1</a></p></blockquote><blockquote><p><b>related</b></p><p><b>type</b>: has-member</p><p><b>target</b>: <a>Variant-2</a></p></blockquote><blockquote><p><b>related</b></p><p><b>type</b>: has-member</p><p><b>target</b>: <a>Variant-3</a></p></blockquote></div>"
+  },
+  "status": "final",
+  "code": {
+    "text": "Allele ABC"
+  },
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Molecular Lab Patient ID: HOSP-23456"
+  },
+  "issued": "2013-04-03T15:30:10+01:00",
+  "performer": [
+    {
+      "reference": "Practitioner/example",
+      "display": "Molecular Diagnostics Laboratory"
+    }
+  ],
+  "interpretation": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v2/0078",
+        "code": "POS"
+      }
+    ],
+    "text": "Positive"
+  },
+  "specimen": {
+    "reference": "Specimen/genetics-example1-somatic",
+    "display": "Molecular Specimen ID: MLD45-Z4-1234"
+  },
+  "related": [
+    {
+      "type": "has-member",
+      "target": {
+        "reference": "Observation/example-genetics-1",
+        "display": "Variant-1"
+      }
+    },
+    {
+      "type": "has-member",
+      "target": {
+        "reference": "Observation/example-genetics-2",
+        "display": "Variant-2"
+      }
+    },
+    {
+      "type": "has-member",
+      "target": {
+        "reference": "Observation/example-genetics-3",
+        "display": "Variant-3"
+      }
+    }
+  ]
+}

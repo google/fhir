@@ -1,0 +1,98 @@
+{
+  "resourceType": "DiagnosticReport",
+  "id": "f202",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f202</p><p><b>contained</b>: </p><p><b>basedOn</b>: id: req; status: active; intent: original-order; Blood culture for bacteria, including anaerobic screen <span>(Details : {SNOMED CT code '104177005' = 'Blood culture for bacteria, including anaerobic screen', given as 'Blood culture for bacteria, including anaerobic screen'})</span>; Roel; Roel's encounter on March eleventh 2013</p><p><b>status</b>: final</p><p><b>category</b>: Laboratory test <span>(Details : {SNOMED CT code '15220000' = 'Laboratory test', given as 'Laboratory test'}; {http://hl7.org/fhir/v2/0074 code 'LAB' = 'Laboratory)</span></p><p><b>code</b>: Blood culture for bacteria, including anaerobic screen <span>(Details : {SNOMED CT code '104177005' = 'Blood culture for bacteria, including anaerobic screen', given as 'Blood culture for bacteria, including anaerobic screen'})</span></p><p><b>subject</b>: <a>Roel</a></p><p><b>issued</b>: 11/03/2013 10:28:00 AM</p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>AUMC</a></td></tr></table><p><b>result</b>: <a>Results for staphylococcus analysis on Roel's blood culture</a></p><p><b>conclusion</b>: Blood culture tested positive on staphylococcus aureus</p><p><b>codedDiagnosis</b>: Bacteremia due to staphylococcus <span>(Details : {SNOMED CT code '428763004' = 'Bacteremia due to Staphylococcus aureus', given as 'Bacteremia due to staphylococcus'})</span></p></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "ProcedureRequest",
+      "id": "req",
+      "status": "active",
+      "intent": "original-order",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "104177005",
+            "display": "Blood culture for bacteria, including anaerobic screen"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/f201",
+        "display": "Roel"
+      },
+      "context": {
+        "reference": "Encounter/f203",
+        "display": "Roel's encounter on March eleventh 2013"
+      },
+      "requester": {
+        "agent": {
+          "reference": "Practitioner/f201",
+          "display": "Dokter Bronsig"
+        }
+      }
+    }
+  ],
+  "basedOn": [
+    {
+      "reference": "#req"
+    }
+  ],
+  "status": "final",
+  "category": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "15220000",
+        "display": "Laboratory test"
+      },
+      {
+        "system": "http://hl7.org/fhir/v2/0074",
+        "code": "LAB"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "104177005",
+        "display": "Blood culture for bacteria, including anaerobic screen"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/f201",
+    "display": "Roel"
+  },
+  "issued": "2013-03-11T10:28:00+01:00",
+  "performer": [
+    {
+      "actor": {
+        "reference": "Organization/f201",
+        "display": "AUMC"
+      }
+    }
+  ],
+  "result": [
+    {
+      "reference": "Observation/f206",
+      "display": "Results for staphylococcus analysis on Roel's blood culture"
+    }
+  ],
+  "conclusion": "Blood culture tested positive on staphylococcus aureus",
+  "codedDiagnosis": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "428763004",
+          "display": "Bacteremia due to staphylococcus"
+        }
+      ]
+    }
+  ]
+}

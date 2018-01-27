@@ -1,0 +1,479 @@
+id {
+  value: "E2501"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the EligibilityResponse.</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/eligibilityresponse"
+  }
+  value {
+    value: "881234"
+  }
+}
+status {
+  value: ACTIVE
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+request {
+  reference {
+    value: "http://www.BenefitsInc.com/fhir/eligibility/225476332402"
+  }
+}
+outcome {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/remittance-outcome"
+    }
+    code {
+      value: "complete"
+    }
+  }
+}
+disposition {
+  value: "Policy is currently in-force."
+}
+insurer {
+  reference {
+    value: "Organization/2"
+  }
+}
+inforce {
+  value: true
+}
+insurance {
+  benefit_balance {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-category"
+        }
+        code {
+          value: "medical"
+        }
+      }
+    }
+    sub_category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-subcategory"
+        }
+        code {
+          value: "30"
+        }
+        display {
+          value: "Health Benefit Plan Coverage"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-term"
+        }
+        code {
+          value: "annual"
+        }
+      }
+    }
+    financial {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed_money {
+        value {
+          value: 500000.0
+          precision: 6
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "SAR"
+        }
+      }
+    }
+    financial {
+      type {
+        coding {
+          code {
+            value: "copay-maximum"
+          }
+        }
+      }
+      allowed_money {
+        value {
+          value: 100.0
+          precision: 3
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "SAR"
+        }
+      }
+    }
+    financial {
+      type {
+        coding {
+          code {
+            value: "copay-percent"
+          }
+        }
+      }
+      allowed_unsigned_int {
+        value: 20
+      }
+    }
+  }
+  benefit_balance {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-category"
+        }
+        code {
+          value: "medical"
+        }
+      }
+    }
+    sub_category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-subcategory"
+        }
+        code {
+          value: "69"
+        }
+        display {
+          value: "Maternity"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-term"
+        }
+        code {
+          value: "annual"
+        }
+      }
+    }
+    financial {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed_money {
+        value {
+          value: 15000.0
+          precision: 5
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "SAR"
+        }
+      }
+    }
+  }
+  benefit_balance {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-category"
+        }
+        code {
+          value: "oral"
+        }
+      }
+    }
+    sub_category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-subcategory"
+        }
+        code {
+          value: "F3"
+        }
+        display {
+          value: "Dental Coverage"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-term"
+        }
+        code {
+          value: "annual"
+        }
+      }
+    }
+    financial {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed_money {
+        value {
+          value: 2000.0
+          precision: 4
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "SAR"
+        }
+      }
+    }
+  }
+  benefit_balance {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-category"
+        }
+        code {
+          value: "vision"
+        }
+      }
+    }
+    sub_category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-subcategory"
+        }
+        code {
+          value: "F6"
+        }
+        display {
+          value: "Vision Coverage"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-term"
+        }
+        code {
+          value: "annual"
+        }
+      }
+    }
+    financial {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed_money {
+        value {
+          value: 400.0
+          precision: 3
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "SAR"
+        }
+      }
+    }
+  }
+  benefit_balance {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-category"
+        }
+        code {
+          value: "vision"
+        }
+      }
+    }
+    sub_category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-subcategory"
+        }
+        code {
+          value: "49"
+        }
+        display {
+          value: "Hospital Room and Board"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-term"
+        }
+        code {
+          value: "day"
+        }
+      }
+    }
+    financial {
+      type {
+        coding {
+          code {
+            value: "room"
+          }
+        }
+      }
+      allowed_string {
+        value: "shared"
+      }
+    }
+    financial {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed_money {
+        value {
+          value: 600.0
+          precision: 3
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "SAR"
+        }
+      }
+    }
+  }
+}

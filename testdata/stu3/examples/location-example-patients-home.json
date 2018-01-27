@@ -1,0 +1,33 @@
+{
+  "resourceType": "Location",
+  "id": "ph",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Patient's Home</div>"
+  },
+  "status": "active",
+  "name": "Patient's Home",
+  "description": "Patient's Home",
+  "mode": "kind",
+  "type": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v3/RoleCode",
+        "code": "PTRES",
+        "display": "Patient's Residence"
+      }
+    ]
+  },
+  "physicalType": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/location-physical-type",
+        "code": "ho",
+        "display": "House"
+      }
+    ]
+  },
+  "managingOrganization": {
+    "reference": "Organization/f001"
+  }
+}

@@ -1,0 +1,78 @@
+id {
+  value: "ambulation"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: ambulation</p><p><b>identifier</b>: 45678</p><p><b>definition</b>: Protocol for hypertension during pregnancy</p><p><b>basedOn</b>: <a>Maternity care plan</a></p><p><b>status</b>: completed</p><p><b>intent</b>: order</p><p><b>code</b>: Ambulation <span>(Details : {SNOMED CT code \'62013009\' = \'Ambulating patient\', given as \'Ambulating patient (procedure)\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>authoredOn</b>: 05/03/2017</p><h3>Requesters</h3><table><tr><td>-</td><td><b>Agent</b></td></tr><tr><td>*</td><td><a>Dr. Beverly Crusher</a></td></tr></table><p><b>reasonReference</b>: <a>Blood Pressure</a></p></div>"
+  }
+}
+identifier {
+  value {
+    value: "45678"
+  }
+}
+definition {
+  display {
+    value: "Protocol for hypertension during pregnancy"
+  }
+}
+based_on {
+  reference {
+    value: "CarePlan/preg"
+  }
+  display {
+    value: "Maternity care plan"
+  }
+}
+status {
+  value: COMPLETED
+}
+intent {
+  value: ORDER
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "62013009"
+    }
+    display {
+      value: "Ambulating patient (procedure)"
+    }
+  }
+  text {
+    value: "Ambulation"
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+}
+authored_on {
+  value_us: 1488672000000000
+  precision: DAY
+}
+requester {
+  agent {
+    reference {
+      value: "Practitioner/3ad0687e-f477-468c-afd5-fcc2bf897809"
+    }
+    display {
+      value: "Dr. Beverly Crusher"
+    }
+  }
+}
+reason_reference {
+  reference {
+    value: "Observation/blood-pressure"
+  }
+  display {
+    value: "Blood Pressure"
+  }
+}

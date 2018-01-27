@@ -1,0 +1,78 @@
+{
+  "resourceType": "DataElement",
+  "id": "prothrombin",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: prothrombin</p><p><b>identifier</b>: Prothrombin Time, PT = 11</p><p><b>status</b>: active</p><p><b>name</b>: Prothrombin Time</p><h3>Mappings</h3><table><tr><td>-</td><td><b>Identity</b></td><td><b>Uri</b></td><td><b>Name</b></td><td><b>Comment</b></td></tr><tr><td>*</td><td>loinc</td><td><a>http://loinc.org/</a></td><td>LOINC</td><td>Version 2.48 or later</td></tr></table><p><b>element</b>: todo-bundle</p></div>"
+  },
+  "identifier": [
+    {
+      "type": {
+        "text": "Prothrombin Time, PT"
+      },
+      "system": "http://www.CenturyHospital/Laboratory/DirectoryofServices",
+      "value": "11",
+      "period": {
+        "start": "2011-05-19"
+      },
+      "assigner": {
+        "display": "Century Hospital Laboratory"
+      }
+    }
+  ],
+  "status": "active",
+  "name": "Prothrombin Time",
+  "mapping": [
+    {
+      "identity": "loinc",
+      "uri": "http://loinc.org/",
+      "name": "LOINC",
+      "comment": "Version 2.48 or later"
+    }
+  ],
+  "element": [
+    {
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://unitsofmeasure.org",
+                "version": "1.9",
+                "code": "s",
+                "display": "second",
+                "userSelected": true
+              }
+            ],
+            "text": "second"
+          }
+        }
+      ],
+      "path": "prothrombin",
+      "definition": "The PT test evaluates the extrinsic and common pathways of the coagulation cascade.",
+      "comment": "Used to screen the integrity of the extrinsic and common pathways of coagulation and to monitor warfarin anticoagulation. ",
+      "requirements": "This test is orderable. A plasma specimen in a 3.2% sodium citrate blue top tube is required.",
+      "alias": [
+        "Protime, PT"
+      ],
+      "type": [
+        {
+          "code": "decimal"
+        }
+      ],
+      "example": [
+        {
+          "label": "Simple",
+          "valueDecimal": 10.0
+        }
+      ],
+      "mapping": [
+        {
+          "identity": "loinc",
+          "map": "5964-2"
+        }
+      ]
+    }
+  ]
+}

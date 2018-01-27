@@ -1,0 +1,53 @@
+id {
+  value: "f001"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f001</p><p><b>identifier</b>: 12345</p><p><b>status</b>: active</p><p><b>type</b>: Feeding tube, device <span>(Details : {SNOMED CT code \'25062003\' = \'Feeding tube\', given as \'Feeding tube, device\'})</span></p><p><b>manufactureDate</b>: 08/08/2015</p><p><b>expirationDate</b>: 08/08/2020</p><p><b>owner</b>: <a>Organization/2.16.840.1.113883.19.5</a></p><p><b>location</b>: Central Supply</p></div>"
+  }
+}
+identifier {
+  system {
+    value: "http:/goodhealthhospital/identifier/devices"
+  }
+  value {
+    value: "12345"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "25062003"
+    }
+    display {
+      value: "Feeding tube, device"
+    }
+  }
+}
+manufacture_date {
+  value_us: 1438992000000000
+  precision: DAY
+}
+expiration_date {
+  value_us: 1596844800000000
+  precision: DAY
+}
+owner {
+  reference {
+    value: "Organization/2.16.840.1.113883.19.5"
+  }
+}
+location {
+  display {
+    value: "Central Supply"
+  }
+}

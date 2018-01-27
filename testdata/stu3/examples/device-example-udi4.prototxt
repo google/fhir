@@ -1,0 +1,36 @@
+id {
+  value: "example-udi4"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-udi4</p><h3>Udis</h3><table><tr><td>-</td><td><b>Jurisdiction</b></td><td><b>CarrierHRF</b></td><td><b>Issuer</b></td></tr><tr><td>*</td><td><a>http://hl7.org/fhir/NamingSystem/fda-udi</a></td><td>=)1TE123456A&amp;)RZ12345678</td><td><a>http://hl7.org/fhir/NamingSystem/iccbba-blood</a></td></tr></table><p><b>status</b>: inactive</p><p><b>lotNumber</b>: RZ12345678</p><p><b>manufacturer</b>: GlobalMed, Inc</p><p><b>patient</b>: <a>Patient/example</a></p></div>"
+  }
+}
+udi {
+  jurisdiction {
+    value: "http://hl7.org/fhir/NamingSystem/fda-udi"
+  }
+  carrier_h_r_f {
+    value: "=)1TE123456A&)RZ12345678"
+  }
+  issuer {
+    value: "http://hl7.org/fhir/NamingSystem/iccbba-blood"
+  }
+}
+status {
+  value: INACTIVE
+}
+lot_number {
+  value: "RZ12345678"
+}
+manufacturer {
+  value: "GlobalMed, Inc"
+}
+patient {
+  reference {
+    value: "Patient/example"
+  }
+}

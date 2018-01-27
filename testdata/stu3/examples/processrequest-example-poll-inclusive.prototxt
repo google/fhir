@@ -1,0 +1,37 @@
+id {
+  value: "1112"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Poll ProcessRequest</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/processrequest"
+  }
+  value {
+    value: "112"
+  }
+}
+status {
+  value: ACTIVE
+}
+action {
+  value: POLL
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+include {
+  value: "PaymentReconciliation"
+}

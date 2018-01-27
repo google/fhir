@@ -1,0 +1,159 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      HACC Program for Peter James Chalmers at HL7 Healthcare 15 Sept 2014 - current<br/>\n\t\t\twas on leave from 22 Sept - 24 Sept while in respite care\n    </div>"
+  }
+}
+identifier {
+  system {
+    value: "http://example.org/sampleepisodeofcare-identifier"
+  }
+  value {
+    value: "123"
+  }
+}
+status {
+  value: ACTIVE
+}
+status_history {
+  status {
+    value: PLANNED
+  }
+  period {
+    start {
+      value_us: 1409529600000000
+      precision: DAY
+    }
+    end {
+      value_us: 1410652800000000
+      precision: DAY
+    }
+  }
+}
+status_history {
+  status {
+    value: ACTIVE
+  }
+  period {
+    start {
+      value_us: 1410739200000000
+      precision: DAY
+    }
+    end {
+      value_us: 1411257600000000
+      precision: DAY
+    }
+  }
+}
+status_history {
+  status {
+    value: ONHOLD
+  }
+  period {
+    start {
+      value_us: 1411344000000000
+      precision: DAY
+    }
+    end {
+      value_us: 1411516800000000
+      precision: DAY
+    }
+  }
+}
+status_history {
+  status {
+    value: ACTIVE
+  }
+  period {
+    start {
+      value_us: 1411603200000000
+      precision: DAY
+    }
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/episodeofcare-type"
+    }
+    code {
+      value: "hacc"
+    }
+    display {
+      value: "Home and Community Care"
+    }
+  }
+}
+diagnosis {
+  condition {
+    reference {
+      value: "Condition/stroke"
+    }
+  }
+  role {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/diagnosis-role"
+      }
+      code {
+        value: "CC"
+      }
+      display {
+        value: "Chief complaint"
+      }
+    }
+  }
+  rank {
+    value: 1
+  }
+}
+patient {
+  reference {
+    value: "Patient/example"
+  }
+}
+managing_organization {
+  reference {
+    value: "Organization/hl7"
+  }
+}
+period {
+  start {
+    value_us: 1409529600000000
+    precision: DAY
+  }
+}
+referral_request {
+  display {
+    value: "Referral from Example Aged Care Services"
+  }
+}
+care_manager {
+  reference {
+    value: "Practitioner/14"
+  }
+  display {
+    value: "Amanda Assigned"
+  }
+}
+team {
+  reference {
+    value: "CareTeam/example"
+  }
+  display {
+    value: "example care team"
+  }
+}
+account {
+  reference {
+    value: "Account/example"
+  }
+  display {
+    value: "example account"
+  }
+}

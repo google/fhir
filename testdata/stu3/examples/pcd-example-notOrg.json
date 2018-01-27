@@ -1,0 +1,80 @@
+{
+  "resourceType": "Contract",
+  "id": "pcd-example-notOrg",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">The following scenario is based on existing jurisdictional policy and are realized in existing systems in Canada. \n\tThe default policy is one of implied consent for the provision of care, so these scenarios all deal with withdrawal or withholding consent for that purpose. \n\tIn other jurisdictions, where an express consent model is used (Opt-In), these would examples would contain the phrase &quot;consent to&quot; rather \n\tthan &quot;withhold&quot; or &quot;withdraw&quot; consent for.\n    <p>\n\tspecific to use-case 3) Withhold or withdraw consent for disclosure to a specific provider organization  \n\t</p><p>\n    Patient &quot;P. van de Heuvel&quot; ex-spouse is a Physician that is employed by Good Health Clinic.  P. decides\n   that he would like to withdraw/withhold consent to disclose any instance of his health information \n   to Good Health Clinic.\n   </p>\n   </div>"
+  },
+  "issued": "2015-11-18",
+  "subject": [
+    {
+      "reference": "Patient/f001",
+      "display": "P. van de Heuvel"
+    }
+  ],
+  "authority": [
+    {
+      "reference": "Organization/Infoway",
+      "display": "Canada Infoway"
+    }
+  ],
+  "domain": [
+    {
+      "reference": "Location/Infoway",
+      "display": "Canada Infoway"
+    }
+  ],
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "57016-8"
+      }
+    ]
+  },
+  "subType": [
+    {
+      "coding": [
+        {
+          "system": "http://www.infoway-inforoute.ca.org/Consent-subtype-codes",
+          "code": "Opt-In",
+          "display": "Default Authorization with exceptions."
+        }
+      ]
+    }
+  ],
+  "term": [
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://example.org/fhir/consent-term-type-codes",
+            "code": "withhold-from",
+            "display": "Withhold all data from specified actor entity."
+          }
+        ]
+      },
+      "topic": [
+        {
+          "reference": "Organization/2.16.840.1.113883.19.5",
+          "display": "Good Health Clinic"
+        }
+      ],
+      "text": "Withhold this order and any results or related objects from any provider."
+    }
+  ],
+  "friendly": [
+    {
+      "contentAttachment": {
+        "title": "The terms of the consent in friendly consumer speak."
+      }
+    }
+  ],
+  "legal": [
+    {
+      "contentAttachment": {
+        "title": "The terms of the consent in lawyer speak."
+      }
+    }
+  ]
+}

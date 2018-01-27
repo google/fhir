@@ -1,0 +1,157 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Brian MRI results discussion</div>"
+  }
+}
+status {
+  value: BOOKED
+}
+service_category {
+  coding {
+    system {
+      value: "http://example.org/service-category"
+    }
+    code {
+      value: "gp"
+    }
+    display {
+      value: "General Practice"
+    }
+  }
+}
+service_type {
+  coding {
+    code {
+      value: "52"
+    }
+    display {
+      value: "General Discussion"
+    }
+  }
+}
+specialty {
+  coding {
+    system {
+      value: "http://example.org/specialty"
+    }
+    code {
+      value: "gp"
+    }
+    display {
+      value: "General Practice"
+    }
+  }
+}
+appointment_type {
+  coding {
+    system {
+      value: "http://example.org/appointment-type"
+    }
+    code {
+      value: "follow"
+    }
+    display {
+      value: "Followup"
+    }
+  }
+}
+indication {
+  reference {
+    value: "Condition/example"
+  }
+  display {
+    value: "Severe burn of left ear"
+  }
+}
+priority {
+  value: 5
+}
+description {
+  value: "Discussion on the results of your recent MRI"
+}
+start {
+  value_us: 1386666000000000
+  timezone: "UTC"
+  precision: SECOND
+}
+end {
+  value_us: 1386673200000000
+  timezone: "UTC"
+  precision: SECOND
+}
+created {
+  value_us: 1381363200000000
+  precision: DAY
+}
+comment {
+  value: "Further expand on the results of the MRI and determine the next actions that may be appropriate."
+}
+incoming_referral {
+  reference {
+    value: "ReferralRequest/example"
+  }
+}
+participant {
+  actor {
+    reference {
+      value: "Patient/example"
+    }
+    display {
+      value: "Peter James Chalmers"
+    }
+  }
+  required {
+    value: REQUIRED
+  }
+  status {
+    value: ACCEPTED
+  }
+}
+participant {
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/v3/ParticipationType"
+      }
+      code {
+        value: "ATND"
+      }
+    }
+  }
+  actor {
+    reference {
+      value: "Practitioner/example"
+    }
+    display {
+      value: "Dr Adam Careful"
+    }
+  }
+  required {
+    value: REQUIRED
+  }
+  status {
+    value: ACCEPTED
+  }
+}
+participant {
+  actor {
+    reference {
+      value: "Location/1"
+    }
+    display {
+      value: "South Wing, second floor"
+    }
+  }
+  required {
+    value: REQUIRED
+  }
+  status {
+    value: ACCEPTED
+  }
+}

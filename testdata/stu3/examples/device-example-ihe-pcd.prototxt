@@ -1,0 +1,43 @@
+id {
+  value: "ihe-pcd"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Acme Patient Monitor</p>\n    </div>"
+  }
+}
+identifier {
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/identifier-type"
+      }
+      code {
+        value: "SNO"
+      }
+    }
+    text {
+      value: "Serial Number"
+    }
+  }
+  value {
+    value: "AMID-123-456"
+  }
+}
+type {
+  text {
+    value: "Vital Signs Monitor"
+  }
+}
+lot_number {
+  value: "12345"
+}
+manufacturer {
+  value: "Acme Devices, Inc"
+}
+model {
+  value: "A.1.1"
+}

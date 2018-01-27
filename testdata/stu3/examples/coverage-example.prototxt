@@ -1,0 +1,116 @@
+id {
+  value: "9876B1"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the coverage</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://benefitsinc.com/certificate"
+  }
+  value {
+    value: "12345"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/v3/ActCode"
+    }
+    code {
+      value: "EHCPOL"
+    }
+    display {
+      value: "extended healthcare"
+    }
+  }
+}
+policy_holder {
+  reference {
+    value: "http://benefitsinc.com/FHIR/Organization/CBI35"
+  }
+}
+subscriber {
+  reference {
+    value: "Patient/4"
+  }
+}
+beneficiary {
+  reference {
+    value: "Patient/4"
+  }
+}
+relationship {
+  coding {
+    code {
+      value: "self"
+    }
+  }
+}
+period {
+  start {
+    value_us: 1306108800000000
+    precision: DAY
+  }
+  end {
+    value_us: 1337731200000000
+    precision: DAY
+  }
+}
+payor {
+  reference {
+    value: "Organization/2"
+  }
+}
+grouping {
+  group {
+    value: "CBI35"
+  }
+  group_display {
+    value: "Corporate Baker\'s Inc. Local #35"
+  }
+  sub_group {
+    value: "123"
+  }
+  sub_group_display {
+    value: "Trainee Part-time Benefits"
+  }
+  plan {
+    value: "B37FC"
+  }
+  plan_display {
+    value: "Full Coverage: Medical, Dental, Pharmacy, Vision, EHC"
+  }
+  sub_plan {
+    value: "P7"
+  }
+  sub_plan_display {
+    value: "Includes afterlife benefits"
+  }
+  class {
+    value: "SILVER"
+  }
+  class_display {
+    value: "Silver: Family Plan spouse only"
+  }
+  sub_class {
+    value: "Tier2"
+  }
+  sub_class_display {
+    value: "Low deductable, max $20 copay"
+  }
+}
+dependent {
+  value: "0"
+}
+sequence {
+  value: "9"
+}

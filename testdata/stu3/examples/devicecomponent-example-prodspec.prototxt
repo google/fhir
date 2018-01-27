@@ -1,0 +1,119 @@
+id {
+  value: "example-prodspec"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-prodspec</p><p><b>identifier</b>: 789123</p><p><b>type</b>: MDC_DEV_ANALY_SAT_O2_MDS <span>(Details : {urn:iso:std:iso:11073:10101 code \'2000\' = \'2000\', given as \'MDC_DEV_ANALY_SAT_O2_MDS\'})</span></p><p><b>lastSystemChange</b>: 07/10/2014 2:45:00 PM</p><p><b>source</b>: <a>Device/d1</a></p><p><b>operationalStatus</b>: Off <span>(Details : {[not stated] code \'off\' = \'off\', given as \'Off\'})</span></p><blockquote><p><b>productionSpecification</b></p><p><b>specType</b>: Serial number <span>(Details : {[not stated] code \'serial-number\' = \'serial-number\', given as \'Serial number\'})</span></p><p><b>productionSpec</b>: xa-12324-b</p></blockquote><blockquote><p><b>productionSpecification</b></p><p><b>specType</b>: Hardware Revision <span>(Details : {[not stated] code \'hardware-revision\' = \'hardware-revision\', given as \'Hardware Revision\'})</span></p><p><b>productionSpec</b>: 1.1</p></blockquote><blockquote><p><b>productionSpecification</b></p><p><b>specType</b>: Software Revision <span>(Details : {[not stated] code \'software-revision\' = \'software-revision\', given as \'Software Revision\'})</span></p><p><b>productionSpec</b>: 1.12</p></blockquote><blockquote><p><b>productionSpecification</b></p><p><b>specType</b>: Firmware Revision <span>(Details : {[not stated] code \'firmware-revision\' = \'firmware-revision\', given as \'Firmware Revision\'})</span></p><p><b>productionSpec</b>: 1.0.23</p></blockquote><p><b>languageCode</b>: en-US <span>(Details : {http://tools.ietf.org/html/bcp47 code \'en-US\' = \'en-US)</span></p></div>"
+  }
+}
+identifier {
+  value {
+    value: "789123"
+  }
+}
+type {
+  coding {
+    system {
+      value: "urn:iso:std:iso:11073:10101"
+    }
+    code {
+      value: "2000"
+    }
+    display {
+      value: "MDC_DEV_ANALY_SAT_O2_MDS"
+    }
+  }
+}
+last_system_change {
+  value_us: 1412693100000000
+  timezone: "UTC"
+  precision: SECOND
+}
+source {
+  reference {
+    value: "Device/d1"
+  }
+}
+operational_status {
+  coding {
+    code {
+      value: "off"
+    }
+    display {
+      value: "Off"
+    }
+  }
+}
+production_specification {
+  spec_type {
+    coding {
+      code {
+        value: "serial-number"
+      }
+      display {
+        value: "Serial number"
+      }
+    }
+  }
+  production_spec {
+    value: "xa-12324-b"
+  }
+}
+production_specification {
+  spec_type {
+    coding {
+      code {
+        value: "hardware-revision"
+      }
+      display {
+        value: "Hardware Revision"
+      }
+    }
+  }
+  production_spec {
+    value: "1.1"
+  }
+}
+production_specification {
+  spec_type {
+    coding {
+      code {
+        value: "software-revision"
+      }
+      display {
+        value: "Software Revision"
+      }
+    }
+  }
+  production_spec {
+    value: "1.12"
+  }
+}
+production_specification {
+  spec_type {
+    coding {
+      code {
+        value: "firmware-revision"
+      }
+      display {
+        value: "Firmware Revision"
+      }
+    }
+  }
+  production_spec {
+    value: "1.0.23"
+  }
+}
+language_code {
+  coding {
+    system {
+      value: "http://tools.ietf.org/html/bcp47"
+    }
+    code {
+      value: "en-US"
+    }
+  }
+}

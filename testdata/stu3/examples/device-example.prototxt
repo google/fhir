@@ -1,0 +1,88 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>identifier</b>: 345675, Serial Number = AMID-342135-8464</p><p><b>status</b>: active</p><p><b>type</b>: ECG <span>(Details : {SNOMED CT code \'86184003\' = \'Electrocardiographic monitor and recorder\', given as \'Electrocardiographic monitor and recorder\'})</span></p><p><b>lotNumber</b>: 43453424</p><p><b>manufacturer</b>: Acme Devices, Inc</p><p><b>model</b>: AB 45-J</p><p><b>contact</b>: ph: ext 4352</p><p><b>note</b>: QA Checked</p></div>"
+  }
+}
+identifier {
+  system {
+    value: "http://goodcare.org/devices/id"
+  }
+  value {
+    value: "345675"
+  }
+}
+identifier {
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/identifier-type"
+      }
+      code {
+        value: "SNO"
+      }
+    }
+    text {
+      value: "Serial Number"
+    }
+  }
+  value {
+    value: "AMID-342135-8464"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "86184003"
+    }
+    display {
+      value: "Electrocardiographic monitor and recorder"
+    }
+  }
+  text {
+    value: "ECG"
+  }
+}
+lot_number {
+  value: "43453424"
+}
+manufacturer {
+  value: "Acme Devices, Inc"
+}
+model {
+  value: "AB 45-J"
+}
+contact {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "ext 4352"
+  }
+}
+note {
+  author_reference {
+    reference {
+      value: "Practitioner/xcda-author"
+    }
+  }
+  time {
+    value_us: 1435464212000000
+    timezone: "+10:00"
+    precision: SECOND
+  }
+  text {
+    value: "QA Checked"
+  }
+}

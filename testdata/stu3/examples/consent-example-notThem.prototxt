@@ -1,0 +1,87 @@
+id {
+  value: "consent-example-notThem"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">The following scenario is based on existing jurisdictional policy and are realized in existing systems in Canada. \n\tThe default policy is one of implied consent for the provision of care, so these scenarios all deal with withdrawal or withholding consent for that purpose. \n\tIn other jurisdictions, where an express consent model is used (Opt-In), these would examples would contain the phrase &quot;consent to&quot; rather \n\tthan &quot;withhold&quot; or &quot;withdraw&quot; consent for.\n    <p>\n\tspecific to use-case 4) Withhold or withdraw consent for disclosure to a specific provider agent (an individual within an organization) \n\t</p><p>\n    Patient &quot;P. van de Heuvel&quot; ex-spouse, Bill T Lookafter is a Nurse that is employed by Good Health Hospital.\n   P. realizes that she may receive treatment at GHH, however she does not want her ex-spouse to have any \n   access to her IIHI.  She indicates that she would like to withdraw/withhold consent to disclose any instance \n   of her health information to her ex-spouse as a result of his employment at Good Health Clinic.\n   </p>\n   </div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+patient {
+  reference {
+    value: "Patient/f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+date_time {
+  value_us: 1447804800000000
+  precision: DAY
+}
+organization {
+  reference {
+    value: "Organization/Infoway"
+  }
+  display {
+    value: "Canada Infoway"
+  }
+}
+source_attachment {
+  title {
+    value: "The terms of the consent in lawyer speak."
+  }
+}
+policy_rule {
+  value: "http://hl7.org/fhir/ConsentPolicy/opt-in"
+}
+except {
+  type {
+    value: DENY
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Practitioner/f204"
+      }
+      display {
+        value: "Fictive Nurse"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/consentaction"
+      }
+      code {
+        value: "correct"
+      }
+    }
+  }
+}

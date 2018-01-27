@@ -1,0 +1,196 @@
+id {
+  value: "example-media"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-media</p><p><b>type</b>: Export (Details: DICOM code 110106 = \'Export\', stated as \'Export\')</p><p><b>subtype</b>: Distribute Document Set on Media (Details: urn:oid:1.3.6.1.4.1.19376.1.2 code ITI-32 = \'ITI-32\', stated as \'Distribute Document Set on Media\')</p><p><b>action</b>: R</p><p><b>recorded</b>: 27/08/2015 11:42:24 PM</p><p><b>outcome</b>: 0</p><blockquote><p><b>agent</b></p><p><b>role</b>: Source Role ID <span>(Details : {DICOM code \'110153\' = \'Source Role ID\', given as \'Source Role ID\'})</span></p><p><b>userId</b>: ExportToMedia.app</p><p><b>requestor</b>: false</p></blockquote><blockquote><p><b>agent</b></p><p><b>userId</b>: 95</p><p><b>altId</b>: 601847123</p><p><b>name</b>: Grahame Grieve</p><p><b>requestor</b>: true</p></blockquote><blockquote><p><b>agent</b></p><p><b>name</b>: Media title: Hello World</p><p><b>requestor</b>: false</p><p><b>media</b>: DVD (Details: DICOM code 110033 = \'DVD\', stated as \'DVD\')</p></blockquote><h3>Sources</h3><table><tr><td>-</td><td><b>Identifier</b></td></tr><tr><td>*</td><td>hl7connect.healthintersections.com.au</td></tr></table><blockquote><p><b>entity</b></p><p><b>identifier</b>: e3cdfc81a0d24bd^^^&amp;2.16.840.1.113883.4.2&amp;ISO</p><p><b>type</b>: Person (Details: http://hl7.org/fhir/object-type code 1 = \'1\', stated as \'Person\')</p><p><b>role</b>: Patient (Details: http://hl7.org/fhir/object-role code 1 = \'Patient\', stated as \'Patient\')</p></blockquote><blockquote><p><b>entity</b></p><p><b>identifier</b>: submission set classificationNode = e3cdfc81a0d24bd^^^&amp;2.16.840.1.113883.4.2&amp;ISO</p><p><b>type</b>: System Object (Details: http://hl7.org/fhir/object-type code 2 = \'2\', stated as \'System Object\')</p><p><b>role</b>: Job (Details: http://hl7.org/fhir/object-role code 20 = \'Job\', stated as \'Job\')</p></blockquote><blockquote><p><b>entity</b></p><p><b>reference</b>: <a>DocumentManifest/example</a></p><p><b>type</b>: System Object (Details: http://hl7.org/fhir/object-type code 2 = \'2\', stated as \'System Object\')</p></blockquote></div>"
+  }
+}
+type {
+  system {
+    value: "http://dicom.nema.org/resources/ontology/DCM"
+  }
+  code {
+    value: "110106"
+  }
+  display {
+    value: "Export"
+  }
+}
+subtype {
+  system {
+    value: "urn:oid:1.3.6.1.4.1.19376.1.2"
+  }
+  code {
+    value: "ITI-32"
+  }
+  display {
+    value: "Distribute Document Set on Media"
+  }
+}
+action {
+  value: R
+}
+recorded {
+  value_us: 1440718944000000
+  timezone: "UTC"
+  precision: SECOND
+}
+outcome {
+  value: SUCCESS
+}
+agent {
+  role {
+    coding {
+      system {
+        value: "http://dicom.nema.org/resources/ontology/DCM"
+      }
+      code {
+        value: "110153"
+      }
+      display {
+        value: "Source Role ID"
+      }
+    }
+  }
+  user_id {
+    value {
+      value: "ExportToMedia.app"
+    }
+  }
+  requestor {
+  }
+}
+agent {
+  user_id {
+    value {
+      value: "95"
+    }
+  }
+  alt_id {
+    value: "601847123"
+  }
+  name {
+    value: "Grahame Grieve"
+  }
+  requestor {
+    value: true
+  }
+}
+agent {
+  name {
+    value: "Media title: Hello World"
+  }
+  requestor {
+  }
+  media {
+    system {
+      value: "http://dicom.nema.org/resources/ontology/DCM"
+    }
+    code {
+      value: "110033"
+    }
+    display {
+      value: "DVD"
+    }
+  }
+}
+source {
+  identifier {
+    value {
+      value: "hl7connect.healthintersections.com.au"
+    }
+  }
+}
+entity {
+  identifier {
+    value {
+      value: "e3cdfc81a0d24bd^^^&2.16.840.1.113883.4.2&ISO"
+    }
+  }
+  type {
+    system {
+      value: "http://hl7.org/fhir/object-type"
+    }
+    code {
+      value: "1"
+    }
+    display {
+      value: "Person"
+    }
+  }
+  role {
+    system {
+      value: "http://hl7.org/fhir/object-role"
+    }
+    code {
+      value: "1"
+    }
+    display {
+      value: "Patient"
+    }
+  }
+}
+entity {
+  identifier {
+    type {
+      coding {
+        system {
+          value: "urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd"
+        }
+        code {
+          value: "IHE XDS Metadata"
+        }
+        display {
+          value: "submission set classificationNode"
+        }
+      }
+    }
+    value {
+      value: "e3cdfc81a0d24bd^^^&2.16.840.1.113883.4.2&ISO"
+    }
+  }
+  type {
+    system {
+      value: "http://hl7.org/fhir/object-type"
+    }
+    code {
+      value: "2"
+    }
+    display {
+      value: "System Object"
+    }
+  }
+  role {
+    system {
+      value: "http://hl7.org/fhir/object-role"
+    }
+    code {
+      value: "20"
+    }
+    display {
+      value: "Job"
+    }
+  }
+}
+entity {
+  reference {
+    reference {
+      value: "DocumentManifest/example"
+    }
+  }
+  type {
+    system {
+      value: "http://hl7.org/fhir/object-type"
+    }
+    code {
+      value: "2"
+    }
+    display {
+      value: "System Object"
+    }
+  }
+}

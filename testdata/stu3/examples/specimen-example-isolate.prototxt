@@ -1,0 +1,140 @@
+id {
+  value: "isolate"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: isolate</p><p><b>contained</b>: </p><p><b>accessionIdentifier</b>: X352356-ISO1</p><p><b>status</b>: available</p><p><b>type</b>: Bacterial isolate specimen <span>(Details : {SNOMED CT code \'429951000124103\' = \'Bacterial isolate specimen (specimen)\', given as \'Bacterial isolate specimen\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>receivedTime</b>: 18/08/2015 7:03:00 AM</p><p><b>parent</b>: id: stool; X352356; status: unavailable; Stool specimen <span>(Details : {SNOMED CT code \'119339001\' = \'Stool specimen\', given as \'Stool specimen\'})</span>; ????; receivedTime: 16/08/2015 7:03:00 AM</p><h3>Collections</h3><table><tr><td>-</td><td><b>Collector</b></td><td><b>Collected[x]</b></td><td><b>Method</b></td></tr><tr><td>*</td><td><a>Practitioner/f202</a></td><td>16/08/2015 7:03:00 AM</td><td>Plates, Blood Agar <span>(Details : {http://hl7.org/fhir/v2/0488 code \'BAP\' = \'Plates, Blood Agar)</span></td></tr></table><p><b>note</b>: Patient dropped off specimen</p></div>"
+  }
+}
+contained {
+  specimen {
+    id {
+      value: "stool"
+    }
+    accession_identifier {
+      system {
+        value: "http://lab.acme.org/specimens/2015"
+      }
+      value {
+        value: "X352356"
+      }
+    }
+    status {
+      value: UNAVAILABLE
+    }
+    type {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "119339001"
+        }
+        display {
+          value: "Stool specimen"
+        }
+      }
+    }
+    subject {
+      reference {
+        value: "Patient/example"
+      }
+    }
+    received_time {
+      value_us: 1439708580000000
+      timezone: "UTC"
+      precision: SECOND
+    }
+    collection {
+      collector {
+        display {
+          value: "Patient"
+        }
+      }
+      collected_date_time {
+        value_us: 1313475300000000
+        timezone: "UTC"
+        precision: SECOND
+      }
+      method {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/v2/0488"
+          }
+          code {
+            value: "LNV"
+          }
+        }
+      }
+    }
+  }
+}
+accession_identifier {
+  system {
+    value: "http://lab.acme.org/specimens/2011"
+  }
+  value {
+    value: "X352356-ISO1"
+  }
+}
+status {
+  value: AVAILABLE
+}
+type {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "429951000124103"
+    }
+    display {
+      value: "Bacterial isolate specimen"
+    }
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+}
+received_time {
+  value_us: 1439881380000000
+  timezone: "UTC"
+  precision: SECOND
+}
+parent {
+  reference {
+    value: "#stool"
+  }
+}
+collection {
+  collector {
+    reference {
+      value: "Practitioner/f202"
+    }
+  }
+  collected_date_time {
+    value_us: 1439708580000000
+    timezone: "UTC"
+    precision: SECOND
+  }
+  method {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/v2/0488"
+      }
+      code {
+        value: "BAP"
+      }
+    }
+  }
+}
+note {
+  text {
+    value: "Patient dropped off specimen"
+  }
+}

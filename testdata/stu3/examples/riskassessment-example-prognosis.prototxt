@@ -1,0 +1,54 @@
+id {
+  value: "prognosis"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Moderate risk of permanent weakness of the left arm, but otherwise no permanent disability</p>\n    </div>"
+  }
+}
+status {
+  value: FINAL
+}
+occurrence_date_time {
+  value_us: 1290384000000000
+  precision: DAY
+}
+condition {
+  reference {
+    value: "Condition/stroke"
+  }
+  display {
+    value: "Ischemic Stroke"
+  }
+}
+prediction {
+  outcome {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "249943000:363698007=72098002,260868000=6934004"
+      }
+    }
+    text {
+      value: "permanent weakness of the left arm"
+    }
+  }
+  qualitative_risk {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/risk-probability"
+      }
+      code {
+        value: "moderate"
+      }
+      display {
+        value: "moderate likelihood"
+      }
+    }
+  }
+}

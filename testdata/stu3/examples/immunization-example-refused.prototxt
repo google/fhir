@@ -1,0 +1,57 @@
+id {
+  value: "notGiven"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: notGiven</p><p><b>status</b>: completed</p><p><b>notGiven</b>: true</p><p><b>vaccineCode</b>: DTP <span>(Details : {http://hl7.org/fhir/sid/cvx code \'01\' = \'DTP\', given as \'DTP\'})</span></p><p><b>patient</b>: <a>Patient/example</a></p><p><b>date</b>: 10/01/2013</p><p><b>primarySource</b>: true</p><h3>Explanations</h3><table><tr><td>-</td><td><b>ReasonNotGiven</b></td></tr><tr><td>*</td><td>medical precaution <span>(Details : {http://hl7.org/fhir/v3/ActReason code \'MEDPREC\' = \'medical precaution\', given as \'medical precaution\'})</span></td></tr></table></div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+not_given {
+  value: true
+}
+vaccine_code {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/sid/cvx"
+    }
+    code {
+      value: "01"
+    }
+    display {
+      value: "DTP"
+    }
+  }
+}
+patient {
+  reference {
+    value: "Patient/example"
+  }
+}
+date {
+  value_us: 1357776000000000
+  precision: DAY
+}
+primary_source {
+  value: true
+}
+explanation {
+  reason_not_given {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/v3/ActReason"
+      }
+      code {
+        value: "MEDPREC"
+      }
+      display {
+        value: "medical precaution"
+      }
+    }
+  }
+}

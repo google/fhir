@@ -1,0 +1,59 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Message definition base example</div>"
+  }
+}
+url {
+  value: "http://hl7.org/fhir/MessageDefinition/example"
+}
+name {
+  value: "EXAMPLE"
+}
+title {
+  value: "Message definition base example"
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+date {
+  value_us: 1478649600000000
+  precision: DAY
+}
+publisher {
+  value: "Health Level Seven, Int\'l"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org"
+    }
+  }
+}
+purpose {
+  value: "Defines a base example for other MessageDefintion instances."
+}
+event {
+  system {
+    value: "http://hl7.org/fhir/message-events"
+  }
+  code {
+    value: "communication-request"
+  }
+}
+category {
+  value: NOTIFICATION
+}
+response_required {
+}

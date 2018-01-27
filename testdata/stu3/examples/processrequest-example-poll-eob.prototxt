@@ -1,0 +1,32 @@
+id {
+  value: "1115"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Poll ProcessRequest</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.phr.com/patient/12345/processrequest"
+  }
+  value {
+    value: "115"
+  }
+}
+status {
+  value: ACTIVE
+}
+action {
+  value: POLL
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+include {
+  value: "ExplanationOfBenefit"
+}

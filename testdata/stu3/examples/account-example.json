@@ -1,0 +1,56 @@
+{
+  "resourceType": "Account",
+  "id": "example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">HACC Funded Billing for Peter James Chalmers</div>"
+  },
+  "identifier": [
+    {
+      "system": "urn:oid:0.1.2.3.4.5.6.7",
+      "value": "654321"
+    }
+  ],
+  "status": "active",
+  "type": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v3/ActCode",
+        "code": "PBILLACCT",
+        "display": "patient billing account"
+      }
+    ],
+    "text": "patient"
+  },
+  "name": "HACC Funded Billing for Peter James Chalmers",
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Peter James Chalmers"
+  },
+  "period": {
+    "start": "2016-01-01",
+    "end": "2016-06-30"
+  },
+  "active": {
+    "start": "2016-01-01",
+    "end": "2016-06-30"
+  },
+  "balance": {
+    "value": -1200,
+    "unit": "USD",
+    "system": "urn:iso:std:iso:4217",
+    "code": "USD"
+  },
+  "coverage": [
+    {
+      "coverage": {
+        "reference": "Coverage/7546D"
+      },
+      "priority": 1
+    }
+  ],
+  "owner": {
+    "reference": "Organization/hl7"
+  },
+  "description": "Hospital charges"
+}

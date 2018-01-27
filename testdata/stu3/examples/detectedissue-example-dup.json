@@ -1,0 +1,42 @@
+{
+  "resourceType": "DetectedIssue",
+  "id": "duplicate",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Similar test was performed within the past 14 days</p>\n      <ul>\n        <li>\n          <a href=\"ProcedureRequest/id\">Chest CT - ordered May 8, 2013 by Dr. Adam Careful</a>\n        </li>\n        <li>\n          <a href=\"ImagingStudy/example\">Image 1 from Series 3: CT Images on Patient MINT (MINT1234) taken at 1-Jan 2011 01:20 AM</a>\n        </li>\n      </ul>\n    </div>"
+  },
+  "identifier": {
+    "use": "official",
+    "system": "http://example.org",
+    "value": "12345"
+  },
+  "status": "final",
+  "category": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v3/ActCode",
+        "code": "DUPTHPY",
+        "display": "Duplicate Therapy Alert"
+      }
+    ]
+  },
+  "patient": {
+    "reference": "Patient/dicom"
+  },
+  "date": "2013-05-08",
+  "author": {
+    "reference": "Device/software"
+  },
+  "implicated": [
+    {
+      "reference": "ProcedureRequest/di",
+      "display": "Chest CT - ordered May 8, 2013 by Dr. Adam Careful"
+    },
+    {
+      "reference": "ImagingStudy/example",
+      "display": "Image 1 from Series 3: CT Images on Patient MINT (MINT1234) taken at 1-Jan 2011 01:20 AM"
+    }
+  ],
+  "detail": "Similar test was performed within the past 14 days",
+  "reference": "http://www.tmhp.com/RadiologyClinicalDecisionSupport/2011/CHEST%20IMAGING%20GUIDELINES%202011.pdf"
+}

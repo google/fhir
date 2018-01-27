@@ -1,0 +1,108 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">procedure record authored on 27-June 2015 by Harold Hippocrates, MD Content extracted from XDS managed CDA Referral received 26-June</div>"
+  }
+}
+target {
+  reference {
+    value: "Procedure/example/_history/1"
+  }
+}
+period {
+  start {
+    value_us: 1435363200000000
+    precision: DAY
+  }
+  end {
+    value_us: 1435449600000000
+    precision: DAY
+  }
+}
+recorded {
+  value_us: 1435358364000000
+  timezone: "+10:00"
+  precision: SECOND
+}
+policy {
+  value: "http://acme.com/fhir/Consent/25"
+}
+location {
+  reference {
+    value: "Location/1"
+  }
+}
+reason {
+  system {
+    value: "http://snomed.info/sct"
+  }
+  code {
+    value: "3457005"
+  }
+  display {
+    value: "Referral"
+  }
+}
+agent {
+  role {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/v3/ParticipationType"
+      }
+      code {
+        value: "AUT"
+      }
+    }
+  }
+  who_reference {
+    reference {
+      value: "Practitioner/xcda-author"
+    }
+  }
+  on_behalf_of_uri {
+    value: "#a1"
+  }
+  related_agent_type {
+    text {
+      value: "used"
+    }
+  }
+}
+agent {
+  id {
+    value: "a1"
+  }
+  role {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/v3/ParticipationType"
+      }
+      code {
+        value: "DEV"
+      }
+    }
+  }
+  who_reference {
+    reference {
+      value: "Device/software"
+    }
+  }
+}
+entity {
+  role {
+    value: SOURCE
+  }
+  what_reference {
+    reference {
+      value: "DocumentReference/example"
+    }
+    display {
+      value: "CDA Document in XDS repository"
+    }
+  }
+}

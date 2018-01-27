@@ -1,0 +1,106 @@
+id {
+  value: "ambulation"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Ambulation procedure was not done</div>"
+  }
+}
+identifier {
+  value {
+    value: "12345"
+  }
+}
+definition {
+  display {
+    value: "Protocol for hypertension during pregnancy"
+  }
+}
+based_on {
+  reference {
+    value: "CarePlan/preg"
+  }
+  display {
+    value: "Maternity care plan"
+  }
+}
+status {
+  value: SUSPENDED
+}
+not_done {
+  value: true
+}
+not_done_reason {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "398254007"
+    }
+    display {
+      value: "  Pre-eclampsia (disorder)"
+    }
+  }
+  text {
+    value: "Pre-eclampsia"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "62013009"
+    }
+    display {
+      value: "Ambulating patient (procedure)"
+    }
+  }
+  text {
+    value: "Ambulation"
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+}
+performer {
+  actor {
+    reference {
+      value: "Practitioner/f204"
+    }
+    display {
+      value: "Carla Espinosa"
+    }
+  }
+  on_behalf_of {
+    reference {
+      value: "Organization/f001"
+    }
+    display {
+      value: "University Medical Hospital"
+    }
+  }
+}
+location {
+  reference {
+    value: "Location/1"
+  }
+  display {
+    value: "Burgers University Medical Center, South Wing, second floor"
+  }
+}
+reason_reference {
+  reference {
+    value: "Observation/blood-pressure"
+  }
+  display {
+    value: "Blood Pressure"
+  }
+}

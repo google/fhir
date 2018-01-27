@@ -1,0 +1,52 @@
+id {
+  value: "stop-smoking"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<p> A simple care goal for a patient to stop smoking.</p>\n\t\t</div>"
+  }
+}
+identifier {
+  value {
+    value: "123"
+  }
+}
+status {
+  value: ACHIEVED
+}
+description {
+  text {
+    value: "Stop smoking"
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+start_date {
+  value_us: 1428192000000000
+  precision: DAY
+}
+outcome_code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "8517006"
+    }
+    display {
+      value: "Ex-smoker (finding)"
+    }
+  }
+  text {
+    value: "Former smoker"
+  }
+}

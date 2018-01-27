@@ -1,0 +1,338 @@
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <table>\n        <tbody>\n          <tr>\n            <td>Name</td>\n            <td>Peter James <b>Chalmers</b> (&quot;Jim&quot;)</td>\n          </tr>\n          <tr>\n            <td>Address</td>\n            <td>534 Erewhon, Pleasantville, Vic, 3999</td>\n          </tr>\n          <tr>\n            <td>Contacts</td>\n            <td>Home: unknown. Work: (03) 5555 6473</td>\n          </tr>\n          <tr>\n            <td>Id</td>\n            <td>MRN: 12345 (Acme Healthcare)</td>\n          </tr>\n        </tbody>\n      </table>\n    </div>"
+  }
+}
+contained {
+  binary {
+    id {
+      value: "pic1"
+    }
+    content_type {
+      value: "image/gif"
+    }
+    content {
+      value: "GIF89a\023\000\021\000\367\000\000\000\000\000\000\000\377\357Z\000\357\265\000\377\326\000\377\336\000\377\336\b\377\336\020\377\336\030\377\347\000\377\347\b\377\347\020\377\347!\377\347)\377\347R\377\347Z\377\357\000\377\357\b\377\357\020\377\357\030\377\357!\377\357)\377\3571\377\3579\377\357Z\377\357c\377\357k\377\357\214\377\367s\377\367\224\377\367\234\377\377\265\377\377\275\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377!\371\004\001\000\000\001\000,\000\000\000\000\023\000\021\000\000\b\276\000\003\b\f0\240`\301\201\b\023\022\274\300\220\341\000\205\t\a0\f\021\202\003\207\v\017!\006\020 \361\002\200\020\036<p\310\250P\000\307\206!C\222$\230\321\244\200\006\r.p\b9r\340\000\v\026V\016\200yA\303\003\2227\'L\320\t\263\301\201\243\006/\b\035j\023\201\006\016F\017\020 `\300\300\002\241\021\"<\034\200\340\301\006\221\f\215V]p!+\323\001\a6|\375p\361B\205\005d/H\210 a\353\001\a\033>\210l\333\260B\204\251[\021 \310\260\227/\303\277\200\t\362\224\331V\350\005\004\005\022\v\354\3507+\004\b\210%\333\364{\031B\202\004S5#4H\2324\302\200\000\000;"
+    }
+  }
+}
+contained {
+  organization {
+    id {
+      value: "org3141"
+    }
+    text {
+      status {
+        value: GENERATED
+      }
+      div {
+        value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Good Health Clinic</p>\n    </div>"
+      }
+    }
+    identifier {
+      system {
+        value: "urn:ietf:rfc:3986"
+      }
+      value {
+        value: "2.16.840.1.113883.19.5"
+      }
+    }
+    name {
+      value: "Good Health Clinic"
+    }
+  }
+}
+extension {
+  url {
+    value: "http://example.org/fhir/StructureDefinition/patientAvatar"
+  }
+  value_reference {
+    reference {
+      value: "#pic1"
+    }
+    display {
+      value: "Duck image"
+    }
+  }
+}
+extension {
+  url {
+    value: "http://example.org/fhir/StructureDefinition/complexExtensionExample"
+  }
+  extension {
+    url {
+      value: "nestedA"
+    }
+    value_coding {
+      extension {
+        url {
+          value: "http://example.org/fhir/StructureDefinition/extraforcodingWithExt"
+        }
+        extension {
+          url {
+            value: "extra1"
+          }
+          value_string {
+            value: "extra info"
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://example.org/fhir/StructureDefinition/extraforcodingWithValue"
+        }
+        value_integer {
+          value: 45
+        }
+      }
+      system {
+        value: "http://demo.org/id/4"
+      }
+      code {
+        value: "AB45"
+      }
+    }
+  }
+  extension {
+    id {
+      value: "q4"
+    }
+    url {
+      value: "nestedB"
+    }
+    extension {
+      url {
+        value: "nestedB1"
+      }
+      value_string {
+        value: "hello"
+      }
+    }
+  }
+}
+modifier_extension {
+  url {
+    value: "http://example.org/fhir/StructureDefinition/pi"
+  }
+  value_decimal {
+    value: 3.141592653589793
+    precision: 16
+    extension {
+      url {
+        value: "https://fhir.google.com/extensions/decimal-highPrecision"
+      }
+      value_string {
+        value: "3.141592653589793"
+      }
+    }
+  }
+}
+modifier_extension {
+  url {
+    value: "http://example.org/fhir/StructureDefinition/max-decimal-precision"
+  }
+  value_decimal {
+    value: 1.0006502214162465
+    precision: 18
+    extension {
+      url {
+        value: "https://fhir.google.com/extensions/decimal-highPrecision"
+      }
+      value_string {
+        value: "1.00065022141624642"
+      }
+    }
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  system {
+    value: "urn:oid:1.2.36.146.595.217.0.1"
+  }
+  value {
+    value: "12345"
+  }
+  period {
+    start {
+      value_us: 989107200000000
+      precision: DAY
+    }
+  }
+  assigner {
+    display {
+      value: "Acme\342\200\257Healthcare"
+    }
+  }
+}
+active {
+  extension {
+    url {
+      value: "http://example.org/fhir/StructureDefinition/recordStatus"
+    }
+    value_code {
+      value: "archived"
+    }
+  }
+  extension {
+    url {
+      value: "https://fhir.google.com/extensions/primitiveHasNoValue"
+    }
+    value_boolean {
+      value: true
+    }
+  }
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  family {
+    value: "Chalmers"
+  }
+  given {
+    value: "Peter"
+  }
+  given {
+    value: "James"
+  }
+}
+name {
+  use {
+    value: USUAL
+  }
+  given {
+    value: "Jim"
+  }
+}
+telecom {
+  use {
+    value: HOME
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "(03) 5555 6473"
+  }
+  use {
+    value: WORK
+  }
+}
+gender {
+  value: MALE
+}
+birth_date {
+  value_us: 155088000000000
+  precision: MONTH
+}
+deceased_boolean {
+  value: true
+}
+address {
+  use {
+    value: HOME
+  }
+  line {
+    value: "534 Erewhon St"
+  }
+  city {
+    value: "PleasantVille"
+  }
+  state {
+    value: "Vic"
+  }
+  postal_code {
+    value: "3999"
+  }
+}
+marital_status {
+  extension {
+    url {
+      value: "http://example.org/fhir/StructureDefinition/nullFlavor"
+    }
+    value_code {
+      value: "ASKU"
+    }
+  }
+}
+multiple_birth_integer {
+  value: 3
+}
+contact {
+  relationship {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/patient-contact-relationship"
+      }
+      code {
+        value: "partner"
+      }
+    }
+  }
+  name {
+    family {
+      value: "du March\303\251"
+      extension {
+        url {
+          value: "http://example.org/fhir/StructureDefinition/qualifier"
+        }
+        value_string {
+          value: "VV"
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinitioniso-21090#nullFlavor"
+        }
+        value_code {
+          value: "ASKU"
+        }
+      }
+    }
+    given {
+      value: "B\303\251n\303\251dicte"
+    }
+    given {
+      value: "Denise"
+      id {
+        value: "a3"
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/qualifier"
+        }
+        value_code {
+          value: "MID"
+        }
+      }
+    }
+    given {
+      value: "Marie"
+    }
+  }
+  telecom {
+    system {
+      value: PHONE
+    }
+    value {
+      value: "+33 (237) 998327"
+    }
+  }
+}
+general_practitioner {
+  reference {
+    value: "#org3141"
+  }
+}
+managing_organization {
+  reference {
+    value: "Organization/1"
+  }
+}

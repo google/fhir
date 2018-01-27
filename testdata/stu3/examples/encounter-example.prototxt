@@ -1,0 +1,30 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Encounter with patient @example</div>"
+  }
+}
+status {
+  value: IN_PROGRESS
+}
+class {
+  system {
+    value: "http://hl7.org/fhir/v3/ActCode"
+  }
+  code {
+    value: "IMP"
+  }
+  display {
+    value: "inpatient encounter"
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+}

@@ -1,0 +1,121 @@
+id {
+  value: "prothrombin"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: prothrombin</p><p><b>identifier</b>: Prothrombin Time, PT = 11</p><p><b>status</b>: active</p><p><b>name</b>: Prothrombin Time</p><h3>Mappings</h3><table><tr><td>-</td><td><b>Identity</b></td><td><b>Uri</b></td><td><b>Name</b></td><td><b>Comment</b></td></tr><tr><td>*</td><td>loinc</td><td><a>http://loinc.org/</a></td><td>LOINC</td><td>Version 2.48 or later</td></tr></table><p><b>element</b>: todo-bundle</p></div>"
+  }
+}
+identifier {
+  type {
+    text {
+      value: "Prothrombin Time, PT"
+    }
+  }
+  system {
+    value: "http://www.CenturyHospital/Laboratory/DirectoryofServices"
+  }
+  value {
+    value: "11"
+  }
+  period {
+    start {
+      value_us: 1305763200000000
+      precision: DAY
+    }
+  }
+  assigner {
+    display {
+      value: "Century Hospital Laboratory"
+    }
+  }
+}
+status {
+  value: ACTIVE
+}
+name {
+  value: "Prothrombin Time"
+}
+mapping {
+  identity {
+    value: "loinc"
+  }
+  uri {
+    value: "http://loinc.org/"
+  }
+  name {
+    value: "LOINC"
+  }
+  comment {
+    value: "Version 2.48 or later"
+  }
+}
+element {
+  extension {
+    url {
+      value: "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits"
+    }
+    value_codeable_concept {
+      coding {
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        version {
+          value: "1.9"
+        }
+        code {
+          value: "s"
+        }
+        display {
+          value: "second"
+        }
+        user_selected {
+          value: true
+        }
+      }
+      text {
+        value: "second"
+      }
+    }
+  }
+  path {
+    value: "prothrombin"
+  }
+  definition {
+    value: "The PT test evaluates the extrinsic and common pathways of the coagulation cascade."
+  }
+  comment {
+    value: "Used to screen the integrity of the extrinsic and common pathways of coagulation and to monitor warfarin anticoagulation. "
+  }
+  requirements {
+    value: "This test is orderable. A plasma specimen in a 3.2% sodium citrate blue top tube is required."
+  }
+  alias {
+    value: "Protime, PT"
+  }
+  type {
+    code {
+      value: "decimal"
+    }
+  }
+  example {
+    label {
+      value: "Simple"
+    }
+    value_decimal {
+      value: 10.0
+      precision: 3
+    }
+  }
+  mapping {
+    identity {
+      value: "loinc"
+    }
+    map {
+      value: "5964-2"
+    }
+  }
+}

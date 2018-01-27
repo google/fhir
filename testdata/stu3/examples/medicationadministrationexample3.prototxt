@@ -1,0 +1,95 @@
+id {
+  value: "medadminexample03"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medadminexample03</p><p><b>contained</b>: </p><p><b>status</b>: on-hold</p><p><b>medication</b>: id: med0303; Alemtuzumab 10mg/ml (Lemtrada) <span>(Details : {RxNorm code \'1594660\' = \'1594660\', given as \'Alemtuzumab 10mg/ml (Lemtrada)\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>context</b>: <a>Encounter/f001</a></p><p><b>supportingInformation</b>: <a>Condition/f204</a></p><p><b>effective</b>: 15/01/2015 2:30:00 PM --&gt; 15/01/2015 2:30:00 PM</p><p><b>notGiven</b>: true</p><p><b>reasonNotGiven</b>: Administration of medication not done due to a contraindication (situation) <span>(Details : {SNOMED CT code \'373147003\' = \'Medication not administered because contraindicated\', given as \'Administration of medication not done due to a contraindication (situation)\'})</span></p><p><b>prescription</b>: <a>MedicationRequest/medrx0317</a></p><p><b>note</b>: Patient started Bupropion this morning - will administer in a reduced dose tomorrow</p></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "med0303"
+    }
+    code {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "1594660"
+        }
+        display {
+          value: "Alemtuzumab 10mg/ml (Lemtrada)"
+        }
+      }
+    }
+  }
+}
+status {
+  value: ON_HOLD
+}
+medication_reference {
+  reference {
+    value: "#med0303"
+  }
+}
+subject {
+  reference {
+    value: "Patient/pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+context {
+  reference {
+    value: "Encounter/f001"
+  }
+}
+supporting_information {
+  reference {
+    value: "Condition/f204"
+  }
+}
+effective_period {
+  start {
+    value_us: 1421328600000000
+    timezone: "+01:00"
+    precision: SECOND
+  }
+  end {
+    value_us: 1421328600000000
+    timezone: "+01:00"
+    precision: SECOND
+  }
+}
+not_given {
+  value: true
+}
+reason_not_given {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "373147003"
+    }
+    display {
+      value: "Administration of medication not done due to a contraindication (situation)"
+    }
+  }
+}
+prescription {
+  reference {
+    value: "MedicationRequest/medrx0317"
+  }
+}
+note {
+  text {
+    value: "Patient started Bupropion this morning - will administer in a reduced dose tomorrow"
+  }
+}

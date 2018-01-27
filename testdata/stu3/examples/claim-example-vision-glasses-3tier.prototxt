@@ -1,0 +1,758 @@
+id {
+  value: "660152"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Vision Claim for Glasses</div>"
+  }
+}
+contained {
+  claim_response {
+    id {
+      value: "claimresponse-1"
+    }
+    identifier {
+      system {
+        value: "http://thebenefircompany.com/claimresponse"
+      }
+      value {
+        value: "CR6532875367"
+      }
+    }
+  }
+}
+contained {
+  device {
+    id {
+      value: "device-frame"
+    }
+  }
+}
+contained {
+  device {
+    id {
+      value: "device-lens"
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://happysight.com/claim"
+  }
+  value {
+    value: "6612347"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/ex-claimtype"
+    }
+    code {
+      value: "vision"
+    }
+  }
+}
+use {
+  value: COMPLETE
+}
+patient {
+  reference {
+    value: "Patient/1"
+  }
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+insurer {
+  reference {
+    value: "Organization/2"
+  }
+}
+organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+prescription {
+  reference {
+    value: "http://www.optdocs.com/prescription/12345"
+  }
+}
+payee {
+  type {
+    coding {
+      code {
+        value: "provider"
+      }
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    reference {
+      value: "Practitioner/example"
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis_codeable_concept {
+    coding {
+      code {
+        value: "654321"
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+  }
+  coverage {
+    reference {
+      value: "Coverage/9876B1"
+    }
+  }
+  pre_auth_ref {
+    value: "PR7652387237"
+  }
+  claim_response {
+    reference {
+      value: "#claimresponse-1"
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 2
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    reference {
+      value: "Coverage/9876B1"
+    }
+  }
+  pre_auth_ref {
+    value: "AB543GTD7567"
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_link_id {
+    value: 1
+  }
+  revenue {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-revenue-center"
+      }
+      code {
+        value: "0010"
+      }
+      display {
+        value: "Vision Clinic"
+      }
+    }
+  }
+  category {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/benefit-subcategory"
+      }
+      code {
+        value: "F6"
+      }
+      display {
+        value: "Vision Coverage"
+      }
+    }
+  }
+  service {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-visionservice"
+      }
+      code {
+        value: "glasses"
+      }
+    }
+  }
+  modifier {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/modifiers"
+      }
+      code {
+        value: "rooh"
+      }
+    }
+  }
+  program_code {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-programcode"
+      }
+      code {
+        value: "none"
+      }
+    }
+  }
+  serviced_date {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+  unit_price {
+    value {
+      value: 235.4
+      precision: 5
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: 235.4
+      precision: 5
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  detail {
+    sequence {
+      value: 1
+    }
+    revenue {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-revenue-center"
+        }
+        code {
+          value: "0010"
+        }
+        display {
+          value: "Vision Clinic"
+        }
+      }
+    }
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-subcategory"
+        }
+        code {
+          value: "F6"
+        }
+        display {
+          value: "Vision Coverage"
+        }
+      }
+    }
+    service {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-visionservice"
+        }
+        code {
+          value: "frame"
+        }
+      }
+    }
+    modifier {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/modifiers"
+        }
+        code {
+          value: "rooh"
+        }
+      }
+    }
+    unit_price {
+      value {
+        value: 100.0
+        precision: 5
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+    factor {
+      value: 1.1
+      precision: 2
+    }
+    net {
+      value {
+        value: 110.0
+        precision: 5
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+    udi {
+      reference {
+        value: "#device-frame"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 2
+    }
+    revenue {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-revenue-center"
+        }
+        code {
+          value: "0010"
+        }
+        display {
+          value: "Vision Clinic"
+        }
+      }
+    }
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-subcategory"
+        }
+        code {
+          value: "F6"
+        }
+        display {
+          value: "Vision Coverage"
+        }
+      }
+    }
+    service {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-visionservice"
+        }
+        code {
+          value: "lens"
+        }
+      }
+    }
+    program_code {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-programcode"
+        }
+        code {
+          value: "none"
+        }
+      }
+    }
+    quantity {
+      value {
+        value: 2.0
+        precision: 1
+      }
+    }
+    unit_price {
+      value {
+        value: 55.0
+        precision: 4
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+    net {
+      value {
+        value: 110.0
+        precision: 5
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+    sub_detail {
+      sequence {
+        value: 1
+      }
+      revenue {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/ex-revenue-center"
+          }
+          code {
+            value: "0010"
+          }
+          display {
+            value: "Vision Clinic"
+          }
+        }
+      }
+      category {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/benefit-subcategory"
+          }
+          code {
+            value: "F6"
+          }
+          display {
+            value: "Vision Coverage"
+          }
+        }
+      }
+      service {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/ex-visionservice"
+          }
+          code {
+            value: "lens"
+          }
+        }
+      }
+      modifier {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/modifiers"
+          }
+          code {
+            value: "rooh"
+          }
+        }
+      }
+      program_code {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/ex-programcode"
+          }
+          code {
+            value: "none"
+          }
+        }
+      }
+      quantity {
+        value {
+          value: 2.0
+          precision: 1
+        }
+      }
+      unit_price {
+        value {
+          value: 30.0
+          precision: 4
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "USD"
+        }
+      }
+      factor {
+        value: 1.1
+        precision: 2
+      }
+      net {
+        value {
+          value: 66.0
+          precision: 4
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "USD"
+        }
+      }
+      udi {
+        reference {
+          value: "#device-lens"
+        }
+      }
+    }
+    sub_detail {
+      sequence {
+        value: 2
+      }
+      revenue {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/ex-revenue-center"
+          }
+          code {
+            value: "0010"
+          }
+          display {
+            value: "Vision Clinic"
+          }
+        }
+      }
+      category {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/benefit-subcategory"
+          }
+          code {
+            value: "F6"
+          }
+          display {
+            value: "Vision Coverage"
+          }
+        }
+      }
+      service {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/ex-visionservice"
+          }
+          code {
+            value: "hardening"
+          }
+        }
+      }
+      modifier {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/modifiers"
+          }
+          code {
+            value: "rooh"
+          }
+        }
+      }
+      quantity {
+        value {
+          value: 2.0
+          precision: 1
+        }
+      }
+      unit_price {
+        value {
+          value: 15.0
+          precision: 4
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "USD"
+        }
+      }
+      factor {
+        value: 1.1
+        precision: 2
+      }
+      net {
+        value {
+          value: 33.0
+          precision: 4
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "USD"
+        }
+      }
+    }
+    sub_detail {
+      sequence {
+        value: 3
+      }
+      revenue {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/ex-revenue-center"
+          }
+          code {
+            value: "0010"
+          }
+          display {
+            value: "Vision Clinic"
+          }
+        }
+      }
+      category {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/benefit-subcategory"
+          }
+          code {
+            value: "F6"
+          }
+          display {
+            value: "Vision Coverage"
+          }
+        }
+      }
+      service {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/ex-visionservice"
+          }
+          code {
+            value: "UV coating"
+          }
+        }
+      }
+      modifier {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/modifiers"
+          }
+          code {
+            value: "rooh"
+          }
+        }
+      }
+      quantity {
+        value {
+          value: 2.0
+          precision: 1
+        }
+      }
+      unit_price {
+        value {
+          value: 5.0
+          precision: 3
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "USD"
+        }
+      }
+      factor {
+        value: 1.1
+        precision: 2
+      }
+      net {
+        value {
+          value: 11.0
+          precision: 4
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "USD"
+        }
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 3
+    }
+    revenue {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-revenue-center"
+        }
+        code {
+          value: "0010"
+        }
+        display {
+          value: "Vision Clinic"
+        }
+      }
+    }
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-subcategory"
+        }
+        code {
+          value: "F6"
+        }
+        display {
+          value: "Vision Coverage"
+        }
+      }
+    }
+    service {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-visionservice"
+        }
+        code {
+          value: "fst"
+        }
+      }
+    }
+    unit_price {
+      value {
+        value: 220.0
+        precision: 5
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+    factor {
+      value: 0.07
+      precision: 1
+    }
+    net {
+      value {
+        value: 15.4
+        precision: 4
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+  }
+}

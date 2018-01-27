@@ -1,0 +1,50 @@
+{
+  "resourceType": "Substance",
+  "id": "f204",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f204</p><p><b>identifier</b>: 15970</p><p><b>category</b>: Chemical <span>(Details : {http://hl7.org.fhir/substance-category code 'chemical' = 'chemical', given as 'Chemical'})</span></p><p><b>code</b>: Silver nitrate 20% solution (product) <span>(Details : {SNOMED CT code '333346007' = 'Silver nitrate 20% solution', given as 'Silver nitrate 20% solution (product)'})</span></p><p><b>description</b>: Solution for silver nitrate stain</p><h3>Instances</h3><table><tr><td>-</td><td><b>Identifier</b></td><td><b>Expiry</b></td><td><b>Quantity</b></td></tr><tr><td>*</td><td>AB94687</td><td>01/01/2018</td><td>100 mL<span> (Details: UCUM code mL = 'mL')</span></td></tr></table></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://acme.org/identifiers/substances",
+      "value": "15970"
+    }
+  ],
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org.fhir/substance-category",
+          "code": "chemical",
+          "display": "Chemical"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "333346007",
+        "display": "Silver nitrate 20% solution (product)"
+      }
+    ]
+  },
+  "description": "Solution for silver nitrate stain",
+  "instance": [
+    {
+      "identifier": {
+        "system": "http://acme.org/identifiers/substances/lot",
+        "value": "AB94687"
+      },
+      "expiry": "2018-01-01",
+      "quantity": {
+        "value": 100,
+        "unit": "mL",
+        "system": "http://unitsofmeasure.org",
+        "code": "mL"
+      }
+    }
+  ]
+}

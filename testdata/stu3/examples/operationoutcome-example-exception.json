@@ -1,0 +1,17 @@
+{
+  "resourceType": "OperationOutcome",
+  "id": "exception",
+  "text": {
+    "status": "additional",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>SQL Link Communication Error (dbx = 34234)</p>\n    </div>"
+  },
+  "issue": [
+    {
+      "severity": "error",
+      "code": "exception",
+      "details": {
+        "text": "SQL Link Communication Error (dbx = 34234)"
+      }
+    }
+  ]
+}

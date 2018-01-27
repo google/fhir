@@ -1,0 +1,131 @@
+id {
+  value: "f202"
+}
+meta {
+  security {
+    system {
+      value: "http://hl7.org/fhir/v3/ActCode"
+    }
+    code {
+      value: "TBOO"
+    }
+    display {
+      value: "taboo"
+    }
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f202</p><p><b>meta</b>: </p><p><b>clinicalStatus</b>: resolved</p><p><b>verificationStatus</b>: confirmed</p><p><b>category</b>: Encounter Diagnosis <span>(Details : {http://hl7.org/fhir/condition-category code \'encounter-diagnosis\' = \'Encounter Diagnosis)</span></p><p><b>severity</b>: Severe <span>(Details : {SNOMED CT code \'24484000\' = \'Severe\', given as \'Severe\'})</span></p><p><b>code</b>: Malignant neoplastic disease <span>(Details : {SNOMED CT code \'363346000\' = \'Malignant tumour\', given as \'Malignant neoplastic disease\'})</span></p><p><b>bodySite</b>: Entire head and neck <span>(Details : {SNOMED CT code \'361355005\' = \'Entire head and neck\', given as \'Entire head and neck\'})</span></p><p><b>subject</b>: <a>Roel</a></p><p><b>onset</b>: 52 years<span> (Details: UCUM code a = \'a\')</span></p><p><b>abatement</b>: 54 years<span> (Details: UCUM code a = \'a\')</span></p><p><b>assertedDate</b>: 01/12/2012</p><h3>Evidences</h3><table><tr><td>-</td><td><b>Detail</b></td></tr><tr><td>*</td><td><a>Erasmus\' diagnostic report of Roel\'s tumor</a></td></tr></table></div>"
+  }
+}
+clinical_status {
+  value: RESOLVED
+}
+verification_status {
+  value: CONFIRMED
+}
+category {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/condition-category"
+    }
+    code {
+      value: "encounter-diagnosis"
+    }
+  }
+}
+severity {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "24484000"
+    }
+    display {
+      value: "Severe"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "363346000"
+    }
+    display {
+      value: "Malignant neoplastic disease"
+    }
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "361355005"
+    }
+    display {
+      value: "Entire head and neck"
+    }
+  }
+}
+subject {
+  reference {
+    value: "Patient/f201"
+  }
+  display {
+    value: "Roel"
+  }
+}
+onset_age {
+  value {
+    value: 52.0
+    precision: 2
+  }
+  unit {
+    value: "years"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "a"
+  }
+}
+abatement_age {
+  value {
+    value: 54.0
+    precision: 2
+  }
+  unit {
+    value: "years"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "a"
+  }
+}
+asserted_date {
+  value_us: 1354320000000000
+  precision: DAY
+}
+evidence {
+  detail {
+    reference {
+      value: "DiagnosticReport/f201"
+    }
+    display {
+      value: "Erasmus\' diagnostic report of Roel\'s tumor"
+    }
+  }
+}

@@ -1,0 +1,236 @@
+{
+  "resourceType": "Claim",
+  "id": "760151",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Pharmacy Claim</div>"
+  },
+  "identifier": [
+    {
+      "system": "http://happypharma.com/claim",
+      "value": "7612345"
+    }
+  ],
+  "status": "active",
+  "type": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/ex-claimtype",
+        "code": "pharmacy"
+      }
+    ]
+  },
+  "use": "complete",
+  "patient": {
+    "reference": "Patient/1"
+  },
+  "created": "2014-08-16",
+  "insurer": {
+    "reference": "Organization/2"
+  },
+  "organization": {
+    "reference": "Organization/1"
+  },
+  "priority": {
+    "coding": [
+      {
+        "code": "stat"
+      }
+    ]
+  },
+  "prescription": {
+    "reference": "http://pharmacy.org/MedicationRequest/AB1234G"
+  },
+  "originalPrescription": {
+    "reference": "http://pharmacy.org/MedicationRequest/AB1202B"
+  },
+  "payee": {
+    "type": {
+      "coding": [
+        {
+          "code": "provider"
+        }
+      ]
+    }
+  },
+  "careTeam": [
+    {
+      "sequence": 1,
+      "provider": {
+        "reference": "Practitioner/example"
+      }
+    }
+  ],
+  "information": [
+    {
+      "sequence": 1,
+      "category": {
+        "coding": [
+          {
+            "code": "pharmacyrefill"
+          }
+        ]
+      },
+      "code": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/pharmacy-refill",
+            "code": "new"
+          }
+        ]
+      }
+    },
+    {
+      "sequence": 2,
+      "category": {
+        "coding": [
+          {
+            "code": "pharmacyinformation"
+          }
+        ]
+      },
+      "code": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/pharmacy-information",
+            "code": "refillsremaining"
+          }
+        ]
+      },
+      "valueQuantity": {
+        "value": 2
+      }
+    },
+    {
+      "sequence": 3,
+      "category": {
+        "coding": [
+          {
+            "code": "pharmacyinformation"
+          }
+        ]
+      },
+      "code": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/pharmacy-information",
+            "code": "dayssupply"
+          }
+        ]
+      },
+      "valueQuantity": {
+        "value": 90
+      }
+    }
+  ],
+  "diagnosis": [
+    {
+      "sequence": 1,
+      "diagnosisCodeableConcept": {
+        "coding": [
+          {
+            "code": "654456"
+          }
+        ]
+      }
+    }
+  ],
+  "insurance": [
+    {
+      "sequence": 1,
+      "focal": true,
+      "coverage": {
+        "reference": "Coverage/9876B1"
+      }
+    }
+  ],
+  "item": [
+    {
+      "sequence": 1,
+      "careTeamLinkId": [
+        1
+      ],
+      "informationLinkId": [
+        1,
+        2,
+        3
+      ],
+      "service": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/RxNorm",
+            "code": "562721",
+            "display": "Alprazolam 0.25mg (Xanax)"
+          }
+        ]
+      },
+      "servicedDate": "2014-08-16",
+      "quantity": {
+        "value": 90,
+        "unit": "TAB",
+        "system": "http://unitsofmeasure.org",
+        "code": "TAB"
+      },
+      "net": {
+        "value": 90.00,
+        "system": "urn:iso:std:iso:4217",
+        "code": "USD"
+      },
+      "detail": [
+        {
+          "sequence": 1,
+          "service": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/ex-pharmaservice",
+                "code": "drugcost"
+              }
+            ]
+          },
+          "net": {
+            "value": 45.00,
+            "system": "urn:iso:std:iso:4217",
+            "code": "USD"
+          }
+        },
+        {
+          "sequence": 2,
+          "service": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/ex-pharmaservice",
+                "code": "markup"
+              }
+            ]
+          },
+          "net": {
+            "value": 9.00,
+            "system": "urn:iso:std:iso:4217",
+            "code": "USD"
+          }
+        },
+        {
+          "sequence": 3,
+          "service": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/ex-pharmaservice",
+                "code": "dispensefee"
+              }
+            ]
+          },
+          "net": {
+            "value": 36.00,
+            "system": "urn:iso:std:iso:4217",
+            "code": "USD"
+          }
+        }
+      ]
+    }
+  ],
+  "total": {
+    "value": 90.00,
+    "system": "urn:iso:std:iso:4217",
+    "code": "USD"
+  }
+}

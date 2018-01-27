@@ -1,0 +1,141 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<p> A simple care goal for a patient to lose weight due to obesity.</p>\n\t\t</div>"
+  }
+}
+identifier {
+  value {
+    value: "123"
+  }
+}
+status {
+  value: ON_HOLD
+}
+category {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/goal-category"
+    }
+    code {
+      value: "dietary"
+    }
+  }
+}
+priority {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/goal-priority"
+    }
+    code {
+      value: "high-priority"
+    }
+    display {
+      value: "High Priority"
+    }
+  }
+  text {
+    value: "high"
+  }
+}
+description {
+  text {
+    value: "Target weight is 160 to 180 lbs."
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+start_date {
+  value_us: 1428192000000000
+  precision: DAY
+}
+target {
+  measure {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "3141-9"
+      }
+      display {
+        value: "Weight Measured"
+      }
+    }
+  }
+  detail_range {
+    low {
+      value {
+        value: 160.0
+        precision: 3
+      }
+      unit {
+        value: "lbs"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "[lb_av]"
+      }
+    }
+    high {
+      value {
+        value: 180.0
+        precision: 3
+      }
+      unit {
+        value: "lbs"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "[lb_av]"
+      }
+    }
+  }
+  due_date {
+    value_us: 1459814400000000
+    precision: DAY
+  }
+}
+status_date {
+  value_us: 1455408000000000
+  precision: DAY
+}
+status_reason {
+  value: "Patient wants to defer weight loss until after honeymoon."
+}
+expressed_by {
+  reference {
+    value: "Patient/example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+addresses {
+  display {
+    value: "obesity condition"
+  }
+}
+outcome_reference {
+  reference {
+    value: "Observation/example"
+  }
+  display {
+    value: "Body Weight Measured"
+  }
+}

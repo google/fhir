@@ -1,0 +1,182 @@
+id {
+  value: "phr"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n     \n      <p>Prototype Capability Statement for September 2013 Connectathon</p>\n     \n      <p>The server offers read and search support on the following resource types:</p>\n     \n      <ul>\n      \n        <li>Patient</li>\n      \n        <li>DocumentReference</li>\n      \n        <li>Condition</li>\n      \n        <li>DiagnosticReport</li>\n    \n      </ul>\n    \n    </div>"
+  }
+}
+name {
+  value: "PHR Template"
+}
+status {
+  value: DRAFT
+}
+date {
+  value_us: 1371513600000000
+  precision: DAY
+}
+publisher {
+  value: "FHIR Project"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+}
+description {
+  value: "Prototype Capability Statement for September 2013 Connectathon"
+}
+kind {
+  value: CAPABILITY
+}
+software {
+  name {
+    value: "ACME PHR Server"
+  }
+}
+fhir_version {
+  value: "1.0.0"
+}
+accept_unknown {
+  value: NO
+}
+format {
+  value: "json"
+}
+format {
+  value: "xml"
+}
+rest {
+  mode {
+    value: SERVER
+  }
+  documentation {
+    value: "Protoype server Capability Statement for September 2013 Connectathon"
+  }
+  security {
+    service {
+      text {
+        value: "OAuth"
+      }
+    }
+    description {
+      value: "We recommend that PHR servers use standard OAuth using a          standard 3rd party provider. We are not testing the ability to provide an          OAuth authentication/authorization service itself, and nor is providing          any security required for the connectathon at all"
+    }
+  }
+  resource {
+    type {
+      value: PATIENT
+    }
+    interaction {
+      code {
+        value: READ
+      }
+    }
+    interaction {
+      code {
+        value: SEARCH_TYPE
+      }
+      documentation {
+        value: "When a client searches patients with no search criteria, they get a list of all patients they have access too. Servers may elect to offer additional search parameters, but this is not required"
+      }
+    }
+  }
+  resource {
+    type {
+      value: DOCUMENT_REFERENCE
+    }
+    interaction {
+      code {
+        value: READ
+      }
+    }
+    interaction {
+      code {
+        value: SEARCH_TYPE
+      }
+    }
+    search_param {
+      name {
+        value: "_id"
+      }
+      type {
+        value: TOKEN
+      }
+      documentation {
+        value: "_id parameter always supported. For the connectathon, servers may elect which search parameters are supported"
+      }
+    }
+  }
+  resource {
+    type {
+      value: CONDITION
+    }
+    interaction {
+      code {
+        value: READ
+      }
+    }
+    interaction {
+      code {
+        value: SEARCH_TYPE
+      }
+    }
+    search_param {
+      name {
+        value: "_id"
+      }
+      type {
+        value: TOKEN
+      }
+      documentation {
+        value: "Standard _id parameter"
+      }
+    }
+  }
+  resource {
+    type {
+      value: DIAGNOSTIC_REPORT
+    }
+    interaction {
+      code {
+        value: READ
+      }
+    }
+    interaction {
+      code {
+        value: SEARCH_TYPE
+      }
+    }
+    search_param {
+      name {
+        value: "_id"
+      }
+      type {
+        value: TOKEN
+      }
+      documentation {
+        value: "Standard _id parameter"
+      }
+    }
+    search_param {
+      name {
+        value: "service"
+      }
+      type {
+        value: TOKEN
+      }
+      documentation {
+        value: "which diagnostic discipline/department created the report"
+      }
+    }
+  }
+}

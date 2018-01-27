@@ -1,0 +1,299 @@
+id {
+  value: "960151"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Claim</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyhospital.com/claim"
+  }
+  value {
+    value: "96123451"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/ex-claimtype"
+    }
+    code {
+      value: "institutional"
+    }
+  }
+}
+use {
+  value: COMPLETE
+}
+patient {
+  reference {
+    value: "Patient/1"
+  }
+}
+billable_period {
+  start {
+    value_us: 1408060800000000
+    precision: DAY
+  }
+  end {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+enterer {
+  identifier {
+    system {
+      value: "http://jurisdiction.org/facilities/HOSP1234/users"
+    }
+    value {
+      value: "UC1234"
+    }
+  }
+}
+insurer {
+  reference {
+    value: "Organization/2"
+  }
+}
+provider {
+  identifier {
+    system {
+      value: "http://npid.org/providerid"
+    }
+    value {
+      value: "NJ12345"
+    }
+  }
+}
+organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+payee {
+  type {
+    coding {
+      code {
+        value: "provider"
+      }
+    }
+  }
+}
+facility {
+  identifier {
+    system {
+      value: "http://jurisdiction.org/facilities"
+    }
+    value {
+      value: "HOSP1234"
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    reference {
+      value: "Practitioner/example"
+    }
+  }
+  responsible {
+    value: true
+  }
+  role {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/claim-careteamrole"
+      }
+      code {
+        value: "primary"
+      }
+    }
+  }
+  qualification {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/provider-qualification"
+      }
+      code {
+        value: "physician"
+      }
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis_codeable_concept {
+    coding {
+      code {
+        value: "654456"
+      }
+    }
+  }
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-diagnosistype"
+      }
+      code {
+        value: "admitting"
+      }
+    }
+  }
+  package_code {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-diagnosisrelatedgroup"
+      }
+      code {
+        value: "400"
+      }
+      display {
+        value: "Head trauma - concussion"
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    reference {
+      value: "Coverage/9876B1"
+    }
+  }
+  business_arrangement {
+    value: "BA987123"
+  }
+  pre_auth_ref {
+    value: "PA2014G56473"
+  }
+}
+accident {
+  date {
+    value_us: 1404864000000000
+    precision: DAY
+  }
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/v3/ActIncidentCode"
+      }
+      code {
+        value: "SPT"
+      }
+      display {
+        value: "Sporting Accident"
+      }
+    }
+  }
+  location_address {
+    text {
+      value: "Grouse Mountain Ski Hill"
+    }
+  }
+}
+employment_impacted {
+  start {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+  end {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+}
+hospitalization {
+  start {
+    value_us: 1408060800000000
+    precision: DAY
+  }
+  end {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_link_id {
+    value: 1
+  }
+  service {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-serviceproduct"
+      }
+      code {
+        value: "exam"
+      }
+    }
+  }
+  serviced_date {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+  unit_price {
+    value {
+      value: 125.0
+      precision: 5
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: 125.0
+      precision: 5
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+}
+total {
+  value {
+    value: 125.0
+    precision: 5
+  }
+  system {
+    value: "urn:iso:std:iso:4217"
+  }
+  code {
+    value: "USD"
+  }
+}

@@ -1,0 +1,220 @@
+id {
+  value: "R3500"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the ClaimResponse</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/remittance"
+  }
+  value {
+    value: "R3500"
+  }
+}
+status {
+  value: ACTIVE
+}
+patient {
+  reference {
+    value: "Patient/1"
+  }
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+insurer {
+  identifier {
+    system {
+      value: "http://www.jurisdiction.org/insurers"
+    }
+    value {
+      value: "555123"
+    }
+  }
+}
+request_provider {
+  reference {
+    value: "Practitioner/1"
+  }
+}
+request_organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+request {
+  reference {
+    value: "http://www.BenefitsInc.com/fhir/oralhealthclaim/15476332402"
+  }
+}
+outcome {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/remittance-outcome"
+    }
+    code {
+      value: "complete"
+    }
+  }
+}
+disposition {
+  value: "Claim settled as per contract."
+}
+payee_type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/payeetype"
+    }
+    code {
+      value: "provider"
+    }
+  }
+}
+item {
+  sequence_link_id {
+    value: 1
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "eligible"
+        }
+      }
+    }
+    amount {
+      value {
+        value: 135.57
+        precision: 5
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "copay"
+        }
+      }
+    }
+    amount {
+      value {
+        value: 10.0
+        precision: 4
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "eligpercent"
+        }
+      }
+    }
+    value {
+      value: 80.0
+      precision: 4
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "benefit"
+        }
+      }
+    }
+    amount {
+      value {
+        value: 100.47
+        precision: 5
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+  }
+}
+total_cost {
+  value {
+    value: 135.57
+    precision: 5
+  }
+  system {
+    value: "urn:iso:std:iso:4217"
+  }
+  code {
+    value: "USD"
+  }
+}
+total_benefit {
+  value {
+    value: 100.47
+    precision: 5
+  }
+  system {
+    value: "urn:iso:std:iso:4217"
+  }
+  code {
+    value: "USD"
+  }
+}
+payment {
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-paymenttype"
+      }
+      code {
+        value: "complete"
+      }
+    }
+  }
+  date {
+    value_us: 1409443200000000
+    precision: DAY
+  }
+  amount {
+    value {
+      value: 100.47
+      precision: 5
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  identifier {
+    system {
+      value: "http://www.BenefitsInc.com/fhir/paymentidentifier"
+    }
+    value {
+      value: "201408-2-1569478"
+    }
+  }
+}

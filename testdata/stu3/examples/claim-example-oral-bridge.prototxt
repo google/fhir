@@ -1,0 +1,527 @@
+id {
+  value: "100156"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Oral Health Claim</div>"
+  }
+}
+contained {
+  device {
+    id {
+      value: "device-bridge"
+    }
+  }
+}
+contained {
+  referral_request {
+    id {
+      value: "referral"
+    }
+    status {
+      value: ACTIVE
+    }
+    intent {
+      value: ORDER
+    }
+    subject {
+      reference {
+        value: "Patient/1"
+      }
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/claim"
+  }
+  value {
+    value: "123466"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/ex-claimtype"
+    }
+    code {
+      value: "oral"
+    }
+  }
+}
+use {
+  value: COMPLETE
+}
+patient {
+  reference {
+    value: "Patient/1"
+  }
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+insurer {
+  reference {
+    value: "Organization/2"
+  }
+}
+organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+related {
+  claim {
+    reference {
+      value: "Claim/100151"
+    }
+  }
+  relationship {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-relatedclaimrelationship"
+      }
+      code {
+        value: "associated"
+      }
+    }
+  }
+  reference {
+    value {
+      value: "CASE156746B"
+    }
+  }
+}
+payee {
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/payeetype"
+      }
+      code {
+        value: "other"
+      }
+    }
+  }
+  resource_type {
+    system {
+      value: "http://hl7.org/fhir/ex-payee-resource-type"
+    }
+    code {
+      value: "relatedperson"
+    }
+  }
+  party {
+    reference {
+      value: "RelatedPerson/peter"
+    }
+  }
+}
+referral {
+  reference {
+    value: "#referral"
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    reference {
+      value: "Practitioner/example"
+    }
+  }
+}
+information {
+  sequence {
+    value: 1
+  }
+  category {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/claiminformationcategory"
+      }
+      code {
+        value: "prosthesis"
+      }
+    }
+  }
+  code {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-oralprostho"
+      }
+      code {
+        value: "2"
+      }
+      display {
+        value: "Maryland Bridge"
+      }
+    }
+  }
+  timing_date {
+    value_us: 986601600000000
+    precision: DAY
+  }
+}
+procedure {
+  sequence {
+    value: 1
+  }
+  date {
+    value_us: 1404432000000000
+    precision: DAY
+  }
+  procedure_codeable_concept {
+    text {
+      value: "Resection of gum to increase exposed tooth."
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    reference {
+      value: "Coverage/9876B1"
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_link_id {
+    value: 1
+  }
+  information_link_id {
+    value: 1
+  }
+  service {
+    coding {
+      system {
+        value: "http://example.org/fhir/oralservicecodes"
+      }
+      code {
+        value: "67221"
+      }
+      display {
+        value: "Maryland Bridge"
+      }
+    }
+  }
+  serviced_date {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+  location_codeable_concept {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-serviceplace"
+      }
+      code {
+        value: "11"
+      }
+    }
+  }
+  unit_price {
+    value {
+      value: 1400.0
+      precision: 6
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  factor {
+    value: 0.75
+    precision: 2
+  }
+  net {
+    value {
+      value: 1050.0
+      precision: 6
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  udi {
+    reference {
+      value: "#device-bridge"
+    }
+  }
+  body_site {
+    coding {
+      system {
+        value: "http://fdi.org/fhir/oraltoothcodes"
+      }
+      code {
+        value: "01"
+      }
+    }
+  }
+}
+item {
+  sequence {
+    value: 2
+  }
+  care_team_link_id {
+    value: 1
+  }
+  service {
+    coding {
+      system {
+        value: "http://example.org/fhir/oralservicecodes"
+      }
+      code {
+        value: "21211"
+      }
+    }
+  }
+  serviced_date {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+  location_codeable_concept {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-serviceplace"
+      }
+      code {
+        value: "11"
+      }
+    }
+  }
+  unit_price {
+    value {
+      value: 105.0
+      precision: 5
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: 105.0
+      precision: 5
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  body_site {
+    coding {
+      system {
+        value: "http://fdi.org/fhir/oraltoothcodes"
+      }
+      code {
+        value: "21"
+      }
+    }
+  }
+  sub_site {
+    coding {
+      system {
+        value: "http://fdi.org/fhir/oralsurfacecodes"
+      }
+      code {
+        value: "L"
+      }
+    }
+  }
+}
+item {
+  sequence {
+    value: 3
+  }
+  care_team_link_id {
+    value: 1
+  }
+  procedure_link_id {
+    value: 1
+  }
+  service {
+    coding {
+      system {
+        value: "http://example.org/fhir/oralservicecodes"
+      }
+      code {
+        value: "27211"
+      }
+    }
+  }
+  serviced_date {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+  location_codeable_concept {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-serviceplace"
+      }
+      code {
+        value: "11"
+      }
+    }
+  }
+  unit_price {
+    value {
+      value: 1100.0
+      precision: 6
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: 1100.0
+      precision: 6
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  body_site {
+    coding {
+      system {
+        value: "http://fdi.org/fhir/oraltoothcodes"
+      }
+      code {
+        value: "24"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 1
+    }
+    service {
+      coding {
+        system {
+          value: "http://example.org/fhir/oralservicecodes"
+        }
+        code {
+          value: "27211"
+        }
+      }
+    }
+    unit_price {
+      value {
+        value: 1000.0
+        precision: 6
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+    factor {
+      value: 0.75
+      precision: 2
+    }
+    net {
+      value {
+        value: 750.0
+        precision: 5
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 2
+    }
+    service {
+      coding {
+        system {
+          value: "http://example.org/fhir/oralservicecodes"
+        }
+        code {
+          value: "lab"
+        }
+      }
+    }
+    unit_price {
+      value {
+        value: 350.0
+        precision: 5
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+    net {
+      value {
+        value: 350.0
+        precision: 5
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+  }
+}
+total {
+  value {
+    value: 2255.0
+    precision: 6
+  }
+  system {
+    value: "urn:iso:std:iso:4217"
+  }
+  code {
+    value: "USD"
+  }
+}

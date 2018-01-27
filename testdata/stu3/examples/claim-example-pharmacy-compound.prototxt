@@ -1,0 +1,532 @@
+id {
+  value: "760152"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Pharmacy Claim</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happypharma.com/claim"
+  }
+  value {
+    value: "7612345"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/ex-claimtype"
+    }
+    code {
+      value: "pharmacy"
+    }
+  }
+}
+use {
+  value: COMPLETE
+}
+patient {
+  reference {
+    value: "Patient/1"
+  }
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+insurer {
+  reference {
+    value: "Organization/2"
+  }
+}
+organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+priority {
+  coding {
+    code {
+      value: "stat"
+    }
+  }
+}
+payee {
+  type {
+    coding {
+      code {
+        value: "provider"
+      }
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    reference {
+      value: "Practitioner/example"
+    }
+  }
+}
+information {
+  sequence {
+    value: 1
+  }
+  category {
+    coding {
+      code {
+        value: "pharmacyrefill"
+      }
+    }
+  }
+  code {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/pharmacy-refill"
+      }
+      code {
+        value: "new"
+      }
+    }
+  }
+}
+information {
+  sequence {
+    value: 2
+  }
+  category {
+    coding {
+      code {
+        value: "pharmacyinformation"
+      }
+    }
+  }
+  code {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/pharmacy-information"
+      }
+      code {
+        value: "refillsremaining"
+      }
+    }
+  }
+  value_quantity {
+    value {
+      precision: 1
+    }
+  }
+}
+information {
+  sequence {
+    value: 3
+  }
+  category {
+    coding {
+      code {
+        value: "pharmacyinformation"
+      }
+    }
+  }
+  code {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/pharmacy-information"
+      }
+      code {
+        value: "dayssupply"
+      }
+    }
+  }
+  value_quantity {
+    value {
+      value: 10.0
+      precision: 2
+    }
+  }
+}
+information {
+  sequence {
+    value: 4
+  }
+  category {
+    coding {
+      code {
+        value: "pharmacy"
+      }
+    }
+  }
+  code {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/pharmacy-form"
+      }
+      code {
+        value: "capsule"
+      }
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis_codeable_concept {
+    coding {
+      code {
+        value: "654456"
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    reference {
+      value: "Coverage/9876B1"
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_link_id {
+    value: 1
+  }
+  information_link_id {
+    value: 1
+  }
+  information_link_id {
+    value: 2
+  }
+  information_link_id {
+    value: 3
+  }
+  information_link_id {
+    value: 4
+  }
+  service {
+    coding {
+      system {
+        value: "http://localdruglist.org"
+      }
+      code {
+        value: "compound"
+      }
+      display {
+        value: "Custom compound"
+      }
+    }
+  }
+  serviced_date {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+  quantity {
+    value {
+      value: 30.0
+      precision: 2
+    }
+    unit {
+      value: "TAB"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "TAB"
+    }
+  }
+  net {
+    value {
+      value: 155.0
+      precision: 5
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  detail {
+    sequence {
+      value: 1
+    }
+    service {
+      coding {
+        system {
+          value: "http://localdruglist.org"
+        }
+        code {
+          value: "44001"
+        }
+        display {
+          value: "Acetaminophen 250mg"
+        }
+      }
+    }
+    quantity {
+      value {
+        value: 250.0
+        precision: 3
+      }
+      unit {
+        value: "mg"
+      }
+    }
+    net {
+      value {
+        value: 20.0
+        precision: 4
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+    sub_detail {
+      sequence {
+        value: 1
+      }
+      service {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/ex-pharmaservice"
+          }
+          code {
+            value: "drugcost"
+          }
+        }
+      }
+      net {
+        value {
+          value: 20.0
+          precision: 4
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "USD"
+        }
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 2
+    }
+    service {
+      coding {
+        system {
+          value: "http://localdruglist.org"
+        }
+        code {
+          value: "44035"
+        }
+        display {
+          value: "Phenacetin 50mg"
+        }
+      }
+    }
+    quantity {
+      value {
+        value: 50.0
+        precision: 2
+      }
+      unit {
+        value: "mg"
+      }
+    }
+    net {
+      value {
+        value: 25.0
+        precision: 4
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+    sub_detail {
+      sequence {
+        value: 1
+      }
+      service {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/ex-pharmaservice"
+          }
+          code {
+            value: "drugcost"
+          }
+        }
+      }
+      net {
+        value {
+          value: 25.0
+          precision: 4
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "USD"
+        }
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 3
+    }
+    service {
+      coding {
+        system {
+          value: "http://localdruglist.org"
+        }
+        code {
+          value: "44057"
+        }
+        display {
+          value: "Codeine 25mg"
+        }
+      }
+    }
+    quantity {
+      value {
+        value: 25.0
+        precision: 2
+      }
+      unit {
+        value: "mg"
+      }
+    }
+    net {
+      value {
+        value: 28.0
+        precision: 4
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+    sub_detail {
+      sequence {
+        value: 1
+      }
+      service {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/ex-pharmaservice"
+          }
+          code {
+            value: "drugcost"
+          }
+        }
+      }
+      net {
+        value {
+          value: 28.0
+          precision: 4
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "USD"
+        }
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 2
+    }
+    service {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-pharmaservice"
+        }
+        code {
+          value: "markup"
+        }
+      }
+    }
+    net {
+      value {
+        value: 22.0
+        precision: 4
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 3
+    }
+    service {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-pharmaservice"
+        }
+        code {
+          value: "compoundfee"
+        }
+      }
+    }
+    net {
+      value {
+        value: 60.0
+        precision: 4
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+  }
+}
+total {
+  value {
+    value: 155.0
+    precision: 5
+  }
+  system {
+    value: "urn:iso:std:iso:4217"
+  }
+  code {
+    value: "USD"
+  }
+}

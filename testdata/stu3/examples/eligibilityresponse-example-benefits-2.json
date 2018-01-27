@@ -1,0 +1,368 @@
+{
+  "resourceType": "EligibilityResponse",
+  "id": "E2502",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the EligibilityResponse.</div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Patient",
+      "id": "patient-1",
+      "name": [
+        {
+          "use": "official",
+          "family": "Donald",
+          "given": [
+            "Duck"
+          ]
+        }
+      ],
+      "gender": "male",
+      "birthDate": "1986-05-17",
+      "address": [
+        {
+          "use": "home",
+          "line": [
+            "1234 Main Street"
+          ],
+          "city": "Vancouver",
+          "postalCode": "V2H1Y3",
+          "country": "CAD"
+        }
+      ]
+    },
+    {
+      "resourceType": "Coverage",
+      "id": "coverage-1",
+      "identifier": [
+        {
+          "system": "http://benefitsinc.com/certificate",
+          "value": "12345"
+        }
+      ],
+      "status": "active",
+      "type": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v3/ActCode",
+            "code": "EHCPOL"
+          }
+        ]
+      },
+      "subscriber": {
+        "reference": "#patient-1"
+      },
+      "beneficiary": {
+        "reference": "#patient-1"
+      },
+      "relationship": {
+        "coding": [
+          {
+            "code": "self"
+          }
+        ]
+      },
+      "payor": [
+        {
+          "identifier": {
+            "system": "http://www.bindb.com/bin",
+            "value": "123456"
+          }
+        }
+      ],
+      "grouping": {
+        "plan": "CBI35",
+        "planDisplay": "Corporate Baker's Inc. Plan#35",
+        "subPlan": "123",
+        "subPlanDisplay": "Trainee Part-time Benefits"
+      },
+      "dependent": "1",
+      "sequence": "1"
+    }
+  ],
+  "identifier": [
+    {
+      "system": "http://www.BenefitsInc.com/fhir/eligibilityresponse",
+      "value": "8812342"
+    }
+  ],
+  "status": "active",
+  "created": "2014-09-16",
+  "requestProvider": {
+    "identifier": {
+      "system": "http://national.org/provider",
+      "value": "PR9876"
+    }
+  },
+  "requestOrganization": {
+    "identifier": {
+      "system": "http://national.org/clinic",
+      "value": "OR1234"
+    }
+  },
+  "request": {
+    "reference": "http://www.BenefitsInc.com/fhir/eligibility/225476332405"
+  },
+  "outcome": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/remittance-outcome",
+        "code": "complete"
+      }
+    ]
+  },
+  "disposition": "Policy is currently in-force.",
+  "insurer": {
+    "reference": "Organization/2"
+  },
+  "inforce": true,
+  "insurance": [
+    {
+      "coverage": {
+        "reference": "#coverage-1"
+      },
+      "contract": {
+        "reference": "http://www.BenefitsInc.com/fhir/contract/NBU22547"
+      },
+      "benefitBalance": [
+        {
+          "category": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-category",
+                "code": "medical"
+              }
+            ]
+          },
+          "subCategory": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-subcategory",
+                "code": "30",
+                "display": "Health Benefit Plan Coverage"
+              }
+            ]
+          },
+          "network": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-network",
+                "code": "in"
+              }
+            ]
+          },
+          "unit": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-unit",
+                "code": "individual"
+              }
+            ]
+          },
+          "term": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-term",
+                "code": "annual"
+              }
+            ]
+          },
+          "financial": [
+            {
+              "type": {
+                "coding": [
+                  {
+                    "code": "benefit"
+                  }
+                ]
+              },
+              "allowedMoney": {
+                "value": 500000,
+                "system": "urn:iso:std:iso:4217",
+                "code": "USD"
+              },
+              "usedMoney": {
+                "value": 3748.00,
+                "system": "urn:iso:std:iso:4217",
+                "code": "USD"
+              }
+            },
+            {
+              "type": {
+                "coding": [
+                  {
+                    "code": "copay-maximum"
+                  }
+                ]
+              },
+              "allowedMoney": {
+                "value": 100,
+                "system": "urn:iso:std:iso:4217",
+                "code": "USD"
+              }
+            },
+            {
+              "type": {
+                "coding": [
+                  {
+                    "code": "copay-percent"
+                  }
+                ]
+              },
+              "allowedUnsignedInt": 20
+            }
+          ]
+        },
+        {
+          "category": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-category",
+                "code": "medical"
+              }
+            ]
+          },
+          "subCategory": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-subcategory",
+                "code": "69",
+                "display": "Maternity"
+              }
+            ]
+          },
+          "network": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-network",
+                "code": "in"
+              }
+            ]
+          },
+          "unit": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-unit",
+                "code": "individual"
+              }
+            ]
+          },
+          "term": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-term",
+                "code": "annual"
+              }
+            ]
+          },
+          "financial": [
+            {
+              "type": {
+                "coding": [
+                  {
+                    "code": "benefit"
+                  }
+                ]
+              },
+              "allowedMoney": {
+                "value": 15000,
+                "system": "urn:iso:std:iso:4217",
+                "code": "USD"
+              }
+            }
+          ]
+        },
+        {
+          "category": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-category",
+                "code": "oral"
+              }
+            ]
+          },
+          "subCategory": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-subcategory",
+                "code": "F3",
+                "display": "Dental Coverage"
+              }
+            ]
+          },
+          "network": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-network",
+                "code": "in"
+              }
+            ]
+          },
+          "unit": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-unit",
+                "code": "individual"
+              }
+            ]
+          },
+          "term": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-term",
+                "code": "annual"
+              }
+            ]
+          },
+          "financial": [
+            {
+              "type": {
+                "coding": [
+                  {
+                    "code": "benefit"
+                  }
+                ]
+              },
+              "allowedMoney": {
+                "value": 2000,
+                "system": "urn:iso:std:iso:4217",
+                "code": "USD"
+              }
+            }
+          ]
+        },
+        {
+          "category": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-category",
+                "code": "vision"
+              }
+            ]
+          },
+          "subCategory": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-subcategory",
+                "code": "F6",
+                "display": "Vision Coverage"
+              }
+            ]
+          },
+          "excluded": true,
+          "name": "Vision",
+          "description": "Vision products and services such as exams, glasses and contatc lenses."
+        }
+      ]
+    }
+  ],
+  "form": {
+    "coding": [
+      {
+        "system": "http://national.org/form",
+        "code": "ELRSP/2017/01"
+      }
+    ]
+  }
+}

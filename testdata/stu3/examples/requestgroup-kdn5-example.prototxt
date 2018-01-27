@@ -1,0 +1,281 @@
+id {
+  value: "kdn5-example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Administer gemcitabine and carboplatin.</div>"
+  }
+}
+contained {
+  medication_request {
+    id {
+      value: "1111"
+    }
+    intent {
+      value: PROPOSAL
+    }
+    medication_codeable_concept {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "12574"
+        }
+        display {
+          value: "gemcitabine"
+        }
+      }
+      text {
+        value: "gemcitabine"
+      }
+    }
+    subject {
+      reference {
+        value: "Patient/example"
+      }
+    }
+    dosage_instruction {
+      text {
+        value: "1250 mg/m\302\262 IV over 30 minutes"
+      }
+      timing {
+        repeat {
+          duration {
+            value: 30.0
+            precision: 2
+          }
+          duration_unit {
+            value: MIN
+          }
+        }
+      }
+      route {
+        text {
+          value: "IV"
+        }
+      }
+      dose_quantity {
+        value {
+          value: 1250.0
+          precision: 4
+        }
+        unit {
+          value: "mg/m\302\262"
+        }
+      }
+    }
+  }
+}
+contained {
+  medication_request {
+    id {
+      value: "2222"
+    }
+    intent {
+      value: PROPOSAL
+    }
+    medication_codeable_concept {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "40048"
+        }
+        display {
+          value: "Carboplatin"
+        }
+      }
+      text {
+        value: "CARBOplatin"
+      }
+    }
+    subject {
+      reference {
+        value: "Patient/example"
+      }
+    }
+    dosage_instruction {
+      text {
+        value: "AUC 5 IV over 30 minutes"
+      }
+      timing {
+        repeat {
+          duration {
+            value: 30.0
+            precision: 2
+          }
+          duration_unit {
+            value: MIN
+          }
+        }
+      }
+      route {
+        text {
+          value: "IV"
+        }
+      }
+      dose_quantity {
+        extension {
+          url {
+            value: "http://example.org/fhir/AUC-dose"
+          }
+          value_integer {
+            value: 5
+          }
+        }
+      }
+    }
+  }
+}
+identifier {
+  value {
+    value: "requestgroup-kdn5"
+  }
+}
+definition {
+  reference {
+    value: "PlanDefinition/KDN5"
+  }
+}
+status {
+  value: DRAFT
+}
+intent {
+  value: PLAN
+}
+priority {
+  value: ROUTINE
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+}
+context {
+  reference {
+    value: "Encounter/example"
+  }
+}
+authored_on {
+  value_us: 1488821460000000
+  timezone: "UTC"
+  precision: SECOND
+}
+author {
+  reference {
+    value: "Practitioner/1"
+  }
+}
+action {
+  selection_behavior {
+    value: EXACTLY_ONE
+  }
+  action {
+    selection_behavior {
+      value: ALL
+    }
+    action {
+      grouping_behavior {
+        value: SENTENCE_GROUP
+      }
+      selection_behavior {
+        value: EXACTLY_ONE
+      }
+      action {
+        id {
+          value: "cycle-definition-1"
+        }
+        text_equivalent {
+          value: "21-day cycle for 6 cycles"
+        }
+        timing_timing {
+          repeat {
+            count {
+              value: 6
+            }
+            duration {
+              value: 21.0
+              precision: 2
+            }
+            duration_unit {
+              value: D
+            }
+          }
+        }
+        action {
+          id {
+            value: "action-1"
+          }
+          extension {
+            url {
+              value: "http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle"
+            }
+            extension {
+              url {
+                value: "day"
+              }
+              value_integer {
+                value: 1
+              }
+            }
+            extension {
+              url {
+                value: "day"
+              }
+              value_integer {
+                value: 8
+              }
+            }
+          }
+          text_equivalent {
+            value: "Gemcitabine 1250 mg/m\302\262 IV over 30 minutes on days 1 and 8"
+          }
+          resource {
+            reference {
+              value: "#1111"
+            }
+          }
+        }
+        action {
+          id {
+            value: "action-2"
+          }
+          extension {
+            url {
+              value: "http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle"
+            }
+            extension {
+              url {
+                value: "day"
+              }
+              value_integer {
+                value: 1
+              }
+            }
+          }
+          text_equivalent {
+            value: "CARBOplatin AUC 5 IV over 30 minutes on Day 1"
+          }
+          related_action {
+            action_id {
+              value: "action-1"
+            }
+            relationship {
+              value: CONCURRENT_WITH_START
+            }
+          }
+          resource {
+            reference {
+              value: "#2222"
+            }
+          }
+        }
+      }
+    }
+  }
+}

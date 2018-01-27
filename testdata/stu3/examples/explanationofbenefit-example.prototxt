@@ -1,0 +1,258 @@
+id {
+  value: "EB3500"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the ExplanationOfBenefit</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/explanationofbenefit"
+  }
+  value {
+    value: "987654321"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/ex-claimtype"
+    }
+    code {
+      value: "oral"
+    }
+  }
+}
+patient {
+  reference {
+    value: "Patient/pat1"
+  }
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+enterer {
+  reference {
+    value: "Practitioner/1"
+  }
+}
+provider {
+  reference {
+    value: "Practitioner/1"
+  }
+}
+organization {
+  reference {
+    value: "Organization/2"
+  }
+}
+facility {
+  reference {
+    value: "Location/1"
+  }
+}
+claim {
+  reference {
+    value: "Claim/100150"
+  }
+}
+claim_response {
+  reference {
+    value: "ClaimResponse/R3500"
+  }
+}
+outcome {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/remittance-outcome"
+    }
+    code {
+      value: "complete"
+    }
+  }
+}
+disposition {
+  value: "Claim settled as per contract."
+}
+payee {
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/payeetype"
+      }
+      code {
+        value: "provider"
+      }
+    }
+  }
+  resource_type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/resource-type-link"
+      }
+      code {
+        value: "organization"
+      }
+    }
+  }
+  party {
+    reference {
+      value: "Organization/2"
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    reference {
+      value: "Practitioner/example"
+    }
+  }
+}
+insurance {
+  coverage {
+    reference {
+      value: "Coverage/9876B1"
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_link_id {
+    value: 1
+  }
+  service {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/service-uscls"
+      }
+      code {
+        value: "1200"
+      }
+    }
+  }
+  serviced_date {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+  unit_price {
+    value {
+      value: 135.57
+      precision: 5
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: 135.57
+      precision: 5
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  encounter {
+    reference {
+      value: "Encounter/example"
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "eligible"
+        }
+      }
+    }
+    amount {
+      value {
+        value: 120.0
+        precision: 5
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "eligpercent"
+        }
+      }
+    }
+    value {
+      value: 0.8
+      precision: 2
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "benefit"
+        }
+      }
+    }
+    amount {
+      value {
+        value: 96.0
+        precision: 4
+      }
+      system {
+        value: "urn:iso:std:iso:4217"
+      }
+      code {
+        value: "USD"
+      }
+    }
+  }
+}
+total_cost {
+  value {
+    value: 135.57
+    precision: 5
+  }
+  system {
+    value: "urn:iso:std:iso:4217"
+  }
+  code {
+    value: "USD"
+  }
+}
+total_benefit {
+  value {
+    value: 96.0
+    precision: 4
+  }
+  system {
+    value: "urn:iso:std:iso:4217"
+  }
+  code {
+    value: "USD"
+  }
+}

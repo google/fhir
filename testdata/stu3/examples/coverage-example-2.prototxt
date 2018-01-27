@@ -1,0 +1,104 @@
+id {
+  value: "7546D"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the coverage</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://xyz.com/codes/identifier"
+  }
+  value {
+    value: "AB98761"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/v3/ActCode"
+    }
+    code {
+      value: "EHCPOL"
+    }
+    display {
+      value: "extended healthcare"
+    }
+  }
+}
+subscriber {
+  reference {
+    value: "Patient/5"
+  }
+}
+subscriber_id {
+  value: "AB9876"
+}
+beneficiary {
+  reference {
+    value: "Patient/5"
+  }
+}
+relationship {
+  coding {
+    code {
+      value: "self"
+    }
+  }
+}
+period {
+  start {
+    value_us: 1300320000000000
+    precision: DAY
+  }
+  end {
+    value_us: 1331942400000000
+    precision: DAY
+  }
+}
+payor {
+  reference {
+    value: "Organization/2"
+  }
+}
+grouping {
+  group {
+    value: "WESTAIR"
+  }
+  group_display {
+    value: "Western Airlines"
+  }
+  plan {
+    value: "WESTAIR"
+  }
+  plan_display {
+    value: "Western Airlines"
+  }
+  sub_plan {
+    value: "D15C9"
+  }
+  sub_plan_display {
+    value: "Platinum"
+  }
+}
+dependent {
+  value: "1"
+}
+order {
+  value: 2
+}
+network {
+  value: "5"
+}
+contract {
+  reference {
+    value: "Contract/563818"
+  }
+}

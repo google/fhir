@@ -1,0 +1,151 @@
+id {
+  value: "760150"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Pharmacy Claim</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happypharma.com/claim"
+  }
+  value {
+    value: "7612345"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/ex-claimtype"
+    }
+    code {
+      value: "pharmacy"
+    }
+  }
+}
+use {
+  value: COMPLETE
+}
+patient {
+  reference {
+    value: "Patient/1"
+  }
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+insurer {
+  reference {
+    value: "Organization/2"
+  }
+}
+organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+priority {
+  coding {
+    code {
+      value: "stat"
+    }
+  }
+}
+payee {
+  type {
+    coding {
+      code {
+        value: "provider"
+      }
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    reference {
+      value: "Practitioner/example"
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis_codeable_concept {
+    coding {
+      code {
+        value: "654456"
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    reference {
+      value: "Coverage/9876B1"
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_link_id {
+    value: 1
+  }
+  service {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-pharmaservice"
+      }
+      code {
+        value: "smokecess"
+      }
+    }
+  }
+  serviced_date {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+  unit_price {
+    value {
+      value: 60.0
+      precision: 4
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: 60.0
+      precision: 4
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+}

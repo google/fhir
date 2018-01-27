@@ -1,0 +1,22 @@
+id {
+  value: "mmanu"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Acme Corporation, Proud member of the pharma industry</p>\n    </div>"
+  }
+}
+active {
+  value: true
+}
+name {
+  value: "Acme Corporation"
+}
+address {
+  country {
+    value: "Swizterland"
+  }
+}

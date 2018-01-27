@@ -1,0 +1,137 @@
+id {
+  value: "gcs-qa"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: gcs-qa</p><p><b>status</b>: final</p><p><b>code</b>: Glasgow Coma Scale , (GCS) <span>(Details : {LOINC code \'9269-2\' = \'Glasgow coma score total\', given as \'Glasgow coma score total\'})</span></p><p><b>subject</b>: <a>Peter James Chalmers</a></p><p><b>effective</b>: 11/12/2014 4:44:16 AM</p><p><b>value</b>: 13 {score}<span> (Details: UCUM code {score} = \'{score}\')</span></p><blockquote><p><b>referenceRange</b></p><p><b>high</b>: 8 {score}<span> (Details: UCUM code {score} = \'{score}\')</span></p><p><b>type</b>: Severe TBI <span>(Details )</span></p></blockquote><blockquote><p><b>referenceRange</b></p><p><b>low</b>: 9 {score}<span> (Details: UCUM code {score} = \'{score}\')</span></p><p><b>high</b>: 12 {score}<span> (Details: UCUM code {score} = \'{score}\')</span></p><p><b>type</b>: Moderate TBI <span>(Details )</span></p></blockquote><blockquote><p><b>referenceRange</b></p><p><b>low</b>: 13 {score}<span> (Details: UCUM code {score} = \'{score}\')</span></p><p><b>type</b>: Mild TBI <span>(Details )</span></p></blockquote><h3>Relateds</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Target</b></td></tr><tr><td>*</td><td>derived-from</td><td><a>GCS form results</a></td></tr></table></div>"
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "9269-2"
+    }
+    display {
+      value: "Glasgow coma score total"
+    }
+  }
+  text {
+    value: "Glasgow Coma Scale , (GCS)"
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+effective_date_time {
+  value_us: 1418273056000000
+  timezone: "UTC"
+  precision: SECOND
+}
+value_quantity {
+  value {
+    value: 13.0
+    precision: 2
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "{score}"
+  }
+}
+reference_range {
+  high {
+    value {
+      value: 8.0
+      precision: 1
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "{score}"
+    }
+  }
+  type {
+    text {
+      value: "Severe TBI"
+    }
+  }
+}
+reference_range {
+  low {
+    value {
+      value: 9.0
+      precision: 1
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "{score}"
+    }
+  }
+  high {
+    value {
+      value: 12.0
+      precision: 2
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "{score}"
+    }
+  }
+  type {
+    text {
+      value: "Moderate TBI"
+    }
+  }
+}
+reference_range {
+  low {
+    value {
+      value: 13.0
+      precision: 2
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "{score}"
+    }
+  }
+  type {
+    text {
+      value: "Mild TBI"
+    }
+  }
+}
+related {
+  type {
+    value: DERIVED_FROM
+  }
+  target {
+    reference {
+      value: "QuestionnaireResponse/gcs"
+    }
+    display {
+      value: "GCS form results"
+    }
+  }
+}

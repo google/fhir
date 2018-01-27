@@ -1,0 +1,155 @@
+id {
+  value: "examplereq"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Brian MRI results discussion</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://example.org/sampleappointment-identifier"
+  }
+  value {
+    value: "123"
+  }
+}
+status {
+  value: PROPOSED
+}
+service_category {
+  coding {
+    system {
+      value: "http://example.org/service-category"
+    }
+    code {
+      value: "gp"
+    }
+    display {
+      value: "General Practice"
+    }
+  }
+}
+specialty {
+  coding {
+    system {
+      value: "http://example.org/specialty"
+    }
+    code {
+      value: "gp"
+    }
+    display {
+      value: "General Practice"
+    }
+  }
+}
+appointment_type {
+  coding {
+    system {
+      value: "http://example.org/appointment-type"
+    }
+    code {
+      value: "wi"
+    }
+    display {
+      value: "Walk in"
+    }
+  }
+}
+reason {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "413095006"
+    }
+  }
+  text {
+    value: "Clinical Review"
+  }
+}
+priority {
+  value: 5
+}
+description {
+  value: "Discussion on the results of your recent MRI"
+}
+minutes_duration {
+  value: 15
+}
+slot {
+  reference {
+    value: "Slot/example"
+  }
+}
+created {
+  value_us: 1449014400000000
+  precision: DAY
+}
+comment {
+  value: "Further expand on the results of the MRI and determine the next actions that may be appropriate."
+}
+participant {
+  actor {
+    reference {
+      value: "Patient/example"
+    }
+    display {
+      value: "Peter James Chalmers"
+    }
+  }
+  required {
+    value: REQUIRED
+  }
+  status {
+    value: NEEDS_ACTION
+  }
+}
+participant {
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/v3/ParticipationType"
+      }
+      code {
+        value: "ATND"
+      }
+    }
+  }
+  required {
+    value: REQUIRED
+  }
+  status {
+    value: NEEDS_ACTION
+  }
+}
+participant {
+  actor {
+    reference {
+      value: "Location/1"
+    }
+    display {
+      value: "South Wing, second floor"
+    }
+  }
+  required {
+    value: REQUIRED
+  }
+  status {
+    value: ACCEPTED
+  }
+}
+requested_period {
+  start {
+    value_us: 1464825600000000
+    precision: DAY
+  }
+  end {
+    value_us: 1465430400000000
+    precision: DAY
+  }
+}

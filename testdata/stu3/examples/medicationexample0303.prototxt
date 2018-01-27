@@ -1,0 +1,147 @@
+id {
+  value: "med0303"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: med0303</p><p><b>contained</b>: </p><p><b>code</b>: Alemtuzumab 10mg/ml (Lemtrada) <span>(Details : {RxNorm code \'1594660\' = \'1594660\', given as \'Alemtuzumab 10mg/ml (Lemtrada)\'})</span></p><p><b>isBrand</b>: true</p><p><b>manufacturer</b>: id: org6; name: Genzyme</p><p><b>form</b>: Injection solution (qualifier vallue) <span>(Details : {SNOMED CT code \'385219001\' = \'Injection solution\', given as \'Injection solution (qualifier vallue)\'})</span></p><h3>Ingredients</h3><table><tr><td>-</td><td><b>Item[x]</b></td><td><b>Amount</b></td></tr><tr><td>*</td><td>Alemtuzamab (substance) <span>(Details : {SNOMED CT code \'129472003\' = \'Alemtuzumab\', given as \'Alemtuzamab (substance)\'})</span></td><td>12 mg<span> (Details: UCUM code mg = \'mg\')</span>/1.2 mL<span> (Details: UCUM code mL = \'mL\')</span></td></tr></table><blockquote><p><b>package</b></p><p><b>container</b>: Vial <span>(Details : {SNOMED CT code \'415818006\' = \'Vial\', given as \'Vial\'})</span></p><h3>Contents</h3><table><tr><td>-</td><td><b>Item[x]</b></td><td><b>Amount</b></td></tr><tr><td>*</td><td>Alemtuzumab 30mg/3mL infusion concentrate (product) <span>(Details : {SNOMED CT code \'408596005\' = \'Alemtuzumab 30mg/3mL infusion concentrate\', given as \'Alemtuzumab 30mg/3mL infusion concentrate (product)\'})</span></td><td>3 mL<span> (Details: UCUM code mL = \'mL\')</span></td></tr></table><h3>Batches</h3><table><tr><td>-</td><td><b>LotNumber</b></td><td><b>ExpirationDate</b></td></tr><tr><td>*</td><td>9494788</td><td>22/05/2017</td></tr></table></blockquote></div>"
+  }
+}
+contained {
+  organization {
+    id {
+      value: "org6"
+    }
+    name {
+      value: "Genzyme"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+    }
+    code {
+      value: "1594660"
+    }
+    display {
+      value: "Alemtuzumab 10mg/ml (Lemtrada)"
+    }
+  }
+}
+is_brand {
+  value: true
+}
+manufacturer {
+  reference {
+    value: "#org6"
+  }
+}
+form {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "385219001"
+    }
+    display {
+      value: "Injection solution (qualifier vallue)"
+    }
+  }
+}
+ingredient {
+  item_codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "129472003"
+      }
+      display {
+        value: "Alemtuzamab (substance)"
+      }
+    }
+  }
+  amount {
+    numerator {
+      value {
+        value: 12.0
+        precision: 2
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mg"
+      }
+    }
+    denominator {
+      value {
+        value: 1.2
+        precision: 2
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mL"
+      }
+    }
+  }
+}
+package_value {
+  container {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "415818006"
+      }
+      display {
+        value: "Vial"
+      }
+    }
+  }
+  content {
+    item_codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "408596005"
+        }
+        display {
+          value: "Alemtuzumab 30mg/3mL infusion concentrate (product)"
+        }
+      }
+    }
+    amount {
+      value {
+        value: 3.0
+        precision: 1
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mL"
+      }
+    }
+  }
+  batch {
+    lot_number {
+      value: "9494788"
+    }
+    expiration_date {
+      value_us: 1495411200000000
+      precision: DAY
+    }
+  }
+}

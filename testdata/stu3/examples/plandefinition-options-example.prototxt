@@ -1,0 +1,104 @@
+id {
+  value: "options-example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>"
+  }
+}
+contained {
+  activity_definition {
+    id {
+      value: "activitydefinition-medicationrequest-1"
+    }
+    status {
+      value: DRAFT
+    }
+    kind {
+      value: MEDICATION_REQUEST
+    }
+    product_codeable_concept {
+      text {
+        value: "Medication 1"
+      }
+    }
+  }
+}
+contained {
+  activity_definition {
+    id {
+      value: "activitydefinition-medicationrequest-2"
+    }
+    status {
+      value: DRAFT
+    }
+    kind {
+      value: MEDICATION_REQUEST
+    }
+    product_codeable_concept {
+      text {
+        value: "Medication 2"
+      }
+    }
+  }
+}
+title {
+  value: "This example illustrates relationships between actions."
+}
+status {
+  value: DRAFT
+}
+action {
+  grouping_behavior {
+    value: LOGICAL_GROUP
+  }
+  selection_behavior {
+    value: ALL
+  }
+  action {
+    id {
+      value: "medication-action-1"
+    }
+    title {
+      value: "Administer Medication 1"
+    }
+    definition {
+      reference {
+        value: "#activitydefinition-medicationrequest-1"
+      }
+    }
+  }
+  action {
+    id {
+      value: "medication-action-2"
+    }
+    title {
+      value: "Administer Medication 2"
+    }
+    related_action {
+      action_id {
+        value: "medication-action-1"
+      }
+      relationship {
+        value: AFTER_END
+      }
+      offset_duration {
+        value {
+          value: 1.0
+          precision: 1
+        }
+        unit {
+          value: "h"
+        }
+      }
+    }
+    definition {
+      reference {
+        value: "#activitydefinition-medicationrequest-2"
+      }
+    }
+  }
+}

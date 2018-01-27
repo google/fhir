@@ -1,0 +1,198 @@
+id {
+  value: "960150"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Claim</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyhospital.com/claim"
+  }
+  value {
+    value: "9612345"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/ex-claimtype"
+    }
+    code {
+      value: "institutional"
+    }
+  }
+}
+sub_type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/ex-claimsubtype"
+    }
+    code {
+      value: "emergency"
+    }
+  }
+}
+use {
+  value: COMPLETE
+}
+patient {
+  reference {
+    value: "Patient/1"
+  }
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+enterer {
+  identifier {
+    system {
+      value: "http://jurisdiction.org/facilities/HOSP1234/users"
+    }
+    value {
+      value: "UC1234"
+    }
+  }
+}
+insurer {
+  reference {
+    value: "Organization/2"
+  }
+}
+organization {
+  reference {
+    value: "Organization/1"
+  }
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+payee {
+  type {
+    coding {
+      code {
+        value: "provider"
+      }
+    }
+  }
+}
+facility {
+  identifier {
+    system {
+      value: "http://jurisdiction.org/facilities"
+    }
+    value {
+      value: "HOSP1234"
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    reference {
+      value: "Practitioner/example"
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis_codeable_concept {
+    coding {
+      code {
+        value: "654456"
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    reference {
+      value: "Coverage/9876B1"
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_link_id {
+    value: 1
+  }
+  service {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-serviceproduct"
+      }
+      code {
+        value: "exam"
+      }
+    }
+  }
+  serviced_date {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+  unit_price {
+    value {
+      value: 125.0
+      precision: 5
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: 125.0
+      precision: 5
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  encounter {
+    reference {
+      value: "Encounter/example"
+    }
+  }
+}
+total {
+  value {
+    value: 125.0
+    precision: 5
+  }
+  system {
+    value: "urn:iso:std:iso:4217"
+  }
+  code {
+    value: "USD"
+  }
+}

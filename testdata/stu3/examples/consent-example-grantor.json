@@ -1,0 +1,69 @@
+{
+  "resourceType": "Consent",
+  "id": "consent-example-grantor",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">The following scenario is based on a question asked on John Moehrke's blog in the \n\t<a href=\"http://healthcaresecprivacy.blogspot.com/2016/04/consent-given-to-authorized.html\">Consent given to authorized representative</a>\n    <p>\nThis is a case where a Patient is giving a limited (read-only) access to an individual.\n\t</p><p>\n    Patient &quot;P. van de Heuvel&quot; wishes to provide XXX with read-only access to the data at Good Health Psychiatric Hospital \n   available for patient requested access use.\n   </p>\n   </div>"
+  },
+  "status": "active",
+  "patient": {
+    "reference": "Patient/f001",
+    "display": "P. van de Heuvel"
+  },
+  "dateTime": "2015-11-18",
+  "organization": [
+    {
+      "reference": "Organization/Infoway",
+      "display": "Canada Infoway"
+    }
+  ],
+  "sourceAttachment": {
+    "title": "The terms of the consent in lawyer speak."
+  },
+  "policyRule": "http://hl7.org/fhir/ConsentPolicy/opt-out",
+  "except": [
+    {
+      "type": "permit",
+      "actor": [
+        {
+          "role": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/v3/ParticipationType",
+                "code": "CST"
+              }
+            ]
+          },
+          "reference": {
+            "reference": "Organization/2.16.840.1.113883.19.6",
+            "display": "Good Health Psychiatric Hospital"
+          }
+        },
+        {
+          "role": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/v3/ParticipationType",
+                "code": "PRCP"
+              }
+            ]
+          },
+          "reference": {
+            "reference": "Patient/example",
+            "display": "Good Health Clinic"
+          }
+        }
+      ],
+      "action": [
+        {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/consentaction",
+              "code": "access"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

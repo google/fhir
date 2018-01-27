@@ -1,0 +1,26 @@
+{
+  "resourceType": "Device",
+  "id": "software",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: software</p><p><b>identifier</b>: goodhealth</p><p><b>type</b>: EHR <span>(Details )</span></p><p><b>manufacturer</b>: Acme Devices, Inc</p><p><b>version</b>: 10.23-23423</p><p><b>contact</b>: http://acme.com</p><p><b>url</b>: <a>http://acme.com/goodhealth/ehr/</a></p></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://acme.com/ehr/client-ids",
+      "value": "goodhealth"
+    }
+  ],
+  "type": {
+    "text": "EHR"
+  },
+  "manufacturer": "Acme Devices, Inc",
+  "version": "10.23-23423",
+  "contact": [
+    {
+      "system": "url",
+      "value": "http://acme.com"
+    }
+  ],
+  "url": "http://acme.com/goodhealth/ehr/"
+}

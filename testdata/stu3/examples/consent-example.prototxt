@@ -1,0 +1,52 @@
+id {
+  value: "consent-example-basic"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n    <p>\n\tAuthorize Normal access for Treatment\n\t</p><p>\n    Patient &quot;P. van de Heuvel&quot; wishes to have all of the PHI collected at the Good Health Psychiatric Hospital \n   available for normal treatment use.\n   </p>\n   </div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+patient {
+  reference {
+    value: "Patient/f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+period {
+  start {
+    value_us: -189388800000000
+    precision: DAY
+  }
+  end {
+    value_us: 1451606400000000
+    precision: DAY
+  }
+}
+date_time {
+  value_us: 1462924800000000
+  precision: DAY
+}
+organization {
+  reference {
+    value: "Organization/Infoway"
+  }
+  display {
+    value: "Canada Infoway"
+  }
+}
+source_attachment {
+  title {
+    value: "The terms of the consent in lawyer speak."
+  }
+}
+policy_rule {
+  value: "http://goodhealth.org/consent/policy/opt-in"
+}

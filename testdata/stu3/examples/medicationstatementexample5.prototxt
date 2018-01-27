@@ -1,0 +1,69 @@
+id {
+  value: "example005"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example005</p><p><b>basedOn</b>: <a>CarePlan/gpvisit</a></p><p><b>context</b>: <a>Encounter/f203</a></p><p><b>status</b>: entered-in-error</p><p><b>medication</b>: Amoxicillin (product) <span>(Details : {SNOMED CT code \'27658006\' = \'p-Hydroxyampicillin\', given as \'Amoxicillin (product)\'})</span></p><p><b>effective</b>: 23/01/2014</p><p><b>dateAsserted</b>: 22/02/2015</p><p><b>informationSource</b>: <a>Donald Duck</a></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>taken</b>: unk</p><p><b>note</b>: Patient indicated that they thought it was Amoxicillin they were taking but it was really Erythromycin</p></div>"
+  }
+}
+based_on {
+  reference {
+    value: "CarePlan/gpvisit"
+  }
+}
+context {
+  reference {
+    value: "Encounter/f203"
+  }
+}
+status {
+  value: ENTERED_IN_ERROR
+}
+medication_codeable_concept {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "27658006"
+    }
+    display {
+      value: "Amoxicillin (product)"
+    }
+  }
+}
+effective_date_time {
+  value_us: 1390435200000000
+  precision: DAY
+}
+date_asserted {
+  value_us: 1424563200000000
+  precision: DAY
+}
+information_source {
+  reference {
+    value: "Patient/pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+subject {
+  reference {
+    value: "Patient/pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+taken {
+  value: UNK
+}
+note {
+  text {
+    value: "Patient indicated that they thought it was Amoxicillin they were taking but it was really Erythromycin"
+  }
+}

@@ -1,0 +1,91 @@
+id {
+  value: "E2503"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the EligibilityResponse.</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/eligibilityresponse"
+  }
+  value {
+    value: "8812343"
+  }
+}
+status {
+  value: ACTIVE
+}
+created {
+  value_us: 1410825600000000
+  precision: DAY
+}
+request_provider {
+  identifier {
+    system {
+      value: "http://national.org/provider"
+    }
+    value {
+      value: "PR9876"
+    }
+  }
+}
+request_organization {
+  identifier {
+    system {
+      value: "http://national.org/clinic"
+    }
+    value {
+      value: "OR1234"
+    }
+  }
+}
+request {
+  reference {
+    value: "http://www.BenefitsInc.com/fhir/eligibility/225476332406"
+  }
+}
+outcome {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/remittance-outcome"
+    }
+    code {
+      value: "error"
+    }
+  }
+}
+disposition {
+  value: "Eligibiliy request could not be processed, please address errors before submitting."
+}
+insurer {
+  reference {
+    value: "Organization/2"
+  }
+}
+form {
+  coding {
+    system {
+      value: "http://national.org/form"
+    }
+    code {
+      value: "ELRSP/2017/01"
+    }
+  }
+}
+error {
+  code {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/adjudication-error"
+      }
+      code {
+        value: "a001"
+      }
+    }
+  }
+}

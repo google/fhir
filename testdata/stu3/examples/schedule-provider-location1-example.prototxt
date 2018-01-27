@@ -1,0 +1,86 @@
+id {
+  value: "exampleloc1"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      Dr. Beverly Crusher - USS Enterprise-D Sickbay Schedule\n\t\t</div>"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  system {
+    value: "http://example.org/scheduleid"
+  }
+  value {
+    value: "46"
+  }
+}
+active {
+  value: true
+}
+service_category {
+  coding {
+    code {
+      value: "17"
+    }
+    display {
+      value: "General Practice"
+    }
+  }
+}
+service_type {
+  coding {
+    code {
+      value: "75"
+    }
+    display {
+      value: "Genetic Counselling"
+    }
+  }
+}
+specialty {
+  coding {
+    code {
+      value: "394580004"
+    }
+    display {
+      value: "Clinical genetics"
+    }
+  }
+}
+actor {
+  reference {
+    value: "Practitioner/1"
+  }
+  display {
+    value: "Dr. Beverly Crusher"
+  }
+}
+actor {
+  reference {
+    value: "Location/3"
+  }
+  display {
+    value: "USS Enterprise-D Sickbay"
+  }
+}
+planning_horizon {
+  start {
+    value_us: 1514193300000000
+    timezone: "UTC"
+    precision: SECOND
+  }
+  end {
+    value_us: 1514194200000000
+    timezone: "UTC"
+    precision: SECOND
+  }
+}
+comment {
+  value: "The slots attached to this schedule are for genetic counselling in the USS Enterprise-D Sickbay."
+}

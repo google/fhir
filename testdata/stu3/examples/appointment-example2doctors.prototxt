@@ -1,0 +1,148 @@
+id {
+  value: "2docs"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Brian MRI results discussion</div>"
+  }
+}
+status {
+  value: BOOKED
+}
+service_category {
+  coding {
+    system {
+      value: "http://example.org/service-category"
+    }
+    code {
+      value: "gp"
+    }
+    display {
+      value: "General Practice"
+    }
+  }
+}
+service_type {
+  coding {
+    code {
+      value: "52"
+    }
+    display {
+      value: "General Discussion"
+    }
+  }
+}
+specialty {
+  coding {
+    system {
+      value: "http://example.org/specialty"
+    }
+    code {
+      value: "gp"
+    }
+    display {
+      value: "General Practice"
+    }
+  }
+}
+appointment_type {
+  coding {
+    system {
+      value: "http://example.org/appointment-type"
+    }
+    code {
+      value: "wi"
+    }
+    display {
+      value: "Walk in"
+    }
+  }
+}
+priority {
+  value: 5
+}
+description {
+  value: "Discussion about Peter Chalmers MRI results"
+}
+supporting_information {
+  reference {
+    value: "DiagnosticReport/ultrasound"
+  }
+}
+start {
+  value_us: 1386579600000000
+  timezone: "UTC"
+  precision: SECOND
+}
+end {
+  value_us: 1386586800000000
+  timezone: "UTC"
+  precision: SECOND
+}
+comment {
+  value: "Clarify the results of the MRI to ensure context of test was correct"
+}
+participant {
+  actor {
+    reference {
+      value: "Patient/example"
+    }
+    display {
+      value: "Peter James Chalmers"
+    }
+  }
+  required {
+    value: INFORMATION_ONLY
+  }
+  status {
+    value: ACCEPTED
+  }
+}
+participant {
+  actor {
+    reference {
+      value: "Practitioner/example"
+    }
+    display {
+      value: "Dr Adam Careful"
+    }
+  }
+  required {
+    value: REQUIRED
+  }
+  status {
+    value: ACCEPTED
+  }
+}
+participant {
+  actor {
+    reference {
+      value: "Practitioner/f202"
+    }
+    display {
+      value: "Luigi Maas"
+    }
+  }
+  required {
+    value: REQUIRED
+  }
+  status {
+    value: ACCEPTED
+  }
+}
+participant {
+  actor {
+    display {
+      value: "Phone Call"
+    }
+  }
+  required {
+    value: INFORMATION_ONLY
+  }
+  status {
+    value: ACCEPTED
+  }
+}

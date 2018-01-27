@@ -1,0 +1,62 @@
+{
+  "resourceType": "ValueSet",
+  "id": "inactive",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <h3>Value Set Contents</h3>\n      <p>This value set contains 5 concepts</p>\n      <p>All codes from system \n        <a href=\"v3/ActMood/cs.html\">\n          <code>http://hl7.org/fhir/v3/ActMood</code>\n        </a>\n      </p>\n      <table class=\"codes\">\n        <tr>\n          <td>\n            <b>Code</b>\n          </td>\n          <td>\n            <b>Display</b>\n          </td>\n          <td>\n            <b>Definition</b>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <a name=\"http---hl7.org-fhir-v3-ActMood-CRT\"> </a>\n            <a href=\"v3/ActMood/cs.html#v3-ActMood-CRT\">CRT</a>\n          </td>\n          <td>criterion</td>\n          <td>Deprecation Comment: \n                           This concept This codes should no longer be used.  Instead, set attribute Act.isCriterionInd to &quot;true&quot; and use the desired mood for your criterion.\n\n                        \n                           Definition: A condition that must be true for the source act to be considered.</td>\n        </tr>\n        <tr>\n          <td>\n            <a name=\"http---hl7.org-fhir-v3-ActMood-EXPEC\"> </a>\n            <a href=\"v3/ActMood/cs.html#v3-ActMood-EXPEC\">EXPEC</a>\n          </td>\n          <td>expectation</td>\n          <td>Definition: An act that is considered to have some noteworthy likelihood of occurring in the future (has_match = event).\n\n                        \n                           Examples:Prognosis of a condition, Expected date of discharge from hospital, patient will likely need an emergency decompression of the intracranial pressure by morning.\n\n                        \n                           UsageNotes:INT (intent) reflects a plan for the future, which is a declaration to do something. This contrasts with expectation, which is a prediction that something will happen in the future. GOL (goal) reflects a hope rather than a prediction. RSK (risk) reflects a potential negative event that may or may not be expected to happen.</td>\n        </tr>\n        <tr>\n          <td>\n            <a name=\"http---hl7.org-fhir-v3-ActMood-GOL\"> </a>  \n            <a href=\"v3/ActMood/cs.html#v3-ActMood-GOL\">GOL</a>\n          </td>\n          <td>goal</td>\n          <td>Definition: An expectation that is considered to be desirable to occur in the future \n\n                        \n                           Examples:Target weight below 80Kg, Stop smoking, Regain ability to walk, goal is to administer thrombolytics to candidate patients presenting with acute myocardial infarction.\n\n                        \n                           UsageNotes: INT (intent) reflects a plan for the future, which is a declaration to do something.  This contrasts with goal which doesn't represent an intention to act, merely a hope for an eventual result.  A goal is distinct from the intended actions to reach that goal.  &quot;I will reduce the dose of drug x to 20mg&quot; is an intent.  &quot;I hope to be able to get the patient to the point where I can reduce the dose of drug x to 20mg&quot; is a goal. EXPEC (expectation) reflects a prediction rather than a hope. RSK (risk) reflects a potential negative event rather than a hope.</td>\n        </tr>\n        <tr>\n          <td>\n            <a name=\"http---hl7.org-fhir-v3-ActMood-RSK\"> </a>  \n            <a href=\"v3/ActMood/cs.html#v3-ActMood-RSK\">RSK</a>\n          </td>\n          <td>risk</td>\n          <td>Definition:An act that may occur in the future and which is regarded as undesirable \n\n                        \n                           Examples:Increased risk of DVT, at risk for sub-acute bacterial endocarditis.\n\n                        \n                           UsageNotes:Note: An observation in RSK mood expresses the undesirable act, and not the underlying risk factor. A risk factor that is present (e.g. obesity, smoking, etc) should be expressed in event mood. INT (intent) reflects a plan for the future, which is a declaration to do something. This contrasts with RSK (risk), which is the potential that something negative will occur that may or may not ever happen. GOL (goal) reflects a hope to achieve something. EXPEC (expectation) is the prediction of a positive or negative event. This contrasts with RSK (risk), which is the potential that something negative will occur that may or may not ever happen, and may not be expected to happen.</td>\n        </tr>\n        <tr>\n          <td>\n            <a name=\"http---hl7.org-fhir-v3-ActMood-OPT\"> </a>\n            <a href=\"v3/ActMood/cs.html#v3-ActMood-OPT\">OPT</a>\n          </td>\n          <td>option</td>\n          <td>Definition: One of a set of acts that specify an option for the property values that the parent act may have. Typically used in definitions or orders to describe alternatives. An option can only be used as a group, that is, all assigned values must be used together. The actual mood of the act is the same as the parent act, and they must be linked by an actrelationship with type = OPTN.</td>\n        </tr>\n      </table>\n    </div>"
+  },
+  "url": "http://hl7.org/fhir/ValueSet/inactive",
+  "name": "Example-inactive",
+  "title": "Example with inactive codes",
+  "status": "draft",
+  "description": "HL7 v3 ActMood Prdicate codes, including inactive codes",
+  "compose": {
+    "inactive": true,
+    "include": [
+      {
+        "system": "http://hl7.org/fhir/v3/ActMood",
+        "filter": [
+          {
+            "property": "concept",
+            "op": "descendent-of",
+            "value": "_ActMoodPredicate"
+          }
+        ]
+      }
+    ]
+  },
+  "expansion": {
+    "identifier": "urn:uuid:46c00b3f-003a-4f31-9d4b-ea2de58b2a99",
+    "timestamp": "2017-02-26T10:00:00Z",
+    "contains": [
+      {
+        "system": "http://hl7.org/fhir/v3/ActMood",
+        "inactive": true,
+        "code": "CRT",
+        "display": "criterion"
+      },
+      {
+        "system": "http://hl7.org/fhir/v3/ActMood",
+        "code": "EXPEC",
+        "display": "expectation",
+        "contains": [
+          {
+            "system": "http://hl7.org/fhir/v3/ActMood",
+            "code": "GOL",
+            "display": "goal"
+          },
+          {
+            "system": "http://hl7.org/fhir/v3/ActMood",
+            "code": "RSK",
+            "display": "risk"
+          }
+        ]
+      },
+      {
+        "system": "http://hl7.org/fhir/v3/ActMood",
+        "code": "OPT",
+        "display": "option"
+      }
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "resourceType": "ExpansionProfile",
+  "id": "example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">[ Provide Rendering ]</div>"
+  },
+  "url": "http://hl7.org/fhir/ExpansionProfile/example",
+  "identifier": {
+    "system": "http://example.org/profiles",
+    "value": "example"
+  },
+  "version": "0.1",
+  "name": "Example Expansion Profile",
+  "status": "draft",
+  "experimental": true,
+  "date": "2016-12-23",
+  "publisher": "HL7 International",
+  "contact": [
+    {
+      "name": "FHIR project team",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://hl7.org/fhir"
+        }
+      ]
+    }
+  ],
+  "description": "exanple ExpansionProfile for publication",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001",
+          "display": "World"
+        }
+      ]
+    }
+  ],
+  "excludeNested": true
+}

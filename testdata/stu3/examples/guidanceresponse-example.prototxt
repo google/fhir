@@ -1,0 +1,112 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>contained</b>: </p><p><b>requestId</b>: guidanceRequest1</p><p><b>identifier</b>: guidanceResponse1</p><p><b>module</b>: <a>ServiceDefinition/example</a></p><p><b>status</b>: success</p><p><b>subject</b>: <a>Patient/example</a></p><p><b>context</b>: <a>Encounter/example</a></p><p><b>occurrenceDateTime</b>: 10/03/2017 4:02:00 PM</p><p><b>performer</b>: <a>Device/software</a></p><p><b>reason</b>: Guideline Appropriate Ordering Assessment <span>(Details )</span></p><p><b>outputParameters</b>: id: outputParameters1</p></div>"
+  }
+}
+contained {
+  parameters {
+    id {
+      value: "outputParameters1"
+    }
+    parameter {
+      name {
+        value: "score"
+      }
+      value_decimal {
+        value: 7.0
+        precision: 1
+      }
+    }
+    parameter {
+      name {
+        value: "item-assessed"
+      }
+      value_codeable_concept {
+        coding {
+          system {
+            value: "http://www.ama-assn.org/go/cpt"
+          }
+          code {
+            value: "70450"
+          }
+          display {
+            value: "CT, head, wo iv contrast"
+          }
+        }
+      }
+    }
+    parameter {
+      name {
+        value: "device"
+      }
+      value_reference {
+        reference {
+          value: "Device/software"
+        }
+      }
+    }
+    parameter {
+      name {
+        value: "guideline-followed"
+      }
+      value_uri {
+        value: "http://someguidelineprovider.org/radiology-appropriateness-guidelines.html"
+      }
+    }
+  }
+}
+request_id {
+  value: "guidanceRequest1"
+}
+identifier {
+  system {
+    value: "http://example.org"
+  }
+  value {
+    value: "guidanceResponse1"
+  }
+}
+module {
+  reference {
+    value: "ServiceDefinition/example"
+  }
+}
+status {
+  value: SUCCESS
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+}
+context {
+  reference {
+    value: "Encounter/example"
+  }
+}
+occurrence_date_time {
+  value_us: 1489161720000000
+  timezone: "UTC"
+  precision: SECOND
+}
+performer {
+  reference {
+    value: "Device/software"
+  }
+}
+reason_codeable_concept {
+  text {
+    value: "Guideline Appropriate Ordering Assessment"
+  }
+}
+output_parameters {
+  reference {
+    value: "#outputParameters1"
+  }
+}

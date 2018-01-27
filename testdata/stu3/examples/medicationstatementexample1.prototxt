@@ -1,0 +1,307 @@
+id {
+  value: "example001"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example001</p><p><b>contained</b>: </p><p><b>identifier</b>: 12345689 (OFFICIAL)</p><p><b>status</b>: active</p><p><b>category</b>: Inpatient <span>(Details : {http://hl7.org/fhir/medication-statement-category code \'inpatient\' = \'Inpatient\', given as \'Inpatient\'})</span></p><p><b>medication</b>: id: med0309; Tylenol PM <span>(Details : {http://hl7.org/fhir/sid/ndc code \'50580-506-02\' = \'50580-506-02\', given as \'Tylenol PM\'})</span>; isBrand; Film-coated tablet (qualifier value) <span>(Details : {SNOMED CT code \'385057009\' = \'Film-coated tablet\', given as \'Film-coated tablet (qualifier value)\'})</span></p><p><b>effective</b>: 23/01/2015</p><p><b>dateAsserted</b>: 22/02/2015</p><p><b>informationSource</b>: <a>Donald Duck</a></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>derivedFrom</b>: <a>MedicationRequest/medrx002</a></p><p><b>taken</b>: n</p><p><b>reasonCode</b>: Restless Legs <span>(Details : {SNOMED CT code \'32914008\' = \'Restless legs\', given as \'Restless Legs\'})</span></p><p><b>note</b>: Patient indicates they miss the occasional dose</p><p><b>dosage</b>: </p></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "med0309"
+    }
+    code {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/ndc"
+        }
+        code {
+          value: "50580-506-02"
+        }
+        display {
+          value: "Tylenol PM"
+        }
+      }
+    }
+    is_brand {
+      value: true
+    }
+    form {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "385057009"
+        }
+        display {
+          value: "Film-coated tablet (qualifier value)"
+        }
+      }
+    }
+    ingredient {
+      item_codeable_concept {
+        coding {
+          system {
+            value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+          }
+          code {
+            value: "315266"
+          }
+          display {
+            value: "Acetaminophen 500 MG"
+          }
+        }
+      }
+      amount {
+        numerator {
+          value {
+            value: 500.0
+            precision: 3
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mg"
+          }
+        }
+        denominator {
+          value {
+            value: 1.0
+            precision: 1
+          }
+          system {
+            value: "http://hl7.org/fhir/v3/orderableDrugForm"
+          }
+          code {
+            value: "Tab"
+          }
+        }
+      }
+    }
+    ingredient {
+      item_codeable_concept {
+        coding {
+          system {
+            value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+          }
+          code {
+            value: "901813"
+          }
+          display {
+            value: "Diphenhydramine Hydrochloride 25 mg"
+          }
+        }
+      }
+      amount {
+        numerator {
+          value {
+            value: 25.0
+            precision: 2
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mg"
+          }
+        }
+        denominator {
+          value {
+            value: 1.0
+            precision: 1
+          }
+          system {
+            value: "http://hl7.org/fhir/v3/orderableDrugForm"
+          }
+          code {
+            value: "Tab"
+          }
+        }
+      }
+    }
+    package_value {
+      batch {
+        lot_number {
+          value: "9494788"
+        }
+        expiration_date {
+          value_us: 1495411200000000
+          precision: DAY
+        }
+      }
+    }
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.bmc.nl/portal/medstatements"
+  }
+  value {
+    value: "12345689"
+  }
+}
+status {
+  value: ACTIVE
+}
+category {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/medication-statement-category"
+    }
+    code {
+      value: "inpatient"
+    }
+    display {
+      value: "Inpatient"
+    }
+  }
+}
+medication_reference {
+  reference {
+    value: "#med0309"
+  }
+}
+effective_date_time {
+  value_us: 1421971200000000
+  precision: DAY
+}
+date_asserted {
+  value_us: 1424563200000000
+  precision: DAY
+}
+information_source {
+  reference {
+    value: "Patient/pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+subject {
+  reference {
+    value: "Patient/pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+derived_from {
+  reference {
+    value: "MedicationRequest/medrx002"
+  }
+}
+taken {
+  value: N
+}
+reason_code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "32914008"
+    }
+    display {
+      value: "Restless Legs"
+    }
+  }
+}
+note {
+  text {
+    value: "Patient indicates they miss the occasional dose"
+  }
+}
+dosage {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "1-2 tablets once daily at bedtime as needed for restless legs"
+  }
+  additional_instruction {
+    text {
+      value: "Taking at bedtime"
+    }
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 1
+      }
+      period {
+        value: 1.0
+        precision: 1
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  as_needed_codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "32914008"
+      }
+      display {
+        value: "Restless Legs"
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "26643006"
+      }
+      display {
+        value: "Oral Route"
+      }
+    }
+  }
+  dose_range {
+    low {
+      value {
+        value: 1.0
+        precision: 1
+      }
+      unit {
+        value: "TAB"
+      }
+      system {
+        value: "http://hl7.org/fhir/v3/orderableDrugForm"
+      }
+      code {
+        value: "TAB"
+      }
+    }
+    high {
+      value {
+        value: 2.0
+        precision: 1
+      }
+      unit {
+        value: "TAB"
+      }
+      system {
+        value: "http://hl7.org/fhir/v3/orderableDrugForm"
+      }
+      code {
+        value: "TAB"
+      }
+    }
+  }
+}

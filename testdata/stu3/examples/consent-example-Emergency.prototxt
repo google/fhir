@@ -1,0 +1,100 @@
+id {
+  value: "consent-example-Emergency"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t<p>\n\tWithhold Authorization for Treatment except for Emegency Treatment\n\t</p><p>\n    Patient &quot;P. van de Heuvel&quot; wishes to have no data at the Good Health Psychiatric Hospital \n   available except for Emergency treatment use.\n   An overall Deny consent Directive, with an exception &quot;Permit&quot; of purposeOfUse &quot;ETREAT&quot; \n   at &quot;Good Health&quot; hospital, and exception &quot;Deny&quot; all other purposeOfUse from good health hospital.\n   </p>\n   </div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+patient {
+  reference {
+    value: "Patient/f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+date_time {
+  value_us: 1447804800000000
+  precision: DAY
+}
+organization {
+  reference {
+    value: "Organization/Infoway"
+  }
+  display {
+    value: "Canada Infoway"
+  }
+}
+source_attachment {
+  title {
+    value: "The terms of the consent in lawyer speak."
+  }
+}
+policy_rule {
+  value: "http://hl7.org/fhir/ConsentPolicy/opt-out"
+}
+except {
+  type {
+    value: PERMIT
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "CST"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Organization/2.16.840.1.113883.19.6"
+      }
+      display {
+        value: "Good Health Psychiatric Hospital"
+      }
+    }
+  }
+  purpose {
+    system {
+      value: "http://hl7.org/fhir/v3/ActReason"
+    }
+    code {
+      value: "ETREAT"
+    }
+  }
+}
+except {
+  type {
+    value: DENY
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ParticipationType"
+        }
+        code {
+          value: "CST"
+        }
+      }
+    }
+    reference {
+      reference {
+        value: "Organization/2.16.840.1.113883.19.6"
+      }
+      display {
+        value: "Good Health Psychiatric Hospital"
+      }
+    }
+  }
+}

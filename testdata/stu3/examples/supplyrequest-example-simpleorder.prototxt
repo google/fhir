@@ -1,0 +1,95 @@
+id {
+  value: "simpleorder"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: simpleorder</p><p><b>identifier</b>: Order10284</p><p><b>status</b>: active</p><p><b>category</b>: Central Stock Resupply <span>(Details : {[not stated] code \'central\' = \'central\', given as \'Central Stock Resupply\'})</span></p><p><b>priority</b>: asap</p><h3>OrderedItems</h3><table><tr><td>-</td><td><b>Quantity</b></td><td><b>Item[x]</b></td></tr><tr><td>*</td><td>10</td><td>Blood collect tubes blue cap <span>(Details : {[not stated] code \'BlueTubes\' = \'BlueTubes\', given as \'Blood collect tubes blue cap\'})</span></td></tr></table><p><b>occurrence</b>: 31/12/2016</p><p><b>authoredOn</b>: 31/12/2016</p><h3>Requesters</h3><table><tr><td>-</td><td><b>Agent</b></td><td><b>OnBehalfOf</b></td></tr><tr><td>*</td><td>Henry Seven</td><td>Purchasing Dept</td></tr></table><p><b>supplier</b>: Vendor1</p><p><b>reason</b>: Refill due to low stock <span>(Details : {[not stated] code \'stock_low\' = \'stock_low\', given as \'Refill due to low stock\'})</span></p><p><b>deliverFrom</b>: Location 1</p><p><b>deliverTo</b>: GoodHealth Clinic Receiving</p></div>"
+  }
+}
+identifier {
+  value {
+    value: "Order10284"
+  }
+}
+status {
+  value: ACTIVE
+}
+category {
+  coding {
+    code {
+      value: "central"
+    }
+    display {
+      value: "Central Stock Resupply"
+    }
+  }
+}
+priority {
+  value: ASAP
+}
+ordered_item {
+  quantity {
+    value {
+      value: 10.0
+      precision: 2
+    }
+  }
+  item_codeable_concept {
+    coding {
+      code {
+        value: "BlueTubes"
+      }
+      display {
+        value: "Blood collect tubes blue cap"
+      }
+    }
+  }
+}
+occurrence_date_time {
+  value_us: 1483142400000000
+  precision: DAY
+}
+authored_on {
+  value_us: 1483142400000000
+  precision: DAY
+}
+requester {
+  agent {
+    display {
+      value: "Henry Seven"
+    }
+  }
+  on_behalf_of {
+    display {
+      value: "Purchasing Dept"
+    }
+  }
+}
+supplier {
+  display {
+    value: "Vendor1"
+  }
+}
+reason_codeable_concept {
+  coding {
+    code {
+      value: "stock_low"
+    }
+    display {
+      value: "Refill due to low stock"
+    }
+  }
+}
+deliver_from {
+  display {
+    value: "Location 1"
+  }
+}
+deliver_to {
+  display {
+    value: "GoodHealth Clinic Receiving"
+  }
+}

@@ -1,0 +1,215 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p> A simple care plan to indicate a patient taking their weight once a day because of obesity.</p>\n    </div>"
+  }
+}
+contained {
+  condition {
+    id {
+      value: "p1"
+    }
+    clinical_status {
+      value: ACTIVE
+    }
+    verification_status {
+      value: CONFIRMED
+    }
+    code {
+      text {
+        value: "Obesity"
+      }
+    }
+    subject {
+      reference {
+        value: "Patient/example"
+      }
+      display {
+        value: "Peter James Chalmers"
+      }
+    }
+  }
+}
+identifier {
+  value {
+    value: "12345"
+  }
+}
+definition {
+  display {
+    value: "A PlanDefinition protocol for obesity"
+  }
+}
+based_on {
+  display {
+    value: "Management of Type 2 Diabetes"
+  }
+}
+replaces {
+  display {
+    value: "Plan from urgent care clinic"
+  }
+}
+part_of {
+  display {
+    value: "Overall wellness plan"
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: PLAN
+}
+category {
+  text {
+    value: "Weight management plan"
+  }
+}
+description {
+  value: "Manage obesity and weight loss"
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+context {
+  reference {
+    value: "Encounter/home"
+  }
+}
+period {
+  end {
+    value_us: 1496275200000000
+    precision: DAY
+  }
+}
+author {
+  reference {
+    value: "Practitioner/example"
+  }
+  display {
+    value: "Dr Adam Careful"
+  }
+}
+care_team {
+  reference {
+    value: "CareTeam/example"
+  }
+}
+addresses {
+  reference {
+    value: "#p1"
+  }
+  display {
+    value: "obesity"
+  }
+}
+goal {
+  reference {
+    value: "Goal/example"
+  }
+}
+activity {
+  outcome_codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "161832001"
+      }
+      display {
+        value: "Progressive weight loss"
+      }
+    }
+  }
+  outcome_reference {
+    reference {
+      value: "Observation/example"
+    }
+    display {
+      value: "Weight Measured"
+    }
+  }
+  detail {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/care-plan-activity-category"
+        }
+        code {
+          value: "observation"
+        }
+      }
+    }
+    code {
+      coding {
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "3141-9"
+        }
+        display {
+          value: "Weight Measured"
+        }
+      }
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "27113001"
+        }
+        display {
+          value: "Body weight"
+        }
+      }
+    }
+    status {
+      value: COMPLETED
+    }
+    status_reason {
+      value: "Achieved weight loss to mitigate diabetes risk."
+    }
+    prohibited {
+    }
+    scheduled_timing {
+      repeat {
+        frequency {
+          value: 1
+        }
+        period {
+          value: 1.0
+          precision: 1
+        }
+        period_unit {
+          value: D
+        }
+      }
+    }
+    location {
+      display {
+        value: "Patient\'s home"
+      }
+    }
+    performer {
+      reference {
+        value: "Patient/example"
+      }
+      display {
+        value: "Peter James Chalmers"
+      }
+    }
+  }
+}

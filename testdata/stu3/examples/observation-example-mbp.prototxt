@@ -1,0 +1,70 @@
+id {
+  value: "mbp"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: mbp</p><p><b>status</b>: final</p><p><b>category</b>: Vital Signs <span>(Details : {http://hl7.org/fhir/observation-category code \'vital-signs\' = \'Vital Signs\', given as \'Vital Signs\'})</span></p><p><b>code</b>: Mean blood pressure <span>(Details : {LOINC code \'8478-0\' = \'Mean blood pressure\', given as \'Mean blood pressure\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>effective</b>: 02/07/1999</p><p><b>value</b>: 80 mm[Hg]<span> (Details: UCUM code mm[Hg] = \'mmHg\')</span></p></div>"
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/observation-category"
+    }
+    code {
+      value: "vital-signs"
+    }
+    display {
+      value: "Vital Signs"
+    }
+  }
+  text {
+    value: "Vital Signs"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "8478-0"
+    }
+    display {
+      value: "Mean blood pressure"
+    }
+  }
+  text {
+    value: "Mean blood pressure"
+  }
+}
+subject {
+  reference {
+    value: "Patient/example"
+  }
+}
+effective_date_time {
+  value_us: 930873600000000
+  precision: DAY
+}
+value_quantity {
+  value {
+    value: 80.0
+    precision: 2
+  }
+  unit {
+    value: "mm[Hg]"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "mm[Hg]"
+  }
+}

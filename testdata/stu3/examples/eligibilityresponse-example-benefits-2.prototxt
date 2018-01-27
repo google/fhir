@@ -1,0 +1,518 @@
+id {
+  value: "E2502"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the EligibilityResponse.</div>"
+  }
+}
+contained {
+  patient {
+    id {
+      value: "patient-1"
+    }
+    name {
+      use {
+        value: OFFICIAL
+      }
+      family {
+        value: "Donald"
+      }
+      given {
+        value: "Duck"
+      }
+    }
+    gender {
+      value: MALE
+    }
+    birth_date {
+      value_us: 516672000000000
+      precision: DAY
+    }
+    address {
+      use {
+        value: HOME
+      }
+      line {
+        value: "1234 Main Street"
+      }
+      city {
+        value: "Vancouver"
+      }
+      postal_code {
+        value: "V2H1Y3"
+      }
+      country {
+        value: "CAD"
+      }
+    }
+  }
+}
+contained {
+  coverage {
+    id {
+      value: "coverage-1"
+    }
+    identifier {
+      system {
+        value: "http://benefitsinc.com/certificate"
+      }
+      value {
+        value: "12345"
+      }
+    }
+    status {
+      value: ACTIVE
+    }
+    type {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ActCode"
+        }
+        code {
+          value: "EHCPOL"
+        }
+      }
+    }
+    subscriber {
+      reference {
+        value: "#patient-1"
+      }
+    }
+    beneficiary {
+      reference {
+        value: "#patient-1"
+      }
+    }
+    relationship {
+      coding {
+        code {
+          value: "self"
+        }
+      }
+    }
+    payor {
+      identifier {
+        system {
+          value: "http://www.bindb.com/bin"
+        }
+        value {
+          value: "123456"
+        }
+      }
+    }
+    grouping {
+      plan {
+        value: "CBI35"
+      }
+      plan_display {
+        value: "Corporate Baker\'s Inc. Plan#35"
+      }
+      sub_plan {
+        value: "123"
+      }
+      sub_plan_display {
+        value: "Trainee Part-time Benefits"
+      }
+    }
+    dependent {
+      value: "1"
+    }
+    sequence {
+      value: "1"
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/eligibilityresponse"
+  }
+  value {
+    value: "8812342"
+  }
+}
+status {
+  value: ACTIVE
+}
+created {
+  value_us: 1410825600000000
+  precision: DAY
+}
+request_provider {
+  identifier {
+    system {
+      value: "http://national.org/provider"
+    }
+    value {
+      value: "PR9876"
+    }
+  }
+}
+request_organization {
+  identifier {
+    system {
+      value: "http://national.org/clinic"
+    }
+    value {
+      value: "OR1234"
+    }
+  }
+}
+request {
+  reference {
+    value: "http://www.BenefitsInc.com/fhir/eligibility/225476332405"
+  }
+}
+outcome {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/remittance-outcome"
+    }
+    code {
+      value: "complete"
+    }
+  }
+}
+disposition {
+  value: "Policy is currently in-force."
+}
+insurer {
+  reference {
+    value: "Organization/2"
+  }
+}
+inforce {
+  value: true
+}
+insurance {
+  coverage {
+    reference {
+      value: "#coverage-1"
+    }
+  }
+  contract {
+    reference {
+      value: "http://www.BenefitsInc.com/fhir/contract/NBU22547"
+    }
+  }
+  benefit_balance {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-category"
+        }
+        code {
+          value: "medical"
+        }
+      }
+    }
+    sub_category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-subcategory"
+        }
+        code {
+          value: "30"
+        }
+        display {
+          value: "Health Benefit Plan Coverage"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-term"
+        }
+        code {
+          value: "annual"
+        }
+      }
+    }
+    financial {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed_money {
+        value {
+          value: 500000.0
+          precision: 6
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "USD"
+        }
+      }
+      used_money {
+        value {
+          value: 3748.0
+          precision: 6
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "USD"
+        }
+      }
+    }
+    financial {
+      type {
+        coding {
+          code {
+            value: "copay-maximum"
+          }
+        }
+      }
+      allowed_money {
+        value {
+          value: 100.0
+          precision: 3
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "USD"
+        }
+      }
+    }
+    financial {
+      type {
+        coding {
+          code {
+            value: "copay-percent"
+          }
+        }
+      }
+      allowed_unsigned_int {
+        value: 20
+      }
+    }
+  }
+  benefit_balance {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-category"
+        }
+        code {
+          value: "medical"
+        }
+      }
+    }
+    sub_category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-subcategory"
+        }
+        code {
+          value: "69"
+        }
+        display {
+          value: "Maternity"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-term"
+        }
+        code {
+          value: "annual"
+        }
+      }
+    }
+    financial {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed_money {
+        value {
+          value: 15000.0
+          precision: 5
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "USD"
+        }
+      }
+    }
+  }
+  benefit_balance {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-category"
+        }
+        code {
+          value: "oral"
+        }
+      }
+    }
+    sub_category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-subcategory"
+        }
+        code {
+          value: "F3"
+        }
+        display {
+          value: "Dental Coverage"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-term"
+        }
+        code {
+          value: "annual"
+        }
+      }
+    }
+    financial {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed_money {
+        value {
+          value: 2000.0
+          precision: 4
+        }
+        system {
+          value: "urn:iso:std:iso:4217"
+        }
+        code {
+          value: "USD"
+        }
+      }
+    }
+  }
+  benefit_balance {
+    category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-category"
+        }
+        code {
+          value: "vision"
+        }
+      }
+    }
+    sub_category {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/benefit-subcategory"
+        }
+        code {
+          value: "F6"
+        }
+        display {
+          value: "Vision Coverage"
+        }
+      }
+    }
+    excluded {
+      value: true
+    }
+    name {
+      value: "Vision"
+    }
+    description {
+      value: "Vision products and services such as exams, glasses and contatc lenses."
+    }
+  }
+}
+form {
+  coding {
+    system {
+      value: "http://national.org/form"
+    }
+    code {
+      value: "ELRSP/2017/01"
+    }
+  }
+}

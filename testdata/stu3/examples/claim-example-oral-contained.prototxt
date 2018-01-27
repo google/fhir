@@ -1,0 +1,310 @@
+id {
+  value: "100152"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Oral Health Claim</div>"
+  }
+}
+contained {
+  organization {
+    id {
+      value: "org-insurer"
+    }
+    identifier {
+      system {
+        value: "http://www.bindb.com/bin"
+      }
+      value {
+        value: "123456"
+      }
+    }
+  }
+}
+contained {
+  organization {
+    id {
+      value: "org-org"
+    }
+    identifier {
+      system {
+        value: "http://www.jurisdiction.com/oralhealthoffices"
+      }
+      value {
+        value: "3456"
+      }
+    }
+  }
+}
+contained {
+  practitioner {
+    id {
+      value: "provider-1"
+    }
+    identifier {
+      system {
+        value: "http://www.jurisdiction.com/oralhealthproviders"
+      }
+      value {
+        value: "123456789"
+      }
+    }
+  }
+}
+contained {
+  patient {
+    id {
+      value: "patient-1"
+    }
+    name {
+      use {
+        value: OFFICIAL
+      }
+      family {
+        value: "Donald"
+      }
+      given {
+        value: "Duck"
+      }
+    }
+    gender {
+      value: MALE
+    }
+    birth_date {
+      value_us: 516672000000000
+      precision: DAY
+    }
+    address {
+      use {
+        value: HOME
+      }
+      line {
+        value: "1234 Main Street"
+      }
+      city {
+        value: "Vancouver"
+      }
+      postal_code {
+        value: "V2H1Y3"
+      }
+      country {
+        value: "CAD"
+      }
+    }
+  }
+}
+contained {
+  coverage {
+    id {
+      value: "coverage-1"
+    }
+    identifier {
+      system {
+        value: "http://benefitsinc.com/certificate"
+      }
+      value {
+        value: "12345"
+      }
+    }
+    status {
+      value: ACTIVE
+    }
+    type {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ActCode"
+        }
+        code {
+          value: "EHCPOL"
+        }
+      }
+    }
+    subscriber {
+      reference {
+        value: "#patient-1"
+      }
+    }
+    beneficiary {
+      reference {
+        value: "#patient-1"
+      }
+    }
+    relationship {
+      coding {
+        code {
+          value: "self"
+        }
+      }
+    }
+    payor {
+      identifier {
+        system {
+          value: "http://www.bindb.com/bin"
+        }
+        value {
+          value: "123456"
+        }
+      }
+    }
+    grouping {
+      plan {
+        value: "CBI35"
+      }
+      plan_display {
+        value: "Corporate Baker\'s Inc. Plan#35"
+      }
+      sub_plan {
+        value: "123"
+      }
+      sub_plan_display {
+        value: "Trainee Part-time Benefits"
+      }
+    }
+    dependent {
+      value: "1"
+    }
+    sequence {
+      value: "1"
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/claim"
+  }
+  value {
+    value: "12347"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/ex-claimtype"
+    }
+    code {
+      value: "oral"
+    }
+  }
+}
+use {
+  value: COMPLETE
+}
+patient {
+  reference {
+    value: "#patient-1"
+  }
+}
+created {
+  value_us: 1408147200000000
+  precision: DAY
+}
+insurer {
+  reference {
+    value: "#org-insurer"
+  }
+}
+organization {
+  reference {
+    value: "#org-org"
+  }
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+payee {
+  type {
+    coding {
+      code {
+        value: "provider"
+      }
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    reference {
+      value: "#provider-1"
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis_codeable_concept {
+    coding {
+      code {
+        value: "123456"
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    reference {
+      value: "#coverage-1"
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_link_id {
+    value: 1
+  }
+  service {
+    coding {
+      code {
+        value: "1200"
+      }
+    }
+  }
+  serviced_date {
+    value_us: 1408147200000000
+    precision: DAY
+  }
+  unit_price {
+    value {
+      value: 135.57
+      precision: 5
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: 135.57
+      precision: 5
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+}

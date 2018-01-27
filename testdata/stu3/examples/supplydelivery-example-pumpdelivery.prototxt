@@ -1,0 +1,44 @@
+id {
+  value: "pumpdelivery"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>"
+  }
+}
+identifier {
+  value {
+    value: "98398459409"
+  }
+  assigner {
+    display {
+      value: "SupplierDeliveryNr"
+    }
+  }
+}
+status {
+  value: IN_PROGRESS
+}
+patient {
+  display {
+    value: "Mr. Belpit"
+  }
+}
+supplier {
+  display {
+    value: "ACME distribution"
+  }
+}
+destination {
+  display {
+    value: "Home care dept"
+  }
+}
+receiver {
+  display {
+    value: "Nurse Smith"
+  }
+}

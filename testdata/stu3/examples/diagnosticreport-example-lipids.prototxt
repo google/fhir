@@ -1,0 +1,377 @@
+id {
+  value: "lipids"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\n\n      <h3>Lipid Report for Wile. E. COYOTE (MRN: 23453) issued 3-Mar 2009 14:26</h3>\n\n\n      <pre>\nTest                  Units       Value       Reference Range\nCholesterol           mmol/L      6.3         &lt;4.5\nTriglyceride          mmol/L      1.3         &lt;2.0\nHDL Cholesterol       mmol/L      1.3         &gt;1.5\nLDL Chol. (calc)      mmol/L      4.2         &lt;3.0\n      </pre>\n\n\n      <p>Acme Laboratory, Inc signed: Dr Pete Pathologist</p>\n\n\n    </div>"
+  }
+}
+contained {
+  observation {
+    id {
+      value: "cholesterol"
+    }
+    status {
+      value: FINAL
+    }
+    code {
+      coding {
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "14647-2"
+        }
+        display {
+          value: "Cholesterol [Moles/\342\200\213volume] in Serum or Plasma"
+        }
+      }
+      text {
+        value: "Cholesterol"
+      }
+    }
+    subject {
+      reference {
+        value: "Patient/pat2"
+      }
+    }
+    performer {
+      reference {
+        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      }
+      display {
+        value: "Acme Laboratory, Inc"
+      }
+    }
+    value_quantity {
+      value {
+        value: 6.3
+        precision: 2
+      }
+      unit {
+        value: "mmol/L"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mmol/L"
+      }
+    }
+    reference_range {
+      high {
+        value {
+          value: 4.5
+          precision: 2
+        }
+        unit {
+          value: "mmol/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mmol/L"
+        }
+      }
+    }
+  }
+}
+contained {
+  observation {
+    id {
+      value: "triglyceride"
+    }
+    status {
+      value: FINAL
+    }
+    code {
+      coding {
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "14927-8"
+        }
+        display {
+          value: "Triglyceride [Moles/\342\200\213volume] in Serum or Plasma"
+        }
+      }
+      text {
+        value: "Triglyceride"
+      }
+    }
+    subject {
+      reference {
+        value: "Patient/pat2"
+      }
+    }
+    performer {
+      reference {
+        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      }
+      display {
+        value: "Acme Laboratory, Inc"
+      }
+    }
+    value_quantity {
+      value {
+        value: 1.3
+        precision: 2
+      }
+      unit {
+        value: "mmol/L"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mmol/L"
+      }
+    }
+    reference_range {
+      high {
+        value {
+          value: 2.0
+          precision: 2
+        }
+        unit {
+          value: "mmol/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mmol/L"
+        }
+      }
+    }
+  }
+}
+contained {
+  observation {
+    id {
+      value: "hdlcholesterol"
+    }
+    status {
+      value: FINAL
+    }
+    code {
+      coding {
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "2085-9"
+        }
+        display {
+          value: "Cholesterol in HDL [Moles/\342\200\213volume] in Serum or Plasma"
+        }
+      }
+      text {
+        value: "Cholesterol in HDL"
+      }
+    }
+    subject {
+      reference {
+        value: "Patient/pat2"
+      }
+    }
+    performer {
+      reference {
+        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      }
+      display {
+        value: "Acme Laboratory, Inc"
+      }
+    }
+    value_quantity {
+      value {
+        value: 1.3
+        precision: 2
+      }
+      unit {
+        value: "mmol/L"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mmol/L"
+      }
+    }
+    reference_range {
+      low {
+        value {
+          value: 1.5
+          precision: 2
+        }
+        unit {
+          value: "mmol/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mmol/L"
+        }
+      }
+    }
+  }
+}
+contained {
+  observation {
+    id {
+      value: "ldlcholesterol"
+    }
+    status {
+      value: FINAL
+    }
+    code {
+      coding {
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "39469-2"
+        }
+        display {
+          value: "Cholesterol in LDL [Moles/\342\200\213volume] in Serum or Plasma by calculation"
+        }
+      }
+      text {
+        value: "LDL Chol. (Calc)"
+      }
+    }
+    subject {
+      reference {
+        value: "Patient/pat2"
+      }
+    }
+    performer {
+      reference {
+        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      }
+      display {
+        value: "Acme Laboratory, Inc"
+      }
+    }
+    value_quantity {
+      value {
+        value: 4.6
+        precision: 2
+      }
+      unit {
+        value: "mmol/L"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mmol/L"
+      }
+    }
+    reference_range {
+      high {
+        value {
+          value: 3.0
+          precision: 2
+        }
+        unit {
+          value: "mmol/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mmol/L"
+        }
+      }
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://acme.com/lab/reports"
+  }
+  value {
+    value: "5234342"
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/v2/0074"
+    }
+    code {
+      value: "HM"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "24331-1"
+    }
+    display {
+      value: "Lipid 1996 panel - Serum or Plasma"
+    }
+  }
+  text {
+    value: "Lipid Panel"
+  }
+}
+subject {
+  reference {
+    value: "Patient/pat2"
+  }
+}
+effective_date_time {
+  value_us: 1299187800000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+issued {
+  value_us: 1359247533000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+performer {
+  actor {
+    reference {
+      value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+    }
+    display {
+      value: "Acme Laboratory, Inc"
+    }
+  }
+}
+result {
+  reference {
+    value: "#cholesterol"
+  }
+}
+result {
+  reference {
+    value: "#triglyceride"
+  }
+}
+result {
+  reference {
+    value: "#hdlcholesterol"
+  }
+}
+result {
+  reference {
+    value: "#ldlcholesterol"
+  }
+}
