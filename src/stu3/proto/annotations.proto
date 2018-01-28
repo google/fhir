@@ -54,34 +54,34 @@ enum Requirement {
   REQUIRED_BY_FHIR = 1;
 }
 
-extend proto2.MessageOptions {
+extend google.protobuf.MessageOptions {
   // If this message is the proto version of a fhir extension, this is the
   // extension identifier.
-  optional string fhir_extension_url = 177048773;
+  string fhir_extension_url = 177048773;
 
   // If this message is a Code constrained to a specific valueset, this is the
   // valueset identifier.
-  optional string fhir_valueset_url = 180887441;
+  string fhir_valueset_url = 180887441;
 
   // What type of fhir structure does this message represent?
-  optional StructureDefinitionKindValue structure_definition_kind = 182131192;
+  StructureDefinitionKindValue structure_definition_kind = 182131192;
 }
 
-extend proto2.EnumValueOptions {
+extend google.protobuf.EnumValueOptions {
   // If we had to rename this code to make a valid enum identifier, what was
   // the original name?
-  optional string fhir_original_code = 181000551;
+  string fhir_original_code = 181000551;
 }
 
-extend proto2.FieldOptions {
+extend google.protobuf.FieldOptions {
   // Is this field required?
-  optional Requirement validation_requirement = 162282766;
+  Requirement validation_requirement = 162282766;
 
   // When the field is of type Code, what kind of Code is it?
-  optional CodeType fhir_code_type = 162491637;
+  CodeType fhir_code_type = 162491637;
 }
 
-extend proto2.OneofOptions {
+extend google.protobuf.OneofOptions {
   // Is this field required?
-  optional Requirement oneof_validation_requirement = 181563459;
+  Requirement oneof_validation_requirement = 181563459;
 }
