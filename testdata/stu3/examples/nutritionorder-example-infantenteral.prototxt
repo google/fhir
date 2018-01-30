@@ -83,8 +83,7 @@ enteral_formula {
   }
   caloric_density {
     value {
-      value: 20.0
-      precision: 2
+      value: "20"
     }
     unit {
       value: "calories per ounce"
@@ -125,8 +124,7 @@ enteral_formula {
           value: 1
         }
         period {
-          value: 3.0
-          precision: 1
+          value: "3"
         }
         period_unit {
           value: H
@@ -135,8 +133,7 @@ enteral_formula {
     }
     quantity {
       value {
-        value: 4.0
-        precision: 1
+        value: "4"
       }
       unit {
         value: "ounces"
@@ -151,8 +148,7 @@ enteral_formula {
   }
   max_volume_to_deliver {
     value {
-      value: 32.0
-      precision: 2
+      value: "32"
     }
     unit {
       value: "ounces"

@@ -66,8 +66,7 @@ performer {
 }
 value_quantity {
   value {
-    value: 6.3
-    precision: 2
+    value: "6.3"
   }
   unit {
     value: "mmol/l"
@@ -95,8 +94,7 @@ interpretation {
 reference_range {
   low {
     value {
-      value: 3.1
-      precision: 2
+      value: "3.1"
     }
     unit {
       value: "mmol/l"
@@ -110,8 +108,7 @@ reference_range {
   }
   high {
     value {
-      value: 6.2
-      precision: 2
+      value: "6.2"
     }
     unit {
       value: "mmol/l"

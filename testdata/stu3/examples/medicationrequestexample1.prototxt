@@ -177,8 +177,7 @@ dosage_instruction {
   }
   dose_quantity {
     value {
-      value: 1.0
-      precision: 1
+      value: "1"
     }
     unit {
       value: "TAB"
@@ -207,8 +206,7 @@ dispense_request {
   }
   quantity {
     value {
-      value: 30.0
-      precision: 2
+      value: "30"
     }
     unit {
       value: "TAB"
@@ -222,8 +220,7 @@ dispense_request {
   }
   expected_supply_duration {
     value {
-      value: 30.0
-      precision: 2
+      value: "30"
     }
     unit {
       value: "days"

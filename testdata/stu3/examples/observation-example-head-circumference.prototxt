@@ -60,8 +60,7 @@ effective_date_time {
 }
 value_quantity {
   value {
-    value: 51.2
-    precision: 3
+    value: "51.2"
   }
   unit {
     value: "cm"

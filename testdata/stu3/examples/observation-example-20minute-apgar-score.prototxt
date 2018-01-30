@@ -107,8 +107,7 @@ performer {
 }
 value_quantity {
   value {
-    value: 10.0
-    precision: 2
+    value: "10"
   }
   system {
     value: "http://unitsofmeasure.org"
@@ -141,8 +140,7 @@ component {
           value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
         }
         value_decimal {
-          value: 2.0
-          precision: 1
+          value: "2"
         }
       }
       system {
@@ -192,8 +190,7 @@ component {
           value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
         }
         value_decimal {
-          value: 2.0
-          precision: 1
+          value: "2"
         }
       }
       system {
@@ -243,8 +240,7 @@ component {
           value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
         }
         value_decimal {
-          value: 2.0
-          precision: 1
+          value: "2"
         }
       }
       system {
@@ -294,8 +290,7 @@ component {
           value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
         }
         value_decimal {
-          value: 2.0
-          precision: 1
+          value: "2"
         }
       }
       system {
@@ -345,8 +340,7 @@ component {
           value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
         }
         value_decimal {
-          value: 2.0
-          precision: 1
+          value: "2"
         }
       }
       system {

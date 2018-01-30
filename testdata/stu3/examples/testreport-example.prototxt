@@ -32,8 +32,7 @@ result {
   value: PASS
 }
 score {
-  value: 100.0
-  precision: 4
+  value: "100.0"
 }
 tester {
   value: "HL7 Execution Engine"

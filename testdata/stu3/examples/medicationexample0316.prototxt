@@ -66,8 +66,7 @@ ingredient {
   amount {
     numerator {
       value {
-        value: 50.0
-        precision: 2
+        value: "50"
       }
       system {
         value: "http://unitsofmeasure.org"
@@ -78,8 +77,7 @@ ingredient {
     }
     denominator {
       value {
-        value: 1.0
-        precision: 1
+        value: "1"
       }
       system {
         value: "http://hl7.org/fhir/v3/orderableDrugForm"

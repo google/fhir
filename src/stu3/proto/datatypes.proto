@@ -136,18 +136,14 @@ message DateTime {
 // See http://hl7.org/fhir/datatypes.html#decimal
 message Decimal {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  // Primitive value for decimal, including the number of significant digits.
-  // For example, a value of "1.23" has 3 significant digits, and a value of
-  // "20" may have 1 or 2 significant digits depending on how that value was
-  // generated or measured.
-  double value = 1;
-  int32 precision = 2;
+  // Primitive value for decimal, stored as a string to preserve precision.
+  string value = 1;
 
   // xml:id (or equivalent in JSON)
-  String id = 3;
+  String id = 2;
 
   // Additional Content defined by implementations
-  repeated Extension extension = 4;
+  repeated Extension extension = 3;
 }
 
 // Primitive Type id

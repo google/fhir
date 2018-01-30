@@ -80,8 +80,7 @@ participant {
 }
 length {
   value {
-    value: 90.0
-    precision: 2
+    value: "90"
   }
   unit {
     value: "min"

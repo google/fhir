@@ -82,8 +82,7 @@ ingredient {
   quantity {
     numerator {
       value {
-        value: 875.0
-        precision: 3
+        value: "875"
       }
       unit {
         value: "mg"
@@ -97,8 +96,7 @@ ingredient {
     }
     denominator {
       value {
-        value: 1000.0
-        precision: 4
+        value: "1000"
       }
       unit {
         value: "mg"
@@ -121,8 +119,7 @@ ingredient {
   quantity {
     numerator {
       value {
-        value: 125.0
-        precision: 3
+        value: "125"
       }
       unit {
         value: "mg"
@@ -136,8 +133,7 @@ ingredient {
     }
     denominator {
       value {
-        value: 1000.0
-        precision: 4
+        value: "1000"
       }
       unit {
         value: "mg"

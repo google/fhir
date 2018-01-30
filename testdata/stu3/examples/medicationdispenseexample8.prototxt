@@ -75,8 +75,7 @@ dosage_instruction {
         value: 2
       }
       period {
-        value: 21.0
-        precision: 2
+        value: "21"
       }
       period_unit {
         value: D
@@ -98,8 +97,7 @@ dosage_instruction {
   }
   dose_quantity {
     value {
-      value: 500.0
-      precision: 3
+      value: "500"
     }
     unit {
       value: "mg"

@@ -19,8 +19,7 @@ contained {
         value: "score"
       }
       value_decimal {
-        value: 7.0
-        precision: 1
+        value: "7"
       }
     }
     parameter {

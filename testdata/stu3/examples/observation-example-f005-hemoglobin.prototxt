@@ -71,8 +71,7 @@ performer {
 }
 value_quantity {
   value {
-    value: 7.2
-    precision: 2
+    value: "7.2"
   }
   unit {
     value: "g/dl"
@@ -100,8 +99,7 @@ interpretation {
 reference_range {
   low {
     value {
-      value: 7.5
-      precision: 2
+      value: "7.5"
     }
     unit {
       value: "g/dl"
@@ -115,8 +113,7 @@ reference_range {
   }
   high {
     value {
-      value: 10.0
-      precision: 2
+      value: "10"
     }
     unit {
       value: "g/dl"

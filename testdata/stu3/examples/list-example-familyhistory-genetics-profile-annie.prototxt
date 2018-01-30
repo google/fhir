@@ -122,8 +122,7 @@ contained {
     }
     age_age {
       value {
-        value: 42.0
-        precision: 2
+        value: "42"
       }
       unit {
         value: "years"
@@ -239,8 +238,7 @@ contained {
     }
     deceased_age {
       value {
-        value: 50.0
-        precision: 2
+        value: "50"
       }
       unit {
         value: "years"
@@ -268,8 +266,7 @@ contained {
       }
       onset_age {
         value {
-          value: 45.0
-          precision: 2
+          value: "45"
         }
         unit {
           value: "years"
@@ -384,8 +381,7 @@ contained {
     }
     age_age {
       value {
-        value: 72.0
-        precision: 2
+        value: "72"
       }
       unit {
         value: "years"
@@ -435,8 +431,7 @@ contained {
     }
     deceased_age {
       value {
-        value: 77.0
-        precision: 2
+        value: "77"
       }
       unit {
         value: "years"
@@ -464,8 +459,7 @@ contained {
       }
       onset_age {
         value {
-          value: 55.0
-          precision: 2
+          value: "55"
         }
         unit {
           value: "years"
@@ -514,8 +508,7 @@ contained {
     }
     deceased_age {
       value {
-        value: 76.0
-        precision: 2
+        value: "76"
       }
       unit {
         value: "years"
@@ -563,8 +556,7 @@ contained {
     }
     deceased_age {
       value {
-        value: 74.0
-        precision: 2
+        value: "74"
       }
       unit {
         value: "years"
@@ -612,8 +604,7 @@ contained {
     }
     deceased_age {
       value {
-        value: 73.0
-        precision: 2
+        value: "73"
       }
       unit {
         value: "years"
@@ -641,8 +632,7 @@ contained {
       }
       onset_age {
         value {
-          value: 72.0
-          precision: 2
+          value: "72"
         }
         unit {
           value: "years"
@@ -757,8 +747,7 @@ contained {
     }
     age_age {
       value {
-        value: 32.0
-        precision: 2
+        value: "32"
       }
       unit {
         value: "years"
@@ -788,8 +777,7 @@ contained {
       }
       onset_age {
         value {
-          value: 32.0
-          precision: 2
+          value: "32"
         }
         unit {
           value: "years"
@@ -904,8 +892,7 @@ contained {
     }
     age_age {
       value {
-        value: 36.0
-        precision: 2
+        value: "36"
       }
       unit {
         value: "years"
@@ -935,8 +922,7 @@ contained {
       }
       onset_age {
         value {
-          value: 35.0
-          precision: 2
+          value: "35"
         }
         unit {
           value: "years"
@@ -982,8 +968,7 @@ contained {
     }
     age_age {
       value {
-        value: 30.0
-        precision: 2
+        value: "30"
       }
       unit {
         value: "years"
@@ -1097,8 +1082,7 @@ contained {
     }
     age_age {
       value {
-        value: 16.0
-        precision: 2
+        value: "16"
       }
       unit {
         value: "years"
@@ -1214,8 +1198,7 @@ contained {
     }
     age_age {
       value {
-        value: 15.0
-        precision: 2
+        value: "15"
       }
       unit {
         value: "years"
@@ -1288,8 +1271,7 @@ contained {
     }
     age_age {
       value {
-        value: 35.0
-        precision: 2
+        value: "35"
       }
       unit {
         value: "years"
@@ -1403,8 +1385,7 @@ contained {
     }
     age_age {
       value {
-        value: 17.0
-        precision: 2
+        value: "17"
       }
       unit {
         value: "years"
@@ -1515,8 +1496,7 @@ contained {
     }
     age_age {
       value {
-        value: 56.0
-        precision: 2
+        value: "56"
       }
       unit {
         value: "years"
@@ -1627,8 +1607,7 @@ contained {
     }
     age_age {
       value {
-        value: 57.0
-        precision: 2
+        value: "57"
       }
       unit {
         value: "years"
@@ -1754,8 +1733,7 @@ contained {
     }
     age_age {
       value {
-        value: 60.0
-        precision: 2
+        value: "60"
       }
       unit {
         value: "years"
@@ -1866,8 +1844,7 @@ contained {
     }
     age_age {
       value {
-        value: 57.0
-        precision: 2
+        value: "57"
       }
       unit {
         value: "years"
@@ -2012,8 +1989,7 @@ contained {
     }
     age_age {
       value {
-        value: 30.0
-        precision: 2
+        value: "30"
       }
       unit {
         value: "years"
@@ -2041,8 +2017,7 @@ contained {
       }
       onset_age {
         value {
-          value: 30.0
-          precision: 2
+          value: "30"
         }
         unit {
           value: "years"
@@ -2157,8 +2132,7 @@ contained {
     }
     age_age {
       value {
-        value: 31.0
-        precision: 2
+        value: "31"
       }
       unit {
         value: "years"

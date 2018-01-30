@@ -153,8 +153,7 @@ oral_diet {
     }
     amount {
       value {
-        value: 2.0
-        precision: 1
+        value: "2"
       }
       unit {
         value: "grams"
@@ -183,8 +182,7 @@ oral_diet {
     }
     amount {
       value {
-        value: 1500.0
-        precision: 4
+        value: "1500"
       }
       unit {
         value: "milliliter"

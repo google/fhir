@@ -69,8 +69,7 @@ active {
 }
 balance {
   value {
-    value: -1200.0
-    precision: 4
+    value: "-1200"
   }
   unit {
     value: "USD"

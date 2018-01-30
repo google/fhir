@@ -87,8 +87,7 @@ subject {
 }
 onset_age {
   value {
-    value: 52.0
-    precision: 2
+    value: "52"
   }
   unit {
     value: "years"
@@ -102,8 +101,7 @@ onset_age {
 }
 abatement_age {
   value {
-    value: 54.0
-    precision: 2
+    value: "54"
   }
   unit {
     value: "years"

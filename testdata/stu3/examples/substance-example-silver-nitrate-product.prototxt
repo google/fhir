@@ -61,8 +61,7 @@ instance {
   }
   quantity {
     value {
-      value: 100.0
-      precision: 3
+      value: "100"
     }
     unit {
       value: "mL"

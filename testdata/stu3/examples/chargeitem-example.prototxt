@@ -117,18 +117,15 @@ requesting_organization {
 }
 quantity {
   value {
-    value: 1.0
-    precision: 1
+    value: "1"
   }
 }
 factor_override {
-  value: 0.8
-  precision: 1
+  value: "0.8"
 }
 price_override {
   value {
-    value: 40.0
-    precision: 2
+    value: "40"
   }
   unit {
     value: "EUR"

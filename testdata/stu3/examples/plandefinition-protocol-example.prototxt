@@ -194,8 +194,7 @@ goal {
     detail_range {
       high {
         value {
-          value: 24.9
-          precision: 3
+          value: "24.9"
         }
         unit {
           value: "kg/m2"
@@ -204,8 +203,7 @@ goal {
     }
     due {
       value {
-        value: 1.0
-        precision: 1
+        value: "1"
       }
       unit {
         value: "a"

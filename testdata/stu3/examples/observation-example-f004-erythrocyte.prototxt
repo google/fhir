@@ -71,8 +71,7 @@ performer {
 }
 value_quantity {
   value {
-    value: 4.12
-    precision: 3
+    value: "4.12"
   }
   unit {
     value: "10^12/L"

@@ -74,8 +74,7 @@ quality {
   }
   score {
     value {
-      value: 5.0
-      precision: 4
+      value: "5.000"
     }
   }
   method {
@@ -92,28 +91,22 @@ quality {
     }
   }
   truth_t_p {
-    value: 129481.0
-    precision: 6
+    value: "129481"
   }
   truth_f_n {
-    value: 3168.0
-    precision: 4
+    value: "3168"
   }
   query_f_p {
-    value: 1507.0
-    precision: 4
+    value: "1507"
   }
   gt_f_p {
-    value: 2186.0
-    precision: 4
+    value: "2186"
   }
   precision {
-    value: 0.9885
-    precision: 4
+    value: "0.9885"
   }
   f_score {
-    value: 0.9823
-    precision: 4
+    value: "0.9823"
   }
 }
 repository {

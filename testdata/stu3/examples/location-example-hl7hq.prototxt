@@ -90,11 +90,9 @@ physical_type {
 }
 position {
   longitude {
-    value: 42.2565
-    precision: 8
+    value: "42.256500"
   }
   latitude {
-    value: -83.69471
-    precision: 8
+    value: "-83.694710"
   }
 }

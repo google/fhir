@@ -67,8 +67,7 @@ enteral_formula {
   }
   caloric_density {
     value {
-      value: 1.0
-      precision: 1
+      value: "1"
     }
     unit {
       value: "calories per milliliter"
@@ -107,8 +106,7 @@ enteral_formula {
     }
     rate_quantity {
       value {
-        value: 60.0
-        precision: 2
+        value: "60"
       }
       unit {
         value: "ml/hr"
@@ -135,8 +133,7 @@ enteral_formula {
     }
     rate_quantity {
       value {
-        value: 80.0
-        precision: 2
+        value: "80"
       }
       unit {
         value: "ml/hr"
@@ -163,8 +160,7 @@ enteral_formula {
     }
     rate_quantity {
       value {
-        value: 100.0
-        precision: 3
+        value: "100"
       }
       unit {
         value: "ml/hr"
@@ -179,8 +175,7 @@ enteral_formula {
   }
   max_volume_to_deliver {
     value {
-      value: 880.0
-      precision: 3
+      value: "880"
     }
     unit {
       value: "milliliter/day"

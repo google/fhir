@@ -66,8 +66,7 @@ contained {
       }
       onset_age {
         value {
-          value: 45.0
-          precision: 2
+          value: "45"
         }
         unit {
           value: "yr"
@@ -136,8 +135,7 @@ contained {
       }
       onset_age {
         value {
-          value: 35.0
-          precision: 2
+          value: "35"
         }
         unit {
           value: "yr"
@@ -265,8 +263,7 @@ contained {
     }
     age_age {
       value {
-        value: 70.0
-        precision: 2
+        value: "70"
       }
       unit {
         value: "yr"
@@ -359,8 +356,7 @@ contained {
     }
     age_age {
       value {
-        value: 55.0
-        precision: 2
+        value: "55"
       }
       unit {
         value: "yr"
@@ -447,8 +443,7 @@ contained {
     }
     age_age {
       value {
-        value: 74.0
-        precision: 2
+        value: "74"
       }
       unit {
         value: "yr"

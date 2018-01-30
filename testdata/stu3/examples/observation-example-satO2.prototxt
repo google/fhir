@@ -77,8 +77,7 @@ effective_date_time {
 }
 value_quantity {
   value {
-    value: 95.0
-    precision: 2
+    value: "95"
   }
   unit {
     value: "%"
@@ -114,8 +113,7 @@ device {
 reference_range {
   low {
     value {
-      value: 90.0
-      precision: 2
+      value: "90"
     }
     unit {
       value: "%"
@@ -129,8 +127,7 @@ reference_range {
   }
   high {
     value {
-      value: 99.0
-      precision: 2
+      value: "99"
     }
     unit {
       value: "%"

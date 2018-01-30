@@ -122,8 +122,7 @@ oral_diet {
         value: 3
       }
       period {
-        value: 1.0
-        precision: 1
+        value: "1"
       }
       period_unit {
         value: D
@@ -146,8 +145,7 @@ oral_diet {
     }
     amount {
       value {
-        value: 2.0
-        precision: 1
+        value: "2"
       }
       unit {
         value: "grams"
@@ -176,8 +174,7 @@ oral_diet {
     }
     amount {
       value {
-        value: 1000.0
-        precision: 4
+        value: "1000"
       }
       unit {
         value: "milligrams"
@@ -206,8 +203,7 @@ oral_diet {
     }
     amount {
       value {
-        value: 2.0
-        precision: 1
+        value: "2"
       }
       unit {
         value: "grams"

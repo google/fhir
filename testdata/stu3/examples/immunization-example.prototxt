@@ -97,8 +97,7 @@ route {
 }
 dose_quantity {
   value {
-    value: 5.0
-    precision: 1
+    value: "5"
   }
   system {
     value: "http://unitsofmeasure.org"

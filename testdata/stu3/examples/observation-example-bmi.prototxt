@@ -60,8 +60,7 @@ effective_date_time {
 }
 value_quantity {
   value {
-    value: 16.2
-    precision: 3
+    value: "16.2"
   }
   unit {
     value: "kg/m2"

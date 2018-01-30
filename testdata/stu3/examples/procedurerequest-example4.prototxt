@@ -45,8 +45,7 @@ occurrence_timing {
       value: 3
     }
     period {
-      value: 1.0
-      precision: 1
+      value: "1"
     }
     period_unit {
       value: WK

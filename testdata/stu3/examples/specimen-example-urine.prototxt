@@ -88,8 +88,7 @@ container {
   }
   capacity {
     value {
-      value: 50.0
-      precision: 2
+      value: "50"
     }
     unit {
       value: "mls"
@@ -97,8 +96,7 @@ container {
   }
   specimen_quantity {
     value {
-      value: 10.0
-      precision: 2
+      value: "10"
     }
     unit {
       value: "mls"

@@ -67,8 +67,7 @@ entry {
       value: MATCH
     }
     score {
-      value: 1.0
-      precision: 1
+      value: "1"
     }
   }
 }

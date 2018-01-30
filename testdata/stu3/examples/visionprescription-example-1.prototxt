@@ -64,32 +64,26 @@ dispense {
     value: RIGHT
   }
   cylinder {
-    value: -2.25
-    precision: 3
+    value: "-2.25"
   }
   axis {
     value: 160
   }
   add {
-    value: 1.75
-    precision: 3
+    value: "1.75"
   }
   power {
-    value: -2.75
-    precision: 3
+    value: "-2.75"
   }
   back_curve {
-    value: 8.7
-    precision: 2
+    value: "8.7"
   }
   diameter {
-    value: 14.0
-    precision: 3
+    value: "14.0"
   }
   duration {
     value {
-      value: 1.0
-      precision: 1
+      value: "1"
     }
     unit {
       value: "month"
@@ -128,32 +122,26 @@ dispense {
     value: LEFT
   }
   cylinder {
-    value: -3.5
-    precision: 3
+    value: "-3.50"
   }
   axis {
     value: 160
   }
   add {
-    value: 1.75
-    precision: 3
+    value: "1.75"
   }
   power {
-    value: -2.75
-    precision: 3
+    value: "-2.75"
   }
   back_curve {
-    value: 8.7
-    precision: 2
+    value: "8.7"
   }
   diameter {
-    value: 14.0
-    precision: 3
+    value: "14.0"
   }
   duration {
     value {
-      value: 1.0
-      precision: 1
+      value: "1"
     }
     unit {
       value: "month"

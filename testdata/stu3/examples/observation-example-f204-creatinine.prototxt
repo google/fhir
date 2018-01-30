@@ -56,8 +56,7 @@ performer {
 }
 value_quantity {
   value {
-    value: 122.0
-    precision: 3
+    value: "122"
   }
   unit {
     value: "umol/L"
@@ -93,14 +92,12 @@ interpretation {
 reference_range {
   low {
     value {
-      value: 64.0
-      precision: 2
+      value: "64"
     }
   }
   high {
     value {
-      value: 104.0
-      precision: 3
+      value: "104"
     }
   }
   type {

@@ -114,8 +114,7 @@ detail {
   }
   amount {
     value {
-      value: 1000.0
-      precision: 6
+      value: "1000.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -147,8 +146,7 @@ detail {
   }
   amount {
     value {
-      value: 4000.0
-      precision: 6
+      value: "4000.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -175,8 +173,7 @@ detail {
   }
   amount {
     value {
-      value: -1500.0
-      precision: 6
+      value: "-1500.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -198,8 +195,7 @@ form {
 }
 total {
   value {
-    value: 3500.0
-    precision: 6
+    value: "3500.00"
   }
   system {
     value: "urn:iso:std:iso:4217"

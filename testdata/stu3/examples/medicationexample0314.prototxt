@@ -54,8 +54,7 @@ ingredient {
   amount {
     numerator {
       value {
-        value: 0.25
-        precision: 2
+        value: "0.25"
       }
       system {
         value: "http://unitsofmeasure.org"
@@ -66,8 +65,7 @@ ingredient {
     }
     denominator {
       value {
-        value: 1.0
-        precision: 1
+        value: "1"
       }
       system {
         value: "http://snomed.info/sct"

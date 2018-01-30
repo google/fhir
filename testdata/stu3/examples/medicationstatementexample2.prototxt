@@ -60,8 +60,7 @@ contained {
       amount {
         numerator {
           value {
-            value: 500.0
-            precision: 3
+            value: "500"
           }
           system {
             value: "http://unitsofmeasure.org"
@@ -72,8 +71,7 @@ contained {
         }
         denominator {
           value {
-            value: 1.0
-            precision: 1
+            value: "1"
           }
           system {
             value: "http://hl7.org/fhir/v3/orderableDrugForm"
@@ -101,8 +99,7 @@ contained {
       amount {
         numerator {
           value {
-            value: 25.0
-            precision: 2
+            value: "25"
           }
           system {
             value: "http://unitsofmeasure.org"
@@ -113,8 +110,7 @@ contained {
         }
         denominator {
           value {
-            value: 1.0
-            precision: 1
+            value: "1"
           }
           system {
             value: "http://hl7.org/fhir/v3/orderableDrugForm"

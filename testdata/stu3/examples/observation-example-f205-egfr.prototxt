@@ -91,8 +91,7 @@ component {
   }
   value_quantity {
     value {
-      value: 60.0
-      precision: 2
+      value: "60"
     }
     comparator {
       value: GT
@@ -110,8 +109,7 @@ component {
   reference_range {
     low {
       value {
-        value: 60.0
-        precision: 2
+        value: "60"
       }
       unit {
         value: "mL/min/1.73m2"
@@ -131,8 +129,7 @@ component {
     age {
       low {
         value {
-          value: 18.0
-          precision: 2
+          value: "18"
         }
         unit {
           value: "yrs"
@@ -163,8 +160,7 @@ component {
   }
   value_quantity {
     value {
-      value: 60.0
-      precision: 2
+      value: "60"
     }
     unit {
       value: "mL/min/1.73m2"
@@ -179,8 +175,7 @@ component {
   reference_range {
     low {
       value {
-        value: 60.0
-        precision: 2
+        value: "60"
       }
       unit {
         value: "mL/min/1.73m2"
@@ -195,8 +190,7 @@ component {
     age {
       low {
         value {
-          value: 18.0
-          precision: 2
+          value: "18"
         }
         unit {
           value: "yrs"

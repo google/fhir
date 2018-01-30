@@ -77,8 +77,7 @@ target {
   detail_range {
     low {
       value {
-        value: 160.0
-        precision: 3
+        value: "160"
       }
       unit {
         value: "lbs"
@@ -92,8 +91,7 @@ target {
     }
     high {
       value {
-        value: 180.0
-        precision: 3
+        value: "180"
       }
       unit {
         value: "lbs"

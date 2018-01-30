@@ -67,8 +67,7 @@ performer {
 }
 value_quantity {
   value {
-    value: 28.0
-    precision: 2
+    value: "28"
   }
   unit {
     value: "mmol/L"
@@ -109,14 +108,12 @@ method {
 reference_range {
   low {
     value {
-      value: 22.0
-      precision: 2
+      value: "22"
     }
   }
   high {
     value {
-      value: 29.0
-      precision: 2
+      value: "29"
     }
   }
   type {

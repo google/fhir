@@ -198,12 +198,10 @@ subject {
 occurrence_timing {
   repeat {
     duration {
-      value: 15.0
-      precision: 2
+      value: "15"
     }
     duration_max {
-      value: 25.0
-      precision: 2
+      value: "25"
     }
     duration_unit {
       value: MIN
@@ -215,8 +213,7 @@ occurrence_timing {
       value: 4
     }
     period {
-      value: 1.0
-      precision: 1
+      value: "1"
     }
     period_unit {
       value: D

@@ -123,7 +123,7 @@ information {
   }
   value_quantity {
     value {
-      precision: 1
+      value: "0"
     }
   }
 }
@@ -150,8 +150,7 @@ information {
   }
   value_quantity {
     value {
-      value: 10.0
-      precision: 2
+      value: "10"
     }
   }
 }
@@ -240,8 +239,7 @@ item {
   }
   quantity {
     value {
-      value: 30.0
-      precision: 2
+      value: "30"
     }
     unit {
       value: "TAB"
@@ -255,8 +253,7 @@ item {
   }
   net {
     value {
-      value: 155.0
-      precision: 5
+      value: "155.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -284,8 +281,7 @@ item {
     }
     quantity {
       value {
-        value: 250.0
-        precision: 3
+        value: "250"
       }
       unit {
         value: "mg"
@@ -293,8 +289,7 @@ item {
     }
     net {
       value {
-        value: 20.0
-        precision: 4
+        value: "20.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -319,8 +314,7 @@ item {
       }
       net {
         value {
-          value: 20.0
-          precision: 4
+          value: "20.00"
         }
         system {
           value: "urn:iso:std:iso:4217"
@@ -350,8 +344,7 @@ item {
     }
     quantity {
       value {
-        value: 50.0
-        precision: 2
+        value: "50"
       }
       unit {
         value: "mg"
@@ -359,8 +352,7 @@ item {
     }
     net {
       value {
-        value: 25.0
-        precision: 4
+        value: "25.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -385,8 +377,7 @@ item {
       }
       net {
         value {
-          value: 25.0
-          precision: 4
+          value: "25.00"
         }
         system {
           value: "urn:iso:std:iso:4217"
@@ -416,8 +407,7 @@ item {
     }
     quantity {
       value {
-        value: 25.0
-        precision: 2
+        value: "25"
       }
       unit {
         value: "mg"
@@ -425,8 +415,7 @@ item {
     }
     net {
       value {
-        value: 28.0
-        precision: 4
+        value: "28.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -451,8 +440,7 @@ item {
       }
       net {
         value {
-          value: 28.0
-          precision: 4
+          value: "28.00"
         }
         system {
           value: "urn:iso:std:iso:4217"
@@ -479,8 +467,7 @@ item {
     }
     net {
       value {
-        value: 22.0
-        precision: 4
+        value: "22.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -506,8 +493,7 @@ item {
     }
     net {
       value {
-        value: 60.0
-        precision: 4
+        value: "60.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -520,8 +506,7 @@ item {
 }
 total {
   value {
-    value: 155.0
-    precision: 5
+    value: "155.00"
   }
   system {
     value: "urn:iso:std:iso:4217"

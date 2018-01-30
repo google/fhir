@@ -71,8 +71,7 @@ performer {
 }
 value_quantity {
   value {
-    value: 6.2
-    precision: 2
+    value: "6.2"
   }
   unit {
     value: "kPa"
@@ -100,8 +99,7 @@ interpretation {
 reference_range {
   low {
     value {
-      value: 4.8
-      precision: 2
+      value: "4.8"
     }
     unit {
       value: "kPa"
@@ -115,8 +113,7 @@ reference_range {
   }
   high {
     value {
-      value: 6.0
-      precision: 2
+      value: "6.0"
     }
     unit {
       value: "kPa"

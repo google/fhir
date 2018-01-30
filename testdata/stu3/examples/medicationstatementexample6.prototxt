@@ -81,8 +81,7 @@ dosage {
   }
   dose_quantity {
     value {
-      value: 5.0
-      precision: 1
+      value: "5"
     }
     unit {
       value: "mL"
@@ -97,14 +96,12 @@ dosage {
   max_dose_per_period {
     numerator {
       value {
-        value: 3.0
-        precision: 1
+        value: "3"
       }
     }
     denominator {
       value {
-        value: 1.0
-        precision: 1
+        value: "1"
       }
       system {
         value: "http://unitsofmeasure.org"

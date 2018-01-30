@@ -89,36 +89,28 @@ quality {
     }
   }
   truth_t_p {
-    value: 7749.0
-    precision: 4
+    value: "7749"
   }
   query_t_p {
-    value: 7984.0
-    precision: 4
+    value: "7984"
   }
   truth_f_n {
-    value: 2554.0
-    precision: 4
+    value: "2554"
   }
   query_f_p {
-    value: 10670.0
-    precision: 5
+    value: "10670"
   }
   gt_f_p {
-    value: 2186.0
-    precision: 4
+    value: "2186"
   }
   precision {
-    value: 0.428005
-    precision: 6
+    value: "0.428005"
   }
   recall {
-    value: 0.752111
-    precision: 6
+    value: "0.752111"
   }
   f_score {
-    value: 0.545551
-    precision: 6
+    value: "0.545551"
   }
 }
 repository {

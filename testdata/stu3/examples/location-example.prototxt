@@ -115,15 +115,13 @@ physical_type {
 }
 position {
   longitude {
-    value: -83.6945691
-    precision: 9
+    value: "-83.6945691"
   }
   latitude {
-    value: 42.25475478
-    precision: 10
+    value: "42.25475478"
   }
   altitude {
-    precision: 1
+    value: "0"
   }
 }
 managing_organization {

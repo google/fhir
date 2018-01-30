@@ -87,8 +87,7 @@ effective_date_time {
 }
 value_quantity {
   value {
-    value: 185.0
-    precision: 3
+    value: "185"
   }
   unit {
     value: "lbs"

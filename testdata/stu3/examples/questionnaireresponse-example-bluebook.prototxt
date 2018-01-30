@@ -83,8 +83,7 @@ item {
       }
       answer {
         value_decimal {
-          value: 3.25
-          precision: 3
+          value: "3.25"
         }
       }
     }
@@ -97,8 +96,7 @@ item {
       }
       answer {
         value_decimal {
-          value: 44.3
-          precision: 3
+          value: "44.3"
         }
       }
     }

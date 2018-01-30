@@ -139,8 +139,7 @@ item {
   }
   unit_price {
     value {
-      value: 9000.0
-      precision: 6
+      value: "9000.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -151,8 +150,7 @@ item {
   }
   net {
     value {
-      value: 9000.0
-      precision: 6
+      value: "9000.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -177,8 +175,7 @@ item {
     }
     unit_price {
       value {
-        value: 1000.0
-        precision: 6
+        value: "1000.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -189,8 +186,7 @@ item {
     }
     net {
       value {
-        value: 1000.0
-        precision: 6
+        value: "1000.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -216,8 +212,7 @@ item {
     }
     unit_price {
       value {
-        value: 1500.0
-        precision: 6
+        value: "1500.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -228,8 +223,7 @@ item {
     }
     net {
       value {
-        value: 1500.0
-        precision: 6
+        value: "1500.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -255,8 +249,7 @@ item {
     }
     unit_price {
       value {
-        value: 500.0
-        precision: 5
+        value: "500.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -267,8 +260,7 @@ item {
     }
     net {
       value {
-        value: 500.0
-        precision: 5
+        value: "500.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -294,8 +286,7 @@ item {
     }
     quantity {
       value {
-        value: 24.0
-        precision: 2
+        value: "24"
       }
     }
   }
@@ -315,14 +306,12 @@ item {
     }
     quantity {
       value {
-        value: 24.0
-        precision: 2
+        value: "24"
       }
     }
     unit_price {
       value {
-        value: 250.0
-        precision: 5
+        value: "250.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -333,8 +322,7 @@ item {
     }
     net {
       value {
-        value: 250.0
-        precision: 5
+        value: "250.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -368,8 +356,7 @@ item {
   }
   unit_price {
     value {
-      value: 105.0
-      precision: 5
+      value: "105.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -380,8 +367,7 @@ item {
   }
   net {
     value {
-      value: 105.0
-      precision: 5
+      value: "105.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -434,8 +420,7 @@ item {
   }
   unit_price {
     value {
-      value: 1100.0
-      precision: 6
+      value: "1100.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -446,8 +431,7 @@ item {
   }
   net {
     value {
-      value: 1100.0
-      precision: 6
+      value: "1100.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -482,8 +466,7 @@ item {
     }
     unit_price {
       value {
-        value: 750.0
-        precision: 5
+        value: "750.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -494,8 +477,7 @@ item {
     }
     net {
       value {
-        value: 750.0
-        precision: 5
+        value: "750.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -521,8 +503,7 @@ item {
     }
     unit_price {
       value {
-        value: 350.0
-        precision: 5
+        value: "350.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -533,8 +514,7 @@ item {
     }
     net {
       value {
-        value: 350.0
-        precision: 5
+        value: "350.00"
       }
       system {
         value: "urn:iso:std:iso:4217"

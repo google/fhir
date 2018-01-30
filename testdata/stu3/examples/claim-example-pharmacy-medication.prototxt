@@ -133,8 +133,7 @@ information {
   }
   value_quantity {
     value {
-      value: 2.0
-      precision: 1
+      value: "2"
     }
   }
 }
@@ -161,8 +160,7 @@ information {
   }
   value_quantity {
     value {
-      value: 90.0
-      precision: 2
+      value: "90"
     }
   }
 }
@@ -226,8 +224,7 @@ item {
   }
   quantity {
     value {
-      value: 90.0
-      precision: 2
+      value: "90"
     }
     unit {
       value: "TAB"
@@ -241,8 +238,7 @@ item {
   }
   net {
     value {
-      value: 90.0
-      precision: 4
+      value: "90.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -267,8 +263,7 @@ item {
     }
     net {
       value {
-        value: 45.0
-        precision: 4
+        value: "45.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -294,8 +289,7 @@ item {
     }
     net {
       value {
-        value: 9.0
-        precision: 3
+        value: "9.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -321,8 +315,7 @@ item {
     }
     net {
       value {
-        value: 36.0
-        precision: 4
+        value: "36.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -335,8 +328,7 @@ item {
 }
 total {
   value {
-    value: 90.0
-    precision: 4
+    value: "90.00"
   }
   system {
     value: "urn:iso:std:iso:4217"

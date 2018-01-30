@@ -85,8 +85,7 @@ dosage {
         value: 3
       }
       period {
-        value: 1.0
-        precision: 1
+        value: "1"
       }
       period_unit {
         value: D
@@ -111,8 +110,7 @@ dosage {
   max_dose_per_period {
     numerator {
       value {
-        value: 3.0
-        precision: 1
+        value: "3"
       }
       unit {
         value: "capsules"
@@ -126,8 +124,7 @@ dosage {
     }
     denominator {
       value {
-        value: 1.0
-        precision: 1
+        value: "1"
       }
       system {
         value: "http://unitsofmeasure.org"

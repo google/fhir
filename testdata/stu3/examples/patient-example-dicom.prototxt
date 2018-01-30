@@ -15,8 +15,7 @@ extension {
   }
   value_quantity {
     value {
-      value: 56.0
-      precision: 2
+      value: "56"
     }
     unit {
       value: "Y"
@@ -29,8 +28,7 @@ extension {
   }
   value_quantity {
     value {
-      value: 1.83
-      precision: 3
+      value: "1.83"
     }
     unit {
       value: "m"
@@ -43,8 +41,7 @@ extension {
   }
   value_quantity {
     value {
-      value: 72.58
-      precision: 4
+      value: "72.58"
     }
     unit {
       value: "kg"

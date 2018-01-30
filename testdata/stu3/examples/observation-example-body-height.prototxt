@@ -60,16 +60,7 @@ effective_date_time {
 }
 value_quantity {
   value {
-    value: 66.89999999999999
-    precision: 17
-    extension {
-      url {
-        value: "https://fhir.google.com/extensions/decimal-highPrecision"
-      }
-      value_string {
-        value: "66.899999999999991"
-      }
-    }
+    value: "66.899999999999991"
   }
   unit {
     value: "in"

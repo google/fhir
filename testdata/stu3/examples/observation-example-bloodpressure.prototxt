@@ -145,8 +145,7 @@ component {
   }
   value_quantity {
     value {
-      value: 107.0
-      precision: 3
+      value: "107"
     }
     unit {
       value: "mmHg"
@@ -191,8 +190,7 @@ component {
   }
   value_quantity {
     value {
-      value: 60.0
-      precision: 2
+      value: "60"
     }
     unit {
       value: "mmHg"

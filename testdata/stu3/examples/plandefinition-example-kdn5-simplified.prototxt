@@ -40,8 +40,7 @@ contained {
       timing {
         repeat {
           duration {
-            value: 30.0
-            precision: 2
+            value: "30"
           }
           duration_unit {
             value: MIN
@@ -55,8 +54,7 @@ contained {
       }
       dose_quantity {
         value {
-          value: 1250.0
-          precision: 4
+          value: "1250"
         }
         unit {
           value: "mg/m\302\262"
@@ -96,8 +94,7 @@ contained {
       timing {
         repeat {
           duration {
-            value: 30.0
-            precision: 2
+            value: "30"
           }
           duration_unit {
             value: MIN
@@ -365,8 +362,7 @@ action {
               value: 6
             }
             duration {
-              value: 21.0
-              precision: 2
+              value: "21"
             }
             duration_unit {
               value: D

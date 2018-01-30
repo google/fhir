@@ -94,8 +94,7 @@ ingredient {
   amount {
     numerator {
       value {
-        value: 5.0
-        precision: 1
+        value: "5"
       }
       system {
         value: "http://unitsofmeasure.org"
@@ -106,8 +105,7 @@ ingredient {
     }
     denominator {
       value {
-        value: 1.0
-        precision: 1
+        value: "1"
       }
       system {
         value: "http://hl7.org/fhir/v3/orderableDrugForm"
@@ -135,8 +133,7 @@ ingredient {
   amount {
     numerator {
       value {
-        value: 325.0
-        precision: 3
+        value: "325"
       }
       system {
         value: "http://unitsofmeasure.org"
@@ -147,8 +144,7 @@ ingredient {
     }
     denominator {
       value {
-        value: 1.0
-        precision: 1
+        value: "1"
       }
       system {
         value: "http://hl7.org/fhir/v3/orderableDrugForm"
@@ -181,8 +177,7 @@ package_value {
     }
     amount {
       value {
-        value: 100.0
-        precision: 3
+        value: "100"
       }
       system {
         value: "http://hl7.org/fhir/v3/orderableDrugForm"

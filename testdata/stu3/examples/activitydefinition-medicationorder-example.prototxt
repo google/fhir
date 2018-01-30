@@ -52,8 +52,7 @@ contained {
       amount {
         numerator {
           value {
-            value: 20.0
-            precision: 2
+            value: "20"
           }
           unit {
             value: "mg"
@@ -61,8 +60,7 @@ contained {
         }
         denominator {
           value {
-            value: 1.0
-            precision: 1
+            value: "1"
           }
           unit {
             value: "{tbl}"
@@ -429,8 +427,7 @@ dosage {
         value: 1
       }
       period {
-        value: 1.0
-        precision: 1
+        value: "1"
       }
       period_unit {
         value: D
@@ -452,8 +449,7 @@ dosage {
   }
   dose_quantity {
     value {
-      value: 1.0
-      precision: 1
+      value: "1"
     }
     unit {
       value: "{tbl}"

@@ -170,8 +170,7 @@ activity {
     }
     daily_amount {
       value {
-        value: 80.0
-        precision: 2
+        value: "80"
       }
       unit {
         value: "mmol"

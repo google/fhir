@@ -43,8 +43,7 @@ effective_date_time {
 }
 value_quantity {
   value {
-    value: 13.0
-    precision: 2
+    value: "13"
   }
   system {
     value: "http://unitsofmeasure.org"
@@ -56,8 +55,7 @@ value_quantity {
 reference_range {
   high {
     value {
-      value: 8.0
-      precision: 1
+      value: "8"
     }
     system {
       value: "http://unitsofmeasure.org"
@@ -75,8 +73,7 @@ reference_range {
 reference_range {
   low {
     value {
-      value: 9.0
-      precision: 1
+      value: "9"
     }
     system {
       value: "http://unitsofmeasure.org"
@@ -87,8 +84,7 @@ reference_range {
   }
   high {
     value {
-      value: 12.0
-      precision: 2
+      value: "12"
     }
     system {
       value: "http://unitsofmeasure.org"
@@ -106,8 +102,7 @@ reference_range {
 reference_range {
   low {
     value {
-      value: 13.0
-      precision: 2
+      value: "13"
     }
     system {
       value: "http://unitsofmeasure.org"

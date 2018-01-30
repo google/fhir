@@ -149,8 +149,7 @@ item {
   }
   unit_price {
     value {
-      value: 135.57
-      precision: 5
+      value: "135.57"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -161,8 +160,7 @@ item {
   }
   net {
     value {
-      value: 135.57
-      precision: 5
+      value: "135.57"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -186,8 +184,7 @@ item {
     }
     amount {
       value {
-        value: 120.0
-        precision: 5
+        value: "120.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -206,8 +203,7 @@ item {
       }
     }
     value {
-      value: 0.8
-      precision: 2
+      value: "0.80"
     }
   }
   adjudication {
@@ -220,8 +216,7 @@ item {
     }
     amount {
       value {
-        value: 96.0
-        precision: 4
+        value: "96.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -234,8 +229,7 @@ item {
 }
 total_cost {
   value {
-    value: 135.57
-    precision: 5
+    value: "135.57"
   }
   system {
     value: "urn:iso:std:iso:4217"
@@ -246,8 +240,7 @@ total_cost {
 }
 total_benefit {
   value {
-    value: 96.0
-    precision: 4
+    value: "96.00"
   }
   system {
     value: "urn:iso:std:iso:4217"

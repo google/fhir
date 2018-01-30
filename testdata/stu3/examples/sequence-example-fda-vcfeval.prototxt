@@ -86,28 +86,22 @@ quality {
     }
   }
   truth_t_p {
-    value: 7749.0
-    precision: 4
+    value: "7749"
   }
   truth_f_n {
-    value: 2554.0
-    precision: 4
+    value: "2554"
   }
   query_f_p {
-    value: 10670.0
-    precision: 5
+    value: "10670"
   }
   gt_f_p {
-    value: 2186.0
-    precision: 4
+    value: "2186"
   }
   precision {
-    value: 0.428005
-    precision: 6
+    value: "0.428005"
   }
   recall {
-    value: 0.752111
-    precision: 6
+    value: "0.752111"
   }
 }
 quality {
@@ -144,28 +138,22 @@ quality {
     }
   }
   truth_t_p {
-    value: 92106.0
-    precision: 5
+    value: "92106"
   }
   truth_f_n {
-    value: 1247.0
-    precision: 4
+    value: "1247"
   }
   query_f_p {
-    value: 21744.0
-    precision: 5
+    value: "21744"
   }
   gt_f_p {
-    value: 493.0
-    precision: 3
+    value: "493"
   }
   precision {
-    value: 0.808602
-    precision: 6
+    value: "0.808602"
   }
   recall {
-    value: 0.986642
-    precision: 6
+    value: "0.986642"
   }
 }
 repository {

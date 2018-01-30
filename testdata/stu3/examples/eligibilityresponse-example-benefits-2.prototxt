@@ -262,8 +262,7 @@ insurance {
       }
       allowed_money {
         value {
-          value: 500000.0
-          precision: 6
+          value: "500000"
         }
         system {
           value: "urn:iso:std:iso:4217"
@@ -274,8 +273,7 @@ insurance {
       }
       used_money {
         value {
-          value: 3748.0
-          precision: 6
+          value: "3748.00"
         }
         system {
           value: "urn:iso:std:iso:4217"
@@ -295,8 +293,7 @@ insurance {
       }
       allowed_money {
         value {
-          value: 100.0
-          precision: 3
+          value: "100"
         }
         system {
           value: "urn:iso:std:iso:4217"
@@ -383,8 +380,7 @@ insurance {
       }
       allowed_money {
         value {
-          value: 15000.0
-          precision: 5
+          value: "15000"
         }
         system {
           value: "urn:iso:std:iso:4217"
@@ -459,8 +455,7 @@ insurance {
       }
       allowed_money {
         value {
-          value: 2000.0
-          precision: 4
+          value: "2000"
         }
         system {
           value: "urn:iso:std:iso:4217"

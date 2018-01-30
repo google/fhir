@@ -78,8 +78,7 @@ ingredient {
   amount {
     numerator {
       value {
-        value: 500.0
-        precision: 3
+        value: "500"
       }
       system {
         value: "http://unitsofmeasure.org"
@@ -90,8 +89,7 @@ ingredient {
     }
     denominator {
       value {
-        value: 10.0
-        precision: 2
+        value: "10"
       }
       system {
         value: "http://unitsofmeasure.org"
@@ -132,8 +130,7 @@ package_value {
     }
     amount {
       value {
-        value: 10.0
-        precision: 2
+        value: "10"
       }
       system {
         value: "http://unitsofmeasure.org"

@@ -454,8 +454,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 176.0
-        precision: 3
+        value: "176"
       }
       unit {
         value: "g/L"
@@ -470,8 +469,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 135.0
-          precision: 3
+          value: "135"
         }
         unit {
           value: "g/L"
@@ -485,8 +483,7 @@ contained {
       }
       high {
         value {
-          value: 180.0
-          precision: 3
+          value: "180"
         }
         unit {
           value: "g/L"
@@ -540,8 +537,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 5.9
-        precision: 2
+        value: "5.9"
       }
       unit {
         value: "x10*12/L"
@@ -556,8 +552,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 4.2
-          precision: 2
+          value: "4.2"
         }
         unit {
           value: "x10*12/L"
@@ -571,8 +566,7 @@ contained {
       }
       high {
         value {
-          value: 6.0
-          precision: 2
+          value: "6.0"
         }
         unit {
           value: "x10*12/L"
@@ -626,8 +620,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 55.0
-        precision: 2
+        value: "55"
       }
       unit {
         value: "%"
@@ -646,8 +639,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 38.0
-          precision: 2
+          value: "38"
         }
         unit {
           value: "%"
@@ -655,8 +647,7 @@ contained {
       }
       high {
         value {
-          value: 52.0
-          precision: 2
+          value: "52"
         }
         unit {
           value: "%"
@@ -704,8 +695,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 99.0
-        precision: 2
+        value: "99"
       }
       unit {
         value: "fL"
@@ -730,8 +720,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 80.0
-          precision: 2
+          value: "80"
         }
         unit {
           value: "fL"
@@ -745,8 +734,7 @@ contained {
       }
       high {
         value {
-          value: 98.0
-          precision: 2
+          value: "98"
         }
         unit {
           value: "fL"
@@ -800,8 +788,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 36.0
-        precision: 2
+        value: "36"
       }
       unit {
         value: "pg"
@@ -826,8 +813,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 27.0
-          precision: 2
+          value: "27"
         }
         unit {
           value: "pg"
@@ -841,8 +827,7 @@ contained {
       }
       high {
         value {
-          value: 35.0
-          precision: 2
+          value: "35"
         }
         unit {
           value: "pg"
@@ -896,8 +881,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 444.0
-        precision: 3
+        value: "444"
       }
       unit {
         value: "x10*9/L"
@@ -912,8 +896,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 150.0
-          precision: 3
+          value: "150"
         }
         unit {
           value: "x10*9/L"
@@ -927,8 +910,7 @@ contained {
       }
       high {
         value {
-          value: 450.0
-          precision: 3
+          value: "450"
         }
         unit {
           value: "x10*9/L"
@@ -982,8 +964,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 4.6
-        precision: 2
+        value: "4.6"
       }
       unit {
         value: "x10*9/L"
@@ -998,8 +979,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 4.0
-          precision: 2
+          value: "4.0"
         }
         unit {
           value: "x10*9/L"
@@ -1013,8 +993,7 @@ contained {
       }
       high {
         value {
-          value: 11.0
-          precision: 3
+          value: "11.0"
         }
         unit {
           value: "x10*9/L"
@@ -1068,8 +1047,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 20.0
-        precision: 2
+        value: "20"
       }
       unit {
         value: "%"
@@ -1122,8 +1100,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 0.9
-        precision: 1
+        value: "0.9"
       }
       unit {
         value: "x10*9/L"
@@ -1148,8 +1125,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 2.0
-          precision: 2
+          value: "2.0"
         }
         unit {
           value: "x10*9/L"
@@ -1163,8 +1139,7 @@ contained {
       }
       high {
         value {
-          value: 7.5
-          precision: 2
+          value: "7.5"
         }
         unit {
           value: "x10*9/L"
@@ -1218,8 +1193,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 20.0
-        precision: 2
+        value: "20"
       }
       unit {
         value: "%"
@@ -1272,8 +1246,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 0.9
-        precision: 1
+        value: "0.9"
       }
       unit {
         value: "x10*9/L"
@@ -1298,8 +1271,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 1.1
-          precision: 2
+          value: "1.1"
         }
         unit {
           value: "x10*9/L"
@@ -1313,8 +1285,7 @@ contained {
       }
       high {
         value {
-          value: 4.0
-          precision: 2
+          value: "4.0"
         }
         unit {
           value: "x10*9/L"
@@ -1368,8 +1339,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 20.0
-        precision: 2
+        value: "20"
       }
       unit {
         value: "%"
@@ -1422,8 +1392,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 0.9
-        precision: 1
+        value: "0.9"
       }
       unit {
         value: "x10*9/L"
@@ -1438,8 +1407,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 0.2
-          precision: 1
+          value: "0.2"
         }
         unit {
           value: "x10*9/L"
@@ -1453,8 +1421,7 @@ contained {
       }
       high {
         value {
-          value: 1.0
-          precision: 2
+          value: "1.0"
         }
         unit {
           value: "x10*9/L"
@@ -1508,8 +1475,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 20.0
-        precision: 2
+        value: "20"
       }
       unit {
         value: "%"
@@ -1562,8 +1528,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 0.92
-        precision: 2
+        value: "0.92"
       }
       unit {
         value: "x10*9/L"
@@ -1588,8 +1553,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 0.04
-          precision: 1
+          value: "0.04"
         }
         unit {
           value: "x10*9/L"
@@ -1603,8 +1567,7 @@ contained {
       }
       high {
         value {
-          value: 0.4
-          precision: 2
+          value: "0.40"
         }
         unit {
           value: "x10*9/L"
@@ -1658,8 +1621,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 20.0
-        precision: 2
+        value: "20"
       }
       unit {
         value: "%"
@@ -1712,8 +1674,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 0.92
-        precision: 2
+        value: "0.92"
       }
       unit {
         value: "x10*9/L"
@@ -1728,8 +1689,7 @@ contained {
     reference_range {
       high {
         value {
-          value: 0.21
-          precision: 2
+          value: "0.21"
         }
         unit {
           value: "x10*9/L"
@@ -2057,8 +2017,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 140.0
-        precision: 3
+        value: "140"
       }
       unit {
         value: "mmol/L"
@@ -2067,8 +2026,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 137.0
-          precision: 3
+          value: "137"
         }
         unit {
           value: "mmol/L"
@@ -2076,8 +2034,7 @@ contained {
       }
       high {
         value {
-          value: 147.0
-          precision: 3
+          value: "147"
         }
         unit {
           value: "mmol/L"
@@ -2130,8 +2087,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 4.2
-        precision: 2
+        value: "4.2"
       }
       unit {
         value: "mmol/L"
@@ -2140,8 +2096,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 3.5
-          precision: 2
+          value: "3.5"
         }
         unit {
           value: "mmol/L"
@@ -2149,8 +2104,7 @@ contained {
       }
       high {
         value {
-          value: 5.0
-          precision: 2
+          value: "5.0"
         }
         unit {
           value: "mmol/L"
@@ -2203,8 +2157,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 105.0
-        precision: 3
+        value: "105"
       }
       unit {
         value: "mmol/L"
@@ -2213,8 +2166,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 96.0
-          precision: 2
+          value: "96"
         }
         unit {
           value: "mmol/L"
@@ -2222,8 +2174,7 @@ contained {
       }
       high {
         value {
-          value: 109.0
-          precision: 3
+          value: "109"
         }
         unit {
           value: "mmol/L"
@@ -2276,8 +2227,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 26.0
-        precision: 2
+        value: "26"
       }
       unit {
         value: "mmol/L"
@@ -2286,8 +2236,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 25.0
-          precision: 2
+          value: "25"
         }
         unit {
           value: "mmol/L"
@@ -2295,8 +2244,7 @@ contained {
       }
       high {
         value {
-          value: 33.0
-          precision: 2
+          value: "33"
         }
         unit {
           value: "mmol/L"
@@ -2349,8 +2297,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 13.0
-        precision: 2
+        value: "13"
       }
       unit {
         value: "mmol/L"
@@ -2359,8 +2306,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 4.0
-          precision: 1
+          value: "4"
         }
         unit {
           value: "mmol/L"
@@ -2368,8 +2314,7 @@ contained {
       }
       high {
         value {
-          value: 17.0
-          precision: 2
+          value: "17"
         }
         unit {
           value: "mmol/L"
@@ -2422,8 +2367,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 7.4
-        precision: 2
+        value: "7.4"
       }
       unit {
         value: "mmol/L"
@@ -2432,8 +2376,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 3.0
-          precision: 2
+          value: "3.0"
         }
         unit {
           value: "mmol/L"
@@ -2441,8 +2384,7 @@ contained {
       }
       high {
         value {
-          value: 7.7
-          precision: 2
+          value: "7.7"
         }
         unit {
           value: "mmol/L"
@@ -2495,8 +2437,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 4.7
-        precision: 2
+        value: "4.7"
       }
       unit {
         value: "mmol/L"
@@ -2505,8 +2446,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 2.0
-          precision: 2
+          value: "2.0"
         }
         unit {
           value: "mmol/L"
@@ -2514,8 +2454,7 @@ contained {
       }
       high {
         value {
-          value: 7.0
-          precision: 2
+          value: "7.0"
         }
         unit {
           value: "mmol/L"
@@ -2568,8 +2507,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 0.09
-        precision: 1
+        value: "0.09"
       }
       unit {
         value: "mmol/L"
@@ -2578,8 +2516,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 0.04
-          precision: 1
+          value: "0.04"
         }
         unit {
           value: "mmol/L"
@@ -2587,8 +2524,7 @@ contained {
       }
       high {
         value {
-          value: 0.11
-          precision: 2
+          value: "0.11"
         }
         unit {
           value: "mmol/L"
@@ -2641,8 +2577,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 0.39
-        precision: 2
+        value: "0.39"
       }
       unit {
         value: "mmol/L"
@@ -2661,8 +2596,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 0.14
-          precision: 2
+          value: "0.14"
         }
         unit {
           value: "mmol/L"
@@ -2670,8 +2604,7 @@ contained {
       }
       high {
         value {
-          value: 0.35
-          precision: 2
+          value: "0.35"
         }
         unit {
           value: "mmol/L"
@@ -2724,8 +2657,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 7.0
-        precision: 1
+        value: "7"
       }
       unit {
         value: "umol/L"
@@ -2734,8 +2666,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 2.0
-          precision: 1
+          value: "2"
         }
         unit {
           value: "umol/L"
@@ -2743,8 +2674,7 @@ contained {
       }
       high {
         value {
-          value: 20.0
-          precision: 2
+          value: "20"
         }
         unit {
           value: "umol/L"
@@ -2797,8 +2727,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 3.0
-        precision: 1
+        value: "3"
       }
       unit {
         value: "umol/L"
@@ -2807,7 +2736,7 @@ contained {
     reference_range {
       low {
         value {
-          precision: 1
+          value: "0"
         }
         unit {
           value: "umol/L"
@@ -2815,8 +2744,7 @@ contained {
       }
       high {
         value {
-          value: 8.0
-          precision: 1
+          value: "8"
         }
         unit {
           value: "umol/L"
@@ -2869,8 +2797,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 108.0
-        precision: 3
+        value: "108"
       }
       unit {
         value: "U/L"
@@ -2879,8 +2806,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 30.0
-          precision: 2
+          value: "30"
         }
         unit {
           value: "U/L"
@@ -2888,8 +2814,7 @@ contained {
       }
       high {
         value {
-          value: 115.0
-          precision: 3
+          value: "115"
         }
         unit {
           value: "U/L"
@@ -2942,8 +2867,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 35.0
-        precision: 2
+        value: "35"
       }
       unit {
         value: "U/L"
@@ -2952,7 +2876,7 @@ contained {
     reference_range {
       low {
         value {
-          precision: 1
+          value: "0"
         }
         unit {
           value: "U/L"
@@ -2960,8 +2884,7 @@ contained {
       }
       high {
         value {
-          value: 45.0
-          precision: 2
+          value: "45"
         }
         unit {
           value: "U/L"
@@ -3014,8 +2937,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 54.0
-        precision: 2
+        value: "54"
       }
       unit {
         value: "U/L"
@@ -3034,7 +2956,7 @@ contained {
     reference_range {
       low {
         value {
-          precision: 1
+          value: "0"
         }
         unit {
           value: "U/L"
@@ -3042,8 +2964,7 @@ contained {
       }
       high {
         value {
-          value: 45.0
-          precision: 2
+          value: "45"
         }
         unit {
           value: "U/L"
@@ -3096,8 +3017,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 30.0
-        precision: 2
+        value: "30"
       }
       unit {
         value: "U/L"
@@ -3106,7 +3026,7 @@ contained {
     reference_range {
       low {
         value {
-          precision: 1
+          value: "0"
         }
         unit {
           value: "U/L"
@@ -3114,8 +3034,7 @@ contained {
       }
       high {
         value {
-          value: 41.0
-          precision: 2
+          value: "41"
         }
         unit {
           value: "U/L"
@@ -3168,8 +3087,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 131.0
-        precision: 3
+        value: "131"
       }
       unit {
         value: "U/L"
@@ -3178,8 +3096,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 80.0
-          precision: 2
+          value: "80"
         }
         unit {
           value: "U/L"
@@ -3187,8 +3104,7 @@ contained {
       }
       high {
         value {
-          value: 250.0
-          precision: 3
+          value: "250"
         }
         unit {
           value: "U/L"
@@ -3241,8 +3157,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 2.38
-        precision: 3
+        value: "2.38"
       }
       unit {
         value: "mmol/L"
@@ -3251,8 +3166,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 2.25
-          precision: 3
+          value: "2.25"
         }
         unit {
           value: "mmol/L"
@@ -3260,8 +3174,7 @@ contained {
       }
       high {
         value {
-          value: 2.65
-          precision: 3
+          value: "2.65"
         }
         unit {
           value: "mmol/L"
@@ -3314,8 +3227,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 2.39
-        precision: 3
+        value: "2.39"
       }
       unit {
         value: "mmol/L"
@@ -3324,8 +3236,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 2.25
-          precision: 3
+          value: "2.25"
         }
         unit {
           value: "mmol/L"
@@ -3333,8 +3244,7 @@ contained {
       }
       high {
         value {
-          value: 2.65
-          precision: 3
+          value: "2.65"
         }
         unit {
           value: "mmol/L"
@@ -3387,8 +3297,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 1.5
-        precision: 2
+        value: "1.5"
       }
       unit {
         value: "mmol/L"
@@ -3397,8 +3306,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 0.8
-          precision: 1
+          value: "0.8"
         }
         unit {
           value: "mmol/L"
@@ -3406,8 +3314,7 @@ contained {
       }
       high {
         value {
-          value: 1.5
-          precision: 2
+          value: "1.5"
         }
         unit {
           value: "mmol/L"
@@ -3460,8 +3367,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 67.0
-        precision: 2
+        value: "67"
       }
       unit {
         value: "g/L"
@@ -3470,8 +3376,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 60.0
-          precision: 2
+          value: "60"
         }
         unit {
           value: "g/L"
@@ -3479,8 +3384,7 @@ contained {
       }
       high {
         value {
-          value: 82.0
-          precision: 2
+          value: "82"
         }
         unit {
           value: "g/L"
@@ -3533,8 +3437,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 42.0
-        precision: 2
+        value: "42"
       }
       unit {
         value: "g/L"
@@ -3543,8 +3446,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 35.0
-          precision: 2
+          value: "35"
         }
         unit {
           value: "g/L"
@@ -3552,8 +3454,7 @@ contained {
       }
       high {
         value {
-          value: 50.0
-          precision: 2
+          value: "50"
         }
         unit {
           value: "g/L"
@@ -3606,8 +3507,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 25.0
-        precision: 2
+        value: "25"
       }
       unit {
         value: "g/L"
@@ -3616,8 +3516,7 @@ contained {
     reference_range {
       low {
         value {
-          value: 20.0
-          precision: 2
+          value: "20"
         }
         unit {
           value: "g/L"
@@ -3625,8 +3524,7 @@ contained {
       }
       high {
         value {
-          value: 40.0
-          precision: 2
+          value: "40"
         }
         unit {
           value: "g/L"
@@ -3820,8 +3718,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 5.0
-        precision: 2
+        value: "5.0"
       }
       unit {
         value: "pH"
@@ -3950,8 +3847,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 1.009
-        precision: 4
+        value: "1.009"
       }
     }
     specimen {
@@ -4211,8 +4107,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 1.0
-        precision: 1
+        value: "1"
       }
       unit {
         value: "/uL"
@@ -4274,8 +4169,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 1.0
-        precision: 1
+        value: "1"
       }
       comparator {
         value: LT
@@ -4340,8 +4234,7 @@ contained {
     }
     value_quantity {
       value {
-        value: 1.0
-        precision: 1
+        value: "1"
       }
       comparator {
         value: LT

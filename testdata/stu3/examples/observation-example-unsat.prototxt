@@ -88,8 +88,7 @@ comment {
 reference_range {
   low {
     value {
-      value: 3.1
-      precision: 2
+      value: "3.1"
     }
     unit {
       value: "mmol/l"
@@ -103,8 +102,7 @@ reference_range {
   }
   high {
     value {
-      value: 6.2
-      precision: 2
+      value: "6.2"
     }
     unit {
       value: "mmol/l"

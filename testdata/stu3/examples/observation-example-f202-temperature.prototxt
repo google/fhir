@@ -94,8 +94,7 @@ performer {
 }
 value_quantity {
   value {
-    value: 39.0
-    precision: 2
+    value: "39"
   }
   unit {
     value: "degrees C"
@@ -146,8 +145,7 @@ method {
 reference_range {
   high {
     value {
-      value: 38.2
-      precision: 3
+      value: "38.2"
     }
     unit {
       value: "degrees C"

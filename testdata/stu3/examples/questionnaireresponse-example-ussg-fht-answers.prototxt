@@ -200,8 +200,7 @@ item {
       }
       answer {
         value_decimal {
-          value: 63.0
-          precision: 2
+          value: "63"
         }
         item {
           link_id {
@@ -243,8 +242,7 @@ item {
       }
       answer {
         value_decimal {
-          value: 127.0
-          precision: 3
+          value: "127"
         }
         item {
           link_id {
@@ -286,8 +284,7 @@ item {
       }
       answer {
         value_decimal {
-          value: 22.5
-          precision: 3
+          value: "22.5"
         }
       }
     }
@@ -479,8 +476,7 @@ item {
               }
               answer {
                 value_decimal {
-                  value: 17.0
-                  precision: 2
+                  value: "17"
                 }
               }
             }
@@ -647,8 +643,7 @@ item {
               }
               answer {
                 value_decimal {
-                  value: 32.0
-                  precision: 2
+                  value: "32"
                 }
               }
             }
@@ -865,8 +860,7 @@ item {
               }
               answer {
                 value_decimal {
-                  value: 36.0
-                  precision: 2
+                  value: "36"
                 }
               }
             }
@@ -1083,8 +1077,7 @@ item {
               }
               answer {
                 value_decimal {
-                  value: 16.0
-                  precision: 2
+                  value: "16"
                 }
               }
             }
@@ -1251,8 +1244,7 @@ item {
               }
               answer {
                 value_decimal {
-                  value: 15.0
-                  precision: 2
+                  value: "15"
                 }
               }
             }
@@ -1419,8 +1411,7 @@ item {
               }
               answer {
                 value_decimal {
-                  value: 52.0
-                  precision: 2
+                  value: "52"
                 }
               }
             }
@@ -1587,8 +1578,7 @@ item {
               }
               answer {
                 value_decimal {
-                  value: 56.0
-                  precision: 2
+                  value: "56"
                 }
               }
             }
@@ -1755,8 +1745,7 @@ item {
               }
               answer {
                 value_decimal {
-                  value: 57.0
-                  precision: 2
+                  value: "57"
                 }
               }
             }
@@ -2662,8 +2651,7 @@ item {
               }
               answer {
                 value_decimal {
-                  value: 60.0
-                  precision: 2
+                  value: "60"
                 }
               }
             }
@@ -2830,8 +2818,7 @@ item {
               }
               answer {
                 value_decimal {
-                  value: 57.0
-                  precision: 2
+                  value: "57"
                 }
               }
             }
@@ -3496,8 +3483,7 @@ item {
               }
               answer {
                 value_decimal {
-                  value: 30.0
-                  precision: 2
+                  value: "30"
                 }
               }
             }
@@ -3714,8 +3700,7 @@ item {
               }
               answer {
                 value_decimal {
-                  value: 31.0
-                  precision: 2
+                  value: "31"
                 }
               }
             }

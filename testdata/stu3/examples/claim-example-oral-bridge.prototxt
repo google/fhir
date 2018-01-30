@@ -244,8 +244,7 @@ item {
   }
   unit_price {
     value {
-      value: 1400.0
-      precision: 6
+      value: "1400.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -255,13 +254,11 @@ item {
     }
   }
   factor {
-    value: 0.75
-    precision: 2
+    value: "0.75"
   }
   net {
     value {
-      value: 1050.0
-      precision: 6
+      value: "1050.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -319,8 +316,7 @@ item {
   }
   unit_price {
     value {
-      value: 105.0
-      precision: 5
+      value: "105.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -331,8 +327,7 @@ item {
   }
   net {
     value {
-      value: 105.0
-      precision: 5
+      value: "105.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -398,8 +393,7 @@ item {
   }
   unit_price {
     value {
-      value: 1100.0
-      precision: 6
+      value: "1100.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -410,8 +404,7 @@ item {
   }
   net {
     value {
-      value: 1100.0
-      precision: 6
+      value: "1100.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -446,8 +439,7 @@ item {
     }
     unit_price {
       value {
-        value: 1000.0
-        precision: 6
+        value: "1000.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -457,13 +449,11 @@ item {
       }
     }
     factor {
-      value: 0.75
-      precision: 2
+      value: "0.75"
     }
     net {
       value {
-        value: 750.0
-        precision: 5
+        value: "750.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -489,8 +479,7 @@ item {
     }
     unit_price {
       value {
-        value: 350.0
-        precision: 5
+        value: "350.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -501,8 +490,7 @@ item {
     }
     net {
       value {
-        value: 350.0
-        precision: 5
+        value: "350.00"
       }
       system {
         value: "urn:iso:std:iso:4217"
@@ -515,8 +503,7 @@ item {
 }
 total {
   value {
-    value: 2255.0
-    precision: 6
+    value: "2255.00"
   }
   system {
     value: "urn:iso:std:iso:4217"

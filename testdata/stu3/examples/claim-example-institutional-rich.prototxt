@@ -262,8 +262,7 @@ item {
   }
   unit_price {
     value {
-      value: 125.0
-      precision: 5
+      value: "125.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -274,8 +273,7 @@ item {
   }
   net {
     value {
-      value: 125.0
-      precision: 5
+      value: "125.00"
     }
     system {
       value: "urn:iso:std:iso:4217"
@@ -287,8 +285,7 @@ item {
 }
 total {
   value {
-    value: 125.0
-    precision: 5
+    value: "125.00"
   }
   system {
     value: "urn:iso:std:iso:4217"

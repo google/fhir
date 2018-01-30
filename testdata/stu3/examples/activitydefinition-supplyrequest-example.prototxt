@@ -36,8 +36,7 @@ code {
 }
 quantity {
   value {
-    value: 10.0
-    precision: 2
+    value: "10"
   }
 }
 transform {

@@ -81,25 +81,20 @@ component {
   value_sampled_data {
     origin {
       value {
-        value: 2048.0
-        precision: 4
+        value: "2048"
       }
     }
     period {
-      value: 10.0
-      precision: 2
+      value: "10"
     }
     factor {
-      value: 1.612
-      precision: 4
+      value: "1.612"
     }
     lower_limit {
-      value: -3300.0
-      precision: 4
+      value: "-3300"
     }
     upper_limit {
-      value: 3300.0
-      precision: 4
+      value: "3300"
     }
     dimensions {
       value: 1
@@ -126,25 +121,20 @@ component {
   value_sampled_data {
     origin {
       value {
-        value: 2048.0
-        precision: 4
+        value: "2048"
       }
     }
     period {
-      value: 10.0
-      precision: 2
+      value: "10"
     }
     factor {
-      value: 1.612
-      precision: 4
+      value: "1.612"
     }
     lower_limit {
-      value: -3300.0
-      precision: 4
+      value: "-3300"
     }
     upper_limit {
-      value: 3300.0
-      precision: 4
+      value: "3300"
     }
     dimensions {
       value: 1
@@ -171,25 +161,20 @@ component {
   value_sampled_data {
     origin {
       value {
-        value: 2048.0
-        precision: 4
+        value: "2048"
       }
     }
     period {
-      value: 10.0
-      precision: 2
+      value: "10"
     }
     factor {
-      value: 1.612
-      precision: 4
+      value: "1.612"
     }
     lower_limit {
-      value: -3300.0
-      precision: 4
+      value: "-3300"
     }
     upper_limit {
-      value: 3300.0
-      precision: 4
+      value: "3300"
     }
     dimensions {
       value: 1

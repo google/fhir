@@ -117,8 +117,7 @@ enteral_formula {
   }
   caloric_density {
     value {
-      value: 1.5
-      precision: 2
+      value: "1.5"
     }
     unit {
       value: "calories per milliliter"
@@ -157,8 +156,7 @@ enteral_formula {
           value: 1
         }
         period {
-          value: 4.0
-          precision: 1
+          value: "4"
         }
         period_unit {
           value: H
@@ -167,8 +165,7 @@ enteral_formula {
     }
     quantity {
       value {
-        value: 240.0
-        precision: 3
+        value: "240"
       }
       unit {
         value: "milliliters"
@@ -183,8 +180,7 @@ enteral_formula {
   }
   max_volume_to_deliver {
     value {
-      value: 1440.0
-      precision: 4
+      value: "1440"
     }
     unit {
       value: "milliliter/day"

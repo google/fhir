@@ -52,8 +52,7 @@ condition {
   }
   onset_age {
     value {
-      value: 56.0
-      precision: 2
+      value: "56"
     }
     unit {
       value: "yr"

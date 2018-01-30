@@ -118,16 +118,7 @@ modifier_extension {
     value: "http://example.org/fhir/StructureDefinition/pi"
   }
   value_decimal {
-    value: 3.141592653589793
-    precision: 16
-    extension {
-      url {
-        value: "https://fhir.google.com/extensions/decimal-highPrecision"
-      }
-      value_string {
-        value: "3.141592653589793"
-      }
-    }
+    value: "3.141592653589793"
   }
 }
 modifier_extension {
@@ -135,16 +126,7 @@ modifier_extension {
     value: "http://example.org/fhir/StructureDefinition/max-decimal-precision"
   }
   value_decimal {
-    value: 1.0006502214162465
-    precision: 18
-    extension {
-      url {
-        value: "https://fhir.google.com/extensions/decimal-highPrecision"
-      }
-      value_string {
-        value: "1.00065022141624642"
-      }
-    }
+    value: "1.00065022141624642"
   }
 }
 identifier {

@@ -122,8 +122,7 @@ oral_diet {
         value: 3
       }
       period {
-        value: 1.0
-        precision: 1
+        value: "1"
       }
       period_unit {
         value: D
@@ -146,8 +145,7 @@ oral_diet {
     }
     amount {
       value {
-        value: 75.0
-        precision: 2
+        value: "75"
       }
       unit {
         value: "grams"

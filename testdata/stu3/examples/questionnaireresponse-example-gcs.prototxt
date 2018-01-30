@@ -46,8 +46,7 @@ item {
           value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
         }
         value_decimal {
-          value: 4.0
-          precision: 1
+          value: "4"
         }
       }
       system {
@@ -73,8 +72,7 @@ item {
           value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
         }
         value_decimal {
-          value: 5.0
-          precision: 1
+          value: "5"
         }
       }
       system {
@@ -100,8 +98,7 @@ item {
           value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
         }
         value_decimal {
-          value: 4.0
-          precision: 1
+          value: "4"
         }
       }
       system {

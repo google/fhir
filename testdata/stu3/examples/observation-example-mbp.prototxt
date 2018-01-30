@@ -55,8 +55,7 @@ effective_date_time {
 }
 value_quantity {
   value {
-    value: 80.0
-    precision: 2
+    value: "80"
   }
   unit {
     value: "mm[Hg]"

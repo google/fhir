@@ -106,8 +106,7 @@ element {
       value: "Simple"
     }
     value_decimal {
-      value: 10.0
-      precision: 3
+      value: "10.0"
     }
   }
   mapping {
