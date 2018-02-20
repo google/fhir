@@ -60,7 +60,7 @@ entry {
         }
       }
       subject {
-        reference {
+        uri {
           value: "http://fhir.healthintersections.com.au/open/Patient/d1"
         }
         display {
@@ -68,7 +68,7 @@ entry {
         }
       }
       encounter {
-        reference {
+        uri {
           value: "http://fhir.healthintersections.com.au/open/Encounter/doc-example"
         }
       }
@@ -78,8 +78,8 @@ entry {
         precision: SECOND
       }
       author {
-        reference {
-          value: "Practitioner/example"
+        practitioner_id {
+          value: "example"
         }
         display {
           value: "Doctor Dave"
@@ -117,7 +117,7 @@ entry {
           }
         }
         entry {
-          reference {
+          uri {
             value: "urn:uuid:541a72a8-df75-4484-ac89-ac4923f03b81"
           }
         }
@@ -151,12 +151,12 @@ entry {
           value: WORKING
         }
         entry {
-          reference {
+          uri {
             value: "urn:uuid:124a6916-5d84-4b8c-b250-10cefb8e6e86"
           }
         }
         entry {
-          reference {
+          uri {
             value: "urn:uuid:673f8db5-0ffd-4395-9657-6da00420bbc1"
           }
         }
@@ -187,7 +187,7 @@ entry {
           }
         }
         entry {
-          reference {
+          uri {
             value: "urn:uuid:47600e0f-b6b5-4308-84b5-5dec157f7637"
           }
         }
@@ -350,8 +350,8 @@ entry {
         }
       }
       subject {
-        reference {
-          value: "Patient/d1"
+        patient_id {
+          value: "d1"
         }
       }
       period {
@@ -414,7 +414,7 @@ entry {
         }
       }
       subject {
-        reference {
+        uri {
           value: "http://fhir.healthintersections.com.au/open/Patient/d1"
         }
         display {
@@ -422,7 +422,7 @@ entry {
         }
       }
       context {
-        reference {
+        uri {
           value: "http://fhir.healthintersections.com.au/open/Encounter/doc-example"
         }
       }
@@ -470,7 +470,7 @@ entry {
         }
       }
       subject {
-        reference {
+        uri {
           value: "http://fhir.healthintersections.com.au/open/Patient/d1"
         }
         display {
@@ -479,16 +479,16 @@ entry {
       }
       requester {
         agent {
-          reference {
-            value: "Practitioner/example"
+          practitioner_id {
+            value: "example"
           }
           display {
             value: "Peter Practitioner"
           }
         }
         on_behalf_of {
-          reference {
-            value: "Organization/f002"
+          organization_id {
+            value: "f002"
           }
         }
       }
@@ -575,7 +575,7 @@ entry {
         precision: SECOND
       }
       subject {
-        reference {
+        uri {
           value: "http://fhir.healthintersections.com.au/open/Patient/d1"
         }
         display {
@@ -632,7 +632,7 @@ entry {
         }
       }
       patient {
-        reference {
+        uri {
           value: "http://fhir.healthintersections.com.au/open/Patient/d1"
         }
         display {
@@ -682,13 +682,13 @@ signature {
     precision: SECOND
   }
   who_reference {
-    reference {
-      value: "Device/software"
+    device_id {
+      value: "software"
     }
   }
   on_behalf_of_reference {
-    reference {
-      value: "Organization/example"
+    organization_id {
+      value: "example"
     }
   }
   content_type {

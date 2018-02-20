@@ -29,8 +29,8 @@ active {
   value: true
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 relationship {

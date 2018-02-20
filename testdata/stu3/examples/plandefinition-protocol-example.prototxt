@@ -245,8 +245,8 @@ action {
     value: SINGLE
   }
   definition {
-    reference {
-      value: "#procedure"
+    fragment {
+      value: "procedure"
     }
   }
 }

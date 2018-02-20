@@ -46,16 +46,16 @@ name {
   value: "Peter James Charlmers Care Plan for Inpatient Encounter"
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Peter James Chalmers"
   }
 }
 context {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
 }
 period {
@@ -71,8 +71,8 @@ participant {
     }
   }
   member {
-    reference {
-      value: "Patient/example"
+    patient_id {
+      value: "example"
     }
     display {
       value: "Peter James Chalmers"
@@ -86,16 +86,16 @@ participant {
     }
   }
   member {
-    reference {
-      value: "#pr1"
+    fragment {
+      value: "pr1"
     }
     display {
       value: "Dorothy Dietition"
     }
   }
   on_behalf_of {
-    reference {
-      value: "Organization/f001"
+    organization_id {
+      value: "f001"
     }
   }
   period {
@@ -106,7 +106,7 @@ participant {
   }
 }
 managing_organization {
-  reference {
-    value: "Organization/f001"
+  organization_id {
+    value: "f001"
   }
 }

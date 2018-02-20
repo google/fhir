@@ -78,12 +78,12 @@ physical_type {
   }
 }
 managing_organization {
-  reference {
-    value: "Organization/f001"
+  organization_id {
+    value: "f001"
   }
 }
 part_of {
-  reference {
-    value: "Location/1"
+  location_id {
+    value: "1"
   }
 }

@@ -13,8 +13,8 @@ uid {
   value: "urn:oid:2.16.124.113543.6003.1154777499.30246.19789.3503430045"
 }
 patient {
-  reference {
-    value: "Patient/dicom"
+  patient_id {
+    value: "dicom"
   }
 }
 started {

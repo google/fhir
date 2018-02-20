@@ -5,8 +5,8 @@ content_type {
   value: "application/pdf"
 }
 security_context {
-  reference {
-    value: "DocumentReference/example"
+  document_reference_id {
+    value: "example"
   }
 }
 content {

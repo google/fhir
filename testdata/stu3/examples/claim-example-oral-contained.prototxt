@@ -123,13 +123,13 @@ contained {
       }
     }
     subscriber {
-      reference {
-        value: "#patient-1"
+      fragment {
+        value: "patient-1"
       }
     }
     beneficiary {
-      reference {
-        value: "#patient-1"
+      fragment {
+        value: "patient-1"
       }
     }
     relationship {
@@ -196,8 +196,8 @@ use {
   value: COMPLETE
 }
 patient {
-  reference {
-    value: "#patient-1"
+  fragment {
+    value: "patient-1"
   }
 }
 created {
@@ -205,13 +205,13 @@ created {
   precision: DAY
 }
 insurer {
-  reference {
-    value: "#org-insurer"
+  fragment {
+    value: "org-insurer"
   }
 }
 organization {
-  reference {
-    value: "#org-org"
+  fragment {
+    value: "org-org"
   }
 }
 priority {
@@ -235,8 +235,8 @@ care_team {
     value: 1
   }
   provider {
-    reference {
-      value: "#provider-1"
+    fragment {
+      value: "provider-1"
     }
   }
 }
@@ -260,8 +260,8 @@ insurance {
     value: true
   }
   coverage {
-    reference {
-      value: "#coverage-1"
+    fragment {
+      value: "coverage-1"
     }
   }
 }

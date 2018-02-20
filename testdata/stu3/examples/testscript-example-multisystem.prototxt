@@ -138,8 +138,8 @@ metadata {
       value: "http://hl7.org/fhir/http.html#read"
     }
     capabilities {
-      reference {
-        value: "CapabilityStatement/example"
+      capability_statement_id {
+        value: "example"
       }
     }
   }
@@ -162,8 +162,8 @@ metadata {
       value: "http://hl7.org/fhir/http.html#read"
     }
     capabilities {
-      reference {
-        value: "CapabilityStatement/example"
+      capability_statement_id {
+        value: "example"
       }
     }
   }

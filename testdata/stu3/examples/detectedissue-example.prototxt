@@ -33,21 +33,21 @@ date {
   precision: DAY
 }
 author {
-  reference {
-    value: "Device/software"
+  device_id {
+    value: "software"
   }
 }
 implicated {
-  reference {
-    value: "MedicationStatement/example001"
+  medication_statement_id {
+    value: "example001"
   }
   display {
     value: "500 mg Acetaminophen tablet 1/day, PRN since 2010"
   }
 }
 implicated {
-  reference {
-    value: "MedicationRequest/medrx0331"
+  medication_request_id {
+    value: "medrx0331"
   }
   display {
     value: "Warfarin 1 MG TAB prescribed Jan. 15, 2015"
@@ -78,8 +78,8 @@ mitigation {
     precision: DAY
   }
   author {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
     display {
       value: "Dr. Adam Careful"

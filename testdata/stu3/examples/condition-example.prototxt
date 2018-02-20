@@ -85,8 +85,8 @@ body_site {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 onset_date_time {

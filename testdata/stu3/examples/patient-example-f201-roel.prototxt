@@ -212,8 +212,8 @@ communication {
   }
 }
 managing_organization {
-  reference {
-    value: "Organization/f201"
+  organization_id {
+    value: "f201"
   }
   display {
     value: "AUMC"

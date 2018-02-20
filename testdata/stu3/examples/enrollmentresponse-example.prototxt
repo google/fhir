@@ -21,7 +21,7 @@ status {
   value: ACTIVE
 }
 request {
-  reference {
+  uri {
     value: "http://www.BenefitsInc.com/fhir/eligibility/225476332402"
   }
 }
@@ -43,7 +43,7 @@ created {
   precision: DAY
 }
 organization {
-  reference {
-    value: "Organization/2"
+  organization_id {
+    value: "2"
   }
 }

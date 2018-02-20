@@ -10,8 +10,8 @@ text {
   }
 }
 based_on {
-  reference {
-    value: "ProcedureRequest/example-pgx"
+  procedure_request_id {
+    value: "example-pgx"
   }
 }
 status {
@@ -34,8 +34,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/899962"
+  patient_id {
+    value: "899962"
   }
   display {
     value: "Bob Smith"
@@ -53,14 +53,14 @@ issued {
 }
 performer {
   actor {
-    reference {
-      value: "Organization/4829"
+    organization_id {
+      value: "4829"
     }
   }
 }
 result {
-  reference {
-    value: "Observation/example-phenotype"
+  observation_id {
+    value: "example-phenotype"
   }
 }
 presented_form {

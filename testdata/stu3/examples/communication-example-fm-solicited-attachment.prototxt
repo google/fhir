@@ -56,8 +56,8 @@ contained {
       value: COMPLETED
     }
     subject {
-      reference {
-        value: "Patient/1"
+      patient_id {
+        value: "1"
       }
     }
   }
@@ -71,8 +71,8 @@ identifier {
   }
 }
 based_on {
-  reference {
-    value: "#request"
+  fragment {
+    value: "request"
   }
 }
 status {
@@ -89,13 +89,13 @@ category {
   }
 }
 subject {
-  reference {
-    value: "Patient/1"
+  patient_id {
+    value: "1"
   }
 }
 recipient {
-  reference {
-    value: "#payor"
+  fragment {
+    value: "payor"
   }
 }
 sent {
@@ -104,8 +104,8 @@ sent {
   precision: SECOND
 }
 sender {
-  reference {
-    value: "#provider"
+  fragment {
+    value: "provider"
   }
 }
 payload {

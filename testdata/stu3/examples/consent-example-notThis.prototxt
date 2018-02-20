@@ -13,8 +13,8 @@ status {
   value: ACTIVE
 }
 patient {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
   display {
     value: "P. van de Heuvel"
@@ -25,8 +25,8 @@ date_time {
   precision: DAY
 }
 organization {
-  reference {
-    value: "Organization/Infoway"
+  organization_id {
+    value: "Infoway"
   }
   display {
     value: "Canada Infoway"
@@ -49,8 +49,8 @@ except {
       value: RELATED
     }
     reference {
-      reference {
-        value: "Task/f201"
+      task_id {
+        value: "f201"
       }
     }
   }

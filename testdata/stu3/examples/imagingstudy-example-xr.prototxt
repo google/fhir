@@ -30,8 +30,8 @@ accession {
     value: "W12342398"
   }
   assigner {
-    reference {
-      value: "Organization/dicom-organization"
+    organization_id {
+      value: "dicom-organization"
     }
   }
 }
@@ -43,8 +43,8 @@ identifier {
     value: "55551234"
   }
   assigner {
-    reference {
-      value: "Organization/dicom-organization"
+    organization_id {
+      value: "dicom-organization"
     }
   }
 }
@@ -60,13 +60,13 @@ modality_list {
   }
 }
 patient {
-  reference {
-    value: "Patient/dicom"
+  patient_id {
+    value: "dicom"
   }
 }
 context {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
 }
 started {
@@ -75,23 +75,23 @@ started {
   precision: SECOND
 }
 based_on {
-  reference {
-    value: "ProcedureRequest/example"
+  procedure_request_id {
+    value: "example"
   }
 }
 referrer {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }
 interpreter {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }
 endpoint {
-  reference {
-    value: "Endpoint/example-wadors"
+  endpoint_id {
+    value: "example-wadors"
   }
 }
 number_of_series {
@@ -101,8 +101,8 @@ number_of_instances {
   value: 2
 }
 procedure_reference {
-  reference {
-    value: "Procedure/example"
+  procedure_id {
+    value: "example"
   }
 }
 procedure_code {
@@ -162,8 +162,8 @@ series {
     value: ONLINE
   }
   endpoint {
-    reference {
-      value: "Endpoint/example-wadors"
+    endpoint_id {
+      value: "example-wadors"
     }
   }
   body_site {
@@ -194,8 +194,8 @@ series {
     precision: SECOND
   }
   performer {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
   }
   instance {

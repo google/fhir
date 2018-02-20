@@ -36,13 +36,13 @@ status {
   value: COMPLETED
 }
 medication_reference {
-  reference {
-    value: "#medexample015"
+  fragment {
+    value: "medexample015"
   }
 }
 subject {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
   display {
     value: "Donald Duck"
@@ -50,19 +50,19 @@ subject {
 }
 performer {
   actor {
-    reference {
-      value: "Practitioner/f006"
+    practitioner_id {
+      value: "f006"
     }
   }
   on_behalf_of {
-    reference {
-      value: "Organization/2.16.840.1.113883.19.5"
+    organization_id {
+      value: "2.16.840.1.113883.19.5"
     }
   }
 }
 authorizing_prescription {
-  reference {
-    value: "MedicationRequest/medrx0309"
+  medication_request_id {
+    value: "medrx0309"
   }
 }
 dosage_instruction {

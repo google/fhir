@@ -178,8 +178,8 @@ entity {
 }
 entity {
   reference {
-    reference {
-      value: "DocumentManifest/example"
+    document_manifest_id {
+      value: "example"
     }
   }
   type {

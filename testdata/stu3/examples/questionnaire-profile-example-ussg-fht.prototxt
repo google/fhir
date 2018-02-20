@@ -639,7 +639,7 @@ entry {
               value: true
             }
             options {
-              reference {
+              uri {
                 value: "http://hl7.org/fhir/us/sdc/ValueSet/LL1-9"
               }
               display {
@@ -689,7 +689,7 @@ entry {
               value: CHOICE
             }
             options {
-              reference {
+              uri {
                 value: "http://hl7.org/fhir/us/sdc/ValueSet/LL623-0"
               }
               display {
@@ -722,7 +722,7 @@ entry {
               value: CHOICE
             }
             options {
-              reference {
+              uri {
                 value: "http://hl7.org/fhir/us/sdc/ValueSet/LL361-7"
               }
               display {
@@ -744,7 +744,7 @@ entry {
               value: CHOICE
             }
             options {
-              reference {
+              uri {
                 value: "http://hl7.org/fhir/us/sdc/ValueSet/LL361-7"
               }
               display {
@@ -779,8 +779,8 @@ entry {
                 value: CHOICE
               }
               options {
-                reference {
-                  value: "#length"
+                fragment {
+                  value: "length"
                 }
               }
             }
@@ -809,8 +809,8 @@ entry {
                 value: CHOICE
               }
               options {
-                reference {
-                  value: "#weight"
+                fragment {
+                  value: "weight"
                 }
               }
             }
@@ -849,7 +849,7 @@ entry {
               value: true
             }
             options {
-              reference {
+              uri {
                 value: "http://hl7.org/fhir/us/sdc/ValueSet/LL629-7"
               }
               display {
@@ -874,7 +874,7 @@ entry {
               value: true
             }
             options {
-              reference {
+              uri {
                 value: "http://hl7.org/fhir/us/sdc/ValueSet/LL628-9"
               }
               display {
@@ -913,7 +913,7 @@ entry {
               value: CHOICE
             }
             options {
-              reference {
+              uri {
                 value: "http://hl7.org/fhir/us/sdc/ValueSet/LL626-3"
               }
               display {
@@ -935,7 +935,7 @@ entry {
               value: CHOICE
             }
             options {
-              reference {
+              uri {
                 value: "http://hl7.org/fhir/us/sdc/ValueSet/LL619-8"
               }
               display {
@@ -989,7 +989,7 @@ entry {
                 value: CHOICE
               }
               options {
-                reference {
+                uri {
                   value: "http://hl7.org/fhir/us/sdc/ValueSet/LL621-4"
                 }
                 display {
@@ -1025,7 +1025,7 @@ entry {
                 value: CHOICE
               }
               options {
-                reference {
+                uri {
                   value: "http://hl7.org/fhir/us/sdc/ValueSet/LL1-9"
                 }
                 display {
@@ -1061,7 +1061,7 @@ entry {
                 value: CHOICE
               }
               options {
-                reference {
+                uri {
                   value: "http://hl7.org/fhir/us/sdc/ValueSet/LL361-7"
                 }
                 display {
@@ -1089,7 +1089,7 @@ entry {
                     value: CHOICE
                   }
                   options {
-                    reference {
+                    uri {
                       value: "http://hl7.org/fhir/us/sdc/ValueSet/LL627-1"
                     }
                   }
@@ -1119,7 +1119,7 @@ entry {
                     value: CHOICE
                   }
                   options {
-                    reference {
+                    uri {
                       value: "http://hl7.org/fhir/us/sdc/ValueSet/LL619-8"
                     }
                     display {
@@ -1179,7 +1179,7 @@ entry {
                 value: CHOICE
               }
               options {
-                reference {
+                uri {
                   value: "http://hl7.org/fhir/us/sdc/ValueSet/LL623-0"
                 }
               }
@@ -1198,7 +1198,7 @@ entry {
                 value: CHOICE
               }
               options {
-                reference {
+                uri {
                   value: "http://hl7.org/fhir/us/sdc/ValueSet/LL623-0"
                 }
               }
@@ -1220,7 +1220,7 @@ entry {
                 value: true
               }
               options {
-                reference {
+                uri {
                   value: "http://hl7.org/fhir/us/sdc/ValueSet/LL629-7"
                 }
                 display {
@@ -1245,7 +1245,7 @@ entry {
                 value: true
               }
               options {
-                reference {
+                uri {
                   value: "http://hl7.org/fhir/us/sdc/ValueSet/LL628-9"
                 }
                 display {
@@ -1287,7 +1287,7 @@ entry {
                 value: true
               }
               options {
-                reference {
+                uri {
                   value: "http://hl7.org/fhir/us/sdc/ValueSet/LL626-3"
                 }
                 display {
@@ -1309,7 +1309,7 @@ entry {
                 value: CHOICE
               }
               options {
-                reference {
+                uri {
                   value: "http://hl7.org/fhir/us/sdc/ValueSet/LL619-8"
                 }
                 display {

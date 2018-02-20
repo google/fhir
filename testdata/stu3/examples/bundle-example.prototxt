@@ -51,13 +51,13 @@ entry {
         value: ORDER
       }
       medication_reference {
-        reference {
-          value: "Medication/example"
+        medication_id {
+          value: "example"
         }
       }
       subject {
-        reference {
-          value: "Patient/347"
+        patient_id {
+          value: "347"
         }
       }
     }

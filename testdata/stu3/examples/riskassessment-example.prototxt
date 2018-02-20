@@ -25,8 +25,8 @@ occurrence_date_time {
   precision: SECOND
 }
 basis {
-  reference {
-    value: "List/prognosis"
+  list_id {
+    value: "prognosis"
   }
 }
 prediction {

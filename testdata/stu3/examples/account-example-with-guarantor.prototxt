@@ -40,8 +40,8 @@ name {
   value: "Inpatient: Peter James Chalmers"
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Peter James Chalmers"
@@ -83,8 +83,8 @@ balance {
 }
 coverage {
   coverage {
-    reference {
-      value: "Coverage/9876B1"
+    coverage_id {
+      value: "9876B1"
     }
   }
   priority {
@@ -93,8 +93,8 @@ coverage {
 }
 coverage {
   coverage {
-    reference {
-      value: "Coverage/7546D"
+    coverage_id {
+      value: "7546D"
     }
   }
   priority {
@@ -102,8 +102,8 @@ coverage {
   }
 }
 owner {
-  reference {
-    value: "Organization/f001"
+  organization_id {
+    value: "f001"
   }
   display {
     value: "Burgers University Medical Center"
@@ -114,8 +114,8 @@ description {
 }
 guarantor {
   party {
-    reference {
-      value: "RelatedPerson/benedicte"
+    related_person_id {
+      value: "benedicte"
     }
     display {
       value: "B\303\251n\303\251dicte du March\303\251"

@@ -398,8 +398,8 @@ action {
             value: "Gemcitabine 1250 mg/m\302\262 IV over 30 minutes on days 1 and 8"
           }
           definition {
-            reference {
-              value: "#1111"
+            fragment {
+              value: "1111"
             }
           }
         }
@@ -432,8 +432,8 @@ action {
             }
           }
           definition {
-            reference {
-              value: "#2222"
+            fragment {
+              value: "2222"
             }
           }
         }

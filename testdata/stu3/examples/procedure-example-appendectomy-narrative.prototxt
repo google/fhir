@@ -13,7 +13,7 @@ status {
   value: COMPLETED
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }

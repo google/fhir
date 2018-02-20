@@ -65,18 +65,18 @@ medium {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 recipient {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }
 context {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
 }
 sent {
@@ -90,8 +90,8 @@ received {
   precision: SECOND
 }
 sender {
-  reference {
-    value: "Device/f001"
+  device_id {
+    value: "f001"
   }
 }
 payload {

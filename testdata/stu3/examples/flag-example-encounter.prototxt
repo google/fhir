@@ -39,15 +39,15 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Peter Patient"
   }
 }
 encounter {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
 }

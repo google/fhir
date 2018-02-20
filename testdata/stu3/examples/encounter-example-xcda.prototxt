@@ -35,14 +35,14 @@ class {
   }
 }
 subject {
-  reference {
-    value: "Patient/xcda"
+  patient_id {
+    value: "xcda"
   }
 }
 participant {
   individual {
-    reference {
-      value: "Practitioner/xcda1"
+    practitioner_id {
+      value: "xcda1"
     }
   }
 }

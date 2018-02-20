@@ -10,8 +10,8 @@ text {
   }
 }
 based_on {
-  reference {
-    value: "ProcedureRequest/education"
+  procedure_request_id {
+    value: "education"
   }
   display {
     value: "Order for health education"

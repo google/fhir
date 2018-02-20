@@ -55,8 +55,8 @@ deceased_boolean {
   value: true
 }
 managing_organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
   display {
     value: "ACME Healthcare, Inc"

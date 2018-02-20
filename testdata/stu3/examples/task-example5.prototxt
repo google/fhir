@@ -59,24 +59,24 @@ description {
   value: "Create order for getting specimen, Set up inhouse testing,  generate order for any sendouts and submit with specimen"
 }
 focus {
-  reference {
-    value: "ProcedureRequest/lipid"
+  procedure_request_id {
+    value: "lipid"
   }
   display {
     value: "Lipid Panel Request"
   }
 }
 for_value {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Peter James Chalmers"
   }
 }
 context {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
   display {
     value: "Example In-Patient Encounter"
@@ -101,16 +101,16 @@ last_modified {
 }
 requester {
   agent {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
     display {
       value: "Dr Adam Careful"
     }
   }
   on_behalf_of {
-    reference {
-      value: "Organization/2.16.840.1.113883.19.5"
+    organization_id {
+      value: "2.16.840.1.113883.19.5"
     }
     display {
       value: "Good Health Clinic"
@@ -134,8 +134,8 @@ performer_type {
   }
 }
 owner {
-  reference {
-    value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+  organization_id {
+    value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
   }
   display {
     value: "Clinical Laboratory @ Acme Hospital"
@@ -170,8 +170,8 @@ output {
     }
   }
   value_reference {
-    reference {
-      value: "Specimen/101"
+    specimen_id {
+      value: "101"
     }
   }
 }

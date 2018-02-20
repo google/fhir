@@ -43,8 +43,8 @@ telecom {
   }
 }
 part_of {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
   display {
     value: "ACME Healthcare, Inc"

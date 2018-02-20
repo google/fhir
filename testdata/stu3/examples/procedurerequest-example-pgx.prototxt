@@ -29,8 +29,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/899962"
+  patient_id {
+    value: "899962"
   }
 }
 authored_on {
@@ -40,8 +40,8 @@ authored_on {
 }
 requester {
   agent {
-    reference {
-      value: "Practitioner/12345"
+    practitioner_id {
+      value: "12345"
     }
   }
 }

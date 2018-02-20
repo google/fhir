@@ -36,13 +36,13 @@ vaccine_code {
   }
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 encounter {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
 }
 date {
@@ -53,13 +53,13 @@ primary_source {
   value: true
 }
 location {
-  reference {
-    value: "Location/1"
+  location_id {
+    value: "1"
   }
 }
 manufacturer {
-  reference {
-    value: "Organization/hl7"
+  organization_id {
+    value: "hl7"
   }
 }
 lot_number {
@@ -118,8 +118,8 @@ practitioner {
     }
   }
   actor {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
   }
 }
@@ -135,8 +135,8 @@ practitioner {
     }
   }
   actor {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
   }
 }
@@ -163,8 +163,8 @@ reaction {
     precision: DAY
   }
   detail {
-    reference {
-      value: "Observation/example"
+    observation_id {
+      value: "example"
     }
   }
   reported {
@@ -179,8 +179,8 @@ vaccination_protocol {
     value: "Vaccination Protocol Sequence 1"
   }
   authority {
-    reference {
-      value: "Organization/hl7"
+    organization_id {
+      value: "hl7"
     }
   }
   series {

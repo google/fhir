@@ -26,8 +26,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
       display {
         value: "Peter James Chalmers"
@@ -75,16 +75,16 @@ description {
   value: "Manage obesity and weight loss"
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Peter James Chalmers"
   }
 }
 context {
-  reference {
-    value: "Encounter/home"
+  encounter_id {
+    value: "home"
   }
 }
 period {
@@ -94,29 +94,29 @@ period {
   }
 }
 author {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
   display {
     value: "Dr Adam Careful"
   }
 }
 care_team {
-  reference {
-    value: "CareTeam/example"
+  care_team_id {
+    value: "example"
   }
 }
 addresses {
-  reference {
-    value: "#p1"
+  fragment {
+    value: "p1"
   }
   display {
     value: "obesity"
   }
 }
 goal {
-  reference {
-    value: "Goal/example"
+  goal_id {
+    value: "example"
   }
 }
 activity {
@@ -134,8 +134,8 @@ activity {
     }
   }
   outcome_reference {
-    reference {
-      value: "Observation/example"
+    observation_id {
+      value: "example"
     }
     display {
       value: "Weight Measured"
@@ -203,8 +203,8 @@ activity {
       }
     }
     performer {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
       display {
         value: "Peter James Chalmers"

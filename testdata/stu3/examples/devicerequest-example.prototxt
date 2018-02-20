@@ -20,12 +20,12 @@ intent {
   }
 }
 code_reference {
-  reference {
-    value: "Device/example"
+  device_id {
+    value: "example"
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }

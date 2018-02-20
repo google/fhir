@@ -76,8 +76,8 @@ use {
   value: COMPLETE
 }
 patient {
-  reference {
-    value: "#patient-1"
+  fragment {
+    value: "patient-1"
   }
 }
 created {
@@ -155,7 +155,7 @@ insurance {
     value: true
   }
   coverage {
-    reference {
+    uri {
       value: "http://www.jurisdiction.com/nationalplan/123AB345"
     }
   }

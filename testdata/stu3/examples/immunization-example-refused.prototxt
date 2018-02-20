@@ -29,8 +29,8 @@ vaccine_code {
   }
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 date {

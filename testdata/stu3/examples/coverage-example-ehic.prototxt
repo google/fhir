@@ -34,13 +34,13 @@ type {
   }
 }
 subscriber {
-  reference {
-    value: "Patient/5"
+  patient_id {
+    value: "5"
   }
 }
 beneficiary {
-  reference {
-    value: "Patient/5"
+  patient_id {
+    value: "5"
   }
 }
 relationship {

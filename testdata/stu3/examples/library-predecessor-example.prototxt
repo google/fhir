@@ -53,8 +53,8 @@ related_artifact {
     value: DEPENDS_ON
   }
   resource {
-    reference {
-      value: "Library/fhir-model-definition"
+    library_id {
+      value: "fhir-model-definition"
     }
   }
 }
@@ -63,8 +63,8 @@ related_artifact {
     value: SUCCESSOR
   }
   resource {
-    reference {
-      value: "Library/library-fhir-helpers"
+    library_id {
+      value: "library-fhir-helpers"
     }
   }
 }

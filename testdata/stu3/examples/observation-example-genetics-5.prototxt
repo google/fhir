@@ -18,8 +18,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Molecular Lab Patient ID: HOSP-23456"
@@ -31,8 +31,8 @@ issued {
   precision: SECOND
 }
 performer {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
   display {
     value: "Sequence Analysis Laboratory"
@@ -56,8 +56,8 @@ related {
     value: SEQUEL_TO
   }
   target {
-    reference {
-      value: "Observation/example-genetics-1"
+    observation_id {
+      value: "example-genetics-1"
     }
     display {
       value: "ObservationForGenetics profile example 1"

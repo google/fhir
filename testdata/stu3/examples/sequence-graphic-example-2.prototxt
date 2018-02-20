@@ -28,7 +28,7 @@ reference_seq {
   }
 }
 pointer {
-  reference {
-    value: "Sequence/graphic-example-3"
+  sequence_id {
+    value: "graphic-example-3"
   }
 }

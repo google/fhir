@@ -13,8 +13,8 @@ status {
   value: ACTIVE
 }
 patient {
-  reference {
-    value: "Patient/xcda"
+  patient_id {
+    value: "xcda"
   }
 }
 period {
@@ -35,13 +35,13 @@ date_time {
   precision: SECOND
 }
 consenting_party {
-  reference {
-    value: "RelatedPerson/peter"
+  related_person_id {
+    value: "peter"
   }
 }
 organization {
-  reference {
-    value: "Organization/example"
+  organization_id {
+    value: "example"
   }
 }
 policy_rule {

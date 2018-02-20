@@ -34,13 +34,13 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 context {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
 }
 occurrence_period {
@@ -70,8 +70,8 @@ participant {
     }
   }
   actor {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
   }
 }
@@ -90,8 +90,8 @@ participant {
     }
   }
   actor {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
   }
 }
@@ -141,8 +141,8 @@ override_reason {
   value: "Patient is Cardiologist\'s golf buddy, so he gets a 20% discount!"
 }
 enterer {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }
 entered_date {
@@ -164,19 +164,19 @@ reason {
   }
 }
 service {
-  reference {
-    value: "Procedure/example"
+  procedure_id {
+    value: "example"
   }
 }
 account {
-  reference {
-    value: "Account/example"
+  account_id {
+    value: "example"
   }
 }
 note {
   author_reference {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
   }
   time {

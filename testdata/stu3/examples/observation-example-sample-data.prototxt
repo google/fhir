@@ -39,8 +39,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
   display {
     value: "P. van de Heuvel"
@@ -52,8 +52,8 @@ effective_date_time {
   precision: SECOND
 }
 performer {
-  reference {
-    value: "Practitioner/f005"
+  practitioner_id {
+    value: "f005"
   }
   display {
     value: "A. Langeveld"

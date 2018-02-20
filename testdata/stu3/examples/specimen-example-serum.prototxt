@@ -31,19 +31,19 @@ type {
   }
 }
 subject {
-  reference {
-    value: "Patient/pat2"
+  patient_id {
+    value: "pat2"
   }
 }
 request {
-  reference {
-    value: "ProcedureRequest/ft4"
+  procedure_request_id {
+    value: "ft4"
   }
 }
 collection {
   collector {
-    reference {
-      value: "Practitioner/f202"
+    practitioner_id {
+      value: "f202"
     }
   }
   collected_date_time {

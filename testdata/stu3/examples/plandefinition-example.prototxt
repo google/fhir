@@ -75,8 +75,8 @@ contained {
       value: MEDICATION_REQUEST
     }
     product_reference {
-      reference {
-        value: "#citalopramMedication"
+      fragment {
+        value: "citalopramMedication"
       }
     }
     dosage {
@@ -172,8 +172,8 @@ contained {
     }
     ingredient {
       item_reference {
-        reference {
-          value: "#citalopramSubstance"
+        fragment {
+          value: "citalopramSubstance"
         }
       }
       amount {
@@ -531,8 +531,8 @@ related_artifact {
     value: COMPOSED_OF
   }
   resource {
-    reference {
-      value: "ActivityDefinition/referralPrimaryCareMentalHealth"
+    activity_definition_id {
+      value: "referralPrimaryCareMentalHealth"
     }
   }
 }
@@ -541,14 +541,14 @@ related_artifact {
     value: COMPOSED_OF
   }
   resource {
-    reference {
-      value: "ActivityDefinition/citalopramPrescription"
+    activity_definition_id {
+      value: "citalopramPrescription"
     }
   }
 }
 library {
-  reference {
-    value: "Library/suiciderisk-orderset-logic"
+  library_id {
+    value: "suiciderisk-orderset-logic"
   }
   display {
     value: "SuicideRiskLogic"
@@ -573,8 +573,8 @@ action {
         value: "Refer to outpatient mental health program for evaluation and treatment of mental health conditions now"
       }
       definition {
-        reference {
-          value: "#referralToMentalHealthCare"
+        fragment {
+          value: "referralToMentalHealthCare"
         }
       }
       dynamic_value {
@@ -720,8 +720,8 @@ action {
             value: "citalopram 20 mg tablet 1 tablet oral 1 time daily now (30 table; 3 refills)"
           }
           definition {
-            reference {
-              value: "#citalopramPrescription"
+            fragment {
+              value: "citalopramPrescription"
             }
           }
           dynamic_value {

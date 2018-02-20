@@ -98,8 +98,8 @@ photo {
   }
 }
 managing_organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
   display {
     value: "ACME Healthcare, Inc"
@@ -107,8 +107,8 @@ managing_organization {
 }
 link {
   other {
-    reference {
-      value: "Patient/pat1"
+    patient_id {
+      value: "pat1"
     }
   }
   type {

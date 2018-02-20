@@ -21,8 +21,8 @@ status {
   value: ACTIVE
 }
 patient {
-  reference {
-    value: "Patient/1"
+  patient_id {
+    value: "1"
   }
 }
 created {
@@ -40,17 +40,17 @@ insurer {
   }
 }
 request_provider {
-  reference {
-    value: "Practitioner/1"
+  practitioner_id {
+    value: "1"
   }
 }
 request_organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
 }
 request {
-  reference {
+  uri {
     value: "http://www.BenefitsInc.com/fhir/oralhealthclaim/15476332402"
   }
 }

@@ -80,8 +80,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Molecular Lab Patient ID: HOSP-23456"
@@ -93,8 +93,8 @@ issued {
   precision: SECOND
 }
 performer {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
   display {
     value: "Molecular Diagnostics Laboratory"
@@ -114,8 +114,8 @@ value_codeable_concept {
   }
 }
 specimen {
-  reference {
-    value: "Specimen/genetics-example1-somatic"
+  specimen_id {
+    value: "genetics-example1-somatic"
   }
   display {
     value: "Molecular Specimen ID: MLD45-Z4-1234"

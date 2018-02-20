@@ -25,17 +25,17 @@ created {
   precision: DAY
 }
 organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
 }
 subject {
-  reference {
-    value: "Patient/1"
+  patient_id {
+    value: "1"
   }
 }
 coverage {
-  reference {
-    value: "Coverage/9876B1"
+  coverage_id {
+    value: "9876B1"
   }
 }

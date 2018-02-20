@@ -15,8 +15,8 @@ type {
 coordinate_system {
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 reference_seq {
@@ -54,8 +54,8 @@ variant {
     value: "T"
   }
   variant_pointer {
-    reference {
-      value: "Observation/example-haplotype2"
+    observation_id {
+      value: "example-haplotype2"
     }
     display {
       value: "Target Haplotype Observation"

@@ -54,8 +54,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#2"
+          fragment {
+            value: "2"
           }
         }
       }
@@ -87,8 +87,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#3"
+          fragment {
+            value: "3"
           }
         }
       }
@@ -97,8 +97,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -170,8 +170,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#4"
+          fragment {
+            value: "4"
           }
         }
       }
@@ -203,8 +203,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#5"
+          fragment {
+            value: "5"
           }
         }
       }
@@ -213,8 +213,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -313,8 +313,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#6"
+          fragment {
+            value: "6"
           }
         }
       }
@@ -346,8 +346,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#7"
+          fragment {
+            value: "7"
           }
         }
       }
@@ -356,8 +356,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -406,8 +406,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -483,8 +483,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -531,8 +531,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -579,8 +579,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -679,8 +679,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#2"
+          fragment {
+            value: "2"
           }
         }
       }
@@ -712,8 +712,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#3"
+          fragment {
+            value: "3"
           }
         }
       }
@@ -722,8 +722,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -824,8 +824,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#2"
+          fragment {
+            value: "2"
           }
         }
       }
@@ -857,8 +857,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#3"
+          fragment {
+            value: "3"
           }
         }
       }
@@ -867,8 +867,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -946,8 +946,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -1014,8 +1014,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#9"
+          fragment {
+            value: "9"
           }
         }
       }
@@ -1047,8 +1047,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#10"
+          fragment {
+            value: "10"
           }
         }
       }
@@ -1057,8 +1057,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -1130,8 +1130,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#9"
+          fragment {
+            value: "9"
           }
         }
       }
@@ -1163,8 +1163,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#10"
+          fragment {
+            value: "10"
           }
         }
       }
@@ -1173,8 +1173,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -1249,8 +1249,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -1317,8 +1317,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#1"
+          fragment {
+            value: "1"
           }
         }
       }
@@ -1350,8 +1350,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#13"
+          fragment {
+            value: "13"
           }
         }
       }
@@ -1360,8 +1360,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -1431,8 +1431,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#6"
+          fragment {
+            value: "6"
           }
         }
       }
@@ -1464,8 +1464,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#7"
+          fragment {
+            value: "7"
           }
         }
       }
@@ -1474,8 +1474,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -1542,8 +1542,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#6"
+          fragment {
+            value: "6"
           }
         }
       }
@@ -1575,8 +1575,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#7"
+          fragment {
+            value: "7"
           }
         }
       }
@@ -1585,8 +1585,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -1668,8 +1668,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#4"
+          fragment {
+            value: "4"
           }
         }
       }
@@ -1701,8 +1701,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#5"
+          fragment {
+            value: "5"
           }
         }
       }
@@ -1711,8 +1711,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -1779,8 +1779,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#4"
+          fragment {
+            value: "4"
           }
         }
       }
@@ -1812,8 +1812,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#5"
+          fragment {
+            value: "5"
           }
         }
       }
@@ -1822,8 +1822,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -1867,8 +1867,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -1921,8 +1921,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#18"
+          fragment {
+            value: "18"
           }
         }
       }
@@ -1954,8 +1954,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#19"
+          fragment {
+            value: "19"
           }
         }
       }
@@ -1964,8 +1964,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -2064,8 +2064,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#18"
+          fragment {
+            value: "18"
           }
         }
       }
@@ -2097,8 +2097,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#19"
+          fragment {
+            value: "19"
           }
         }
       }
@@ -2107,8 +2107,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/proband"
+      patient_id {
+        value: "proband"
       }
       display {
         value: "Annie Proband, female, born 1966"
@@ -2166,8 +2166,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/proband"
+  patient_id {
+    value: "proband"
   }
   display {
     value: "Annie Proband, female, born 1966"
@@ -2175,148 +2175,148 @@ subject {
 }
 entry {
   item {
-    reference {
-      value: "#image"
+    fragment {
+      value: "image"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#2"
+    fragment {
+      value: "2"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#3"
+    fragment {
+      value: "3"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#4"
+    fragment {
+      value: "4"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#5"
+    fragment {
+      value: "5"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#6"
+    fragment {
+      value: "6"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#7"
+    fragment {
+      value: "7"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#8"
+    fragment {
+      value: "8"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#9"
+    fragment {
+      value: "9"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#10"
+    fragment {
+      value: "10"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#11"
+    fragment {
+      value: "11"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#12"
+    fragment {
+      value: "12"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#13"
+    fragment {
+      value: "13"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#14"
+    fragment {
+      value: "14"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#15"
+    fragment {
+      value: "15"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#16"
+    fragment {
+      value: "16"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#17"
+    fragment {
+      value: "17"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#18"
+    fragment {
+      value: "18"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#19"
+    fragment {
+      value: "19"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#20"
+    fragment {
+      value: "20"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#21"
+    fragment {
+      value: "21"
     }
   }
 }

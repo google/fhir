@@ -29,8 +29,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
@@ -41,7 +41,7 @@ asserted_date {
   precision: DAY
 }
 asserter {
-  reference {
-    value: "Practitioner/f201"
+  practitioner_id {
+    value: "f201"
   }
 }

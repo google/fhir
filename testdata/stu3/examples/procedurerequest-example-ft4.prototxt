@@ -32,8 +32,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/pat2"
+  patient_id {
+    value: "pat2"
   }
 }
 occurrence_date_time {
@@ -43,8 +43,8 @@ occurrence_date_time {
 }
 requester {
   agent {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
   }
 }

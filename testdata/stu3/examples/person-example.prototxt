@@ -119,8 +119,8 @@ active {
 }
 link {
   target {
-    reference {
-      value: "RelatedPerson/peter"
+    related_person_id {
+      value: "peter"
     }
     display {
       value: "Peter Chalmers"
@@ -129,8 +129,8 @@ link {
 }
 link {
   target {
-    reference {
-      value: "Patient/example"
+    patient_id {
+      value: "example"
     }
     display {
       value: "Peter Chalmers"

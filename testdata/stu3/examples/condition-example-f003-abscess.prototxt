@@ -68,16 +68,16 @@ body_site {
   }
 }
 subject {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
   display {
     value: "P. van de Heuvel"
   }
 }
 context {
-  reference {
-    value: "Encounter/f003"
+  encounter_id {
+    value: "f003"
   }
 }
 onset_date_time {
@@ -89,8 +89,8 @@ asserted_date {
   precision: DAY
 }
 asserter {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
   display {
     value: "P. van de Heuvel"

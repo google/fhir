@@ -43,14 +43,14 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     collection {
       collector {
-        reference {
-          value: "Practitioner/f202"
+        practitioner_id {
+          value: "f202"
         }
       }
       collected_date_time {
@@ -103,14 +103,14 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     collection {
       collector {
-        reference {
-          value: "Practitioner/f202"
+        practitioner_id {
+          value: "f202"
         }
       }
       collected_date_time {
@@ -163,14 +163,14 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     collection {
       collector {
-        reference {
-          value: "Practitioner/f202"
+        practitioner_id {
+          value: "f202"
         }
       }
       collected_date_time {
@@ -228,16 +228,16 @@ contained {
       precision: SECOND
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
       }
     }
     specimen {
-      reference {
-        value: "#ltt"
+      fragment {
+        value: "ltt"
       }
       display {
         value: "Lavender Top Tube"
@@ -248,8 +248,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r1"
+        fragment {
+          value: "r1"
         }
       }
     }
@@ -258,8 +258,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r2"
+        fragment {
+          value: "r2"
         }
       }
     }
@@ -268,8 +268,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r3"
+        fragment {
+          value: "r3"
         }
       }
     }
@@ -278,8 +278,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r4"
+        fragment {
+          value: "r4"
         }
       }
     }
@@ -288,8 +288,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r5"
+        fragment {
+          value: "r5"
         }
       }
     }
@@ -298,8 +298,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r6"
+        fragment {
+          value: "r6"
         }
       }
     }
@@ -308,8 +308,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r7"
+        fragment {
+          value: "r7"
         }
       }
     }
@@ -318,8 +318,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r8"
+        fragment {
+          value: "r8"
         }
       }
     }
@@ -328,8 +328,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r9"
+        fragment {
+          value: "r9"
         }
       }
     }
@@ -338,8 +338,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r10"
+        fragment {
+          value: "r10"
         }
       }
     }
@@ -348,8 +348,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r11"
+        fragment {
+          value: "r11"
         }
       }
     }
@@ -358,8 +358,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r12"
+        fragment {
+          value: "r12"
         }
       }
     }
@@ -368,8 +368,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r13"
+        fragment {
+          value: "r13"
         }
       }
     }
@@ -378,8 +378,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r14"
+        fragment {
+          value: "r14"
         }
       }
     }
@@ -388,8 +388,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r15"
+        fragment {
+          value: "r15"
         }
       }
     }
@@ -398,8 +398,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r16"
+        fragment {
+          value: "r16"
         }
       }
     }
@@ -408,8 +408,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#r17"
+        fragment {
+          value: "r17"
         }
       }
     }
@@ -440,13 +440,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -523,13 +523,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -606,13 +606,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -681,13 +681,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -774,13 +774,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -867,13 +867,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -950,13 +950,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -1033,13 +1033,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -1086,13 +1086,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -1179,13 +1179,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -1232,13 +1232,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -1325,13 +1325,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -1378,13 +1378,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -1461,13 +1461,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -1514,13 +1514,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -1607,13 +1607,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -1660,13 +1660,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -1736,16 +1736,16 @@ contained {
       precision: SECOND
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
       }
     }
     specimen {
-      reference {
-        value: "#rtt"
+      fragment {
+        value: "rtt"
       }
       display {
         value: "Red Top Tube"
@@ -1756,8 +1756,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o1"
+        fragment {
+          value: "o1"
         }
       }
     }
@@ -1766,8 +1766,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o2"
+        fragment {
+          value: "o2"
         }
       }
     }
@@ -1776,8 +1776,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o3"
+        fragment {
+          value: "o3"
         }
       }
     }
@@ -1786,8 +1786,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o4"
+        fragment {
+          value: "o4"
         }
       }
     }
@@ -1796,8 +1796,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o5"
+        fragment {
+          value: "o5"
         }
       }
     }
@@ -1806,8 +1806,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o6"
+        fragment {
+          value: "o6"
         }
       }
     }
@@ -1816,8 +1816,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o7"
+        fragment {
+          value: "o7"
         }
       }
     }
@@ -1826,8 +1826,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o8"
+        fragment {
+          value: "o8"
         }
       }
     }
@@ -1836,8 +1836,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o9"
+        fragment {
+          value: "o9"
         }
       }
     }
@@ -1846,8 +1846,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o10"
+        fragment {
+          value: "o10"
         }
       }
     }
@@ -1856,8 +1856,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o11"
+        fragment {
+          value: "o11"
         }
       }
     }
@@ -1866,8 +1866,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o12"
+        fragment {
+          value: "o12"
         }
       }
     }
@@ -1876,8 +1876,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o13"
+        fragment {
+          value: "o13"
         }
       }
     }
@@ -1886,8 +1886,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o14"
+        fragment {
+          value: "o14"
         }
       }
     }
@@ -1896,8 +1896,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o15"
+        fragment {
+          value: "o15"
         }
       }
     }
@@ -1906,8 +1906,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o16"
+        fragment {
+          value: "o16"
         }
       }
     }
@@ -1916,8 +1916,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o17"
+        fragment {
+          value: "o17"
         }
       }
     }
@@ -1926,8 +1926,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o18"
+        fragment {
+          value: "o18"
         }
       }
     }
@@ -1936,8 +1936,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o19"
+        fragment {
+          value: "o19"
         }
       }
     }
@@ -1946,8 +1946,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o20"
+        fragment {
+          value: "o20"
         }
       }
     }
@@ -1956,8 +1956,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o21"
+        fragment {
+          value: "o21"
         }
       }
     }
@@ -1966,8 +1966,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#o22"
+        fragment {
+          value: "o22"
         }
       }
     }
@@ -2003,13 +2003,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -2073,13 +2073,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -2143,13 +2143,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -2213,13 +2213,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -2283,13 +2283,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -2353,13 +2353,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -2423,13 +2423,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -2493,13 +2493,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -2563,13 +2563,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -2643,13 +2643,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -2713,13 +2713,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -2783,13 +2783,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -2853,13 +2853,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -2923,13 +2923,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -3003,13 +3003,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -3073,13 +3073,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -3143,13 +3143,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -3213,13 +3213,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -3283,13 +3283,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -3353,13 +3353,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -3423,13 +3423,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -3493,13 +3493,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -3565,16 +3565,16 @@ contained {
       precision: SECOND
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
       }
     }
     specimen {
-      reference {
-        value: "#urine"
+      fragment {
+        value: "urine"
       }
       display {
         value: "Urine Sample"
@@ -3585,8 +3585,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#u1"
+        fragment {
+          value: "u1"
         }
       }
     }
@@ -3595,8 +3595,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#u2"
+        fragment {
+          value: "u2"
         }
       }
     }
@@ -3605,8 +3605,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#u3"
+        fragment {
+          value: "u3"
         }
       }
     }
@@ -3615,8 +3615,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#u4"
+        fragment {
+          value: "u4"
         }
       }
     }
@@ -3625,8 +3625,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#u5"
+        fragment {
+          value: "u5"
         }
       }
     }
@@ -3635,8 +3635,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#u6"
+        fragment {
+          value: "u6"
         }
       }
     }
@@ -3645,8 +3645,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#u7"
+        fragment {
+          value: "u7"
         }
       }
     }
@@ -3655,8 +3655,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#u8"
+        fragment {
+          value: "u8"
         }
       }
     }
@@ -3665,8 +3665,8 @@ contained {
         value: HAS_MEMBER
       }
       target {
-        reference {
-          value: "#u9"
+        fragment {
+          value: "u9"
         }
       }
     }
@@ -3694,8 +3694,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     effective_date_time {
@@ -3709,8 +3709,8 @@ contained {
       precision: SECOND
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -3725,8 +3725,8 @@ contained {
       }
     }
     specimen {
-      reference {
-        value: "#urine"
+      fragment {
+        value: "urine"
       }
       display {
         value: "Urine Sample"
@@ -3756,8 +3756,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     effective_date_time {
@@ -3771,8 +3771,8 @@ contained {
       precision: SECOND
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -3792,8 +3792,8 @@ contained {
       }
     }
     specimen {
-      reference {
-        value: "#urine"
+      fragment {
+        value: "urine"
       }
       display {
         value: "Urine Sample"
@@ -3823,8 +3823,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     effective_date_time {
@@ -3838,8 +3838,8 @@ contained {
       precision: SECOND
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -3851,8 +3851,8 @@ contained {
       }
     }
     specimen {
-      reference {
-        value: "#urine"
+      fragment {
+        value: "urine"
       }
       display {
         value: "Urine Sample"
@@ -3882,8 +3882,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     effective_date_time {
@@ -3897,8 +3897,8 @@ contained {
       precision: SECOND
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -3918,8 +3918,8 @@ contained {
       }
     }
     specimen {
-      reference {
-        value: "#urine"
+      fragment {
+        value: "urine"
       }
       display {
         value: "Urine Sample"
@@ -3949,8 +3949,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     effective_date_time {
@@ -3964,8 +3964,8 @@ contained {
       precision: SECOND
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -3985,8 +3985,8 @@ contained {
       }
     }
     specimen {
-      reference {
-        value: "#urine"
+      fragment {
+        value: "urine"
       }
       display {
         value: "Urine Sample"
@@ -4016,8 +4016,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     effective_date_time {
@@ -4031,8 +4031,8 @@ contained {
       precision: SECOND
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -4052,8 +4052,8 @@ contained {
       }
     }
     specimen {
-      reference {
-        value: "#urine"
+      fragment {
+        value: "urine"
       }
       display {
         value: "Urine Sample"
@@ -4083,8 +4083,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     effective_date_time {
@@ -4098,8 +4098,8 @@ contained {
       precision: SECOND
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -4114,8 +4114,8 @@ contained {
       }
     }
     specimen {
-      reference {
-        value: "#urine"
+      fragment {
+        value: "urine"
       }
       display {
         value: "Urine Sample"
@@ -4145,8 +4145,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     effective_date_time {
@@ -4160,8 +4160,8 @@ contained {
       precision: SECOND
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -4179,8 +4179,8 @@ contained {
       }
     }
     specimen {
-      reference {
-        value: "#urine"
+      fragment {
+        value: "urine"
       }
       display {
         value: "Urine Sample"
@@ -4210,8 +4210,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     effective_date_time {
@@ -4225,8 +4225,8 @@ contained {
       precision: SECOND
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -4244,8 +4244,8 @@ contained {
       }
     }
     specimen {
-      reference {
-        value: "#urine"
+      fragment {
+        value: "urine"
       }
       display {
         value: "Urine Sample"
@@ -4278,8 +4278,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/pat2"
+  patient_id {
+    value: "pat2"
   }
 }
 effective_date_time {
@@ -4294,8 +4294,8 @@ issued {
 }
 performer {
   actor {
-    reference {
-      value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+    organization_id {
+      value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
     }
     display {
       value: "Acme Laboratory, Inc"
@@ -4303,48 +4303,48 @@ performer {
   }
 }
 specimen {
-  reference {
-    value: "#rtt"
+  fragment {
+    value: "rtt"
   }
   display {
     value: "Red Top Tube"
   }
 }
 specimen {
-  reference {
-    value: "#ltt"
+  fragment {
+    value: "ltt"
   }
   display {
     value: "Lavender Top Tube"
   }
 }
 specimen {
-  reference {
-    value: "#urine"
+  fragment {
+    value: "urine"
   }
   display {
     value: "Urine Sample"
   }
 }
 result {
-  reference {
-    value: "#p1"
+  fragment {
+    value: "p1"
   }
   display {
     value: "Chemistry Panel"
   }
 }
 result {
-  reference {
-    value: "#p2"
+  fragment {
+    value: "p2"
   }
   display {
     value: "CBC"
   }
 }
 result {
-  reference {
-    value: "#p3"
+  fragment {
+    value: "p3"
   }
   display {
     value: "Urinalysis"

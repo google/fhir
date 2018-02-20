@@ -34,8 +34,8 @@ type {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 received_time {
@@ -45,8 +45,8 @@ received_time {
 }
 collection {
   collector {
-    reference {
-      value: "Practitioner/f202"
+    practitioner_id {
+      value: "f202"
     }
   }
   collected_date_time {

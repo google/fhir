@@ -28,7 +28,7 @@ created {
   precision: DAY
 }
 organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
 }

@@ -42,8 +42,8 @@ expiration_date {
   precision: DAY
 }
 owner {
-  reference {
-    value: "Organization/2.16.840.1.113883.19.5"
+  organization_id {
+    value: "2.16.840.1.113883.19.5"
   }
 }
 location {

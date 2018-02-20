@@ -40,8 +40,8 @@ date {
   precision: SECOND
 }
 source {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 ordered_by {
@@ -56,15 +56,15 @@ ordered_by {
 }
 entry {
   item {
-    reference {
-      value: "AllergyIntolerance/example"
+    allergy_intolerance_id {
+      value: "example"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "AllergyIntolerance/medication"
+    allergy_intolerance_id {
+      value: "medication"
     }
   }
 }

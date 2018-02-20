@@ -114,7 +114,7 @@ source {
 }
 entity {
   reference {
-    reference {
+    uri {
       value: "Patient/example/_history/1"
     }
   }

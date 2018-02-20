@@ -14,24 +14,24 @@ issued {
   precision: DAY
 }
 subject {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
   display {
     value: "P. van de Heuvel"
   }
 }
 authority {
-  reference {
-    value: "Organization/2"
+  organization_id {
+    value: "2"
   }
   display {
     value: "Canada Infoway"
   }
 }
 domain {
-  reference {
-    value: "Location/ukp"
+  location_id {
+    value: "ukp"
   }
   display {
     value: "Canada Infoway"
@@ -62,8 +62,8 @@ sub_type {
 }
 agent {
   actor {
-    reference {
-      value: "Patient/f001"
+    patient_id {
+      value: "f001"
     }
   }
 }
@@ -77,8 +77,8 @@ signer {
     }
   }
   party {
-    reference {
-      value: "Patient/f001"
+    patient_id {
+      value: "f001"
     }
   }
   signature {
@@ -96,8 +96,8 @@ signer {
       precision: SECOND
     }
     who_reference {
-      reference {
-        value: "Patient/f001"
+      patient_id {
+        value: "f001"
       }
     }
   }
@@ -117,8 +117,8 @@ term {
     }
   }
   topic {
-    reference {
-      value: "Practitioner/f204"
+    practitioner_id {
+      value: "f204"
     }
     display {
       value: "Fictive Nurse"

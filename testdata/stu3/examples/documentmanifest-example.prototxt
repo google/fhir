@@ -57,8 +57,8 @@ type {
   }
 }
 subject {
-  reference {
-    value: "Patient/xcda"
+  patient_id {
+    value: "xcda"
   }
 }
 created {
@@ -67,13 +67,13 @@ created {
   precision: SECOND
 }
 author {
-  reference {
-    value: "#a1"
+  fragment {
+    value: "a1"
   }
 }
 recipient {
-  reference {
-    value: "Practitioner/xcda1"
+  practitioner_id {
+    value: "xcda1"
   }
 }
 source {
@@ -84,8 +84,8 @@ description {
 }
 content {
   p_reference {
-    reference {
-      value: "DocumentReference/example"
+    document_reference_id {
+      value: "example"
     }
   }
 }
@@ -99,8 +99,8 @@ related {
     }
   }
   ref {
-    reference {
-      value: "DocumentReference/example"
+    document_reference_id {
+      value: "example"
     }
   }
 }

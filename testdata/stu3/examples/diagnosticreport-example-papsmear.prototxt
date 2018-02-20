@@ -23,8 +23,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/b248b1b2-1686-4b94-9936-37d7a5f94b51"
+  patient_id {
+    value: "b248b1b2-1686-4b94-9936-37d7a5f94b51"
   }
 }
 effective_date_time {
@@ -39,8 +39,8 @@ issued {
 }
 performer {
   actor {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
   }
 }

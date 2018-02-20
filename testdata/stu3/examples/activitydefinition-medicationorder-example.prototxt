@@ -45,8 +45,8 @@ contained {
     }
     ingredient {
       item_reference {
-        reference {
-          value: "#citalopramSubstance"
+        fragment {
+          value: "citalopramSubstance"
         }
       }
       amount {
@@ -404,8 +404,8 @@ related_artifact {
     value: COMPOSED_OF
   }
   resource {
-    reference {
-      value: "#citalopramMedication"
+    fragment {
+      value: "citalopramMedication"
     }
   }
 }
@@ -413,8 +413,8 @@ kind {
   value: MEDICATION_REQUEST
 }
 product_reference {
-  reference {
-    value: "#citalopramMedication"
+  fragment {
+    value: "citalopramMedication"
   }
 }
 dosage {

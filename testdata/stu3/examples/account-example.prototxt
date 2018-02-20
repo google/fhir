@@ -40,8 +40,8 @@ name {
   value: "HACC Funded Billing for Peter James Chalmers"
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Peter James Chalmers"
@@ -83,8 +83,8 @@ balance {
 }
 coverage {
   coverage {
-    reference {
-      value: "Coverage/7546D"
+    coverage_id {
+      value: "7546D"
     }
   }
   priority {
@@ -92,8 +92,8 @@ coverage {
   }
 }
 owner {
-  reference {
-    value: "Organization/hl7"
+  organization_id {
+    value: "hl7"
   }
 }
 description {

@@ -47,16 +47,16 @@ class {
   }
 }
 subject {
-  reference {
-    value: "Patient/xcda"
+  patient_id {
+    value: "xcda"
   }
   display {
     value: "Henry Levin the 7th"
   }
 }
 encounter {
-  reference {
-    value: "Encounter/xcda"
+  encounter_id {
+    value: "xcda"
   }
 }
 date {
@@ -65,8 +65,8 @@ date {
   precision: SECOND
 }
 author {
-  reference {
-    value: "Practitioner/xcda-author"
+  practitioner_id {
+    value: "xcda-author"
   }
   display {
     value: "Harold Hippocrates, MD"
@@ -88,8 +88,8 @@ attester {
     precision: SECOND
   }
   party {
-    reference {
-      value: "Practitioner/xcda-author"
+    practitioner_id {
+      value: "xcda-author"
     }
     display {
       value: "Harold Hippocrates, MD"
@@ -97,8 +97,8 @@ attester {
   }
 }
 custodian {
-  reference {
-    value: "Organization/2.16.840.1.113883.19.5"
+  organization_id {
+    value: "2.16.840.1.113883.19.5"
   }
   display {
     value: "Good Health Clinic"
@@ -109,8 +109,8 @@ relates_to {
     value: REPLACES
   }
   target_reference {
-    reference {
-      value: "Composition/old-example"
+    composition_id {
+      value: "old-example"
     }
   }
 }
@@ -152,8 +152,8 @@ event {
     }
   }
   detail {
-    reference {
-      value: "Observation/example"
+    observation_id {
+      value: "example"
     }
   }
 }
@@ -199,18 +199,18 @@ section {
     }
   }
   entry {
-    reference {
-      value: "Condition/stroke"
+    condition_id {
+      value: "stroke"
     }
   }
   entry {
-    reference {
-      value: "Condition/example"
+    condition_id {
+      value: "example"
     }
   }
   entry {
-    reference {
-      value: "Condition/example2"
+    condition_id {
+      value: "example2"
     }
   }
 }

@@ -40,7 +40,7 @@ quantity {
   }
 }
 transform {
-  reference {
-    value: "StructureMap/supplyrequest-transform"
+  structure_map_id {
+    value: "supplyrequest-transform"
   }
 }

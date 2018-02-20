@@ -34,13 +34,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -103,13 +103,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -172,13 +172,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -241,13 +241,13 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/pat2"
+      patient_id {
+        value: "pat2"
       }
     }
     performer {
-      reference {
-        value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
       }
       display {
         value: "Acme Laboratory, Inc"
@@ -323,8 +323,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/pat2"
+  patient_id {
+    value: "pat2"
   }
 }
 effective_date_time {
@@ -339,8 +339,8 @@ issued {
 }
 performer {
   actor {
-    reference {
-      value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+    organization_id {
+      value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
     }
     display {
       value: "Acme Laboratory, Inc"
@@ -348,22 +348,22 @@ performer {
   }
 }
 result {
-  reference {
-    value: "#cholesterol"
+  fragment {
+    value: "cholesterol"
   }
 }
 result {
-  reference {
-    value: "#triglyceride"
+  fragment {
+    value: "triglyceride"
   }
 }
 result {
-  reference {
-    value: "#hdlcholesterol"
+  fragment {
+    value: "hdlcholesterol"
   }
 }
 result {
-  reference {
-    value: "#ldlcholesterol"
+  fragment {
+    value: "ldlcholesterol"
   }
 }

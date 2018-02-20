@@ -107,13 +107,13 @@ medium {
   }
 }
 recipient {
-  reference {
-    value: "#provider"
+  fragment {
+    value: "provider"
   }
 }
 context {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
 }
 payload {
@@ -132,14 +132,14 @@ authored_on {
   precision: SECOND
 }
 sender {
-  reference {
-    value: "#payor"
+  fragment {
+    value: "payor"
   }
 }
 requester {
   agent {
-    reference {
-      value: "#requester"
+    fragment {
+      value: "requester"
     }
   }
 }

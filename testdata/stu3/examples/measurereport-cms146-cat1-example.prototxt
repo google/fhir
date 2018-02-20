@@ -31,18 +31,18 @@ type {
   value: INDIVIDUAL
 }
 measure {
-  reference {
-    value: "Measure/CMS146"
+  measure_id {
+    value: "CMS146"
   }
 }
 patient {
-  reference {
-    value: "Patient/123"
+  patient_id {
+    value: "123"
   }
 }
 reporting_organization {
-  reference {
-    value: "#reporter"
+  fragment {
+    value: "reporter"
   }
 }
 period {
@@ -532,7 +532,7 @@ group {
   }
 }
 evaluated_resources {
-  reference {
-    value: "Bundle/456"
+  bundle_id {
+    value: "456"
   }
 }

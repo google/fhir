@@ -62,7 +62,7 @@ address {
   }
 }
 endpoint {
-  reference {
-    value: "Endpoint/example"
+  endpoint_id {
+    value: "example"
   }
 }

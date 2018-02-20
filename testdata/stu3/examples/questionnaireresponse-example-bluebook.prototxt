@@ -13,7 +13,7 @@ status {
   value: COMPLETED
 }
 subject {
-  reference {
+  uri {
     value: "http://hl7.org/fhir/Patient/1"
   }
 }
@@ -23,7 +23,7 @@ authored {
   precision: SECOND
 }
 author {
-  reference {
+  uri {
     value: "http://hl7.org/fhir/Practitioner/example"
   }
 }

@@ -26,12 +26,12 @@ status {
   value: CANDIDATE
 }
 study {
-  reference {
-    value: "ResearchStudy/example"
+  research_study_id {
+    value: "example"
   }
 }
 individual {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }

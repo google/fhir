@@ -21,8 +21,8 @@ status {
   value: ACTIVE
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Peter Chalmers"
@@ -33,8 +33,8 @@ date_time {
   precision: DAY
 }
 orderer {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
   display {
     value: "Dr Adam Careful"

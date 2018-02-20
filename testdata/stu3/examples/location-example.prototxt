@@ -125,12 +125,12 @@ position {
   }
 }
 managing_organization {
-  reference {
-    value: "Organization/f001"
+  organization_id {
+    value: "f001"
   }
 }
 endpoint {
-  reference {
-    value: "Endpoint/example"
+  endpoint_id {
+    value: "example"
   }
 }

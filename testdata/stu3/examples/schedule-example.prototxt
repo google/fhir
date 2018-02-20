@@ -54,8 +54,8 @@ specialty {
   }
 }
 actor {
-  reference {
-    value: "Location/1"
+  location_id {
+    value: "1"
   }
   display {
     value: "Burgers UMC, South Wing, second floor"

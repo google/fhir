@@ -23,8 +23,8 @@ identifier {
   }
 }
 patient {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
 }
 relationship {

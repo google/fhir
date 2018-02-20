@@ -10,8 +10,8 @@ text {
   }
 }
 target {
-  reference {
-    value: "DocumentReference/example"
+  document_reference_id {
+    value: "example"
   }
 }
 recorded {
@@ -74,8 +74,8 @@ signature {
     precision: SECOND
   }
   who_reference {
-    reference {
-      value: "Practitioner/xcda-author"
+    practitioner_id {
+      value: "xcda-author"
     }
   }
   content_type {

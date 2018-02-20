@@ -37,8 +37,8 @@ class {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 participant {
@@ -55,8 +55,8 @@ participant {
     }
   }
   individual {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
     display {
       value: "Dr Adam Careful"
@@ -77,8 +77,8 @@ period {
 }
 location {
   location {
-    reference {
-      value: "#home"
+    fragment {
+      value: "home"
     }
     display {
       value: "Client\'s home"

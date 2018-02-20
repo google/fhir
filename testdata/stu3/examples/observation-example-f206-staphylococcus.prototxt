@@ -37,8 +37,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
@@ -50,8 +50,8 @@ issued {
   precision: SECOND
 }
 performer {
-  reference {
-    value: "Practitioner/f202"
+  practitioner_id {
+    value: "f202"
   }
   display {
     value: "Luigi Maas"

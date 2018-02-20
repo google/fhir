@@ -36,8 +36,8 @@ vaccine_code {
   }
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 date {
@@ -60,8 +60,8 @@ report_origin {
   }
 }
 location {
-  reference {
-    value: "Location/1"
+  location_id {
+    value: "1"
   }
 }
 note {

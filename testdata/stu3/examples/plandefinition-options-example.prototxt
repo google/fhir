@@ -66,8 +66,8 @@ action {
       value: "Administer Medication 1"
     }
     definition {
-      reference {
-        value: "#activitydefinition-medicationrequest-1"
+      fragment {
+        value: "activitydefinition-medicationrequest-1"
       }
     }
   }
@@ -95,8 +95,8 @@ action {
       }
     }
     definition {
-      reference {
-        value: "#activitydefinition-medicationrequest-2"
+      fragment {
+        value: "activitydefinition-medicationrequest-2"
       }
     }
   }

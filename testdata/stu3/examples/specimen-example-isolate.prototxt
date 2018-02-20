@@ -39,8 +39,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
     }
     received_time {
@@ -97,8 +97,8 @@ type {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 received_time {
@@ -107,14 +107,14 @@ received_time {
   precision: SECOND
 }
 parent {
-  reference {
-    value: "#stool"
+  fragment {
+    value: "stool"
   }
 }
 collection {
   collector {
-    reference {
-      value: "Practitioner/f202"
+    practitioner_id {
+      value: "f202"
     }
   }
   collected_date_time {

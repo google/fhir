@@ -15,7 +15,7 @@ contained {
       value: "signature"
     }
     target {
-      reference {
+      uri {
         value: "ProcedureRequest/physiotherapy/_history/1"
       }
     }
@@ -36,8 +36,8 @@ contained {
         }
       }
       who_reference {
-        reference {
-          value: "Practitioner/example"
+        practitioner_id {
+          value: "example"
         }
         display {
           value: "Dr Adam Careful"
@@ -62,8 +62,8 @@ contained {
         precision: SECOND
       }
       who_reference {
-        reference {
-          value: "Practitioner/example"
+        practitioner_id {
+          value: "example"
         }
         display {
           value: "Dr Adam Careful"
@@ -132,8 +132,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
     }
     onset_date_time {
@@ -167,8 +167,8 @@ identifier {
   }
 }
 based_on {
-  reference {
-    value: "CarePlan/gpvisit"
+  care_plan_id {
+    value: "gpvisit"
   }
 }
 status {
@@ -191,8 +191,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 occurrence_timing {
@@ -232,16 +232,16 @@ authored_on {
 }
 requester {
   agent {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
     display {
       value: "Dr Adam Careful"
     }
   }
   on_behalf_of {
-    reference {
-      value: "Organization/2"
+    organization_id {
+      value: "2"
     }
     display {
       value: "Good Health Clinic"
@@ -249,13 +249,13 @@ requester {
   }
 }
 reason_reference {
-  reference {
-    value: "#cystic-fibrosis"
+  fragment {
+    value: "cystic-fibrosis"
   }
 }
 relevant_history {
-  reference {
-    value: "#signature"
+  fragment {
+    value: "signature"
   }
   display {
     value: "Author\'s Signature"

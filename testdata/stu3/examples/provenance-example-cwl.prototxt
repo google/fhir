@@ -10,8 +10,8 @@ text {
   }
 }
 target {
-  reference {
-    value: "Sequence/example-pgx-1"
+  sequence_id {
+    value: "example-pgx-1"
   }
 }
 period {
@@ -42,8 +42,8 @@ agent {
     }
   }
   who_reference {
-    reference {
-      value: "Patient/example"
+    patient_id {
+      value: "example"
     }
   }
 }

@@ -29,8 +29,8 @@ contained {
         }
       }
       member {
-        reference {
-          value: "Practitioner/f201"
+        practitioner_id {
+          value: "f201"
         }
         display {
           value: "Dokter Bronsig"
@@ -52,8 +52,8 @@ contained {
         }
       }
       member {
-        reference {
-          value: "Practitioner/f204"
+        practitioner_id {
+          value: "f204"
         }
         display {
           value: "Nurse Carla Espinosa"
@@ -76,8 +76,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/f201"
+      patient_id {
+        value: "f201"
       }
       display {
         value: "Roel"
@@ -92,8 +92,8 @@ intent {
   value: PROPOSAL
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
@@ -110,21 +110,21 @@ period {
   }
 }
 care_team {
-  reference {
-    value: "#careteam"
+  fragment {
+    value: "careteam"
   }
 }
 addresses {
-  reference {
-    value: "Condition/f204"
+  condition_id {
+    value: "f204"
   }
   display {
     value: "Roel\'s renal insufficiency"
   }
 }
 goal {
-  reference {
-    value: "#goal"
+  fragment {
+    value: "goal"
   }
 }
 activity {
@@ -161,8 +161,8 @@ activity {
       value: "daily"
     }
     product_reference {
-      reference {
-        value: "Substance/f203"
+      substance_id {
+        value: "f203"
       }
       display {
         value: "Potassium"

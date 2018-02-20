@@ -34,16 +34,16 @@ type {
   }
 }
 subscriber {
-  reference {
-    value: "Patient/5"
+  patient_id {
+    value: "5"
   }
 }
 subscriber_id {
   value: "AB9876"
 }
 beneficiary {
-  reference {
-    value: "Patient/5"
+  patient_id {
+    value: "5"
   }
 }
 relationship {
@@ -64,8 +64,8 @@ period {
   }
 }
 payor {
-  reference {
-    value: "Organization/2"
+  organization_id {
+    value: "2"
   }
 }
 grouping {
@@ -98,7 +98,7 @@ network {
   value: "5"
 }
 contract {
-  reference {
-    value: "Contract/563818"
+  contract_id {
+    value: "563818"
   }
 }

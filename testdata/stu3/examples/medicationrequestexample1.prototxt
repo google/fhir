@@ -62,21 +62,21 @@ intent {
   value: ORDER
 }
 medication_reference {
-  reference {
-    value: "#med0316"
+  fragment {
+    value: "med0316"
   }
 }
 subject {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
   display {
     value: "Donald Duck"
   }
 }
 context {
-  reference {
-    value: "Encounter/f001"
+  encounter_id {
+    value: "f001"
   }
   display {
     value: "encounter who leads to this prescription"
@@ -88,22 +88,22 @@ authored_on {
 }
 requester {
   agent {
-    reference {
-      value: "Practitioner/f007"
+    practitioner_id {
+      value: "f007"
     }
     display {
       value: "Patrick Pump"
     }
   }
   on_behalf_of {
-    reference {
-      value: "Organization/f002"
+    organization_id {
+      value: "f002"
     }
   }
 }
 reason_reference {
-  reference {
-    value: "Condition/f201"
+  condition_id {
+    value: "f201"
   }
   display {
     value: "condition for prescribing this medication"

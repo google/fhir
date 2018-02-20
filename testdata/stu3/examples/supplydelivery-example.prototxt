@@ -15,8 +15,8 @@ identifier {
   }
 }
 based_on {
-  reference {
-    value: "SupplyRequest/simpleorder"
+  supply_request_id {
+    value: "simpleorder"
   }
 }
 part_of {

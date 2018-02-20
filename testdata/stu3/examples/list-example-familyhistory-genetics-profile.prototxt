@@ -41,8 +41,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#2"
+          fragment {
+            value: "2"
           }
           display {
             value: "maternal grandfather"
@@ -54,8 +54,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
       display {
         value: "Peter Patient"
@@ -88,8 +88,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
       display {
         value: "Peter Patient"
@@ -142,8 +142,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#2"
+          fragment {
+            value: "2"
           }
           display {
             value: "maternal grandfather"
@@ -155,8 +155,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
       display {
         value: "Peter Patient"
@@ -186,8 +186,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
       display {
         value: "Peter Patient"
@@ -217,8 +217,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
       display {
         value: "Peter Patient"
@@ -251,8 +251,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
       display {
         value: "Peter Patient"
@@ -282,8 +282,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
       display {
         value: "Peter Patient"
@@ -336,8 +336,8 @@ contained {
           value: "reference"
         }
         value_reference {
-          reference {
-            value: "#2"
+          fragment {
+            value: "2"
           }
           display {
             value: "maternal grandfather"
@@ -349,8 +349,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
       display {
         value: "Peter Patient"
@@ -394,8 +394,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Peter Patient"
@@ -403,64 +403,64 @@ subject {
 }
 entry {
   item {
-    reference {
-      value: "#1"
+    fragment {
+      value: "1"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#2"
+    fragment {
+      value: "2"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#3"
+    fragment {
+      value: "3"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#4"
+    fragment {
+      value: "4"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#5"
+    fragment {
+      value: "5"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#6"
+    fragment {
+      value: "6"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#7"
+    fragment {
+      value: "7"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#8"
+    fragment {
+      value: "8"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "Condition/family-history"
+    condition_id {
+      value: "family-history"
     }
     display {
       value: "Family history of cancer of colon"

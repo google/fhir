@@ -26,8 +26,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/100"
+      patient_id {
+        value: "100"
       }
       display {
         value: "Peter James Chalmers"
@@ -58,8 +58,8 @@ contained {
         }
       }
       member {
-        reference {
-          value: "Practitioner/13"
+        practitioner_id {
+          value: "13"
         }
         display {
           value: "Nurse Nancy"
@@ -84,8 +84,8 @@ contained {
         }
       }
       member {
-        reference {
-          value: "Practitioner/14"
+        practitioner_id {
+          value: "14"
         }
         display {
           value: "Doctor Dave"
@@ -108,8 +108,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/100"
+      patient_id {
+        value: "100"
       }
       display {
         value: "Peter James Chalmers"
@@ -124,8 +124,8 @@ intent {
   value: PLAN
 }
 subject {
-  reference {
-    value: "Patient/100"
+  patient_id {
+    value: "100"
   }
   display {
     value: "Peter James Chalmers"
@@ -139,27 +139,27 @@ period {
   }
 }
 care_team {
-  reference {
-    value: "#careteam"
+  fragment {
+    value: "careteam"
   }
 }
 addresses {
-  reference {
-    value: "#p1"
+  fragment {
+    value: "p1"
   }
   display {
     value: "obesity"
   }
 }
 goal {
-  reference {
-    value: "#goal"
+  fragment {
+    value: "goal"
   }
 }
 activity {
   outcome_reference {
-    reference {
-      value: "Encounter/example"
+    encounter_id {
+      value: "example"
     }
   }
   detail {
@@ -204,8 +204,8 @@ activity {
       }
     }
     performer {
-      reference {
-        value: "Practitioner/13"
+      practitioner_id {
+        value: "13"
       }
       display {
         value: "Nurse Nancy"
@@ -244,8 +244,8 @@ activity {
     prohibited {
     }
     performer {
-      reference {
-        value: "Practitioner/14"
+      practitioner_id {
+        value: "14"
       }
       display {
         value: "Doctor Dave"

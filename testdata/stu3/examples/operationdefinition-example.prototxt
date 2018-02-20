@@ -93,8 +93,8 @@ comment {
   value: "Only implemented for Labs and Medications so far"
 }
 base {
-  reference {
-    value: "OperationDefinition/Questionnaire-populate"
+  operation_definition_id {
+    value: "Questionnaire-populate"
   }
 }
 resource {

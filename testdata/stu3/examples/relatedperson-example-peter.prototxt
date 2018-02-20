@@ -10,8 +10,8 @@ text {
   }
 }
 patient {
-  reference {
-    value: "Patient/animal"
+  patient_id {
+    value: "animal"
   }
 }
 relationship {

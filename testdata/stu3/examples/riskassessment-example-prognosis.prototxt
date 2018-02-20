@@ -17,8 +17,8 @@ occurrence_date_time {
   precision: DAY
 }
 condition {
-  reference {
-    value: "Condition/stroke"
+  condition_id {
+    value: "stroke"
   }
   display {
     value: "Ischemic Stroke"

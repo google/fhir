@@ -48,7 +48,7 @@ physical_type {
   }
 }
 managing_organization {
-  reference {
-    value: "Organization/f001"
+  organization_id {
+    value: "f001"
   }
 }

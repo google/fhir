@@ -16,8 +16,8 @@ contained {
     }
     participant {
       member {
-        reference {
-          value: "Practitioner/f003"
+        practitioner_id {
+          value: "f003"
         }
         display {
           value: "M.I.M. Versteegh"
@@ -40,8 +40,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/f001"
+      patient_id {
+        value: "f001"
       }
       display {
         value: "P. van de Heuvel"
@@ -72,8 +72,8 @@ intent {
   value: PLAN
 }
 subject {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
   display {
     value: "P. van de Heuvel"
@@ -90,21 +90,21 @@ period {
   }
 }
 care_team {
-  reference {
-    value: "#careteam"
+  fragment {
+    value: "careteam"
   }
 }
 addresses {
-  reference {
-    value: "Condition/f201"
+  condition_id {
+    value: "f201"
   }
   display {
     value: "?????"
   }
 }
 goal {
-  reference {
-    value: "#goal"
+  fragment {
+    value: "goal"
   }
 }
 activity {
@@ -142,8 +142,8 @@ activity {
       value: "2011-07-07T09:30:10+01:00"
     }
     performer {
-      reference {
-        value: "Practitioner/f003"
+      practitioner_id {
+        value: "f003"
       }
       display {
         value: "M.I.M. Versteegh"

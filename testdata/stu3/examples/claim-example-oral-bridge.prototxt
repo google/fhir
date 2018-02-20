@@ -28,8 +28,8 @@ contained {
       value: ORDER
     }
     subject {
-      reference {
-        value: "Patient/1"
+      patient_id {
+        value: "1"
       }
     }
   }
@@ -59,8 +59,8 @@ use {
   value: COMPLETE
 }
 patient {
-  reference {
-    value: "Patient/1"
+  patient_id {
+    value: "1"
   }
 }
 created {
@@ -68,13 +68,13 @@ created {
   precision: DAY
 }
 insurer {
-  reference {
-    value: "Organization/2"
+  organization_id {
+    value: "2"
   }
 }
 organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
 }
 priority {
@@ -86,8 +86,8 @@ priority {
 }
 related {
   claim {
-    reference {
-      value: "Claim/100151"
+    claim_id {
+      value: "100151"
     }
   }
   relationship {
@@ -126,14 +126,14 @@ payee {
     }
   }
   party {
-    reference {
-      value: "RelatedPerson/peter"
+    related_person_id {
+      value: "peter"
     }
   }
 }
 referral {
-  reference {
-    value: "#referral"
+  fragment {
+    value: "referral"
   }
 }
 care_team {
@@ -141,8 +141,8 @@ care_team {
     value: 1
   }
   provider {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
   }
 }
@@ -200,8 +200,8 @@ insurance {
     value: true
   }
   coverage {
-    reference {
-      value: "Coverage/9876B1"
+    coverage_id {
+      value: "9876B1"
     }
   }
 }
@@ -268,8 +268,8 @@ item {
     }
   }
   udi {
-    reference {
-      value: "#device-bridge"
+    fragment {
+      value: "device-bridge"
     }
   }
   body_site {

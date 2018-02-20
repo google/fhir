@@ -59,8 +59,8 @@ code_codeable_concept {
   }
 }
 subject {
-  reference {
-    value: "Patient/dicom"
+  patient_id {
+    value: "dicom"
   }
 }
 context {
@@ -80,16 +80,16 @@ authored_on {
 }
 requester {
   agent {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
     display {
       value: "Dr. Adam Careful"
     }
   }
   on_behalf_of {
-    reference {
-      value: "Organization/2.16.840.1.113883.19.5"
+    organization_id {
+      value: "2.16.840.1.113883.19.5"
     }
   }
 }

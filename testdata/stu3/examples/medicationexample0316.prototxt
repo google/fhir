@@ -59,8 +59,8 @@ form {
 }
 ingredient {
   item_reference {
-    reference {
-      value: "#sub04"
+    fragment {
+      value: "sub04"
     }
   }
   amount {

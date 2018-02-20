@@ -110,8 +110,8 @@ ingredient {
     }
   }
   substance_reference {
-    reference {
-      value: "#ingr1"
+    fragment {
+      value: "ingr1"
     }
   }
 }
@@ -147,8 +147,8 @@ ingredient {
     }
   }
   substance_reference {
-    reference {
-      value: "#ingr2"
+    fragment {
+      value: "ingr2"
     }
   }
 }

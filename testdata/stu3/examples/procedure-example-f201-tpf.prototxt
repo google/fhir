@@ -26,16 +26,16 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
   }
 }
 context {
-  reference {
-    value: "Encounter/f202"
+  encounter_id {
+    value: "f202"
   }
   display {
     value: "Roel\'s encounter on January 28th, 2013"
@@ -68,8 +68,8 @@ performer {
     }
   }
   actor {
-    reference {
-      value: "Practitioner/f201"
+    practitioner_id {
+      value: "f201"
     }
     display {
       value: "Dokter Bronsig"

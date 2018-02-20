@@ -35,12 +35,12 @@ created {
   precision: DAY
 }
 organization {
-  reference {
-    value: "Organization/2"
+  organization_id {
+    value: "2"
   }
 }
 request {
-  reference {
+  uri {
     value: "http://www.BenefitsInc.com/fhir/eligibility/225476332402"
   }
 }
@@ -58,13 +58,13 @@ disposition {
   value: "2014 August mid-month settlement."
 }
 request_provider {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }
 request_organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
 }
 detail {
@@ -99,13 +99,13 @@ detail {
     }
   }
   submitter {
-    reference {
-      value: "Organization/1"
+    organization_id {
+      value: "1"
     }
   }
   payee {
-    reference {
-      value: "Organization/1"
+    organization_id {
+      value: "1"
     }
   }
   date {
@@ -136,7 +136,7 @@ detail {
     }
   }
   request {
-    reference {
+    uri {
       value: "http://www.BenefitsInc.com/fhir/oralhealthclaim/225476332699"
     }
   }

@@ -49,8 +49,8 @@ description {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Peter James Chalmers"
@@ -117,8 +117,8 @@ status_reason {
   value: "Patient wants to defer weight loss until after honeymoon."
 }
 expressed_by {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Peter James Chalmers"
@@ -130,8 +130,8 @@ addresses {
   }
 }
 outcome_reference {
-  reference {
-    value: "Observation/example"
+  observation_id {
+    value: "example"
   }
   display {
     value: "Body Weight Measured"

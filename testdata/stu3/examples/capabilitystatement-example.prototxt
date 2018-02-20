@@ -137,7 +137,7 @@ implementation_guide {
   value: "http://hl7.org/fhir/us/lab"
 }
 profile {
-  reference {
+  uri {
     value: "http://hl7.org/fhir/us/core/StructureDefinition/familymemberhistory-genetic"
   }
 }
@@ -179,7 +179,7 @@ rest {
       value: PATIENT
     }
     profile {
-      reference {
+      uri {
         value: "http://fhir.hl7.org/base/StructureDefinition/7896271d-57f6-4231-89dc-dcc91eab2416"
       }
     }
@@ -323,13 +323,13 @@ messaging {
       value: PATIENT
     }
     request {
-      reference {
-        value: "StructureDefinition/Patient"
+      structure_definition_id {
+        value: "Patient"
       }
     }
     response {
-      reference {
-        value: "StructureDefinition/MessageHeader"
+      structure_definition_id {
+        value: "MessageHeader"
       }
     }
     documentation {
@@ -345,7 +345,7 @@ document {
     value: "Basic rules for all documents in the EHR system"
   }
   profile {
-    reference {
+    uri {
       value: "http://fhir.hl7.org/base/Profilebc054d23-75e1-4dc6-aca5-838b6b1ac81d/_history/b5fdd9fc-b021-4ea1-911a-721a60663796"
     }
   }

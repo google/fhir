@@ -84,8 +84,8 @@ agent {
     value: true
   }
   location {
-    reference {
-      value: "Location/1"
+    location_id {
+      value: "1"
     }
   }
   policy {
@@ -115,8 +115,8 @@ agent {
     }
   }
   reference {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
   }
   user_id {
@@ -171,8 +171,8 @@ source {
 }
 entity {
   reference {
-    reference {
-      value: "Patient/example"
+    patient_id {
+      value: "example"
     }
   }
   type {
@@ -205,7 +205,7 @@ entity {
     }
   }
   reference {
-    reference {
+    uri {
       value: "Patient/example/_history/1"
     }
   }

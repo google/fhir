@@ -10,8 +10,8 @@ text {
   }
 }
 author {
-  reference {
-    value: "Practitioner/f201"
+  practitioner_id {
+    value: "f201"
   }
 }
 item {
@@ -19,8 +19,8 @@ item {
     value: SOURCE
   }
   resource {
-    reference {
-      value: "Condition/example"
+    condition_id {
+      value: "example"
     }
     display {
       value: "Severe burn of left ear (Date: 24-May 2012)"
@@ -32,8 +32,8 @@ item {
     value: ALTERNATE
   }
   resource {
-    reference {
-      value: "Condition/condition-example"
+    condition_id {
+      value: "condition-example"
     }
     display {
       value: "Severe burn of left ear (Date: 24-May 2012)"

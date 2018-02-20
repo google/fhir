@@ -100,8 +100,8 @@ metadata {
       value: "http://hl7.org/fhir/http.html#delete"
     }
     capabilities {
-      reference {
-        value: "CapabilityStatement/example"
+      capability_statement_id {
+        value: "example"
       }
     }
   }
@@ -115,8 +115,8 @@ fixture {
   autodelete {
   }
   resource {
-    reference {
-      value: "Patient/example"
+    patient_id {
+      value: "example"
     }
     display {
       value: "Peter Chalmers"
@@ -132,8 +132,8 @@ fixture {
   autodelete {
   }
   resource {
-    reference {
-      value: "Patient/pat1"
+    patient_id {
+      value: "pat1"
     }
     display {
       value: "Donald Duck"
@@ -144,7 +144,7 @@ profile {
   id {
     value: "patient-profile"
   }
-  reference {
+  uri {
     value: "http://hl7.org/fhir/StructureDefinition/Patient"
   }
 }

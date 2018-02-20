@@ -142,14 +142,14 @@ related_artifact {
     value: SUCCESSOR
   }
   resource {
-    reference {
-      value: "Measure/measure-exclusive-breastfeeding"
+    measure_id {
+      value: "measure-exclusive-breastfeeding"
     }
   }
 }
 library {
-  reference {
-    value: "Library/library-exclusive-breastfeeding-cqm-logic"
+  library_id {
+    value: "library-exclusive-breastfeeding-cqm-logic"
   }
 }
 disclaimer {

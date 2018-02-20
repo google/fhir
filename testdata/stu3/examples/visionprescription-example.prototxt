@@ -21,8 +21,8 @@ status {
   value: ACTIVE
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 date_written {
@@ -30,8 +30,8 @@ date_written {
   precision: DAY
 }
 prescriber {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }
 dispense {

@@ -75,8 +75,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
@@ -88,8 +88,8 @@ issued {
   precision: SECOND
 }
 performer {
-  reference {
-    value: "Practitioner/f201"
+  practitioner_id {
+    value: "f201"
   }
 }
 value_quantity {

@@ -31,13 +31,13 @@ type {
   value: PATIENT_LIST
 }
 measure {
-  reference {
-    value: "Measure/CMS146"
+  measure_id {
+    value: "CMS146"
   }
 }
 reporting_organization {
-  reference {
-    value: "#reporter"
+  fragment {
+    value: "reporter"
   }
 }
 period {
@@ -68,8 +68,8 @@ group {
       value: 500
     }
     patients {
-      reference {
-        value: "List/CMS146-initial-population"
+      list_id {
+        value: "CMS146-initial-population"
       }
     }
   }
@@ -85,8 +85,8 @@ group {
       value: 200
     }
     patients {
-      reference {
-        value: "List/CMS146-numerator"
+      list_id {
+        value: "CMS146-numerator"
       }
     }
   }
@@ -102,8 +102,8 @@ group {
       value: 500
     }
     patients {
-      reference {
-        value: "List/CMS146-denominator"
+      list_id {
+        value: "CMS146-denominator"
       }
     }
   }
@@ -119,8 +119,8 @@ group {
       value: 100
     }
     patients {
-      reference {
-        value: "List/CMS146-denominator-exclusions"
+      list_id {
+        value: "CMS146-denominator-exclusions"
       }
     }
   }
@@ -146,8 +146,8 @@ group {
           value: 250
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-up-to-9-true-initial-population"
+          list_id {
+            value: "CMS146-stratifier-ages-up-to-9-true-initial-population"
           }
         }
       }
@@ -163,8 +163,8 @@ group {
           value: 100
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-up-to-9-true-numerator"
+          list_id {
+            value: "CMS146-stratifier-ages-up-to-9-true-numerator"
           }
         }
       }
@@ -180,8 +180,8 @@ group {
           value: 250
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-up-to-9-true-denominator"
+          list_id {
+            value: "CMS146-stratifier-ages-up-to-9-true-denominator"
           }
         }
       }
@@ -197,8 +197,8 @@ group {
           value: 50
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-up-to-9-true-denominator-exclusions"
+          list_id {
+            value: "CMS146-stratifier-ages-up-to-9-true-denominator-exclusions"
           }
         }
       }
@@ -219,8 +219,8 @@ group {
           value: 250
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-up-to-9-false-initial-population"
+          list_id {
+            value: "CMS146-stratifier-ages-up-to-9-false-initial-population"
           }
         }
       }
@@ -236,8 +236,8 @@ group {
           value: 100
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-up-to-9-false-numerator"
+          list_id {
+            value: "CMS146-stratifier-ages-up-to-9-false-numerator"
           }
         }
       }
@@ -253,8 +253,8 @@ group {
           value: 250
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-up-to-9-false-denominator"
+          list_id {
+            value: "CMS146-stratifier-ages-up-to-9-false-denominator"
           }
         }
       }
@@ -270,8 +270,8 @@ group {
           value: 50
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-up-to-9-false-denominator-exclusions"
+          list_id {
+            value: "CMS146-stratifier-ages-up-to-9-false-denominator-exclusions"
           }
         }
       }
@@ -299,8 +299,8 @@ group {
           value: 250
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-10-plus-true-initial-population"
+          list_id {
+            value: "CMS146-stratifier-ages-10-plus-true-initial-population"
           }
         }
       }
@@ -316,8 +316,8 @@ group {
           value: 100
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-10-plus-true-numerator"
+          list_id {
+            value: "CMS146-stratifier-ages-10-plus-true-numerator"
           }
         }
       }
@@ -333,8 +333,8 @@ group {
           value: 250
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-10-plus-true-denominator"
+          list_id {
+            value: "CMS146-stratifier-ages-10-plus-true-denominator"
           }
         }
       }
@@ -350,8 +350,8 @@ group {
           value: 50
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-10-plus-true-denominator-exclusions"
+          list_id {
+            value: "CMS146-stratifier-ages-10-plus-true-denominator-exclusions"
           }
         }
       }
@@ -372,8 +372,8 @@ group {
           value: 250
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-10-plus-false-initial-population"
+          list_id {
+            value: "CMS146-stratifier-ages-10-plus-false-initial-population"
           }
         }
       }
@@ -389,8 +389,8 @@ group {
           value: 100
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-10-plus-false-numerator"
+          list_id {
+            value: "CMS146-stratifier-ages-10-plus-false-numerator"
           }
         }
       }
@@ -406,8 +406,8 @@ group {
           value: 250
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-10-plus-false-denominator"
+          list_id {
+            value: "CMS146-stratifier-ages-10-plus-false-denominator"
           }
         }
       }
@@ -423,8 +423,8 @@ group {
           value: 50
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-ages-10-plus-false-denominator-exclusions"
+          list_id {
+            value: "CMS146-stratifier-ages-10-plus-false-denominator-exclusions"
           }
         }
       }
@@ -452,8 +452,8 @@ group {
           value: 250
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-male-initial-population"
+          list_id {
+            value: "CMS146-stratifier-gender-male-initial-population"
           }
         }
       }
@@ -469,8 +469,8 @@ group {
           value: 100
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-male-numerator"
+          list_id {
+            value: "CMS146-stratifier-gender-male-numerator"
           }
         }
       }
@@ -486,8 +486,8 @@ group {
           value: 250
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-male-denominator"
+          list_id {
+            value: "CMS146-stratifier-gender-male-denominator"
           }
         }
       }
@@ -503,8 +503,8 @@ group {
           value: 50
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-male-denominator-exclusions"
+          list_id {
+            value: "CMS146-stratifier-gender-male-denominator-exclusions"
           }
         }
       }
@@ -525,8 +525,8 @@ group {
           value: 250
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-female-initial-population"
+          list_id {
+            value: "CMS146-stratifier-gender-female-initial-population"
           }
         }
       }
@@ -542,8 +542,8 @@ group {
           value: 100
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-female-numerator"
+          list_id {
+            value: "CMS146-stratifier-gender-female-numerator"
           }
         }
       }
@@ -559,8 +559,8 @@ group {
           value: 250
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-female-denominator"
+          list_id {
+            value: "CMS146-stratifier-gender-female-denominator"
           }
         }
       }
@@ -576,8 +576,8 @@ group {
           value: 50
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-female-denominator-exclusions"
+          list_id {
+            value: "CMS146-stratifier-gender-female-denominator-exclusions"
           }
         }
       }
@@ -597,8 +597,8 @@ group {
         count {
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-other-initial-population"
+          list_id {
+            value: "CMS146-stratifier-gender-other-initial-population"
           }
         }
       }
@@ -613,8 +613,8 @@ group {
         count {
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-other-numerator"
+          list_id {
+            value: "CMS146-stratifier-gender-other-numerator"
           }
         }
       }
@@ -629,8 +629,8 @@ group {
         count {
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-other-denominator"
+          list_id {
+            value: "CMS146-stratifier-gender-other-denominator"
           }
         }
       }
@@ -645,8 +645,8 @@ group {
         count {
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-other-denominator-exclusions"
+          list_id {
+            value: "CMS146-stratifier-gender-other-denominator-exclusions"
           }
         }
       }
@@ -666,8 +666,8 @@ group {
         count {
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-unknown-initial-population"
+          list_id {
+            value: "CMS146-stratifier-gender-unknown-initial-population"
           }
         }
       }
@@ -682,8 +682,8 @@ group {
         count {
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-unknown-numerator"
+          list_id {
+            value: "CMS146-stratifier-gender-unknown-numerator"
           }
         }
       }
@@ -698,8 +698,8 @@ group {
         count {
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-unknown-denominator"
+          list_id {
+            value: "CMS146-stratifier-gender-unknown-denominator"
           }
         }
       }
@@ -714,8 +714,8 @@ group {
         count {
         }
         patients {
-          reference {
-            value: "List/CMS146-stratifier-gender-unknown-denominator-exclusions"
+          list_id {
+            value: "CMS146-stratifier-gender-unknown-denominator-exclusions"
           }
         }
       }

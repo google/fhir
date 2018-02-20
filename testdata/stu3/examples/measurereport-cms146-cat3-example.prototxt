@@ -31,13 +31,13 @@ type {
   value: SUMMARY
 }
 measure {
-  reference {
-    value: "Measure/CMS146"
+  measure_id {
+    value: "CMS146"
   }
 }
 reporting_organization {
-  reference {
-    value: "#reporter"
+  fragment {
+    value: "reporter"
   }
 }
 period {

@@ -48,8 +48,8 @@ active {
 }
 link {
   target {
-    reference {
-      value: "RelatedPerson/f002"
+    related_person_id {
+      value: "f002"
     }
     display {
       value: "Ariadne Bor-Jansma"

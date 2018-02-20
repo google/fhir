@@ -117,8 +117,8 @@ timing_timing {
   }
 }
 location {
-  reference {
-    value: "Location/1"
+  location_id {
+    value: "1"
   }
 }
 participant {

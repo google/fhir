@@ -60,8 +60,8 @@ is_brand {
   value: true
 }
 manufacturer {
-  reference {
-    value: "#org1"
+  fragment {
+    value: "org1"
   }
 }
 form {
@@ -171,8 +171,8 @@ package_value {
   }
   content {
     item_reference {
-      reference {
-        value: "#med500"
+      fragment {
+        value: "med500"
       }
     }
     amount {

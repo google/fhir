@@ -24,8 +24,8 @@ status {
   value: COMPLETED
 }
 test_script {
-  reference {
-    value: "TestScript/testscript-example"
+  test_script_id {
+    value: "testscript-example"
   }
 }
 result {

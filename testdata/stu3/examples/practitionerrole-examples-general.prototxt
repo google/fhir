@@ -22,16 +22,16 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/f003"
+        practitioner_id {
+          value: "f003"
         }
         display {
           value: "Marc Versteegh"
         }
       }
       organization {
-        reference {
-          value: "Organization/f001"
+        organization_id {
+          value: "f001"
         }
         display {
           value: "BMC"
@@ -108,16 +108,16 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/example"
+        practitioner_id {
+          value: "example"
         }
         display {
           value: "Adam Careful"
         }
       }
       organization {
-        reference {
-          value: "Organization/f001"
+        organization_id {
+          value: "f001"
         }
       }
       code {
@@ -131,16 +131,16 @@ entry {
         }
       }
       location {
-        reference {
-          value: "Location/1"
+        location_id {
+          value: "1"
         }
         display {
           value: "South Wing, second floor"
         }
       }
       healthcare_service {
-        reference {
-          value: "HealthcareService/example"
+        healthcare_service_id {
+          value: "example"
         }
       }
       telecom {
@@ -152,8 +152,8 @@ entry {
         }
       }
       endpoint {
-        reference {
-          value: "Endpoint/example"
+        endpoint_id {
+          value: "example"
         }
       }
     }
@@ -183,16 +183,16 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/example"
+        practitioner_id {
+          value: "example"
         }
         display {
           value: "Adam Careful"
         }
       }
       organization {
-        reference {
-          value: "Organization/2"
+        organization_id {
+          value: "2"
         }
         display {
           value: "Good Health Clinic"
@@ -229,16 +229,16 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/example"
+        practitioner_id {
+          value: "example"
         }
         display {
           value: "Adam Careful"
         }
       }
       organization {
-        reference {
-          value: "Organization/2"
+        organization_id {
+          value: "2"
         }
         display {
           value: "Good Health Clinic"
@@ -295,16 +295,16 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/f007"
+        practitioner_id {
+          value: "f007"
         }
         display {
           value: "Simone Heps"
         }
       }
       organization {
-        reference {
-          value: "Organization/f001"
+        organization_id {
+          value: "f001"
         }
         display {
           value: "BMC"
@@ -363,16 +363,16 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/f004"
+        practitioner_id {
+          value: "f004"
         }
         display {
           value: "Ronald Briet"
         }
       }
       organization {
-        reference {
-          value: "Organization/f001"
+        organization_id {
+          value: "f001"
         }
         display {
           value: "BMC"
@@ -431,8 +431,8 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/xcda1"
+        practitioner_id {
+          value: "xcda1"
         }
         display {
           value: "Sherry Dopplemeyer"
@@ -474,16 +474,16 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/f202"
+        practitioner_id {
+          value: "f202"
         }
         display {
           value: "Luigi Maas"
         }
       }
       organization {
-        reference {
-          value: "Organization/f201"
+        organization_id {
+          value: "f201"
         }
         display {
           value: "AUMC"
@@ -536,16 +536,16 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/f201"
+        practitioner_id {
+          value: "f201"
         }
         display {
           value: "Dokter Bronsig"
         }
       }
       organization {
-        reference {
-          value: "Organization/f201"
+        organization_id {
+          value: "f201"
         }
         display {
           value: "AUMC"
@@ -598,16 +598,16 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/f203"
+        practitioner_id {
+          value: "f203"
         }
         display {
           value: "Juri van Gelder"
         }
       }
       organization {
-        reference {
-          value: "Organization/f201"
+        organization_id {
+          value: "f201"
         }
         display {
           value: "AUMC"
@@ -660,16 +660,16 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/f005"
+        practitioner_id {
+          value: "f005"
         }
         display {
           value: "Langeveld Anne"
         }
       }
       organization {
-        reference {
-          value: "Organization/f001"
+        organization_id {
+          value: "f001"
         }
         display {
           value: "BMC"
@@ -728,16 +728,16 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/f006"
+        practitioner_id {
+          value: "f006"
         }
         display {
           value: "Rob van den Berk"
         }
       }
       organization {
-        reference {
-          value: "Organization/f001"
+        organization_id {
+          value: "f001"
         }
         display {
           value: "BMC"
@@ -796,16 +796,16 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/f001"
+        practitioner_id {
+          value: "f001"
         }
         display {
           value: "Eric van den broek"
         }
       }
       organization {
-        reference {
-          value: "Organization/f001"
+        organization_id {
+          value: "f001"
         }
         display {
           value: "BMC"
@@ -864,16 +864,16 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/f002"
+        practitioner_id {
+          value: "f002"
         }
         display {
           value: "Pieter Voigt"
         }
       }
       organization {
-        reference {
-          value: "Organization/f001"
+        organization_id {
+          value: "f001"
         }
         display {
           value: "BMC"
@@ -932,16 +932,16 @@ entry {
         }
       }
       practitioner {
-        reference {
-          value: "Practitioner/f204"
+        practitioner_id {
+          value: "f204"
         }
         display {
           value: "Carla Espinosa"
         }
       }
       organization {
-        reference {
-          value: "Organization/f201"
+        organization_id {
+          value: "f201"
         }
         display {
           value: "AUMC"

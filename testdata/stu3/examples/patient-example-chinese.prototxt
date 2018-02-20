@@ -114,8 +114,8 @@ address {
   }
 }
 managing_organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
   display {
     value: "\344\270\212\346\265\267\344\270\234\346\226\271\345\214\273\351\231\242"

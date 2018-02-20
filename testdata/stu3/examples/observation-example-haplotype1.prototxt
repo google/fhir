@@ -32,8 +32,8 @@ extension {
     value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsSequence"
   }
   value_reference {
-    reference {
-      value: "Sequence/example-sequence1"
+    sequence_id {
+      value: "example-sequence1"
     }
   }
 }
@@ -42,8 +42,8 @@ extension {
     value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsSequence"
   }
   value_reference {
-    reference {
-      value: "Sequence/example-sequence2"
+    sequence_id {
+      value: "example-sequence2"
     }
   }
 }
@@ -64,8 +64,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/727127"
+  patient_id {
+    value: "727127"
   }
   display {
     value: "J*********** C***********"
@@ -90,8 +90,8 @@ value_codeable_concept {
   }
 }
 specimen {
-  reference {
-    value: "Specimen/genetics-example1-somatic"
+  specimen_id {
+    value: "genetics-example1-somatic"
   }
   display {
     value: "Molecular Specimen ID: MLD45-Z4-1234"
@@ -102,8 +102,8 @@ related {
     value: DERIVED_FROM
   }
   target {
-    reference {
-      value: "Sequence/example-pgx-1"
+    sequence_id {
+      value: "example-pgx-1"
     }
   }
 }
@@ -112,8 +112,8 @@ related {
     value: DERIVED_FROM
   }
   target {
-    reference {
-      value: "Sequence/example-pgx-2"
+    sequence_id {
+      value: "example-pgx-2"
     }
   }
 }

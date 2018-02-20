@@ -60,22 +60,22 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/f001"
+      patient_id {
+        value: "f001"
       }
       display {
         value: "P. van den Heuvel"
       }
     }
     context {
-      reference {
-        value: "Encounter/f001"
+      encounter_id {
+        value: "f001"
       }
     }
     requester {
       agent {
-        reference {
-          value: "Practitioner/f001"
+        practitioner_id {
+          value: "f001"
         }
         display {
           value: "E.van den Broek"
@@ -101,8 +101,8 @@ identifier {
   }
 }
 based_on {
-  reference {
-    value: "#req"
+  fragment {
+    value: "req"
   }
 }
 status {
@@ -143,8 +143,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
   display {
     value: "P. van den Heuvel"
@@ -157,8 +157,8 @@ issued {
 }
 performer {
   actor {
-    reference {
-      value: "Organization/f001"
+    organization_id {
+      value: "f001"
     }
     display {
       value: "Burgers University Medical Centre"
@@ -166,28 +166,28 @@ performer {
   }
 }
 result {
-  reference {
-    value: "Observation/f001"
+  observation_id {
+    value: "f001"
   }
 }
 result {
-  reference {
-    value: "Observation/f002"
+  observation_id {
+    value: "f002"
   }
 }
 result {
-  reference {
-    value: "Observation/f003"
+  observation_id {
+    value: "f003"
   }
 }
 result {
-  reference {
-    value: "Observation/f004"
+  observation_id {
+    value: "f004"
   }
 }
 result {
-  reference {
-    value: "Observation/f005"
+  observation_id {
+    value: "f005"
   }
 }
 conclusion {

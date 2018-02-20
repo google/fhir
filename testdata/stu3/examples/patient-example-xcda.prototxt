@@ -49,8 +49,8 @@ birth_date {
   precision: DAY
 }
 managing_organization {
-  reference {
-    value: "Organization/2.16.840.1.113883.19.5"
+  organization_id {
+    value: "2.16.840.1.113883.19.5"
   }
   display {
     value: "Good Health Clinic"

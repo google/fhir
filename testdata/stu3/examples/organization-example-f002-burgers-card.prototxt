@@ -42,8 +42,8 @@ address {
   }
 }
 part_of {
-  reference {
-    value: "Organization/f001"
+  organization_id {
+    value: "f001"
   }
 }
 contact {

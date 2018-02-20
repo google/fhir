@@ -28,8 +28,8 @@ priority {
   }
 }
 patient {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
 }
 serviced_date {
@@ -61,13 +61,13 @@ provider {
   }
 }
 organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
 }
 insurer {
-  reference {
-    value: "Organization/2"
+  organization_id {
+    value: "2"
   }
 }
 facility {
@@ -81,8 +81,8 @@ facility {
   }
 }
 coverage {
-  reference {
-    value: "Coverage/9876B1"
+  coverage_id {
+    value: "9876B1"
   }
 }
 business_arrangement {

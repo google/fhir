@@ -107,8 +107,8 @@ package_value {
       value: "test.html"
     }
     example_for {
-      reference {
-        value: "StructureDefinition/daf-patient"
+      structure_definition_id {
+        value: "daf-patient"
       }
     }
   }
@@ -118,8 +118,8 @@ global {
     value: PATIENT
   }
   profile {
-    reference {
-      value: "StructureDefinition/daf-patient"
+    structure_definition_id {
+      value: "daf-patient"
     }
   }
 }

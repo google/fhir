@@ -21,13 +21,13 @@ status {
   value: ACTIVE
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 encounter {
-  reference {
-    value: "Encounter/f001"
+  encounter_id {
+    value: "f001"
   }
 }
 date_written {
@@ -35,8 +35,8 @@ date_written {
   precision: DAY
 }
 prescriber {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }
 reason_codeable_concept {

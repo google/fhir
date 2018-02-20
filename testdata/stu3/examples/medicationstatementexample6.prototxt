@@ -34,16 +34,16 @@ date_asserted {
   precision: DAY
 }
 information_source {
-  reference {
-    value: "RelatedPerson/peter"
+  related_person_id {
+    value: "peter"
   }
   display {
     value: "Peter Chalmers"
   }
 }
 subject {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
   display {
     value: "Donald Duck"

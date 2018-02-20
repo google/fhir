@@ -34,8 +34,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
     }
     dosage_instruction {
@@ -93,8 +93,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
     }
     dosage_instruction {
@@ -135,8 +135,8 @@ identifier {
   }
 }
 definition {
-  reference {
-    value: "PlanDefinition/KDN5"
+  plan_definition_id {
+    value: "KDN5"
   }
 }
 status {
@@ -149,13 +149,13 @@ priority {
   value: ROUTINE
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 context {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
 }
 authored_on {
@@ -164,8 +164,8 @@ authored_on {
   precision: SECOND
 }
 author {
-  reference {
-    value: "Practitioner/1"
+  practitioner_id {
+    value: "1"
   }
 }
 action {
@@ -232,8 +232,8 @@ action {
             value: "Gemcitabine 1250 mg/m\302\262 IV over 30 minutes on days 1 and 8"
           }
           resource {
-            reference {
-              value: "#1111"
+            fragment {
+              value: "1111"
             }
           }
         }
@@ -266,8 +266,8 @@ action {
             }
           }
           resource {
-            reference {
-              value: "#2222"
+            fragment {
+              value: "2222"
             }
           }
         }

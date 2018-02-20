@@ -21,13 +21,13 @@ description {
   value: "This 26 yo male patient is brought into ER by ambulance after being involved in a motor vehicle accident"
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 context {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
 }
 effective_period {
@@ -48,8 +48,8 @@ date {
   precision: SECOND
 }
 assessor {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }
 problem {

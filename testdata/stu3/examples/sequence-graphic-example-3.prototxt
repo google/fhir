@@ -16,8 +16,8 @@ coordinate_system {
 }
 reference_seq {
   reference_seq_pointer {
-    reference {
-      value: "Sequence/graphic-example-5"
+    sequence_id {
+      value: "graphic-example-5"
     }
   }
   strand {
@@ -48,7 +48,7 @@ variant {
   }
 }
 pointer {
-  reference {
-    value: "Sequence/graphic-example-4"
+  sequence_id {
+    value: "graphic-example-4"
   }
 }

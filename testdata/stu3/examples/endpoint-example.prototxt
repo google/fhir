@@ -32,8 +32,8 @@ name {
   value: "Health Intersections CarePlan Hub"
 }
 managing_organization {
-  reference {
-    value: "Organization/hl7"
+  organization_id {
+    value: "hl7"
   }
 }
 contact {

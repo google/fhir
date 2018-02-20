@@ -48,12 +48,12 @@ provider {
   }
 }
 organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
 }
 request {
-  reference {
+  uri {
     value: "http://benefitco.com/oralhealthclaim/12345"
   }
 }

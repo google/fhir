@@ -25,7 +25,7 @@ created {
   precision: DAY
 }
 request {
-  reference {
+  uri {
     value: "http://www.BenefitsInc.com/fhir/eligibility/225476332402"
   }
 }
@@ -43,8 +43,8 @@ disposition {
   value: "Policy is currently in-force."
 }
 insurer {
-  reference {
-    value: "Organization/2"
+  organization_id {
+    value: "2"
   }
 }
 inforce {

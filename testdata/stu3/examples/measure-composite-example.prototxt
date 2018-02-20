@@ -20,8 +20,8 @@ related_artifact {
     value: COMPOSED_OF
   }
   resource {
-    reference {
-      value: "Measure/component-a-example"
+    measure_id {
+      value: "component-a-example"
     }
   }
 }
@@ -30,8 +30,8 @@ related_artifact {
     value: COMPOSED_OF
   }
   resource {
-    reference {
-      value: "Measure/component-b-example"
+    measure_id {
+      value: "component-b-example"
     }
   }
 }

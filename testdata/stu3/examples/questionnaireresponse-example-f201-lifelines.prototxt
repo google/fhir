@@ -13,8 +13,8 @@ status {
   value: COMPLETED
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
@@ -26,13 +26,13 @@ authored {
   precision: SECOND
 }
 author {
-  reference {
-    value: "Practitioner/f201"
+  practitioner_id {
+    value: "f201"
   }
 }
 source {
-  reference {
-    value: "Practitioner/f201"
+  practitioner_id {
+    value: "f201"
   }
 }
 item {

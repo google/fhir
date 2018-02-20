@@ -68,8 +68,8 @@ description {
   value: "Discussion about Peter Chalmers MRI results"
 }
 supporting_information {
-  reference {
-    value: "DiagnosticReport/ultrasound"
+  diagnostic_report_id {
+    value: "ultrasound"
   }
 }
 start {
@@ -87,8 +87,8 @@ comment {
 }
 participant {
   actor {
-    reference {
-      value: "Patient/example"
+    patient_id {
+      value: "example"
     }
     display {
       value: "Peter James Chalmers"
@@ -103,8 +103,8 @@ participant {
 }
 participant {
   actor {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
     display {
       value: "Dr Adam Careful"
@@ -119,8 +119,8 @@ participant {
 }
 participant {
   actor {
-    reference {
-      value: "Practitioner/f202"
+    practitioner_id {
+      value: "f202"
     }
     display {
       value: "Luigi Maas"

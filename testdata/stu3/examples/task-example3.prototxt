@@ -21,13 +21,13 @@ code {
   }
 }
 focus {
-  reference {
-    value: "MedicationRequest/medrx002"
+  medication_request_id {
+    value: "medrx002"
   }
 }
 for_value {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
 }
 authored_on {
@@ -42,13 +42,13 @@ last_modified {
 }
 requester {
   agent {
-    reference {
-      value: "Patient/example"
+    patient_id {
+      value: "example"
     }
   }
 }
 owner {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }

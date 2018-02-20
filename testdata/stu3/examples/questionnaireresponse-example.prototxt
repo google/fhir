@@ -56,14 +56,14 @@ contained {
       value: ORDER
     }
     subject {
-      reference {
-        value: "#patsub"
+      fragment {
+        value: "patsub"
       }
     }
     requester {
       agent {
-        reference {
-          value: "Practitioner/example"
+        practitioner_id {
+          value: "example"
         }
       }
     }
@@ -98,26 +98,26 @@ identifier {
   }
 }
 based_on {
-  reference {
-    value: "#order"
+  fragment {
+    value: "order"
   }
 }
 parent {
-  reference {
-    value: "Procedure/f201"
+  procedure_id {
+    value: "f201"
   }
 }
 status {
   value: COMPLETED
 }
 subject {
-  reference {
-    value: "#patsub"
+  fragment {
+    value: "patsub"
   }
 }
 context {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
 }
 authored {
@@ -126,8 +126,8 @@ authored {
   precision: SECOND
 }
 author {
-  reference {
-    value: "#questauth"
+  fragment {
+    value: "questauth"
   }
 }
 item {

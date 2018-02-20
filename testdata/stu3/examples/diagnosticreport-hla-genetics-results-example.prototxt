@@ -76,8 +76,8 @@ entry {
         }
       }
       based_on {
-        reference {
-          value: "ProcedureRequest/123"
+        procedure_request_id {
+          value: "123"
         }
       }
       status {
@@ -110,8 +110,8 @@ entry {
         }
       }
       subject {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
@@ -128,8 +128,8 @@ entry {
       }
       performer {
         actor {
-          reference {
-            value: "Organization/68"
+          organization_id {
+            value: "68"
           }
           display {
             value: "aTypingLab Inc"
@@ -137,15 +137,15 @@ entry {
         }
       }
       specimen {
-        reference {
-          value: "Specimen/67"
+        specimen_id {
+          value: "67"
         }
         display {
           value: "buccal swab from Mary Chalmers"
         }
       }
       result {
-        reference {
+        uri {
           value: "urn:uuid:49a86246-4004-42eb-9bdc-f542f93f9228"
         }
         display {
@@ -153,7 +153,7 @@ entry {
         }
       }
       result {
-        reference {
+        uri {
           value: "urn:uuid:60613a43-c4cb-4502-b3e2-cf9215feaa70"
         }
         display {
@@ -161,7 +161,7 @@ entry {
         }
       }
       result {
-        reference {
+        uri {
           value: "urn:uuid:0e0a780e-4486-4cd0-bfae-7243c579f208"
         }
         display {
@@ -199,16 +199,16 @@ entry {
       coordinate_system {
       }
       patient {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
         }
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -272,16 +272,16 @@ entry {
       coordinate_system {
       }
       patient {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
         }
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -345,16 +345,16 @@ entry {
       coordinate_system {
       }
       patient {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
         }
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -418,16 +418,16 @@ entry {
       coordinate_system {
       }
       patient {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
         }
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -491,16 +491,16 @@ entry {
       coordinate_system {
       }
       patient {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
         }
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -564,16 +564,16 @@ entry {
       coordinate_system {
       }
       patient {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
         }
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -637,16 +637,16 @@ entry {
       coordinate_system {
       }
       patient {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
         }
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -710,16 +710,16 @@ entry {
       coordinate_system {
       }
       patient {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
         }
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -783,16 +783,16 @@ entry {
       coordinate_system {
       }
       patient {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
         }
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -856,16 +856,16 @@ entry {
       coordinate_system {
       }
       patient {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
         }
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -929,16 +929,16 @@ entry {
       coordinate_system {
       }
       patient {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
         }
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -1002,16 +1002,16 @@ entry {
       coordinate_system {
       }
       patient {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
         }
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -1148,8 +1148,8 @@ entry {
         }
       }
       subject {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
@@ -1160,8 +1160,8 @@ entry {
         precision: DAY
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -1172,7 +1172,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:8200dab6-18a2-4550-b913-a7db480c0804"
           }
           display {
@@ -1185,7 +1185,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:7c393185-f15c-45bc-a714-c0fdbea32675"
           }
           display {
@@ -1297,8 +1297,8 @@ entry {
         }
       }
       subject {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
@@ -1309,8 +1309,8 @@ entry {
         precision: DAY
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -1321,7 +1321,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:65c85f14-c3a0-4b72-818f-820e04fcc621"
           }
           display {
@@ -1334,7 +1334,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:fbba9fe7-0ece-4ec1-9233-a437a8d242a0"
           }
           display {
@@ -1420,8 +1420,8 @@ entry {
         }
       }
       subject {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
@@ -1432,8 +1432,8 @@ entry {
         precision: DAY
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -1444,7 +1444,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:b7765bbf-df40-486a-9f2f-404309643de6"
           }
           display {
@@ -1457,7 +1457,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:d98d92a7-0e86-4ae5-b036-b7e1bba6ec32"
           }
           display {
@@ -1569,8 +1569,8 @@ entry {
         }
       }
       subject {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
@@ -1581,8 +1581,8 @@ entry {
         precision: DAY
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -1593,7 +1593,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:cbabf93e-1b4b-46f2-ba1e-d84862670670"
           }
           display {
@@ -1606,7 +1606,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:c233ad3d-1572-48d6-93da-0a583535e138"
           }
           display {
@@ -1718,8 +1718,8 @@ entry {
         }
       }
       subject {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
@@ -1730,8 +1730,8 @@ entry {
         precision: DAY
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -1742,7 +1742,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:05fa52d7-5c67-460a-8722-d3460b24d6fe"
           }
           display {
@@ -1755,7 +1755,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:db69e549-6267-4777-b4b9-8813f3329309"
           }
           display {
@@ -1841,8 +1841,8 @@ entry {
         }
       }
       subject {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
@@ -1853,8 +1853,8 @@ entry {
         precision: DAY
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -1865,7 +1865,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:e2092243-2970-49d2-a90f-b90d1d49715a"
           }
           display {
@@ -1878,7 +1878,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:792be53e-d4fb-4887-a367-815ef6c706e5"
           }
           display {
@@ -1990,8 +1990,8 @@ entry {
         }
       }
       subject {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
@@ -2002,8 +2002,8 @@ entry {
         precision: DAY
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -2014,7 +2014,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:bb55c2bc-5ad2-4bc1-8ff3-c407d06b12d0"
           }
           display {
@@ -2027,7 +2027,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:46938bb2-0486-4e87-bfd3-89aab2d5e22f"
           }
           display {
@@ -2139,8 +2139,8 @@ entry {
         }
       }
       subject {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
@@ -2151,8 +2151,8 @@ entry {
         precision: DAY
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -2163,7 +2163,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:2ae2ff34-279e-43c2-9018-b054fd3fc1ce"
           }
           display {
@@ -2176,7 +2176,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:19153ef1-68c6-47a2-9676-c4eefbd39af9"
           }
           display {
@@ -2262,8 +2262,8 @@ entry {
         }
       }
       subject {
-        reference {
-          value: "Patient/119"
+        patient_id {
+          value: "119"
         }
         display {
           value: "Mary Chalmers"
@@ -2274,8 +2274,8 @@ entry {
         precision: DAY
       }
       specimen {
-        reference {
-          value: "Specimen/120"
+        specimen_id {
+          value: "120"
         }
         display {
           value: "buccal swab from Mary Chalmers"
@@ -2286,7 +2286,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:709c5315-9403-4867-9d82-0b953836665f"
           }
           display {
@@ -2299,7 +2299,7 @@ entry {
           value: DERIVED_FROM
         }
         target {
-          reference {
+          uri {
             value: "urn:uuid:8b2aa21c-1426-4717-8ab0-a84d83df7d47"
           }
           display {

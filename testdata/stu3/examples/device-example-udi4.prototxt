@@ -30,7 +30,7 @@ manufacturer {
   value: "GlobalMed, Inc"
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }

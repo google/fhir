@@ -31,16 +31,16 @@ period {
   }
 }
 practitioner {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
   display {
     value: "Dr Adam Careful"
   }
 }
 organization {
-  reference {
-    value: "Organization/f001"
+  organization_id {
+    value: "f001"
   }
 }
 code {
@@ -67,16 +67,16 @@ specialty {
   }
 }
 location {
-  reference {
-    value: "Location/1"
+  location_id {
+    value: "1"
   }
   display {
     value: "South Wing, second floor"
   }
 }
 healthcare_service {
-  reference {
-    value: "HealthcareService/example"
+  healthcare_service_id {
+    value: "example"
   }
 }
 telecom {
@@ -155,7 +155,7 @@ availability_exceptions {
   value: "Adam is generally unavailable on public holidays and during the Christmas/New Year break"
 }
 endpoint {
-  reference {
-    value: "Endpoint/example"
+  endpoint_id {
+    value: "example"
   }
 }

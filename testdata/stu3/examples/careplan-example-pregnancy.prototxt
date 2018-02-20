@@ -26,8 +26,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/1"
+      patient_id {
+        value: "1"
       }
       display {
         value: "Eve Everywoman"
@@ -85,8 +85,8 @@ contained {
         }
       }
       member {
-        reference {
-          value: "#pr1"
+        fragment {
+          value: "pr1"
         }
         display {
           value: "Mavis Midwife"
@@ -108,8 +108,8 @@ contained {
         }
       }
       member {
-        reference {
-          value: "#pr2"
+        fragment {
+          value: "pr2"
         }
         display {
           value: "Oscar Obstetrician"
@@ -132,8 +132,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/1"
+      patient_id {
+        value: "1"
       }
       display {
         value: "Eve Everywoman"
@@ -157,8 +157,8 @@ intent {
   value: PLAN
 }
 subject {
-  reference {
-    value: "Patient/1"
+  patient_id {
+    value: "1"
   }
   display {
     value: "Eve Everywoman"
@@ -175,21 +175,21 @@ period {
   }
 }
 care_team {
-  reference {
-    value: "#careteam"
+  fragment {
+    value: "careteam"
   }
 }
 addresses {
-  reference {
-    value: "#p1"
+  fragment {
+    value: "p1"
   }
   display {
     value: "pregnancy"
   }
 }
 goal {
-  reference {
-    value: "#goal"
+  fragment {
+    value: "goal"
   }
 }
 activity {
@@ -252,8 +252,8 @@ activity {
       }
     }
     performer {
-      reference {
-        value: "#pr1"
+      fragment {
+        value: "pr1"
       }
       display {
         value: "Mavis Midwife"
@@ -309,8 +309,8 @@ activity {
       }
     }
     performer {
-      reference {
-        value: "#pr1"
+      fragment {
+        value: "pr1"
       }
       display {
         value: "Mavis Midwife"
@@ -366,8 +366,8 @@ activity {
       }
     }
     performer {
-      reference {
-        value: "#pr1"
+      fragment {
+        value: "pr1"
       }
       display {
         value: "Mavis Midwife"

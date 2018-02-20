@@ -50,8 +50,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 effective_date_time {
@@ -63,8 +63,8 @@ related {
     value: HAS_MEMBER
   }
   target {
-    reference {
-      value: "Observation/respiratory-rate"
+    observation_id {
+      value: "respiratory-rate"
     }
     display {
       value: "Respiratory Rate"
@@ -76,8 +76,8 @@ related {
     value: HAS_MEMBER
   }
   target {
-    reference {
-      value: "Observation/heart-rate"
+    observation_id {
+      value: "heart-rate"
     }
     display {
       value: "Heart Rate"
@@ -89,8 +89,8 @@ related {
     value: HAS_MEMBER
   }
   target {
-    reference {
-      value: "Observation/blood-pressure"
+    observation_id {
+      value: "blood-pressure"
     }
     display {
       value: "Blood Pressure"
@@ -102,8 +102,8 @@ related {
     value: HAS_MEMBER
   }
   target {
-    reference {
-      value: "Observation/body-temperature"
+    observation_id {
+      value: "body-temperature"
     }
     display {
       value: "Body Temperature"

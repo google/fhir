@@ -91,8 +91,8 @@ type {
 }
 diagnosis {
   condition {
-    reference {
-      value: "Condition/stroke"
+    condition_id {
+      value: "stroke"
     }
   }
   role {
@@ -113,13 +113,13 @@ diagnosis {
   }
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 managing_organization {
-  reference {
-    value: "Organization/hl7"
+  organization_id {
+    value: "hl7"
   }
 }
 period {
@@ -134,24 +134,24 @@ referral_request {
   }
 }
 care_manager {
-  reference {
-    value: "Practitioner/14"
+  practitioner_id {
+    value: "14"
   }
   display {
     value: "Amanda Assigned"
   }
 }
 team {
-  reference {
-    value: "CareTeam/example"
+  care_team_id {
+    value: "example"
   }
   display {
     value: "example care team"
   }
 }
 account {
-  reference {
-    value: "Account/example"
+  account_id {
+    value: "example"
   }
   display {
     value: "example account"

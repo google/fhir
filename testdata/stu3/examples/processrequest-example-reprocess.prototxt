@@ -28,12 +28,12 @@ created {
   precision: DAY
 }
 organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
 }
 request {
-  reference {
+  uri {
     value: "http://BenefitsInc.com/fhir/claim/12345"
   }
 }

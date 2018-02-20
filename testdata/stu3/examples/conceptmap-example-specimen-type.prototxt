@@ -51,12 +51,12 @@ contact {
   }
 }
 source_reference {
-  reference {
+  uri {
     value: "http://hl7.org/fhir/ValueSet/v2-0487"
   }
 }
 target_reference {
-  reference {
+  uri {
     value: "http://snomed.info/id?fhir_vs"
   }
 }

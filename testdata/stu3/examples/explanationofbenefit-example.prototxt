@@ -31,8 +31,8 @@ type {
   }
 }
 patient {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
 }
 created {
@@ -40,33 +40,33 @@ created {
   precision: DAY
 }
 enterer {
-  reference {
-    value: "Practitioner/1"
+  practitioner_id {
+    value: "1"
   }
 }
 provider {
-  reference {
-    value: "Practitioner/1"
+  practitioner_id {
+    value: "1"
   }
 }
 organization {
-  reference {
-    value: "Organization/2"
+  organization_id {
+    value: "2"
   }
 }
 facility {
-  reference {
-    value: "Location/1"
+  location_id {
+    value: "1"
   }
 }
 claim {
-  reference {
-    value: "Claim/100150"
+  claim_id {
+    value: "100150"
   }
 }
 claim_response {
-  reference {
-    value: "ClaimResponse/R3500"
+  claim_response_id {
+    value: "R3500"
   }
 }
 outcome {
@@ -104,8 +104,8 @@ payee {
     }
   }
   party {
-    reference {
-      value: "Organization/2"
+    organization_id {
+      value: "2"
     }
   }
 }
@@ -114,15 +114,15 @@ care_team {
     value: 1
   }
   provider {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
   }
 }
 insurance {
   coverage {
-    reference {
-      value: "Coverage/9876B1"
+    coverage_id {
+      value: "9876B1"
     }
   }
 }
@@ -170,8 +170,8 @@ item {
     }
   }
   encounter {
-    reference {
-      value: "Encounter/example"
+    encounter_id {
+      value: "example"
     }
   }
   adjudication {

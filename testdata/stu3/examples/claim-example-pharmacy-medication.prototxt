@@ -34,8 +34,8 @@ use {
   value: COMPLETE
 }
 patient {
-  reference {
-    value: "Patient/1"
+  patient_id {
+    value: "1"
   }
 }
 created {
@@ -43,13 +43,13 @@ created {
   precision: DAY
 }
 insurer {
-  reference {
-    value: "Organization/2"
+  organization_id {
+    value: "2"
   }
 }
 organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
 }
 priority {
@@ -60,12 +60,12 @@ priority {
   }
 }
 prescription {
-  reference {
+  uri {
     value: "http://pharmacy.org/MedicationRequest/AB1234G"
   }
 }
 original_prescription {
-  reference {
+  uri {
     value: "http://pharmacy.org/MedicationRequest/AB1202B"
   }
 }
@@ -83,8 +83,8 @@ care_team {
     value: 1
   }
   provider {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
   }
 }
@@ -184,8 +184,8 @@ insurance {
     value: true
   }
   coverage {
-    reference {
-      value: "Coverage/9876B1"
+    coverage_id {
+      value: "9876B1"
     }
   }
 }

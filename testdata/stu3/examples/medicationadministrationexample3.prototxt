@@ -33,26 +33,26 @@ status {
   value: ON_HOLD
 }
 medication_reference {
-  reference {
-    value: "#med0303"
+  fragment {
+    value: "med0303"
   }
 }
 subject {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
   display {
     value: "Donald Duck"
   }
 }
 context {
-  reference {
-    value: "Encounter/f001"
+  encounter_id {
+    value: "f001"
   }
 }
 supporting_information {
-  reference {
-    value: "Condition/f204"
+  condition_id {
+    value: "f204"
   }
 }
 effective_period {
@@ -84,8 +84,8 @@ reason_not_given {
   }
 }
 prescription {
-  reference {
-    value: "MedicationRequest/medrx0317"
+  medication_request_id {
+    value: "medrx0317"
   }
 }
 note {

@@ -31,8 +31,8 @@ category {
   }
 }
 subject {
-  reference {
-    value: "Patient/1"
+  patient_id {
+    value: "1"
   }
 }
 recipient {

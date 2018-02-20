@@ -13,8 +13,8 @@ status {
   value: ACTIVE
 }
 patient {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
   display {
     value: "P. van de Heuvel"
@@ -36,8 +36,8 @@ actor {
     }
   }
   reference {
-    reference {
-      value: "Organization/2.16.840.1.113883.19.6"
+    organization_id {
+      value: "2.16.840.1.113883.19.6"
     }
     display {
       value: "Good Health Psychiatric Hospital"
@@ -45,8 +45,8 @@ actor {
   }
 }
 organization {
-  reference {
-    value: "Organization/Infoway"
+  organization_id {
+    value: "Infoway"
   }
   display {
     value: "Canada Infoway"

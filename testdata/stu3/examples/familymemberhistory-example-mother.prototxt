@@ -13,8 +13,8 @@ status {
   value: COMPLETED
 }
 patient {
-  reference {
-    value: "Patient/100"
+  patient_id {
+    value: "100"
   }
   display {
     value: "Peter Patient"

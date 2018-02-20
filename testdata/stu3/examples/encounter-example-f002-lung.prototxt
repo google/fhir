@@ -61,8 +61,8 @@ priority {
   }
 }
 subject {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
   display {
     value: "P. van de Heuvel"
@@ -70,8 +70,8 @@ subject {
 }
 participant {
   individual {
-    reference {
-      value: "Practitioner/f003"
+    practitioner_id {
+      value: "f003"
     }
     display {
       value: "M.I.M Versteegh"
@@ -145,8 +145,8 @@ hospitalization {
   }
 }
 service_provider {
-  reference {
-    value: "Organization/f001"
+  organization_id {
+    value: "f001"
   }
   display {
     value: "BMC"

@@ -50,8 +50,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 effective_date_time {
@@ -66,8 +66,8 @@ issued {
 }
 performer {
   actor {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
   }
 }
@@ -76,8 +76,8 @@ image {
     value: "A comment about the image"
   }
   link {
-    reference {
-      value: "Media/1.2.840.11361907579238403408700.3.0.14.19970327150033"
+    media_id {
+      value: "1.2.840.11361907579238403408700.3.0.14.19970327150033"
     }
     display {
       value: "WADO example image"

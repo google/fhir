@@ -53,8 +53,8 @@ related_artifact {
     value: COMPOSED_OF
   }
   resource {
-    reference {
-      value: "ActivityDefinition/administer-zika-virus-exposure-assessment"
+    activity_definition_id {
+      value: "administer-zika-virus-exposure-assessment"
     }
   }
 }
@@ -63,8 +63,8 @@ related_artifact {
     value: COMPOSED_OF
   }
   resource {
-    reference {
-      value: "ActivityDefinition/order-serum-zika-dengue-virus-igm"
+    activity_definition_id {
+      value: "order-serum-zika-dengue-virus-igm"
     }
   }
 }
@@ -73,8 +73,8 @@ related_artifact {
     value: COMPOSED_OF
   }
   resource {
-    reference {
-      value: "ActivityDefinition/provide-mosquito-prevention-advice"
+    activity_definition_id {
+      value: "provide-mosquito-prevention-advice"
     }
   }
 }
@@ -83,8 +83,8 @@ related_artifact {
     value: COMPOSED_OF
   }
   resource {
-    reference {
-      value: "Library/zika-virus-intervention-logic"
+    library_id {
+      value: "zika-virus-intervention-logic"
     }
   }
 }
@@ -93,8 +93,8 @@ related_artifact {
     value: COMPOSED_OF
   }
   resource {
-    reference {
-      value: "PlanDefinition/zika-virus-intervention"
+    plan_definition_id {
+      value: "zika-virus-intervention"
     }
   }
 }
@@ -103,8 +103,8 @@ related_artifact {
     value: COMPOSED_OF
   }
   resource {
-    reference {
-      value: "Questionnaire/zika-virus-exposure-assessment"
+    questionnaire_id {
+      value: "zika-virus-exposure-assessment"
     }
   }
 }

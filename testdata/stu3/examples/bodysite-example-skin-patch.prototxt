@@ -39,7 +39,7 @@ description {
   value: "inner surface (volar) of the left forearm"
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }

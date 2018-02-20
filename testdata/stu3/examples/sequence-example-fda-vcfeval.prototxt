@@ -13,8 +13,8 @@ coordinate_system {
   value: 1
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 reference_seq {

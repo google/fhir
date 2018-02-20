@@ -27,24 +27,24 @@ intent {
   value: ORDER
 }
 medication_reference {
-  reference {
-    value: "Medication/med0316"
+  medication_id {
+    value: "med0316"
   }
   display {
     value: "prescribed medication"
   }
 }
 subject {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
   display {
     value: "Donald Duck"
   }
 }
 context {
-  reference {
-    value: "Encounter/f001"
+  encounter_id {
+    value: "f001"
   }
   display {
     value: "encounter that leads to this prescription"
@@ -56,16 +56,16 @@ authored_on {
 }
 requester {
   agent {
-    reference {
-      value: "Practitioner/f007"
+    practitioner_id {
+      value: "f007"
     }
     display {
       value: "Patrick Pump"
     }
   }
   on_behalf_of {
-    reference {
-      value: "Organization/f002"
+    organization_id {
+      value: "f002"
     }
   }
 }

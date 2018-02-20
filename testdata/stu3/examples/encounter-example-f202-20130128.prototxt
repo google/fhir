@@ -58,8 +58,8 @@ priority {
   }
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
@@ -67,8 +67,8 @@ subject {
 }
 participant {
   individual {
-    reference {
-      value: "Practitioner/f201"
+    practitioner_id {
+      value: "f201"
     }
   }
 }
@@ -123,7 +123,7 @@ diagnosis {
   }
 }
 service_provider {
-  reference {
-    value: "Organization/f201"
+  organization_id {
+    value: "f201"
   }
 }

@@ -14,8 +14,8 @@ extension {
     value: "http://example.org/do-not-use/fhir-extensions/referral#requestingPractitioner"
   }
   value_reference {
-    reference {
-      value: "Practitioner/f201"
+    practitioner_id {
+      value: "f201"
     }
     display {
       value: "Dokter Bronsig"
@@ -35,8 +35,8 @@ extension {
     value: "http://example.org/do-not-use/fhir-extensions/referral#fulfillingEncounter"
   }
   value_reference {
-    reference {
-      value: "Encounter/f201"
+    encounter_id {
+      value: "f201"
     }
   }
 }
@@ -100,8 +100,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
@@ -112,7 +112,7 @@ created {
   precision: DAY
 }
 author {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }

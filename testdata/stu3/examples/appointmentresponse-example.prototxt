@@ -10,16 +10,16 @@ text {
   }
 }
 appointment {
-  reference {
-    value: "Appointment/example"
+  appointment_id {
+    value: "example"
   }
   display {
     value: "Brian MRI results discussion"
   }
 }
 actor {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Peter James Chalmers"

@@ -67,16 +67,16 @@ birth_date {
   precision: DAY
 }
 general_practitioner {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
   display {
     value: "Dr Adam Careful"
   }
 }
 managing_organization {
-  reference {
-    value: "Organization/2"
+  organization_id {
+    value: "2"
   }
   display {
     value: "Good Health Clinic"

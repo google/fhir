@@ -56,8 +56,8 @@ is_brand {
   value: true
 }
 manufacturer {
-  reference {
-    value: "#org2"
+  fragment {
+    value: "org2"
   }
 }
 form {
@@ -75,8 +75,8 @@ form {
 }
 ingredient {
   item_reference {
-    reference {
-      value: "#sub04"
+    fragment {
+      value: "sub04"
     }
   }
   amount {

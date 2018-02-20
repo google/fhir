@@ -158,8 +158,8 @@ related_artifact {
   }
 }
 library {
-  reference {
-    value: "Library/library-cms146-example"
+  library_id {
+    value: "library-cms146-example"
   }
 }
 disclaimer {

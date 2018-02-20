@@ -73,8 +73,8 @@ class {
   }
 }
 subject {
-  reference {
-    value: "Patient/xcda"
+  patient_id {
+    value: "xcda"
   }
 }
 created {
@@ -88,23 +88,23 @@ indexed {
   precision: SECOND
 }
 author {
-  reference {
-    value: "Practitioner/xcda1"
+  practitioner_id {
+    value: "xcda1"
   }
 }
 author {
-  reference {
-    value: "#a2"
+  fragment {
+    value: "a2"
   }
 }
 authenticator {
-  reference {
-    value: "Organization/f001"
+  organization_id {
+    value: "f001"
   }
 }
 custodian {
-  reference {
-    value: "Organization/f001"
+  organization_id {
+    value: "f001"
   }
 }
 relates_to {
@@ -112,8 +112,8 @@ relates_to {
     value: APPENDS
   }
   target {
-    reference {
-      value: "DocumentReference/example"
+    document_reference_id {
+      value: "example"
     }
   }
 }
@@ -165,8 +165,8 @@ content {
 }
 context {
   encounter {
-    reference {
-      value: "Encounter/xcda"
+    encounter_id {
+      value: "xcda"
     }
   }
   event {
@@ -221,8 +221,8 @@ context {
     }
   }
   source_patient_info {
-    reference {
-      value: "Patient/xcda"
+    patient_id {
+      value: "xcda"
     }
   }
   related {
@@ -235,8 +235,8 @@ context {
       }
     }
     ref {
-      reference {
-        value: "Patient/xcda"
+      patient_id {
+        value: "xcda"
       }
     }
   }

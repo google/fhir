@@ -34,16 +34,16 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/f201"
+      patient_id {
+        value: "f201"
       }
       display {
         value: "Roel"
       }
     }
     context {
-      reference {
-        value: "Encounter/f203"
+      encounter_id {
+        value: "f203"
       }
       display {
         value: "Roel\'s encounter on March eleventh 2013"
@@ -51,8 +51,8 @@ contained {
     }
     requester {
       agent {
-        reference {
-          value: "Practitioner/f201"
+        practitioner_id {
+          value: "f201"
         }
         display {
           value: "Dokter Bronsig"
@@ -62,8 +62,8 @@ contained {
   }
 }
 based_on {
-  reference {
-    value: "#req"
+  fragment {
+    value: "req"
   }
 }
 status {
@@ -104,8 +104,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
@@ -118,8 +118,8 @@ issued {
 }
 performer {
   actor {
-    reference {
-      value: "Organization/f201"
+    organization_id {
+      value: "f201"
     }
     display {
       value: "AUMC"
@@ -127,8 +127,8 @@ performer {
   }
 }
 result {
-  reference {
-    value: "Observation/f206"
+  observation_id {
+    value: "f206"
   }
   display {
     value: "Results for staphylococcus analysis on Roel\'s blood culture"

@@ -102,8 +102,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "#newborn"
+  fragment {
+    value: "newborn"
   }
 }
 effective_date_time {
@@ -112,8 +112,8 @@ effective_date_time {
   precision: SECOND
 }
 performer {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }
 value_quantity {

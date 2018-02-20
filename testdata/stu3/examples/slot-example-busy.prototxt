@@ -28,8 +28,8 @@ service_category {
   }
 }
 schedule {
-  reference {
-    value: "Schedule/example"
+  schedule_id {
+    value: "example"
   }
 }
 status {

@@ -34,18 +34,18 @@ type {
   }
 }
 policy_holder {
-  reference {
+  uri {
     value: "http://benefitsinc.com/FHIR/Organization/CBI35"
   }
 }
 subscriber {
-  reference {
-    value: "Patient/4"
+  patient_id {
+    value: "4"
   }
 }
 beneficiary {
-  reference {
-    value: "Patient/4"
+  patient_id {
+    value: "4"
   }
 }
 relationship {
@@ -66,8 +66,8 @@ period {
   }
 }
 payor {
-  reference {
-    value: "Organization/2"
+  organization_id {
+    value: "2"
   }
 }
 grouping {

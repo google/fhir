@@ -73,8 +73,8 @@ contact {
 }
 note {
   author_reference {
-    reference {
-      value: "Practitioner/xcda-author"
+    practitioner_id {
+      value: "xcda-author"
     }
   }
   time {

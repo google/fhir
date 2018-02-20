@@ -18,8 +18,8 @@ identifier {
   }
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 recommendation {
@@ -117,8 +117,8 @@ recommendation {
       value: "First sequence in protocol"
     }
     authority {
-      reference {
-        value: "Organization/hl7"
+      organization_id {
+        value: "hl7"
       }
     }
     series {
@@ -126,13 +126,13 @@ recommendation {
     }
   }
   supporting_immunization {
-    reference {
-      value: "Immunization/example"
+    immunization_id {
+      value: "example"
     }
   }
   supporting_patient_information {
-    reference {
-      value: "Observation/example"
+    observation_id {
+      value: "example"
     }
   }
 }

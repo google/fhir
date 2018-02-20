@@ -53,7 +53,7 @@ variant {
   }
 }
 pointer {
-  reference {
-    value: "Sequence/graphic-example-2"
+  sequence_id {
+    value: "graphic-example-2"
   }
 }

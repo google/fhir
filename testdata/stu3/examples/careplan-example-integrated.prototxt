@@ -26,8 +26,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/1"
+      patient_id {
+        value: "1"
       }
       display {
         value: "Eve Everywoman"
@@ -52,8 +52,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/1"
+      patient_id {
+        value: "1"
       }
       display {
         value: "Eve Everywoman"
@@ -78,8 +78,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/1"
+      patient_id {
+        value: "1"
       }
       display {
         value: "Eve Everywoman"
@@ -101,8 +101,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/1"
+      patient_id {
+        value: "1"
       }
       display {
         value: "Eve Everywoman"
@@ -124,8 +124,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/1"
+      patient_id {
+        value: "1"
       }
       display {
         value: "Eve Everywoman"
@@ -147,8 +147,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/1"
+      patient_id {
+        value: "1"
       }
       display {
         value: "Eve Everywoman"
@@ -170,8 +170,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/1"
+      patient_id {
+        value: "1"
       }
       display {
         value: "Eve Everywoman"
@@ -193,8 +193,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/1"
+      patient_id {
+        value: "1"
       }
       display {
         value: "Eve Everywoman"
@@ -209,60 +209,60 @@ intent {
   value: PLAN
 }
 subject {
-  reference {
-    value: "Patient/1"
+  patient_id {
+    value: "1"
   }
   display {
     value: "Eve Everywoman"
   }
 }
 addresses {
-  reference {
-    value: "#p1"
+  fragment {
+    value: "p1"
   }
   display {
     value: "GERDS"
   }
 }
 addresses {
-  reference {
-    value: "#p2"
+  fragment {
+    value: "p2"
   }
   display {
     value: "Obesity"
   }
 }
 addresses {
-  reference {
-    value: "#p3"
+  fragment {
+    value: "p3"
   }
   display {
     value: "Psoriasis"
   }
 }
 goal {
-  reference {
-    value: "#g1"
+  fragment {
+    value: "g1"
   }
 }
 goal {
-  reference {
-    value: "#g2"
+  fragment {
+    value: "g2"
   }
 }
 goal {
-  reference {
-    value: "#g3"
+  fragment {
+    value: "g3"
   }
 }
 goal {
-  reference {
-    value: "#g4"
+  fragment {
+    value: "g4"
   }
 }
 goal {
-  reference {
-    value: "#g5"
+  fragment {
+    value: "g5"
   }
 }
 activity {
@@ -296,8 +296,8 @@ activity {
       }
     }
     goal {
-      reference {
-        value: "#g1"
+      fragment {
+        value: "g1"
       }
     }
     status {
@@ -347,8 +347,8 @@ activity {
       }
     }
     goal {
-      reference {
-        value: "#g1"
+      fragment {
+        value: "g1"
       }
     }
     status {
@@ -389,8 +389,8 @@ activity {
       }
     }
     goal {
-      reference {
-        value: "#g2"
+      fragment {
+        value: "g2"
       }
     }
     status {
@@ -449,8 +449,8 @@ activity {
       }
     }
     goal {
-      reference {
-        value: "#g3"
+      fragment {
+        value: "g3"
       }
     }
     status {
@@ -509,8 +509,8 @@ activity {
       }
     }
     goal {
-      reference {
-        value: "#g3"
+      fragment {
+        value: "g3"
       }
     }
     status {
@@ -551,8 +551,8 @@ activity {
       }
     }
     goal {
-      reference {
-        value: "#g4"
+      fragment {
+        value: "g4"
       }
     }
     status {
@@ -611,8 +611,8 @@ activity {
       }
     }
     goal {
-      reference {
-        value: "#g5"
+      fragment {
+        value: "g5"
       }
     }
     status {
@@ -662,8 +662,8 @@ activity {
       }
     }
     goal {
-      reference {
-        value: "#g4"
+      fragment {
+        value: "g4"
       }
     }
     status {
@@ -722,8 +722,8 @@ activity {
       }
     }
     goal {
-      reference {
-        value: "#g3"
+      fragment {
+        value: "g3"
       }
     }
     status {
@@ -764,8 +764,8 @@ activity {
       }
     }
     goal {
-      reference {
-        value: "#g4"
+      fragment {
+        value: "g4"
       }
     }
     status {
@@ -815,8 +815,8 @@ activity {
       }
     }
     goal {
-      reference {
-        value: "#g4"
+      fragment {
+        value: "g4"
       }
     }
     status {
@@ -875,8 +875,8 @@ activity {
       }
     }
     goal {
-      reference {
-        value: "#g3"
+      fragment {
+        value: "g3"
       }
     }
     status {

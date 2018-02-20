@@ -19,8 +19,8 @@ contained {
         value: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation"
       }
       value_reference {
-        reference {
-          value: "Observation/dgf1"
+        observation_id {
+          value: "dgf1"
         }
       }
     }
@@ -28,8 +28,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
     }
     relationship {
@@ -52,8 +52,8 @@ extension {
     value: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory"
   }
   value_reference {
-    reference {
-      value: "#f1-genetics"
+    fragment {
+      value: "f1-genetics"
     }
   }
 }
@@ -95,8 +95,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Peter James Chalmers(MRN: 12345)"
@@ -114,8 +114,8 @@ issued {
 }
 performer {
   actor {
-    reference {
-      value: "Practitioner/genetics-example2"
+    practitioner_id {
+      value: "genetics-example2"
     }
     display {
       value: "Molecular Diagnostic Laboratory"
@@ -123,24 +123,24 @@ performer {
   }
 }
 specimen {
-  reference {
-    value: "Specimen/genetics-example2"
+  specimen_id {
+    value: "genetics-example2"
   }
   display {
     value: "Molecular Specimen ID: MLD45-Z4-1234"
   }
 }
 result {
-  reference {
-    value: "Observation/ob-genetics-3-1"
+  observation_id {
+    value: "ob-genetics-3-1"
   }
   display {
     value: "Genetic analysis for BRAC -1"
   }
 }
 result {
-  reference {
-    value: "Observation/ob-genetics-3-2"
+  observation_id {
+    value: "ob-genetics-3-2"
   }
   display {
     value: "Genetic analysis for BRAC -2"

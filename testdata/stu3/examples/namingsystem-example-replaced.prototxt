@@ -37,7 +37,7 @@ unique_id {
   }
 }
 replaced_by {
-  reference {
-    value: "NamingSystem/example"
+  naming_system_id {
+    value: "example"
   }
 }

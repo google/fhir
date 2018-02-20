@@ -33,13 +33,13 @@ last_system_change {
   precision: SECOND
 }
 source {
-  reference {
-    value: "Device/d1"
+  device_id {
+    value: "d1"
   }
 }
 parent {
-  reference {
-    value: "DeviceComponent/dc1"
+  device_component_id {
+    value: "dc1"
   }
 }
 operational_status {

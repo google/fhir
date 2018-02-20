@@ -54,14 +54,14 @@ related_artifact {
     value: SUCCESSOR
   }
   resource {
-    reference {
-      value: "PlanDefinition/zika-virus-intervention"
+    plan_definition_id {
+      value: "zika-virus-intervention"
     }
   }
 }
 library {
-  reference {
-    value: "Library/zika-virus-intervention-logic"
+  library_id {
+    value: "zika-virus-intervention-logic"
   }
 }
 action {
@@ -94,8 +94,8 @@ action {
       }
     }
     definition {
-      reference {
-        value: "ActivityDefinition/administer-zika-virus-exposure-assessment"
+      activity_definition_id {
+        value: "administer-zika-virus-exposure-assessment"
       }
     }
   }
@@ -109,8 +109,8 @@ action {
       }
     }
     definition {
-      reference {
-        value: "ActivityDefinition/order-serum-urine-rrt-pcr-test"
+      activity_definition_id {
+        value: "order-serum-urine-rrt-pcr-test"
       }
     }
   }
@@ -124,8 +124,8 @@ action {
       }
     }
     definition {
-      reference {
-        value: "ActivityDefinition/order-serum-zika-dengue-virus-igm"
+      activity_definition_id {
+        value: "order-serum-zika-dengue-virus-igm"
       }
     }
   }
@@ -139,8 +139,8 @@ action {
       }
     }
     definition {
-      reference {
-        value: "ActivityDefinition/consider-igm-antibody-testing"
+      activity_definition_id {
+        value: "consider-igm-antibody-testing"
       }
     }
   }
@@ -155,15 +155,15 @@ action {
     }
     action {
       definition {
-        reference {
-          value: "ActivityDefinition/provide-mosquito-prevention-advice"
+        activity_definition_id {
+          value: "provide-mosquito-prevention-advice"
         }
       }
     }
     action {
       definition {
-        reference {
-          value: "ActivityDefinition/provide-contraception-advice"
+        activity_definition_id {
+          value: "provide-contraception-advice"
         }
       }
     }

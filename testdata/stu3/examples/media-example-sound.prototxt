@@ -13,13 +13,13 @@ type {
   value: VIDEO
 }
 subject {
-  reference {
-    value: "Patient/xcda"
+  patient_id {
+    value: "xcda"
   }
 }
 operator {
-  reference {
-    value: "Practitioner/xcda-author"
+  practitioner_id {
+    value: "xcda-author"
   }
 }
 duration {

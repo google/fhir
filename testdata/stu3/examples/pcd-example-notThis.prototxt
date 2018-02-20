@@ -14,24 +14,24 @@ issued {
   precision: DAY
 }
 subject {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
   display {
     value: "P. van de Heuvel"
   }
 }
 authority {
-  reference {
-    value: "Organization/Infoway"
+  organization_id {
+    value: "Infoway"
   }
   display {
     value: "Canada Infoway"
   }
 }
 domain {
-  reference {
-    value: "Location/Infoway"
+  location_id {
+    value: "Infoway"
   }
   display {
     value: "Canada Infoway"
@@ -75,8 +75,8 @@ term {
     }
   }
   topic {
-    reference {
-      value: "ProcedureRequest/example-lipid"
+    procedure_request_id {
+      value: "example-lipid"
     }
   }
   text {

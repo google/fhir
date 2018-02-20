@@ -75,7 +75,7 @@ address {
   }
 }
 managing_organization {
-  reference {
-    value: "Organization/hl7"
+  organization_id {
+    value: "hl7"
   }
 }

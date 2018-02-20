@@ -17,8 +17,8 @@ actual {
 }
 member {
   entity {
-    reference {
-      value: "Patient/pat1"
+    patient_id {
+      value: "pat1"
     }
   }
   period {
@@ -30,8 +30,8 @@ member {
 }
 member {
   entity {
-    reference {
-      value: "Patient/pat2"
+    patient_id {
+      value: "pat2"
     }
   }
   period {
@@ -46,8 +46,8 @@ member {
 }
 member {
   entity {
-    reference {
-      value: "Patient/pat3"
+    patient_id {
+      value: "pat3"
     }
   }
   period {
@@ -59,8 +59,8 @@ member {
 }
 member {
   entity {
-    reference {
-      value: "Patient/pat4"
+    patient_id {
+      value: "pat4"
     }
   }
   period {

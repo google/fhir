@@ -10,13 +10,13 @@ text {
   }
 }
 based_on {
-  reference {
-    value: "CarePlan/gpvisit"
+  care_plan_id {
+    value: "gpvisit"
   }
 }
 context {
-  reference {
-    value: "Encounter/f203"
+  encounter_id {
+    value: "f203"
   }
 }
 status {
@@ -44,16 +44,16 @@ date_asserted {
   precision: DAY
 }
 information_source {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
   display {
     value: "Donald Duck"
   }
 }
 subject {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
   display {
     value: "Donald Duck"

@@ -70,8 +70,8 @@ entry {
         }
       }
       subject {
-        reference {
-          value: "Patient/a2"
+        patient_id {
+          value: "a2"
         }
       }
       created {
@@ -84,13 +84,13 @@ entry {
         precision: SECOND
       }
       author {
-        reference {
-          value: "Practitioner/a3"
+        practitioner_id {
+          value: "a3"
         }
       }
       author {
-        reference {
-          value: "Practitioner/a4"
+        practitioner_id {
+          value: "a4"
         }
       }
       description {

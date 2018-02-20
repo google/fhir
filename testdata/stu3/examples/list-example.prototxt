@@ -24,13 +24,13 @@ mode {
   value: CHANGES
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 encounter {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
 }
 date {
@@ -39,8 +39,8 @@ date {
   precision: SECOND
 }
 source {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 entry {
@@ -53,8 +53,8 @@ entry {
     value: true
   }
   item {
-    reference {
-      value: "Condition/example"
+    condition_id {
+      value: "example"
     }
   }
 }
@@ -69,8 +69,8 @@ entry {
     precision: DAY
   }
   item {
-    reference {
-      value: "Condition/example2"
+    condition_id {
+      value: "example2"
     }
   }
 }

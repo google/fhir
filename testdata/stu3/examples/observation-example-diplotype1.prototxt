@@ -47,8 +47,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/727127"
+  patient_id {
+    value: "727127"
   }
   display {
     value: "J*********** C***********"
@@ -60,8 +60,8 @@ issued {
   precision: SECOND
 }
 specimen {
-  reference {
-    value: "Specimen/genetics-example1-somatic"
+  specimen_id {
+    value: "genetics-example1-somatic"
   }
   display {
     value: "Molecular Specimen ID: MLD45-Z4-1234"
@@ -72,8 +72,8 @@ related {
     value: DERIVED_FROM
   }
   target {
-    reference {
-      value: "Observation/example-haplotype1"
+    observation_id {
+      value: "example-haplotype1"
     }
   }
 }
@@ -82,8 +82,8 @@ related {
     value: DERIVED_FROM
   }
   target {
-    reference {
-      value: "Observation/example-haplotype2"
+    observation_id {
+      value: "example-haplotype2"
     }
   }
 }

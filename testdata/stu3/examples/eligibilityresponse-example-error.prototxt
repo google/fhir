@@ -45,7 +45,7 @@ request_organization {
   }
 }
 request {
-  reference {
+  uri {
     value: "http://www.BenefitsInc.com/fhir/eligibility/225476332406"
   }
 }
@@ -63,8 +63,8 @@ disposition {
   value: "Eligibiliy request could not be processed, please address errors before submitting."
 }
 insurer {
-  reference {
-    value: "Organization/2"
+  organization_id {
+    value: "2"
   }
 }
 form {

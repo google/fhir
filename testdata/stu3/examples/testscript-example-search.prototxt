@@ -97,8 +97,8 @@ metadata {
       value: "http://hl7.org/fhir/http.html#search"
     }
     capabilities {
-      reference {
-        value: "CapabilityStatement/example"
+      capability_statement_id {
+        value: "example"
       }
     }
   }
@@ -108,8 +108,8 @@ fixture {
     value: "fixture-patient-create"
   }
   resource {
-    reference {
-      value: "Patient/example"
+    patient_id {
+      value: "example"
     }
     display {
       value: "Peter Chalmers"
@@ -120,7 +120,7 @@ profile {
   id {
     value: "bundle-profile"
   }
-  reference {
+  uri {
     value: "http://hl7.org/fhir/StructureDefinition/Bundle"
   }
 }

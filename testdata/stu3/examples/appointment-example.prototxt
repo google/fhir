@@ -62,8 +62,8 @@ appointment_type {
   }
 }
 indication {
-  reference {
-    value: "Condition/example"
+  condition_id {
+    value: "example"
   }
   display {
     value: "Severe burn of left ear"
@@ -93,14 +93,14 @@ comment {
   value: "Further expand on the results of the MRI and determine the next actions that may be appropriate."
 }
 incoming_referral {
-  reference {
-    value: "ReferralRequest/example"
+  referral_request_id {
+    value: "example"
   }
 }
 participant {
   actor {
-    reference {
-      value: "Patient/example"
+    patient_id {
+      value: "example"
     }
     display {
       value: "Peter James Chalmers"
@@ -125,8 +125,8 @@ participant {
     }
   }
   actor {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
     display {
       value: "Dr Adam Careful"
@@ -141,8 +141,8 @@ participant {
 }
 participant {
   actor {
-    reference {
-      value: "Location/1"
+    location_id {
+      value: "1"
     }
     display {
       value: "South Wing, second floor"

@@ -324,8 +324,8 @@ related_artifact {
     value: SUCCESSOR
   }
   resource {
-    reference {
-      value: "ActivityDefinition/referralPrimaryCareMentalHealth"
+    activity_definition_id {
+      value: "referralPrimaryCareMentalHealth"
     }
   }
 }

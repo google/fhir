@@ -14,24 +14,24 @@ issued {
   precision: DAY
 }
 subject {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
   display {
     value: "P. van de Heuvel"
   }
 }
 authority {
-  reference {
-    value: "Organization/Infoway"
+  organization_id {
+    value: "Infoway"
   }
   display {
     value: "Canada Infoway"
   }
 }
 domain {
-  reference {
-    value: "Location/Infoway"
+  location_id {
+    value: "Infoway"
   }
   display {
     value: "Canada Infoway"
@@ -75,8 +75,8 @@ term {
     }
   }
   topic {
-    reference {
-      value: "Organization/2.16.840.1.113883.19.5"
+    organization_id {
+      value: "2.16.840.1.113883.19.5"
     }
     display {
       value: "Good Health Clinic"

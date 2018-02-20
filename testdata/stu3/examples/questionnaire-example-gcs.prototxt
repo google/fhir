@@ -265,8 +265,8 @@ item {
     value: CHOICE
   }
   options {
-    reference {
-      value: "#verbal"
+    fragment {
+      value: "verbal"
     }
   }
 }
@@ -286,8 +286,8 @@ item {
     value: CHOICE
   }
   options {
-    reference {
-      value: "#motor"
+    fragment {
+      value: "motor"
     }
   }
 }
@@ -307,8 +307,8 @@ item {
     value: CHOICE
   }
   options {
-    reference {
-      value: "#eye"
+    fragment {
+      value: "eye"
     }
   }
 }

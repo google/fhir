@@ -15,8 +15,8 @@ identifier {
   }
 }
 patient {
-  reference {
-    value: "Patient/dicom"
+  patient_id {
+    value: "dicom"
   }
 }
 authoring_time {
@@ -25,8 +25,8 @@ authoring_time {
   precision: SECOND
 }
 author {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }
 description {
@@ -37,18 +37,18 @@ study {
     value: "urn:oid:2.16.124.113543.6003.189642796.63084.16749.2599092904"
   }
   imaging_study {
-    reference {
-      value: "ImagingStudy/example"
+    imaging_study_id {
+      value: "example"
     }
   }
   endpoint {
-    reference {
-      value: "Endpoint/example-iid"
+    endpoint_id {
+      value: "example-iid"
     }
   }
   endpoint {
-    reference {
-      value: "Endpoint/example-wadors"
+    endpoint_id {
+      value: "example-wadors"
     }
   }
   series {
@@ -56,8 +56,8 @@ study {
       value: "urn:oid:2.16.124.113543.6003.189642796.63084.16750.2599092901"
     }
     endpoint {
-      reference {
-        value: "Endpoint/example-wadors"
+      endpoint_id {
+        value: "example-wadors"
       }
     }
     instance {

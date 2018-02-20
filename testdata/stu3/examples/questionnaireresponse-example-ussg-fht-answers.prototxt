@@ -10,15 +10,15 @@ text {
   }
 }
 questionnaire {
-  reference {
-    value: "Questionnaire/ussg-fht"
+  questionnaire_id {
+    value: "ussg-fht"
   }
 }
 status {
   value: IN_PROGRESS
 }
 subject {
-  reference {
+  uri {
     value: "http://hl7.org/fhir/Patient/proband"
   }
 }
@@ -362,8 +362,8 @@ item {
     value: "Family member health information"
   }
   subject {
-    reference {
-      value: "Patient/pat1"
+    patient_id {
+      value: "pat1"
     }
   }
   item {

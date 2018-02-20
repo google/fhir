@@ -48,21 +48,21 @@ status {
   value: INTENDED
 }
 medication_reference {
-  reference {
-    value: "#med0315"
+  fragment {
+    value: "med0315"
   }
 }
 information_source {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
   display {
     value: "Donald Duck"
   }
 }
 subject {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
   display {
     value: "Donald Duck"

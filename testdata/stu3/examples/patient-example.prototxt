@@ -262,7 +262,7 @@ contact {
   }
 }
 managing_organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
 }

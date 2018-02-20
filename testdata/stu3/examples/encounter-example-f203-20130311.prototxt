@@ -69,21 +69,21 @@ priority {
   }
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
   }
 }
 episode_of_care {
-  reference {
+  uri {
     value: "EpisodeOfCare/example"
   }
 }
 incoming_referral {
-  reference {
-    value: "ReferralRequest/example"
+  referral_request_id {
+    value: "example"
   }
 }
 participant {
@@ -98,14 +98,14 @@ participant {
     }
   }
   individual {
-    reference {
-      value: "Practitioner/f201"
+    practitioner_id {
+      value: "f201"
     }
   }
 }
 appointment {
-  reference {
-    value: "Appointment/example"
+  appointment_id {
+    value: "example"
   }
 }
 period {
@@ -125,8 +125,8 @@ reason {
 }
 diagnosis {
   condition {
-    reference {
-      value: "Condition/stroke"
+    condition_id {
+      value: "stroke"
     }
   }
   role {
@@ -148,8 +148,8 @@ diagnosis {
 }
 diagnosis {
   condition {
-    reference {
-      value: "Condition/f201"
+    condition_id {
+      value: "f201"
     }
   }
   role {
@@ -167,14 +167,14 @@ diagnosis {
   }
 }
 account {
-  reference {
-    value: "Account/example"
+  account_id {
+    value: "example"
   }
 }
 hospitalization {
   origin {
-    reference {
-      value: "Location/2"
+    location_id {
+      value: "2"
     }
   }
   admit_source {
@@ -237,18 +237,18 @@ hospitalization {
     }
   }
   destination {
-    reference {
-      value: "Location/2"
+    location_id {
+      value: "2"
     }
   }
 }
 service_provider {
-  reference {
-    value: "Organization/2"
+  organization_id {
+    value: "2"
   }
 }
 part_of {
-  reference {
-    value: "Encounter/f203"
+  encounter_id {
+    value: "f203"
   }
 }

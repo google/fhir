@@ -22,8 +22,8 @@ destination {
     value: "Acme Message Gateway"
   }
   target {
-    reference {
-      value: "Device/example"
+    device_id {
+      value: "example"
     }
   }
   endpoint {
@@ -31,8 +31,8 @@ destination {
   }
 }
 sender {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
 }
 timestamp {
@@ -41,13 +41,13 @@ timestamp {
   precision: SECOND
 }
 enterer {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }
 author {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }
 source {
@@ -91,7 +91,7 @@ response {
   }
 }
 focus {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }

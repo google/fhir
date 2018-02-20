@@ -67,8 +67,8 @@ contact {
     }
   }
   organization {
-    reference {
-      value: "Organization/1"
+    organization_id {
+      value: "1"
     }
     display {
       value: "Walt Disney Corporation"
@@ -76,8 +76,8 @@ contact {
   }
 }
 managing_organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
   display {
     value: "ACME Healthcare, Inc"
@@ -85,8 +85,8 @@ managing_organization {
 }
 link {
   other {
-    reference {
-      value: "Patient/pat2"
+    patient_id {
+      value: "pat2"
     }
   }
   type {

@@ -88,8 +88,8 @@ model {
   value: "PM/Octane 2014"
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 safety {

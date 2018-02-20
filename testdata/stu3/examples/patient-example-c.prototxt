@@ -57,8 +57,8 @@ deceased_date_time {
   precision: SECOND
 }
 managing_organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
   display {
     value: "ACME Healthcare, Inc"

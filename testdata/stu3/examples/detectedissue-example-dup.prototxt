@@ -37,8 +37,8 @@ category {
   }
 }
 patient {
-  reference {
-    value: "Patient/dicom"
+  patient_id {
+    value: "dicom"
   }
 }
 date {
@@ -46,21 +46,21 @@ date {
   precision: DAY
 }
 author {
-  reference {
-    value: "Device/software"
+  device_id {
+    value: "software"
   }
 }
 implicated {
-  reference {
-    value: "ProcedureRequest/di"
+  procedure_request_id {
+    value: "di"
   }
   display {
     value: "Chest CT - ordered May 8, 2013 by Dr. Adam Careful"
   }
 }
 implicated {
-  reference {
-    value: "ImagingStudy/example"
+  imaging_study_id {
+    value: "example"
   }
   display {
     value: "Image 1 from Series 3: CT Images on Patient MINT (MINT1234) taken at 1-Jan 2011 01:20 AM"

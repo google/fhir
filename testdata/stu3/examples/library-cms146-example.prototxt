@@ -45,8 +45,8 @@ related_artifact {
     value: DEPENDS_ON
   }
   resource {
-    reference {
-      value: "Library/library-quick-model-definition"
+    library_id {
+      value: "library-quick-model-definition"
     }
   }
 }

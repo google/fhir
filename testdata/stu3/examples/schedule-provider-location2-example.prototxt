@@ -54,16 +54,16 @@ specialty {
   }
 }
 actor {
-  reference {
-    value: "Practitioner/1"
+  practitioner_id {
+    value: "1"
   }
   display {
     value: "Dr. Beverly Crusher"
   }
 }
 actor {
-  reference {
-    value: "Location/2"
+  location_id {
+    value: "2"
   }
   display {
     value: "Starfleet HQ Sickbay"

@@ -45,8 +45,8 @@ contained {
         value: "device"
       }
       value_reference {
-        reference {
-          value: "Device/software"
+        device_id {
+          value: "software"
         }
       }
     }
@@ -72,21 +72,21 @@ identifier {
   }
 }
 module {
-  reference {
-    value: "ServiceDefinition/example"
+  service_definition_id {
+    value: "example"
   }
 }
 status {
   value: SUCCESS
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 context {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
 }
 occurrence_date_time {
@@ -95,8 +95,8 @@ occurrence_date_time {
   precision: SECOND
 }
 performer {
-  reference {
-    value: "Device/software"
+  device_id {
+    value: "software"
   }
 }
 reason_codeable_concept {
@@ -105,7 +105,7 @@ reason_codeable_concept {
   }
 }
 output_parameters {
-  reference {
-    value: "#outputParameters1"
+  fragment {
+    value: "outputParameters1"
   }
 }

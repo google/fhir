@@ -50,8 +50,8 @@ extension {
     value: "http://example.org/fhir/StructureDefinition/patientAvatar"
   }
   value_reference {
-    reference {
-      value: "#pic1"
+    fragment {
+      value: "pic1"
     }
     display {
       value: "Duck image"
@@ -309,12 +309,12 @@ contact {
   }
 }
 general_practitioner {
-  reference {
-    value: "#org3141"
+  fragment {
+    value: "org3141"
   }
 }
 managing_organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
 }

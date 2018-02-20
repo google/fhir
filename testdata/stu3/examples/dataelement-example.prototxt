@@ -96,13 +96,13 @@ contained {
       value: ACTIVE
     }
     source_reference {
-      reference {
-        value: "#2179414"
+      fragment {
+        value: "2179414"
       }
     }
     target_reference {
-      reference {
-        value: "#2179414-permitted"
+      fragment {
+        value: "2179414-permitted"
       }
     }
     group {
@@ -264,8 +264,8 @@ element {
           value: "http://hl7.org/fhir/StructureDefinition/11179-permitted-value-valueset"
         }
         value_reference {
-          reference {
-            value: "#2179414-permitted"
+          fragment {
+            value: "2179414-permitted"
           }
         }
       }
@@ -274,13 +274,13 @@ element {
           value: "http://hl7.org/fhir/StructureDefinition/11179-permitted-value-conceptmap"
         }
         value_reference {
-          reference {
-            value: "#2179414-cm"
+          fragment {
+            value: "2179414-cm"
           }
         }
       }
-      reference {
-        value: "#2179414"
+      fragment {
+        value: "2179414"
       }
     }
   }

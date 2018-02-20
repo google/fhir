@@ -29,13 +29,13 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/pat2"
+  patient_id {
+    value: "pat2"
   }
 }
 performer {
-  reference {
-    value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+  organization_id {
+    value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
   }
   display {
     value: "Acme Imaging Diagnostics"

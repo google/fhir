@@ -46,8 +46,8 @@ code {
   }
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 onset_date_time {
@@ -60,13 +60,13 @@ asserted_date {
   precision: SECOND
 }
 recorder {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }
 asserter {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 last_occurrence {

@@ -21,12 +21,12 @@ status {
   value: ACTIVE
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 device {
-  reference {
-    value: "Device/example"
+  device_id {
+    value: "example"
   }
 }

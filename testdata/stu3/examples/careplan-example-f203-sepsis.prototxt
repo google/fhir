@@ -29,8 +29,8 @@ contained {
         }
       }
       member {
-        reference {
-          value: "Practitioner/f201"
+        practitioner_id {
+          value: "f201"
         }
         display {
           value: "Dokter Bronsig"
@@ -52,8 +52,8 @@ contained {
         }
       }
       member {
-        reference {
-          value: "Practitioner/f202"
+        practitioner_id {
+          value: "f202"
         }
         display {
           value: "Luigi Maas"
@@ -76,8 +76,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/f201"
+      patient_id {
+        value: "f201"
       }
       display {
         value: "Roel"
@@ -92,8 +92,8 @@ intent {
   value: PLAN
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
@@ -110,21 +110,21 @@ period {
   }
 }
 care_team {
-  reference {
-    value: "#careteam"
+  fragment {
+    value: "careteam"
   }
 }
 addresses {
-  reference {
-    value: "Condition/f203"
+  condition_id {
+    value: "f203"
   }
   display {
     value: "Roel\'s sepsis"
   }
 }
 goal {
-  reference {
-    value: "#goal"
+  fragment {
+    value: "goal"
   }
 }
 activity {

@@ -32,8 +32,8 @@ group_identifier {
   }
 }
 part_of {
-  reference {
-    value: "Task/example1"
+  task_id {
+    value: "example1"
   }
   display {
     value: "Lipid Panel"
@@ -64,16 +64,16 @@ focus {
   }
 }
 for_value {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Peter James Chalmers"
   }
 }
 context {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
   display {
     value: "Example In-Patient Encounter"
@@ -98,8 +98,8 @@ last_modified {
 }
 requester {
   agent {
-    reference {
-      value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+    organization_id {
+      value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
     }
     display {
       value: "Clinical Laboratory @ Acme Hospital"
@@ -123,8 +123,8 @@ performer_type {
   }
 }
 owner {
-  reference {
-    value: "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"
+  organization_id {
+    value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
   }
   display {
     value: "Clinical Laboratory @ Acme Hospital"

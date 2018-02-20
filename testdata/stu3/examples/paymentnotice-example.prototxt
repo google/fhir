@@ -21,12 +21,12 @@ status {
   value: ACTIVE
 }
 request {
-  reference {
+  uri {
     value: "http://benefitsinc.com/fhir/claim/12345"
   }
 }
 response {
-  reference {
+  uri {
     value: "http://benefitsinc.com/fhir/claimresponse/CR12345"
   }
 }
@@ -59,8 +59,8 @@ provider {
   }
 }
 organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
 }
 payment_status {

@@ -37,8 +37,8 @@ date {
   precision: SECOND
 }
 source {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 empty_reason {

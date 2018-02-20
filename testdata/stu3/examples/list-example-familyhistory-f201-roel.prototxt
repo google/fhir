@@ -18,8 +18,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/f201"
+      patient_id {
+        value: "f201"
       }
       display {
         value: "Roel"
@@ -66,8 +66,8 @@ contained {
       value: COMPLETED
     }
     patient {
-      reference {
-        value: "Patient/f201"
+      patient_id {
+        value: "f201"
       }
       display {
         value: "Roel"
@@ -139,8 +139,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
@@ -153,15 +153,15 @@ note {
 }
 entry {
   item {
-    reference {
-      value: "#fmh-1"
+    fragment {
+      value: "fmh-1"
     }
   }
 }
 entry {
   item {
-    reference {
-      value: "#fmh-2"
+    fragment {
+      value: "fmh-2"
     }
   }
 }

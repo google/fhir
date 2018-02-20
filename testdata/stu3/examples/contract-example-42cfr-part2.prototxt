@@ -25,8 +25,8 @@ issued {
   precision: SECOND
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
 }
 type {
@@ -153,8 +153,8 @@ security_label {
 }
 agent {
   actor {
-    reference {
-      value: "Organization/f001"
+    organization_id {
+      value: "f001"
     }
     display {
       value: "VA Ann Arbor Healthcare System"
@@ -179,8 +179,8 @@ agent {
 }
 agent {
   actor {
-    reference {
-      value: "Organization/2"
+    organization_id {
+      value: "2"
     }
     display {
       value: "Community Mental Health Clinic"
@@ -213,8 +213,8 @@ signer {
     }
   }
   party {
-    reference {
-      value: "Patient/f201"
+    patient_id {
+      value: "f201"
     }
     display {
       value: "Alice Recruit"
@@ -235,8 +235,8 @@ signer {
       precision: SECOND
     }
     who_reference {
-      reference {
-        value: "Patient/f201"
+      patient_id {
+        value: "f201"
       }
     }
   }

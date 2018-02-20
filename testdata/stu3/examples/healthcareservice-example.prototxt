@@ -44,8 +44,8 @@ active {
   value: true
 }
 provided_by {
-  reference {
-    value: "Organization/f001"
+  organization_id {
+    value: "f001"
   }
   display {
     value: "Burgers University Medical Center"
@@ -107,8 +107,8 @@ specialty {
   }
 }
 location {
-  reference {
-    value: "Location/1"
+  location_id {
+    value: "1"
   }
 }
 name {
@@ -143,8 +143,8 @@ telecom {
   }
 }
 coverage_area {
-  reference {
-    value: "#DenBurg"
+  fragment {
+    value: "DenBurg"
   }
   display {
     value: "Greater Denburg area"
@@ -305,7 +305,7 @@ availability_exceptions {
   value: "Reduced capacity is available during the Christmas period"
 }
 endpoint {
-  reference {
-    value: "Endpoint/example"
+  endpoint_id {
+    value: "example"
   }
 }

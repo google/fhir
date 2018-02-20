@@ -59,8 +59,8 @@ type {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "Peter Patient"
@@ -72,14 +72,14 @@ received_time {
   precision: SECOND
 }
 request {
-  reference {
-    value: "ProcedureRequest/example"
+  procedure_request_id {
+    value: "example"
   }
 }
 collection {
   collector {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
   }
   collected_date_time {
@@ -153,8 +153,8 @@ container {
     }
   }
   additive_reference {
-    reference {
-      value: "#hep"
+    fragment {
+      value: "hep"
     }
   }
 }

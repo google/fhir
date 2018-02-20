@@ -76,7 +76,7 @@ service_requested {
   }
 }
 subject {
-  reference {
+  uri {
     value: "https://fhir.orionhealth.com/blaze/fhir/Patient/77662"
   }
   display {
@@ -100,7 +100,7 @@ authored_on {
 }
 requester {
   agent {
-    reference {
+    uri {
       value: "https://fhir.orionhealth.com/blaze/fhir/Practitioner/77272"
     }
     display {
@@ -122,7 +122,7 @@ specialty {
   }
 }
 recipient {
-  reference {
+  uri {
     value: "https://fhir.orionhealth.com/blaze/fhir/Practitioner/76597"
   }
   display {

@@ -13,8 +13,8 @@ status {
   value: ACTIVE
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
   display {
     value: "...example patient..."
@@ -25,8 +25,8 @@ date_time {
   precision: DAY
 }
 organization {
-  reference {
-    value: "Organization/pkb"
+  organization_id {
+    value: "pkb"
   }
   display {
     value: "Patients Know Best"
@@ -51,8 +51,8 @@ except {
       }
     }
     reference {
-      reference {
-        value: "Organization/ich-nmt"
+      organization_id {
+        value: "ich-nmt"
       }
       display {
         value: "Non-migrated Team - Imperial College Healthcare"
@@ -94,8 +94,8 @@ except {
       }
     }
     reference {
-      reference {
-        value: "Organization/ich-nmt"
+      organization_id {
+        value: "ich-nmt"
       }
       display {
         value: "Non-migrated Team - Imperial College Healthcare"
@@ -137,8 +137,8 @@ except {
       }
     }
     reference {
-      reference {
-        value: "Organization/ich-nmt"
+      organization_id {
+        value: "ich-nmt"
       }
       display {
         value: "Non-migrated Team - Imperial College Healthcare"
@@ -180,8 +180,8 @@ except {
       }
     }
     reference {
-      reference {
-        value: "Organization/ich-core"
+      organization_id {
+        value: "ich-core"
       }
       display {
         value: "Core Information Exchange team - Imperial College Healthcare"
@@ -223,8 +223,8 @@ except {
       }
     }
     reference {
-      reference {
-        value: "Organization/ich-core"
+      organization_id {
+        value: "ich-core"
       }
       display {
         value: "Core Information Exchange team - Imperial College Healthcare"
@@ -266,8 +266,8 @@ except {
       }
     }
     reference {
-      reference {
-        value: "Organization/ich-core"
+      organization_id {
+        value: "ich-core"
       }
       display {
         value: "Core Information Exchange team - Imperial College Healthcare"
@@ -309,8 +309,8 @@ except {
       }
     }
     reference {
-      reference {
-        value: "Organization/ich-core"
+      organization_id {
+        value: "ich-core"
       }
       display {
         value: "Core Information Exchange team - Imperial College Healthcare"
@@ -352,8 +352,8 @@ except {
       }
     }
     reference {
-      reference {
-        value: "Organization/tsd-park"
+      organization_id {
+        value: "tsd-park"
       }
       display {
         value: "Torbay and Source Devon Trust - Parkinson\'s Team"
@@ -395,8 +395,8 @@ except {
       }
     }
     reference {
-      reference {
-        value: "Organization/tsd-park"
+      organization_id {
+        value: "tsd-park"
       }
       display {
         value: "Torbay and Source Devon Trust - Parkinson\'s Team"
@@ -438,8 +438,8 @@ except {
       }
     }
     reference {
-      reference {
-        value: "Organization/tsd-park"
+      organization_id {
+        value: "tsd-park"
       }
       display {
         value: "Torbay and Source Devon Trust - Parkinson\'s Team"
@@ -481,8 +481,8 @@ except {
       }
     }
     reference {
-      reference {
-        value: "Organization/tsd-park"
+      organization_id {
+        value: "tsd-park"
       }
       display {
         value: "Torbay and Source Devon Trust - Parkinson\'s Team"
@@ -524,8 +524,8 @@ except {
       }
     }
     reference {
-      reference {
-        value: "Organization/ich-non"
+      organization_id {
+        value: "ich-non"
       }
       display {
         value: "Imperial Collage Healthcare - Neuro-oncology"

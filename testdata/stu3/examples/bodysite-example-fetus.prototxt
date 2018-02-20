@@ -37,7 +37,7 @@ description {
   value: "EDD 1/1/2017 confirmation by LMP"
 }
 patient {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }

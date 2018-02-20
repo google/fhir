@@ -81,22 +81,22 @@ contained {
     }
     ingredient {
       item_reference {
-        reference {
-          value: "#doce"
+        fragment {
+          value: "doce"
         }
       }
     }
     ingredient {
       item_reference {
-        reference {
-          value: "#cisp"
+        fragment {
+          value: "cisp"
         }
       }
     }
     ingredient {
       item_reference {
-        reference {
-          value: "#fluo"
+        fragment {
+          value: "fluo"
         }
       }
     }
@@ -122,8 +122,8 @@ contained {
         }
       }
       member {
-        reference {
-          value: "Practitioner/f201"
+        practitioner_id {
+          value: "f201"
         }
         display {
           value: "Dokter Bronsig"
@@ -146,8 +146,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/f201"
+      patient_id {
+        value: "f201"
       }
       display {
         value: "Roel"
@@ -162,35 +162,35 @@ intent {
   value: PLAN
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
   }
 }
 care_team {
-  reference {
-    value: "#careteam"
+  fragment {
+    value: "careteam"
   }
 }
 addresses {
-  reference {
-    value: "Condition/f202"
+  condition_id {
+    value: "f202"
   }
   display {
     value: "Roel\'s head-neck tumor"
   }
 }
 goal {
-  reference {
-    value: "#goal"
+  fragment {
+    value: "goal"
   }
 }
 activity {
   outcome_reference {
-    reference {
-      value: "Procedure/f201"
+    procedure_id {
+      value: "f201"
     }
     display {
       value: "Roel\'s Chemotherapy"
@@ -226,8 +226,8 @@ activity {
     prohibited {
     }
     product_reference {
-      reference {
-        value: "#tpf"
+      fragment {
+        value: "tpf"
       }
     }
   }

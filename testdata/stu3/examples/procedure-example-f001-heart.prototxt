@@ -26,16 +26,16 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
   display {
     value: "P. van de Heuvel"
   }
 }
 context {
-  reference {
-    value: "Encounter/f001"
+  encounter_id {
+    value: "f001"
   }
 }
 performed_period {
@@ -66,8 +66,8 @@ performer {
     }
   }
   actor {
-    reference {
-      value: "Practitioner/f002"
+    practitioner_id {
+      value: "f002"
     }
     display {
       value: "P. Voigt"
@@ -98,8 +98,8 @@ outcome {
   }
 }
 report {
-  reference {
-    value: "DiagnosticReport/f001"
+  diagnostic_report_id {
+    value: "f001"
   }
   display {
     value: "Lab results blood test"

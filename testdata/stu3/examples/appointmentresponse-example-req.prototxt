@@ -18,8 +18,8 @@ identifier {
   }
 }
 appointment {
-  reference {
-    value: "Appointment/examplereq"
+  appointment_id {
+    value: "examplereq"
   }
   display {
     value: "Brian MRI results discussion"
@@ -46,8 +46,8 @@ participant_type {
   }
 }
 actor {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
   display {
     value: "Dr Adam Careful"

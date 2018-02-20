@@ -26,16 +26,16 @@ date_asserted {
   precision: DAY
 }
 information_source {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
   display {
     value: "Donald Duck"
   }
 }
 subject {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
   display {
     value: "Donald Duck"
@@ -45,8 +45,8 @@ taken {
   value: Y
 }
 reason_reference {
-  reference {
-    value: "Observation/blood-pressure"
+  observation_id {
+    value: "blood-pressure"
   }
 }
 note {

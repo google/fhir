@@ -1502,6 +1502,21 @@ message Ratio {
   Quantity denominator = 4;
 }
 
+message ReferenceId {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  // Primitive value for id
+  string value = 1;
+
+  // History version, if present.
+  Id history = 2;
+
+  // xml:id (or equivalent in JSON)
+  String id = 3;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 4;
+}
+
 // A reference from one resource to another
 // See https://www.hl7.org/fhir/datatypes.html#Reference
 message Reference {
@@ -1513,13 +1528,139 @@ message Reference {
   repeated Extension extension = 2;
 
   // Literal reference, Relative, internal or absolute URL
-  String reference = 3;
+  oneof reference {
+    // Absolute URIs are untyped.
+    String uri = 3 [json_name = "reference"];
+
+    // Fragments (internal references) are untyped, and represented here
+    // without the leading '#'.
+    String fragment = 4;
+
+    // Typed relative urls are represented here.
+    ReferenceId account_id = 5;
+    ReferenceId activity_definition_id = 6;
+    ReferenceId adverse_event_id = 7;
+    ReferenceId allergy_intolerance_id = 8;
+    ReferenceId appointment_id = 9;
+    ReferenceId appointment_response_id = 10;
+    ReferenceId audit_event_id = 11;
+    ReferenceId basic_id = 12;
+    ReferenceId binary_id = 13;
+    ReferenceId body_site_id = 14;
+    ReferenceId bundle_id = 15;
+    ReferenceId capability_statement_id = 16;
+    ReferenceId care_plan_id = 17;
+    ReferenceId care_team_id = 18;
+    ReferenceId charge_item_id = 19;
+    ReferenceId claim_id = 20;
+    ReferenceId claim_response_id = 21;
+    ReferenceId clinical_impression_id = 22;
+    ReferenceId code_system_id = 23;
+    ReferenceId communication_id = 24;
+    ReferenceId communication_request_id = 25;
+    ReferenceId compartment_definition_id = 26;
+    ReferenceId composition_id = 27;
+    ReferenceId concept_map_id = 28;
+    ReferenceId condition_id = 29;
+    ReferenceId consent_id = 30;
+    ReferenceId contract_id = 31;
+    ReferenceId coverage_id = 32;
+    ReferenceId data_element_id = 33;
+    ReferenceId detected_issue_id = 34;
+    ReferenceId device_id = 35;
+    ReferenceId device_component_id = 36;
+    ReferenceId device_metric_id = 37;
+    ReferenceId device_request_id = 38;
+    ReferenceId device_usestatement_id = 39;
+    ReferenceId diagnostic_report_id = 40;
+    ReferenceId document_manifest_id = 41;
+    ReferenceId document_reference_id = 42;
+    ReferenceId eligibility_request_id = 43;
+    ReferenceId eligibility_response_id = 44;
+    ReferenceId encounter_id = 45;
+    ReferenceId endpoint_id = 46;
+    ReferenceId enrollment_request_id = 47;
+    ReferenceId enrollment_response_id = 48;
+    ReferenceId episode_ofcare_id = 49;
+    ReferenceId expansion_profile_id = 50;
+    ReferenceId explanation_ofbenefit_id = 51;
+    ReferenceId family_memberhistory_id = 52;
+    ReferenceId flag_id = 53;
+    ReferenceId goal_id = 54;
+    ReferenceId graph_definition_id = 55;
+    ReferenceId group_id = 56;
+    ReferenceId guidance_response_id = 57;
+    ReferenceId healthcare_service_id = 58;
+    ReferenceId imaging_manifest_id = 59;
+    ReferenceId imaging_study_id = 60;
+    ReferenceId immunization_id = 61;
+    ReferenceId immunization_recommendation_id = 62;
+    ReferenceId implementation_guide_id = 63;
+    ReferenceId library_id = 64;
+    ReferenceId linkage_id = 65;
+    ReferenceId list_id = 66;
+    ReferenceId location_id = 67;
+    ReferenceId measure_id = 68;
+    ReferenceId measure_report_id = 69;
+    ReferenceId media_id = 70;
+    ReferenceId medication_id = 71;
+    ReferenceId medication_administration_id = 72;
+    ReferenceId medication_dispense_id = 73;
+    ReferenceId medication_request_id = 74;
+    ReferenceId medication_statement_id = 75;
+    ReferenceId message_definition_id = 76;
+    ReferenceId message_header_id = 77;
+    ReferenceId naming_system_id = 78;
+    ReferenceId nutrition_order_id = 79;
+    ReferenceId observation_id = 80;
+    ReferenceId operation_definition_id = 81;
+    ReferenceId operation_outcome_id = 82;
+    ReferenceId organization_id = 83;
+    ReferenceId parameters_id = 84;
+    ReferenceId patient_id = 85;
+    ReferenceId payment_notice_id = 86;
+    ReferenceId payment_reconciliation_id = 87;
+    ReferenceId person_id = 88;
+    ReferenceId plan_definition_id = 89;
+    ReferenceId practitioner_id = 90;
+    ReferenceId practitioner_role_id = 91;
+    ReferenceId procedure_id = 92;
+    ReferenceId procedure_request_id = 93;
+    ReferenceId process_request_id = 94;
+    ReferenceId process_response_id = 95;
+    ReferenceId provenance_id = 96;
+    ReferenceId questionnaire_id = 97;
+    ReferenceId questionnaire_response_id = 98;
+    ReferenceId referral_request_id = 99;
+    ReferenceId related_person_id = 100;
+    ReferenceId request_group_id = 101;
+    ReferenceId research_study_id = 102;
+    ReferenceId research_subject_id = 103;
+    ReferenceId risk_assessment_id = 104;
+    ReferenceId schedule_id = 105;
+    ReferenceId search_parameter_id = 106;
+    ReferenceId sequence_id = 107;
+    ReferenceId service_definition_id = 108;
+    ReferenceId slot_id = 109;
+    ReferenceId specimen_id = 110;
+    ReferenceId structure_definition_id = 111;
+    ReferenceId structure_map_id = 112;
+    ReferenceId subscription_id = 113;
+    ReferenceId substance_id = 114;
+    ReferenceId supply_delivery_id = 115;
+    ReferenceId supply_request_id = 116;
+    ReferenceId task_id = 117;
+    ReferenceId test_report_id = 118;
+    ReferenceId test_script_id = 119;
+    ReferenceId value_set_id = 120;
+    ReferenceId vision_prescription_id = 121;
+  }
 
   // Logical reference, when literal reference is not known
-  Identifier identifier = 4;
+  Identifier identifier = 122;
 
   // Text alternative for the resource
-  String display = 5;
+  String display = 123;
 }
 
 // Related artifacts for a knowledge resource

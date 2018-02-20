@@ -20,8 +20,8 @@ definition {
   }
 }
 based_on {
-  reference {
-    value: "CarePlan/preg"
+  care_plan_id {
+    value: "preg"
   }
   display {
     value: "Maternity care plan"
@@ -66,22 +66,22 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 performer {
   actor {
-    reference {
-      value: "Practitioner/f204"
+    practitioner_id {
+      value: "f204"
     }
     display {
       value: "Carla Espinosa"
     }
   }
   on_behalf_of {
-    reference {
-      value: "Organization/f001"
+    organization_id {
+      value: "f001"
     }
     display {
       value: "University Medical Hospital"
@@ -89,16 +89,16 @@ performer {
   }
 }
 location {
-  reference {
-    value: "Location/1"
+  location_id {
+    value: "1"
   }
   display {
     value: "Burgers University Medical Center, South Wing, second floor"
   }
 }
 reason_reference {
-  reference {
-    value: "Observation/blood-pressure"
+  observation_id {
+    value: "blood-pressure"
   }
   display {
     value: "Blood Pressure"

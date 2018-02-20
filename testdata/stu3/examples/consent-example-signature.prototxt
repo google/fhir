@@ -31,8 +31,8 @@ category {
   }
 }
 patient {
-  reference {
-    value: "Patient/72"
+  patient_id {
+    value: "72"
   }
 }
 period {
@@ -51,8 +51,8 @@ date_time {
   precision: SECOND
 }
 consenting_party {
-  reference {
-    value: "Patient/72"
+  patient_id {
+    value: "72"
   }
 }
 actor {
@@ -67,14 +67,14 @@ actor {
     }
   }
   reference {
-    reference {
-      value: "Practitioner/13"
+    practitioner_id {
+      value: "13"
     }
   }
 }
 organization {
-  reference {
-    value: "Organization/example"
+  organization_id {
+    value: "example"
   }
 }
 policy_rule {
@@ -96,8 +96,8 @@ except {
       }
     }
     reference {
-      reference {
-        value: "Practitioner/xcda-author"
+      practitioner_id {
+        value: "xcda-author"
       }
     }
   }

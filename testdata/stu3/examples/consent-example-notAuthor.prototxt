@@ -13,8 +13,8 @@ status {
   value: ACTIVE
 }
 patient {
-  reference {
-    value: "Patient/f001"
+  patient_id {
+    value: "f001"
   }
   display {
     value: "P. van de Heuvel"
@@ -25,8 +25,8 @@ date_time {
   precision: DAY
 }
 organization {
-  reference {
-    value: "Organization/Infoway"
+  organization_id {
+    value: "Infoway"
   }
   display {
     value: "Canada Infoway"
@@ -56,8 +56,8 @@ except {
       }
     }
     reference {
-      reference {
-        value: "Organization/2.16.840.1.113883.19.5"
+      organization_id {
+        value: "2.16.840.1.113883.19.5"
       }
       display {
         value: "Good Health Clinic"

@@ -25,12 +25,12 @@ created {
   precision: DAY
 }
 organization {
-  reference {
-    value: "Organization/2"
+  organization_id {
+    value: "2"
   }
 }
 request {
-  reference {
+  uri {
     value: "http://happyvalley.com/fhir/claim/12345"
   }
 }
@@ -48,7 +48,7 @@ disposition {
   value: "Adjudication processing completed, ClaimResponse and EOB ready for retrieval."
 }
 request_organization {
-  reference {
-    value: "Organization/1"
+  organization_id {
+    value: "1"
   }
 }

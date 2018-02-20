@@ -44,13 +44,13 @@ unit {
   }
 }
 source {
-  reference {
-    value: "Device/dev1"
+  device_id {
+    value: "dev1"
   }
 }
 parent {
-  reference {
-    value: "DeviceComponent/dc102"
+  device_component_id {
+    value: "dc102"
   }
 }
 operational_status {

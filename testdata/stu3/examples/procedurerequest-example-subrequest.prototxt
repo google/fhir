@@ -52,8 +52,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/dicom"
+  patient_id {
+    value: "dicom"
   }
 }
 occurrence_date_time {
@@ -63,8 +63,8 @@ occurrence_date_time {
 }
 requester {
   agent {
-    reference {
-      value: "Practitioner/example"
+    practitioner_id {
+      value: "example"
     }
     display {
       value: "Dr. Adam Careful"

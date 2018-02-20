@@ -162,8 +162,8 @@ category {
   }
 }
 medication_reference {
-  reference {
-    value: "#med0309"
+  fragment {
+    value: "med0309"
   }
 }
 effective_date_time {
@@ -175,24 +175,24 @@ date_asserted {
   precision: DAY
 }
 information_source {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
   display {
     value: "Donald Duck"
   }
 }
 subject {
-  reference {
-    value: "Patient/pat1"
+  patient_id {
+    value: "pat1"
   }
   display {
     value: "Donald Duck"
   }
 }
 derived_from {
-  reference {
-    value: "MedicationRequest/medrx002"
+  medication_request_id {
+    value: "medrx002"
   }
 }
 taken {

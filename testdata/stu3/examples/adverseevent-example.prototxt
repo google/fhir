@@ -34,8 +34,8 @@ type {
   }
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 date {
@@ -57,8 +57,8 @@ seriousness {
   }
 }
 recorder {
-  reference {
-    value: "Practitioner/example"
+  practitioner_id {
+    value: "example"
   }
 }
 description {
@@ -66,8 +66,8 @@ description {
 }
 suspect_entity {
   instance {
-    reference {
-      value: "Medication/example"
+    medication_id {
+      value: "example"
     }
   }
 }

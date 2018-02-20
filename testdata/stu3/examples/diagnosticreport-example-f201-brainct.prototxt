@@ -50,8 +50,8 @@ code {
   }
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
@@ -69,8 +69,8 @@ issued {
 }
 performer {
   actor {
-    reference {
-      value: "Organization/f203"
+    organization_id {
+      value: "f203"
     }
     display {
       value: "Blijdorp MC"

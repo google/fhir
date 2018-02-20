@@ -82,8 +82,8 @@ minutes_duration {
   value: 15
 }
 slot {
-  reference {
-    value: "Slot/example"
+  slot_id {
+    value: "example"
   }
 }
 created {
@@ -95,8 +95,8 @@ comment {
 }
 participant {
   actor {
-    reference {
-      value: "Patient/example"
+    patient_id {
+      value: "example"
     }
     display {
       value: "Peter James Chalmers"
@@ -129,8 +129,8 @@ participant {
 }
 participant {
   actor {
-    reference {
-      value: "Location/1"
+    location_id {
+      value: "1"
     }
     display {
       value: "South Wing, second floor"

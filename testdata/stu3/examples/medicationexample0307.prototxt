@@ -36,8 +36,8 @@ is_brand {
   value: true
 }
 manufacturer {
-  reference {
-    value: "#org3"
+  fragment {
+    value: "org3"
   }
 }
 form {

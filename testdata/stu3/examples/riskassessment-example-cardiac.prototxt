@@ -24,13 +24,13 @@ status {
   value: FINAL
 }
 subject {
-  reference {
-    value: "Patient/pat2"
+  patient_id {
+    value: "pat2"
   }
 }
 context {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
 }
 occurrence_date_time {
@@ -44,18 +44,18 @@ performer {
   }
 }
 basis {
-  reference {
-    value: "Patient/pat2"
+  patient_id {
+    value: "pat2"
   }
 }
 basis {
-  reference {
-    value: "DiagnosticReport/lipids"
+  diagnostic_report_id {
+    value: "lipids"
   }
 }
 basis {
-  reference {
-    value: "Observation/blood-pressure"
+  observation_id {
+    value: "blood-pressure"
   }
 }
 prediction {

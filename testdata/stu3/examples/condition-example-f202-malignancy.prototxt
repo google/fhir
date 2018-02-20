@@ -78,8 +78,8 @@ body_site {
   }
 }
 subject {
-  reference {
-    value: "Patient/f201"
+  patient_id {
+    value: "f201"
   }
   display {
     value: "Roel"
@@ -119,8 +119,8 @@ asserted_date {
 }
 evidence {
   detail {
-    reference {
-      value: "DiagnosticReport/f201"
+    diagnostic_report_id {
+      value: "f201"
     }
     display {
       value: "Erasmus\' diagnostic report of Roel\'s tumor"

@@ -41,8 +41,8 @@ is_brand {
 is_over_the_counter {
 }
 manufacturer {
-  reference {
-    value: "#org4"
+  fragment {
+    value: "org4"
   }
 }
 form {

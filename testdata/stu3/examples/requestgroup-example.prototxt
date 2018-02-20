@@ -23,8 +23,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
     }
   }
@@ -43,8 +43,8 @@ contained {
       }
     }
     subject {
-      reference {
-        value: "Patient/example"
+      patient_id {
+        value: "example"
       }
     }
   }
@@ -72,13 +72,13 @@ priority {
   value: ROUTINE
 }
 subject {
-  reference {
-    value: "Patient/example"
+  patient_id {
+    value: "example"
   }
 }
 context {
-  reference {
-    value: "Encounter/example"
+  encounter_id {
+    value: "example"
   }
 }
 authored_on {
@@ -87,8 +87,8 @@ authored_on {
   precision: SECOND
 }
 author {
-  reference {
-    value: "Practitioner/1"
+  practitioner_id {
+    value: "1"
   }
 }
 reason_codeable_concept {
@@ -120,8 +120,8 @@ action {
     precision: SECOND
   }
   participant {
-    reference {
-      value: "Practitioner/1"
+    practitioner_id {
+      value: "1"
     }
   }
   grouping_behavior {
@@ -152,8 +152,8 @@ action {
       }
     }
     resource {
-      reference {
-        value: "#medicationrequest-1"
+      fragment {
+        value: "medicationrequest-1"
       }
     }
   }
@@ -186,8 +186,8 @@ action {
       }
     }
     resource {
-      reference {
-        value: "#medicationrequest-2"
+      fragment {
+        value: "medicationrequest-2"
       }
     }
   }
