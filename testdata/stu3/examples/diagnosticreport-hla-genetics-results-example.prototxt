@@ -194,7 +194,7 @@ entry {
         }
       }
       type {
-        value: "dna"
+        value: DNA
       }
       coordinate_system {
       }
@@ -267,7 +267,7 @@ entry {
         }
       }
       type {
-        value: "dna"
+        value: DNA
       }
       coordinate_system {
       }
@@ -340,7 +340,7 @@ entry {
         }
       }
       type {
-        value: "dna"
+        value: DNA
       }
       coordinate_system {
       }
@@ -413,7 +413,7 @@ entry {
         }
       }
       type {
-        value: "dna"
+        value: DNA
       }
       coordinate_system {
       }
@@ -486,7 +486,7 @@ entry {
         }
       }
       type {
-        value: "dna"
+        value: DNA
       }
       coordinate_system {
       }
@@ -559,7 +559,7 @@ entry {
         }
       }
       type {
-        value: "dna"
+        value: DNA
       }
       coordinate_system {
       }
@@ -632,7 +632,7 @@ entry {
         }
       }
       type {
-        value: "dna"
+        value: DNA
       }
       coordinate_system {
       }
@@ -705,7 +705,7 @@ entry {
         }
       }
       type {
-        value: "dna"
+        value: DNA
       }
       coordinate_system {
       }
@@ -778,7 +778,7 @@ entry {
         }
       }
       type {
-        value: "dna"
+        value: DNA
       }
       coordinate_system {
       }
@@ -851,7 +851,7 @@ entry {
         }
       }
       type {
-        value: "dna"
+        value: DNA
       }
       coordinate_system {
       }
@@ -924,7 +924,7 @@ entry {
         }
       }
       type {
-        value: "dna"
+        value: DNA
       }
       coordinate_system {
       }
@@ -997,7 +997,7 @@ entry {
         }
       }
       type {
-        value: "dna"
+        value: DNA
       }
       coordinate_system {
       }

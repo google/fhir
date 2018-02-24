@@ -10,7 +10,7 @@ text {
   }
 }
 type {
-  value: "dna"
+  value: DNA
 }
 coordinate_system {
   value: 1
