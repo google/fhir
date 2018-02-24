@@ -114,8 +114,11 @@ source {
 }
 entity {
   reference {
-    uri {
-      value: "Patient/example/_history/1"
+    patient_id {
+      value: "example"
+      history {
+        value: "1"
+      }
     }
   }
   type {

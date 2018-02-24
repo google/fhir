@@ -15,8 +15,11 @@ contained {
       value: "signature"
     }
     target {
-      uri {
-        value: "ProcedureRequest/physiotherapy/_history/1"
+      procedure_request_id {
+        value: "physiotherapy"
+        history {
+          value: "1"
+        }
       }
     }
     recorded {

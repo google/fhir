@@ -10,8 +10,11 @@ text {
   }
 }
 target {
-  uri {
-    value: "Procedure/example/_history/1"
+  procedure_id {
+    value: "example"
+    history {
+      value: "1"
+    }
   }
 }
 period {
