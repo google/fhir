@@ -95,81 +95,93 @@ enteral_formula {
   administration {
     schedule {
       repeat {
-        bounds_period {
-          start {
-            value_us: 1410937200000000
-            timezone: "UTC"
-            precision: SECOND
+        bounds {
+          period {
+            start {
+              value_us: 1410937200000000
+              timezone: "UTC"
+              precision: SECOND
+            }
           }
         }
       }
     }
-    rate_quantity {
-      value {
-        value: "60"
-      }
-      unit {
-        value: "ml/hr"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "mL/h"
+    rate {
+      quantity {
+        value {
+          value: "60"
+        }
+        unit {
+          value: "ml/hr"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mL/h"
+        }
       }
     }
   }
   administration {
     schedule {
       repeat {
-        bounds_period {
-          start {
-            value_us: 1410951600000000
-            timezone: "UTC"
-            precision: SECOND
+        bounds {
+          period {
+            start {
+              value_us: 1410951600000000
+              timezone: "UTC"
+              precision: SECOND
+            }
           }
         }
       }
     }
-    rate_quantity {
-      value {
-        value: "80"
-      }
-      unit {
-        value: "ml/hr"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "mL/h"
+    rate {
+      quantity {
+        value {
+          value: "80"
+        }
+        unit {
+          value: "ml/hr"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mL/h"
+        }
       }
     }
   }
   administration {
     schedule {
       repeat {
-        bounds_period {
-          start {
-            value_us: 1410966000000000
-            timezone: "UTC"
-            precision: SECOND
+        bounds {
+          period {
+            start {
+              value_us: 1410966000000000
+              timezone: "UTC"
+              precision: SECOND
+            }
           }
         }
       }
     }
-    rate_quantity {
-      value {
-        value: "100"
-      }
-      unit {
-        value: "ml/hr"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "mL/h"
+    rate {
+      quantity {
+        value {
+          value: "100"
+        }
+        unit {
+          value: "ml/hr"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mL/h"
+        }
       }
     }
   }

@@ -77,12 +77,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "140"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "140"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -147,12 +149,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.2"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.2"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -217,12 +221,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "105"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "105"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -287,12 +293,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "26"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "26"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -357,12 +365,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "13"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "13"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -427,12 +437,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "7.4"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "7.4"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -497,12 +509,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.7"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.7"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -567,12 +581,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.09"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.09"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -637,12 +653,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.39"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.39"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -717,12 +735,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "7"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "7"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -787,12 +807,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "3"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "3"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -857,12 +879,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "108"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "108"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -927,12 +951,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "35"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "35"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -997,12 +1023,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "54"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "54"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -1077,12 +1105,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "30"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "30"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -1147,12 +1177,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "131"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "131"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -1217,12 +1249,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.38"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.38"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -1287,12 +1321,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.39"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.39"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -1357,12 +1393,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.5"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.5"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -1427,12 +1465,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "67"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "67"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -1497,12 +1537,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "42"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "42"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -1567,12 +1609,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "25"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "25"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -1637,12 +1681,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "5"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "5"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -1717,12 +1763,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "3.8"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "3.8"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -1787,12 +1835,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.9"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.9"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -1857,12 +1907,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.0"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.0"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -1914,10 +1966,12 @@ entry {
           value: "1"
         }
       }
-      effective_date_time {
-        value_us: 1106808017000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1106808017000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1106808001000000
@@ -2133,12 +2187,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "138"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "138"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -2203,12 +2259,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.1"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.1"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -2273,12 +2331,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "103"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "103"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -2343,12 +2403,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "27"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "27"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -2413,12 +2475,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "12"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "12"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -2483,12 +2547,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6.8"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "6.8"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -2553,12 +2619,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "8.2"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "8.2"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -2633,12 +2701,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.07"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.07"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -2703,12 +2773,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.42"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.42"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -2783,12 +2855,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "16"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "16"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -2853,12 +2927,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "8"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "8"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -2923,12 +2999,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "369"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "369"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -3003,12 +3081,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "438"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "438"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -3083,12 +3163,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "263"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "263"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -3163,12 +3245,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "87"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "87"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -3243,12 +3327,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "179"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "179"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -3313,12 +3399,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.32"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.32"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -3383,12 +3471,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.42"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.42"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -3453,12 +3543,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.3"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.3"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -3523,12 +3615,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "67"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "67"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -3593,12 +3687,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "39"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "39"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -3663,12 +3759,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "28"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "28"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -3733,12 +3831,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "8"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "8"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -3813,12 +3913,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.8"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.8"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -3883,12 +3985,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.2"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.2"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -3932,10 +4036,12 @@ entry {
           value: "2"
         }
       }
-      effective_date_time {
-        value_us: 1102491917000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1102491917000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1109153041000000
@@ -4146,12 +4252,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "142"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "142"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -4216,12 +4324,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.0"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.0"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -4286,12 +4396,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "105"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "105"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -4356,12 +4468,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "28"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "28"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -4426,12 +4540,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "13"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "13"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -4496,12 +4612,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "5.2"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "5.2"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -4566,12 +4684,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6.4"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "6.4"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -4636,12 +4756,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.09"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.09"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -4706,12 +4828,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.46"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.46"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -4786,12 +4910,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "13"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "13"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -4856,12 +4982,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "6"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -4926,12 +5054,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "204"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "204"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -5006,12 +5136,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "192"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "192"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -5086,12 +5218,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "70"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "70"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -5166,12 +5300,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "26"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "26"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -5236,12 +5372,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "150"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "150"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -5306,12 +5444,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.37"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.37"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -5376,12 +5516,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.47"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.47"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -5446,12 +5588,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.4"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.4"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -5516,12 +5660,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "67"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "67"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -5586,12 +5732,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "39"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "39"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -5656,12 +5804,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "28"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "28"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -5726,12 +5876,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "5"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "5"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -5806,12 +5958,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.4"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.4"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -5876,12 +6030,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.1"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.1"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -5925,10 +6081,12 @@ entry {
           value: "3"
         }
       }
-      effective_date_time {
-        value_us: 1103095217000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1103095217000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1109153041000000
@@ -6139,12 +6297,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "142"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "142"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -6209,12 +6369,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.0"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.0"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -6279,12 +6441,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "107"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "107"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -6349,12 +6513,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "26"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "26"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -6419,12 +6585,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "13"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "13"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -6489,12 +6657,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6.3"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "6.3"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -6559,12 +6729,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6.7"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "6.7"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -6629,12 +6801,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.08"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.08"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -6699,12 +6873,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.40"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.40"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -6779,12 +6955,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "9"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "9"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -6849,12 +7027,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "4"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -6919,12 +7099,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "144"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "144"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -6999,12 +7181,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "106"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "106"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -7079,12 +7263,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "30"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "30"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -7149,12 +7335,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "18"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "18"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -7219,12 +7407,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "143"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "143"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -7289,12 +7479,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.28"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.28"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -7359,12 +7551,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.32"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.32"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -7429,12 +7623,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.3"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.3"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -7499,12 +7695,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "66"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "66"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -7569,12 +7767,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "41"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "41"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -7639,12 +7839,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "25"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "25"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -7709,12 +7911,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "3"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "3"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -7789,12 +7993,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.0"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.0"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -7859,12 +8065,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.0"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.0"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -7908,10 +8116,12 @@ entry {
           value: "4"
         }
       }
-      effective_date_time {
-        value_us: 1103701517000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1103701517000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1103587201000000
@@ -8122,12 +8332,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "141"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "141"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -8192,12 +8404,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.2"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.2"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -8262,12 +8476,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "106"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "106"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -8332,12 +8548,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "29"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "29"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -8402,12 +8620,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "10"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "10"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -8472,12 +8692,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "7.0"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "7.0"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -8542,12 +8764,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.7"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.7"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -8612,12 +8836,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.05"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.05"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -8682,12 +8908,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.32"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.32"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -8752,12 +8980,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "43"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "43"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -8832,12 +9062,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "708"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "708"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -8912,12 +9144,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1131"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "1131"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -8992,12 +9226,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "475"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "475"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -9072,12 +9308,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "176"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "176"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -9152,12 +9390,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "324"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "324"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -9232,12 +9472,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.32"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.32"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -9302,12 +9544,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.45"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.45"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -9372,12 +9616,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.9"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.9"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -9442,12 +9688,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "71"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "71"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -9512,12 +9760,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "38"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "38"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -9582,12 +9832,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "33"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "33"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -9652,12 +9904,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "17"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "17"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -9722,12 +9976,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "7.0"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "7.0"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -9802,12 +10058,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.9"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.9"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -9851,10 +10109,12 @@ entry {
           value: "5"
         }
       }
-      effective_date_time {
-        value_us: 1102067117000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1102067117000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1102032001000000
@@ -10060,12 +10320,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "142"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "142"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -10130,12 +10392,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "3.6"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "3.6"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -10200,12 +10464,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "104"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "104"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -10270,12 +10536,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "30"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "30"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -10340,12 +10608,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "12"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "12"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -10410,12 +10680,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6.2"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "6.2"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -10480,12 +10752,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.5"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.5"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -10550,12 +10824,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.06"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.06"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -10620,12 +10896,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.37"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.37"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -10700,12 +10978,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "50"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "50"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -10780,12 +11060,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "684"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "684"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -10860,12 +11142,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1105"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "1105"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -10940,12 +11224,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "466"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "466"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -11020,12 +11306,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "198"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "198"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -11100,12 +11388,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "323"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "323"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -11180,12 +11470,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.32"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.32"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -11250,12 +11542,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.45"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.45"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -11320,12 +11614,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.9"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.9"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -11390,12 +11686,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "70"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "70"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -11460,12 +11758,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "38"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "38"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -11530,12 +11830,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "32"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "32"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -11600,12 +11902,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "11"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "11"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -11670,12 +11974,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6.9"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "6.9"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -11750,12 +12056,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.9"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.9"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -11799,10 +12107,12 @@ entry {
           value: "6"
         }
       }
-      effective_date_time {
-        value_us: 1102105817000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1102105817000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1109153041000000
@@ -12008,12 +12318,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "143"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "143"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -12078,12 +12390,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.3"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.3"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -12148,12 +12462,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "108"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "108"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -12218,12 +12534,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "25"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "25"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -12288,12 +12606,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "14"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "14"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -12358,12 +12678,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.3"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.3"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -12428,12 +12750,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.6"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.6"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -12498,12 +12822,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.06"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.06"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -12568,12 +12894,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.41"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.41"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -12648,12 +12976,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "27"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "27"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -12728,12 +13058,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "631"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "631"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -12808,12 +13140,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "956"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "956"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -12888,12 +13222,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "398"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "398"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -12968,12 +13304,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "120"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "120"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -13048,12 +13386,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "243"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "243"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -13118,12 +13458,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.33"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.33"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -13188,12 +13530,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.52"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.52"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -13258,12 +13602,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.2"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.2"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -13328,12 +13674,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "71"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "71"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -13398,12 +13746,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "36"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "36"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -13468,12 +13818,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "35"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "35"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -13538,12 +13890,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "39"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "39"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -13618,12 +13972,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6.8"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "6.8"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -13698,12 +14054,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.5"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.5"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -13747,10 +14105,12 @@ entry {
           value: "7"
         }
       }
-      effective_date_time {
-        value_us: 1102230917000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1102230917000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1109153041000000
@@ -13956,12 +14316,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "140"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "140"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -14026,12 +14388,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.2"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.2"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -14096,12 +14460,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "105"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "105"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -14166,12 +14532,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "26"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "26"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -14236,12 +14604,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "13"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "13"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -14306,12 +14676,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "7.4"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "7.4"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -14376,12 +14748,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.7"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.7"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -14446,12 +14820,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.09"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.09"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -14516,12 +14892,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.39"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.39"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -14596,12 +14974,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "7"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "7"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -14666,12 +15046,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "3"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "3"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -14736,12 +15118,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "108"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "108"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -14806,12 +15190,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "35"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "35"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -14876,12 +15262,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "54"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "54"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -14956,12 +15344,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "30"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "30"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -15026,12 +15416,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "131"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "131"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -15096,12 +15488,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.38"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.38"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -15166,12 +15560,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.39"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.39"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -15236,12 +15632,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.5"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.5"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -15306,12 +15704,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "67"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "67"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -15376,12 +15776,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "42"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "42"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -15446,12 +15848,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "25"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "25"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -15513,12 +15917,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "5"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "5"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -15593,12 +15999,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "3.8"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "3.8"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -15663,12 +16071,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.9"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.9"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -15712,10 +16122,12 @@ entry {
           value: "8"
         }
       }
-      effective_date_time {
-        value_us: 1106808017000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1106808017000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1109153041000000
@@ -15926,12 +16338,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "138"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "138"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -15996,12 +16410,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.1"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.1"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -16066,12 +16482,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "103"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "103"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -16136,12 +16554,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "27"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "27"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -16206,12 +16626,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "12"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "12"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -16276,12 +16698,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6.8"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "6.8"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -16346,12 +16770,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "8.2"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "8.2"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -16426,12 +16852,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.07"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.07"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -16496,12 +16924,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.42"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.42"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -16576,12 +17006,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "16"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "16"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -16646,12 +17078,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "8"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "8"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -16716,12 +17150,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "369"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "369"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -16796,12 +17232,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "438"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "438"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -16876,12 +17314,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "263"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "263"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -16956,12 +17396,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "87"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "87"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -17036,12 +17478,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "179"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "179"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -17106,12 +17550,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.32"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.32"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -17176,12 +17622,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.42"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.42"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -17246,12 +17694,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.3"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.3"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -17316,12 +17766,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "67"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "67"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -17386,12 +17838,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "39"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "39"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -17456,12 +17910,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "28"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "28"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -17526,12 +17982,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "8"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "8"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -17606,12 +18064,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.8"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.8"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -17676,12 +18136,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.2"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.2"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -17725,10 +18187,12 @@ entry {
           value: "9"
         }
       }
-      effective_date_time {
-        value_us: 1102491917000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1102491917000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1109153041000000
@@ -17939,12 +18403,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "142"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "142"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -18009,12 +18475,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.0"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.0"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -18079,12 +18547,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "105"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "105"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -18149,12 +18619,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "28"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "28"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -18219,12 +18691,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "13"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "13"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -18289,12 +18763,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "5.2"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "5.2"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -18359,12 +18835,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6.4"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "6.4"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -18429,12 +18907,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.09"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.09"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -18499,12 +18979,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.46"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.46"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -18579,12 +19061,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "13"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "13"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -18649,12 +19133,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "6"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -18719,12 +19205,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "204"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "204"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -18799,12 +19287,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "192"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "192"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -18879,12 +19369,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "70"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "70"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -18959,12 +19451,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "26"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "26"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -19029,12 +19523,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "150"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "150"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -19099,12 +19595,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.37"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.37"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -19169,12 +19667,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.47"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.47"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -19239,12 +19739,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.4"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.4"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -19309,12 +19811,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "67"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "67"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -19379,12 +19883,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "39"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "39"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -19449,12 +19955,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "28"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "28"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -19519,12 +20027,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "5"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "5"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -19599,12 +20109,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.4"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.4"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -19669,12 +20181,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.1"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.1"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -19718,10 +20232,12 @@ entry {
           value: "10"
         }
       }
-      effective_date_time {
-        value_us: 1103095217000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1103095217000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1109153041000000
@@ -19932,12 +20448,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "142"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "142"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -20002,12 +20520,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.0"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.0"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -20072,12 +20592,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "107"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "107"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -20142,12 +20664,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "26"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "26"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -20212,12 +20736,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "13"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "13"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -20282,12 +20808,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6.3"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "6.3"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -20352,12 +20880,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6.7"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "6.7"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -20422,12 +20952,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.08"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.08"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -20492,12 +21024,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.40"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.40"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -20572,12 +21106,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "9"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "9"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -20642,12 +21178,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "4"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -20712,12 +21250,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "144"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "144"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -20792,12 +21332,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "106"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "106"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -20872,12 +21414,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "30"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "30"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -20942,12 +21486,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "18"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "18"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -21012,12 +21558,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "143"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "143"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -21082,12 +21630,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.28"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.28"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -21152,12 +21702,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.32"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.32"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -21222,12 +21774,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.3"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.3"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -21292,12 +21846,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "66"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "66"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -21362,12 +21918,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "41"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "41"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -21432,12 +21990,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "25"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "25"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -21502,12 +22062,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "3"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "3"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -21582,12 +22144,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.0"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.0"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -21652,12 +22216,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.0"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.0"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -21701,10 +22267,12 @@ entry {
           value: "1"
         }
       }
-      effective_date_time {
-        value_us: 1103701517000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1103701517000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1109153041000000
@@ -21915,12 +22483,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "141"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "141"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -21985,12 +22555,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.2"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.2"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -22055,12 +22627,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "106"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "106"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -22125,12 +22699,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "29"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "29"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -22195,12 +22771,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "10"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "10"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -22265,12 +22843,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "7.0"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "7.0"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -22335,12 +22915,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.7"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.7"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -22405,12 +22987,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.05"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.05"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -22475,12 +23059,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.32"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.32"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -22545,12 +23131,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "43"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "43"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -22625,12 +23213,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "708"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "708"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -22705,12 +23295,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1131"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "1131"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -22785,12 +23377,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "475"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "475"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -22865,12 +23459,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "176"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "176"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -22945,12 +23541,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "324"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "324"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -23025,12 +23623,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.32"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.32"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -23095,12 +23695,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.45"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.45"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -23165,12 +23767,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.9"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.9"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -23235,12 +23839,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "71"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "71"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -23305,12 +23911,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "38"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "38"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -23375,12 +23983,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "33"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "33"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -23445,12 +24055,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "17"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "17"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -23515,12 +24127,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "7.0"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "7.0"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -23595,12 +24209,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.9"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.9"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -23644,10 +24260,12 @@ entry {
           value: "2"
         }
       }
-      effective_date_time {
-        value_us: 1102067117000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1102067117000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1109153041000000
@@ -23853,12 +24471,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "142"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "142"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -23923,12 +24543,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "3.6"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "3.6"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -23993,12 +24615,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "104"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "104"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -24063,12 +24687,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "30"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "30"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -24133,12 +24759,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "12"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "12"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -24203,12 +24831,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6.2"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "6.2"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -24273,12 +24903,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.5"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.5"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -24343,12 +24975,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.06"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.06"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -24413,12 +25047,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.37"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.37"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -24493,12 +25129,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "50"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "50"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -24573,12 +25211,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "684"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "684"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -24653,12 +25293,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1105"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "1105"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -24733,12 +25375,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "466"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "466"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -24813,12 +25457,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "198"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "198"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -24893,12 +25539,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "323"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "323"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -24973,12 +25621,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.32"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.32"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -25043,12 +25693,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.45"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.45"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -25113,12 +25765,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.9"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.9"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -25183,12 +25837,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "70"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "70"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -25253,12 +25909,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "38"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "38"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -25323,12 +25981,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "32"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "32"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -25393,12 +26053,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "11"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "11"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           reference_range {
@@ -25463,12 +26125,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6.9"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "6.9"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -25543,12 +26207,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.9"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.9"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -25592,10 +26258,12 @@ entry {
           value: "3"
         }
       }
-      effective_date_time {
-        value_us: 1102105817000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1102105817000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1109153041000000
@@ -25801,12 +26469,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "143"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "143"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -25871,12 +26541,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.3"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.3"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -25941,12 +26613,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "108"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "108"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -26011,12 +26685,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "25"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "25"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -26081,12 +26757,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "14"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "14"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -26151,12 +26829,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.3"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.3"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -26221,12 +26901,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4.6"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "4.6"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -26291,12 +26973,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.06"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.06"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -26361,12 +27045,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.41"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "0.41"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -26441,12 +27127,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "27"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "27"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -26521,12 +27209,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "631"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "631"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -26601,12 +27291,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "956"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "956"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -26681,12 +27373,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "398"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "398"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -26761,12 +27455,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "120"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "120"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           interpretation {
@@ -26841,12 +27537,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "243"
-            }
-            unit {
-              value: "U/L"
+          value {
+            quantity {
+              value {
+                value: "243"
+              }
+              unit {
+                value: "U/L"
+              }
             }
           }
           reference_range {
@@ -26911,12 +27609,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.33"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.33"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -26981,12 +27681,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.52"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "2.52"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -27051,12 +27753,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.2"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.2"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -27121,12 +27825,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "71"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "71"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -27191,12 +27897,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "36"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "36"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -27261,12 +27969,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "35"
-            }
-            unit {
-              value: "g/L"
+          value {
+            quantity {
+              value {
+                value: "35"
+              }
+              unit {
+                value: "g/L"
+              }
             }
           }
           reference_range {
@@ -27331,12 +28041,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "39"
-            }
-            unit {
-              value: "umol/L"
+          value {
+            quantity {
+              value {
+                value: "39"
+              }
+              unit {
+                value: "umol/L"
+              }
             }
           }
           interpretation {
@@ -27411,12 +28123,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "6.8"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "6.8"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           interpretation {
@@ -27491,12 +28205,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1.5"
-            }
-            unit {
-              value: "mmol/L"
+          value {
+            quantity {
+              value {
+                value: "1.5"
+              }
+              unit {
+                value: "mmol/L"
+              }
             }
           }
           reference_range {
@@ -27540,10 +28256,12 @@ entry {
           value: "4"
         }
       }
-      effective_date_time {
-        value_us: 1102230917000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1102230917000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1109153041000000
@@ -27741,9 +28459,11 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_codeable_concept {
-            text {
-              value: "KLEBSIELLA PNEUMONIAE"
+          value {
+            codeable_concept {
+              text {
+                value: "KLEBSIELLA PNEUMONIAE"
+              }
             }
           }
         }
@@ -27782,12 +28502,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "20000"
-            }
-            unit {
-              value: "CFU/ML"
+          value {
+            quantity {
+              value {
+                value: "20000"
+              }
+              unit {
+                value: "CFU/ML"
+              }
             }
           }
         }
@@ -27826,12 +28548,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4"
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "4"
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -27880,12 +28604,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "16"
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "16"
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -27934,15 +28660,17 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1"
-            }
-            comparator {
-              value: LE
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "1"
+              }
+              comparator {
+                value: LE
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -27991,15 +28719,17 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4"
-            }
-            comparator {
-              value: LE
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "4"
+              }
+              comparator {
+                value: LE
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -28048,15 +28778,17 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1"
-            }
-            comparator {
-              value: LE
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "1"
+              }
+              comparator {
+                value: LE
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -28105,15 +28837,17 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4"
-            }
-            comparator {
-              value: LE
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "4"
+              }
+              comparator {
+                value: LE
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -28162,15 +28896,17 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1"
-            }
-            comparator {
-              value: LE
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "1"
+              }
+              comparator {
+                value: LE
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -28219,15 +28955,17 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1"
-            }
-            comparator {
-              value: LE
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "1"
+              }
+              comparator {
+                value: LE
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -28276,15 +29014,17 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.25"
-            }
-            comparator {
-              value: LE
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "0.25"
+              }
+              comparator {
+                value: LE
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -28333,15 +29073,17 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1"
-            }
-            comparator {
-              value: LE
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "1"
+              }
+              comparator {
+                value: LE
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -28390,15 +29132,17 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1"
-            }
-            comparator {
-              value: LE
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "1"
+              }
+              comparator {
+                value: LE
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -28447,15 +29191,17 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "0.25"
-            }
-            comparator {
-              value: LE
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "0.25"
+              }
+              comparator {
+                value: LE
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -28504,12 +29250,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "32"
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "32"
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -28558,15 +29306,17 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "4"
-            }
-            comparator {
-              value: LE
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "4"
+              }
+              comparator {
+                value: LE
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -28615,15 +29365,17 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "20"
-            }
-            comparator {
-              value: LE
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "20"
+              }
+              comparator {
+                value: LE
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -28672,15 +29424,17 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "1"
-            }
-            comparator {
-              value: LE
-            }
-            unit {
-              value: "U"
+          value {
+            quantity {
+              value {
+                value: "1"
+              }
+              comparator {
+                value: LE
+              }
+              unit {
+                value: "U"
+              }
             }
           }
           interpretation {
@@ -28724,10 +29478,12 @@ entry {
           value: "5"
         }
       }
-      effective_date_time {
-        value_us: 1131399857000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1131399857000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1131406681000000
@@ -28900,8 +29656,10 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_string {
-            value: "Non-reactive"
+          value {
+            string_value {
+              value: "Non-reactive"
+            }
           }
         }
       }
@@ -28937,10 +29695,12 @@ entry {
           value: "6"
         }
       }
-      effective_date_time {
-        value_us: 1110204137000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1110204137000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1110204121000000
@@ -29034,12 +29794,14 @@ entry {
               value: "Acme Laboratory, Inc"
             }
           }
-          value_quantity {
-            value {
-              value: "2.8"
-            }
-            unit {
-              value: "mg/L"
+          value {
+            quantity {
+              value {
+                value: "2.8"
+              }
+              unit {
+                value: "mg/L"
+              }
             }
           }
           reference_range {
@@ -29091,10 +29853,12 @@ entry {
           value: "1"
         }
       }
-      effective_date_time {
-        value_us: 1337597100000000
-        timezone: "UTC"
-        precision: SECOND
+      effective {
+        date_time {
+          value_us: 1337597100000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       issued {
         value_us: 1337783221000000

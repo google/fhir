@@ -19,9 +19,11 @@ intent {
     }
   }
 }
-code_reference {
-  device_id {
-    value: "example"
+code {
+  reference {
+    device_id {
+      value: "example"
+    }
   }
 }
 subject {

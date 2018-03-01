@@ -23,24 +23,30 @@ extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-ballot-status"
   }
-  value_string {
-    value: "Informative"
+  value {
+    string_value {
+      value: "Informative"
+    }
   }
 }
 extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
   }
-  value_integer {
-    value: 1
+  value {
+    integer {
+      value: 1
+    }
   }
 }
 extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg"
   }
-  value_code {
-    value: "fhir"
+  value {
+    code {
+      value: "fhir"
+    }
   }
 }
 url {

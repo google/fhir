@@ -38,16 +38,18 @@ performer {
     value: "Sequence Analysis Laboratory"
   }
 }
-value_codeable_concept {
-  coding {
-    system {
-      value: "http://snomed.info/sct"
-    }
-    code {
-      value: "260385009"
-    }
-    display {
-      value: "Negative"
+value {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "260385009"
+      }
+      display {
+        value: "Negative"
+      }
     }
   }
 }

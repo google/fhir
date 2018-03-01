@@ -36,22 +36,28 @@ contained {
         value: "Referral to service (procedure)"
       }
     }
-    timing_timing {
-      event {
-        extension {
-          url {
-            value: "http://hl7.org/fhir/StructureDefinition/cqif-cqlExpression"
+    timing {
+      timing_value {
+        event {
+          extension {
+            url {
+              value: "http://hl7.org/fhir/StructureDefinition/cqif-cqlExpression"
+            }
+            value {
+              string_value {
+                value: "Now()"
+              }
+            }
           }
-          value_string {
-            value: "Now()"
-          }
-        }
-        extension {
-          url {
-            value: "https://fhir.google.com/extensions/primitiveHasNoValue"
-          }
-          value_boolean {
-            value: true
+          extension {
+            url {
+              value: "https://fhir.google.com/extensions/primitiveHasNoValue"
+            }
+            value {
+              boolean {
+                value: true
+              }
+            }
           }
         }
       }
@@ -74,9 +80,11 @@ contained {
     kind {
       value: MEDICATION_REQUEST
     }
-    product_reference {
-      fragment {
-        value: "citalopramMedication"
+    product {
+      reference {
+        fragment {
+          value: "citalopramMedication"
+        }
       }
     }
     dosage {
@@ -109,12 +117,14 @@ contained {
           value: "Oral route (qualifier value)"
         }
       }
-      dose_quantity {
-        value {
-          value: "1"
-        }
-        unit {
-          value: "{tbl}"
+      dose {
+        quantity {
+          value {
+            value: "1"
+          }
+          unit {
+            value: "{tbl}"
+          }
         }
       }
     }
@@ -171,9 +181,11 @@ contained {
       }
     }
     ingredient {
-      item_reference {
-        fragment {
-          value: "citalopramSubstance"
+      item {
+        reference {
+          fragment {
+            value: "citalopramSubstance"
+          }
         }
       }
       amount {
@@ -289,39 +301,18 @@ use_context {
       value: "age"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "https://meshb.nlm.nih.gov"
-      }
-      code {
-        value: "D000328"
-      }
-      display {
-        value: "Adult"
-      }
-    }
-  }
-}
-use_context {
-  code {
-    system {
-      value: "http://hl7.org/fhir/usage-context-type"
-    }
-    code {
-      value: "focus"
-    }
-  }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "87512008"
-      }
-      display {
-        value: "Mild major depression"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "https://meshb.nlm.nih.gov"
+        }
+        code {
+          value: "D000328"
+        }
+        display {
+          value: "Adult"
+        }
       }
     }
   }
@@ -335,39 +326,18 @@ use_context {
       value: "focus"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "40379007"
-      }
-      display {
-        value: "Major depression, recurrent, mild"
-      }
-    }
-  }
-}
-use_context {
-  code {
-    system {
-      value: "http://hl7.org/fhir/usage-context-type"
-    }
-    code {
-      value: "focus"
-    }
-  }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "394687007"
-      }
-      display {
-        value: "Low suicide risk"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "87512008"
+        }
+        display {
+          value: "Mild major depression"
+        }
       }
     }
   }
@@ -381,16 +351,68 @@ use_context {
       value: "focus"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "40379007"
+        }
+        display {
+          value: "Major depression, recurrent, mild"
+        }
       }
-      code {
-        value: "225337009"
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "394687007"
+        }
+        display {
+          value: "Low suicide risk"
+        }
       }
-      display {
-        value: "Suicide risk assessment"
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "225337009"
+        }
+        display {
+          value: "Suicide risk assessment"
+        }
       }
     }
   }
@@ -404,16 +426,18 @@ use_context {
       value: "user"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "309343006"
-      }
-      display {
-        value: "Physician"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "309343006"
+        }
+        display {
+          value: "Physician"
+        }
       }
     }
   }
@@ -427,16 +451,18 @@ use_context {
       value: "venue"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "440655000"
-      }
-      display {
-        value: "Outpatient environment"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "440655000"
+        }
+        display {
+          value: "Outpatient environment"
+        }
       }
     }
   }
@@ -658,17 +684,19 @@ action {
             url {
               value: "http://hl7.org/fhir/StructureDefinition/cqif-qualityOfEvidence"
             }
-            value_codeable_concept {
-              coding {
-                system {
-                  value: "http://hl7.org/fhir/evidence-quality"
+            value {
+              codeable_concept {
+                coding {
+                  system {
+                    value: "http://hl7.org/fhir/evidence-quality"
+                  }
+                  code {
+                    value: "high"
+                  }
                 }
-                code {
-                  value: "high"
+                text {
+                  value: "High Quality"
                 }
-              }
-              text {
-                value: "High Quality"
               }
             }
           }

@@ -57,9 +57,11 @@ subject {
     value: "Max Jones"
   }
 }
-effective_date_time {
-  value_us: 1488412800000000
-  precision: DAY
+effective {
+  date_time {
+    value_us: 1488412800000000
+    precision: DAY
+  }
 }
 issued {
   value_us: 1489565588000000
@@ -90,16 +92,20 @@ presented_form {
         url {
           value: "separator"
         }
-        value_string {
-          value: " "
+        value {
+          string_value {
+            value: " "
+          }
         }
       }
       extension {
         url {
           value: "stride"
         }
-        value_positive_int {
-          value: 76
+        value {
+          positive_int {
+            value: 76
+          }
         }
       }
     }

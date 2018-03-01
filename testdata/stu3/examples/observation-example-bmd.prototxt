@@ -41,18 +41,20 @@ performer {
     value: "Acme Imaging Diagnostics"
   }
 }
-value_quantity {
-  value {
-    value: "0.887"
-  }
-  unit {
-    value: "g/cm\302\262"
-  }
-  system {
-    value: "http://unitsofmeasure.org"
-  }
-  code {
-    value: "g/cm-2"
+value {
+  quantity {
+    value {
+      value: "0.887"
+    }
+    unit {
+      value: "g/cm\302\262"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "g/cm-2"
+    }
   }
 }
 body_site {

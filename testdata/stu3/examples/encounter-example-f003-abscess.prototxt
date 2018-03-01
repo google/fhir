@@ -97,8 +97,10 @@ reason {
     url {
       value: "http://hl7.org/fhir/StructureDefinition/encounter-primaryDiagnosis"
     }
-    value_positive_int {
-      value: 1
+    value {
+      positive_int {
+        value: 1
+      }
     }
   }
   coding {

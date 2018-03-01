@@ -57,16 +57,18 @@ performer {
     value: "Luigi Maas"
   }
 }
-value_codeable_concept {
-  coding {
-    system {
-      value: "http://snomed.info/sct"
-    }
-    code {
-      value: "3092008"
-    }
-    display {
-      value: "Staphylococcus aureus"
+value {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "3092008"
+      }
+      display {
+        value: "Staphylococcus aureus"
+      }
     }
   }
 }

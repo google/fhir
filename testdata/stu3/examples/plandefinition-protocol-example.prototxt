@@ -86,16 +86,18 @@ use_context {
       value: "focus"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "414916001"
-      }
-      display {
-        value: "Obesity (disorder)"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "414916001"
+        }
+        display {
+          value: "Obesity (disorder)"
+        }
       }
     }
   }
@@ -191,13 +193,15 @@ goal {
         }
       }
     }
-    detail_range {
-      high {
-        value {
-          value: "24.9"
-        }
-        unit {
-          value: "kg/m2"
+    detail {
+      range {
+        high {
+          value {
+            value: "24.9"
+          }
+          unit {
+            value: "kg/m2"
+          }
         }
       }
     }

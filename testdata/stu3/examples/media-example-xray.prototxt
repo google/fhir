@@ -50,9 +50,11 @@ context {
     value: "example"
   }
 }
-occurrence_date_time {
-  value_us: 1458000000000000
-  precision: DAY
+occurrence {
+  date_time {
+    value_us: 1458000000000000
+    precision: DAY
+  }
 }
 body_site {
   coding {

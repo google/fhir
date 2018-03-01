@@ -50,9 +50,11 @@ entry {
       intent {
         value: ORDER
       }
-      medication_reference {
-        medication_id {
-          value: "example"
+      medication {
+        reference {
+          medication_id {
+            value: "example"
+          }
         }
       }
       subject {

@@ -35,9 +35,11 @@ contained {
 status {
   value: COMPLETED
 }
-medication_reference {
-  fragment {
-    value: "medexample015"
+medication {
+  reference {
+    fragment {
+      value: "medexample015"
+    }
   }
 }
 subject {
@@ -95,18 +97,20 @@ dosage_instruction {
       }
     }
   }
-  dose_quantity {
-    value {
-      value: "500"
-    }
-    unit {
-      value: "mg"
-    }
-    system {
-      value: "http://unitsofmeasure.org"
-    }
-    code {
-      value: "mg"
+  dose {
+    quantity {
+      value {
+        value: "500"
+      }
+      unit {
+        value: "mg"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mg"
+      }
     }
   }
 }

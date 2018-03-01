@@ -72,9 +72,11 @@ contact {
   }
 }
 note {
-  author_reference {
-    practitioner_id {
-      value: "xcda-author"
+  author {
+    reference {
+      practitioner_id {
+        value: "xcda-author"
+      }
     }
   }
   time {

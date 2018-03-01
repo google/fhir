@@ -79,8 +79,10 @@ data_requirement {
     path {
       value: "code"
     }
-    value_set_string {
-      value: "2.16.840.1.113883.3.464.1003.102.12.1011"
+    value_set {
+      string_value {
+        value: "2.16.840.1.113883.3.464.1003.102.12.1011"
+      }
     }
   }
 }
@@ -108,8 +110,10 @@ data_requirement {
     path {
       value: "code"
     }
-    value_set_string {
-      value: "2.16.840.1.113883.3.464.1003.102.12.1012"
+    value_set {
+      string_value {
+        value: "2.16.840.1.113883.3.464.1003.102.12.1012"
+      }
     }
   }
 }
@@ -137,8 +141,10 @@ data_requirement {
     path {
       value: "type"
     }
-    value_set_string {
-      value: "2.16.840.1.113883.3.464.1003.101.12.1061"
+    value_set {
+      string_value {
+        value: "2.16.840.1.113883.3.464.1003.101.12.1061"
+      }
     }
   }
 }
@@ -150,8 +156,10 @@ data_requirement {
     path {
       value: "diagnosis"
     }
-    value_set_string {
-      value: "2.16.840.1.113883.3.464.1003.198.12.1012"
+    value_set {
+      string_value {
+        value: "2.16.840.1.113883.3.464.1003.198.12.1012"
+      }
     }
   }
 }
@@ -163,8 +171,10 @@ data_requirement {
     path {
       value: "code"
     }
-    value_set_string {
-      value: "2.16.840.1.113883.3.464.1003.196.12.1001"
+    value_set {
+      string_value {
+        value: "2.16.840.1.113883.3.464.1003.196.12.1001"
+      }
     }
   }
 }
@@ -184,8 +194,10 @@ data_requirement {
     path {
       value: "medication.code"
     }
-    value_set_string {
-      value: "2.16.840.1.113883.3.464.1003.196.12.1001"
+    value_set {
+      string_value {
+        value: "2.16.840.1.113883.3.464.1003.196.12.1001"
+      }
     }
   }
 }
@@ -205,8 +217,10 @@ data_requirement {
     path {
       value: "medication.code"
     }
-    value_set_string {
-      value: "2.16.840.1.113883.3.464.1003.196.12.1001"
+    value_set {
+      string_value {
+        value: "2.16.840.1.113883.3.464.1003.196.12.1001"
+      }
     }
   }
 }

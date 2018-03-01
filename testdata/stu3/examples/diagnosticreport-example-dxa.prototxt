@@ -30,9 +30,11 @@ subject {
     value: "pat2"
   }
 }
-effective_date_time {
-  value_us: 1213660800000000
-  precision: DAY
+effective {
+  date_time {
+    value_us: 1213660800000000
+    precision: DAY
+  }
 }
 issued {
   value_us: 1213744980000000

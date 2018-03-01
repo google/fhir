@@ -51,6 +51,8 @@ subject {
     value: "example"
   }
 }
-onset_string {
-  value: "approximately November 2012"
+onset {
+  string_value {
+    value: "approximately November 2012"
+  }
 }

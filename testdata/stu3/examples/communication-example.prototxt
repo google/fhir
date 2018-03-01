@@ -95,14 +95,18 @@ sender {
   }
 }
 payload {
-  content_string {
-    value: "Patient 1 has a very high serum potassium value (7.2 mmol/L on 2014-Dec-12 at 5:55 pm)"
+  content {
+    string_value {
+      value: "Patient 1 has a very high serum potassium value (7.2 mmol/L on 2014-Dec-12 at 5:55 pm)"
+    }
   }
 }
 payload {
-  content_reference {
-    display {
-      value: "Serum Potassium Observation"
+  content {
+    reference {
+      display {
+        value: "Serum Potassium Observation"
+      }
     }
   }
 }

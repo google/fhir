@@ -63,16 +63,20 @@ content {
         url {
           value: "separator"
         }
-        value_string {
-          value: "    "
+        value {
+          string_value {
+            value: "    "
+          }
         }
       }
       extension {
         url {
           value: "stride"
         }
-        value_positive_int {
-          value: 40
+        value {
+          positive_int {
+            value: 40
+          }
         }
       }
     }

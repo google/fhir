@@ -89,13 +89,15 @@ diagnosis {
   sequence {
     value: 1
   }
-  diagnosis_codeable_concept {
-    coding {
-      system {
-        value: "http://hl7.org/fhir/sid/icd-10"
-      }
-      code {
-        value: "123457"
+  diagnosis {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/icd-10"
+        }
+        code {
+          value: "123457"
+        }
       }
     }
   }
@@ -133,9 +135,11 @@ item {
       }
     }
   }
-  serviced_date {
-    value_us: 1431734400000000
-    precision: DAY
+  serviced {
+    date {
+      value_us: 1431734400000000
+      precision: DAY
+    }
   }
   unit_price {
     value {
@@ -350,9 +354,11 @@ item {
       }
     }
   }
-  serviced_date {
-    value_us: 1408147200000000
-    precision: DAY
+  serviced {
+    date {
+      value_us: 1408147200000000
+      precision: DAY
+    }
   }
   unit_price {
     value {
@@ -414,9 +420,11 @@ item {
       }
     }
   }
-  serviced_date {
-    value_us: 1408147200000000
-    precision: DAY
+  serviced {
+    date {
+      value_us: 1408147200000000
+      precision: DAY
+    }
   }
   unit_price {
     value {

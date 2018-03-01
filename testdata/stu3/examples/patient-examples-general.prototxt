@@ -776,24 +776,28 @@ entry {
           url {
             value: "http://example.org/Profile/administrative-status"
           }
-          value_codeable_concept {
-            coding {
-              system {
-                value: "http://example.org/fhir/v2/administrative-status"
-              }
-              code {
-                value: "FTM"
-              }
-              display {
-                value: "female-to-male"
+          value {
+            codeable_concept {
+              coding {
+                system {
+                  value: "http://example.org/fhir/v2/administrative-status"
+                }
+                code {
+                  value: "FTM"
+                }
+                display {
+                  value: "female-to-male"
+                }
               }
             }
           }
         }
       }
-      deceased_date_time {
-        value_us: 1030147200000000
-        precision: DAY
+      deceased {
+        date_time {
+          value_us: 1030147200000000
+          precision: DAY
+        }
       }
       address {
         use {

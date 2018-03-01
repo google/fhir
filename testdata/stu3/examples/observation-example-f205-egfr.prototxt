@@ -89,21 +89,23 @@ component {
       }
     }
   }
-  value_quantity {
-    value {
-      value: "60"
-    }
-    comparator {
-      value: GT
-    }
-    unit {
-      value: "mL/min/1.73m2"
-    }
-    system {
-      value: "http://unitsofmeasure.org"
-    }
-    code {
-      value: "mL/min/{1.73_m2}"
+  value {
+    quantity {
+      value {
+        value: "60"
+      }
+      comparator {
+        value: GT
+      }
+      unit {
+        value: "mL/min/1.73m2"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mL/min/{1.73_m2}"
+      }
     }
   }
   reference_range {
@@ -158,18 +160,20 @@ component {
       }
     }
   }
-  value_quantity {
-    value {
-      value: "60"
-    }
-    unit {
-      value: "mL/min/1.73m2"
-    }
-    system {
-      value: "http://unitsofmeasure.org"
-    }
-    code {
-      value: "mL/min/{1.73_m2}"
+  value {
+    quantity {
+      value {
+        value: "60"
+      }
+      unit {
+        value: "mL/min/1.73m2"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mL/min/{1.73_m2}"
+      }
     }
   }
   reference_range {

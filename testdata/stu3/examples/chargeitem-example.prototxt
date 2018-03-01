@@ -43,16 +43,18 @@ context {
     value: "example"
   }
 }
-occurrence_period {
-  start {
-    value_us: 1485327600000000
-    timezone: "+01:00"
-    precision: SECOND
-  }
-  end {
-    value_us: 1485344100000000
-    timezone: "+01:00"
-    precision: SECOND
+occurrence {
+  period {
+    start {
+      value_us: 1485327600000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1485344100000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
   }
 }
 participant {
@@ -174,9 +176,11 @@ account {
   }
 }
 note {
-  author_reference {
-    practitioner_id {
-      value: "example"
+  author {
+    reference {
+      practitioner_id {
+        value: "example"
+      }
     }
   }
   time {

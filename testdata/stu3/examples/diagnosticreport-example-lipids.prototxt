@@ -46,18 +46,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "6.3"
-      }
-      unit {
-        value: "mmol/L"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "mmol/L"
+    value {
+      quantity {
+        value {
+          value: "6.3"
+        }
+        unit {
+          value: "mmol/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mmol/L"
+        }
       }
     }
     reference_range {
@@ -115,18 +117,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "1.3"
-      }
-      unit {
-        value: "mmol/L"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "mmol/L"
+    value {
+      quantity {
+        value {
+          value: "1.3"
+        }
+        unit {
+          value: "mmol/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mmol/L"
+        }
       }
     }
     reference_range {
@@ -184,18 +188,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "1.3"
-      }
-      unit {
-        value: "mmol/L"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "mmol/L"
+    value {
+      quantity {
+        value {
+          value: "1.3"
+        }
+        unit {
+          value: "mmol/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mmol/L"
+        }
       }
     }
     reference_range {
@@ -253,18 +259,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "4.6"
-      }
-      unit {
-        value: "mmol/L"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "mmol/L"
+    value {
+      quantity {
+        value {
+          value: "4.6"
+        }
+        unit {
+          value: "mmol/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mmol/L"
+        }
       }
     }
     reference_range {
@@ -327,10 +335,12 @@ subject {
     value: "pat2"
   }
 }
-effective_date_time {
-  value_us: 1299187800000000
-  timezone: "+11:00"
-  precision: SECOND
+effective {
+  date_time {
+    value_us: 1299187800000000
+    timezone: "+11:00"
+    precision: SECOND
+  }
 }
 issued {
   value_us: 1359247533000000

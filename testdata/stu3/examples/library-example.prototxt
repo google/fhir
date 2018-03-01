@@ -63,8 +63,10 @@ data_requirement {
     path {
       value: "code"
     }
-    value_set_string {
-      value: "Other Female Reproductive Conditions"
+    value_set {
+      string_value {
+        value: "Other Female Reproductive Conditions"
+      }
     }
   }
 }

@@ -74,9 +74,11 @@ form {
   }
 }
 ingredient {
-  item_reference {
-    fragment {
-      value: "sub04"
+  item {
+    reference {
+      fragment {
+        value: "sub04"
+      }
     }
   }
   amount {
@@ -119,16 +121,18 @@ package_value {
     }
   }
   content {
-    item_codeable_concept {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "134622004"
-        }
-        display {
-          value: "Capecitabine 500mg tablets (product)"
+    item {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "134622004"
+          }
+          display {
+            value: "Capecitabine 500mg tablets (product)"
+          }
         }
       }
     }

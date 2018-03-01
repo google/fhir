@@ -36,20 +36,24 @@ ordered_item {
       value: "10"
     }
   }
-  item_codeable_concept {
-    coding {
-      code {
-        value: "BlueTubes"
-      }
-      display {
-        value: "Blood collect tubes blue cap"
+  item {
+    codeable_concept {
+      coding {
+        code {
+          value: "BlueTubes"
+        }
+        display {
+          value: "Blood collect tubes blue cap"
+        }
       }
     }
   }
 }
-occurrence_date_time {
-  value_us: 1483142400000000
-  precision: DAY
+occurrence {
+  date_time {
+    value_us: 1483142400000000
+    precision: DAY
+  }
 }
 authored_on {
   value_us: 1483142400000000
@@ -72,13 +76,15 @@ supplier {
     value: "Vendor1"
   }
 }
-reason_codeable_concept {
-  coding {
-    code {
-      value: "stock_low"
-    }
-    display {
-      value: "Refill due to low stock"
+reason {
+  codeable_concept {
+    coding {
+      code {
+        value: "stock_low"
+      }
+      display {
+        value: "Refill due to low stock"
+      }
     }
   }
 }

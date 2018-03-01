@@ -13,12 +13,14 @@ extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/device-din"
   }
-  value_identifier {
-    system {
-      value: "http://hl7.org/fhir/NamingSystem/iccbba-din"
-    }
-    value {
-      value: "A99971312345600"
+  value {
+    identifier {
+      system {
+        value: "http://hl7.org/fhir/NamingSystem/iccbba-din"
+      }
+      value {
+        value: "A99971312345600"
+      }
     }
   }
 }

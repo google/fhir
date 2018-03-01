@@ -45,17 +45,19 @@ intent {
 priority {
   value: ROUTINE
 }
-code_codeable_concept {
-  coding {
-    system {
-      value: "http://loinc.org"
+code {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "43148-6"
+      }
     }
-    code {
-      value: "43148-6"
+    text {
+      value: "Insulin delivery device panel"
     }
-  }
-  text {
-    value: "Insulin delivery device panel"
   }
 }
 subject {
@@ -68,10 +70,12 @@ context {
     value: "Encounter 1"
   }
 }
-occurrence_date_time {
-  value_us: 1367980407000000
-  timezone: "+07:00"
-  precision: SECOND
+occurrence {
+  date_time {
+    value_us: 1367980407000000
+    timezone: "+07:00"
+    precision: SECOND
+  }
 }
 authored_on {
   value_us: 1367980407000000

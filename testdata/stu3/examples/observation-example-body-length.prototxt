@@ -54,21 +54,25 @@ subject {
     value: "example"
   }
 }
-effective_date_time {
-  value_us: 930873600000000
-  precision: DAY
+effective {
+  date_time {
+    value_us: 930873600000000
+    precision: DAY
+  }
 }
-value_quantity {
-  value {
-    value: "25"
-  }
-  unit {
-    value: "cm"
-  }
-  system {
-    value: "http://unitsofmeasure.org"
-  }
-  code {
-    value: "cm"
+value {
+  quantity {
+    value {
+      value: "25"
+    }
+    unit {
+      value: "cm"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "cm"
+    }
   }
 }

@@ -91,9 +91,11 @@ context {
     value: "Roel\'s encounter on March eleventh"
   }
 }
-onset_date_time {
-  value_us: 1362700800000000
-  precision: DAY
+onset {
+  date_time {
+    value_us: 1362700800000000
+    precision: DAY
+  }
 }
 asserted_date {
   value_us: 1362960000000000

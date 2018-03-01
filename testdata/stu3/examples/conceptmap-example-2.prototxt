@@ -50,11 +50,15 @@ description {
 purpose {
   value: "To illustrate mapping features"
 }
-source_uri {
-  value: "http://example.org/fhir/example1"
+source {
+  uri {
+    value: "http://example.org/fhir/example1"
+  }
 }
-target_uri {
-  value: "http://example.org/fhir/example2"
+target {
+  uri {
+    value: "http://example.org/fhir/example2"
+  }
 }
 group {
   source {

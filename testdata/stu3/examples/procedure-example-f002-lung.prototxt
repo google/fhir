@@ -38,16 +38,18 @@ context {
     value: "f002"
   }
 }
-performed_period {
-  start {
-    value_us: 1362729610000000
-    timezone: "+01:00"
-    precision: SECOND
-  }
-  end {
-    value_us: 1362731410000000
-    timezone: "+01:00"
-    precision: SECOND
+performed {
+  period {
+    start {
+      value_us: 1362729610000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1362731410000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
   }
 }
 performer {

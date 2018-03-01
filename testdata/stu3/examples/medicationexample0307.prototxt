@@ -54,16 +54,18 @@ form {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "325072002"
-      }
-      display {
-        value: "Insulin Aspart (substance)"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "325072002"
+        }
+        display {
+          value: "Insulin Aspart (substance)"
+        }
       }
     }
   }
@@ -107,16 +109,18 @@ package_value {
     }
   }
   content {
-    item_codeable_concept {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "325072002"
-        }
-        display {
-          value: "Insulin Aspart (substance)"
+    item {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "325072002"
+          }
+          display {
+            value: "Insulin Aspart (substance)"
+          }
         }
       }
     }

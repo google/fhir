@@ -82,12 +82,14 @@ item {
         question {
           value: "1.1"
         }
-        answer_coding {
-          system {
-            value: "http://hl7.org/fhir/v2/0136"
-          }
-          code {
-            value: "Y"
+        answer {
+          coding {
+            system {
+              value: "http://hl7.org/fhir/v2/0136"
+            }
+            code {
+              value: "Y"
+            }
           }
         }
       }

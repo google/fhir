@@ -17,9 +17,11 @@ contained {
     intent {
       value: PROPOSAL
     }
-    medication_codeable_concept {
-      text {
-        value: "Medication 1"
+    medication {
+      codeable_concept {
+        text {
+          value: "Medication 1"
+        }
       }
     }
     subject {
@@ -37,9 +39,11 @@ contained {
     intent {
       value: PROPOSAL
     }
-    medication_codeable_concept {
-      text {
-        value: "Medication 2"
+    medication {
+      codeable_concept {
+        text {
+          value: "Medication 2"
+        }
       }
     }
     subject {
@@ -91,9 +95,11 @@ author {
     value: "1"
   }
 }
-reason_codeable_concept {
-  text {
-    value: "Treatment"
+reason {
+  codeable_concept {
+    text {
+      value: "Treatment"
+    }
   }
 }
 note {
@@ -114,10 +120,12 @@ action {
   text_equivalent {
     value: "Administer medication 1, followed an hour later by medication 2"
   }
-  timing_date_time {
-    value_us: 1488826800000000
-    timezone: "UTC"
-    precision: SECOND
+  timing {
+    date_time {
+      value_us: 1488826800000000
+      timezone: "UTC"
+      precision: SECOND
+    }
   }
   participant {
     practitioner_id {
@@ -171,12 +179,14 @@ action {
       relationship {
         value: AFTER_END
       }
-      offset_duration {
-        value {
-          value: "1"
-        }
-        unit {
-          value: "h"
+      offset {
+        duration {
+          value {
+            value: "1"
+          }
+          unit {
+            value: "h"
+          }
         }
       }
     }

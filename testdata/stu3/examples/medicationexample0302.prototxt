@@ -54,16 +54,18 @@ form {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-      }
-      code {
-        value: "203134"
-      }
-      display {
-        value: "Piperacillin Sodium"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "203134"
+        }
+        display {
+          value: "Piperacillin Sodium"
+        }
       }
     }
   }
@@ -93,16 +95,18 @@ ingredient {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-      }
-      code {
-        value: "221167"
-      }
-      display {
-        value: "Tazobactam Sodium"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "221167"
+        }
+        display {
+          value: "Tazobactam Sodium"
+        }
       }
     }
   }

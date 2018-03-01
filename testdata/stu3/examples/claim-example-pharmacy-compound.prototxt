@@ -121,9 +121,11 @@ information {
       }
     }
   }
-  value_quantity {
-    value {
-      value: "0"
+  value {
+    quantity {
+      value {
+        value: "0"
+      }
     }
   }
 }
@@ -148,9 +150,11 @@ information {
       }
     }
   }
-  value_quantity {
-    value {
-      value: "10"
+  value {
+    quantity {
+      value {
+        value: "10"
+      }
     }
   }
 }
@@ -180,10 +184,12 @@ diagnosis {
   sequence {
     value: 1
   }
-  diagnosis_codeable_concept {
-    coding {
-      code {
-        value: "654456"
+  diagnosis {
+    codeable_concept {
+      coding {
+        code {
+          value: "654456"
+        }
       }
     }
   }
@@ -233,9 +239,11 @@ item {
       }
     }
   }
-  serviced_date {
-    value_us: 1408147200000000
-    precision: DAY
+  serviced {
+    date {
+      value_us: 1408147200000000
+      precision: DAY
+    }
   }
   quantity {
     value {

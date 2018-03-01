@@ -103,8 +103,10 @@ package_value {
     acronym {
       value: "daf-tst"
     }
-    source_uri {
-      value: "test.html"
+    source {
+      uri {
+        value: "test.html"
+      }
     }
     example_for {
       structure_definition_id {

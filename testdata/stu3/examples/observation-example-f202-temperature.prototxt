@@ -92,18 +92,20 @@ performer {
     value: "f201"
   }
 }
-value_quantity {
-  value {
-    value: "39"
-  }
-  unit {
-    value: "degrees C"
-  }
-  system {
-    value: "http://unitsofmeasure.org"
-  }
-  code {
-    value: "Cel"
+value {
+  quantity {
+    value {
+      value: "39"
+    }
+    unit {
+      value: "degrees C"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "Cel"
+    }
   }
 }
 interpretation {

@@ -30,16 +30,18 @@ context {
     value: "example"
   }
 }
-effective_period {
-  start {
-    value_us: 1417856400000000
-    timezone: "+11:00"
-    precision: SECOND
-  }
-  end {
-    value_us: 1417865580000000
-    timezone: "+11:00"
-    precision: SECOND
+effective {
+  period {
+    start {
+      value_us: 1417856400000000
+      timezone: "+11:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1417865580000000
+      timezone: "+11:00"
+      precision: SECOND
+    }
   }
 }
 date {
@@ -88,13 +90,15 @@ summary {
   value: "provisional diagnoses of laceration of head and traumatic brain injury (TBI)"
 }
 finding {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://hl7.org/fhir/sid/icd-9"
-      }
-      code {
-        value: "850.0"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/icd-9"
+        }
+        code {
+          value: "850.0"
+        }
       }
     }
   }

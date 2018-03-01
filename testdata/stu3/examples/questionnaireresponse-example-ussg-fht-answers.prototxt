@@ -38,9 +38,11 @@ item {
       value: "Date Done"
     }
     answer {
-      value_date {
-        value_us: 1200528000000000
-        precision: DAY
+      value {
+        date {
+          value_us: 1200528000000000
+          precision: DAY
+        }
       }
     }
   }
@@ -70,8 +72,10 @@ item {
         value: "Name"
       }
       answer {
-        value_string {
-          value: "Annie Proband"
+        value {
+          string_value {
+            value: "Annie Proband"
+          }
         }
       }
     }
@@ -86,15 +90,17 @@ item {
         value: "Gender"
       }
       answer {
-        value_coding {
-          system {
-            value: "http://loinc.org"
-          }
-          code {
-            value: "LA3-6"
-          }
-          display {
-            value: "Female"
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA3-6"
+            }
+            display {
+              value: "Female"
+            }
           }
         }
       }
@@ -110,9 +116,11 @@ item {
         value: "Date of Birth"
       }
       answer {
-        value_date {
-          value_us: -118195200000000
-          precision: DAY
+        value {
+          date {
+            value_us: -118195200000000
+            precision: DAY
+          }
         }
       }
     }
@@ -127,15 +135,17 @@ item {
         value: "Were you born a twin?"
       }
       answer {
-        value_coding {
-          system {
-            value: "http://loinc.org"
-          }
-          code {
-            value: "LA32-8"
-          }
-          display {
-            value: "No"
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA32-8"
+            }
+            display {
+              value: "No"
+            }
           }
         }
       }
@@ -151,15 +161,17 @@ item {
         value: "Were you adopted?"
       }
       answer {
-        value_coding {
-          system {
-            value: "http://loinc.org"
-          }
-          code {
-            value: "LA32-8"
-          }
-          display {
-            value: "No"
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA32-8"
+            }
+            display {
+              value: "No"
+            }
           }
         }
       }
@@ -175,15 +187,17 @@ item {
         value: "Are your parents related to each other in any way other than marriage?"
       }
       answer {
-        value_coding {
-          system {
-            value: "http://loinc.org"
-          }
-          code {
-            value: "LA32-8"
-          }
-          display {
-            value: "No"
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA32-8"
+            }
+            display {
+              value: "No"
+            }
           }
         }
       }
@@ -199,8 +213,10 @@ item {
         value: "Height"
       }
       answer {
-        value_decimal {
-          value: "63"
+        value {
+          decimal {
+            value: "63"
+          }
         }
         item {
           link_id {
@@ -214,15 +230,17 @@ item {
               value: "Units"
             }
             answer {
-              value_coding {
-                system {
-                  value: "http://unitsofmeasure.org"
-                }
-                code {
-                  value: "[in_i]"
-                }
-                display {
-                  value: "inches"
+              value {
+                coding {
+                  system {
+                    value: "http://unitsofmeasure.org"
+                  }
+                  code {
+                    value: "[in_i]"
+                  }
+                  display {
+                    value: "inches"
+                  }
                 }
               }
             }
@@ -241,8 +259,10 @@ item {
         value: "Weight"
       }
       answer {
-        value_decimal {
-          value: "127"
+        value {
+          decimal {
+            value: "127"
+          }
         }
         item {
           link_id {
@@ -256,15 +276,17 @@ item {
               value: "Units"
             }
             answer {
-              value_coding {
-                system {
-                  value: "http://unitsofmeasure.org"
-                }
-                code {
-                  value: "lb"
-                }
-                display {
-                  value: "pounds"
+              value {
+                coding {
+                  system {
+                    value: "http://unitsofmeasure.org"
+                  }
+                  code {
+                    value: "lb"
+                  }
+                  display {
+                    value: "pounds"
+                  }
                 }
               }
             }
@@ -283,8 +305,10 @@ item {
         value: "Body mass index (BMI) [Ratio]"
       }
       answer {
-        value_decimal {
-          value: "22.5"
+        value {
+          decimal {
+            value: "22.5"
+          }
         }
       }
     }
@@ -299,15 +323,17 @@ item {
         value: "Race"
       }
       answer {
-        value_coding {
-          system {
-            value: "http://loinc.org"
-          }
-          code {
-            value: "LA4457-3"
-          }
-          display {
-            value: "White"
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA4457-3"
+            }
+            display {
+              value: "White"
+            }
           }
         }
       }
@@ -323,28 +349,32 @@ item {
         value: "Ethnicity"
       }
       answer {
-        value_coding {
-          system {
-            value: "http://loinc.org"
-          }
-          code {
-            value: "LA10602-3"
-          }
-          display {
-            value: "-- Mexican"
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA10602-3"
+            }
+            display {
+              value: "-- Mexican"
+            }
           }
         }
       }
       answer {
-        value_coding {
-          system {
-            value: "http://loinc.org"
-          }
-          code {
-            value: "LA10606-4"
-          }
-          display {
-            value: "-- South American"
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA10606-4"
+            }
+            display {
+              value: "-- South American"
+            }
           }
         }
       }
@@ -385,15 +415,17 @@ item {
           value: "Relationship to you"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10405-1"
-            }
-            display {
-              value: "Daughter"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10405-1"
+              }
+              display {
+                value: "Daughter"
+              }
             }
           }
         }
@@ -409,8 +441,10 @@ item {
           value: "Name"
         }
         answer {
-          value_string {
-            value: "Susan"
+          value {
+            string_value {
+              value: "Susan"
+            }
           }
         }
       }
@@ -425,15 +459,17 @@ item {
           value: "Gender"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA3-6"
-            }
-            display {
-              value: "Female"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
             }
           }
         }
@@ -449,15 +485,17 @@ item {
           value: "Living?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA33-6"
-            }
-            display {
-              value: "Yes"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
             }
           }
           item {
@@ -475,8 +513,10 @@ item {
                 value: "Age"
               }
               answer {
-                value_decimal {
-                  value: "17"
+                value {
+                  decimal {
+                    value: "17"
+                  }
                 }
               }
             }
@@ -494,15 +534,17 @@ item {
           value: "Was this person born a twin?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -518,15 +560,17 @@ item {
           value: "Was this person adopted?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -552,15 +596,17 @@ item {
           value: "Relationship to you"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10415-0"
-            }
-            display {
-              value: "Brother"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10415-0"
+              }
+              display {
+                value: "Brother"
+              }
             }
           }
         }
@@ -576,8 +622,10 @@ item {
           value: "Name"
         }
         answer {
-          value_string {
-            value: "Brian"
+          value {
+            string_value {
+              value: "Brian"
+            }
           }
         }
       }
@@ -592,15 +640,17 @@ item {
           value: "Gender"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA2-8"
-            }
-            display {
-              value: "Male"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA2-8"
+              }
+              display {
+                value: "Male"
+              }
             }
           }
         }
@@ -616,15 +666,17 @@ item {
           value: "Living?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA33-6"
-            }
-            display {
-              value: "Yes"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
             }
           }
           item {
@@ -642,8 +694,10 @@ item {
                 value: "Age"
               }
               answer {
-                value_decimal {
-                  value: "32"
+                value {
+                  decimal {
+                    value: "32"
+                  }
                 }
               }
             }
@@ -661,15 +715,17 @@ item {
           value: "Was this person born a twin?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -685,15 +741,17 @@ item {
           value: "Was this person adopted?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -714,15 +772,17 @@ item {
           value: "Disease or Condition"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10550-4"
-            }
-            display {
-              value: "-- Other Cancer"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10550-4"
+              }
+              display {
+                value: "-- Other Cancer"
+              }
             }
           }
         }
@@ -735,15 +795,17 @@ item {
           value: "Age at Diagnosis"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10397-0"
-            }
-            display {
-              value: "30-39"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10397-0"
+              }
+              display {
+                value: "30-39"
+              }
             }
           }
         }
@@ -769,15 +831,17 @@ item {
           value: "Relationship to you"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10418-4"
-            }
-            display {
-              value: "Sister"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10418-4"
+              }
+              display {
+                value: "Sister"
+              }
             }
           }
         }
@@ -793,8 +857,10 @@ item {
           value: "Name"
         }
         answer {
-          value_string {
-            value: "Janet"
+          value {
+            string_value {
+              value: "Janet"
+            }
           }
         }
       }
@@ -809,15 +875,17 @@ item {
           value: "Gender"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA3-6"
-            }
-            display {
-              value: "Female"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
             }
           }
         }
@@ -833,15 +901,17 @@ item {
           value: "Living?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA33-6"
-            }
-            display {
-              value: "Yes"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
             }
           }
           item {
@@ -859,8 +929,10 @@ item {
                 value: "Age"
               }
               answer {
-                value_decimal {
-                  value: "36"
+                value {
+                  decimal {
+                    value: "36"
+                  }
                 }
               }
             }
@@ -878,15 +950,17 @@ item {
           value: "Was this person born a twin?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -902,15 +976,17 @@ item {
           value: "Was this person adopted?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -931,15 +1007,17 @@ item {
           value: "Disease or Condition"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10536-3"
-            }
-            display {
-              value: "-- Breast Cancer"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10536-3"
+              }
+              display {
+                value: "-- Breast Cancer"
+              }
             }
           }
         }
@@ -952,15 +1030,17 @@ item {
           value: "Age at Diagnosis"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10397-0"
-            }
-            display {
-              value: "30-39"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10397-0"
+              }
+              display {
+                value: "30-39"
+              }
             }
           }
         }
@@ -986,15 +1066,17 @@ item {
           value: "Relationship to you"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10419-2"
-            }
-            display {
-              value: "Nephew"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10419-2"
+              }
+              display {
+                value: "Nephew"
+              }
             }
           }
         }
@@ -1010,8 +1092,10 @@ item {
           value: "Name"
         }
         answer {
-          value_string {
-            value: "Ian"
+          value {
+            string_value {
+              value: "Ian"
+            }
           }
         }
       }
@@ -1026,15 +1110,17 @@ item {
           value: "Gender"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA2-8"
-            }
-            display {
-              value: "Male"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA2-8"
+              }
+              display {
+                value: "Male"
+              }
             }
           }
         }
@@ -1050,15 +1136,17 @@ item {
           value: "Living?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA33-6"
-            }
-            display {
-              value: "Yes"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
             }
           }
           item {
@@ -1076,8 +1164,10 @@ item {
                 value: "Age"
               }
               answer {
-                value_decimal {
-                  value: "16"
+                value {
+                  decimal {
+                    value: "16"
+                  }
                 }
               }
             }
@@ -1095,15 +1185,17 @@ item {
           value: "Was this person born a twin?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -1119,15 +1211,17 @@ item {
           value: "Was this person adopted?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -1153,15 +1247,17 @@ item {
           value: "Relationship to you"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10420-0"
-            }
-            display {
-              value: "Niece"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10420-0"
+              }
+              display {
+                value: "Niece"
+              }
             }
           }
         }
@@ -1177,8 +1273,10 @@ item {
           value: "Name"
         }
         answer {
-          value_string {
-            value: "Helen"
+          value {
+            string_value {
+              value: "Helen"
+            }
           }
         }
       }
@@ -1193,15 +1291,17 @@ item {
           value: "Gender"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA3-6"
-            }
-            display {
-              value: "Female"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
             }
           }
         }
@@ -1217,15 +1317,17 @@ item {
           value: "Living?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA33-6"
-            }
-            display {
-              value: "Yes"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
             }
           }
           item {
@@ -1243,8 +1345,10 @@ item {
                 value: "Age"
               }
               answer {
-                value_decimal {
-                  value: "15"
+                value {
+                  decimal {
+                    value: "15"
+                  }
                 }
               }
             }
@@ -1262,15 +1366,17 @@ item {
           value: "Was this person born a twin?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -1286,15 +1392,17 @@ item {
           value: "Was this person adopted?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -1320,15 +1428,17 @@ item {
           value: "Relationship to you"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10416-8"
-            }
-            display {
-              value: "Father"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10416-8"
+              }
+              display {
+                value: "Father"
+              }
             }
           }
         }
@@ -1344,8 +1454,10 @@ item {
           value: "Name"
         }
         answer {
-          value_string {
-            value: "Donald"
+          value {
+            string_value {
+              value: "Donald"
+            }
           }
         }
       }
@@ -1360,15 +1472,17 @@ item {
           value: "Gender"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA2-8"
-            }
-            display {
-              value: "Male"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA2-8"
+              }
+              display {
+                value: "Male"
+              }
             }
           }
         }
@@ -1384,15 +1498,17 @@ item {
           value: "Living?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA33-6"
-            }
-            display {
-              value: "Yes"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
             }
           }
           item {
@@ -1410,8 +1526,10 @@ item {
                 value: "Age"
               }
               answer {
-                value_decimal {
-                  value: "52"
+                value {
+                  decimal {
+                    value: "52"
+                  }
                 }
               }
             }
@@ -1429,15 +1547,17 @@ item {
           value: "Was this person born a twin?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -1453,15 +1573,17 @@ item {
           value: "Was this person adopted?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -1487,15 +1609,17 @@ item {
           value: "Relationship to you"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10425-9"
-            }
-            display {
-              value: "Paternal Uncle"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10425-9"
+              }
+              display {
+                value: "Paternal Uncle"
+              }
             }
           }
         }
@@ -1511,8 +1635,10 @@ item {
           value: "Name"
         }
         answer {
-          value_string {
-            value: "Eric"
+          value {
+            string_value {
+              value: "Eric"
+            }
           }
         }
       }
@@ -1527,15 +1653,17 @@ item {
           value: "Gender"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA2-8"
-            }
-            display {
-              value: "Male"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA2-8"
+              }
+              display {
+                value: "Male"
+              }
             }
           }
         }
@@ -1551,15 +1679,17 @@ item {
           value: "Living?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA33-6"
-            }
-            display {
-              value: "Yes"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
             }
           }
           item {
@@ -1577,8 +1707,10 @@ item {
                 value: "Age"
               }
               answer {
-                value_decimal {
-                  value: "56"
+                value {
+                  decimal {
+                    value: "56"
+                  }
                 }
               }
             }
@@ -1596,15 +1728,17 @@ item {
           value: "Was this person born a twin?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -1620,15 +1754,17 @@ item {
           value: "Was this person adopted?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -1654,15 +1790,17 @@ item {
           value: "Relationship to you"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10421-8"
-            }
-            display {
-              value: "Paternal Aunt"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10421-8"
+              }
+              display {
+                value: "Paternal Aunt"
+              }
             }
           }
         }
@@ -1678,8 +1816,10 @@ item {
           value: "Name"
         }
         answer {
-          value_string {
-            value: "Fiona"
+          value {
+            string_value {
+              value: "Fiona"
+            }
           }
         }
       }
@@ -1694,15 +1834,17 @@ item {
           value: "Gender"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA3-6"
-            }
-            display {
-              value: "Female"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
             }
           }
         }
@@ -1718,15 +1860,17 @@ item {
           value: "Living?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA33-6"
-            }
-            display {
-              value: "Yes"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
             }
           }
           item {
@@ -1744,8 +1888,10 @@ item {
                 value: "Age"
               }
               answer {
-                value_decimal {
-                  value: "57"
+                value {
+                  decimal {
+                    value: "57"
+                  }
                 }
               }
             }
@@ -1763,15 +1909,17 @@ item {
           value: "Was this person born a twin?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -1787,15 +1935,17 @@ item {
           value: "Was this person adopted?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -1816,15 +1966,17 @@ item {
           value: "Disease or Condition"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10543-9"
-            }
-            display {
-              value: "-- Skin Cancer"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10543-9"
+              }
+              display {
+                value: "-- Skin Cancer"
+              }
             }
           }
         }
@@ -1850,15 +2002,17 @@ item {
           value: "Relationship to you"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10423-4"
-            }
-            display {
-              value: "Paternal Grandfather"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10423-4"
+              }
+              display {
+                value: "Paternal Grandfather"
+              }
             }
           }
         }
@@ -1874,8 +2028,10 @@ item {
           value: "Name"
         }
         answer {
-          value_string {
-            value: "Bob"
+          value {
+            string_value {
+              value: "Bob"
+            }
           }
         }
       }
@@ -1890,15 +2046,17 @@ item {
           value: "Gender"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA2-8"
-            }
-            display {
-              value: "Male"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA2-8"
+              }
+              display {
+                value: "Male"
+              }
             }
           }
         }
@@ -1914,15 +2072,17 @@ item {
           value: "Living?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
           item {
@@ -1940,276 +2100,16 @@ item {
                 value: "Cause of Death"
               }
               answer {
-                value_coding {
-                  system {
-                    value: "http://loinc.org"
-                  }
-                  code {
-                    value: "LA10537-1"
-                  }
-                  display {
-                    value: "-- Colon Cancer"
-                  }
-                }
-              }
-            }
-            item {
-              link_id {
-                value: "2.1.1.4.1.2"
-              }
-              definition {
-                value: "http://loinc.org/fhir/DataElement/54113-6"
-              }
-              text {
-                value: "Age at Death"
-              }
-              answer {
-                value_coding {
-                  system {
-                    value: "http://loinc.org"
-                  }
-                  code {
-                    value: "LA10400-2"
-                  }
-                  display {
-                    value: "OVER 60"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.5"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54121-9"
-        }
-        text {
-          value: "Was this person born a twin?"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.6"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54122-7"
-        }
-        text {
-          value: "Was this person adopted?"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
-            }
-          }
-        }
-      }
-    }
-    item {
-      link_id {
-        value: "2.1.2"
-      }
-      text {
-        value: "This family member\'s history of disease"
-      }
-      item {
-        link_id {
-          value: "2.1.2.1"
-        }
-        text {
-          value: "Disease or Condition"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10537-1"
-            }
-            display {
-              value: "-- Colon Cancer"
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.2.2"
-        }
-        text {
-          value: "Age at Diagnosis"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10400-2"
-            }
-            display {
-              value: "OVER 60"
-            }
-          }
-        }
-      }
-    }
-  }
-  item {
-    link_id {
-      value: "2.1"
-    }
-    item {
-      link_id {
-        value: "2.1.1"
-      }
-      item {
-        link_id {
-          value: "2.1.1.1"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54136-7"
-        }
-        text {
-          value: "Relationship to you"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10424-2"
-            }
-            display {
-              value: "Paternal Grandmother"
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.2"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54138-3"
-        }
-        text {
-          value: "Name"
-        }
-        answer {
-          value_string {
-            value: "Claire"
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.3"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54123-5"
-        }
-        text {
-          value: "Gender"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA3-6"
-            }
-            display {
-              value: "Female"
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.4"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54139-1"
-        }
-        text {
-          value: "Living?"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
-            }
-          }
-          item {
-            link_id {
-              value: "2.1.1.4.1"
-            }
-            item {
-              link_id {
-                value: "2.1.1.4.1.1"
-              }
-              definition {
-                value: "http://loinc.org/fhir/DataElement/54112-8"
-              }
-              text {
-                value: "Cause of Death"
-              }
-              answer {
-                value_coding {
-                  system {
-                    value: "http://loinc.org"
-                  }
-                  code {
-                    value: "LA10589-2"
-                  }
-                  display {
-                    value: "-- Other/Unexpected"
-                  }
-                }
-                item {
-                  link_id {
-                    value: "2.1.1.4.1.1.1"
-                  }
-                  text {
-                    value: "Please specify"
-                  }
-                  answer {
-                    value_string {
-                      value: "Lou Gehrigs"
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10537-1"
+                    }
+                    display {
+                      value: "-- Colon Cancer"
                     }
                   }
                 }
@@ -2226,15 +2126,17 @@ item {
                 value: "Age at Death"
               }
               answer {
-                value_coding {
-                  system {
-                    value: "http://loinc.org"
-                  }
-                  code {
-                    value: "LA10400-2"
-                  }
-                  display {
-                    value: "OVER 60"
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10400-2"
+                    }
+                    display {
+                      value: "OVER 60"
+                    }
                   }
                 }
               }
@@ -2253,15 +2155,17 @@ item {
           value: "Was this person born a twin?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -2277,15 +2181,71 @@ item {
           value: "Was this person adopted?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
-            code {
-              value: "LA32-8"
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.2"
+      }
+      text {
+        value: "This family member\'s history of disease"
+      }
+      item {
+        link_id {
+          value: "2.1.2.1"
+        }
+        text {
+          value: "Disease or Condition"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10537-1"
+              }
+              display {
+                value: "-- Colon Cancer"
+              }
             }
-            display {
-              value: "No"
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.2.2"
+        }
+        text {
+          value: "Age at Diagnosis"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10400-2"
+              }
+              display {
+                value: "OVER 60"
+              }
             }
           }
         }
@@ -2311,15 +2271,17 @@ item {
           value: "Relationship to you"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10417-6"
-            }
-            display {
-              value: "Mother"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10424-2"
+              }
+              display {
+                value: "Paternal Grandmother"
+              }
             }
           }
         }
@@ -2335,8 +2297,10 @@ item {
           value: "Name"
         }
         answer {
-          value_string {
-            value: "Harriet"
+          value {
+            string_value {
+              value: "Claire"
+            }
           }
         }
       }
@@ -2351,15 +2315,17 @@ item {
           value: "Gender"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA3-6"
-            }
-            display {
-              value: "Female"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
             }
           }
         }
@@ -2375,15 +2341,17 @@ item {
           value: "Living?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
           item {
@@ -2401,15 +2369,32 @@ item {
                 value: "Cause of Death"
               }
               answer {
-                value_coding {
-                  system {
-                    value: "http://loinc.org"
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10589-2"
+                    }
+                    display {
+                      value: "-- Other/Unexpected"
+                    }
                   }
-                  code {
-                    value: "LA10539-7"
+                }
+                item {
+                  link_id {
+                    value: "2.1.1.4.1.1.1"
                   }
-                  display {
-                    value: "-- Ovarian Cancer"
+                  text {
+                    value: "Please specify"
+                  }
+                  answer {
+                    value {
+                      string_value {
+                        value: "Lou Gehrigs"
+                      }
+                    }
                   }
                 }
               }
@@ -2425,15 +2410,17 @@ item {
                 value: "Age at Death"
               }
               answer {
-                value_coding {
-                  system {
-                    value: "http://loinc.org"
-                  }
-                  code {
-                    value: "LA10399-6"
-                  }
-                  display {
-                    value: "50-59"
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10400-2"
+                    }
+                    display {
+                      value: "OVER 60"
+                    }
                   }
                 }
               }
@@ -2452,15 +2439,17 @@ item {
           value: "Was this person born a twin?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -2476,65 +2465,17 @@ item {
           value: "Was this person adopted?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
-            }
-          }
-        }
-      }
-    }
-    item {
-      link_id {
-        value: "2.1.2"
-      }
-      text {
-        value: "This family member\'s history of disease"
-      }
-      item {
-        link_id {
-          value: "2.1.2.1"
-        }
-        text {
-          value: "Disease or Condition"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10539-7"
-            }
-            display {
-              value: "-- Ovarian Cancer"
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.2.2"
-        }
-        text {
-          value: "Age at Diagnosis"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10398-8"
-            }
-            display {
-              value: "40-49"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -2560,15 +2501,17 @@ item {
           value: "Relationship to you"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10414-3"
-            }
-            display {
-              value: "Maternal Uncle"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10417-6"
+              }
+              display {
+                value: "Mother"
+              }
             }
           }
         }
@@ -2584,8 +2527,10 @@ item {
           value: "Name"
         }
         answer {
-          value_string {
-            value: "Rudy"
+          value {
+            string_value {
+              value: "Harriet"
+            }
           }
         }
       }
@@ -2600,15 +2545,17 @@ item {
           value: "Gender"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA2-8"
-            }
-            display {
-              value: "Male"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
             }
           }
         }
@@ -2624,349 +2571,17 @@ item {
           value: "Living?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA33-6"
-            }
-            display {
-              value: "Yes"
-            }
-          }
-          item {
-            link_id {
-              value: "2.1.1.4.2"
-            }
-            item {
-              link_id {
-                value: "2.1.1.4.2.2"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
               }
-              definition {
-                value: "http://loinc.org/fhir/DataElement/54141-7"
+              code {
+                value: "LA32-8"
               }
-              text {
-                value: "Age"
+              display {
+                value: "No"
               }
-              answer {
-                value_decimal {
-                  value: "60"
-                }
-              }
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.5"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54121-9"
-        }
-        text {
-          value: "Was this person born a twin?"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.6"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54122-7"
-        }
-        text {
-          value: "Was this person adopted?"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
-            }
-          }
-        }
-      }
-    }
-  }
-  item {
-    link_id {
-      value: "2.1"
-    }
-    item {
-      link_id {
-        value: "2.1.1"
-      }
-      item {
-        link_id {
-          value: "2.1.1.1"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54136-7"
-        }
-        text {
-          value: "Relationship to you"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10410-1"
-            }
-            display {
-              value: "Maternal Aunt"
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.2"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54138-3"
-        }
-        text {
-          value: "Name"
-        }
-        answer {
-          value_string {
-            value: "Julie"
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.3"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54123-5"
-        }
-        text {
-          value: "Gender"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA3-6"
-            }
-            display {
-              value: "Female"
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.4"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54139-1"
-        }
-        text {
-          value: "Living?"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA33-6"
-            }
-            display {
-              value: "Yes"
-            }
-          }
-          item {
-            link_id {
-              value: "2.1.1.4.2"
-            }
-            item {
-              link_id {
-                value: "2.1.1.4.2.2"
-              }
-              definition {
-                value: "http://loinc.org/fhir/DataElement/54141-7"
-              }
-              text {
-                value: "Age"
-              }
-              answer {
-                value_decimal {
-                  value: "57"
-                }
-              }
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.5"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54121-9"
-        }
-        text {
-          value: "Was this person born a twin?"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.6"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54122-7"
-        }
-        text {
-          value: "Was this person adopted?"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
-            }
-          }
-        }
-      }
-    }
-  }
-  item {
-    link_id {
-      value: "2.1"
-    }
-    item {
-      link_id {
-        value: "2.1.1"
-      }
-      item {
-        link_id {
-          value: "2.1.1.1"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54136-7"
-        }
-        text {
-          value: "Relationship to you"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10412-7"
-            }
-            display {
-              value: "Maternal Grandfather"
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.2"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54138-3"
-        }
-        text {
-          value: "Name"
-        }
-        answer {
-          value_string {
-            value: "Ian"
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.3"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54123-5"
-        }
-        text {
-          value: "Gender"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA2-8"
-            }
-            display {
-              value: "Male"
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.1.4"
-        }
-        definition {
-          value: "http://loinc.org/fhir/DataElement/54139-1"
-        }
-        text {
-          value: "Living?"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
             }
           }
           item {
@@ -2984,15 +2599,17 @@ item {
                 value: "Cause of Death"
               }
               answer {
-                value_coding {
-                  system {
-                    value: "http://loinc.org"
-                  }
-                  code {
-                    value: "LA10558-7"
-                  }
-                  display {
-                    value: "-- Heart Attack"
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10539-7"
+                    }
+                    display {
+                      value: "-- Ovarian Cancer"
+                    }
                   }
                 }
               }
@@ -3008,15 +2625,17 @@ item {
                 value: "Age at Death"
               }
               answer {
-                value_coding {
-                  system {
-                    value: "http://loinc.org"
-                  }
-                  code {
-                    value: "LA10400-2"
-                  }
-                  display {
-                    value: "OVER 60"
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10399-6"
+                    }
+                    display {
+                      value: "50-59"
+                    }
                   }
                 }
               }
@@ -3035,15 +2654,17 @@ item {
           value: "Was this person born a twin?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -3059,15 +2680,71 @@ item {
           value: "Was this person adopted?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
-            code {
-              value: "LA32-8"
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.2"
+      }
+      text {
+        value: "This family member\'s history of disease"
+      }
+      item {
+        link_id {
+          value: "2.1.2.1"
+        }
+        text {
+          value: "Disease or Condition"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10539-7"
+              }
+              display {
+                value: "-- Ovarian Cancer"
+              }
             }
-            display {
-              value: "No"
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.2.2"
+        }
+        text {
+          value: "Age at Diagnosis"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10398-8"
+              }
+              display {
+                value: "40-49"
+              }
             }
           }
         }
@@ -3093,15 +2770,17 @@ item {
           value: "Relationship to you"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10413-5"
-            }
-            display {
-              value: "Maternal Grandmother"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10414-3"
+              }
+              display {
+                value: "Maternal Uncle"
+              }
             }
           }
         }
@@ -3117,8 +2796,10 @@ item {
           value: "Name"
         }
         answer {
-          value_string {
-            value: "Gladys"
+          value {
+            string_value {
+              value: "Rudy"
+            }
           }
         }
       }
@@ -3133,15 +2814,17 @@ item {
           value: "Gender"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA3-6"
-            }
-            display {
-              value: "Female"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA2-8"
+              }
+              display {
+                value: "Male"
+              }
             }
           }
         }
@@ -3157,15 +2840,379 @@ item {
           value: "Living?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
             }
-            code {
-              value: "LA32-8"
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2"
             }
-            display {
-              value: "No"
+            item {
+              link_id {
+                value: "2.1.1.4.2.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54141-7"
+              }
+              text {
+                value: "Age"
+              }
+              answer {
+                value {
+                  decimal {
+                    value: "60"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10410-1"
+              }
+              display {
+                value: "Maternal Aunt"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Julie"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.2.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54141-7"
+              }
+              text {
+                value: "Age"
+              }
+              answer {
+                value {
+                  decimal {
+                    value: "57"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10412-7"
+              }
+              display {
+                value: "Maternal Grandfather"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Ian"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA2-8"
+              }
+              display {
+                value: "Male"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
           item {
@@ -3183,15 +3230,17 @@ item {
                 value: "Cause of Death"
               }
               answer {
-                value_coding {
-                  system {
-                    value: "http://loinc.org"
-                  }
-                  code {
-                    value: "LA10571-0"
-                  }
-                  display {
-                    value: "-- Other/Unknown"
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10558-7"
+                    }
+                    display {
+                      value: "-- Heart Attack"
+                    }
                   }
                 }
               }
@@ -3207,15 +3256,17 @@ item {
                 value: "Age at Death"
               }
               answer {
-                value_coding {
-                  system {
-                    value: "http://loinc.org"
-                  }
-                  code {
-                    value: "LA10400-2"
-                  }
-                  display {
-                    value: "OVER 60"
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10400-2"
+                    }
+                    display {
+                      value: "OVER 60"
+                    }
                   }
                 }
               }
@@ -3234,15 +3285,17 @@ item {
           value: "Was this person born a twin?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -3258,115 +3311,17 @@ item {
           value: "Was this person adopted?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
-            }
-          }
-        }
-      }
-    }
-    item {
-      link_id {
-        value: "2.1.2"
-      }
-      text {
-        value: "This family member\'s history of disease"
-      }
-      item {
-        link_id {
-          value: "2.1.2.1"
-        }
-        text {
-          value: "Disease or Condition"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10536-3"
-            }
-            display {
-              value: "-- Breast Cancer"
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.2.2"
-        }
-        text {
-          value: "Age at Diagnosis"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10399-6"
-            }
-            display {
-              value: "50-59"
-            }
-          }
-        }
-      }
-    }
-    item {
-      link_id {
-        value: "2.1.2"
-      }
-      text {
-        value: "This family member\'s history of disease"
-      }
-      item {
-        link_id {
-          value: "2.1.2.1"
-        }
-        text {
-          value: "Disease or Condition"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10564-5"
-            }
-            display {
-              value: "-- Asthma"
-            }
-          }
-        }
-      }
-      item {
-        link_id {
-          value: "2.1.2.2"
-        }
-        text {
-          value: "Age at Diagnosis"
-        }
-        answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10395-4"
-            }
-            display {
-              value: "Childhood"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -3392,15 +3347,17 @@ item {
           value: "Relationship to you"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10411-9"
-            }
-            display {
-              value: "Maternal Cousin"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10413-5"
+              }
+              display {
+                value: "Maternal Grandmother"
+              }
             }
           }
         }
@@ -3416,8 +3373,10 @@ item {
           value: "Name"
         }
         answer {
-          value_string {
-            value: "Karren"
+          value {
+            string_value {
+              value: "Gladys"
+            }
           }
         }
       }
@@ -3432,15 +3391,17 @@ item {
           value: "Gender"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA3-6"
-            }
-            display {
-              value: "Female"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
             }
           }
         }
@@ -3456,34 +3417,72 @@ item {
           value: "Living?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA33-6"
-            }
-            display {
-              value: "Yes"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
           item {
             link_id {
-              value: "2.1.1.4.2"
+              value: "2.1.1.4.1"
             }
             item {
               link_id {
-                value: "2.1.1.4.2.2"
+                value: "2.1.1.4.1.1"
               }
               definition {
-                value: "http://loinc.org/fhir/DataElement/54141-7"
+                value: "http://loinc.org/fhir/DataElement/54112-8"
               }
               text {
-                value: "Age"
+                value: "Cause of Death"
               }
               answer {
-                value_decimal {
-                  value: "30"
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10571-0"
+                    }
+                    display {
+                      value: "-- Other/Unknown"
+                    }
+                  }
+                }
+              }
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.1.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54113-6"
+              }
+              text {
+                value: "Age at Death"
+              }
+              answer {
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10400-2"
+                    }
+                    display {
+                      value: "OVER 60"
+                    }
+                  }
                 }
               }
             }
@@ -3501,15 +3500,17 @@ item {
           value: "Was this person born a twin?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -3525,15 +3526,17 @@ item {
           value: "Was this person adopted?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -3554,15 +3557,17 @@ item {
           value: "Disease or Condition"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10536-3"
-            }
-            display {
-              value: "-- Breast Cancer"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10536-3"
+              }
+              display {
+                value: "-- Breast Cancer"
+              }
             }
           }
         }
@@ -3575,15 +3580,71 @@ item {
           value: "Age at Diagnosis"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10399-6"
+              }
+              display {
+                value: "50-59"
+              }
             }
-            code {
-              value: "LA10397-0"
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.2"
+      }
+      text {
+        value: "This family member\'s history of disease"
+      }
+      item {
+        link_id {
+          value: "2.1.2.1"
+        }
+        text {
+          value: "Disease or Condition"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10564-5"
+              }
+              display {
+                value: "-- Asthma"
+              }
             }
-            display {
-              value: "30-39"
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.2.2"
+        }
+        text {
+          value: "Age at Diagnosis"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10395-4"
+              }
+              display {
+                value: "Childhood"
+              }
             }
           }
         }
@@ -3609,15 +3670,17 @@ item {
           value: "Relationship to you"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA10411-9"
-            }
-            display {
-              value: "Maternal Cousin"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10411-9"
+              }
+              display {
+                value: "Maternal Cousin"
+              }
             }
           }
         }
@@ -3633,8 +3696,10 @@ item {
           value: "Name"
         }
         answer {
-          value_string {
-            value: "Mary"
+          value {
+            string_value {
+              value: "Karren"
+            }
           }
         }
       }
@@ -3649,15 +3714,17 @@ item {
           value: "Gender"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA3-6"
-            }
-            display {
-              value: "Female"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
             }
           }
         }
@@ -3673,15 +3740,17 @@ item {
           value: "Living?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA33-6"
-            }
-            display {
-              value: "Yes"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
             }
           }
           item {
@@ -3699,8 +3768,10 @@ item {
                 value: "Age"
               }
               answer {
-                value_decimal {
-                  value: "31"
+                value {
+                  decimal {
+                    value: "30"
+                  }
                 }
               }
             }
@@ -3718,15 +3789,17 @@ item {
           value: "Was this person born a twin?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA32-8"
-            }
-            display {
-              value: "No"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }
@@ -3742,15 +3815,252 @@ item {
           value: "Was this person adopted?"
         }
         answer {
-          value_coding {
-            system {
-              value: "http://loinc.org"
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
-            code {
-              value: "LA32-8"
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.2"
+      }
+      text {
+        value: "This family member\'s history of disease"
+      }
+      item {
+        link_id {
+          value: "2.1.2.1"
+        }
+        text {
+          value: "Disease or Condition"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10536-3"
+              }
+              display {
+                value: "-- Breast Cancer"
+              }
             }
-            display {
-              value: "No"
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.2.2"
+        }
+        text {
+          value: "Age at Diagnosis"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10397-0"
+              }
+              display {
+                value: "30-39"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10411-9"
+              }
+              display {
+                value: "Maternal Cousin"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Mary"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.2.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54141-7"
+              }
+              text {
+                value: "Age"
+              }
+              answer {
+                value {
+                  decimal {
+                    value: "31"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
             }
           }
         }

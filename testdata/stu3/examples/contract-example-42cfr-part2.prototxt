@@ -234,26 +234,30 @@ signer {
       timezone: "+01:00"
       precision: SECOND
     }
-    who_reference {
-      patient_id {
-        value: "f201"
+    who {
+      reference {
+        patient_id {
+          value: "f201"
+        }
       }
     }
   }
 }
 legal {
-  content_attachment {
-    content_type {
-      value: "application/pdf"
-    }
-    language {
-      value: "en-US"
-    }
-    url {
-      value: "http://org.mihin.ecms/ConsentDirective-2121"
-    }
-    title {
-      value: "MDHHS-5515 Consent To Share Your Health Information"
+  content {
+    attachment {
+      content_type {
+        value: "application/pdf"
+      }
+      language {
+        value: "en-US"
+      }
+      url {
+        value: "http://org.mihin.ecms/ConsentDirective-2121"
+      }
+      title {
+        value: "MDHHS-5515 Consent To Share Your Health Information"
+      }
     }
   }
 }

@@ -22,17 +22,19 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-allele-database"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.ebi.ac.uk/ipd/imgt/hla/"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.ebi.ac.uk/ipd/imgt/hla/"
+              }
+              version {
+                value: "3.23"
+              }
             }
-            version {
-              value: "3.23"
+            text {
+              value: "IMGT/HLA 3.23"
             }
-          }
-          text {
-            value: "IMGT/HLA 3.23"
           }
         }
       }
@@ -44,16 +46,20 @@ entry {
           url {
             value: "text"
           }
-          value_string {
-            value: "HLA-A:01:01G+HLA-A*01:02^HLA-B*15:01:01:01+HLA-B*57:01:01^HLA-C*01:02:01+HLA-C*03:04:01:01"
+          value {
+            string_value {
+              value: "HLA-A:01:01G+HLA-A*01:02^HLA-B*15:01:01:01+HLA-B*57:01:01^HLA-C*01:02:01+HLA-C*03:04:01:01"
+            }
           }
         }
         extension {
           url {
             value: "uri"
           }
-          value_uri {
-            value: "https://gl.nmdp.org/imgt-hla/3.23.0/multilocus-unphased-genotype/i"
+          value {
+            uri {
+              value: "https://gl.nmdp.org/imgt-hla/3.23.0/multilocus-unphased-genotype/i"
+            }
           }
         }
       }
@@ -61,17 +67,19 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-method"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.ncbi.nlm.nih.gov/gtr/"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.ncbi.nlm.nih.gov/gtr/"
+              }
+              code {
+                value: "GTR000000000.0"
+              }
             }
-            code {
-              value: "GTR000000000.0"
+            text {
+              value: "Next Generation Sequencing of exons 2 and 3 of HLA Class I genes"
             }
-          }
-          text {
-            value: "Next Generation Sequencing of exons 2 and 3 of HLA Class I genes"
           }
         }
       }
@@ -117,9 +125,11 @@ entry {
           value: "Mary Chalmers"
         }
       }
-      effective_date_time {
-        value_us: 1481760000000000
-        precision: DAY
+      effective {
+        date_time {
+          value_us: 1481760000000000
+          precision: DAY
+        }
       }
       issued {
         value_us: 1481832930000000
@@ -1073,16 +1083,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.genenames.org"
-            }
-            code {
-              value: "HGNC:4931"
-            }
-            display {
-              value: "HLA-A"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4931"
+              }
+              display {
+                value: "HLA-A"
+              }
             }
           }
         }
@@ -1091,16 +1103,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.ebi.ac.uk/cgi-bin/ipd/imgt/hla/"
-            }
-            code {
-              value: "A*01:01:01:01"
-            }
-            display {
-              value: "HLA-A*01:01:01G"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.ebi.ac.uk/cgi-bin/ipd/imgt/hla/"
+              }
+              code {
+                value: "A*01:01:01:01"
+              }
+              display {
+                value: "HLA-A*01:01:01G"
+              }
             }
           }
         }
@@ -1109,16 +1123,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA6683-2"
-            }
-            display {
-              value: "germline"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
             }
           }
         }
@@ -1127,8 +1143,10 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet"
         }
-        value_uri {
-          value: "urn:uuid:e13f147e-41e5-4f7a-b20a-1b52b236c5ba"
+        value {
+          uri {
+            value: "urn:uuid:e13f147e-41e5-4f7a-b20a-1b52b236c5ba"
+          }
         }
       }
       status {
@@ -1155,9 +1173,11 @@ entry {
           value: "Mary Chalmers"
         }
       }
-      effective_date_time {
-        value_us: 1481760000000000
-        precision: DAY
+      effective {
+        date_time {
+          value_us: 1481760000000000
+          precision: DAY
+        }
       }
       specimen {
         specimen_id {
@@ -1222,16 +1242,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.genenames.org"
-            }
-            code {
-              value: "HGNC:4931"
-            }
-            display {
-              value: "HLA-A"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4931"
+              }
+              display {
+                value: "HLA-A"
+              }
             }
           }
         }
@@ -1240,16 +1262,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.ebi.ac.uk/cgi-bin/ipd/imgt/hla/"
-            }
-            code {
-              value: "A*01:02"
-            }
-            display {
-              value: "HLA-A*01:02"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.ebi.ac.uk/cgi-bin/ipd/imgt/hla/"
+              }
+              code {
+                value: "A*01:02"
+              }
+              display {
+                value: "HLA-A*01:02"
+              }
             }
           }
         }
@@ -1258,16 +1282,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA6683-2"
-            }
-            display {
-              value: "germline"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
             }
           }
         }
@@ -1276,8 +1302,10 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet"
         }
-        value_uri {
-          value: "urn:uuid:af8e79ec-343e-4380-ba65-cec5266dc2d5"
+        value {
+          uri {
+            value: "urn:uuid:af8e79ec-343e-4380-ba65-cec5266dc2d5"
+          }
         }
       }
       status {
@@ -1304,9 +1332,11 @@ entry {
           value: "Mary Chalmers"
         }
       }
-      effective_date_time {
-        value_us: 1481760000000000
-        precision: DAY
+      effective {
+        date_time {
+          value_us: 1481760000000000
+          precision: DAY
+        }
       }
       specimen {
         specimen_id {
@@ -1371,16 +1401,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.genenames.org"
-            }
-            code {
-              value: "HGNC:4931"
-            }
-            display {
-              value: "HLA-A"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4931"
+              }
+              display {
+                value: "HLA-A"
+              }
             }
           }
         }
@@ -1389,16 +1421,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA6683-2"
-            }
-            display {
-              value: "germline"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
             }
           }
         }
@@ -1427,9 +1461,11 @@ entry {
           value: "Mary Chalmers"
         }
       }
-      effective_date_time {
-        value_us: 1481760000000000
-        precision: DAY
+      effective {
+        date_time {
+          value_us: 1481760000000000
+          precision: DAY
+        }
       }
       specimen {
         specimen_id {
@@ -1494,16 +1530,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.genenames.org"
-            }
-            code {
-              value: "HGNC:4932"
-            }
-            display {
-              value: "HLA-B"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4932"
+              }
+              display {
+                value: "HLA-B"
+              }
             }
           }
         }
@@ -1512,16 +1550,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.ebi.ac.uk/cgi-bin/ipd/imgt/hla/"
-            }
-            code {
-              value: "B*15:01:01:01"
-            }
-            display {
-              value: "HLA-B*15:01:01G"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.ebi.ac.uk/cgi-bin/ipd/imgt/hla/"
+              }
+              code {
+                value: "B*15:01:01:01"
+              }
+              display {
+                value: "HLA-B*15:01:01G"
+              }
             }
           }
         }
@@ -1530,16 +1570,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA6683-2"
-            }
-            display {
-              value: "germline"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
             }
           }
         }
@@ -1548,8 +1590,10 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet"
         }
-        value_uri {
-          value: "urn:uuid:29c67a1b-aeaa-4599-ae20-04b947ef73d8"
+        value {
+          uri {
+            value: "urn:uuid:29c67a1b-aeaa-4599-ae20-04b947ef73d8"
+          }
         }
       }
       status {
@@ -1576,9 +1620,11 @@ entry {
           value: "Mary Chalmers"
         }
       }
-      effective_date_time {
-        value_us: 1481760000000000
-        precision: DAY
+      effective {
+        date_time {
+          value_us: 1481760000000000
+          precision: DAY
+        }
       }
       specimen {
         specimen_id {
@@ -1643,16 +1689,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.genenames.org"
-            }
-            code {
-              value: "HGNC:4932"
-            }
-            display {
-              value: "HLA-B"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4932"
+              }
+              display {
+                value: "HLA-B"
+              }
             }
           }
         }
@@ -1661,16 +1709,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.ebi.ac.uk/cgi-bin/ipd/imgt/hla/"
-            }
-            code {
-              value: "B*57:01:01"
-            }
-            display {
-              value: "HLA-B*57:01:01G"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.ebi.ac.uk/cgi-bin/ipd/imgt/hla/"
+              }
+              code {
+                value: "B*57:01:01"
+              }
+              display {
+                value: "HLA-B*57:01:01G"
+              }
             }
           }
         }
@@ -1679,16 +1729,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA6683-2"
-            }
-            display {
-              value: "germline"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
             }
           }
         }
@@ -1697,8 +1749,10 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet"
         }
-        value_uri {
-          value: "urn:uuid:a19a3557-b36c-4b35-ab8b-4783022066b9"
+        value {
+          uri {
+            value: "urn:uuid:a19a3557-b36c-4b35-ab8b-4783022066b9"
+          }
         }
       }
       status {
@@ -1725,9 +1779,11 @@ entry {
           value: "Mary Chalmers"
         }
       }
-      effective_date_time {
-        value_us: 1481760000000000
-        precision: DAY
+      effective {
+        date_time {
+          value_us: 1481760000000000
+          precision: DAY
+        }
       }
       specimen {
         specimen_id {
@@ -1792,16 +1848,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.genenames.org"
-            }
-            code {
-              value: "HGNC:4932"
-            }
-            display {
-              value: "HLA-B"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4932"
+              }
+              display {
+                value: "HLA-B"
+              }
             }
           }
         }
@@ -1810,16 +1868,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA6683-2"
-            }
-            display {
-              value: "germline"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
             }
           }
         }
@@ -1848,9 +1908,11 @@ entry {
           value: "Mary Chalmers"
         }
       }
-      effective_date_time {
-        value_us: 1481760000000000
-        precision: DAY
+      effective {
+        date_time {
+          value_us: 1481760000000000
+          precision: DAY
+        }
       }
       specimen {
         specimen_id {
@@ -1915,16 +1977,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.genenames.org"
-            }
-            code {
-              value: "HGNC:4933"
-            }
-            display {
-              value: "HLA-C"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4933"
+              }
+              display {
+                value: "HLA-C"
+              }
             }
           }
         }
@@ -1933,16 +1997,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.ebi.ac.uk/cgi-bin/ipd/imgt/hla/"
-            }
-            code {
-              value: "C*01:02:01"
-            }
-            display {
-              value: "HLA-C*01:02:01"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.ebi.ac.uk/cgi-bin/ipd/imgt/hla/"
+              }
+              code {
+                value: "C*01:02:01"
+              }
+              display {
+                value: "HLA-C*01:02:01"
+              }
             }
           }
         }
@@ -1951,16 +2017,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA6683-2"
-            }
-            display {
-              value: "germline"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
             }
           }
         }
@@ -1969,8 +2037,10 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet"
         }
-        value_uri {
-          value: "urn:uuid:79383455-4f55-4126-bcc2-03385cad7944"
+        value {
+          uri {
+            value: "urn:uuid:79383455-4f55-4126-bcc2-03385cad7944"
+          }
         }
       }
       status {
@@ -1997,9 +2067,11 @@ entry {
           value: "Mary Chalmers"
         }
       }
-      effective_date_time {
-        value_us: 1481760000000000
-        precision: DAY
+      effective {
+        date_time {
+          value_us: 1481760000000000
+          precision: DAY
+        }
       }
       specimen {
         specimen_id {
@@ -2064,16 +2136,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.genenames.org"
-            }
-            code {
-              value: "HGNC:4933"
-            }
-            display {
-              value: "HLA-C"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4933"
+              }
+              display {
+                value: "HLA-C"
+              }
             }
           }
         }
@@ -2082,16 +2156,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.ebi.ac.uk/cgi-bin/ipd/imgt/hla/"
-            }
-            code {
-              value: "C*03:04:01:01"
-            }
-            display {
-              value: "HLA-C*03:04:01:01"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.ebi.ac.uk/cgi-bin/ipd/imgt/hla/"
+              }
+              code {
+                value: "C*03:04:01:01"
+              }
+              display {
+                value: "HLA-C*03:04:01:01"
+              }
             }
           }
         }
@@ -2100,16 +2176,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA6683-2"
-            }
-            display {
-              value: "germline"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
             }
           }
         }
@@ -2118,8 +2196,10 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet"
         }
-        value_uri {
-          value: "urn:uuid:a220b7a5-2d7a-4cec-a5b1-bfcf5890e391"
+        value {
+          uri {
+            value: "urn:uuid:a220b7a5-2d7a-4cec-a5b1-bfcf5890e391"
+          }
         }
       }
       status {
@@ -2146,9 +2226,11 @@ entry {
           value: "Mary Chalmers"
         }
       }
-      effective_date_time {
-        value_us: 1481760000000000
-        precision: DAY
+      effective {
+        date_time {
+          value_us: 1481760000000000
+          precision: DAY
+        }
       }
       specimen {
         specimen_id {
@@ -2213,16 +2295,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://www.genenames.org"
-            }
-            code {
-              value: "HGNC:4933"
-            }
-            display {
-              value: "HLA-C"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4933"
+              }
+              display {
+                value: "HLA-C"
+              }
             }
           }
         }
@@ -2231,16 +2315,18 @@ entry {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://loinc.org"
-            }
-            code {
-              value: "LA6683-2"
-            }
-            display {
-              value: "germline"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
             }
           }
         }
@@ -2269,9 +2355,11 @@ entry {
           value: "Mary Chalmers"
         }
       }
-      effective_date_time {
-        value_us: 1481760000000000
-        precision: DAY
+      effective {
+        date_time {
+          value_us: 1481760000000000
+          precision: DAY
+        }
       }
       specimen {
         specimen_id {

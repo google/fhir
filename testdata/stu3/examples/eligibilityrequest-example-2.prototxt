@@ -32,9 +32,11 @@ patient {
     value: "pat1"
   }
 }
-serviced_date {
-  value_us: 1410912000000000
-  precision: DAY
+serviced {
+  date {
+    value_us: 1410912000000000
+    precision: DAY
+  }
 }
 created {
   value_us: 1408147200000000

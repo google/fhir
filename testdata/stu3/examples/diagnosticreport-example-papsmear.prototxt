@@ -27,10 +27,12 @@ subject {
     value: "b248b1b2-1686-4b94-9936-37d7a5f94b51"
   }
 }
-effective_date_time {
-  value_us: 1360539213000000
-  timezone: "+11:00"
-  precision: SECOND
+effective {
+  date_time {
+    value_us: 1360539213000000
+    timezone: "+11:00"
+    precision: SECOND
+  }
 }
 issued {
   value_us: 1360716333000000

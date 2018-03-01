@@ -54,16 +54,18 @@ form {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "75359005"
-      }
-      display {
-        value: "Timolol Maleate (substance)"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "75359005"
+        }
+        display {
+          value: "Timolol Maleate (substance)"
+        }
       }
     }
   }
@@ -107,16 +109,18 @@ package_value {
     }
   }
   content {
-    item_codeable_concept {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "376877002"
-        }
-        display {
-          value: "Timolol maleate 0.5% opthalmic solution (product)"
+    item {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "376877002"
+          }
+          display {
+            value: "Timolol maleate 0.5% opthalmic solution (product)"
+          }
         }
       }
     }

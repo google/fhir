@@ -67,9 +67,11 @@ use_context {
       value: "venue"
     }
   }
-  value_codeable_concept {
-    text {
-      value: "for CDA Usage"
+  value {
+    codeable_concept {
+      text {
+        value: "for CDA Usage"
+      }
     }
   }
 }
@@ -79,11 +81,15 @@ purpose {
 copyright {
   value: "Creative Commons 0"
 }
-source_uri {
-  value: "http://hl7.org/fhir/ValueSet/address-use"
+source {
+  uri {
+    value: "http://hl7.org/fhir/ValueSet/address-use"
+  }
 }
-target_uri {
-  value: "http://hl7.org/fhir/ValueSet/v3-AddressUse"
+target {
+  uri {
+    value: "http://hl7.org/fhir/ValueSet/v3-AddressUse"
+  }
 }
 group {
   source {

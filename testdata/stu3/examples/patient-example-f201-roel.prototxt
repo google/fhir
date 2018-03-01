@@ -93,7 +93,9 @@ birth_date {
   value_us: -309398400000000
   precision: DAY
 }
-deceased_boolean {
+deceased {
+  boolean {
+  }
 }
 address {
   use {
@@ -133,7 +135,9 @@ marital_status {
     }
   }
 }
-multiple_birth_boolean {
+multiple_birth {
+  boolean {
+  }
 }
 photo {
   content_type {

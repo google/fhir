@@ -117,14 +117,18 @@ context {
   }
 }
 payload {
-  content_string {
-    value: "Please provide the accident report and any associated pictures to support your Claim# DEF5647."
+  content {
+    string_value {
+      value: "Please provide the accident report and any associated pictures to support your Claim# DEF5647."
+    }
   }
 }
-occurrence_date_time {
-  value_us: 1465585270000000
-  timezone: "-08:00"
-  precision: SECOND
+occurrence {
+  date_time {
+    value_us: 1465585270000000
+    timezone: "-08:00"
+    precision: SECOND
+  }
 }
 authored_on {
   value_us: 1465585270000000

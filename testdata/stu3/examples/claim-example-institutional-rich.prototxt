@@ -145,10 +145,12 @@ diagnosis {
   sequence {
     value: 1
   }
-  diagnosis_codeable_concept {
-    coding {
-      code {
-        value: "654456"
+  diagnosis {
+    codeable_concept {
+      coding {
+        code {
+          value: "654456"
+        }
       }
     }
   }
@@ -213,9 +215,11 @@ accident {
       }
     }
   }
-  location_address {
-    text {
-      value: "Grouse Mountain Ski Hill"
+  location {
+    address {
+      text {
+        value: "Grouse Mountain Ski Hill"
+      }
     }
   }
 }
@@ -256,9 +260,11 @@ item {
       }
     }
   }
-  serviced_date {
-    value_us: 1408147200000000
-    precision: DAY
+  serviced {
+    date {
+      value_us: 1408147200000000
+      precision: DAY
+    }
   }
   unit_price {
     value {

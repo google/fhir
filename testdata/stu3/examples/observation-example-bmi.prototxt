@@ -54,21 +54,25 @@ subject {
     value: "example"
   }
 }
-effective_date_time {
-  value_us: 930873600000000
-  precision: DAY
+effective {
+  date_time {
+    value_us: 930873600000000
+    precision: DAY
+  }
 }
-value_quantity {
-  value {
-    value: "16.2"
-  }
-  unit {
-    value: "kg/m2"
-  }
-  system {
-    value: "http://unitsofmeasure.org"
-  }
-  code {
-    value: "kg/m2"
+value {
+  quantity {
+    value {
+      value: "16.2"
+    }
+    unit {
+      value: "kg/m2"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "kg/m2"
+    }
   }
 }

@@ -38,16 +38,18 @@ form {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "387106007"
-      }
-      display {
-        value: "Lorazepam (substance)"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "387106007"
+        }
+        display {
+          value: "Lorazepam (substance)"
+        }
       }
     }
   }

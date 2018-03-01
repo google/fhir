@@ -18,16 +18,18 @@ contained {
       url {
         value: "http://example.org/bodysitecode"
       }
-      value_codeable_concept {
-        coding {
-          system {
-            value: "http://snomed.info/sct"
-          }
-          code {
-            value: "14975008"
-          }
-          display {
-            value: "Forearm structure"
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "14975008"
+            }
+            display {
+              value: "Forearm structure"
+            }
           }
         }
       }

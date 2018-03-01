@@ -30,9 +30,11 @@ subject {
     value: "Peter James Chalmers"
   }
 }
-start_date {
-  value_us: 1428192000000000
-  precision: DAY
+start {
+  date {
+    value_us: 1428192000000000
+    precision: DAY
+  }
 }
 outcome_code {
   coding {

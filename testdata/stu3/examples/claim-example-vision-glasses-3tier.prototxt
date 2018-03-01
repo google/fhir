@@ -116,10 +116,12 @@ diagnosis {
   sequence {
     value: 1
   }
-  diagnosis_codeable_concept {
-    coding {
-      code {
-        value: "654321"
+  diagnosis {
+    codeable_concept {
+      coding {
+        code {
+          value: "654321"
+        }
       }
     }
   }
@@ -223,9 +225,11 @@ item {
       }
     }
   }
-  serviced_date {
-    value_us: 1408147200000000
-    precision: DAY
+  serviced {
+    date {
+      value_us: 1408147200000000
+      precision: DAY
+    }
   }
   unit_price {
     value {

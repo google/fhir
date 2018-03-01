@@ -13,12 +13,14 @@ extension {
   url {
     value: "http://example.org/do-not-use/fhir-extensions/referral#requestingPractitioner"
   }
-  value_reference {
-    practitioner_id {
-      value: "f201"
-    }
-    display {
-      value: "Dokter Bronsig"
+  value {
+    reference {
+      practitioner_id {
+        value: "f201"
+      }
+      display {
+        value: "Dokter Bronsig"
+      }
     }
   }
 }
@@ -26,17 +28,21 @@ extension {
   url {
     value: "http://example.org/do-not-use/fhir-extensions/referral#notes"
   }
-  value_string {
-    value: "The patient had fever peaks over the last couple of days. He is worried about these peaks."
+  value {
+    string_value {
+      value: "The patient had fever peaks over the last couple of days. He is worried about these peaks."
+    }
   }
 }
 extension {
   url {
     value: "http://example.org/do-not-use/fhir-extensions/referral#fulfillingEncounter"
   }
-  value_reference {
-    encounter_id {
-      value: "f201"
+  value {
+    reference {
+      encounter_id {
+        value: "f201"
+      }
     }
   }
 }
@@ -44,16 +50,18 @@ modifier_extension {
   url {
     value: "http://example.org/do-not-use/fhir-extensions/referral#referredForService"
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "11429006"
-      }
-      display {
-        value: "Consultation"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "11429006"
+        }
+        display {
+          value: "Consultation"
+        }
       }
     }
   }
@@ -62,14 +70,16 @@ modifier_extension {
   url {
     value: "http://example.org/do-not-use/fhir-extensions/referral#targetDate"
   }
-  value_period {
-    start {
-      value_us: 1364774400000000
-      precision: DAY
-    }
-    end {
-      value_us: 1365984000000000
-      precision: DAY
+  value {
+    period {
+      start {
+        value_us: 1364774400000000
+        precision: DAY
+      }
+      end {
+        value_us: 1365984000000000
+        precision: DAY
+      }
     }
   }
 }
@@ -77,8 +87,10 @@ modifier_extension {
   url {
     value: "http://example.org/do-not-use/fhir-extensions/referral#status"
   }
-  value_code {
-    value: "complete"
+  value {
+    code {
+      value: "complete"
+    }
   }
 }
 identifier {

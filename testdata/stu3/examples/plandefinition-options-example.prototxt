@@ -20,9 +20,11 @@ contained {
     kind {
       value: MEDICATION_REQUEST
     }
-    product_codeable_concept {
-      text {
-        value: "Medication 1"
+    product {
+      codeable_concept {
+        text {
+          value: "Medication 1"
+        }
       }
     }
   }
@@ -38,9 +40,11 @@ contained {
     kind {
       value: MEDICATION_REQUEST
     }
-    product_codeable_concept {
-      text {
-        value: "Medication 2"
+    product {
+      codeable_concept {
+        text {
+          value: "Medication 2"
+        }
       }
     }
   }
@@ -85,12 +89,14 @@ action {
       relationship {
         value: AFTER_END
       }
-      offset_duration {
-        value {
-          value: "1"
-        }
-        unit {
-          value: "h"
+      offset {
+        duration {
+          value {
+            value: "1"
+          }
+          unit {
+            value: "h"
+          }
         }
       }
     }

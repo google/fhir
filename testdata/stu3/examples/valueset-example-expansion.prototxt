@@ -75,8 +75,10 @@ expansion {
     url {
       value: "http://hl7.org/fhir/StructureDefinition/valueset-expansionSource"
     }
-    value_uri {
-      value: "http://hl7.org/fhir/ValueSet/example-extensional"
+    value {
+      uri {
+        value: "http://hl7.org/fhir/ValueSet/example-extensional"
+      }
     }
   }
   identifier {
@@ -96,8 +98,10 @@ expansion {
     name {
       value: "version"
     }
-    value_string {
-      value: "2.50"
+    value {
+      string_value {
+        value: "2.50"
+      }
     }
   }
   contains {

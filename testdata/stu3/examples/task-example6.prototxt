@@ -174,9 +174,11 @@ output {
       value: "DiagnosticReport generated"
     }
   }
-  value_reference {
-    diagnostic_report_id {
-      value: "lipids"
+  value {
+    reference {
+      diagnostic_report_id {
+        value: "lipids"
+      }
     }
   }
 }
@@ -186,9 +188,11 @@ output {
       value: "collected specimen"
     }
   }
-  value_reference {
-    specimen_id {
-      value: "101"
+  value {
+    reference {
+      specimen_id {
+        value: "101"
+      }
     }
   }
 }

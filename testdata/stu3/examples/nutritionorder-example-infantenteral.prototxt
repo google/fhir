@@ -114,10 +114,12 @@ enteral_formula {
   administration {
     schedule {
       repeat {
-        bounds_period {
-          start {
-            value_us: 1410912000000000
-            precision: DAY
+        bounds {
+          period {
+            start {
+              value_us: 1410912000000000
+              precision: DAY
+            }
           }
         }
         frequency {

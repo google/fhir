@@ -50,14 +50,18 @@ contact {
     }
   }
 }
-source_reference {
-  uri {
-    value: "http://hl7.org/fhir/ValueSet/v2-0487"
+source {
+  reference {
+    uri {
+      value: "http://hl7.org/fhir/ValueSet/v2-0487"
+    }
   }
 }
-target_reference {
-  uri {
-    value: "http://snomed.info/id?fhir_vs"
+target {
+  reference {
+    uri {
+      value: "http://snomed.info/id?fhir_vs"
+    }
   }
 }
 group {

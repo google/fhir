@@ -77,16 +77,20 @@ item {
         value: CHOICE
       }
       option {
-        value_coding {
-          code {
-            value: "F"
+        value {
+          coding {
+            code {
+              value: "F"
+            }
           }
         }
       }
       option {
-        value_coding {
-          code {
-            value: "M"
+        value {
+          coding {
+            code {
+              value: "M"
+            }
           }
         }
       }
@@ -135,23 +139,29 @@ item {
         value: CHOICE
       }
       option {
-        value_coding {
-          code {
-            value: "INJECTION"
+        value {
+          coding {
+            code {
+              value: "INJECTION"
+            }
           }
         }
       }
       option {
-        value_coding {
-          code {
-            value: "INTRAVENOUS"
+        value {
+          coding {
+            code {
+              value: "INTRAVENOUS"
+            }
           }
         }
       }
       option {
-        value_coding {
-          code {
-            value: "ORAL"
+        value {
+          coding {
+            code {
+              value: "ORAL"
+            }
           }
         }
       }

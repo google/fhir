@@ -56,10 +56,12 @@ subject {
     value: "dicom"
   }
 }
-occurrence_date_time {
-  value_us: 1367980407000000
-  timezone: "+07:00"
-  precision: SECOND
+occurrence {
+  date_time {
+    value_us: 1367980407000000
+    timezone: "+07:00"
+    precision: SECOND
+  }
 }
 requester {
   agent {

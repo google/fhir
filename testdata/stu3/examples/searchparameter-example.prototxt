@@ -53,13 +53,15 @@ use_context {
       value: "focus"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://hl7.org/fhir/variant-state"
-      }
-      code {
-        value: "positive"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/variant-state"
+        }
+        code {
+          value: "positive"
+        }
       }
     }
   }

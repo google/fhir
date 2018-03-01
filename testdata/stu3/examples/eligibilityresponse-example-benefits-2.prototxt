@@ -260,26 +260,30 @@ insurance {
           }
         }
       }
-      allowed_money {
-        value {
-          value: "500000"
-        }
-        system {
-          value: "urn:iso:std:iso:4217"
-        }
-        code {
-          value: "USD"
+      allowed {
+        money {
+          value {
+            value: "500000"
+          }
+          system {
+            value: "urn:iso:std:iso:4217"
+          }
+          code {
+            value: "USD"
+          }
         }
       }
-      used_money {
-        value {
-          value: "3748.00"
-        }
-        system {
-          value: "urn:iso:std:iso:4217"
-        }
-        code {
-          value: "USD"
+      used {
+        money {
+          value {
+            value: "3748.00"
+          }
+          system {
+            value: "urn:iso:std:iso:4217"
+          }
+          code {
+            value: "USD"
+          }
         }
       }
     }
@@ -291,15 +295,17 @@ insurance {
           }
         }
       }
-      allowed_money {
-        value {
-          value: "100"
-        }
-        system {
-          value: "urn:iso:std:iso:4217"
-        }
-        code {
-          value: "USD"
+      allowed {
+        money {
+          value {
+            value: "100"
+          }
+          system {
+            value: "urn:iso:std:iso:4217"
+          }
+          code {
+            value: "USD"
+          }
         }
       }
     }
@@ -311,8 +317,10 @@ insurance {
           }
         }
       }
-      allowed_unsigned_int {
-        value: 20
+      allowed {
+        unsigned_int {
+          value: 20
+        }
       }
     }
   }
@@ -378,15 +386,17 @@ insurance {
           }
         }
       }
-      allowed_money {
-        value {
-          value: "15000"
-        }
-        system {
-          value: "urn:iso:std:iso:4217"
-        }
-        code {
-          value: "USD"
+      allowed {
+        money {
+          value {
+            value: "15000"
+          }
+          system {
+            value: "urn:iso:std:iso:4217"
+          }
+          code {
+            value: "USD"
+          }
         }
       }
     }
@@ -453,15 +463,17 @@ insurance {
           }
         }
       }
-      allowed_money {
-        value {
-          value: "2000"
-        }
-        system {
-          value: "urn:iso:std:iso:4217"
-        }
-        code {
-          value: "USD"
+      allowed {
+        money {
+          value {
+            value: "2000"
+          }
+          system {
+            value: "urn:iso:std:iso:4217"
+          }
+          code {
+            value: "USD"
+          }
         }
       }
     }

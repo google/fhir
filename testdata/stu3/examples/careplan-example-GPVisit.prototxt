@@ -191,16 +191,18 @@ activity {
     }
     prohibited {
     }
-    scheduled_period {
-      start {
-        value_us: 1357036680000000
-        timezone: "UTC"
-        precision: SECOND
-      }
-      end {
-        value_us: 1357037400000000
-        timezone: "UTC"
-        precision: SECOND
+    scheduled {
+      period {
+        start {
+          value_us: 1357036680000000
+          timezone: "UTC"
+          precision: SECOND
+        }
+        end {
+          value_us: 1357037400000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
     }
     performer {

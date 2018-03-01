@@ -70,16 +70,18 @@ use_context {
       value: "Clinical Focus"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "314079002"
-      }
-      display {
-        value: "Hyperlipidemia screening test (procedure)"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "314079002"
+        }
+        display {
+          value: "Hyperlipidemia screening test (procedure)"
+        }
       }
     }
   }
@@ -376,9 +378,11 @@ snapshot {
       strength {
         value: REQUIRED
       }
-      value_set_reference {
-        uri {
-          value: "http://hl7.org/fhir/ValueSet/observation-status"
+      value_set {
+        reference {
+          uri {
+            value: "http://hl7.org/fhir/ValueSet/observation-status"
+          }
         }
       }
     }
@@ -660,9 +664,11 @@ snapshot {
       strength {
         value: PREFERRED
       }
-      value_set_reference {
-        uri {
-          value: "http://hl7.org/fhir/ValueSet/diagnostic-service-sections"
+      value_set {
+        reference {
+          uri {
+            value: "http://hl7.org/fhir/ValueSet/diagnostic-service-sections"
+          }
         }
       }
     }

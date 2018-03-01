@@ -13,12 +13,14 @@ extension {
   url {
     value: "http://nema.org/fhir/extensions#0010:1010"
   }
-  value_quantity {
-    value {
-      value: "56"
-    }
-    unit {
-      value: "Y"
+  value {
+    quantity {
+      value {
+        value: "56"
+      }
+      unit {
+        value: "Y"
+      }
     }
   }
 }
@@ -26,12 +28,14 @@ extension {
   url {
     value: "http://nema.org/fhir/extensions#0010:1020"
   }
-  value_quantity {
-    value {
-      value: "1.83"
-    }
-    unit {
-      value: "m"
+  value {
+    quantity {
+      value {
+        value: "1.83"
+      }
+      unit {
+        value: "m"
+      }
     }
   }
 }
@@ -39,12 +43,14 @@ extension {
   url {
     value: "http://nema.org/fhir/extensions#0010:1030"
   }
-  value_quantity {
-    value {
-      value: "72.58"
-    }
-    unit {
-      value: "kg"
+  value {
+    quantity {
+      value {
+        value: "72.58"
+      }
+      unit {
+        value: "kg"
+      }
     }
   }
 }
@@ -70,12 +76,14 @@ gender {
     url {
       value: "http://nema.org/examples/extensions#gender"
     }
-    value_coding {
-      system {
-        value: "http://nema.org/examples/gender"
-      }
-      code {
-        value: "M"
+    value {
+      coding {
+        system {
+          value: "http://nema.org/examples/gender"
+        }
+        code {
+          value: "M"
+        }
       }
     }
   }

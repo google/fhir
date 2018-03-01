@@ -32,9 +32,11 @@ contained {
 status {
   value: ON_HOLD
 }
-medication_reference {
-  fragment {
-    value: "med0303"
+medication {
+  reference {
+    fragment {
+      value: "med0303"
+    }
   }
 }
 subject {
@@ -55,16 +57,18 @@ supporting_information {
     value: "f204"
   }
 }
-effective_period {
-  start {
-    value_us: 1421328600000000
-    timezone: "+01:00"
-    precision: SECOND
-  }
-  end {
-    value_us: 1421328600000000
-    timezone: "+01:00"
-    precision: SECOND
+effective {
+  period {
+    start {
+      value_us: 1421328600000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1421328600000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
   }
 }
 not_given {

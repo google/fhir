@@ -13,16 +13,18 @@ extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://www.genenames.org"
-      }
-      code {
-        value: "12014"
-      }
-      display {
-        value: "TPMT"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.genenames.org"
+        }
+        code {
+          value: "12014"
+        }
+        display {
+          value: "TPMT"
+        }
       }
     }
   }
@@ -59,16 +61,18 @@ issued {
   timezone: "+01:00"
   precision: SECOND
 }
-value_codeable_concept {
-  coding {
-    system {
-      value: "http://pharmakb.org"
-    }
-    code {
-      value: "PA166128353"
-    }
-    display {
-      value: "*4"
+value {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://pharmakb.org"
+      }
+      code {
+        value: "PA166128353"
+      }
+      display {
+        value: "*4"
+      }
     }
   }
 }

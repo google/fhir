@@ -46,16 +46,18 @@ performer {
     value: "Molecular Diagnostics Laboratory"
   }
 }
-value_codeable_concept {
-  coding {
-    system {
-      value: "http://snomed.info/sct"
-    }
-    code {
-      value: "10828004"
-    }
-    display {
-      value: "Positive"
+value {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "10828004"
+      }
+      display {
+        value: "Positive"
+      }
     }
   }
 }
@@ -83,20 +85,22 @@ component {
       }
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "363358000"
+        }
+        display {
+          value: "Malignant tumor of lung (disorder)"
+        }
       }
-      code {
-        value: "363358000"
+      text {
+        value: "Lung cancer"
       }
-      display {
-        value: "Malignant tumor of lung (disorder)"
-      }
-    }
-    text {
-      value: "Lung cancer"
     }
   }
 }
@@ -114,13 +118,15 @@ component {
       }
     }
   }
-  value_codeable_concept {
-    coding {
-      code {
-        value: "LA6669-1"
-      }
-      display {
-        value: "Pathogenic"
+  value {
+    codeable_concept {
+      coding {
+        code {
+          value: "LA6669-1"
+        }
+        display {
+          value: "Pathogenic"
+        }
       }
     }
   }

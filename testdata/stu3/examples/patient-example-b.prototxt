@@ -53,16 +53,18 @@ gender {
     url {
       value: "http://example.org/Profile/administrative-status"
     }
-    value_codeable_concept {
-      coding {
-        system {
-          value: "http://hl7.org/fhir/v2/0001"
-        }
-        code {
-          value: "A"
-        }
-        display {
-          value: "Ambiguous"
+    value {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/v2/0001"
+          }
+          code {
+            value: "A"
+          }
+          display {
+            value: "Ambiguous"
+          }
         }
       }
     }
@@ -82,16 +84,20 @@ photo {
         url {
           value: "separator"
         }
-        value_string {
-          value: "             "
+        value {
+          string_value {
+            value: "             "
+          }
         }
       }
       extension {
         url {
           value: "stride"
         }
-        value_positive_int {
-          value: 123
+        value {
+          positive_int {
+            value: 123
+          }
         }
       }
     }

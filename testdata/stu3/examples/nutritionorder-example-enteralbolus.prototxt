@@ -145,11 +145,13 @@ enteral_formula {
   administration {
     schedule {
       repeat {
-        bounds_period {
-          start {
-            value_us: 1410969600000000
-            timezone: "UTC"
-            precision: SECOND
+        bounds {
+          period {
+            start {
+              value_us: 1410969600000000
+              timezone: "UTC"
+              precision: SECOND
+            }
           }
         }
         frequency {

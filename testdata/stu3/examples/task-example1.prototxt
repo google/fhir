@@ -38,12 +38,14 @@ contained {
           }
         }
       }
-      who_reference {
-        practitioner_id {
-          value: "f202"
-        }
-        display {
-          value: "Luigi Maas"
+      who {
+        reference {
+          practitioner_id {
+            value: "f202"
+          }
+          display {
+            value: "Luigi Maas"
+          }
         }
       }
     }
@@ -64,12 +66,14 @@ contained {
         timezone: "+10:00"
         precision: SECOND
       }
-      who_reference {
-        practitioner_id {
-          value: "example"
-        }
-        display {
-          value: "Dr Adam Careful"
+      who {
+        reference {
+          practitioner_id {
+            value: "example"
+          }
+          display {
+            value: "Dr Adam Careful"
+          }
         }
       }
       content_type {

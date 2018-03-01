@@ -54,16 +54,18 @@ form {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-      }
-      code {
-        value: "315266"
-      }
-      display {
-        value: "Acetaminophen 500 MG"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "315266"
+        }
+        display {
+          value: "Acetaminophen 500 MG"
+        }
       }
     }
   }
@@ -93,16 +95,18 @@ ingredient {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-      }
-      code {
-        value: "901813"
-      }
-      display {
-        value: "Diphenhydramine Hydrochloride 25 mg"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "901813"
+        }
+        display {
+          value: "Diphenhydramine Hydrochloride 25 mg"
+        }
       }
     }
   }

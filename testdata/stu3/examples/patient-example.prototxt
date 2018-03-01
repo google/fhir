@@ -146,14 +146,18 @@ birth_date {
     url {
       value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime"
     }
-    value_date_time {
-      value_us: 157232145000000
-      timezone: "-05:00"
-      precision: SECOND
+    value {
+      date_time {
+        value_us: 157232145000000
+        timezone: "-05:00"
+        precision: SECOND
+      }
     }
   }
 }
-deceased_boolean {
+deceased {
+  boolean {
+  }
 }
 address {
   use {
@@ -205,8 +209,10 @@ contact {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix"
         }
-        value_string {
-          value: "VV"
+        value {
+          string_value {
+            value: "VV"
+          }
         }
       }
     }

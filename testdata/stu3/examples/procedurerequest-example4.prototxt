@@ -33,22 +33,24 @@ subject {
     value: "example"
   }
 }
-occurrence_timing {
-  repeat {
-    count {
-      value: 20
-    }
-    count_max {
-      value: 30
-    }
-    frequency {
-      value: 3
-    }
-    period {
-      value: "1"
-    }
-    period_unit {
-      value: WK
+occurrence {
+  timing {
+    repeat {
+      count {
+        value: 20
+      }
+      count_max {
+        value: 30
+      }
+      frequency {
+        value: 3
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: WK
+      }
     }
   }
 }

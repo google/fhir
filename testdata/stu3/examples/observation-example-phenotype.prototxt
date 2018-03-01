@@ -13,16 +13,18 @@ extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://www.genenames.org"
-      }
-      code {
-        value: "2623"
-      }
-      display {
-        value: "CYP2C9"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.genenames.org"
+        }
+        code {
+          value: "2623"
+        }
+        display {
+          value: "CYP2C9"
+        }
       }
     }
   }
@@ -56,16 +58,18 @@ issued {
   timezone: "+01:00"
   precision: SECOND
 }
-value_codeable_concept {
-  coding {
-    system {
-      value: "http://loinc.org"
-    }
-    code {
-      value: "LA25391-6"
-    }
-    display {
-      value: "Normal metabolizer"
+value {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "LA25391-6"
+      }
+      display {
+        value: "Normal metabolizer"
+      }
     }
   }
 }

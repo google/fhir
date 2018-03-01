@@ -44,16 +44,18 @@ contained {
       }
     }
     ingredient {
-      item_codeable_concept {
-        coding {
-          system {
-            value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-          }
-          code {
-            value: "315266"
-          }
-          display {
-            value: "Acetaminophen 500 MG"
+      item {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+            }
+            code {
+              value: "315266"
+            }
+            display {
+              value: "Acetaminophen 500 MG"
+            }
           }
         }
       }
@@ -83,16 +85,18 @@ contained {
       }
     }
     ingredient {
-      item_codeable_concept {
-        coding {
-          system {
-            value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-          }
-          code {
-            value: "901813"
-          }
-          display {
-            value: "Diphenhydramine Hydrochloride 25 mg"
+      item {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+            }
+            code {
+              value: "901813"
+            }
+            display {
+              value: "Diphenhydramine Hydrochloride 25 mg"
+            }
           }
         }
       }
@@ -161,14 +165,18 @@ category {
     }
   }
 }
-medication_reference {
-  fragment {
-    value: "med0309"
+medication {
+  reference {
+    fragment {
+      value: "med0309"
+    }
   }
 }
-effective_date_time {
-  value_us: 1421971200000000
-  precision: DAY
+effective {
+  date_time {
+    value_us: 1421971200000000
+    precision: DAY
+  }
 }
 date_asserted {
   value_us: 1424563200000000
@@ -241,16 +249,18 @@ dosage {
       }
     }
   }
-  as_needed_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "32914008"
-      }
-      display {
-        value: "Restless Legs"
+  as_needed {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "32914008"
+        }
+        display {
+          value: "Restless Legs"
+        }
       }
     }
   }
@@ -267,33 +277,35 @@ dosage {
       }
     }
   }
-  dose_range {
-    low {
-      value {
-        value: "1"
+  dose {
+    range {
+      low {
+        value {
+          value: "1"
+        }
+        unit {
+          value: "TAB"
+        }
+        system {
+          value: "http://hl7.org/fhir/v3/orderableDrugForm"
+        }
+        code {
+          value: "TAB"
+        }
       }
-      unit {
-        value: "TAB"
-      }
-      system {
-        value: "http://hl7.org/fhir/v3/orderableDrugForm"
-      }
-      code {
-        value: "TAB"
-      }
-    }
-    high {
-      value {
-        value: "2"
-      }
-      unit {
-        value: "TAB"
-      }
-      system {
-        value: "http://hl7.org/fhir/v3/orderableDrugForm"
-      }
-      code {
-        value: "TAB"
+      high {
+        value {
+          value: "2"
+        }
+        unit {
+          value: "TAB"
+        }
+        system {
+          value: "http://hl7.org/fhir/v3/orderableDrugForm"
+        }
+        code {
+          value: "TAB"
+        }
       }
     }
   }

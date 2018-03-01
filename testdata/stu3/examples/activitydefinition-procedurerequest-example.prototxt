@@ -30,16 +30,18 @@ use_context {
       value: "age"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "https://meshb.nlm.nih.gov"
-      }
-      code {
-        value: "D000328"
-      }
-      display {
-        value: "Adult"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "https://meshb.nlm.nih.gov"
+        }
+        code {
+          value: "D000328"
+        }
+        display {
+          value: "Adult"
+        }
       }
     }
   }
@@ -53,16 +55,18 @@ use_context {
       value: "user"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "309343006"
-      }
-      display {
-        value: "Physician"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "309343006"
+        }
+        display {
+          value: "Physician"
+        }
       }
     }
   }
@@ -96,22 +100,28 @@ code {
     }
   }
 }
-timing_timing {
-  event {
-    extension {
-      url {
-        value: "http://hl7.org/fhir/StructureDefinition/cqif-cqlExpression"
+timing {
+  timing_value {
+    event {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/cqif-cqlExpression"
+        }
+        value {
+          string_value {
+            value: "Now()"
+          }
+        }
       }
-      value_string {
-        value: "Now()"
-      }
-    }
-    extension {
-      url {
-        value: "https://fhir.google.com/extensions/primitiveHasNoValue"
-      }
-      value_boolean {
-        value: true
+      extension {
+        url {
+          value: "https://fhir.google.com/extensions/primitiveHasNoValue"
+        }
+        value {
+          boolean {
+            value: true
+          }
+        }
       }
     }
   }

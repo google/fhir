@@ -58,26 +58,28 @@ element {
     url {
       value: "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits"
     }
-    value_codeable_concept {
-      coding {
-        system {
-          value: "http://unitsofmeasure.org"
+    value {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          version {
+            value: "1.9"
+          }
+          code {
+            value: "s"
+          }
+          display {
+            value: "second"
+          }
+          user_selected {
+            value: true
+          }
         }
-        version {
-          value: "1.9"
-        }
-        code {
-          value: "s"
-        }
-        display {
+        text {
           value: "second"
         }
-        user_selected {
-          value: true
-        }
-      }
-      text {
-        value: "second"
       }
     }
   }
@@ -105,8 +107,10 @@ element {
     label {
       value: "Simple"
     }
-    value_decimal {
-      value: "10.0"
+    value {
+      decimal {
+        value: "10.0"
+      }
     }
   }
   mapping {

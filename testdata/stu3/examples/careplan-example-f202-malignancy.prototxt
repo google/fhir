@@ -80,23 +80,29 @@ contained {
       }
     }
     ingredient {
-      item_reference {
-        fragment {
-          value: "doce"
+      item {
+        reference {
+          fragment {
+            value: "doce"
+          }
         }
       }
     }
     ingredient {
-      item_reference {
-        fragment {
-          value: "cisp"
+      item {
+        reference {
+          fragment {
+            value: "cisp"
+          }
         }
       }
     }
     ingredient {
-      item_reference {
-        fragment {
-          value: "fluo"
+      item {
+        reference {
+          fragment {
+            value: "fluo"
+          }
         }
       }
     }
@@ -225,9 +231,11 @@ activity {
     }
     prohibited {
     }
-    product_reference {
-      fragment {
-        value: "tpf"
+    product {
+      reference {
+        fragment {
+          value: "tpf"
+        }
       }
     }
   }

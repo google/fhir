@@ -38,7 +38,9 @@ contained {
         }
       }
     }
-    deceased_boolean {
+    deceased {
+      boolean {
+      }
     }
     condition {
       code {
@@ -86,8 +88,10 @@ contained {
         }
       }
     }
-    deceased_boolean {
-      value: true
+    deceased {
+      boolean {
+        value: true
+      }
     }
     condition {
       code {

@@ -115,11 +115,13 @@ supplement {
   }
   schedule {
     repeat {
-      bounds_period {
-        start {
-          value_us: 1423580400000000
-          timezone: "UTC"
-          precision: SECOND
+      bounds {
+        period {
+          start {
+            value_us: 1423580400000000
+            timezone: "UTC"
+            precision: SECOND
+          }
         }
       }
       frequency {

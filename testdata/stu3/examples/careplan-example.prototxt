@@ -184,16 +184,18 @@ activity {
     }
     prohibited {
     }
-    scheduled_timing {
-      repeat {
-        frequency {
-          value: 1
-        }
-        period {
-          value: "1"
-        }
-        period_unit {
-          value: D
+    scheduled {
+      timing {
+        repeat {
+          frequency {
+            value: 1
+          }
+          period {
+            value: "1"
+          }
+          period_unit {
+            value: D
+          }
         }
       }
     }

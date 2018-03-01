@@ -46,10 +46,12 @@ contained {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime"
         }
-        value_date_time {
-          value_us: 1463567325000000
-          timezone: "UTC"
-          precision: SECOND
+        value {
+          date_time {
+            value_us: 1463567325000000
+            timezone: "UTC"
+            precision: SECOND
+          }
         }
       }
     }
@@ -106,25 +108,29 @@ subject {
     value: "newborn"
   }
 }
-effective_date_time {
-  value_us: 1463610802000000
-  timezone: "UTC"
-  precision: SECOND
+effective {
+  date_time {
+    value_us: 1463610802000000
+    timezone: "UTC"
+    precision: SECOND
+  }
 }
 performer {
   practitioner_id {
     value: "example"
   }
 }
-value_quantity {
-  value {
-    value: "0"
-  }
-  system {
-    value: "http://unitsofmeasure.org"
-  }
-  code {
-    value: "{score}"
+value {
+  quantity {
+    value {
+      value: "0"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "{score}"
+    }
   }
 }
 component {
@@ -155,36 +161,40 @@ component {
       value: "Apgar color score"
     }
   }
-  value_codeable_concept {
-    coding {
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+          }
+          value {
+            decimal {
+              value: "0"
+            }
+          }
         }
-        value_decimal {
+        system {
+          value: "http://loinc.org/la"
+        }
+        code {
+          value: "LA6722-8"
+        }
+        display {
+          value: "The baby\'s whole body is completely bluish-gray or pale"
+        }
+      }
+      coding {
+        system {
+          value: "http:/acme.ped/apgarcolor"
+        }
+        code {
           value: "0"
         }
       }
-      system {
-        value: "http://loinc.org/la"
+      text {
+        value: "0. The baby\'s whole body is completely bluish-gray or pale"
       }
-      code {
-        value: "LA6722-8"
-      }
-      display {
-        value: "The baby\'s whole body is completely bluish-gray or pale"
-      }
-    }
-    coding {
-      system {
-        value: "http:/acme.ped/apgarcolor"
-      }
-      code {
-        value: "0"
-      }
-    }
-    text {
-      value: "0. The baby\'s whole body is completely bluish-gray or pale"
     }
   }
 }
@@ -216,36 +226,40 @@ component {
       value: "Apgar respiratory effort score"
     }
   }
-  value_codeable_concept {
-    coding {
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+          }
+          value {
+            decimal {
+              value: "0"
+            }
+          }
         }
-        value_decimal {
+        system {
+          value: "http://loinc.org/la"
+        }
+        code {
+          value: "LA6716-0"
+        }
+        display {
+          value: "No heart rate"
+        }
+      }
+      coding {
+        system {
+          value: "http:/acme.ped/apgarheartrate"
+        }
+        code {
           value: "0"
         }
       }
-      system {
-        value: "http://loinc.org/la"
+      text {
+        value: "0. No heart rate"
       }
-      code {
-        value: "LA6716-0"
-      }
-      display {
-        value: "No heart rate"
-      }
-    }
-    coding {
-      system {
-        value: "http:/acme.ped/apgarheartrate"
-      }
-      code {
-        value: "0"
-      }
-    }
-    text {
-      value: "0. No heart rate"
     }
   }
 }
@@ -277,36 +291,40 @@ component {
       value: "Apgar response to stimulus score"
     }
   }
-  value_codeable_concept {
-    coding {
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+          }
+          value {
+            decimal {
+              value: "0"
+            }
+          }
         }
-        value_decimal {
+        system {
+          value: "http://loinc.org/la"
+        }
+        code {
+          value: "LA6719-4"
+        }
+        display {
+          value: "No response to airways being suctioned"
+        }
+      }
+      coding {
+        system {
+          value: "http:/acme.ped/apgarreflexirritability"
+        }
+        code {
           value: "0"
         }
       }
-      system {
-        value: "http://loinc.org/la"
+      text {
+        value: "0. No response to airways being suctioned"
       }
-      code {
-        value: "LA6719-4"
-      }
-      display {
-        value: "No response to airways being suctioned"
-      }
-    }
-    coding {
-      system {
-        value: "http:/acme.ped/apgarreflexirritability"
-      }
-      code {
-        value: "0"
-      }
-    }
-    text {
-      value: "0. No response to airways being suctioned"
     }
   }
 }
@@ -338,36 +356,40 @@ component {
       value: "Apgar muscle tone score"
     }
   }
-  value_codeable_concept {
-    coding {
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+          }
+          value {
+            decimal {
+              value: "0"
+            }
+          }
         }
-        value_decimal {
+        system {
+          value: "http://loinc.org/la"
+        }
+        code {
+          value: "LA6713-7"
+        }
+        display {
+          value: "Limp; no movement"
+        }
+      }
+      coding {
+        system {
+          value: "http:/acme.ped/apgarmuscletone"
+        }
+        code {
           value: "0"
         }
       }
-      system {
-        value: "http://loinc.org/la"
+      text {
+        value: "0. Limp; no movement"
       }
-      code {
-        value: "LA6713-7"
-      }
-      display {
-        value: "Limp; no movement"
-      }
-    }
-    coding {
-      system {
-        value: "http:/acme.ped/apgarmuscletone"
-      }
-      code {
-        value: "0"
-      }
-    }
-    text {
-      value: "0. Limp; no movement"
     }
   }
 }
@@ -399,36 +421,40 @@ component {
       value: "Apgar respiratory effort score"
     }
   }
-  value_codeable_concept {
-    coding {
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+          }
+          value {
+            decimal {
+              value: "0"
+            }
+          }
         }
-        value_decimal {
+        system {
+          value: "http://loinc.org/la"
+        }
+        code {
+          value: "LA6725-1"
+        }
+        display {
+          value: "Not breathing"
+        }
+      }
+      coding {
+        system {
+          value: "http:/acme.ped/apgarrespiratoryeffort"
+        }
+        code {
           value: "0"
         }
       }
-      system {
-        value: "http://loinc.org/la"
+      text {
+        value: "0. Not breathing"
       }
-      code {
-        value: "LA6725-1"
-      }
-      display {
-        value: "Not breathing"
-      }
-    }
-    coding {
-      system {
-        value: "http:/acme.ped/apgarrespiratoryeffort"
-      }
-      code {
-        value: "0"
-      }
-    }
-    text {
-      value: "0. Not breathing"
     }
   }
 }

@@ -44,8 +44,10 @@ contained {
         value: "natural mother"
       }
     }
-    deceased_boolean {
-      value: true
+    deceased {
+      boolean {
+        value: true
+      }
     }
     condition {
       code {
@@ -64,18 +66,20 @@ contained {
           value: "Diabetes mellitus"
         }
       }
-      onset_age {
-        value {
-          value: "45"
-        }
-        unit {
-          value: "yr"
-        }
-        system {
-          value: "http://unitsofmeasure.org"
-        }
-        code {
-          value: "a"
+      onset {
+        age {
+          value {
+            value: "45"
+          }
+          unit {
+            value: "yr"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "a"
+          }
         }
       }
     }
@@ -133,18 +137,20 @@ contained {
           value: "Diabetes mellitus type 2 without retinopathy"
         }
       }
-      onset_age {
-        value {
-          value: "35"
-        }
-        unit {
-          value: "yr"
-        }
-        system {
-          value: "http://unitsofmeasure.org"
-        }
-        code {
-          value: "a"
+      onset {
+        age {
+          value {
+            value: "35"
+          }
+          unit {
+            value: "yr"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "a"
+          }
         }
       }
     }
@@ -200,20 +206,22 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NSIS"
+              }
+              display {
+                value: "natural sister"
+              }
             }
-            code {
-              value: "NSIS"
-            }
-            display {
+            text {
               value: "natural sister"
             }
-          }
-          text {
-            value: "natural sister"
           }
         }
       }
@@ -221,12 +229,14 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          uri {
-            value: "FamilyMemberHistory/mother"
-          }
-          display {
-            value: "paternal grandmother"
+        value {
+          reference {
+            uri {
+              value: "FamilyMemberHistory/mother"
+            }
+            display {
+              value: "paternal grandmother"
+            }
           }
         }
       }
@@ -261,18 +271,20 @@ contained {
         value: "maternal grandmother"
       }
     }
-    age_age {
-      value {
-        value: "70"
-      }
-      unit {
-        value: "yr"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "70"
+        }
+        unit {
+          value: "yr"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
   }
@@ -290,20 +302,22 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "MTH"
+              }
+              display {
+                value: "mother"
+              }
             }
-            code {
-              value: "MTH"
-            }
-            display {
+            text {
               value: "mother"
             }
-          }
-          text {
-            value: "mother"
           }
         }
       }
@@ -311,12 +325,14 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          uri {
-            value: "FamilyMemberHistory/147146"
-          }
-          display {
-            value: "maternal grandmother"
+        value {
+          reference {
+            uri {
+              value: "FamilyMemberHistory/147146"
+            }
+            display {
+              value: "maternal grandmother"
+            }
           }
         }
       }
@@ -354,18 +370,20 @@ contained {
     gender {
       value: FEMALE
     }
-    age_age {
-      value {
-        value: "55"
-      }
-      unit {
-        value: "yr"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "55"
+        }
+        unit {
+          value: "yr"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
   }
@@ -383,17 +401,19 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            code {
-              value: "NBRO"
+        value {
+          codeable_concept {
+            coding {
+              code {
+                value: "NBRO"
+              }
+              display {
+                value: "natural brother"
+              }
             }
-            display {
+            text {
               value: "natural brother"
             }
-          }
-          text {
-            value: "natural brother"
           }
         }
       }
@@ -401,12 +421,14 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          uri {
-            value: "FamilyMemberHistory/father"
-          }
-          display {
-            value: "maternal grandfather"
+        value {
+          reference {
+            uri {
+              value: "FamilyMemberHistory/father"
+            }
+            display {
+              value: "maternal grandfather"
+            }
           }
         }
       }
@@ -441,18 +463,20 @@ contained {
         value: "Paternal grandfather"
       }
     }
-    age_age {
-      value {
-        value: "74"
-      }
-      unit {
-        value: "yr"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "b"
+    age {
+      age_value {
+        value {
+          value: "74"
+        }
+        unit {
+          value: "yr"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "b"
+        }
       }
     }
   }

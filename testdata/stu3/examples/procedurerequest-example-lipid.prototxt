@@ -35,16 +35,18 @@ contained {
         value: "example"
       }
     }
-    value_codeable_concept {
-      coding {
-        system {
-          value: "http://hl7.org/fhir/v2/0136"
-        }
-        code {
-          value: "Y"
-        }
-        display {
-          value: "Yes"
+    value {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/v2/0136"
+          }
+          code {
+            value: "Y"
+          }
+          display {
+            value: "Yes"
+          }
         }
       }
     }
@@ -82,10 +84,12 @@ contained {
       }
     }
     collection {
-      collected_date_time {
-        value_us: 1439707217000000
-        timezone: "UTC"
-        precision: SECOND
+      collected {
+        date_time {
+          value_us: 1439707217000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
     }
   }
@@ -140,10 +144,12 @@ context {
     value: "example"
   }
 }
-occurrence_date_time {
-  value_us: 1367536560000000
-  timezone: "-07:00"
-  precision: SECOND
+occurrence {
+  date_time {
+    value_us: 1367536560000000
+    timezone: "-07:00"
+    precision: SECOND
+  }
 }
 requester {
   agent {

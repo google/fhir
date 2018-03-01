@@ -82,39 +82,18 @@ use_context {
       value: "age"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "https://meshb.nlm.nih.gov"
-      }
-      code {
-        value: "D000328"
-      }
-      display {
-        value: "Adult"
-      }
-    }
-  }
-}
-use_context {
-  code {
-    system {
-      value: "http://hl7.org/fhir/usage-context-type"
-    }
-    code {
-      value: "focus"
-    }
-  }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "87512008"
-      }
-      display {
-        value: "Mild major depression"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "https://meshb.nlm.nih.gov"
+        }
+        code {
+          value: "D000328"
+        }
+        display {
+          value: "Adult"
+        }
       }
     }
   }
@@ -128,39 +107,18 @@ use_context {
       value: "focus"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "40379007"
-      }
-      display {
-        value: "Major depression, recurrent, mild"
-      }
-    }
-  }
-}
-use_context {
-  code {
-    system {
-      value: "http://hl7.org/fhir/usage-context-type"
-    }
-    code {
-      value: "focus"
-    }
-  }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "225444004"
-      }
-      display {
-        value: "At risk for suicide (finding)"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "87512008"
+        }
+        display {
+          value: "Mild major depression"
+        }
       }
     }
   }
@@ -174,16 +132,68 @@ use_context {
       value: "focus"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "40379007"
+        }
+        display {
+          value: "Major depression, recurrent, mild"
+        }
       }
-      code {
-        value: "306206005"
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "225444004"
+        }
+        display {
+          value: "At risk for suicide (finding)"
+        }
       }
-      display {
-        value: "Referral to service (procedure)"
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "306206005"
+        }
+        display {
+          value: "Referral to service (procedure)"
+        }
       }
     }
   }
@@ -197,16 +207,18 @@ use_context {
       value: "user"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "309343006"
-      }
-      display {
-        value: "Physician"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "309343006"
+        }
+        display {
+          value: "Physician"
+        }
       }
     }
   }
@@ -220,16 +232,18 @@ use_context {
       value: "venue"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "440655000"
-      }
-      display {
-        value: "Outpatient environment"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "440655000"
+        }
+        display {
+          value: "Outpatient environment"
+        }
       }
     }
   }
@@ -345,22 +359,28 @@ code {
     value: "Referral to service (procedure)"
   }
 }
-timing_timing {
-  event {
-    extension {
-      url {
-        value: "http://hl7.org/fhir/StructureDefinition/cqif-cqlExpression"
+timing {
+  timing_value {
+    event {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/cqif-cqlExpression"
+        }
+        value {
+          string_value {
+            value: "Now()"
+          }
+        }
       }
-      value_string {
-        value: "Now()"
-      }
-    }
-    extension {
-      url {
-        value: "https://fhir.google.com/extensions/primitiveHasNoValue"
-      }
-      value_boolean {
-        value: true
+      extension {
+        url {
+          value: "https://fhir.google.com/extensions/primitiveHasNoValue"
+        }
+        value {
+          boolean {
+            value: true
+          }
+        }
       }
     }
   }

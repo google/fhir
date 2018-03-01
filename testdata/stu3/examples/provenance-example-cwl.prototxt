@@ -41,9 +41,11 @@ agent {
       }
     }
   }
-  who_reference {
-    patient_id {
-      value: "example"
+  who {
+    reference {
+      patient_id {
+        value: "example"
+      }
     }
   }
 }
@@ -51,22 +53,24 @@ entity {
   role {
     value: SOURCE
   }
-  what_identifier {
-    type {
-      coding {
-        system {
-          value: "https://github.com/common-workflow-language/workflows"
-        }
-        code {
-          value: "CWL"
-        }
-        display {
-          value: "lobSTR"
+  what {
+    identifier {
+      type {
+        coding {
+          system {
+            value: "https://github.com/common-workflow-language/workflows"
+          }
+          code {
+            value: "CWL"
+          }
+          display {
+            value: "lobSTR"
+          }
         }
       }
-    }
-    value {
-      value: "https://github.com/common-workflow-language/workflows/blob/master/workflows/lobSTR/lobSTR-workflow.cwl"
+      value {
+        value: "https://github.com/common-workflow-language/workflows/blob/master/workflows/lobSTR/lobSTR-workflow.cwl"
+      }
     }
   }
 }

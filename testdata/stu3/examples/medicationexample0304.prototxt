@@ -54,16 +54,18 @@ form {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "387138002"
-      }
-      display {
-        value: "Busulfan (substance)"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "387138002"
+        }
+        display {
+          value: "Busulfan (substance)"
+        }
       }
     }
   }
@@ -107,16 +109,18 @@ package_value {
     }
   }
   content {
-    item_codeable_concept {
-      coding {
-        system {
-          value: "http://hl7.org/fhir/sid/ndc"
-        }
-        code {
-          value: "76388-713-25"
-        }
-        display {
-          value: "Myleran 2mg tablet, film coated"
+    item {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/sid/ndc"
+          }
+          code {
+            value: "76388-713-25"
+          }
+          display {
+            value: "Myleran 2mg tablet, film coated"
+          }
         }
       }
     }

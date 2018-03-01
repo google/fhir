@@ -24,11 +24,15 @@ entry {
       status {
         value: ACTIVE
       }
-      source_uri {
-        value: "http://hl7.org/fhir/us/sdc/Questionnaire/54127-6"
+      source {
+        uri {
+          value: "http://hl7.org/fhir/us/sdc/Questionnaire/54127-6"
+        }
       }
-      target_uri {
-        value: "http://hl7.org/fhir/us/sdc/DataElement"
+      target {
+        uri {
+          value: "http://hl7.org/fhir/us/sdc/DataElement"
+        }
       }
       group {
         source {
@@ -479,16 +483,18 @@ entry {
             value: "species"
           }
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://snomed.info/sct"
-            }
-            code {
-              value: "337915000"
-            }
-            display {
-              value: "Homo sapiens"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://snomed.info/sct"
+              }
+              code {
+                value: "337915000"
+              }
+              display {
+                value: "Homo sapiens"
+              }
             }
           }
         }
@@ -696,15 +702,17 @@ entry {
                 value: "USSG-FHT twin"
               }
             }
-            initial_coding {
-              system {
-                value: "http://loinc.org"
-              }
-              code {
-                value: "LA32-8"
-              }
-              display {
-                value: "No"
+            initial {
+              coding {
+                system {
+                  value: "http://loinc.org"
+                }
+                code {
+                  value: "LA32-8"
+                }
+                display {
+                  value: "No"
+                }
               }
             }
           }

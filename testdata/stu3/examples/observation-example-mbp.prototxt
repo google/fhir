@@ -49,21 +49,25 @@ subject {
     value: "example"
   }
 }
-effective_date_time {
-  value_us: 930873600000000
-  precision: DAY
+effective {
+  date_time {
+    value_us: 930873600000000
+    precision: DAY
+  }
 }
-value_quantity {
-  value {
-    value: "80"
-  }
-  unit {
-    value: "mm[Hg]"
-  }
-  system {
-    value: "http://unitsofmeasure.org"
-  }
-  code {
-    value: "mm[Hg]"
+value {
+  quantity {
+    value {
+      value: "80"
+    }
+    unit {
+      value: "mm[Hg]"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "mm[Hg]"
+    }
   }
 }

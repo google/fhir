@@ -108,9 +108,11 @@ relates_to {
   code {
     value: REPLACES
   }
-  target_reference {
-    composition_id {
-      value: "old-example"
+  target {
+    reference {
+      composition_id {
+        value: "old-example"
+      }
     }
   }
 }
@@ -118,12 +120,14 @@ relates_to {
   code {
     value: APPENDS
   }
-  target_identifier {
-    system {
-      value: "http://example.org/fhir/NamingSystem/document-ids"
-    }
-    value {
-      value: "ABC123"
+  target {
+    identifier {
+      system {
+        value: "http://example.org/fhir/NamingSystem/document-ids"
+      }
+      value {
+        value: "ABC123"
+      }
     }
   }
 }

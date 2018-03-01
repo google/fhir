@@ -84,16 +84,20 @@ term {
   }
 }
 friendly {
-  content_attachment {
-    title {
-      value: "The terms of the consent in friendly consumer speak."
+  content {
+    attachment {
+      title {
+        value: "The terms of the consent in friendly consumer speak."
+      }
     }
   }
 }
 legal {
-  content_attachment {
-    title {
-      value: "The terms of the consent in lawyer speak."
+  content {
+    attachment {
+      title {
+        value: "The terms of the consent in lawyer speak."
+      }
     }
   }
 }

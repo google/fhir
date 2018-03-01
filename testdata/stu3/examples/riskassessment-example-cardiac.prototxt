@@ -33,10 +33,12 @@ context {
     value: "example"
   }
 }
-occurrence_date_time {
-  value_us: 1405785840000000
-  timezone: "UTC"
-  precision: SECOND
+occurrence {
+  date_time {
+    value_us: 1405785840000000
+    timezone: "UTC"
+    precision: SECOND
+  }
 }
 performer {
   display {
@@ -64,36 +66,40 @@ prediction {
       value: "Heart Attack"
     }
   }
-  probability_decimal {
-    value: "0.02"
-  }
-  when_range {
-    low {
-      value {
-        value: "39"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
-      }
+  probability {
+    decimal {
+      value: "0.02"
     }
-    high {
-      value {
-        value: "49"
+  }
+  when {
+    range {
+      low {
+        value {
+          value: "39"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+      high {
+        value {
+          value: "49"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
   }

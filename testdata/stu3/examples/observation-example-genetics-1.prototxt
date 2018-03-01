@@ -13,9 +13,11 @@ extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName"
   }
-  value_codeable_concept {
-    text {
-      value: "NG_007726.3:g.146252T>G"
+  value {
+    codeable_concept {
+      text {
+        value: "NG_007726.3:g.146252T>G"
+      }
     }
   }
 }
@@ -23,16 +25,18 @@ extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://www.genenames.org"
-      }
-      code {
-        value: "3236"
-      }
-      display {
-        value: "EGFR"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.genenames.org"
+        }
+        code {
+          value: "3236"
+        }
+        display {
+          value: "EGFR"
+        }
       }
     }
   }
@@ -41,24 +45,28 @@ extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNARegionName"
   }
-  value_string {
-    value: "Exon 21"
+  value {
+    string_value {
+      value: "Exon 21"
+    }
   }
 }
 extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://loinc.org"
-      }
-      code {
-        value: "LA6684-0"
-      }
-      display {
-        value: "somatic"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "LA6684-0"
+        }
+        display {
+          value: "somatic"
+        }
       }
     }
   }
@@ -100,16 +108,18 @@ performer {
     value: "Molecular Diagnostics Laboratory"
   }
 }
-value_codeable_concept {
-  coding {
-    system {
-      value: "http://snomed.info/sct"
-    }
-    code {
-      value: "10828004"
-    }
-    display {
-      value: "Positive"
+value {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "10828004"
+      }
+      display {
+        value: "Positive"
+      }
     }
   }
 }

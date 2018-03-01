@@ -17,20 +17,22 @@ contained {
     intent {
       value: PROPOSAL
     }
-    medication_codeable_concept {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+    medication {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+          }
+          code {
+            value: "12574"
+          }
+          display {
+            value: "gemcitabine"
+          }
         }
-        code {
-          value: "12574"
-        }
-        display {
+        text {
           value: "gemcitabine"
         }
-      }
-      text {
-        value: "gemcitabine"
       }
     }
     subject {
@@ -57,12 +59,14 @@ contained {
           value: "IV"
         }
       }
-      dose_quantity {
-        value {
-          value: "1250"
-        }
-        unit {
-          value: "mg/m\302\262"
+      dose {
+        quantity {
+          value {
+            value: "1250"
+          }
+          unit {
+            value: "mg/m\302\262"
+          }
         }
       }
     }
@@ -76,20 +80,22 @@ contained {
     intent {
       value: PROPOSAL
     }
-    medication_codeable_concept {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+    medication {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+          }
+          code {
+            value: "40048"
+          }
+          display {
+            value: "Carboplatin"
+          }
         }
-        code {
-          value: "40048"
+        text {
+          value: "CARBOplatin"
         }
-        display {
-          value: "Carboplatin"
-        }
-      }
-      text {
-        value: "CARBOplatin"
       }
     }
     subject {
@@ -116,13 +122,17 @@ contained {
           value: "IV"
         }
       }
-      dose_quantity {
-        extension {
-          url {
-            value: "http://example.org/fhir/AUC-dose"
-          }
-          value_integer {
-            value: 5
+      dose {
+        quantity {
+          extension {
+            url {
+              value: "http://example.org/fhir/AUC-dose"
+            }
+            value {
+              integer {
+                value: 5
+              }
+            }
           }
         }
       }
@@ -190,16 +200,18 @@ action {
         text_equivalent {
           value: "21-day cycle for 6 cycles"
         }
-        timing_timing {
-          repeat {
-            count {
-              value: 6
-            }
-            duration {
-              value: "21"
-            }
-            duration_unit {
-              value: D
+        timing {
+          timing_value {
+            repeat {
+              count {
+                value: 6
+              }
+              duration {
+                value: "21"
+              }
+              duration_unit {
+                value: D
+              }
             }
           }
         }
@@ -215,16 +227,20 @@ action {
               url {
                 value: "day"
               }
-              value_integer {
-                value: 1
+              value {
+                integer {
+                  value: 1
+                }
               }
             }
             extension {
               url {
                 value: "day"
               }
-              value_integer {
-                value: 8
+              value {
+                integer {
+                  value: 8
+                }
               }
             }
           }
@@ -249,8 +265,10 @@ action {
               url {
                 value: "day"
               }
-              value_integer {
-                value: 1
+              value {
+                integer {
+                  value: 1
+                }
               }
             }
           }

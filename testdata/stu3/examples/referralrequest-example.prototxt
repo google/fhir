@@ -88,10 +88,12 @@ context {
     value: "Beverly Waver\'s encounter on 2014-02-14"
   }
 }
-occurrence_period {
-  end {
-    value_us: 1394755200000000
-    precision: DAY
+occurrence {
+  period {
+    end {
+      value_us: 1394755200000000
+      precision: DAY
+    }
   }
 }
 authored_on {

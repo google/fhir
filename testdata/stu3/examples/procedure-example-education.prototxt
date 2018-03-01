@@ -57,9 +57,11 @@ subject {
     value: "Jane Doe"
   }
 }
-performed_date_time {
-  value_us: 1408147200000000
-  precision: DAY
+performed {
+  date_time {
+    value_us: 1408147200000000
+    precision: DAY
+  }
 }
 performer {
   actor {

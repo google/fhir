@@ -89,7 +89,9 @@ subject {
     value: "example"
   }
 }
-onset_date_time {
-  value_us: 1337817600000000
-  precision: DAY
+onset {
+  date_time {
+    value_us: 1337817600000000
+    precision: DAY
+  }
 }

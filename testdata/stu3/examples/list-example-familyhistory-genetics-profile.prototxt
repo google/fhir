@@ -22,16 +22,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "FTH"
-            }
-            display {
-              value: "father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "FTH"
+              }
+              display {
+                value: "father"
+              }
             }
           }
         }
@@ -40,12 +42,14 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "2"
-          }
-          display {
-            value: "maternal grandfather"
+        value {
+          reference {
+            fragment {
+              value: "2"
+            }
+            display {
+              value: "maternal grandfather"
+            }
           }
         }
       }
@@ -123,16 +127,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "MTH"
-            }
-            display {
-              value: "mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "MTH"
+              }
+              display {
+                value: "mother"
+              }
             }
           }
         }
@@ -141,12 +147,14 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "2"
-          }
-          display {
-            value: "maternal grandfather"
+        value {
+          reference {
+            fragment {
+              value: "2"
+            }
+            display {
+              value: "maternal grandfather"
+            }
           }
         }
       }
@@ -317,16 +325,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "MTH"
-            }
-            display {
-              value: "mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "MTH"
+              }
+              display {
+                value: "mother"
+              }
             }
           }
         }
@@ -335,12 +345,14 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "2"
-          }
-          display {
-            value: "maternal grandfather"
+        value {
+          reference {
+            fragment {
+              value: "2"
+            }
+            display {
+              value: "maternal grandfather"
+            }
           }
         }
       }

@@ -46,10 +46,12 @@ contained {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime"
         }
-        value_date_time {
-          value_us: 1463567325000000
-          timezone: "UTC"
-          precision: SECOND
+        value {
+          date_time {
+            value_us: 1463567325000000
+            timezone: "UTC"
+            precision: SECOND
+          }
         }
       }
     }
@@ -106,25 +108,29 @@ subject {
     value: "newborn"
   }
 }
-effective_date_time {
-  value_us: 1463610802000000
-  timezone: "UTC"
-  precision: SECOND
+effective {
+  date_time {
+    value_us: 1463610802000000
+    timezone: "UTC"
+    precision: SECOND
+  }
 }
 performer {
   practitioner_id {
     value: "example"
   }
 }
-value_quantity {
-  value {
-    value: "10"
-  }
-  system {
-    value: "http://unitsofmeasure.org"
-  }
-  code {
-    value: "{score}"
+value {
+  quantity {
+    value {
+      value: "10"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "{score}"
+    }
   }
 }
 component {
@@ -155,36 +161,40 @@ component {
       value: "Apgar color score"
     }
   }
-  value_codeable_concept {
-    coding {
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+          }
+          value {
+            decimal {
+              value: "2"
+            }
+          }
         }
-        value_decimal {
+        system {
+          value: "http://loinc.org/la"
+        }
+        code {
+          value: "LA6724-4"
+        }
+        display {
+          value: "Good color all over"
+        }
+      }
+      coding {
+        system {
+          value: "http:/acme.ped/apgarcolor"
+        }
+        code {
           value: "2"
         }
       }
-      system {
-        value: "http://loinc.org/la"
+      text {
+        value: "2. Good color all over"
       }
-      code {
-        value: "LA6724-4"
-      }
-      display {
-        value: "Good color all over"
-      }
-    }
-    coding {
-      system {
-        value: "http:/acme.ped/apgarcolor"
-      }
-      code {
-        value: "2"
-      }
-    }
-    text {
-      value: "2. Good color all over"
     }
   }
 }
@@ -216,36 +226,40 @@ component {
       value: "Apgar respiratory effort score"
     }
   }
-  value_codeable_concept {
-    coding {
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+          }
+          value {
+            decimal {
+              value: "2"
+            }
+          }
         }
-        value_decimal {
+        system {
+          value: "http://loinc.org/la"
+        }
+        code {
+          value: "LA6718-6"
+        }
+        display {
+          value: "At least 100 beats per minute"
+        }
+      }
+      coding {
+        system {
+          value: "http:/acme.ped/apgarheartrate"
+        }
+        code {
           value: "2"
         }
       }
-      system {
-        value: "http://loinc.org/la"
+      text {
+        value: "2. At least 100 beats per minute"
       }
-      code {
-        value: "LA6718-6"
-      }
-      display {
-        value: "At least 100 beats per minute"
-      }
-    }
-    coding {
-      system {
-        value: "http:/acme.ped/apgarheartrate"
-      }
-      code {
-        value: "2"
-      }
-    }
-    text {
-      value: "2. At least 100 beats per minute"
     }
   }
 }
@@ -277,36 +291,40 @@ component {
       value: "Apgar response to stimulus score"
     }
   }
-  value_codeable_concept {
-    coding {
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+          }
+          value {
+            decimal {
+              value: "2"
+            }
+          }
         }
-        value_decimal {
+        system {
+          value: "http://loinc.org/la"
+        }
+        code {
+          value: "LA6721-0"
+        }
+        display {
+          value: "Grimace and pulling away, cough, or sneeze during suctioning"
+        }
+      }
+      coding {
+        system {
+          value: "http:/acme.ped/apgarreflexirritability"
+        }
+        code {
           value: "2"
         }
       }
-      system {
-        value: "http://loinc.org/la"
+      text {
+        value: "2. Grimace and pulling away, cough, or sneeze during suctioning"
       }
-      code {
-        value: "LA6721-0"
-      }
-      display {
-        value: "Grimace and pulling away, cough, or sneeze during suctioning"
-      }
-    }
-    coding {
-      system {
-        value: "http:/acme.ped/apgarreflexirritability"
-      }
-      code {
-        value: "2"
-      }
-    }
-    text {
-      value: "2. Grimace and pulling away, cough, or sneeze during suctioning"
     }
   }
 }
@@ -338,36 +356,40 @@ component {
       value: "Apgar muscle tone score"
     }
   }
-  value_codeable_concept {
-    coding {
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+          }
+          value {
+            decimal {
+              value: "2"
+            }
+          }
         }
-        value_decimal {
+        system {
+          value: "http://loinc.org/la"
+        }
+        code {
+          value: "LA6715-2"
+        }
+        display {
+          value: "Active motion "
+        }
+      }
+      coding {
+        system {
+          value: "http:/acme.ped/apgarmuscletone"
+        }
+        code {
           value: "2"
         }
       }
-      system {
-        value: "http://loinc.org/la"
+      text {
+        value: "2. Active motion"
       }
-      code {
-        value: "LA6715-2"
-      }
-      display {
-        value: "Active motion "
-      }
-    }
-    coding {
-      system {
-        value: "http:/acme.ped/apgarmuscletone"
-      }
-      code {
-        value: "2"
-      }
-    }
-    text {
-      value: "2. Active motion"
     }
   }
 }
@@ -399,36 +421,40 @@ component {
       value: "Apgar respiratory effort score"
     }
   }
-  value_codeable_concept {
-    coding {
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+          }
+          value {
+            decimal {
+              value: "2"
+            }
+          }
         }
-        value_decimal {
+        system {
+          value: "http://loinc.org/la"
+        }
+        code {
+          value: "LA6727-7"
+        }
+        display {
+          value: "Good, strong cry; normal rate and effort of breathing    "
+        }
+      }
+      coding {
+        system {
+          value: "http:/acme.ped/apgarrespiratoryeffort"
+        }
+        code {
           value: "2"
         }
       }
-      system {
-        value: "http://loinc.org/la"
+      text {
+        value: "2. Good, strong cry; normal rate and effort of breathing"
       }
-      code {
-        value: "LA6727-7"
-      }
-      display {
-        value: "Good, strong cry; normal rate and effort of breathing    "
-      }
-    }
-    coding {
-      system {
-        value: "http:/acme.ped/apgarrespiratoryeffort"
-      }
-      code {
-        value: "2"
-      }
-    }
-    text {
-      value: "2. Good, strong cry; normal rate and effort of breathing"
     }
   }
 }

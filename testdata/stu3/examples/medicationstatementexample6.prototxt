@@ -12,22 +12,26 @@ text {
 status {
   value: ACTIVE
 }
-medication_codeable_concept {
-  coding {
-    system {
-      value: "http://snomed.info/sct"
-    }
-    code {
-      value: "27658006"
-    }
-    display {
-      value: "Amoxicillin (product)"
+medication {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "27658006"
+      }
+      display {
+        value: "Amoxicillin (product)"
+      }
     }
   }
 }
-effective_date_time {
-  value_us: 1391212800000000
-  precision: DAY
+effective {
+  date_time {
+    value_us: 1391212800000000
+    precision: DAY
+  }
 }
 date_asserted {
   value_us: 1393027200000000
@@ -64,7 +68,9 @@ dosage {
   text {
     value: "5ml three times daily"
   }
-  as_needed_boolean {
+  as_needed {
+    boolean {
+    }
   }
   route {
     coding {
@@ -79,18 +85,20 @@ dosage {
       }
     }
   }
-  dose_quantity {
-    value {
-      value: "5"
-    }
-    unit {
-      value: "mL"
-    }
-    system {
-      value: "http://unitsofmeasure.org"
-    }
-    code {
-      value: "mL"
+  dose {
+    quantity {
+      value {
+        value: "5"
+      }
+      unit {
+        value: "mL"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mL"
+      }
     }
   }
   max_dose_per_period {

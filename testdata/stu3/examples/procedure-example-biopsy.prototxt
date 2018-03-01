@@ -49,9 +49,11 @@ subject {
     value: "example"
   }
 }
-performed_date_time {
-  value_us: 1391385600000000
-  precision: DAY
+performed {
+  date_time {
+    value_us: 1391385600000000
+    precision: DAY
+  }
 }
 performer {
   actor {

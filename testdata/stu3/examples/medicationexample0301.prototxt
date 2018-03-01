@@ -59,16 +59,18 @@ form {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-      }
-      code {
-        value: "66955"
-      }
-      display {
-        value: "Vancomycin Hydrochloride"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "66955"
+        }
+        display {
+          value: "Vancomycin Hydrochloride"
+        }
       }
     }
   }
@@ -115,16 +117,18 @@ package_value {
     }
   }
   content {
-    item_codeable_concept {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "324337001"
-        }
-        display {
-          value: "Vancomycin 500mg powder for infusion solution vial (product)"
+    item {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "324337001"
+          }
+          display {
+            value: "Vancomycin 500mg powder for infusion solution vial (product)"
+          }
         }
       }
     }

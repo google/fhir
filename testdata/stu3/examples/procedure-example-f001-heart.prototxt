@@ -38,14 +38,16 @@ context {
     value: "f001"
   }
 }
-performed_period {
-  start {
-    value_us: 1309046400000000
-    precision: DAY
-  }
-  end {
-    value_us: 1309132800000000
-    precision: DAY
+performed {
+  period {
+    start {
+      value_us: 1309046400000000
+      precision: DAY
+    }
+    end {
+      value_us: 1309132800000000
+      precision: DAY
+    }
   }
 }
 performer {

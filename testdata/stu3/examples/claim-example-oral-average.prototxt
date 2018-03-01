@@ -102,9 +102,11 @@ information {
       }
     }
   }
-  timing_date {
-    value_us: 1333756800000000
-    precision: DAY
+  timing {
+    date {
+      value_us: 1333756800000000
+      precision: DAY
+    }
   }
   reason {
     coding {
@@ -141,18 +143,22 @@ information {
       }
     }
   }
-  value_string {
-    value: "Happy Valley Community College"
+  value {
+    string_value {
+      value: "Happy Valley Community College"
+    }
   }
 }
 diagnosis {
   sequence {
     value: 1
   }
-  diagnosis_codeable_concept {
-    coding {
-      code {
-        value: "123456"
+  diagnosis {
+    codeable_concept {
+      coding {
+        code {
+          value: "123456"
+        }
       }
     }
   }
@@ -187,9 +193,11 @@ item {
       }
     }
   }
-  serviced_date {
-    value_us: 1408147200000000
-    precision: DAY
+  serviced {
+    date {
+      value_us: 1408147200000000
+      precision: DAY
+    }
   }
   unit_price {
     value {
@@ -231,9 +239,11 @@ item {
       }
     }
   }
-  serviced_date {
-    value_us: 1408147200000000
-    precision: DAY
+  serviced {
+    date {
+      value_us: 1408147200000000
+      precision: DAY
+    }
   }
   unit_price {
     value {
@@ -295,9 +305,11 @@ item {
       }
     }
   }
-  serviced_date {
-    value_us: 1408147200000000
-    precision: DAY
+  serviced {
+    date {
+      value_us: 1408147200000000
+      precision: DAY
+    }
   }
   unit_price {
     value {

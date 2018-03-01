@@ -36,10 +36,12 @@ subject {
     value: "pat2"
   }
 }
-occurrence_date_time {
-  value_us: 1440642807000000
-  timezone: "+07:00"
-  precision: SECOND
+occurrence {
+  date_time {
+    value_us: 1440642807000000
+    timezone: "+07:00"
+    precision: SECOND
+  }
 }
 requester {
   agent {

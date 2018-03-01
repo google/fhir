@@ -46,10 +46,12 @@ collection {
       value: "f202"
     }
   }
-  collected_date_time {
-    value_us: 1439707217000000
-    timezone: "UTC"
-    precision: SECOND
+  collected {
+    date_time {
+      value_us: 1439707217000000
+      timezone: "UTC"
+      precision: SECOND
+    }
   }
 }
 container {

@@ -18,24 +18,28 @@ contained {
       name {
         value: "score"
       }
-      value_decimal {
-        value: "7"
+      value {
+        decimal {
+          value: "7"
+        }
       }
     }
     parameter {
       name {
         value: "item-assessed"
       }
-      value_codeable_concept {
-        coding {
-          system {
-            value: "http://www.ama-assn.org/go/cpt"
-          }
-          code {
-            value: "70450"
-          }
-          display {
-            value: "CT, head, wo iv contrast"
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://www.ama-assn.org/go/cpt"
+            }
+            code {
+              value: "70450"
+            }
+            display {
+              value: "CT, head, wo iv contrast"
+            }
           }
         }
       }
@@ -44,9 +48,11 @@ contained {
       name {
         value: "device"
       }
-      value_reference {
-        device_id {
-          value: "software"
+      value {
+        reference {
+          device_id {
+            value: "software"
+          }
         }
       }
     }
@@ -54,8 +60,10 @@ contained {
       name {
         value: "guideline-followed"
       }
-      value_uri {
-        value: "http://someguidelineprovider.org/radiology-appropriateness-guidelines.html"
+      value {
+        uri {
+          value: "http://someguidelineprovider.org/radiology-appropriateness-guidelines.html"
+        }
       }
     }
   }
@@ -99,9 +107,11 @@ performer {
     value: "software"
   }
 }
-reason_codeable_concept {
-  text {
-    value: "Guideline Appropriate Ordering Assessment"
+reason {
+  codeable_concept {
+    text {
+      value: "Guideline Appropriate Ordering Assessment"
+    }
   }
 }
 output_parameters {

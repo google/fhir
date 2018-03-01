@@ -13,16 +13,18 @@ extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://www.genenames.org"
-      }
-      code {
-        value: "2625"
-      }
-      display {
-        value: "CYP2D6"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.genenames.org"
+        }
+        code {
+          value: "2625"
+        }
+        display {
+          value: "CYP2D6"
+        }
       }
     }
   }
@@ -31,9 +33,11 @@ extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsSequence"
   }
-  value_reference {
-    sequence_id {
-      value: "example-sequence1"
+  value {
+    reference {
+      sequence_id {
+        value: "example-sequence1"
+      }
     }
   }
 }
@@ -41,9 +45,11 @@ extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsSequence"
   }
-  value_reference {
-    sequence_id {
-      value: "example-sequence2"
+  value {
+    reference {
+      sequence_id {
+        value: "example-sequence2"
+      }
     }
   }
 }
@@ -76,16 +82,18 @@ issued {
   timezone: "+01:00"
   precision: SECOND
 }
-value_codeable_concept {
-  coding {
-    system {
-      value: "http://pharmakb.org"
-    }
-    code {
-      value: "PA165971587"
-    }
-    display {
-      value: "*35B"
+value {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://pharmakb.org"
+      }
+      code {
+        value: "PA165971587"
+      }
+      display {
+        value: "*35B"
+      }
     }
   }
 }

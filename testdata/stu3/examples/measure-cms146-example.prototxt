@@ -86,9 +86,11 @@ use_context {
       value: "program"
     }
   }
-  value_codeable_concept {
-    text {
-      value: "eligibile-provider"
+  value {
+    codeable_concept {
+      text {
+        value: "eligibile-provider"
+      }
     }
   }
 }

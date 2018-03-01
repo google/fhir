@@ -59,9 +59,11 @@ subject {
     value: "example"
   }
 }
-effective_date_time {
-  value_us: 1347840000000000
-  precision: DAY
+effective {
+  date_time {
+    value_us: 1347840000000000
+    precision: DAY
+  }
 }
 performer {
   practitioner_id {

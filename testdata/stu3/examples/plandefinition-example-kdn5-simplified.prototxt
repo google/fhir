@@ -17,20 +17,22 @@ contained {
     status {
       value: DRAFT
     }
-    product_codeable_concept {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+    product {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+          }
+          code {
+            value: "12574"
+          }
+          display {
+            value: "gemcitabine"
+          }
         }
-        code {
-          value: "12574"
-        }
-        display {
+        text {
           value: "gemcitabine"
         }
-      }
-      text {
-        value: "gemcitabine"
       }
     }
     dosage {
@@ -52,12 +54,14 @@ contained {
           value: "IV"
         }
       }
-      dose_quantity {
-        value {
-          value: "1250"
-        }
-        unit {
-          value: "mg/m\302\262"
+      dose {
+        quantity {
+          value {
+            value: "1250"
+          }
+          unit {
+            value: "mg/m\302\262"
+          }
         }
       }
     }
@@ -71,20 +75,22 @@ contained {
     status {
       value: DRAFT
     }
-    product_codeable_concept {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+    product {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+          }
+          code {
+            value: "40048"
+          }
+          display {
+            value: "Carboplatin"
+          }
         }
-        code {
-          value: "40048"
+        text {
+          value: "CARBOplatin"
         }
-        display {
-          value: "Carboplatin"
-        }
-      }
-      text {
-        value: "CARBOplatin"
       }
     }
     dosage {
@@ -106,13 +112,17 @@ contained {
           value: "IV"
         }
       }
-      dose_quantity {
-        extension {
-          url {
-            value: "http://example.org/fhir/AUC-dose"
-          }
-          value_integer {
-            value: 5
+      dose {
+        quantity {
+          extension {
+            url {
+              value: "http://example.org/fhir/AUC-dose"
+            }
+            value {
+              integer {
+                value: 5
+              }
+            }
           }
         }
       }
@@ -160,8 +170,10 @@ use_context {
     url {
       value: "http://hl7.org/fhir/StructureDefinition/usagecontext-group"
     }
-    value_string {
-      value: "A"
+    value {
+      string_value {
+        value: "A"
+      }
     }
   }
   code {
@@ -172,9 +184,11 @@ use_context {
       value: "treamentSetting-or-diseaseStatus"
     }
   }
-  value_codeable_concept {
-    text {
-      value: "Metastatic"
+  value {
+    codeable_concept {
+      text {
+        value: "Metastatic"
+      }
     }
   }
 }
@@ -183,8 +197,10 @@ use_context {
     url {
       value: "http://hl7.org/fhir/StructureDefinition/usagecontext-group"
     }
-    value_string {
-      value: "A"
+    value {
+      string_value {
+        value: "A"
+      }
     }
   }
   code {
@@ -195,9 +211,11 @@ use_context {
       value: "disease-or-histology"
     }
   }
-  value_codeable_concept {
-    text {
-      value: "Collecting Duct/Medullary Subtypes"
+  value {
+    codeable_concept {
+      text {
+        value: "Collecting Duct/Medullary Subtypes"
+      }
     }
   }
 }
@@ -206,8 +224,10 @@ use_context {
     url {
       value: "http://hl7.org/fhir/StructureDefinition/usagecontext-group"
     }
-    value_string {
-      value: "A"
+    value {
+      string_value {
+        value: "A"
+      }
     }
   }
   code {
@@ -218,9 +238,11 @@ use_context {
       value: "focus"
     }
   }
-  value_codeable_concept {
-    text {
-      value: "Kidney Cancer"
+  value {
+    codeable_concept {
+      text {
+        value: "Kidney Cancer"
+      }
     }
   }
 }
@@ -229,8 +251,10 @@ use_context {
     url {
       value: "http://hl7.org/fhir/StructureDefinition/usagecontext-group"
     }
-    value_string {
-      value: "B"
+    value {
+      string_value {
+        value: "B"
+      }
     }
   }
   code {
@@ -241,9 +265,11 @@ use_context {
       value: "treatmentSetting-or-diseaseStatus"
     }
   }
-  value_codeable_concept {
-    text {
-      value: "Relapsed"
+  value {
+    codeable_concept {
+      text {
+        value: "Relapsed"
+      }
     }
   }
 }
@@ -252,8 +278,10 @@ use_context {
     url {
       value: "http://hl7.org/fhir/StructureDefinition/usagecontext-group"
     }
-    value_string {
-      value: "B"
+    value {
+      string_value {
+        value: "B"
+      }
     }
   }
   code {
@@ -264,9 +292,11 @@ use_context {
       value: "disease-or-histology"
     }
   }
-  value_codeable_concept {
-    text {
-      value: "Collecting Duct/Medullary Subtypes"
+  value {
+    codeable_concept {
+      text {
+        value: "Collecting Duct/Medullary Subtypes"
+      }
     }
   }
 }
@@ -275,8 +305,10 @@ use_context {
     url {
       value: "http://hl7.org/fhir/StructureDefinition/usagecontext-group"
     }
-    value_string {
-      value: "B"
+    value {
+      string_value {
+        value: "B"
+      }
     }
   }
   code {
@@ -287,9 +319,11 @@ use_context {
       value: "focus"
     }
   }
-  value_codeable_concept {
-    text {
-      value: "Kidney Cancer \342\200\223 Collecting Duct/Medullary Subtypes - Metastatic"
+  value {
+    codeable_concept {
+      text {
+        value: "Kidney Cancer \342\200\223 Collecting Duct/Medullary Subtypes - Metastatic"
+      }
     }
   }
 }
@@ -322,8 +356,10 @@ related_artifact {
       url {
         value: "http://example.org/fhir/regimenReferenceType"
       }
-      value_code {
-        value: "a"
+      value {
+        code {
+          value: "a"
+        }
       }
     }
   }
@@ -356,16 +392,18 @@ action {
         text_equivalent {
           value: "21-day cycle for 6 cycles"
         }
-        timing_timing {
-          repeat {
-            count {
-              value: 6
-            }
-            duration {
-              value: "21"
-            }
-            duration_unit {
-              value: D
+        timing {
+          timing_value {
+            repeat {
+              count {
+                value: 6
+              }
+              duration {
+                value: "21"
+              }
+              duration_unit {
+                value: D
+              }
             }
           }
         }
@@ -381,16 +419,20 @@ action {
               url {
                 value: "day"
               }
-              value_integer {
-                value: 1
+              value {
+                integer {
+                  value: 1
+                }
               }
             }
             extension {
               url {
                 value: "day"
               }
-              value_integer {
-                value: 8
+              value {
+                integer {
+                  value: 8
+                }
               }
             }
           }
@@ -415,8 +457,10 @@ action {
               url {
                 value: "day"
               }
-              value_integer {
-                value: 1
+              value {
+                integer {
+                  value: 1
+                }
               }
             }
           }

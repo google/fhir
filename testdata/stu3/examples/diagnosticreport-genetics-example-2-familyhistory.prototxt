@@ -18,9 +18,11 @@ contained {
       url {
         value: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation"
       }
-      value_reference {
-        observation_id {
-          value: "dgf1"
+      value {
+        reference {
+          observation_id {
+            value: "dgf1"
+          }
         }
       }
     }
@@ -51,9 +53,11 @@ extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory"
   }
-  value_reference {
-    fragment {
-      value: "f1-genetics"
+  value {
+    reference {
+      fragment {
+        value: "f1-genetics"
+      }
     }
   }
 }
@@ -102,10 +106,12 @@ subject {
     value: "Peter James Chalmers(MRN: 12345)"
   }
 }
-effective_date_time {
-  value_us: 1432650610000000
-  timezone: "+01:00"
-  precision: SECOND
+effective {
+  date_time {
+    value_us: 1432650610000000
+    timezone: "+01:00"
+    precision: SECOND
+  }
 }
 issued {
   value_us: 1400232480000000

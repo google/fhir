@@ -59,16 +59,18 @@ use_context {
       value: "Clinical Venue"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://hl7.org/fhir/v3/ActCode"
-      }
-      code {
-        value: "IMP"
-      }
-      display {
-        value: "inpatient encounter"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/v3/ActCode"
+        }
+        code {
+          value: "IMP"
+        }
+        display {
+          value: "inpatient encounter"
+        }
       }
     }
   }

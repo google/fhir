@@ -51,8 +51,10 @@ birth_date {
   value_us: 397094400000000
   precision: DAY
 }
-deceased_boolean {
-  value: true
+deceased {
+  boolean {
+    value: true
+  }
 }
 managing_organization {
   organization_id {

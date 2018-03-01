@@ -82,10 +82,12 @@ collection {
       value: "example"
     }
   }
-  collected_date_time {
-    value_us: 1306736100000000
-    timezone: "UTC"
-    precision: SECOND
+  collected {
+    date_time {
+      value_us: 1306736100000000
+      timezone: "UTC"
+      precision: SECOND
+    }
   }
   quantity {
     value {
@@ -152,9 +154,11 @@ container {
       value: "mL"
     }
   }
-  additive_reference {
-    fragment {
-      value: "hep"
+  additive {
+    reference {
+      fragment {
+        value: "hep"
+      }
     }
   }
 }

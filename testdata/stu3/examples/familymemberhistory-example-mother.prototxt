@@ -50,18 +50,20 @@ condition {
       value: "Stroke"
     }
   }
-  onset_age {
-    value {
-      value: "56"
-    }
-    unit {
-      value: "yr"
-    }
-    system {
-      value: "http://unitsofmeasure.org"
-    }
-    code {
-      value: "a"
+  onset {
+    age {
+      value {
+        value: "56"
+      }
+      unit {
+        value: "yr"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "a"
+      }
     }
   }
 }

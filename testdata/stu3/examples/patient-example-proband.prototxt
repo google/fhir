@@ -40,5 +40,7 @@ birth_date {
   value_us: -118195200000000
   precision: DAY
 }
-deceased_boolean {
+deceased {
+  boolean {
+  }
 }

@@ -39,13 +39,15 @@ prescriber {
     value: "example"
   }
 }
-reason_codeable_concept {
-  coding {
-    system {
-      value: "http://samplevisionreasoncodes.com"
-    }
-    code {
-      value: "myopia"
+reason {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://samplevisionreasoncodes.com"
+      }
+      code {
+        value: "myopia"
+      }
     }
   }
 }

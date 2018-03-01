@@ -139,10 +139,12 @@ oral_diet {
   }
   schedule {
     repeat {
-      bounds_period {
-        start {
-          value_us: 1423526400000000
-          precision: DAY
+      bounds {
+        period {
+          start {
+            value_us: 1423526400000000
+            precision: DAY
+          }
         }
       }
       frequency {

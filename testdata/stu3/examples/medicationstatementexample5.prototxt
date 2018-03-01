@@ -22,22 +22,26 @@ context {
 status {
   value: ENTERED_IN_ERROR
 }
-medication_codeable_concept {
-  coding {
-    system {
-      value: "http://snomed.info/sct"
-    }
-    code {
-      value: "27658006"
-    }
-    display {
-      value: "Amoxicillin (product)"
+medication {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "27658006"
+      }
+      display {
+        value: "Amoxicillin (product)"
+      }
     }
   }
 }
-effective_date_time {
-  value_us: 1390435200000000
-  precision: DAY
+effective {
+  date_time {
+    value_us: 1390435200000000
+    precision: DAY
+  }
 }
 date_asserted {
   value_us: 1424563200000000

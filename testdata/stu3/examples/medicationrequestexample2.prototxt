@@ -26,12 +26,14 @@ status {
 intent {
   value: ORDER
 }
-medication_reference {
-  medication_id {
-    value: "med0316"
-  }
-  display {
-    value: "prescribed medication"
+medication {
+  reference {
+    medication_id {
+      value: "med0316"
+    }
+    display {
+      value: "prescribed medication"
+    }
   }
 }
 subject {

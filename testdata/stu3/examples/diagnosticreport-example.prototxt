@@ -59,18 +59,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "176"
-      }
-      unit {
-        value: "g/L"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "g/L"
+    value {
+      quantity {
+        value {
+          value: "176"
+        }
+        unit {
+          value: "g/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "g/L"
+        }
       }
     }
     reference_range {
@@ -142,18 +144,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "5.9"
-      }
-      unit {
-        value: "x10*12/L"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "10*12/L"
+    value {
+      quantity {
+        value {
+          value: "5.9"
+        }
+        unit {
+          value: "x10*12/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "10*12/L"
+        }
       }
     }
     reference_range {
@@ -225,12 +229,14 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "55"
-      }
-      unit {
-        value: "%"
+    value {
+      quantity {
+        value {
+          value: "55"
+        }
+        unit {
+          value: "%"
+        }
       }
     }
     interpretation {
@@ -300,18 +306,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "99"
-      }
-      unit {
-        value: "fL"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "fL"
+    value {
+      quantity {
+        value {
+          value: "99"
+        }
+        unit {
+          value: "fL"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "fL"
+        }
       }
     }
     interpretation {
@@ -393,18 +401,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "36"
-      }
-      unit {
-        value: "pg"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "pg"
+    value {
+      quantity {
+        value {
+          value: "36"
+        }
+        unit {
+          value: "pg"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "pg"
+        }
       }
     }
     interpretation {
@@ -486,18 +496,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "444"
-      }
-      unit {
-        value: "x10*9/L"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "10*9/L"
+    value {
+      quantity {
+        value {
+          value: "444"
+        }
+        unit {
+          value: "x10*9/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "10*9/L"
+        }
       }
     }
     reference_range {
@@ -569,18 +581,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "4.6"
-      }
-      unit {
-        value: "x10*9/L"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "10*9/L"
+    value {
+      quantity {
+        value {
+          value: "4.6"
+        }
+        unit {
+          value: "x10*9/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "10*9/L"
+        }
       }
     }
     reference_range {
@@ -652,18 +666,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "20"
-      }
-      unit {
-        value: "%"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "%"
+    value {
+      quantity {
+        value {
+          value: "20"
+        }
+        unit {
+          value: "%"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "%"
+        }
       }
     }
   }
@@ -705,18 +721,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "0.9"
-      }
-      unit {
-        value: "x10*9/L"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "10*9/L"
+    value {
+      quantity {
+        value {
+          value: "0.9"
+        }
+        unit {
+          value: "x10*9/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "10*9/L"
+        }
       }
     }
     interpretation {
@@ -798,18 +816,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "20"
-      }
-      unit {
-        value: "%"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "%"
+    value {
+      quantity {
+        value {
+          value: "20"
+        }
+        unit {
+          value: "%"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "%"
+        }
       }
     }
   }
@@ -851,18 +871,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "0.9"
-      }
-      unit {
-        value: "x10*9/L"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "10*9/L"
+    value {
+      quantity {
+        value {
+          value: "0.9"
+        }
+        unit {
+          value: "x10*9/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "10*9/L"
+        }
       }
     }
     interpretation {
@@ -944,18 +966,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "20"
-      }
-      unit {
-        value: "%"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "%"
+    value {
+      quantity {
+        value {
+          value: "20"
+        }
+        unit {
+          value: "%"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "%"
+        }
       }
     }
   }
@@ -997,18 +1021,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "0.9"
-      }
-      unit {
-        value: "x10*9/L"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "10*9/L"
+    value {
+      quantity {
+        value {
+          value: "0.9"
+        }
+        unit {
+          value: "x10*9/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "10*9/L"
+        }
       }
     }
     reference_range {
@@ -1080,18 +1106,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "20"
-      }
-      unit {
-        value: "%"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "%"
+    value {
+      quantity {
+        value {
+          value: "20"
+        }
+        unit {
+          value: "%"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "%"
+        }
       }
     }
   }
@@ -1133,18 +1161,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "0.92"
-      }
-      unit {
-        value: "x10*9/L"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "10*9/L"
+    value {
+      quantity {
+        value {
+          value: "0.92"
+        }
+        unit {
+          value: "x10*9/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "10*9/L"
+        }
       }
     }
     interpretation {
@@ -1226,18 +1256,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "20"
-      }
-      unit {
-        value: "%"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "%"
+    value {
+      quantity {
+        value {
+          value: "20"
+        }
+        unit {
+          value: "%"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "%"
+        }
       }
     }
   }
@@ -1279,18 +1311,20 @@ contained {
         value: "Acme Laboratory, Inc"
       }
     }
-    value_quantity {
-      value {
-        value: "0.92"
-      }
-      unit {
-        value: "x10*9/L"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "10*9/L"
+    value {
+      quantity {
+        value {
+          value: "0.92"
+        }
+        unit {
+          value: "x10*9/L"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "10*9/L"
+        }
       }
     }
     reference_range {
@@ -1366,10 +1400,12 @@ context {
     value: "example"
   }
 }
-effective_date_time {
-  value_us: 1299187800000000
-  timezone: "+11:00"
-  precision: SECOND
+effective {
+  date_time {
+    value_us: 1299187800000000
+    timezone: "+11:00"
+    precision: SECOND
+  }
 }
 issued {
   value_us: 1299199533000000

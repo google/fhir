@@ -280,9 +280,11 @@ activity {
       url {
         value: "http://example.org/fhir/StructureDefinition/RevisionDate"
       }
-      value_date {
-        value_us: 1347235200000000
-        precision: DAY
+      value {
+        date {
+          value_us: 1347235200000000
+          precision: DAY
+        }
       }
     }
     category {
@@ -305,10 +307,12 @@ activity {
     }
     prohibited {
     }
-    scheduled_period {
-      start {
-        value_us: 1347235200000000
-        precision: DAY
+    scheduled {
+      period {
+        start {
+          value_us: 1347235200000000
+          precision: DAY
+        }
       }
     }
     description {
@@ -331,9 +335,11 @@ activity {
       url {
         value: "http://example.org/fhir/StructureDefinition/RevisionDate"
       }
-      value_date {
-        value_us: 1347235200000000
-        precision: DAY
+      value {
+        date {
+          value_us: 1347235200000000
+          precision: DAY
+        }
       }
     }
     category {
@@ -356,10 +362,12 @@ activity {
     }
     prohibited {
     }
-    scheduled_period {
-      start {
-        value_us: 1347235200000000
-        precision: DAY
+    scheduled {
+      period {
+        start {
+          value_us: 1347235200000000
+          precision: DAY
+        }
       }
     }
     description {
@@ -373,9 +381,11 @@ activity {
       url {
         value: "http://example.org/fhir/StructureDefinition/RevisionDate"
       }
-      value_date {
-        value_us: 1347235200000000
-        precision: DAY
+      value {
+        date {
+          value_us: 1347235200000000
+          precision: DAY
+        }
       }
     }
     category {
@@ -398,10 +408,12 @@ activity {
     }
     prohibited {
     }
-    scheduled_period {
-      start {
-        value_us: 1347235200000000
-        precision: DAY
+    scheduled {
+      period {
+        start {
+          value_us: 1347235200000000
+          precision: DAY
+        }
       }
     }
     description {
@@ -433,9 +445,11 @@ activity {
       url {
         value: "http://example.org/fhir/StructureDefinition/RevisionDate"
       }
-      value_date {
-        value_us: 1347235200000000
-        precision: DAY
+      value {
+        date {
+          value_us: 1347235200000000
+          precision: DAY
+        }
       }
     }
     category {
@@ -458,10 +472,12 @@ activity {
     }
     prohibited {
     }
-    scheduled_period {
-      start {
-        value_us: 1346025600000000
-        precision: DAY
+    scheduled {
+      period {
+        start {
+          value_us: 1346025600000000
+          precision: DAY
+        }
       }
     }
     description {
@@ -493,9 +509,11 @@ activity {
       url {
         value: "http://example.org/fhir/StructureDefinition/RevisionDate"
       }
-      value_date {
-        value_us: 1347235200000000
-        precision: DAY
+      value {
+        date {
+          value_us: 1347235200000000
+          precision: DAY
+        }
       }
     }
     category {
@@ -518,10 +536,12 @@ activity {
     }
     prohibited {
     }
-    scheduled_period {
-      start {
-        value_us: 1343001600000000
-        precision: DAY
+    scheduled {
+      period {
+        start {
+          value_us: 1343001600000000
+          precision: DAY
+        }
       }
     }
     description {
@@ -535,9 +555,11 @@ activity {
       url {
         value: "http://example.org/fhir/StructureDefinition/RevisionDate"
       }
-      value_date {
-        value_us: 1344816000000000
-        precision: DAY
+      value {
+        date {
+          value_us: 1344816000000000
+          precision: DAY
+        }
       }
     }
     category {
@@ -560,10 +582,12 @@ activity {
     }
     prohibited {
     }
-    scheduled_period {
-      start {
-        value_us: 1343001600000000
-        precision: DAY
+    scheduled {
+      period {
+        start {
+          value_us: 1343001600000000
+          precision: DAY
+        }
       }
     }
     description {
@@ -595,9 +619,11 @@ activity {
       url {
         value: "http://example.org/fhir/StructureDefinition/RevisionDate"
       }
-      value_date {
-        value_us: 1346025600000000
-        precision: DAY
+      value {
+        date {
+          value_us: 1346025600000000
+          precision: DAY
+        }
       }
     }
     category {
@@ -620,10 +646,12 @@ activity {
     }
     prohibited {
     }
-    scheduled_period {
-      start {
-        value_us: 1343001600000000
-        precision: DAY
+    scheduled {
+      period {
+        start {
+          value_us: 1343001600000000
+          precision: DAY
+        }
       }
     }
     description {
@@ -646,9 +674,11 @@ activity {
       url {
         value: "http://example.org/fhir/StructureDefinition/RevisionDate"
       }
-      value_date {
-        value_us: 1347235200000000
-        precision: DAY
+      value {
+        date {
+          value_us: 1347235200000000
+          precision: DAY
+        }
       }
     }
     category {
@@ -671,10 +701,12 @@ activity {
     }
     prohibited {
     }
-    scheduled_period {
-      start {
-        value_us: 1341878400000000
-        precision: DAY
+    scheduled {
+      period {
+        start {
+          value_us: 1341878400000000
+          precision: DAY
+        }
       }
     }
     description {
@@ -706,9 +738,11 @@ activity {
       url {
         value: "http://example.org/fhir/StructureDefinition/RevisionDate"
       }
-      value_date {
-        value_us: 1345680000000000
-        precision: DAY
+      value {
+        date {
+          value_us: 1345680000000000
+          precision: DAY
+        }
       }
     }
     category {
@@ -731,10 +765,12 @@ activity {
     }
     prohibited {
     }
-    scheduled_period {
-      start {
-        value_us: 1343001600000000
-        precision: DAY
+    scheduled {
+      period {
+        start {
+          value_us: 1343001600000000
+          precision: DAY
+        }
       }
     }
     description {
@@ -748,9 +784,11 @@ activity {
       url {
         value: "http://example.org/fhir/StructureDefinition/RevisionDate"
       }
-      value_date {
-        value_us: 1343001600000000
-        precision: DAY
+      value {
+        date {
+          value_us: 1343001600000000
+          precision: DAY
+        }
       }
     }
     category {
@@ -773,10 +811,12 @@ activity {
     }
     prohibited {
     }
-    scheduled_period {
-      start {
-        value_us: 1341878400000000
-        precision: DAY
+    scheduled {
+      period {
+        start {
+          value_us: 1341878400000000
+          precision: DAY
+        }
       }
     }
     description {
@@ -799,9 +839,11 @@ activity {
       url {
         value: "http://example.org/fhir/StructureDefinition/RevisionDate"
       }
-      value_date {
-        value_us: 1342396800000000
-        precision: DAY
+      value {
+        date {
+          value_us: 1342396800000000
+          precision: DAY
+        }
       }
     }
     category {
@@ -824,10 +866,12 @@ activity {
     }
     prohibited {
     }
-    scheduled_period {
-      start {
-        value_us: 1341878400000000
-        precision: DAY
+    scheduled {
+      period {
+        start {
+          value_us: 1341878400000000
+          precision: DAY
+        }
       }
     }
     description {
@@ -859,9 +903,11 @@ activity {
       url {
         value: "http://example.org/fhir/StructureDefinition/RevisionDate"
       }
-      value_date {
-        value_us: 1344816000000000
-        precision: DAY
+      value {
+        date {
+          value_us: 1344816000000000
+          precision: DAY
+        }
       }
     }
     category {
@@ -884,10 +930,12 @@ activity {
     }
     prohibited {
     }
-    scheduled_period {
-      start {
-        value_us: 1343001600000000
-        precision: DAY
+    scheduled {
+      period {
+        start {
+          value_us: 1343001600000000
+          precision: DAY
+        }
       }
     }
     description {

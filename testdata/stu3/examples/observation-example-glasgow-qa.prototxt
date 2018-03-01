@@ -36,20 +36,24 @@ subject {
     value: "Peter James Chalmers"
   }
 }
-effective_date_time {
-  value_us: 1418273056000000
-  timezone: "UTC"
-  precision: SECOND
+effective {
+  date_time {
+    value_us: 1418273056000000
+    timezone: "UTC"
+    precision: SECOND
+  }
 }
-value_quantity {
-  value {
-    value: "13"
-  }
-  system {
-    value: "http://unitsofmeasure.org"
-  }
-  code {
-    value: "{score}"
+value {
+  quantity {
+    value {
+      value: "13"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "{score}"
+    }
   }
 }
 reference_range {

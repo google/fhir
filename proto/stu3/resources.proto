@@ -16,8 +16,9 @@ syntax = "proto3";
 
 package google.fhir.stu3.proto;
 
-import "google/fhir/src/stu3/proto/annotations.proto";
-import "google/fhir/src/stu3/proto/datatypes.proto";
+import "google/fhir/proto/stu3/annotations.proto";
+import "google/fhir/proto/stu3/codes.proto";
+import "google/fhir/proto/stu3/datatypes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.proto";
@@ -199,7 +200,7 @@ message Account {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -304,7 +305,7 @@ message ActivityDefinition {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -395,15 +396,18 @@ message ActivityDefinition {
   CodeableConcept code = 33;
 
   // When activity is to occur
-  oneof timing {
-    Timing timing_timing = 34;
-    DateTime timing_date_time = 35;
-    Period timing_period = 36;
-    Range timing_range = 37;
+  message TimingType {
+    oneof timing {
+      Timing timing_value = 1 [json_name = "timing"];
+      DateTime date_time = 2;
+      Period period = 3;
+      Range range = 4;
+    }
   }
+  TimingType timing = 34 [(is_choice_type) = true];
 
   // Where it should happen
-  Reference location = 38;
+  Reference location = 35;
 
   // Who should participate in the action
   message Participant {
@@ -423,25 +427,28 @@ message ActivityDefinition {
     // E.g. Nurse, Surgeon, Parent, etc
     CodeableConcept role = 5;
   }
-  repeated Participant participant = 39;
+  repeated Participant participant = 36;
 
   // What's administered/supplied
-  oneof product {
-    Reference product_reference = 40;
-    CodeableConcept product_codeable_concept = 41;
+  message Product {
+    oneof product {
+      Reference reference = 1;
+      CodeableConcept codeable_concept = 2;
+    }
   }
+  Product product = 37 [(is_choice_type) = true];
 
   // How much is administered/consumed/supplied
-  Quantity quantity = 42;
+  Quantity quantity = 38;
 
   // Detailed dosage instructions
-  repeated Dosage dosage = 43;
+  repeated Dosage dosage = 39;
 
   // What part of body to perform on
-  repeated CodeableConcept body_site = 44;
+  repeated CodeableConcept body_site = 40;
 
   // Transform to apply the template
-  Reference transform = 45;
+  Reference transform = 41;
 
   // Dynamic aspects of the definition
   message DynamicValue {
@@ -466,7 +473,7 @@ message ActivityDefinition {
     // An expression that provides the dynamic value for the customization
     String expression = 7;
   }
-  repeated DynamicValue dynamic_value = 46;
+  repeated DynamicValue dynamic_value = 42;
 }
 
 // Auto-generated from StructureDefinition for AdverseEvent, last updated
@@ -486,7 +493,7 @@ message AdverseEvent {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -530,7 +537,7 @@ message AdverseEvent {
   CodeableConcept seriousness = 16;
 
   // resolved | recovering | ongoing | resolvedWithSequelae | fatal | unknown
-  CodeableConcept outcome = 17 [(fhir_code_type) = CODE_ADVERSE_EVENT_OUTCOME];
+  CodeableConcept outcome = 17;
 
   // Who recorded the adverse event
   Reference recorder = 18;
@@ -602,7 +609,7 @@ message AllergyIntolerance {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -642,28 +649,31 @@ message AllergyIntolerance {
   Reference patient = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // When allergy or intolerance was identified
-  oneof onset {
-    DateTime onset_date_time = 17;
-    Age onset_age = 18;
-    Period onset_period = 19;
-    Range onset_range = 20;
-    String onset_string = 21;
+  message Onset {
+    oneof onset {
+      DateTime date_time = 1;
+      Age age = 2;
+      Period period = 3;
+      Range range = 4;
+      String string_value = 5 [json_name = "string"];
+    }
   }
+  Onset onset = 17 [(is_choice_type) = true];
 
   // Date record was believed accurate
-  DateTime asserted_date = 22;
+  DateTime asserted_date = 18;
 
   // Who recorded the sensitivity
-  Reference recorder = 23;
+  Reference recorder = 19;
 
   // Source of the information about the allergy
-  Reference asserter = 24;
+  Reference asserter = 20;
 
   // Date(/time) of last known occurrence of a reaction
-  DateTime last_occurrence = 25;
+  DateTime last_occurrence = 21;
 
   // Additional text not captured in other fields
-  repeated Annotation note = 26;
+  repeated Annotation note = 22;
 
   // Adverse Reaction Events linked to exposure to substance
   message Reaction {
@@ -699,7 +709,7 @@ message AllergyIntolerance {
     // Text about event not captured in other fields
     repeated Annotation note = 10;
   }
-  repeated Reaction reaction = 27;
+  repeated Reaction reaction = 23;
 }
 
 // Auto-generated from StructureDefinition for Appointment, last updated
@@ -720,7 +730,7 @@ message Appointment {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -842,7 +852,7 @@ message AppointmentResponse {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -899,7 +909,7 @@ message AuditEvent {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -1094,7 +1104,7 @@ message Basic {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -1140,13 +1150,10 @@ message Binary {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // MimeType of the binary content
-  Code content_type = 5 [
-    (fhir_code_type) = CODE_MIME_TYPE,
-    (validation_requirement) = REQUIRED_BY_FHIR
-  ];
+  MimeTypeCode content_type = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Access Control Management
   Reference security_context = 6;
@@ -1171,7 +1178,7 @@ message BodySite {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -1223,7 +1230,7 @@ message Bundle {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Persistent identifier for the bundle
   Identifier identifier = 5;
@@ -1375,7 +1382,7 @@ message CapabilityStatement {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -1488,13 +1495,11 @@ message CapabilityStatement {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // formats supported (xml | json | ttl | mime type)
-  repeated Code format = 29 [
-    (fhir_code_type) = CODE_MIME_TYPE,
-    (validation_requirement) = REQUIRED_BY_FHIR
-  ];
+  repeated MimeTypeCode format = 29
+      [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Patch formats supported
-  repeated Code patch_format = 30 [(fhir_code_type) = CODE_MIME_TYPE];
+  repeated MimeTypeCode patch_format = 30;
 
   // Implementation guides supported
   repeated Uri implementation_guide = 31;
@@ -1552,7 +1557,7 @@ message CapabilityStatement {
         repeated Extension modifier_extension = 3;
 
         // Mime type for certificates
-        Code type = 4 [(fhir_code_type) = CODE_MIME_TYPE];
+        MimeTypeCode type = 4;
 
         // Actual certificate
         Base64Binary blob = 5;
@@ -1841,7 +1846,7 @@ message CarePlan {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -1974,32 +1979,38 @@ message CarePlan {
       Boolean prohibited = 12;
 
       // When activity is to occur
-      oneof scheduled {
-        Timing scheduled_timing = 13;
-        Period scheduled_period = 14;
-        String scheduled_string = 15;
+      message Scheduled {
+        oneof scheduled {
+          Timing timing = 1;
+          Period period = 2;
+          String string_value = 3 [json_name = "string"];
+        }
       }
+      Scheduled scheduled = 13 [(is_choice_type) = true];
 
       // Where it should happen
-      Reference location = 16;
+      Reference location = 14;
 
       // Who will be responsible?
-      repeated Reference performer = 17;
+      repeated Reference performer = 15;
 
       // What is to be administered/supplied
-      oneof product {
-        CodeableConcept product_codeable_concept = 18;
-        Reference product_reference = 19;
+      message Product {
+        oneof product {
+          CodeableConcept codeable_concept = 1;
+          Reference reference = 2;
+        }
       }
+      Product product = 16 [(is_choice_type) = true];
 
       // How to consume/day?
-      Quantity daily_amount = 20;
+      Quantity daily_amount = 17;
 
       // How much to administer/supply/consume
-      Quantity quantity = 21;
+      Quantity quantity = 18;
 
       // Extra info describing activity to perform
-      String description = 22;
+      String description = 19;
     }
     Detail detail = 8;
   }
@@ -2026,7 +2037,7 @@ message CareTeam {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -2116,7 +2127,7 @@ message ChargeItem {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -2154,11 +2165,14 @@ message ChargeItem {
   Reference context = 15;
 
   // When the charged service was applied
-  oneof occurrence {
-    DateTime occurrence_date_time = 16;
-    Period occurrence_period = 17;
-    Timing occurrence_timing = 18;
+  message Occurrence {
+    oneof occurrence {
+      DateTime date_time = 1;
+      Period period = 2;
+      Timing timing = 3;
+    }
   }
+  Occurrence occurrence = 16 [(is_choice_type) = true];
 
   // Who performed charged service
   message Participant {
@@ -2177,49 +2191,49 @@ message ChargeItem {
     // Individual who was performing
     Reference actor = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Participant participant = 19;
+  repeated Participant participant = 17;
 
   // Organization providing the charged sevice
-  Reference performing_organization = 20;
+  Reference performing_organization = 18;
 
   // Organization requesting the charged service
-  Reference requesting_organization = 21;
+  Reference requesting_organization = 19;
 
   // Quantity of which the charge item has been serviced
-  Quantity quantity = 22;
+  Quantity quantity = 20;
 
   // Anatomical location, if relevant
-  repeated CodeableConcept bodysite = 23;
+  repeated CodeableConcept bodysite = 21;
 
   // Factor overriding the associated rules
-  Decimal factor_override = 24;
+  Decimal factor_override = 22;
 
   // Price overriding the associated rules
-  Money price_override = 25;
+  Money price_override = 23;
 
   // Reason for overriding the list price/factor
-  String override_reason = 26;
+  String override_reason = 24;
 
   // Individual who was entering
-  Reference enterer = 27;
+  Reference enterer = 25;
 
   // Date the charge item was entered
-  DateTime entered_date = 28;
+  DateTime entered_date = 26;
 
   // Why was the charged  service rendered?
-  repeated CodeableConcept reason = 29;
+  repeated CodeableConcept reason = 27;
 
   // Which rendered service is being charged?
-  repeated Reference service = 30;
+  repeated Reference service = 28;
 
   // Account to place this charge
-  repeated Reference account = 31;
+  repeated Reference account = 29;
 
   // Comments made about the ChargeItem
-  repeated Annotation note = 32;
+  repeated Annotation note = 30;
 
   // Further information supporting the this charge
-  repeated Reference supporting_information = 33;
+  repeated Reference supporting_information = 31;
 }
 
 // Auto-generated from StructureDefinition for Claim, last updated
@@ -2238,7 +2252,7 @@ message Claim {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -2259,7 +2273,7 @@ message Claim {
   FinancialResourceStatusCode status = 10;
 
   // Type or discipline
-  CodeableConcept type = 11 [(fhir_code_type) = CODE_CLAIM_TYPE];
+  CodeableConcept type = 11;
 
   // Finer grained claim type information
   repeated CodeableConcept sub_type = 12;
@@ -2400,21 +2414,27 @@ message Claim {
     CodeableConcept code = 6;
 
     // When it occurred
-    oneof timing {
-      Date timing_date = 7;
-      Period timing_period = 8;
+    message Timing {
+      oneof timing {
+        Date date = 1;
+        Period period = 2;
+      }
     }
+    Timing timing = 7 [(is_choice_type) = true];
 
     // Additional Data or supporting information
-    oneof value {
-      String value_string = 9;
-      Quantity value_quantity = 10;
-      Attachment value_attachment = 11;
-      Reference value_reference = 12;
+    message Value {
+      oneof value {
+        String string_value = 1 [json_name = "string"];
+        Quantity quantity = 2;
+        Attachment attachment = 3;
+        Reference reference = 4;
+      }
     }
+    Value value = 8 [(is_choice_type) = true];
 
     // Reason associated with the information
-    CodeableConcept reason = 13;
+    CodeableConcept reason = 9;
   }
   repeated SpecialCondition information = 30;
 
@@ -2433,17 +2453,21 @@ message Claim {
     PositiveInt sequence = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Patient's diagnosis
-    oneof diagnosis {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      CodeableConcept diagnosis_codeable_concept = 5;
-      Reference diagnosis_reference = 6;
+    message DiagnosisType {
+      oneof diagnosis {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2;
+      }
     }
+    DiagnosisType diagnosis = 5
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
     // Timing or nature of the diagnosis
-    repeated CodeableConcept type = 7;
+    repeated CodeableConcept type = 6;
 
     // Package billing code
-    CodeableConcept package_code = 8;
+    CodeableConcept package_code = 7;
   }
   repeated Diagnosis diagnosis = 31;
 
@@ -2465,11 +2489,15 @@ message Claim {
     DateTime date = 5;
 
     // Patient's list of procedures performed
-    oneof procedure {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      CodeableConcept procedure_codeable_concept = 6;
-      Reference procedure_reference = 7;
+    message ProcedureType {
+      oneof procedure {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2;
+      }
     }
+    ProcedureType procedure = 6
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Procedure procedure = 32;
 
@@ -2521,13 +2549,16 @@ message Claim {
     Date date = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // The nature of the accident
-    CodeableConcept type = 5 [(fhir_code_type) = CODE_V3_ACTINCIDENTCODE];
+    CodeableConcept type = 5;
 
     // Accident Place
-    oneof location {
-      Address location_address = 6;
-      Reference location_reference = 7;
+    message Location {
+      oneof location {
+        Address address = 1;
+        Reference reference = 2;
+      }
     }
+    Location location = 6 [(is_choice_type) = true];
   }
   Accident accident = 34;
 
@@ -2579,41 +2610,47 @@ message Claim {
     repeated CodeableConcept program_code = 13;
 
     // Date or dates of Service
-    oneof serviced {
-      Date serviced_date = 14;
-      Period serviced_period = 15;
+    message Serviced {
+      oneof serviced {
+        Date date = 1;
+        Period period = 2;
+      }
     }
+    Serviced serviced = 14 [(is_choice_type) = true];
 
     // Place of service
-    oneof location {
-      CodeableConcept location_codeable_concept = 16;
-      Address location_address = 17;
-      Reference location_reference = 18;
+    message Location {
+      oneof location {
+        CodeableConcept codeable_concept = 1;
+        Address address = 2;
+        Reference reference = 3;
+      }
     }
+    Location location = 15 [(is_choice_type) = true];
 
     // Count of Products or Services
-    Quantity quantity = 19;
+    Quantity quantity = 16;
 
     // Fee, charge or cost per point
-    Money unit_price = 20;
+    Money unit_price = 17;
 
     // Price scaling factor
-    Decimal factor = 21;
+    Decimal factor = 18;
 
     // Total item cost
-    Money net = 22;
+    Money net = 19;
 
     // Unique Device Identifier
-    repeated Reference udi = 23;
+    repeated Reference udi = 20;
 
     // Service Location
-    CodeableConcept body_site = 24;
+    CodeableConcept body_site = 21;
 
     // Service Sub-location
-    repeated CodeableConcept sub_site = 25;
+    repeated CodeableConcept sub_site = 22;
 
     // Encounters related to this billed item
-    repeated Reference encounter = 26;
+    repeated Reference encounter = 23;
 
     // Additional items
     message Detail {
@@ -2705,7 +2742,7 @@ message Claim {
       }
       repeated SubDetail sub_detail = 15;
     }
-    repeated Detail detail = 27;
+    repeated Detail detail = 24;
   }
   repeated Item item = 37;
 
@@ -2729,7 +2766,7 @@ message ClaimResponse {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -3025,7 +3062,7 @@ message ClaimResponse {
     PositiveInt number = 4;
 
     // display | print | printoper
-    CodeableConcept type = 5 [(fhir_code_type) = CODE_NOTE_TYPE];
+    CodeableConcept type = 5;
 
     // Note explanatory text
     String text = 6;
@@ -3087,7 +3124,7 @@ message ClinicalImpression {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -3121,22 +3158,25 @@ message ClinicalImpression {
   Reference context = 14;
 
   // Time of assessment
-  oneof effective {
-    DateTime effective_date_time = 15;
-    Period effective_period = 16;
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
   }
+  Effective effective = 15 [(is_choice_type) = true];
 
   // When the assessment was documented
-  DateTime date = 17;
+  DateTime date = 16;
 
   // The clinician performing the assessment
-  Reference assessor = 18;
+  Reference assessor = 17;
 
   // Reference to last assessment
-  Reference previous = 19;
+  Reference previous = 18;
 
   // Relevant impressions of patient state
-  repeated Reference problem = 20;
+  repeated Reference problem = 19;
 
   // One or more sets of investigations (signs, symptions, etc.)
   message Investigation {
@@ -3155,13 +3195,13 @@ message ClinicalImpression {
     // Record of a specific investigation
     repeated Reference item = 5;
   }
-  repeated Investigation investigation = 21;
+  repeated Investigation investigation = 20;
 
   // Clinical Protocol followed
-  repeated Uri protocol = 22;
+  repeated Uri protocol = 21;
 
   // Summary of the assessment
-  String summary = 23;
+  String summary = 22;
 
   // Possible or likely findings and diagnoses
   message Finding {
@@ -3175,28 +3215,32 @@ message ClinicalImpression {
     repeated Extension modifier_extension = 3;
 
     // What was found
-    oneof item {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      CodeableConcept item_codeable_concept = 4;
-      Reference item_reference = 5;
+    message Item {
+      oneof item {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2;
+      }
     }
+    Item item = 4
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
     // Which investigations support finding
-    String basis = 6;
+    String basis = 5;
   }
-  repeated Finding finding = 24;
+  repeated Finding finding = 23;
 
   // Estimate of likely outcome
-  repeated CodeableConcept prognosis_codeable_concept = 25;
+  repeated CodeableConcept prognosis_codeable_concept = 24;
 
   // RiskAssessment expressing likely outcome
-  repeated Reference prognosis_reference = 26;
+  repeated Reference prognosis_reference = 25;
 
   // Action taken as part of assessment procedure
-  repeated Reference action = 27;
+  repeated Reference action = 26;
 
   // Comments made about the ClinicalImpression
-  repeated Annotation note = 28;
+  repeated Annotation note = 27;
 }
 
 // Auto-generated from StructureDefinition for CodeSystem, last updated
@@ -3215,7 +3259,7 @@ message CodeSystem {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -3381,7 +3425,7 @@ message CodeSystem {
       repeated Extension modifier_extension = 3;
 
       // Human language of the designation
-      Code language = 4;
+      LanguageCode language = 4;
 
       // Details how this designation would be used
       Coding use = 5;
@@ -3406,15 +3450,21 @@ message CodeSystem {
       Code code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
       // Value of the property for this concept
-      oneof value {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-        Code value_code = 5;
-        Coding value_coding = 6;
-        String value_string = 7;
-        Integer value_integer = 8;
-        Boolean value_boolean = 9;
-        DateTime value_date_time = 10;
+      message Value {
+        oneof value {
+          option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+          Code code = 1;
+          Coding coding = 2;
+          String string_value = 3 [json_name = "string"];
+          Integer integer = 4;
+          Boolean boolean = 5;
+          DateTime date_time = 6;
+        }
       }
+      Value value = 5 [
+        (is_choice_type) = true,
+        (validation_requirement) = REQUIRED_BY_FHIR
+      ];
     }
     repeated ConceptProperty property = 8;
 
@@ -3440,7 +3490,7 @@ message Communication {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -3521,12 +3571,16 @@ message Communication {
     repeated Extension modifier_extension = 3;
 
     // Message part content
-    oneof content {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      String content_string = 4;
-      Attachment content_attachment = 5;
-      Reference content_reference = 6;
+    message Content {
+      oneof content {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        String string_value = 1 [json_name = "string"];
+        Attachment attachment = 2;
+        Reference reference = 3;
+      }
     }
+    Content content = 4
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Payload payload = 27;
 
@@ -3550,7 +3604,7 @@ message CommunicationRequest {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -3613,26 +3667,33 @@ message CommunicationRequest {
     repeated Extension modifier_extension = 3;
 
     // Message part content
-    oneof content {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      String content_string = 4;
-      Attachment content_attachment = 5;
-      Reference content_reference = 6;
+    message Content {
+      oneof content {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        String string_value = 1 [json_name = "string"];
+        Attachment attachment = 2;
+        Reference reference = 3;
+      }
     }
+    Content content = 4
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Payload payload = 21;
 
   // When scheduled
-  oneof occurrence {
-    DateTime occurrence_date_time = 22;
-    Period occurrence_period = 23;
+  message Occurrence {
+    oneof occurrence {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
   }
+  Occurrence occurrence = 22 [(is_choice_type) = true];
 
   // When request transitioned to being actionable
-  DateTime authored_on = 24;
+  DateTime authored_on = 23;
 
   // Message sender
-  Reference sender = 25;
+  Reference sender = 24;
 
   // Who/what is requesting service
   message Requester {
@@ -3651,16 +3712,16 @@ message CommunicationRequest {
     // Organization agent is acting for
     Reference on_behalf_of = 5;
   }
-  Requester requester = 26;
+  Requester requester = 25;
 
   // Why is communication needed?
-  repeated CodeableConcept reason_code = 27;
+  repeated CodeableConcept reason_code = 26;
 
   // Why is communication needed?
-  repeated Reference reason_reference = 28;
+  repeated Reference reason_reference = 27;
 
   // Comments made about communication request
-  repeated Annotation note = 29;
+  repeated Annotation note = 28;
 }
 
 // Auto-generated from StructureDefinition for CompartmentDefinition, last
@@ -3679,7 +3740,7 @@ message CompartmentDefinition {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -3776,7 +3837,7 @@ message Composition {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -3863,11 +3924,15 @@ message Composition {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Target of the relationship
-    oneof target {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      Identifier target_identifier = 5;
-      Reference target_reference = 6;
+    message Target {
+      oneof target {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        Identifier identifier = 1;
+        Reference reference = 2;
+      }
     }
+    Target target = 5
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated RelatesTo relates_to = 21;
 
@@ -3947,7 +4012,7 @@ message ConceptMap {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -4008,16 +4073,22 @@ message ConceptMap {
   Markdown copyright = 23;
 
   // Identifies the source of the concepts which are being mapped
-  oneof source {
-    Uri source_uri = 24;
-    Reference source_reference = 25;
+  message Source {
+    oneof source {
+      Uri uri = 1;
+      Reference reference = 2;
+    }
   }
+  Source source = 24 [(is_choice_type) = true];
 
   // Provides context to the mappings
-  oneof target {
-    Uri target_uri = 26;
-    Reference target_reference = 27;
+  message Target {
+    oneof target {
+      Uri uri = 1;
+      Reference reference = 2;
+    }
   }
+  Target target = 25 [(is_choice_type) = true];
 
   // Same source and target systems
   message Group {
@@ -4142,7 +4213,7 @@ message ConceptMap {
     }
     Unmapped unmapped = 9;
   }
-  repeated Group group = 28;
+  repeated Group group = 26;
 }
 
 // Auto-generated from StructureDefinition for Condition, last updated
@@ -4161,7 +4232,7 @@ message Condition {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -4204,29 +4275,35 @@ message Condition {
   Reference context = 17;
 
   // Estimated or actual date,  date-time, or age
-  oneof onset {
-    DateTime onset_date_time = 18;
-    Age onset_age = 19;
-    Period onset_period = 20;
-    Range onset_range = 21;
-    String onset_string = 22;
+  message Onset {
+    oneof onset {
+      DateTime date_time = 1;
+      Age age = 2;
+      Period period = 3;
+      Range range = 4;
+      String string_value = 5 [json_name = "string"];
+    }
   }
+  Onset onset = 18 [(is_choice_type) = true];
 
   // If/when in resolution/remission
-  oneof abatement {
-    DateTime abatement_date_time = 23;
-    Age abatement_age = 24;
-    Boolean abatement_boolean = 25;
-    Period abatement_period = 26;
-    Range abatement_range = 27;
-    String abatement_string = 28;
+  message Abatement {
+    oneof abatement {
+      DateTime date_time = 1;
+      Age age = 2;
+      Boolean boolean = 3;
+      Period period = 4;
+      Range range = 5;
+      String string_value = 6 [json_name = "string"];
+    }
   }
+  Abatement abatement = 19 [(is_choice_type) = true];
 
   // Date record was believed accurate
-  DateTime asserted_date = 29;
+  DateTime asserted_date = 20;
 
   // Person who asserts this condition
-  Reference asserter = 30;
+  Reference asserter = 21;
 
   // Stage/grade, usually assessed formally
   message Stage {
@@ -4245,7 +4322,7 @@ message Condition {
     // Formal record of assessment
     repeated Reference assessment = 5;
   }
-  Stage stage = 31;
+  Stage stage = 22;
 
   // Supporting evidence
   message Evidence {
@@ -4264,10 +4341,10 @@ message Condition {
     // Supporting information found elsewhere
     repeated Reference detail = 5;
   }
-  repeated Evidence evidence = 32;
+  repeated Evidence evidence = 23;
 
   // Additional information about the Condition
-  repeated Annotation note = 33;
+  repeated Annotation note = 24;
 }
 
 // Auto-generated from StructureDefinition for Consent, last updated
@@ -4287,7 +4364,7 @@ message Consent {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -4348,11 +4425,14 @@ message Consent {
   repeated Reference organization = 18;
 
   // Source from which this consent is taken
-  oneof source {
-    Attachment source_attachment = 19;
-    Identifier source_identifier = 20;
-    Reference source_reference = 21;
+  message Source {
+    oneof source {
+      Attachment attachment = 1;
+      Identifier identifier = 2;
+      Reference reference = 3;
+    }
   }
+  Source source = 19 [(is_choice_type) = true];
 
   // Policies covered by this consent
   message Policy {
@@ -4371,19 +4451,19 @@ message Consent {
     // Specific policy covered by this consent
     Uri uri = 5;
   }
-  repeated Policy policy = 22;
+  repeated Policy policy = 20;
 
   // Policy that this consents to
-  Uri policy_rule = 23;
+  Uri policy_rule = 21;
 
   // Security Labels that define affected resources
-  repeated Coding security_label = 24;
+  repeated Coding security_label = 22;
 
   // Context of activities for which the agreement is made
-  repeated Coding purpose = 25;
+  repeated Coding purpose = 23;
 
   // Timeframe for data controlled by this consent
-  Period data_period = 26;
+  Period data_period = 24;
 
   // Data controlled by this consent
   message Data {
@@ -4403,7 +4483,7 @@ message Consent {
     // The actual data reference
     Reference reference = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Data data = 27;
+  repeated Data data = 25;
 
   // Additional rule -  addition or removal of permissions
   message Except {
@@ -4480,7 +4560,7 @@ message Consent {
     }
     repeated ExceptData data = 13;
   }
-  repeated Except except = 28;
+  repeated Except except = 26;
 }
 
 // Auto-generated from StructureDefinition for Contract, last updated
@@ -4499,7 +4579,7 @@ message Contract {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -4614,31 +4694,34 @@ message Contract {
     repeated Extension modifier_extension = 3;
 
     // Contract Valued Item Type
-    oneof entity {
-      CodeableConcept entity_codeable_concept = 4;
-      Reference entity_reference = 5;
+    message Entity {
+      oneof entity {
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2;
+      }
     }
+    Entity entity = 4 [(is_choice_type) = true];
 
     // Contract Valued Item Number
-    Identifier identifier = 6;
+    Identifier identifier = 5;
 
     // Contract Valued Item Effective Tiem
-    DateTime effective_time = 7;
+    DateTime effective_time = 6;
 
     // Count of Contract Valued Items
-    Quantity quantity = 8;
+    Quantity quantity = 7;
 
     // Contract Valued Item fee, charge, or cost
-    Money unit_price = 9;
+    Money unit_price = 8;
 
     // Contract Valued Item Price Scaling Factor
-    Decimal factor = 10;
+    Decimal factor = 9;
 
     // Contract Valued Item Difficulty Scaling Factor
-    Decimal points = 11;
+    Decimal points = 10;
 
     // Total Contract Valued Item Value
-    Money net = 12;
+    Money net = 11;
   }
   repeated ValuedItem valued_item = 26;
 
@@ -4714,31 +4797,34 @@ message Contract {
       repeated Extension modifier_extension = 3;
 
       // Contract Term Valued Item Type
-      oneof entity {
-        CodeableConcept entity_codeable_concept = 4;
-        Reference entity_reference = 5;
+      message Entity {
+        oneof entity {
+          CodeableConcept codeable_concept = 1;
+          Reference reference = 2;
+        }
       }
+      Entity entity = 4 [(is_choice_type) = true];
 
       // Contract Term Valued Item Number
-      Identifier identifier = 6;
+      Identifier identifier = 5;
 
       // Contract Term Valued Item Effective Tiem
-      DateTime effective_time = 7;
+      DateTime effective_time = 6;
 
       // Contract Term Valued Item Count
-      Quantity quantity = 8;
+      Quantity quantity = 7;
 
       // Contract Term Valued Item fee, charge, or cost
-      Money unit_price = 9;
+      Money unit_price = 8;
 
       // Contract Term Valued Item Price Scaling Factor
-      Decimal factor = 10;
+      Decimal factor = 9;
 
       // Contract Term Valued Item Difficulty Scaling Factor
-      Decimal points = 11;
+      Decimal points = 10;
 
       // Total Contract Term Valued Item Value
-      Money net = 12;
+      Money net = 11;
     }
     repeated TermValuedItem valued_item = 15;
 
@@ -4748,10 +4834,13 @@ message Contract {
   repeated Term term = 27;
 
   // Binding Contract
-  oneof binding {
-    Attachment binding_attachment = 28;
-    Reference binding_reference = 29;
+  message Binding {
+    oneof binding {
+      Attachment attachment = 1;
+      Reference reference = 2;
+    }
   }
+  Binding binding = 28 [(is_choice_type) = true];
 
   // Contract Friendly Language
   message FriendlyLanguage {
@@ -4765,13 +4854,17 @@ message Contract {
     repeated Extension modifier_extension = 3;
 
     // Easily comprehended representation of this Contract
-    oneof content {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      Attachment content_attachment = 4;
-      Reference content_reference = 5;
+    message Content {
+      oneof content {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        Attachment attachment = 1;
+        Reference reference = 2;
+      }
     }
+    Content content = 4
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated FriendlyLanguage friendly = 30;
+  repeated FriendlyLanguage friendly = 29;
 
   // Contract Legal Language
   message LegalLanguage {
@@ -4785,13 +4878,17 @@ message Contract {
     repeated Extension modifier_extension = 3;
 
     // Contract Legal Text
-    oneof content {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      Attachment content_attachment = 4;
-      Reference content_reference = 5;
+    message Content {
+      oneof content {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        Attachment attachment = 1;
+        Reference reference = 2;
+      }
     }
+    Content content = 4
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated LegalLanguage legal = 31;
+  repeated LegalLanguage legal = 30;
 
   // Computable Contract Language
   message ComputableLanguage {
@@ -4805,13 +4902,17 @@ message Contract {
     repeated Extension modifier_extension = 3;
 
     // Computable Contract Rules
-    oneof content {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      Attachment content_attachment = 4;
-      Reference content_reference = 5;
+    message Content {
+      oneof content {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        Attachment attachment = 1;
+        Reference reference = 2;
+      }
     }
+    Content content = 4
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated ComputableLanguage rule = 32;
+  repeated ComputableLanguage rule = 31;
 }
 
 // Auto-generated from StructureDefinition for Coverage, last updated
@@ -4830,7 +4931,7 @@ message Coverage {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -4955,7 +5056,7 @@ message DataElement {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -5059,7 +5160,7 @@ message DetectedIssue {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -5143,7 +5244,7 @@ message DeviceComponent {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -5225,7 +5326,7 @@ message DeviceMetric {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -5307,7 +5408,7 @@ message Device {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -5420,7 +5521,7 @@ message DeviceRequest {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -5453,37 +5554,41 @@ message DeviceRequest {
   RequestStatusCode status = 14;
 
   // proposal | plan | original-order | encoded | reflex-order
-  CodeableConcept intent = 15 [
-    (fhir_code_type) = CODE_REQUEST_INTENT,
-    (validation_requirement) = REQUIRED_BY_FHIR
-  ];
+  CodeableConcept intent = 15 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Indicates how quickly the {{title}} should be addressed with respect to
   // other requests
   RequestPriorityCode priority = 16;
 
   // Device requested
-  oneof code {
-    option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-    Reference code_reference = 17;
-    CodeableConcept code_codeable_concept = 18;
+  message Code {
+    oneof code {
+      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+      Reference reference = 1;
+      CodeableConcept codeable_concept = 2;
+    }
   }
+  Code code = 17
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
   // Focus of request
-  Reference subject = 19 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 18 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Encounter or Episode motivating request
-  Reference context = 20;
+  Reference context = 19;
 
   // Desired time or schedule for use
-  oneof occurrence {
-    DateTime occurrence_date_time = 21;
-    Period occurrence_period = 22;
-    Timing occurrence_timing = 23;
+  message Occurrence {
+    oneof occurrence {
+      DateTime date_time = 1;
+      Period period = 2;
+      Timing timing = 3;
+    }
   }
+  Occurrence occurrence = 20 [(is_choice_type) = true];
 
   // When recorded
-  DateTime authored_on = 24;
+  DateTime authored_on = 21;
 
   // Who/what is requesting diagnostics
   message Requester {
@@ -5502,28 +5607,28 @@ message DeviceRequest {
     // Organization agent is acting for
     Reference on_behalf_of = 5;
   }
-  Requester requester = 25;
+  Requester requester = 22;
 
   // Fille role
-  CodeableConcept performer_type = 26;
+  CodeableConcept performer_type = 23;
 
   // Requested Filler
-  Reference performer = 27;
+  Reference performer = 24;
 
   // Coded Reason for request
-  repeated CodeableConcept reason_code = 28;
+  repeated CodeableConcept reason_code = 25;
 
   // Linked Reason for request
-  repeated Reference reason_reference = 29;
+  repeated Reference reason_reference = 26;
 
   // Additional clinical information
-  repeated Reference supporting_info = 30;
+  repeated Reference supporting_info = 27;
 
   // Notes or comments
-  repeated Annotation note = 31;
+  repeated Annotation note = 28;
 
   // Request provenance
-  repeated Reference relevant_history = 32;
+  repeated Reference relevant_history = 29;
 }
 
 // Auto-generated from StructureDefinition for DeviceUseStatement, last updated
@@ -5542,7 +5647,7 @@ message DeviceUseStatement {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -5570,29 +5675,32 @@ message DeviceUseStatement {
   Period when_used = 12;
 
   // How often  the device was used
-  oneof timing {
-    Timing timing_timing = 13;
-    Period timing_period = 14;
-    DateTime timing_date_time = 15;
+  message TimingType {
+    oneof timing {
+      Timing timing_value = 1 [json_name = "timing"];
+      Period period = 2;
+      DateTime date_time = 3;
+    }
   }
+  TimingType timing = 13 [(is_choice_type) = true];
 
   // When statement was recorded
-  DateTime recorded_on = 16;
+  DateTime recorded_on = 14;
 
   // Who made the statement
-  Reference source = 17;
+  Reference source = 15;
 
   // Reference to device used
-  Reference device = 18 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference device = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Why device was used
-  repeated CodeableConcept indication = 19;
+  repeated CodeableConcept indication = 17;
 
   // Target body site
-  CodeableConcept body_site = 20;
+  CodeableConcept body_site = 18;
 
   // Addition details (comments, instructions)
-  repeated Annotation note = 21;
+  repeated Annotation note = 19;
 }
 
 // Auto-generated from StructureDefinition for DiagnosticReport, last updated
@@ -5612,7 +5720,7 @@ message DiagnosticReport {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -5649,13 +5757,16 @@ message DiagnosticReport {
   Reference context = 15;
 
   // Clinically relevant time/time-period for report
-  oneof effective {
-    DateTime effective_date_time = 16;
-    Period effective_period = 17;
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
   }
+  Effective effective = 16 [(is_choice_type) = true];
 
   // DateTime this version was released
-  Instant issued = 18;
+  Instant issued = 17;
 
   // Participants in producing the report
   message Performer {
@@ -5674,16 +5785,16 @@ message DiagnosticReport {
     // Practitioner or Organization  participant
     Reference actor = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Performer performer = 19;
+  repeated Performer performer = 18;
 
   // Specimens this report is based on
-  repeated Reference specimen = 20;
+  repeated Reference specimen = 19;
 
   // Observations - simple, or complex nested groups
-  repeated Reference result = 21;
+  repeated Reference result = 20;
 
   // Reference to full details of imaging associated with the diagnostic report
-  repeated Reference imaging_study = 22;
+  repeated Reference imaging_study = 21;
 
   // Key images associated with this report
   message Image {
@@ -5702,16 +5813,16 @@ message DiagnosticReport {
     // Reference to the image source
     Reference link = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Image image = 23;
+  repeated Image image = 22;
 
   // Clinical Interpretation of test results
-  String conclusion = 24;
+  String conclusion = 23;
 
   // Codes for the conclusion
-  repeated CodeableConcept coded_diagnosis = 25;
+  repeated CodeableConcept coded_diagnosis = 24;
 
   // Entire report as issued
-  repeated Attachment presented_form = 26;
+  repeated Attachment presented_form = 25;
 }
 
 // Auto-generated from StructureDefinition for DocumentManifest, last updated
@@ -5730,7 +5841,7 @@ message DocumentManifest {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -5787,11 +5898,15 @@ message DocumentManifest {
     repeated Extension modifier_extension = 3;
 
     // Contents of this set of documents
-    oneof p {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      Attachment p_attachment = 4;
-      Reference p_reference = 5;
+    message P {
+      oneof p {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        Attachment attachment = 1;
+        Reference reference = 2;
+      }
     }
+    P p = 4
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Content content = 19 [(validation_requirement) = REQUIRED_BY_FHIR];
 
@@ -5831,7 +5946,7 @@ message DocumentReference {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -5995,7 +6110,7 @@ message EligibilityRequest {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -6022,40 +6137,43 @@ message EligibilityRequest {
   Reference patient = 12;
 
   // Estimated date or dates of Service
-  oneof serviced {
-    Date serviced_date = 13;
-    Period serviced_period = 14;
+  message Serviced {
+    oneof serviced {
+      Date date = 1;
+      Period period = 2;
+    }
   }
+  Serviced serviced = 13 [(is_choice_type) = true];
 
   // Creation date
-  DateTime created = 15;
+  DateTime created = 14;
 
   // Author
-  Reference enterer = 16;
+  Reference enterer = 15;
 
   // Responsible practitioner
-  Reference provider = 17;
+  Reference provider = 16;
 
   // Responsible organization
-  Reference organization = 18;
+  Reference organization = 17;
 
   // Target
-  Reference insurer = 19;
+  Reference insurer = 18;
 
   // Servicing Facility
-  Reference facility = 20;
+  Reference facility = 19;
 
   // Insurance or medical plan
-  Reference coverage = 21;
+  Reference coverage = 20;
 
   // Business agreement
-  String business_arrangement = 22;
+  String business_arrangement = 21;
 
   // Type of services covered
-  CodeableConcept benefit_category = 23;
+  CodeableConcept benefit_category = 22;
 
   // Detailed services covered within the type
-  CodeableConcept benefit_sub_category = 24;
+  CodeableConcept benefit_sub_category = 23;
 }
 
 // Auto-generated from StructureDefinition for EligibilityResponse, last updated
@@ -6074,7 +6192,7 @@ message EligibilityResponse {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -6107,7 +6225,7 @@ message EligibilityResponse {
   Reference request = 14;
 
   // complete | error | partial
-  CodeableConcept outcome = 15 [(fhir_code_type) = CODE_REMITTANCE_OUTCOME];
+  CodeableConcept outcome = 15;
 
   // Disposition Message
   String disposition = 16;
@@ -6186,17 +6304,23 @@ message EligibilityResponse {
         CodeableConcept type = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
         // Benefits allowed
-        oneof allowed {
-          UnsignedInt allowed_unsigned_int = 5;
-          String allowed_string = 6;
-          Money allowed_money = 7;
+        message Allowed {
+          oneof allowed {
+            UnsignedInt unsigned_int = 1;
+            String string_value = 2 [json_name = "string"];
+            Money money = 3;
+          }
         }
+        Allowed allowed = 5 [(is_choice_type) = true];
 
         // Benefits used
-        oneof used {
-          UnsignedInt used_unsigned_int = 8;
-          Money used_money = 9;
+        message Used {
+          oneof used {
+            UnsignedInt unsigned_int = 1;
+            Money money = 2;
+          }
         }
+        Used used = 6 [(is_choice_type) = true];
       }
       repeated Benefit financial = 12;
     }
@@ -6240,7 +6364,7 @@ message Encounter {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -6465,7 +6589,7 @@ message Endpoint {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -6508,7 +6632,7 @@ message Endpoint {
 
   // Mimetype to send. If not specified, the content could be anything
   // (including no payload, if the connectionType defined this)
-  repeated Code payload_mime_type = 17 [(fhir_code_type) = CODE_MIME_TYPE];
+  repeated MimeTypeCode payload_mime_type = 17;
 
   // The technical base address for connecting to this endpoint
   Uri address = 18 [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -6533,7 +6657,7 @@ message EnrollmentRequest {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -6588,7 +6712,7 @@ message EnrollmentResponse {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -6612,7 +6736,7 @@ message EnrollmentResponse {
   Reference request = 11;
 
   // complete | error | partial
-  CodeableConcept outcome = 12 [(fhir_code_type) = CODE_REMITTANCE_OUTCOME];
+  CodeableConcept outcome = 12;
 
   // Disposition Message
   String disposition = 13;
@@ -6648,7 +6772,7 @@ message EpisodeOfCare {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -6757,7 +6881,7 @@ message ExpansionProfile {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -6887,10 +7011,10 @@ message ExpansionProfile {
         repeated Extension modifier_extension = 3;
 
         // Human language of the designation to be included
-        Code language = 4;
+        LanguageCode language = 4;
 
         // What kind of Designation to include
-        Coding use = 5 [(fhir_code_type) = CODE_DESIGNATION_USE];
+        Coding use = 5;
       }
       repeated DesignationIncludeDesignation designation = 4;
     }
@@ -6919,10 +7043,10 @@ message ExpansionProfile {
         repeated Extension modifier_extension = 3;
 
         // Human language of the designation to be excluded
-        Code language = 4;
+        LanguageCode language = 4;
 
         // What kind of Designation to exclude
-        Coding use = 5 [(fhir_code_type) = CODE_DESIGNATION_USE];
+        Coding use = 5;
       }
       repeated DesignationExcludeDesignation designation = 4;
     }
@@ -6949,7 +7073,7 @@ message ExpansionProfile {
 
   // Specify the language for the display element of codes in the value set
   // expansion
-  Code display_language = 30;
+  LanguageCode display_language = 30;
 
   // Controls behaviour of the value set expand operation when value sets are
   // too large to be completely expanded
@@ -6972,7 +7096,7 @@ message ExplanationOfBenefit {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -6993,7 +7117,7 @@ message ExplanationOfBenefit {
   ExplanationOfBenefitStatusCode status = 10;
 
   // Type or discipline
-  CodeableConcept type = 11 [(fhir_code_type) = CODE_CLAIM_TYPE];
+  CodeableConcept type = 11;
 
   // Finer grained claim type information
   repeated CodeableConcept sub_type = 12;
@@ -7080,8 +7204,7 @@ message ExplanationOfBenefit {
     CodeableConcept type = 4;
 
     // organization | patient | practitioner | relatedperson
-    CodeableConcept resource_type = 5
-        [(fhir_code_type) = CODE_RESOURCE_TYPE_LINK];
+    CodeableConcept resource_type = 5;
 
     // Party to receive the payable
     Reference party = 6;
@@ -7110,21 +7233,27 @@ message ExplanationOfBenefit {
     CodeableConcept code = 6;
 
     // When it occurred
-    oneof timing {
-      Date timing_date = 7;
-      Period timing_period = 8;
+    message Timing {
+      oneof timing {
+        Date date = 1;
+        Period period = 2;
+      }
     }
+    Timing timing = 7 [(is_choice_type) = true];
 
     // Additional Data or supporting information
-    oneof value {
-      String value_string = 9;
-      Quantity value_quantity = 10;
-      Attachment value_attachment = 11;
-      Reference value_reference = 12;
+    message Value {
+      oneof value {
+        String string_value = 1 [json_name = "string"];
+        Quantity quantity = 2;
+        Attachment attachment = 3;
+        Reference reference = 4;
+      }
     }
+    Value value = 8 [(is_choice_type) = true];
 
     // Reason associated with the information
-    Coding reason = 13;
+    Coding reason = 9;
   }
   repeated SupportingInformation information = 30;
 
@@ -7171,17 +7300,21 @@ message ExplanationOfBenefit {
     PositiveInt sequence = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Patient's diagnosis
-    oneof diagnosis {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      CodeableConcept diagnosis_codeable_concept = 5;
-      Reference diagnosis_reference = 6;
+    message DiagnosisType {
+      oneof diagnosis {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2;
+      }
     }
+    DiagnosisType diagnosis = 5
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
     // Timing or nature of the diagnosis
-    repeated CodeableConcept type = 7;
+    repeated CodeableConcept type = 6;
 
     // Package billing code
-    CodeableConcept package_code = 8;
+    CodeableConcept package_code = 7;
   }
   repeated Diagnosis diagnosis = 32;
 
@@ -7203,11 +7336,15 @@ message ExplanationOfBenefit {
     DateTime date = 5;
 
     // Patient's list of procedures performed
-    oneof procedure {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      CodeableConcept procedure_codeable_concept = 6;
-      Reference procedure_reference = 7;
+    message ProcedureType {
+      oneof procedure {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2;
+      }
     }
+    ProcedureType procedure = 6
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Procedure procedure = 33;
 
@@ -7248,13 +7385,16 @@ message ExplanationOfBenefit {
     Date date = 4;
 
     // The nature of the accident
-    CodeableConcept type = 5 [(fhir_code_type) = CODE_V3_ACTINCIDENTCODE];
+    CodeableConcept type = 5;
 
     // Accident Place
-    oneof location {
-      Address location_address = 6;
-      Reference location_reference = 7;
+    message Location {
+      oneof location {
+        Address address = 1;
+        Reference reference = 2;
+      }
     }
+    Location location = 6 [(is_choice_type) = true];
   }
   Accident accident = 36;
 
@@ -7306,44 +7446,50 @@ message ExplanationOfBenefit {
     repeated CodeableConcept program_code = 13;
 
     // Date or dates of Service
-    oneof serviced {
-      Date serviced_date = 14;
-      Period serviced_period = 15;
+    message Serviced {
+      oneof serviced {
+        Date date = 1;
+        Period period = 2;
+      }
     }
+    Serviced serviced = 14 [(is_choice_type) = true];
 
     // Place of service
-    oneof location {
-      CodeableConcept location_codeable_concept = 16;
-      Address location_address = 17;
-      Reference location_reference = 18;
+    message Location {
+      oneof location {
+        CodeableConcept codeable_concept = 1;
+        Address address = 2;
+        Reference reference = 3;
+      }
     }
+    Location location = 15 [(is_choice_type) = true];
 
     // Count of Products or Services
-    Quantity quantity = 19;
+    Quantity quantity = 16;
 
     // Fee, charge or cost per point
-    Money unit_price = 20;
+    Money unit_price = 17;
 
     // Price scaling factor
-    Decimal factor = 21;
+    Decimal factor = 18;
 
     // Total item cost
-    Money net = 22;
+    Money net = 19;
 
     // Unique Device Identifier
-    repeated Reference udi = 23;
+    repeated Reference udi = 20;
 
     // Service Location
-    CodeableConcept body_site = 24;
+    CodeableConcept body_site = 21;
 
     // Service Sub-location
-    repeated CodeableConcept sub_site = 25;
+    repeated CodeableConcept sub_site = 22;
 
     // Encounters related to this billed item
-    repeated Reference encounter = 26;
+    repeated Reference encounter = 23;
 
     // List of note numbers which apply
-    repeated PositiveInt note_number = 27;
+    repeated PositiveInt note_number = 24;
 
     // Adjudication details
     message Adjudication {
@@ -7369,7 +7515,7 @@ message ExplanationOfBenefit {
       // Non-monitory value
       Decimal value = 7;
     }
-    repeated Adjudication adjudication = 28;
+    repeated Adjudication adjudication = 25;
 
     // Additional items
     message Detail {
@@ -7386,10 +7532,7 @@ message ExplanationOfBenefit {
       PositiveInt sequence = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
       // Group or type of product or service
-      CodeableConcept type = 5 [
-        (fhir_code_type) = CODE_V3_ACTINVOICEGROUPCODE,
-        (validation_requirement) = REQUIRED_BY_FHIR
-      ];
+      CodeableConcept type = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
 
       // Revenue or cost center code
       CodeableConcept revenue = 6;
@@ -7442,10 +7585,7 @@ message ExplanationOfBenefit {
         PositiveInt sequence = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
         // Type of product or service
-        CodeableConcept type = 5 [
-          (fhir_code_type) = CODE_V3_ACTINVOICEGROUPCODE,
-          (validation_requirement) = REQUIRED_BY_FHIR
-        ];
+        CodeableConcept type = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
 
         // Revenue or cost center code
         CodeableConcept revenue = 6;
@@ -7485,7 +7625,7 @@ message ExplanationOfBenefit {
       }
       repeated SubDetail sub_detail = 18;
     }
-    repeated Detail detail = 29;
+    repeated Detail detail = 26;
   }
   repeated Item item = 39;
 
@@ -7618,7 +7758,7 @@ message ExplanationOfBenefit {
     PositiveInt number = 4;
 
     // display | print | printoper
-    CodeableConcept type = 5 [(fhir_code_type) = CODE_NOTE_TYPE];
+    CodeableConcept type = 5;
 
     // Note explanitory text
     String text = 6;
@@ -7678,17 +7818,23 @@ message ExplanationOfBenefit {
       CodeableConcept type = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
       // Benefits allowed
-      oneof allowed {
-        UnsignedInt allowed_unsigned_int = 5;
-        String allowed_string = 6;
-        Money allowed_money = 7;
+      message Allowed {
+        oneof allowed {
+          UnsignedInt unsigned_int = 1;
+          String string_value = 2 [json_name = "string"];
+          Money money = 3;
+        }
       }
+      Allowed allowed = 5 [(is_choice_type) = true];
 
       // Benefits used
-      oneof used {
-        UnsignedInt used_unsigned_int = 8;
-        Money used_money = 9;
+      message Used {
+        oneof used {
+          UnsignedInt unsigned_int = 1;
+          Money money = 2;
+        }
       }
+      Used used = 6 [(is_choice_type) = true];
     }
     repeated Benefit financial = 12;
   }
@@ -7711,7 +7857,7 @@ message FamilyMemberHistory {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -7758,39 +7904,48 @@ message FamilyMemberHistory {
   AdministrativeGenderCode gender = 18;
 
   // (approximate) date of birth
-  oneof born {
-    Period born_period = 19;
-    Date born_date = 20;
-    String born_string = 21;
+  message Born {
+    oneof born {
+      Period period = 1;
+      Date date = 2;
+      String string_value = 3 [json_name = "string"];
+    }
   }
+  Born born = 19 [(is_choice_type) = true];
 
   // (approximate) age
-  oneof age {
-    Age age_age = 22;
-    Range age_range = 23;
-    String age_string = 24;
+  message AgeType {
+    oneof age {
+      Age age_value = 1 [json_name = "age"];
+      Range range = 2;
+      String string_value = 3 [json_name = "string"];
+    }
   }
+  AgeType age = 20 [(is_choice_type) = true];
 
   // Age is estimated?
-  Boolean estimated_age = 25;
+  Boolean estimated_age = 21;
 
   // Dead? How old/when?
-  oneof deceased {
-    Boolean deceased_boolean = 26;
-    Age deceased_age = 27;
-    Range deceased_range = 28;
-    Date deceased_date = 29;
-    String deceased_string = 30;
+  message Deceased {
+    oneof deceased {
+      Boolean boolean = 1;
+      Age age = 2;
+      Range range = 3;
+      Date date = 4;
+      String string_value = 5 [json_name = "string"];
+    }
   }
+  Deceased deceased = 22 [(is_choice_type) = true];
 
   // Why was family member history performed?
-  repeated CodeableConcept reason_code = 31;
+  repeated CodeableConcept reason_code = 23;
 
   // Why was family member history performed?
-  repeated Reference reason_reference = 32;
+  repeated Reference reason_reference = 24;
 
   // General note about related person
-  repeated Annotation note = 33;
+  repeated Annotation note = 25;
 
   // Condition that the related person had
   message Condition {
@@ -7810,17 +7965,20 @@ message FamilyMemberHistory {
     CodeableConcept outcome = 5;
 
     // When condition first manifested
-    oneof onset {
-      Age onset_age = 6;
-      Range onset_range = 7;
-      Period onset_period = 8;
-      String onset_string = 9;
+    message Onset {
+      oneof onset {
+        Age age = 1;
+        Range range = 2;
+        Period period = 3;
+        String string_value = 4 [json_name = "string"];
+      }
     }
+    Onset onset = 6 [(is_choice_type) = true];
 
     // Extra information about condition
-    repeated Annotation note = 10;
+    repeated Annotation note = 7;
   }
-  repeated Condition condition = 34;
+  repeated Condition condition = 26;
 }
 
 // Auto-generated from StructureDefinition for Flag, last updated
@@ -7839,7 +7997,7 @@ message Flag {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -7894,7 +8052,7 @@ message Goal {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -7930,10 +8088,13 @@ message Goal {
   Reference subject = 14;
 
   // When goal pursuit begins
-  oneof start {
-    Date start_date = 15;
-    CodeableConcept start_codeable_concept = 16;
+  message Start {
+    oneof start {
+      Date date = 1;
+      CodeableConcept codeable_concept = 2;
+    }
   }
+  Start start = 15 [(is_choice_type) = true];
 
   // Target outcome for the goal
   message Target {
@@ -7950,40 +8111,46 @@ message Goal {
     CodeableConcept measure = 4;
 
     // The target value to be achieved
-    oneof detail {
-      Quantity detail_quantity = 5;
-      Range detail_range = 6;
-      CodeableConcept detail_codeable_concept = 7;
+    message Detail {
+      oneof detail {
+        Quantity quantity = 1;
+        Range range = 2;
+        CodeableConcept codeable_concept = 3;
+      }
     }
+    Detail detail = 5 [(is_choice_type) = true];
 
     // Reach goal on or before
-    oneof due {
-      Date due_date = 8;
-      Duration due_duration = 9;
+    message Due {
+      oneof due {
+        Date date = 1;
+        Duration duration = 2;
+      }
     }
+    Due due = 6 [(is_choice_type) = true];
   }
-  Target target = 17;
+  Target target = 16;
 
   // When goal status took effect
-  Date status_date = 18;
+  Date status_date = 17;
 
   // Reason for current status
-  String status_reason = 19;
+  String status_reason = 18;
 
   // Who's responsible for creating Goal?
-  Reference expressed_by = 20;
+  Reference expressed_by = 19;
 
   // Issues addressed by this goal
-  repeated Reference addresses = 21;
+  repeated Reference addresses = 20;
 
   // Comments about the goal
-  repeated Annotation note = 22;
+  repeated Annotation note = 21;
 
   // What result was achieved regarding the goal?
-  repeated CodeableConcept outcome_code = 23;
+  repeated CodeableConcept outcome_code = 22;
 
   // Observation that resulted from goal
-  repeated Reference outcome_reference = 24;
+  repeated Reference outcome_reference = 23;
 }
 
 // Auto-generated from StructureDefinition for GraphDefinition, last updated
@@ -8002,7 +8169,7 @@ message GraphDefinition {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -8153,7 +8320,7 @@ message Group {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -8203,19 +8370,23 @@ message Group {
     CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Value held by characteristic
-    oneof value {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      CodeableConcept value_codeable_concept = 5;
-      Boolean value_boolean = 6;
-      Quantity value_quantity = 7;
-      Range value_range = 8;
+    message Value {
+      oneof value {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        CodeableConcept codeable_concept = 1;
+        Boolean boolean = 2;
+        Quantity quantity = 3;
+        Range range = 4;
+      }
     }
+    Value value = 5
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
     // Group includes or excludes
-    Boolean exclude = 9 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Boolean exclude = 6 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Period over which characteristic is tested
-    Period period = 10;
+    Period period = 7;
   }
   repeated Characteristic characteristic = 16;
 
@@ -8258,7 +8429,7 @@ message GuidanceResponse {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -8299,25 +8470,28 @@ message GuidanceResponse {
   Reference performer = 16;
 
   // Reason for the response
-  oneof reason {
-    CodeableConcept reason_codeable_concept = 17;
-    Reference reason_reference = 18;
+  message Reason {
+    oneof reason {
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2;
+    }
   }
+  Reason reason = 17 [(is_choice_type) = true];
 
   // Additional notes about the response
-  repeated Annotation note = 19;
+  repeated Annotation note = 18;
 
   // Messages resulting from the evaluation of the artifact or artifacts
-  repeated Reference evaluation_message = 20;
+  repeated Reference evaluation_message = 19;
 
   // The output parameters of the evaluation, if any
-  Reference output_parameters = 21;
+  Reference output_parameters = 20;
 
   // Proposed actions, if any
-  Reference result = 22;
+  Reference result = 21;
 
   // Additional required data
-  repeated DataRequirement data_requirement = 23;
+  repeated DataRequirement data_requirement = 22;
 }
 
 // Auto-generated from StructureDefinition for HealthcareService, last updated
@@ -8336,7 +8510,7 @@ message HealthcareService {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -8477,7 +8651,7 @@ message ImagingManifest {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -8585,7 +8759,7 @@ message ImagingStudy {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -8741,7 +8915,7 @@ message Immunization {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -8924,7 +9098,7 @@ message ImmunizationRecommendation {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -9041,7 +9215,7 @@ message ImplementationGuide {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -9156,14 +9330,20 @@ message ImplementationGuide {
       String acronym = 7;
 
       // Location of the resource
-      oneof source {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-        Uri source_uri = 8;
-        Reference source_reference = 9;
+      message Source {
+        oneof source {
+          option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+          Uri uri = 1;
+          Reference reference = 2;
+        }
       }
+      Source source = 8 [
+        (is_choice_type) = true,
+        (validation_requirement) = REQUIRED_BY_FHIR
+      ];
 
       // Resource this is an example of (if applicable)
-      Reference example_for = 10;
+      Reference example_for = 9;
     }
     repeated Resource resource = 6
         [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -9219,7 +9399,7 @@ message ImplementationGuide {
     repeated String package_value = 8 [json_name = "package"];
 
     // Format of the page (e.g. html, markdown, etc.)
-    Code format = 9 [(fhir_code_type) = CODE_MIME_TYPE];
+    MimeTypeCode format = 9;
 
     // Nested Pages / Sections
     repeated Page page = 10;
@@ -9243,7 +9423,7 @@ message Library {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -9353,7 +9533,7 @@ message Linkage {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -9409,7 +9589,7 @@ message List {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -9501,7 +9681,7 @@ message Location {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -9598,7 +9778,7 @@ message Measure {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -9837,7 +10017,7 @@ message MeasureReport {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -10005,7 +10185,7 @@ message Media {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -10041,40 +10221,43 @@ message Media {
   Reference context = 15;
 
   // When Media was collected
-  oneof occurrence {
-    DateTime occurrence_date_time = 16;
-    Period occurrence_period = 17;
+  message Occurrence {
+    oneof occurrence {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
   }
+  Occurrence occurrence = 16 [(is_choice_type) = true];
 
   // The person who generated the image
-  Reference operator = 18;
+  Reference operator = 17;
 
   // Why was event performed?
-  repeated CodeableConcept reason_code = 19;
+  repeated CodeableConcept reason_code = 18;
 
   // Body part in media
-  CodeableConcept body_site = 20;
+  CodeableConcept body_site = 19;
 
   // Observing Device
-  Reference device = 21;
+  Reference device = 20;
 
   // Height of the image in pixels (photo/video)
-  PositiveInt height = 22;
+  PositiveInt height = 21;
 
   // Width of the image in pixels (photo/video)
-  PositiveInt width = 23;
+  PositiveInt width = 22;
 
   // Number of frames if > 1 (photo)
-  PositiveInt frames = 24;
+  PositiveInt frames = 23;
 
   // Length in seconds (audio / video)
-  UnsignedInt duration = 25;
+  UnsignedInt duration = 24;
 
   // Actual Media - reference or data
-  Attachment content = 26 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Attachment content = 25 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Comments made about the media
-  repeated Annotation note = 27;
+  repeated Annotation note = 26;
 }
 
 // Auto-generated from StructureDefinition for MedicationAdministration, last
@@ -10093,7 +10276,7 @@ message MedicationAdministration {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -10124,27 +10307,35 @@ message MedicationAdministration {
   CodeableConcept category = 13;
 
   // What was administered
-  oneof medication {
-    option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-    CodeableConcept medication_codeable_concept = 14;
-    Reference medication_reference = 15;
+  message Medication {
+    oneof medication {
+      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2;
+    }
   }
+  Medication medication = 14
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who received medication
-  Reference subject = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 15 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Encounter or Episode of Care administered as part of
-  Reference context = 17;
+  Reference context = 16;
 
   // Additional information to support administration
-  repeated Reference supporting_information = 18;
+  repeated Reference supporting_information = 17;
 
   // Start and end time of administration
-  oneof effective {
-    option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-    DateTime effective_date_time = 19;
-    Period effective_period = 20;
+  message Effective {
+    oneof effective {
+      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+      DateTime date_time = 1;
+      Period period = 2;
+    }
   }
+  Effective effective = 18
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who administered substance
   message Performer {
@@ -10163,28 +10354,28 @@ message MedicationAdministration {
     // Organization organization was acting for
     Reference on_behalf_of = 5;
   }
-  repeated Performer performer = 21;
+  repeated Performer performer = 19;
 
   // True if medication not administered
-  Boolean not_given = 22;
+  Boolean not_given = 20;
 
   // Reason administration not performed
-  repeated CodeableConcept reason_not_given = 23;
+  repeated CodeableConcept reason_not_given = 21;
 
   // Reason administration performed
-  repeated CodeableConcept reason_code = 24;
+  repeated CodeableConcept reason_code = 22;
 
   // Condition or Observation that supports why the medication was administered
-  repeated Reference reason_reference = 25;
+  repeated Reference reason_reference = 23;
 
   // Request administration performed against
-  Reference prescription = 26;
+  Reference prescription = 24;
 
   // Device used to administer
-  repeated Reference device = 27;
+  repeated Reference device = 25;
 
   // Information about the administration
-  repeated Annotation note = 28;
+  repeated Annotation note = 26;
 
   // Details of how medication was taken
   message Dosage {
@@ -10213,15 +10404,18 @@ message MedicationAdministration {
     Quantity dose = 8;
 
     // Dose quantity per unit of time
-    oneof rate {
-      Ratio rate_ratio = 9;
-      Quantity rate_quantity = 10;
+    message Rate {
+      oneof rate {
+        Ratio ratio = 1;
+        Quantity quantity = 2;
+      }
     }
+    Rate rate = 9 [(is_choice_type) = true];
   }
-  Dosage dosage = 29;
+  Dosage dosage = 27;
 
   // A list of events of interest in the lifecycle
-  repeated Reference event_history = 30;
+  repeated Reference event_history = 28;
 }
 
 // Auto-generated from StructureDefinition for MedicationDispense, last updated
@@ -10240,7 +10434,7 @@ message MedicationDispense {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -10268,20 +10462,24 @@ message MedicationDispense {
   CodeableConcept category = 12;
 
   // What medication was supplied
-  oneof medication {
-    option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-    CodeableConcept medication_codeable_concept = 13;
-    Reference medication_reference = 14;
+  message Medication {
+    oneof medication {
+      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2;
+    }
   }
+  Medication medication = 13
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who the dispense is for
-  Reference subject = 15;
+  Reference subject = 14;
 
   // Encounter / Episode associated with event
-  Reference context = 16;
+  Reference context = 15;
 
   // Information that supports the dispensing of the medication
-  repeated Reference supporting_information = 17;
+  repeated Reference supporting_information = 16;
 
   // Who performed event
   message Performer {
@@ -10300,38 +10498,38 @@ message MedicationDispense {
     // Organization organization was acting for
     Reference on_behalf_of = 5;
   }
-  repeated Performer performer = 18;
+  repeated Performer performer = 17;
 
   // Medication order that authorizes the dispense
-  repeated Reference authorizing_prescription = 19;
+  repeated Reference authorizing_prescription = 18;
 
   // Trial fill, partial fill, emergency fill, etc.
-  CodeableConcept type = 20;
+  CodeableConcept type = 19;
 
   // Amount dispensed
-  Quantity quantity = 21;
+  Quantity quantity = 20;
 
   // Amount of medication expressed as a timing amount
-  Quantity days_supply = 22;
+  Quantity days_supply = 21;
 
   // When product was packaged and reviewed
-  DateTime when_prepared = 23;
+  DateTime when_prepared = 22;
 
   // When product was given out
-  DateTime when_handed_over = 24;
+  DateTime when_handed_over = 23;
 
   // Where the medication was sent
-  Reference destination = 25;
+  Reference destination = 24;
 
   // Who collected the medication
-  repeated Reference receiver = 26;
+  repeated Reference receiver = 25;
 
   // Information about the dispense
-  repeated Annotation note = 27;
+  repeated Annotation note = 26;
 
   // How the medication is to be used by the patient or administered by the
   // caregiver
-  repeated Dosage dosage_instruction = 28;
+  repeated Dosage dosage_instruction = 27;
 
   // Whether a substitution was performed on the dispense
   message Substitution {
@@ -10357,22 +10555,25 @@ message MedicationDispense {
     // Who is responsible for the substitution
     repeated Reference responsible_party = 7;
   }
-  Substitution substitution = 29;
+  Substitution substitution = 28;
 
   // Clinical issue with action
-  repeated Reference detected_issue = 30;
+  repeated Reference detected_issue = 29;
 
   // Whether the dispense was or was not performed
-  Boolean not_done = 31;
+  Boolean not_done = 30;
 
   // Why a dispense was not performed
-  oneof not_done_reason {
-    CodeableConcept not_done_reason_codeable_concept = 32;
-    Reference not_done_reason_reference = 33;
+  message NotDoneReason {
+    oneof not_done_reason {
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2;
+    }
   }
+  NotDoneReason not_done_reason = 31 [(is_choice_type) = true];
 
   // A list of releveant lifecycle events
-  repeated Reference event_history = 34;
+  repeated Reference event_history = 32;
 }
 
 // Auto-generated from StructureDefinition for Medication, last updated
@@ -10391,7 +10592,7 @@ message Medication {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -10435,17 +10636,21 @@ message Medication {
     repeated Extension modifier_extension = 3;
 
     // The product contained
-    oneof item {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      CodeableConcept item_codeable_concept = 4;
-      Reference item_reference = 5;
+    message Item {
+      oneof item {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2;
+      }
     }
+    Item item = 4
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
     // Active ingredient indicator
-    Boolean is_active = 6;
+    Boolean is_active = 5;
 
     // Quantity of ingredient present
-    Ratio amount = 7;
+    Ratio amount = 6;
   }
   repeated Ingredient ingredient = 15;
 
@@ -10475,14 +10680,20 @@ message Medication {
       repeated Extension modifier_extension = 3;
 
       // The item in the package
-      oneof item {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-        CodeableConcept item_codeable_concept = 4;
-        Reference item_reference = 5;
+      message Item {
+        oneof item {
+          option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+          CodeableConcept codeable_concept = 1;
+          Reference reference = 2;
+        }
       }
+      Item item = 4 [
+        (is_choice_type) = true,
+        (validation_requirement) = REQUIRED_BY_FHIR
+      ];
 
       // Quantity present in the package
-      Quantity amount = 6;
+      Quantity amount = 5;
     }
     repeated Content content = 5;
 
@@ -10527,7 +10738,7 @@ message MedicationRequest {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -10568,23 +10779,27 @@ message MedicationRequest {
   MedicationRequestPriorityCode priority = 16;
 
   // Medication to be taken
-  oneof medication {
-    option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-    CodeableConcept medication_codeable_concept = 17;
-    Reference medication_reference = 18;
+  message Medication {
+    oneof medication {
+      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2;
+    }
   }
+  Medication medication = 17
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who or group medication request is for
-  Reference subject = 19 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 18 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Created during encounter/admission/stay
-  Reference context = 20;
+  Reference context = 19;
 
   // Information to support ordering of the medication
-  repeated Reference supporting_information = 21;
+  repeated Reference supporting_information = 20;
 
   // When request was initially authored
-  DateTime authored_on = 22;
+  DateTime authored_on = 21;
 
   // Who/What requested the Request
   message Requester {
@@ -10603,23 +10818,23 @@ message MedicationRequest {
     // Organization agent is acting for
     Reference on_behalf_of = 5;
   }
-  Requester requester = 23;
+  Requester requester = 22;
 
   // Person who entered the request
-  Reference recorder = 24;
+  Reference recorder = 23;
 
   // Reason or indication for writing the prescription
-  repeated CodeableConcept reason_code = 25;
+  repeated CodeableConcept reason_code = 24;
 
   // Condition or Observation that supports why the prescription is being
   // written
-  repeated Reference reason_reference = 26;
+  repeated Reference reason_reference = 25;
 
   // Information about the prescription
-  repeated Annotation note = 27;
+  repeated Annotation note = 26;
 
   // How the medication should be taken
-  repeated Dosage dosage_instruction = 28;
+  repeated Dosage dosage_instruction = 27;
 
   // Medication supply authorization
   message DispenseRequest {
@@ -10647,7 +10862,7 @@ message MedicationRequest {
     // Intended dispenser
     Reference performer = 8;
   }
-  DispenseRequest dispense_request = 29;
+  DispenseRequest dispense_request = 28;
 
   // Any restrictions on medication substitution
   message Substitution {
@@ -10666,16 +10881,16 @@ message MedicationRequest {
     // Why should (not) substitution be made
     CodeableConcept reason = 5;
   }
-  Substitution substitution = 30;
+  Substitution substitution = 29;
 
   // An order/prescription that is being replaced
-  Reference prior_prescription = 31;
+  Reference prior_prescription = 30;
 
   // Clinical Issue with action
-  repeated Reference detected_issue = 32;
+  repeated Reference detected_issue = 31;
 
   // A list of events of interest in the lifecycle
-  repeated Reference event_history = 33;
+  repeated Reference event_history = 32;
 }
 
 // Auto-generated from StructureDefinition for MedicationStatement, last updated
@@ -10694,7 +10909,7 @@ message MedicationStatement {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -10728,50 +10943,57 @@ message MedicationStatement {
   CodeableConcept category = 14;
 
   // What medication was taken
-  oneof medication {
-    option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-    CodeableConcept medication_codeable_concept = 15;
-    Reference medication_reference = 16;
+  message Medication {
+    oneof medication {
+      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2;
+    }
   }
+  Medication medication = 15
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
   // The date/time or interval when the medication was taken
-  oneof effective {
-    DateTime effective_date_time = 17;
-    Period effective_period = 18;
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
   }
+  Effective effective = 16 [(is_choice_type) = true];
 
   // When the statement was asserted?
-  DateTime date_asserted = 19;
+  DateTime date_asserted = 17;
 
   // Person or organization that provided the information about the taking of
   // this medication
-  Reference information_source = 20;
+  Reference information_source = 18;
 
   // Who is/was taking  the medication
-  Reference subject = 21 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 19 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Additional supporting information
-  repeated Reference derived_from = 22;
+  repeated Reference derived_from = 20;
 
   // y | n | unk | na
-  MedicationStatementTakenCode taken = 23
+  MedicationStatementTakenCode taken = 21
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // True if asserting medication was not given
-  repeated CodeableConcept reason_not_taken = 24;
+  repeated CodeableConcept reason_not_taken = 22;
 
   // Reason for why the medication is being/was taken
-  repeated CodeableConcept reason_code = 25;
+  repeated CodeableConcept reason_code = 23;
 
   // Condition or observation that supports why the medication is being/was
   // taken
-  repeated Reference reason_reference = 26;
+  repeated Reference reason_reference = 24;
 
   // Further information about the statement
-  repeated Annotation note = 27;
+  repeated Annotation note = 25;
 
   // Details of how medication is/was taken or should be taken
-  repeated Dosage dosage = 28;
+  repeated Dosage dosage = 26;
 }
 
 // Auto-generated from StructureDefinition for MessageDefinition, last updated
@@ -10791,7 +11013,7 @@ message MessageDefinition {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -10930,7 +11152,7 @@ message MessageHeader {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -11060,7 +11282,7 @@ message NamingSystem {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -11161,7 +11383,7 @@ message NutritionOrder {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -11343,10 +11565,13 @@ message NutritionOrder {
       Quantity quantity = 5;
 
       // Speed with which the formula is provided per period of time
-      oneof rate {
-        Quantity rate_quantity = 6;
-        Ratio rate_ratio = 7;
+      message Rate {
+        oneof rate {
+          Quantity quantity = 1;
+          Ratio ratio = 2;
+        }
       }
+      Rate rate = 6 [(is_choice_type) = true];
     }
     repeated Administration administration = 10;
 
@@ -11375,7 +11600,7 @@ message Observation {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -11412,52 +11637,58 @@ message Observation {
   Reference context = 15;
 
   // Clinically relevant time/time-period for observation
-  oneof effective {
-    DateTime effective_date_time = 16;
-    Period effective_period = 17;
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
   }
+  Effective effective = 16 [(is_choice_type) = true];
 
   // Date/Time this was made available
-  Instant issued = 18;
+  Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 19;
+  repeated Reference performer = 18;
 
   // Actual result
-  oneof value {
-    Quantity value_quantity = 20;
-    CodeableConcept value_codeable_concept = 21;
-    String value_string = 22;
-    Boolean value_boolean = 23;
-    Range value_range = 24;
-    Ratio value_ratio = 25;
-    SampledData value_sampled_data = 26;
-    Attachment value_attachment = 27;
-    Time value_time = 28;
-    DateTime value_date_time = 29;
-    Period value_period = 30;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+      CodeableConcept codeable_concept = 2;
+      String string_value = 3 [json_name = "string"];
+      Boolean boolean = 4;
+      Range range = 5;
+      Ratio ratio = 6;
+      SampledData sampled_data = 7;
+      Attachment attachment = 8;
+      Time time = 9;
+      DateTime date_time = 10;
+      Period period = 11;
+    }
   }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
-  CodeableConcept data_absent_reason = 31;
+  CodeableConcept data_absent_reason = 20;
 
   // High, low, normal, etc.
-  CodeableConcept interpretation = 32;
+  CodeableConcept interpretation = 21;
 
   // Comments about result
-  String comment = 33;
+  String comment = 22;
 
   // Observed body part
-  CodeableConcept body_site = 34;
+  CodeableConcept body_site = 23;
 
   // How it was done
-  CodeableConcept method = 35;
+  CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 36;
+  Reference specimen = 25;
 
   // (Measurement) Device
-  Reference device = 37;
+  Reference device = 26;
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -11488,7 +11719,7 @@ message Observation {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 38;
+  repeated ReferenceRange reference_range = 27;
 
   // Resource related to this observation
   message Related {
@@ -11508,7 +11739,7 @@ message Observation {
     // Resource that is related to this one
     Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Related related = 39;
+  repeated Related related = 28;
 
   // Component results
   message Component {
@@ -11525,29 +11756,32 @@ message Observation {
     CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Actual component result
-    oneof value {
-      Quantity value_quantity = 5;
-      CodeableConcept value_codeable_concept = 6;
-      String value_string = 7;
-      Range value_range = 8;
-      Ratio value_ratio = 9;
-      SampledData value_sampled_data = 10;
-      Attachment value_attachment = 11;
-      Time value_time = 12;
-      DateTime value_date_time = 13;
-      Period value_period = 14;
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+        CodeableConcept codeable_concept = 2;
+        String string_value = 3 [json_name = "string"];
+        Range range = 4;
+        Ratio ratio = 5;
+        SampledData sampled_data = 6;
+        Attachment attachment = 7;
+        Time time = 8;
+        DateTime date_time = 9;
+        Period period = 10;
+      }
     }
+    Value value = 5 [(is_choice_type) = true];
 
     // Why the component result is missing
-    CodeableConcept data_absent_reason = 15;
+    CodeableConcept data_absent_reason = 6;
 
     // High, low, normal, etc.
-    CodeableConcept interpretation = 16;
+    CodeableConcept interpretation = 7;
 
     // Provides guide for interpretation of component result
-    repeated ReferenceRange reference_range = 17;
+    repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 40;
+  repeated Component component = 29;
 }
 
 // Auto-generated from StructureDefinition for OperationDefinition, last updated
@@ -11566,7 +11800,7 @@ message OperationDefinition {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -11696,11 +11930,17 @@ message OperationDefinition {
           [(validation_requirement) = REQUIRED_BY_FHIR];
 
       // Source of value set
-      oneof value_set {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-        Uri value_set_uri = 5;
-        Reference value_set_reference = 6;
+      message ValueSet {
+        oneof value_set {
+          option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+          Uri uri = 1;
+          Reference reference = 2;
+        }
       }
+      ValueSet value_set = 5 [
+        (is_choice_type) = true,
+        (validation_requirement) = REQUIRED_BY_FHIR
+      ];
     }
     Binding binding = 12;
 
@@ -11745,7 +11985,7 @@ message OperationOutcome {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -11808,7 +12048,7 @@ message Organization {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -11893,7 +12133,7 @@ message Parameters {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Operation Parameter
   message Parameter {
@@ -11910,52 +12150,55 @@ message Parameters {
     String name = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // If parameter is a data type
-    oneof value {
-      Base64Binary value_base64_binary = 5;
-      Boolean value_boolean = 6;
-      Code value_code = 7;
-      Date value_date = 8;
-      DateTime value_date_time = 9;
-      Decimal value_decimal = 10;
-      Id value_id = 11;
-      Instant value_instant = 12;
-      Integer value_integer = 13;
-      Markdown value_markdown = 14;
-      Oid value_oid = 15;
-      PositiveInt value_positive_int = 16;
-      String value_string = 17;
-      Time value_time = 18;
-      UnsignedInt value_unsigned_int = 19;
-      Uri value_uri = 20;
-      Address value_address = 21;
-      Age value_age = 22;
-      Annotation value_annotation = 23;
-      Attachment value_attachment = 24;
-      CodeableConcept value_codeable_concept = 25;
-      Coding value_coding = 26;
-      ContactPoint value_contact_point = 27;
-      Count value_count = 28;
-      Distance value_distance = 29;
-      Duration value_duration = 30;
-      HumanName value_human_name = 31;
-      Identifier value_identifier = 32;
-      Money value_money = 33;
-      Period value_period = 34;
-      Quantity value_quantity = 35;
-      Range value_range = 36;
-      Ratio value_ratio = 37;
-      Reference value_reference = 38;
-      SampledData value_sampled_data = 39;
-      Signature value_signature = 40;
-      Timing value_timing = 41;
-      Meta value_meta = 42;
+    message Value {
+      oneof value {
+        Base64Binary base64_binary = 1;
+        Boolean boolean = 2;
+        Code code = 3;
+        Date date = 4;
+        DateTime date_time = 5;
+        Decimal decimal = 6;
+        Id id = 7;
+        Instant instant = 8;
+        Integer integer = 9;
+        Markdown markdown = 10;
+        Oid oid = 11;
+        PositiveInt positive_int = 12;
+        String string_value = 13 [json_name = "string"];
+        Time time = 14;
+        UnsignedInt unsigned_int = 15;
+        Uri uri = 16;
+        Address address = 17;
+        Age age = 18;
+        Annotation annotation = 19;
+        Attachment attachment = 20;
+        CodeableConcept codeable_concept = 21;
+        Coding coding = 22;
+        ContactPoint contact_point = 23;
+        Count count = 24;
+        Distance distance = 25;
+        Duration duration = 26;
+        HumanName human_name = 27;
+        Identifier identifier = 28;
+        Money money = 29;
+        Period period = 30;
+        Quantity quantity = 31;
+        Range range = 32;
+        Ratio ratio = 33;
+        Reference reference = 34;
+        SampledData sampled_data = 35;
+        Signature signature = 36;
+        Timing timing = 37;
+        Meta meta = 38;
+      }
     }
+    Value value = 5 [(is_choice_type) = true];
 
     // If parameter is a whole resource
-    ContainedResource resource = 43;
+    ContainedResource resource = 6;
 
     // Named part of a multi-part parameter
-    repeated Parameter part = 44;
+    repeated Parameter part = 7;
   }
   repeated Parameter parameter = 5;
 }
@@ -11976,7 +12219,7 @@ message Patient {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -12009,25 +12252,31 @@ message Patient {
   Date birth_date = 14;
 
   // Indicates if the individual is deceased or not
-  oneof deceased {
-    Boolean deceased_boolean = 15;
-    DateTime deceased_date_time = 16;
+  message Deceased {
+    oneof deceased {
+      Boolean boolean = 1;
+      DateTime date_time = 2;
+    }
   }
+  Deceased deceased = 15 [(is_choice_type) = true];
 
   // Addresses for the individual
-  repeated Address address = 17;
+  repeated Address address = 16;
 
   // Marital (civil) status of a patient
-  CodeableConcept marital_status = 18;
+  CodeableConcept marital_status = 17;
 
   // Whether patient is part of a multiple birth
-  oneof multiple_birth {
-    Boolean multiple_birth_boolean = 19;
-    Integer multiple_birth_integer = 20;
+  message MultipleBirth {
+    oneof multiple_birth {
+      Boolean boolean = 1;
+      Integer integer = 2;
+    }
   }
+  MultipleBirth multiple_birth = 18 [(is_choice_type) = true];
 
   // Image of the patient
-  repeated Attachment photo = 21;
+  repeated Attachment photo = 19;
 
   // A contact party (e.g. guardian, partner, friend) for the patient
   message Contact {
@@ -12062,7 +12311,7 @@ message Patient {
     // be contacted relating to this patient
     Period period = 10;
   }
-  repeated Contact contact = 22;
+  repeated Contact contact = 20;
 
   // This patient is known to be an animal (non-human)
   message Animal {
@@ -12084,7 +12333,7 @@ message Patient {
     // E.g. Neutered, Intact
     CodeableConcept gender_status = 6;
   }
-  Animal animal = 23;
+  Animal animal = 21;
 
   // A list of Languages which may be used to communicate with the patient about
   // his or her health
@@ -12105,13 +12354,13 @@ message Patient {
     // Language preference indicator
     Boolean preferred = 5;
   }
-  repeated Communication communication = 24;
+  repeated Communication communication = 22;
 
   // Patient's nominated primary care provider
-  repeated Reference general_practitioner = 25;
+  repeated Reference general_practitioner = 23;
 
   // Organization that is the custodian of the patient record
-  Reference managing_organization = 26;
+  Reference managing_organization = 24;
 
   // Link to another patient resource that concerns the same actual person
   message Link {
@@ -12130,7 +12379,7 @@ message Patient {
     // replaced-by | replaces | refer | seealso - type of link
     LinkTypeCode type = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Link link = 27;
+  repeated Link link = 25;
 }
 
 // Auto-generated from StructureDefinition for PaymentNotice, last updated
@@ -12149,7 +12398,7 @@ message PaymentNotice {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -12210,7 +12459,7 @@ message PaymentReconciliation {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -12243,7 +12492,7 @@ message PaymentReconciliation {
   Reference request = 14;
 
   // complete | error | partial
-  CodeableConcept outcome = 15 [(fhir_code_type) = CODE_REMITTANCE_OUTCOME];
+  CodeableConcept outcome = 15;
 
   // Disposition Message
   String disposition = 16;
@@ -12306,7 +12555,7 @@ message PaymentReconciliation {
     repeated Extension modifier_extension = 3;
 
     // display | print | printoper
-    CodeableConcept type = 4 [(fhir_code_type) = CODE_NOTE_TYPE];
+    CodeableConcept type = 4;
 
     // Comment on the processing
     String text = 5;
@@ -12330,7 +12579,7 @@ message Person {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -12408,7 +12657,7 @@ message PlanDefinition {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -12540,14 +12789,17 @@ message PlanDefinition {
       CodeableConcept measure = 4;
 
       // The target value to be achieved
-      oneof detail {
-        Quantity detail_quantity = 5;
-        Range detail_range = 6;
-        CodeableConcept detail_codeable_concept = 7;
+      message Detail {
+        oneof detail {
+          Quantity quantity = 1;
+          Range range = 2;
+          CodeableConcept codeable_concept = 3;
+        }
       }
+      Detail detail = 5 [(is_choice_type) = true];
 
       // Reach goal within
-      Duration due = 8;
+      Duration due = 6;
     }
     repeated Target target = 10;
   }
@@ -12644,21 +12896,27 @@ message PlanDefinition {
           [(validation_requirement) = REQUIRED_BY_FHIR];
 
       // Time offset for the relationship
-      oneof offset {
-        Duration offset_duration = 6;
-        Range offset_range = 7;
+      message Offset {
+        oneof offset {
+          Duration duration = 1;
+          Range range = 2;
+        }
       }
+      Offset offset = 6 [(is_choice_type) = true];
     }
     repeated RelatedAction related_action = 16;
 
     // When the action should take place
-    oneof timing {
-      DateTime timing_date_time = 17;
-      Period timing_period = 18;
-      Duration timing_duration = 19;
-      Range timing_range = 20;
-      Timing timing_timing = 21;
+    message TimingType {
+      oneof timing {
+        DateTime date_time = 1;
+        Period period = 2;
+        Duration duration = 3;
+        Range range = 4;
+        Timing timing_value = 5 [json_name = "timing"];
+      }
     }
+    TimingType timing = 17 [(is_choice_type) = true];
 
     // Who should participate in the action
     message Participant {
@@ -12678,31 +12936,31 @@ message PlanDefinition {
       // E.g. Nurse, Surgeon, Parent, etc
       CodeableConcept role = 5;
     }
-    repeated Participant participant = 22;
+    repeated Participant participant = 18;
 
     // create | update | remove | fire-event
-    Coding type = 23 [(fhir_code_type) = CODE_ACTION_TYPE];
+    Coding type = 19;
 
     // visual-group | logical-group | sentence-group
-    ActionGroupingBehaviorCode grouping_behavior = 24;
+    ActionGroupingBehaviorCode grouping_behavior = 20;
 
     // any | all | all-or-none | exactly-one | at-most-one | one-or-more
-    ActionSelectionBehaviorCode selection_behavior = 25;
+    ActionSelectionBehaviorCode selection_behavior = 21;
 
     // must | could | must-unless-documented
-    ActionRequiredBehaviorCode required_behavior = 26;
+    ActionRequiredBehaviorCode required_behavior = 22;
 
     // yes | no
-    ActionPrecheckBehaviorCode precheck_behavior = 27;
+    ActionPrecheckBehaviorCode precheck_behavior = 23;
 
     // single | multiple
-    ActionCardinalityBehaviorCode cardinality_behavior = 28;
+    ActionCardinalityBehaviorCode cardinality_behavior = 24;
 
     // Description of the activity to be performed
-    Reference definition = 29;
+    Reference definition = 25;
 
     // Transform to apply the template
-    Reference transform = 30;
+    Reference transform = 26;
 
     // Dynamic aspects of the definition
     message DynamicValue {
@@ -12727,10 +12985,10 @@ message PlanDefinition {
       // An expression that provides the dynamic value for the customization
       String expression = 7;
     }
-    repeated DynamicValue dynamic_value = 31;
+    repeated DynamicValue dynamic_value = 27;
 
     // A sub-action
-    repeated Action action = 32;
+    repeated Action action = 28;
   }
   repeated Action action = 34;
 }
@@ -12752,7 +13010,7 @@ message Practitioner {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -12836,7 +13094,7 @@ message PractitionerRole {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -12951,7 +13209,7 @@ message Procedure {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -13000,10 +13258,13 @@ message Procedure {
   Reference context = 19;
 
   // Date/Period the procedure was performed
-  oneof performed {
-    DateTime performed_date_time = 20;
-    Period performed_period = 21;
+  message Performed {
+    oneof performed {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
   }
+  Performed performed = 20 [(is_choice_type) = true];
 
   // The people who performed the procedure
   message Performer {
@@ -13025,37 +13286,37 @@ message Procedure {
     // Organization the device or practitioner was acting for
     Reference on_behalf_of = 6;
   }
-  repeated Performer performer = 22;
+  repeated Performer performer = 21;
 
   // Where the procedure happened
-  Reference location = 23;
+  Reference location = 22;
 
   // Coded reason procedure performed
-  repeated CodeableConcept reason_code = 24;
+  repeated CodeableConcept reason_code = 23;
 
   // Condition that is the reason the procedure performed
-  repeated Reference reason_reference = 25;
+  repeated Reference reason_reference = 24;
 
   // Target body sites
-  repeated CodeableConcept body_site = 26;
+  repeated CodeableConcept body_site = 25;
 
   // The result of procedure
-  CodeableConcept outcome = 27;
+  CodeableConcept outcome = 26;
 
   // Any report resulting from the procedure
-  repeated Reference report = 28;
+  repeated Reference report = 27;
 
   // Complication following the procedure
-  repeated CodeableConcept complication = 29;
+  repeated CodeableConcept complication = 28;
 
   // A condition that is a result of the procedure
-  repeated Reference complication_detail = 30;
+  repeated Reference complication_detail = 29;
 
   // Instructions for follow up
-  repeated CodeableConcept follow_up = 31;
+  repeated CodeableConcept follow_up = 30;
 
   // Additional information about the procedure
-  repeated Annotation note = 32;
+  repeated Annotation note = 31;
 
   // Device changed in procedure
   message FocalDevice {
@@ -13074,13 +13335,13 @@ message Procedure {
     // Device that was changed
     Reference manipulated = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated FocalDevice focal_device = 33;
+  repeated FocalDevice focal_device = 32;
 
   // Items used during procedure
-  repeated Reference used_reference = 34;
+  repeated Reference used_reference = 33;
 
   // Coded items used during the procedure
-  repeated CodeableConcept used_code = 35;
+  repeated CodeableConcept used_code = 34;
 }
 
 // Auto-generated from StructureDefinition for ProcedureRequest, last updated
@@ -13099,7 +13360,7 @@ message ProcedureRequest {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -13153,20 +13414,26 @@ message ProcedureRequest {
   Reference context = 21;
 
   // When procedure should occur
-  oneof occurrence {
-    DateTime occurrence_date_time = 22;
-    Period occurrence_period = 23;
-    Timing occurrence_timing = 24;
+  message Occurrence {
+    oneof occurrence {
+      DateTime date_time = 1;
+      Period period = 2;
+      Timing timing = 3;
+    }
   }
+  Occurrence occurrence = 22 [(is_choice_type) = true];
 
   // Preconditions for procedure or diagnostic
-  oneof as_needed {
-    Boolean as_needed_boolean = 25;
-    CodeableConcept as_needed_codeable_concept = 26;
+  message AsNeeded {
+    oneof as_needed {
+      Boolean boolean = 1;
+      CodeableConcept codeable_concept = 2;
+    }
   }
+  AsNeeded as_needed = 23 [(is_choice_type) = true];
 
   // Date request signed
-  DateTime authored_on = 27;
+  DateTime authored_on = 24;
 
   // Who/what is requesting procedure or diagnostic
   message Requester {
@@ -13185,34 +13452,34 @@ message ProcedureRequest {
     // Organization agent is acting for
     Reference on_behalf_of = 5;
   }
-  Requester requester = 28;
+  Requester requester = 25;
 
   // Performer role
-  CodeableConcept performer_type = 29;
+  CodeableConcept performer_type = 26;
 
   // Requested perfomer
-  Reference performer = 30;
+  Reference performer = 27;
 
   // Explanation/Justification for test
-  repeated CodeableConcept reason_code = 31;
+  repeated CodeableConcept reason_code = 28;
 
   // Explanation/Justification for test
-  repeated Reference reason_reference = 32;
+  repeated Reference reason_reference = 29;
 
   // Additional clinical information
-  repeated Reference supporting_info = 33;
+  repeated Reference supporting_info = 30;
 
   // Procedure Samples
-  repeated Reference specimen = 34;
+  repeated Reference specimen = 31;
 
   // Location on Body
-  repeated CodeableConcept body_site = 35;
+  repeated CodeableConcept body_site = 32;
 
   // Comments
-  repeated Annotation note = 36;
+  repeated Annotation note = 33;
 
   // Request provenance
-  repeated Reference relevant_history = 37;
+  repeated Reference relevant_history = 34;
 }
 
 // Auto-generated from StructureDefinition for ProcessRequest, last updated
@@ -13232,7 +13499,7 @@ message ProcessRequest {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -13321,7 +13588,7 @@ message ProcessResponse {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -13377,7 +13644,7 @@ message ProcessResponse {
     repeated Extension modifier_extension = 3;
 
     // display | print | printoper
-    CodeableConcept type = 4 [(fhir_code_type) = CODE_NOTE_TYPE];
+    CodeableConcept type = 4;
 
     // Comment on the processing
     String text = 5;
@@ -13407,7 +13674,7 @@ message Provenance {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -13457,20 +13724,27 @@ message Provenance {
     repeated CodeableConcept role = 4;
 
     // Who participated
-    oneof who {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      Uri who_uri = 5;
-      Reference who_reference = 6;
+    message Who {
+      oneof who {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        Uri uri = 1;
+        Reference reference = 2;
+      }
     }
+    Who who = 5
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
     // Who the agent is representing
-    oneof on_behalf_of {
-      Uri on_behalf_of_uri = 7;
-      Reference on_behalf_of_reference = 8;
+    message OnBehalfOf {
+      oneof on_behalf_of {
+        Uri uri = 1;
+        Reference reference = 2;
+      }
     }
+    OnBehalfOf on_behalf_of = 6 [(is_choice_type) = true];
 
     // Type of relationship between agents
-    CodeableConcept related_agent_type = 9;
+    CodeableConcept related_agent_type = 7;
   }
   repeated Agent agent = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
@@ -13490,15 +13764,19 @@ message Provenance {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Identity of entity
-    oneof what {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      Uri what_uri = 5;
-      Reference what_reference = 6;
-      Identifier what_identifier = 7;
+    message What {
+      oneof what {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        Uri uri = 1;
+        Reference reference = 2;
+        Identifier identifier = 3;
+      }
     }
+    What what = 5
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
     // Entity is attributed to this agent
-    repeated Agent agent = 8;
+    repeated Agent agent = 6;
   }
   repeated Entity entity = 17;
 
@@ -13522,7 +13800,7 @@ message Questionnaire {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -13645,20 +13923,23 @@ message Questionnaire {
       Boolean has_answer_value = 5 [json_name = "hasAnswer"];
 
       // Value question must have
-      oneof answer {
-        Boolean answer_boolean = 6;
-        Decimal answer_decimal = 7;
-        Integer answer_integer = 8;
-        Date answer_date = 9;
-        DateTime answer_date_time = 10;
-        Time answer_time = 11;
-        String answer_string = 12;
-        Uri answer_uri = 13;
-        Attachment answer_attachment = 14;
-        Coding answer_coding = 15;
-        Quantity answer_quantity = 16;
-        Reference answer_reference = 17;
+      message Answer {
+        oneof answer {
+          Boolean boolean = 1;
+          Decimal decimal = 2;
+          Integer integer = 3;
+          Date date = 4;
+          DateTime date_time = 5;
+          Time time = 6;
+          String string_value = 7 [json_name = "string"];
+          Uri uri = 8;
+          Attachment attachment = 9;
+          Coding coding = 10;
+          Quantity quantity = 11;
+          Reference reference = 12;
+        }
       }
+      Answer answer = 6 [(is_choice_type) = true];
     }
     repeated EnableWhen enable_when = 10;
 
@@ -13689,35 +13970,44 @@ message Questionnaire {
       repeated Extension modifier_extension = 3;
 
       // Answer value
-      oneof value {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-        Integer value_integer = 4;
-        Date value_date = 5;
-        Time value_time = 6;
-        String value_string = 7;
-        Coding value_coding = 8;
+      message Value {
+        oneof value {
+          option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+          Integer integer = 1;
+          Date date = 2;
+          Time time = 3;
+          String string_value = 4 [json_name = "string"];
+          Coding coding = 5;
+        }
       }
+      Value value = 4 [
+        (is_choice_type) = true,
+        (validation_requirement) = REQUIRED_BY_FHIR
+      ];
     }
     repeated Option option = 16;
 
     // Default value when item is first rendered
-    oneof initial {
-      Boolean initial_boolean = 17;
-      Decimal initial_decimal = 18;
-      Integer initial_integer = 19;
-      Date initial_date = 20;
-      DateTime initial_date_time = 21;
-      Time initial_time = 22;
-      String initial_string = 23;
-      Uri initial_uri = 24;
-      Attachment initial_attachment = 25;
-      Coding initial_coding = 26;
-      Quantity initial_quantity = 27;
-      Reference initial_reference = 28;
+    message Initial {
+      oneof initial {
+        Boolean boolean = 1;
+        Decimal decimal = 2;
+        Integer integer = 3;
+        Date date = 4;
+        DateTime date_time = 5;
+        Time time = 6;
+        String string_value = 7 [json_name = "string"];
+        Uri uri = 8;
+        Attachment attachment = 9;
+        Coding coding = 10;
+        Quantity quantity = 11;
+        Reference reference = 12;
+      }
     }
+    Initial initial = 17 [(is_choice_type) = true];
 
     // Nested questionnaire items
-    repeated Item item = 29;
+    repeated Item item = 18;
   }
   repeated Item item = 29;
 }
@@ -13738,7 +14028,7 @@ message QuestionnaireResponse {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -13818,23 +14108,26 @@ message QuestionnaireResponse {
       repeated Extension modifier_extension = 3;
 
       // Single-valued answer to the question
-      oneof value {
-        Boolean value_boolean = 4;
-        Decimal value_decimal = 5;
-        Integer value_integer = 6;
-        Date value_date = 7;
-        DateTime value_date_time = 8;
-        Time value_time = 9;
-        String value_string = 10;
-        Uri value_uri = 11;
-        Attachment value_attachment = 12;
-        Coding value_coding = 13;
-        Quantity value_quantity = 14;
-        Reference value_reference = 15;
+      message Value {
+        oneof value {
+          Boolean boolean = 1;
+          Decimal decimal = 2;
+          Integer integer = 3;
+          Date date = 4;
+          DateTime date_time = 5;
+          Time time = 6;
+          String string_value = 7 [json_name = "string"];
+          Uri uri = 8;
+          Attachment attachment = 9;
+          Coding coding = 10;
+          Quantity quantity = 11;
+          Reference reference = 12;
+        }
       }
+      Value value = 4 [(is_choice_type) = true];
 
       // Nested groups and questions
-      repeated Item item = 16;
+      repeated Item item = 5;
     }
     repeated Answer answer = 8;
 
@@ -13860,7 +14153,7 @@ message ReferralRequest {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -13912,13 +14205,16 @@ message ReferralRequest {
   Reference context = 20;
 
   // When the service(s) requested in the referral should occur
-  oneof occurrence {
-    DateTime occurrence_date_time = 21;
-    Period occurrence_period = 22;
+  message Occurrence {
+    oneof occurrence {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
   }
+  Occurrence occurrence = 21 [(is_choice_type) = true];
 
   // Date of creation/activation
-  DateTime authored_on = 23;
+  DateTime authored_on = 22;
 
   // Who/what is requesting service
   message Requester {
@@ -13937,31 +14233,31 @@ message ReferralRequest {
     // Organization agent is acting for
     Reference on_behalf_of = 5;
   }
-  Requester requester = 24;
+  Requester requester = 23;
 
   // The clinical specialty (discipline) that the referral is requested for
-  CodeableConcept specialty = 25;
+  CodeableConcept specialty = 24;
 
   // Receiver of referral / transfer of care request
-  repeated Reference recipient = 26;
+  repeated Reference recipient = 25;
 
   // Reason for referral / transfer of care request
-  repeated CodeableConcept reason_code = 27;
+  repeated CodeableConcept reason_code = 26;
 
   // Why is service needed?
-  repeated Reference reason_reference = 28;
+  repeated Reference reason_reference = 27;
 
   // A textual description of the referral
-  String description = 29;
+  String description = 28;
 
   // Additonal information to support referral or transfer of care request
-  repeated Reference supporting_info = 30;
+  repeated Reference supporting_info = 29;
 
   // Comments made about referral request
-  repeated Annotation note = 31;
+  repeated Annotation note = 30;
 
   // Key events in history of request
-  repeated Reference relevant_history = 32;
+  repeated Reference relevant_history = 31;
 }
 
 // Auto-generated from StructureDefinition for RelatedPerson, last updated
@@ -13981,7 +14277,7 @@ message RelatedPerson {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -14045,7 +14341,7 @@ message RequestGroup {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -14097,13 +14393,16 @@ message RequestGroup {
   Reference author = 20;
 
   // Reason for the request group
-  oneof reason {
-    CodeableConcept reason_codeable_concept = 21;
-    Reference reason_reference = 22;
+  message Reason {
+    oneof reason {
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2;
+    }
   }
+  Reason reason = 21 [(is_choice_type) = true];
 
   // Additional notes about the response
-  repeated Annotation note = 23;
+  repeated Annotation note = 22;
 
   // Proposed actions, if any
   message Action {
@@ -14181,50 +14480,56 @@ message RequestGroup {
           [(validation_requirement) = REQUIRED_BY_FHIR];
 
       // Time offset for the relationship
-      oneof offset {
-        Duration offset_duration = 6;
-        Range offset_range = 7;
+      message Offset {
+        oneof offset {
+          Duration duration = 1;
+          Range range = 2;
+        }
       }
+      Offset offset = 6 [(is_choice_type) = true];
     }
     repeated RelatedAction related_action = 11;
 
     // When the action should take place
-    oneof timing {
-      DateTime timing_date_time = 12;
-      Period timing_period = 13;
-      Duration timing_duration = 14;
-      Range timing_range = 15;
-      Timing timing_timing = 16;
+    message TimingType {
+      oneof timing {
+        DateTime date_time = 1;
+        Period period = 2;
+        Duration duration = 3;
+        Range range = 4;
+        Timing timing_value = 5 [json_name = "timing"];
+      }
     }
+    TimingType timing = 12 [(is_choice_type) = true];
 
     // Who should perform the action
-    repeated Reference participant = 17;
+    repeated Reference participant = 13;
 
     // create | update | remove | fire-event
-    Coding type = 18;
+    Coding type = 14;
 
     // visual-group | logical-group | sentence-group
-    ActionGroupingBehaviorCode grouping_behavior = 19;
+    ActionGroupingBehaviorCode grouping_behavior = 15;
 
     // any | all | all-or-none | exactly-one | at-most-one | one-or-more
-    ActionSelectionBehaviorCode selection_behavior = 20;
+    ActionSelectionBehaviorCode selection_behavior = 16;
 
     // must | could | must-unless-documented
-    ActionRequiredBehaviorCode required_behavior = 21;
+    ActionRequiredBehaviorCode required_behavior = 17;
 
     // yes | no
-    ActionPrecheckBehaviorCode precheck_behavior = 22;
+    ActionPrecheckBehaviorCode precheck_behavior = 18;
 
     // single | multiple
-    ActionCardinalityBehaviorCode cardinality_behavior = 23;
+    ActionCardinalityBehaviorCode cardinality_behavior = 19;
 
     // The target of the action
-    Reference resource = 24;
+    Reference resource = 20;
 
     // Sub action
-    repeated Action action = 25;
+    repeated Action action = 21;
   }
-  repeated Action action = 24;
+  repeated Action action = 23;
 }
 
 // Auto-generated from StructureDefinition for ResearchStudy, last updated
@@ -14243,7 +14548,7 @@ message ResearchStudy {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -14355,7 +14660,7 @@ message ResearchSubject {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -14411,7 +14716,7 @@ message RiskAssessment {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -14451,25 +14756,31 @@ message RiskAssessment {
   Reference context = 16;
 
   // When was assessment made?
-  oneof occurrence {
-    DateTime occurrence_date_time = 17;
-    Period occurrence_period = 18;
+  message Occurrence {
+    oneof occurrence {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
   }
+  Occurrence occurrence = 17 [(is_choice_type) = true];
 
   // Condition assessed
-  Reference condition = 19;
+  Reference condition = 18;
 
   // Who did assessment?
-  Reference performer = 20;
+  Reference performer = 19;
 
   // Why the assessment was necessary?
-  oneof reason {
-    CodeableConcept reason_codeable_concept = 21;
-    Reference reason_reference = 22;
+  message Reason {
+    oneof reason {
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2;
+    }
   }
+  Reason reason = 20 [(is_choice_type) = true];
 
   // Information used in assessment
-  repeated Reference basis = 23;
+  repeated Reference basis = 21;
 
   // Outcome predicted
   message Prediction {
@@ -14486,33 +14797,39 @@ message RiskAssessment {
     CodeableConcept outcome = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Likelihood of specified outcome
-    oneof probability {
-      Decimal probability_decimal = 5;
-      Range probability_range = 6;
+    message Probability {
+      oneof probability {
+        Decimal decimal = 1;
+        Range range = 2;
+      }
     }
+    Probability probability = 5 [(is_choice_type) = true];
 
     // Likelihood of specified outcome as a qualitative value
-    CodeableConcept qualitative_risk = 7;
+    CodeableConcept qualitative_risk = 6;
 
     // Relative likelihood
-    Decimal relative_risk = 8;
+    Decimal relative_risk = 7;
 
     // Timeframe or age range
-    oneof when {
-      Period when_period = 9;
-      Range when_range = 10;
+    message When {
+      oneof when {
+        Period period = 1;
+        Range range = 2;
+      }
     }
+    When when = 8 [(is_choice_type) = true];
 
     // Explanation of prediction
-    String rationale = 11;
+    String rationale = 9;
   }
-  repeated Prediction prediction = 24;
+  repeated Prediction prediction = 22;
 
   // How to reduce risk
-  String mitigation = 25;
+  String mitigation = 23;
 
   // Comments on the risk assessment
-  String comment = 26;
+  String comment = 24;
 }
 
 // Auto-generated from StructureDefinition for Schedule, last updated
@@ -14531,7 +14848,7 @@ message Schedule {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -14595,7 +14912,7 @@ message SearchParameter {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -14717,7 +15034,7 @@ message Sequence {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -14735,7 +15052,7 @@ message Sequence {
   repeated Identifier identifier = 9;
 
   // aa | dna | rna
-  Code type = 10;
+  SequenceTypeCode type = 10;
 
   // Base number of coordinate system (0 for 0-based numbering or coordinates,
   // inclusive start, exclusive end, 1 for 1-based numbering, inclusive start,
@@ -14941,7 +15258,7 @@ message ServiceDefinition {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -15048,7 +15365,7 @@ message Slot {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -15121,7 +15438,7 @@ message Specimen {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -15175,19 +15492,22 @@ message Specimen {
     Reference collector = 4;
 
     // Collection time
-    oneof collected {
-      DateTime collected_date_time = 5;
-      Period collected_period = 6;
+    message Collected {
+      oneof collected {
+        DateTime date_time = 1;
+        Period period = 2;
+      }
     }
+    Collected collected = 5 [(is_choice_type) = true];
 
     // The quantity of specimen collected
-    Quantity quantity = 7;
+    Quantity quantity = 6;
 
     // Technique used to perform collection
-    CodeableConcept method = 8;
+    CodeableConcept method = 7;
 
     // Anatomical collection site
-    CodeableConcept body_site = 9;
+    CodeableConcept body_site = 8;
   }
   Collection collection = 17;
 
@@ -15212,10 +15532,13 @@ message Specimen {
     repeated Reference additive = 6;
 
     // Date and time of specimen processing
-    oneof time {
-      DateTime time_date_time = 7;
-      Period time_period = 8;
+    message Time {
+      oneof time {
+        DateTime date_time = 1;
+        Period period = 2;
+      }
     }
+    Time time = 7 [(is_choice_type) = true];
   }
   repeated Processing processing = 18;
 
@@ -15246,10 +15569,13 @@ message Specimen {
     Quantity specimen_quantity = 8;
 
     // Additive associated with container
-    oneof additive {
-      CodeableConcept additive_codeable_concept = 9;
-      Reference additive_reference = 10;
+    message Additive {
+      oneof additive {
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2;
+      }
     }
+    Additive additive = 9 [(is_choice_type) = true];
   }
   repeated Container container = 19;
 
@@ -15273,7 +15599,7 @@ message StructureDefinition {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -15381,7 +15707,7 @@ message StructureDefinition {
   repeated String context_invariant = 31;
 
   // Type defined or constrained by this structure
-  Code type = 32 [(validation_requirement) = REQUIRED_BY_FHIR];
+  FHIRDefinedTypeCode type = 32 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Definition that this type is constrained/specialized from
   Uri base_definition = 33;
@@ -15441,7 +15767,7 @@ message StructureMap {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -15618,62 +15944,65 @@ message StructureMap {
         String type = 7;
 
         // Default value if no value exists
-        oneof default_value {
-          Base64Binary default_value_base64_binary = 8;
-          Boolean default_value_boolean = 9;
-          Code default_value_code = 10;
-          Date default_value_date = 11;
-          DateTime default_value_date_time = 12;
-          Decimal default_value_decimal = 13;
-          Id default_value_id = 14;
-          Instant default_value_instant = 15;
-          Integer default_value_integer = 16;
-          Markdown default_value_markdown = 17;
-          Oid default_value_oid = 18;
-          PositiveInt default_value_positive_int = 19;
-          String default_value_string = 20;
-          Time default_value_time = 21;
-          UnsignedInt default_value_unsigned_int = 22;
-          Uri default_value_uri = 23;
-          Address default_value_address = 24;
-          Age default_value_age = 25;
-          Annotation default_value_annotation = 26;
-          Attachment default_value_attachment = 27;
-          CodeableConcept default_value_codeable_concept = 28;
-          Coding default_value_coding = 29;
-          ContactPoint default_value_contact_point = 30;
-          Count default_value_count = 31;
-          Distance default_value_distance = 32;
-          Duration default_value_duration = 33;
-          HumanName default_value_human_name = 34;
-          Identifier default_value_identifier = 35;
-          Money default_value_money = 36;
-          Period default_value_period = 37;
-          Quantity default_value_quantity = 38;
-          Range default_value_range = 39;
-          Ratio default_value_ratio = 40;
-          Reference default_value_reference = 41;
-          SampledData default_value_sampled_data = 42;
-          Signature default_value_signature = 43;
-          Timing default_value_timing = 44;
-          Meta default_value_meta = 45;
+        message DefaultValue {
+          oneof default_value {
+            Base64Binary base64_binary = 1;
+            Boolean boolean = 2;
+            Code code = 3;
+            Date date = 4;
+            DateTime date_time = 5;
+            Decimal decimal = 6;
+            Id id = 7;
+            Instant instant = 8;
+            Integer integer = 9;
+            Markdown markdown = 10;
+            Oid oid = 11;
+            PositiveInt positive_int = 12;
+            String string_value = 13 [json_name = "string"];
+            Time time = 14;
+            UnsignedInt unsigned_int = 15;
+            Uri uri = 16;
+            Address address = 17;
+            Age age = 18;
+            Annotation annotation = 19;
+            Attachment attachment = 20;
+            CodeableConcept codeable_concept = 21;
+            Coding coding = 22;
+            ContactPoint contact_point = 23;
+            Count count = 24;
+            Distance distance = 25;
+            Duration duration = 26;
+            HumanName human_name = 27;
+            Identifier identifier = 28;
+            Money money = 29;
+            Period period = 30;
+            Quantity quantity = 31;
+            Range range = 32;
+            Ratio ratio = 33;
+            Reference reference = 34;
+            SampledData sampled_data = 35;
+            Signature signature = 36;
+            Timing timing = 37;
+            Meta meta = 38;
+          }
         }
+        DefaultValue default_value = 8 [(is_choice_type) = true];
 
         // Optional field for this source
-        String element = 46;
+        String element = 9;
 
         // first | not_first | last | not_last | only_one
-        StructureMapSourceListModeCode list_mode = 47;
+        StructureMapSourceListModeCode list_mode = 10;
 
         // Named context for field, if a field is specified
-        Id variable = 48;
+        Id variable = 11;
 
         // FHIRPath expression  - must be true or the rule does not apply
-        String condition = 49;
+        String condition = 12;
 
         // FHIRPath expression  - must be true or the mapping engine throws an
         // error instead of completing
-        String check = 50;
+        String check = 13;
       }
       repeated Source source = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
 
@@ -15721,14 +16050,20 @@ message StructureMap {
           repeated Extension modifier_extension = 3;
 
           // Parameter value - variable or literal
-          oneof value {
-            option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-            Id value_id = 4;
-            String value_string = 5;
-            Boolean value_boolean = 6;
-            Integer value_integer = 7;
-            Decimal value_decimal = 8;
+          message Value {
+            oneof value {
+              option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+              Id id = 1;
+              String string_value = 2 [json_name = "string"];
+              Boolean boolean = 3;
+              Integer integer = 4;
+              Decimal decimal = 5;
+            }
           }
+          Value value = 4 [
+            (is_choice_type) = true,
+            (validation_requirement) = REQUIRED_BY_FHIR
+          ];
         }
         repeated Parameter parameter = 11;
       }
@@ -15781,7 +16116,7 @@ message Subscription {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -15860,7 +16195,7 @@ message Substance {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -15926,11 +16261,15 @@ message Substance {
     Ratio quantity = 4;
 
     // A component of the substance
-    oneof substance {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      CodeableConcept substance_codeable_concept = 5;
-      Reference substance_reference = 6;
+    message SubstanceType {
+      oneof substance {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2;
+      }
     }
+    SubstanceType substance = 5
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Ingredient ingredient = 15;
 }
@@ -15951,7 +16290,7 @@ message SupplyDelivery {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -15981,7 +16320,7 @@ message SupplyDelivery {
   Reference patient = 13;
 
   // Category of dispense event
-  CodeableConcept type = 14 [(fhir_code_type) = CODE_SUPPLYDELIVERY_TYPE];
+  CodeableConcept type = 14;
 
   // The item that is delivered or supplied
   message SuppliedItem {
@@ -15998,28 +16337,34 @@ message SupplyDelivery {
     Quantity quantity = 4;
 
     // Medication, Substance, or Device supplied
-    oneof item {
-      CodeableConcept item_codeable_concept = 5;
-      Reference item_reference = 6;
+    message Item {
+      oneof item {
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2;
+      }
     }
+    Item item = 5 [(is_choice_type) = true];
   }
   SuppliedItem supplied_item = 15;
 
   // When event occurred
-  oneof occurrence {
-    DateTime occurrence_date_time = 16;
-    Period occurrence_period = 17;
-    Timing occurrence_timing = 18;
+  message Occurrence {
+    oneof occurrence {
+      DateTime date_time = 1;
+      Period period = 2;
+      Timing timing = 3;
+    }
   }
+  Occurrence occurrence = 16 [(is_choice_type) = true];
 
   // Dispenser
-  Reference supplier = 19;
+  Reference supplier = 17;
 
   // Where the Supply was sent
-  Reference destination = 20;
+  Reference destination = 18;
 
   // Who collected the Supply
-  repeated Reference receiver = 21;
+  repeated Reference receiver = 19;
 }
 
 // Auto-generated from StructureDefinition for SupplyRequest, last updated
@@ -16038,7 +16383,7 @@ message SupplyRequest {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -16079,22 +16424,28 @@ message SupplyRequest {
     Quantity quantity = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Medication, Substance, or Device requested to be supplied
-    oneof item {
-      CodeableConcept item_codeable_concept = 5;
-      Reference item_reference = 6;
+    message Item {
+      oneof item {
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2;
+      }
     }
+    Item item = 5 [(is_choice_type) = true];
   }
   OrderedItem ordered_item = 13;
 
   // When the request should be fulfilled
-  oneof occurrence {
-    DateTime occurrence_date_time = 14;
-    Period occurrence_period = 15;
-    Timing occurrence_timing = 16;
+  message Occurrence {
+    oneof occurrence {
+      DateTime date_time = 1;
+      Period period = 2;
+      Timing timing = 3;
+    }
   }
+  Occurrence occurrence = 14 [(is_choice_type) = true];
 
   // When the request was made
-  DateTime authored_on = 17;
+  DateTime authored_on = 15;
 
   // Who/what is requesting service
   message Requester {
@@ -16113,22 +16464,25 @@ message SupplyRequest {
     // Organization agent is acting for
     Reference on_behalf_of = 5;
   }
-  Requester requester = 18;
+  Requester requester = 16;
 
   // Who is intended to fulfill the request
-  repeated Reference supplier = 19;
+  repeated Reference supplier = 17;
 
   // Why the supply item was requested
-  oneof reason {
-    CodeableConcept reason_codeable_concept = 20;
-    Reference reason_reference = 21;
+  message Reason {
+    oneof reason {
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2;
+    }
   }
+  Reason reason = 18 [(is_choice_type) = true];
 
   // The origin of the supply
-  Reference deliver_from = 22;
+  Reference deliver_from = 19;
 
   // The destination of the supply
-  Reference deliver_to = 23;
+  Reference deliver_to = 20;
 }
 
 // Auto-generated from StructureDefinition for Task, last updated
@@ -16147,7 +16501,7 @@ message Task {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -16165,58 +16519,61 @@ message Task {
   repeated Identifier identifier = 9;
 
   // Formal definition of task
-  oneof definition {
-    Uri definition_uri = 10;
-    Reference definition_reference = 11;
+  message Definition {
+    oneof definition {
+      Uri uri = 1;
+      Reference reference = 2;
+    }
   }
+  Definition definition = 10 [(is_choice_type) = true];
 
   // Request fulfilled by this task
-  repeated Reference based_on = 12;
+  repeated Reference based_on = 11;
 
   // Requisition or grouper id
-  Identifier group_identifier = 13;
+  Identifier group_identifier = 12;
 
   // Composite task
-  repeated Reference part_of = 14;
+  repeated Reference part_of = 13;
 
   // draft | requested | received | accepted | +
-  TaskStatusCode status = 15 [(validation_requirement) = REQUIRED_BY_FHIR];
+  TaskStatusCode status = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Reason for current status
-  CodeableConcept status_reason = 16;
+  CodeableConcept status_reason = 15;
 
   // E.g. "Specimen collected", "IV prepped"
-  CodeableConcept business_status = 17;
+  CodeableConcept business_status = 16;
 
   // proposal | plan | order +
-  RequestIntentCode intent = 18 [(validation_requirement) = REQUIRED_BY_FHIR];
+  RequestIntentCode intent = 17 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // normal | urgent | asap | stat
-  RequestPriorityCode priority = 19;
+  RequestPriorityCode priority = 18;
 
   // Task Type
-  CodeableConcept code = 20;
+  CodeableConcept code = 19;
 
   // Human-readable explanation of task
-  String description = 21;
+  String description = 20;
 
   // What task is acting on
-  Reference focus = 22;
+  Reference focus = 21;
 
   // Beneficiary of the Task
-  Reference for_value = 23 [json_name = "for"];
+  Reference for_value = 22 [json_name = "for"];
 
   // Healthcare event during which this task originated
-  Reference context = 24;
+  Reference context = 23;
 
   // Start and end time of execution
-  Period execution_period = 25;
+  Period execution_period = 24;
 
   // Task Creation Date
-  DateTime authored_on = 26;
+  DateTime authored_on = 25;
 
   // Task Last Modified Date
-  DateTime last_modified = 27;
+  DateTime last_modified = 26;
 
   // Who is asking for task to be done
   message Requester {
@@ -16235,23 +16592,23 @@ message Task {
     // Organization individual is acting for
     Reference on_behalf_of = 5;
   }
-  Requester requester = 28;
+  Requester requester = 27;
 
   // requester | dispatcher | scheduler | performer | monitor | manager |
   // acquirer | reviewer
-  repeated CodeableConcept performer_type = 29;
+  repeated CodeableConcept performer_type = 28;
 
   // Responsible individual
-  Reference owner = 30;
+  Reference owner = 29;
 
   // Why task is needed
-  CodeableConcept reason = 31;
+  CodeableConcept reason = 30;
 
   // Comments made about the task
-  repeated Annotation note = 32;
+  repeated Annotation note = 31;
 
   // Key events in history of the Task
-  repeated Reference relevant_history = 33;
+  repeated Reference relevant_history = 32;
 
   // Constraints on fulfillment tasks
   message Restriction {
@@ -16273,7 +16630,7 @@ message Task {
     // For whom is fulfillment sought?
     repeated Reference recipient = 6;
   }
-  Restriction restriction = 34;
+  Restriction restriction = 33;
 
   // Information used to perform task
   message Parameter {
@@ -16290,49 +16647,53 @@ message Task {
     CodeableConcept type = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Content to use in performing the task
-    oneof value {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      Base64Binary value_base64_binary = 5;
-      Boolean value_boolean = 6;
-      Code value_code = 7;
-      Date value_date = 8;
-      DateTime value_date_time = 9;
-      Decimal value_decimal = 10;
-      Id value_id = 11;
-      Instant value_instant = 12;
-      Integer value_integer = 13;
-      Markdown value_markdown = 14;
-      Oid value_oid = 15;
-      PositiveInt value_positive_int = 16;
-      String value_string = 17;
-      Time value_time = 18;
-      UnsignedInt value_unsigned_int = 19;
-      Uri value_uri = 20;
-      Address value_address = 21;
-      Age value_age = 22;
-      Annotation value_annotation = 23;
-      Attachment value_attachment = 24;
-      CodeableConcept value_codeable_concept = 25;
-      Coding value_coding = 26;
-      ContactPoint value_contact_point = 27;
-      Count value_count = 28;
-      Distance value_distance = 29;
-      Duration value_duration = 30;
-      HumanName value_human_name = 31;
-      Identifier value_identifier = 32;
-      Money value_money = 33;
-      Period value_period = 34;
-      Quantity value_quantity = 35;
-      Range value_range = 36;
-      Ratio value_ratio = 37;
-      Reference value_reference = 38;
-      SampledData value_sampled_data = 39;
-      Signature value_signature = 40;
-      Timing value_timing = 41;
-      Meta value_meta = 42;
+    message Value {
+      oneof value {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        Base64Binary base64_binary = 1;
+        Boolean boolean = 2;
+        Code code = 3;
+        Date date = 4;
+        DateTime date_time = 5;
+        Decimal decimal = 6;
+        Id id = 7;
+        Instant instant = 8;
+        Integer integer = 9;
+        Markdown markdown = 10;
+        Oid oid = 11;
+        PositiveInt positive_int = 12;
+        String string_value = 13 [json_name = "string"];
+        Time time = 14;
+        UnsignedInt unsigned_int = 15;
+        Uri uri = 16;
+        Address address = 17;
+        Age age = 18;
+        Annotation annotation = 19;
+        Attachment attachment = 20;
+        CodeableConcept codeable_concept = 21;
+        Coding coding = 22;
+        ContactPoint contact_point = 23;
+        Count count = 24;
+        Distance distance = 25;
+        Duration duration = 26;
+        HumanName human_name = 27;
+        Identifier identifier = 28;
+        Money money = 29;
+        Period period = 30;
+        Quantity quantity = 31;
+        Range range = 32;
+        Ratio ratio = 33;
+        Reference reference = 34;
+        SampledData sampled_data = 35;
+        Signature signature = 36;
+        Timing timing = 37;
+        Meta meta = 38;
+      }
     }
+    Value value = 5
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Parameter input = 35;
+  repeated Parameter input = 34;
 
   // Information produced as part of task
   message Output {
@@ -16349,49 +16710,53 @@ message Task {
     CodeableConcept type = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Result of output
-    oneof value {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-      Base64Binary value_base64_binary = 5;
-      Boolean value_boolean = 6;
-      Code value_code = 7;
-      Date value_date = 8;
-      DateTime value_date_time = 9;
-      Decimal value_decimal = 10;
-      Id value_id = 11;
-      Instant value_instant = 12;
-      Integer value_integer = 13;
-      Markdown value_markdown = 14;
-      Oid value_oid = 15;
-      PositiveInt value_positive_int = 16;
-      String value_string = 17;
-      Time value_time = 18;
-      UnsignedInt value_unsigned_int = 19;
-      Uri value_uri = 20;
-      Address value_address = 21;
-      Age value_age = 22;
-      Annotation value_annotation = 23;
-      Attachment value_attachment = 24;
-      CodeableConcept value_codeable_concept = 25;
-      Coding value_coding = 26;
-      ContactPoint value_contact_point = 27;
-      Count value_count = 28;
-      Distance value_distance = 29;
-      Duration value_duration = 30;
-      HumanName value_human_name = 31;
-      Identifier value_identifier = 32;
-      Money value_money = 33;
-      Period value_period = 34;
-      Quantity value_quantity = 35;
-      Range value_range = 36;
-      Ratio value_ratio = 37;
-      Reference value_reference = 38;
-      SampledData value_sampled_data = 39;
-      Signature value_signature = 40;
-      Timing value_timing = 41;
-      Meta value_meta = 42;
+    message Value {
+      oneof value {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        Base64Binary base64_binary = 1;
+        Boolean boolean = 2;
+        Code code = 3;
+        Date date = 4;
+        DateTime date_time = 5;
+        Decimal decimal = 6;
+        Id id = 7;
+        Instant instant = 8;
+        Integer integer = 9;
+        Markdown markdown = 10;
+        Oid oid = 11;
+        PositiveInt positive_int = 12;
+        String string_value = 13 [json_name = "string"];
+        Time time = 14;
+        UnsignedInt unsigned_int = 15;
+        Uri uri = 16;
+        Address address = 17;
+        Age age = 18;
+        Annotation annotation = 19;
+        Attachment attachment = 20;
+        CodeableConcept codeable_concept = 21;
+        Coding coding = 22;
+        ContactPoint contact_point = 23;
+        Count count = 24;
+        Distance distance = 25;
+        Duration duration = 26;
+        HumanName human_name = 27;
+        Identifier identifier = 28;
+        Money money = 29;
+        Period period = 30;
+        Quantity quantity = 31;
+        Range range = 32;
+        Ratio ratio = 33;
+        Reference reference = 34;
+        SampledData sampled_data = 35;
+        Signature signature = 36;
+        Timing timing = 37;
+        Meta meta = 38;
+      }
     }
+    Value value = 5
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Output output = 36;
+  repeated Output output = 35;
 }
 
 // Auto-generated from StructureDefinition for TestReport, last updated
@@ -16410,7 +16775,7 @@ message TestReport {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -16637,7 +17002,7 @@ message TestScript {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -17314,7 +17679,7 @@ message ValueSet {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -17444,7 +17809,7 @@ message ValueSet {
           repeated Extension modifier_extension = 3;
 
           // Human language of the designation
-          Code language = 4;
+          LanguageCode language = 4;
 
           // Details how this designation would be used
           Coding use = 5;
@@ -17528,14 +17893,17 @@ message ValueSet {
       String name = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
       // Value of the named parameter
-      oneof value {
-        String value_string = 5;
-        Boolean value_boolean = 6;
-        Integer value_integer = 7;
-        Decimal value_decimal = 8;
-        Uri value_uri = 9;
-        Code value_code = 10;
+      message Value {
+        oneof value {
+          String string_value = 1 [json_name = "string"];
+          Boolean boolean = 2;
+          Integer integer = 3;
+          Decimal decimal = 4;
+          Uri uri = 5;
+          Code code = 6;
+        }
       }
+      Value value = 5 [(is_choice_type) = true];
     }
     repeated Parameter parameter = 8;
 
@@ -17595,7 +17963,7 @@ message VisionPrescription {
   Uri implicit_rules = 3;
 
   // Language of the resource content
-  Code language = 4;
+  LanguageCode language = 4;
 
   // Text summary of the resource, for human interpretation
   Narrative text = 5;
@@ -17628,10 +17996,13 @@ message VisionPrescription {
   Reference prescriber = 14;
 
   // Reason or indication for writing the prescription
-  oneof reason {
-    CodeableConcept reason_codeable_concept = 15;
-    Reference reason_reference = 16;
+  message Reason {
+    oneof reason {
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2;
+    }
   }
+  Reason reason = 15 [(is_choice_type) = true];
 
   // Vision supply authorization
   message Dispense {
@@ -17689,5 +18060,5 @@ message VisionPrescription {
     // Notes for coatings
     repeated Annotation note = 18;
   }
-  repeated Dispense dispense = 17;
+  repeated Dispense dispense = 16;
 }

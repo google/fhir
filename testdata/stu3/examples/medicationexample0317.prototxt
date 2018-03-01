@@ -28,16 +28,18 @@ form {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-      }
-      code {
-        value: "204520"
-      }
-      display {
-        value: "Potassium Chloride"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "204520"
+        }
+        display {
+          value: "Potassium Chloride"
+        }
       }
     }
   }
@@ -67,16 +69,18 @@ ingredient {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-      }
-      code {
-        value: "313002"
-      }
-      display {
-        value: "Sodium Chloride 0.9% injectable solution"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "313002"
+        }
+        display {
+          value: "Sodium Chloride 0.9% injectable solution"
+        }
       }
     }
   }

@@ -49,16 +49,18 @@ use_context {
       value: "species"
     }
   }
-  value_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "337915000"
-      }
-      display {
-        value: "Homo sapiens (organism)"
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "337915000"
+        }
+        display {
+          value: "Homo sapiens (organism)"
+        }
       }
     }
   }

@@ -49,12 +49,14 @@ extension {
   url {
     value: "http://example.org/fhir/StructureDefinition/patientAvatar"
   }
-  value_reference {
-    fragment {
-      value: "pic1"
-    }
-    display {
-      value: "Duck image"
+  value {
+    reference {
+      fragment {
+        value: "pic1"
+      }
+      display {
+        value: "Duck image"
+      }
     }
   }
 }
@@ -66,33 +68,39 @@ extension {
     url {
       value: "nestedA"
     }
-    value_coding {
-      extension {
-        url {
-          value: "http://example.org/fhir/StructureDefinition/extraforcodingWithExt"
+    value {
+      coding {
+        extension {
+          url {
+            value: "http://example.org/fhir/StructureDefinition/extraforcodingWithExt"
+          }
+          extension {
+            url {
+              value: "extra1"
+            }
+            value {
+              string_value {
+                value: "extra info"
+              }
+            }
+          }
         }
         extension {
           url {
-            value: "extra1"
+            value: "http://example.org/fhir/StructureDefinition/extraforcodingWithValue"
           }
-          value_string {
-            value: "extra info"
+          value {
+            integer {
+              value: 45
+            }
           }
         }
-      }
-      extension {
-        url {
-          value: "http://example.org/fhir/StructureDefinition/extraforcodingWithValue"
+        system {
+          value: "http://demo.org/id/4"
         }
-        value_integer {
-          value: 45
+        code {
+          value: "AB45"
         }
-      }
-      system {
-        value: "http://demo.org/id/4"
-      }
-      code {
-        value: "AB45"
       }
     }
   }
@@ -107,8 +115,10 @@ extension {
       url {
         value: "nestedB1"
       }
-      value_string {
-        value: "hello"
+      value {
+        string_value {
+          value: "hello"
+        }
       }
     }
   }
@@ -117,16 +127,20 @@ modifier_extension {
   url {
     value: "http://example.org/fhir/StructureDefinition/pi"
   }
-  value_decimal {
-    value: "3.141592653589793"
+  value {
+    decimal {
+      value: "3.141592653589793"
+    }
   }
 }
 modifier_extension {
   url {
     value: "http://example.org/fhir/StructureDefinition/max-decimal-precision"
   }
-  value_decimal {
-    value: "1.00065022141624642"
+  value {
+    decimal {
+      value: "1.00065022141624642"
+    }
   }
 }
 identifier {
@@ -156,16 +170,20 @@ active {
     url {
       value: "http://example.org/fhir/StructureDefinition/recordStatus"
     }
-    value_code {
-      value: "archived"
+    value {
+      code {
+        value: "archived"
+      }
     }
   }
   extension {
     url {
       value: "https://fhir.google.com/extensions/primitiveHasNoValue"
     }
-    value_boolean {
-      value: true
+    value {
+      boolean {
+        value: true
+      }
     }
   }
 }
@@ -214,8 +232,10 @@ birth_date {
   value_us: 155088000000000
   precision: MONTH
 }
-deceased_boolean {
-  value: true
+deceased {
+  boolean {
+    value: true
+  }
 }
 address {
   use {
@@ -239,13 +259,17 @@ marital_status {
     url {
       value: "http://example.org/fhir/StructureDefinition/nullFlavor"
     }
-    value_code {
-      value: "ASKU"
+    value {
+      code {
+        value: "ASKU"
+      }
     }
   }
 }
-multiple_birth_integer {
-  value: 3
+multiple_birth {
+  integer {
+    value: 3
+  }
 }
 contact {
   relationship {
@@ -265,16 +289,20 @@ contact {
         url {
           value: "http://example.org/fhir/StructureDefinition/qualifier"
         }
-        value_string {
-          value: "VV"
+        value {
+          string_value {
+            value: "VV"
+          }
         }
       }
       extension {
         url {
           value: "http://hl7.org/fhir/StructureDefinitioniso-21090#nullFlavor"
         }
-        value_code {
-          value: "ASKU"
+        value {
+          code {
+            value: "ASKU"
+          }
         }
       }
     }
@@ -290,8 +318,10 @@ contact {
         url {
           value: "http://hl7.org/fhir/StructureDefinition/qualifier"
         }
-        value_code {
-          value: "MID"
+        value {
+          code {
+            value: "MID"
+          }
         }
       }
     }

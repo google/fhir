@@ -28,16 +28,18 @@ form {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "387253001"
-      }
-      display {
-        value: "Salicyclic Acid (substance)"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "387253001"
+        }
+        display {
+          value: "Salicyclic Acid (substance)"
+        }
       }
     }
   }
@@ -67,16 +69,18 @@ ingredient {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "396458002"
-      }
-      display {
-        value: "Hydrocortisone (substance)"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "396458002"
+        }
+        display {
+          value: "Hydrocortisone (substance)"
+        }
       }
     }
   }
@@ -106,16 +110,18 @@ ingredient {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "126066007"
-      }
-      display {
-        value: "White Petrolatum (substance)"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "126066007"
+        }
+        display {
+          value: "White Petrolatum (substance)"
+        }
       }
     }
   }

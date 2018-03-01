@@ -23,22 +23,6 @@ option java_package = "com.google.fhir.stu3.proto";
 
 import "google/protobuf/descriptor.proto";
 
-enum CodeType {
-  CODE_REQUIRED_BUT_TYPE_IS_UNKNOWN = 0;
-  CODE_ACTION_TYPE = 1;  // Coding
-  CODE_ADVERSE_EVENT_OUTCOME = 2;  // CodeableConcept
-  CODE_CLAIM_TYPE = 3;             // CodeableConcept
-  CODE_DESIGNATION_USE = 4;        // Coding
-  CODE_MIME_TYPE = 5;              // Not a FHIR CodeSystem
-  CODE_NOTE_TYPE = 6;              // CodeableConcept
-  CODE_REMITTANCE_OUTCOME = 7;     // CodeableConcept
-  CODE_REQUEST_INTENT = 8;         // CodeableConcept
-  CODE_RESOURCE_TYPE_LINK = 9;     // CodeableConcept
-  CODE_SUPPLYDELIVERY_TYPE = 10;   // CodeableConcept
-  CODE_V3_ACTINCIDENTCODE = 11;    // CodeableConcept
-  CODE_V3_ACTINVOICEGROUPCODE = 12;  // CodeableConcept
-}
-
 // TODO(sundberg): Unify with StructureDefinitionKindCode
 enum StructureDefinitionKindValue {
   KIND_UNKNOWN = 0;
@@ -63,6 +47,10 @@ extend google.protobuf.MessageOptions {
   // valueset identifier.
   string fhir_valueset_url = 180887441;
 
+  // If this message is a Reference, the reference is constrained to these
+  // resource types.
+  repeated string fhir_reference_type = 183546385;
+
   // What type of fhir structure does this message represent?
   StructureDefinitionKindValue structure_definition_kind = 182131192;
 }
@@ -77,8 +65,8 @@ extend google.protobuf.FieldOptions {
   // Is this field required?
   Requirement validation_requirement = 162282766;
 
-  // When the field is of type Code, what kind of Code is it?
-  CodeType fhir_code_type = 162491637;
+  // Is this field a wrapper around a choice type?
+  bool is_choice_type = 187112991;
 }
 
 extend google.protobuf.OneofOptions {

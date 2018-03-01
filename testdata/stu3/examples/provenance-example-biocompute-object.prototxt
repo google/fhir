@@ -41,9 +41,11 @@ agent {
       }
     }
   }
-  who_reference {
-    practitioner_id {
-      value: "example"
+  who {
+    reference {
+      practitioner_id {
+        value: "example"
+      }
     }
   }
 }
@@ -51,22 +53,24 @@ entity {
   role {
     value: SOURCE
   }
-  what_identifier {
-    type {
-      coding {
-        system {
-          value: "https://hive.biochemistry.gwu.edu"
-        }
-        code {
-          value: "biocompute"
-        }
-        display {
-          value: "obj.1001"
+  what {
+    identifier {
+      type {
+        coding {
+          system {
+            value: "https://hive.biochemistry.gwu.edu"
+          }
+          code {
+            value: "biocompute"
+          }
+          display {
+            value: "obj.1001"
+          }
         }
       }
-    }
-    value {
-      value: "https://hive.biochemistry.gwu.edu/cgi-bin/prd/htscsrs/servlet.cgi?pageid=bcoexample_1"
+      value {
+        value: "https://hive.biochemistry.gwu.edu/cgi-bin/prd/htscsrs/servlet.cgi?pageid=bcoexample_1"
+      }
     }
   }
 }

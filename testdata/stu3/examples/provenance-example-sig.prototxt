@@ -52,8 +52,10 @@ agent {
       }
     }
   }
-  who_uri {
-    value: "mailto://hhd@ssa.gov"
+  who {
+    uri {
+      value: "mailto://hhd@ssa.gov"
+    }
   }
 }
 signature {
@@ -73,9 +75,11 @@ signature {
     timezone: "+10:00"
     precision: SECOND
   }
-  who_reference {
-    practitioner_id {
-      value: "xcda-author"
+  who {
+    reference {
+      practitioner_id {
+        value: "xcda-author"
+      }
     }
   }
   content_type {

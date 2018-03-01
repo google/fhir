@@ -40,9 +40,11 @@ characteristic {
       value: "gender"
     }
   }
-  value_codeable_concept {
-    text {
-      value: "mixed"
+  value {
+    codeable_concept {
+      text {
+        value: "mixed"
+      }
     }
   }
   exclude {
@@ -54,9 +56,11 @@ characteristic {
       value: "owner"
     }
   }
-  value_codeable_concept {
-    text {
-      value: "John Smith"
+  value {
+    codeable_concept {
+      text {
+        value: "John Smith"
+      }
     }
   }
   exclude {

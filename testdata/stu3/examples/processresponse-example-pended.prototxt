@@ -46,8 +46,10 @@ contained {
       }
     }
     payload {
-      content_string {
-        value: "Please provide the accident report and any associated pictures to support your Claim#      DEF5647."
+      content {
+        string_value {
+          value: "Please provide the accident report and any associated pictures to support your Claim#      DEF5647."
+        }
       }
     }
     authored_on {

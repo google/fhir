@@ -85,32 +85,36 @@ subject {
     value: "Roel"
   }
 }
-onset_age {
-  value {
-    value: "52"
-  }
-  unit {
-    value: "years"
-  }
-  system {
-    value: "http://unitsofmeasure.org"
-  }
-  code {
-    value: "a"
+onset {
+  age {
+    value {
+      value: "52"
+    }
+    unit {
+      value: "years"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "a"
+    }
   }
 }
-abatement_age {
-  value {
-    value: "54"
-  }
-  unit {
-    value: "years"
-  }
-  system {
-    value: "http://unitsofmeasure.org"
-  }
-  code {
-    value: "a"
+abatement {
+  age {
+    value {
+      value: "54"
+    }
+    unit {
+      value: "years"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "a"
+    }
   }
 }
 asserted_date {

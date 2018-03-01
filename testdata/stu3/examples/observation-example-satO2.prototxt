@@ -70,23 +70,27 @@ subject {
     value: "example"
   }
 }
-effective_date_time {
-  value_us: 1417768210000000
-  timezone: "+01:00"
-  precision: SECOND
+effective {
+  date_time {
+    value_us: 1417768210000000
+    timezone: "+01:00"
+    precision: SECOND
+  }
 }
-value_quantity {
-  value {
-    value: "95"
-  }
-  unit {
-    value: "%"
-  }
-  system {
-    value: "http://unitsofmeasure.org"
-  }
-  code {
-    value: "%"
+value {
+  quantity {
+    value {
+      value: "95"
+    }
+    unit {
+      value: "%"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "%"
+    }
   }
 }
 interpretation {

@@ -51,10 +51,12 @@ birth_date {
   value_us: 380592000000000
   precision: DAY
 }
-deceased_date_time {
-  value_us: 1423885320000000
-  timezone: "+10:00"
-  precision: SECOND
+deceased {
+  date_time {
+    value_us: 1423885320000000
+    timezone: "+10:00"
+    precision: SECOND
+  }
 }
 managing_organization {
   organization_id {

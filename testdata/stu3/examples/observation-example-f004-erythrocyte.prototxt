@@ -44,16 +44,18 @@ subject {
     value: "P. van de Heuvel"
   }
 }
-effective_period {
-  start {
-    value_us: 1364895010000000
-    timezone: "+01:00"
-    precision: SECOND
-  }
-  end {
-    value_us: 1365154210000000
-    timezone: "+01:00"
-    precision: SECOND
+effective {
+  period {
+    start {
+      value_us: 1364895010000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1365154210000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
   }
 }
 issued {
@@ -69,18 +71,20 @@ performer {
     value: "A. Langeveld"
   }
 }
-value_quantity {
-  value {
-    value: "4.12"
-  }
-  unit {
-    value: "10^12/L"
-  }
-  system {
-    value: "http://unitsofmeasure.org"
-  }
-  code {
-    value: "10*12/L"
+value {
+  quantity {
+    value {
+      value: "4.12"
+    }
+    unit {
+      value: "10^12/L"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "10*12/L"
+    }
   }
 }
 interpretation {

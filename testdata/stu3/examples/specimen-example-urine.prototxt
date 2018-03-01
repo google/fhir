@@ -49,10 +49,12 @@ collection {
       value: "f202"
     }
   }
-  collected_date_time {
-    value_us: 1439881380000000
-    timezone: "UTC"
-    precision: SECOND
+  collected {
+    date_time {
+      value_us: 1439881380000000
+      timezone: "UTC"
+      precision: SECOND
+    }
   }
 }
 processing {
@@ -74,10 +76,12 @@ processing {
       value: "6 N HCl"
     }
   }
-  time_date_time {
-    value_us: 1439885400000000
-    timezone: "UTC"
-    precision: SECOND
+  time {
+    date_time {
+      value_us: 1439885400000000
+      timezone: "UTC"
+      precision: SECOND
+    }
   }
 }
 container {

@@ -69,9 +69,11 @@ subject {
     value: "example"
   }
 }
-effective_date_time {
-  value_us: 1347840000000000
-  precision: DAY
+effective {
+  date_time {
+    value_us: 1347840000000000
+    precision: DAY
+  }
 }
 performer {
   practitioner_id {
@@ -143,18 +145,20 @@ component {
       }
     }
   }
-  value_quantity {
-    value {
-      value: "107"
-    }
-    unit {
-      value: "mmHg"
-    }
-    system {
-      value: "http://unitsofmeasure.org"
-    }
-    code {
-      value: "mm[Hg]"
+  value {
+    quantity {
+      value {
+        value: "107"
+      }
+      unit {
+        value: "mmHg"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mm[Hg]"
+      }
     }
   }
   interpretation {
@@ -188,18 +192,20 @@ component {
       }
     }
   }
-  value_quantity {
-    value {
-      value: "60"
-    }
-    unit {
-      value: "mmHg"
-    }
-    system {
-      value: "http://unitsofmeasure.org"
-    }
-    code {
-      value: "mm[Hg]"
+  value {
+    quantity {
+      value {
+        value: "60"
+      }
+      unit {
+        value: "mmHg"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mm[Hg]"
+      }
     }
   }
   interpretation {

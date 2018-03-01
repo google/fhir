@@ -47,8 +47,10 @@ item {
       value: "Do you have allergies?"
     }
     answer {
-      value_string {
-        value: "I am allergic to house dust"
+      value {
+        string_value {
+          value: "I am allergic to house dust"
+        }
       }
     }
   }
@@ -68,8 +70,10 @@ item {
       value: "What is your gender?"
     }
     answer {
-      value_string {
-        value: "Male"
+      value {
+        string_value {
+          value: "Male"
+        }
       }
     }
   }
@@ -81,9 +85,11 @@ item {
       value: "What is your date of birth?"
     }
     answer {
-      value_date {
-        value_us: -309398400000000
-        precision: DAY
+      value {
+        date {
+          value_us: -309398400000000
+          precision: DAY
+        }
       }
     }
   }
@@ -95,8 +101,10 @@ item {
       value: "What is your country of birth?"
     }
     answer {
-      value_string {
-        value: "The Netherlands"
+      value {
+        string_value {
+          value: "The Netherlands"
+        }
       }
     }
   }
@@ -108,8 +116,10 @@ item {
       value: "What is your marital status?"
     }
     answer {
-      value_string {
-        value: "married"
+      value {
+        string_value {
+          value: "married"
+        }
       }
     }
   }
@@ -129,8 +139,10 @@ item {
       value: "Do you smoke?"
     }
     answer {
-      value_string {
-        value: "No"
+      value {
+        string_value {
+          value: "No"
+        }
       }
     }
   }
@@ -142,8 +154,10 @@ item {
       value: "Do you drink alchohol?"
     }
     answer {
-      value_string {
-        value: "No, but I used to drink"
+      value {
+        string_value {
+          value: "No, but I used to drink"
+        }
       }
     }
   }

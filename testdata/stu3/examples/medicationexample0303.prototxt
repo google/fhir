@@ -54,16 +54,18 @@ form {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://snomed.info/sct"
-      }
-      code {
-        value: "129472003"
-      }
-      display {
-        value: "Alemtuzamab (substance)"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "129472003"
+        }
+        display {
+          value: "Alemtuzamab (substance)"
+        }
       }
     }
   }
@@ -107,16 +109,18 @@ package_value {
     }
   }
   content {
-    item_codeable_concept {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "408596005"
-        }
-        display {
-          value: "Alemtuzumab 30mg/3mL infusion concentrate (product)"
+    item {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "408596005"
+          }
+          display {
+            value: "Alemtuzumab 30mg/3mL infusion concentrate (product)"
+          }
         }
       }
     }

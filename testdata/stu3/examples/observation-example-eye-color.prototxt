@@ -22,10 +22,14 @@ subject {
     value: "example"
   }
 }
-effective_date_time {
-  value_us: 1463529600000000
-  precision: DAY
+effective {
+  date_time {
+    value_us: 1463529600000000
+    precision: DAY
+  }
 }
-value_string {
-  value: "blue"
+value {
+  string_value {
+    value: "blue"
+  }
 }

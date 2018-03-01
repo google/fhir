@@ -81,21 +81,25 @@ context {
     value: "example"
   }
 }
-effective_date_time {
-  value_us: 1459123200000000
-  precision: DAY
+effective {
+  date_time {
+    value_us: 1459123200000000
+    precision: DAY
+  }
 }
-value_quantity {
-  value {
-    value: "185"
-  }
-  unit {
-    value: "lbs"
-  }
-  system {
-    value: "http://unitsofmeasure.org"
-  }
-  code {
-    value: "[lb_av]"
+value {
+  quantity {
+    value {
+      value: "185"
+    }
+    unit {
+      value: "lbs"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "[lb_av]"
+    }
   }
 }

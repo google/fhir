@@ -20,8 +20,10 @@ extension {
   url {
     value: "http://example.org/StructureDefinition/trials"
   }
-  value_code {
-    value: "renal"
+  value {
+    code {
+      value: "renal"
+    }
   }
 }
 identifier {

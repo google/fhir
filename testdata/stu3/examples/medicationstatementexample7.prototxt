@@ -47,9 +47,11 @@ contained {
 status {
   value: INTENDED
 }
-medication_reference {
-  fragment {
-    value: "med0315"
+medication {
+  reference {
+    fragment {
+      value: "med0315"
+    }
   }
 }
 information_source {

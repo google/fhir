@@ -46,20 +46,24 @@ supplied_item {
       value: "10"
     }
   }
-  item_codeable_concept {
-    coding {
-      code {
-        value: "BlueTubes"
-      }
-      display {
-        value: "Blood collect tubes blue cap"
+  item {
+    codeable_concept {
+      coding {
+        code {
+          value: "BlueTubes"
+        }
+        display {
+          value: "Blood collect tubes blue cap"
+        }
       }
     }
   }
 }
-occurrence_date_time {
-  value_us: 1483142400000000
-  precision: DAY
+occurrence {
+  date_time {
+    value_us: 1483142400000000
+    precision: DAY
+  }
 }
 supplier {
   display {

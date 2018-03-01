@@ -41,10 +41,12 @@ subject {
     value: "Bob Smith"
   }
 }
-effective_date_time {
-  value_us: 1476495296000000
-  timezone: "+11:00"
-  precision: SECOND
+effective {
+  date_time {
+    value_us: 1476495296000000
+    timezone: "+11:00"
+    precision: SECOND
+  }
 }
 issued {
   value_us: 1476932405000000

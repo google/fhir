@@ -426,8 +426,10 @@ entry {
           value: "http://fhir.healthintersections.com.au/open/Encounter/doc-example"
         }
       }
-      value_string {
-        value: "Acute Asthmatic attack. Was wheezing for days prior to admission."
+      value {
+        string_value {
+          value: "Acute Asthmatic attack. Was wheezing for days prior to admission."
+        }
       }
     }
   }
@@ -456,17 +458,19 @@ entry {
       intent {
         value: ORDER
       }
-      medication_codeable_concept {
-        coding {
-          system {
-            value: "http://snomed.info/sct"
+      medication {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "66493003"
+            }
           }
-          code {
-            value: "66493003"
+          text {
+            value: "Theophylline 200mg"
           }
-        }
-        text {
-          value: "Theophylline 200mg"
         }
       }
       subject {
@@ -529,18 +533,20 @@ entry {
             }
           }
         }
-        dose_quantity {
-          value {
-            value: "1"
-          }
-          unit {
-            value: "tablet"
-          }
-          system {
-            value: "http://unitsofmeasure.org"
-          }
-          code {
-            value: "tbl"
+        dose {
+          quantity {
+            value {
+              value: "1"
+            }
+            unit {
+              value: "tablet"
+            }
+            system {
+              value: "http://unitsofmeasure.org"
+            }
+            code {
+              value: "tbl"
+            }
           }
         }
       }
@@ -564,9 +570,11 @@ entry {
       status {
         value: COMPLETED
       }
-      medication_codeable_concept {
-        text {
-          value: "Ventolin Inhaler"
+      medication {
+        codeable_concept {
+          text {
+            value: "Ventolin Inhaler"
+          }
         }
       }
       date_asserted {
@@ -681,14 +689,18 @@ signature {
     timezone: "+10:00"
     precision: SECOND
   }
-  who_reference {
-    device_id {
-      value: "software"
+  who {
+    reference {
+      device_id {
+        value: "software"
+      }
     }
   }
-  on_behalf_of_reference {
-    organization_id {
-      value: "example"
+  on_behalf_of {
+    reference {
+      organization_id {
+        value: "example"
+      }
     }
   }
   content_type {

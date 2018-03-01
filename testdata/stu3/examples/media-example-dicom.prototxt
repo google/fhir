@@ -13,8 +13,10 @@ extension {
   url {
     value: "http://nema.org/fhir/extensions#0002-0010"
   }
-  value_uri {
-    value: "urn:oid:1.2.840.10008.1.2.1"
+  value {
+    uri {
+      value: "urn:oid:1.2.840.10008.1.2.1"
+    }
   }
 }
 identifier {

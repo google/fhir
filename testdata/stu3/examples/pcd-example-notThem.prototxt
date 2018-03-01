@@ -95,9 +95,11 @@ signer {
       timezone: "-07:00"
       precision: SECOND
     }
-    who_reference {
-      patient_id {
-        value: "f001"
+    who {
+      reference {
+        patient_id {
+          value: "f001"
+        }
       }
     }
   }
@@ -129,16 +131,20 @@ term {
   }
 }
 friendly {
-  content_attachment {
-    title {
-      value: "The terms of the consent in friendly consumer speak."
+  content {
+    attachment {
+      title {
+        value: "The terms of the consent in friendly consumer speak."
+      }
     }
   }
 }
 legal {
-  content_attachment {
-    title {
-      value: "The terms of the consent in lawyer speak."
+  content {
+    attachment {
+      title {
+        value: "The terms of the consent in lawyer speak."
+      }
     }
   }
 }

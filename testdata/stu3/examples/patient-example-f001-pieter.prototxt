@@ -74,7 +74,9 @@ birth_date {
   value_us: -792806400000000
   precision: DAY
 }
-deceased_boolean {
+deceased {
+  boolean {
+  }
 }
 address {
   use {
@@ -109,8 +111,10 @@ marital_status {
     value: "Getrouwd"
   }
 }
-multiple_birth_boolean {
-  value: true
+multiple_birth {
+  boolean {
+    value: true
+  }
 }
 contact {
   relationship {

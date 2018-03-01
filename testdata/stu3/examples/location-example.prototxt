@@ -13,16 +13,20 @@ extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/location-alias"
   }
-  value_string {
-    value: "Burgers University Medical Center, South Wing, second floor"
+  value {
+    string_value {
+      value: "Burgers University Medical Center, South Wing, second floor"
+    }
   }
 }
 extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/location-alias"
   }
-  value_string {
-    value: "BU MC, SW, F2"
+  value {
+    string_value {
+      value: "BU MC, SW, F2"
+    }
   }
 }
 identifier {

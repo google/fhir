@@ -38,44 +38,50 @@ contained {
         value: "example"
       }
     }
-    effective_date_time {
-      value_us: 1418273056000000
-      timezone: "UTC"
-      precision: SECOND
-    }
-    value_codeable_concept {
-      coding {
-        system {
-          value: "http:/acme.ec/gcsmotor"
-        }
-        code {
-          value: "5"
-        }
-        display {
-          value: "Localizes painful stimuli"
-        }
+    effective {
+      date_time {
+        value_us: 1418273056000000
+        timezone: "UTC"
+        precision: SECOND
       }
-      coding {
-        extension {
-          url {
-            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+    }
+    value {
+      codeable_concept {
+        coding {
+          system {
+            value: "http:/acme.ec/gcsmotor"
           }
-          value_decimal {
+          code {
             value: "5"
           }
+          display {
+            value: "Localizes painful stimuli"
+          }
         }
-        system {
-          value: "http://loinc.org"
+        coding {
+          extension {
+            url {
+              value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+            }
+            value {
+              decimal {
+                value: "5"
+              }
+            }
+          }
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "LA6566-9"
+          }
+          display {
+            value: "Localizing pain"
+          }
         }
-        code {
-          value: "LA6566-9"
+        text {
+          value: "5 (Localizes painful stimuli)"
         }
-        display {
-          value: "Localizing pain"
-        }
-      }
-      text {
-        value: "5 (Localizes painful stimuli)"
       }
     }
   }
@@ -109,44 +115,50 @@ contained {
         value: "example"
       }
     }
-    effective_date_time {
-      value_us: 1418273056000000
-      timezone: "UTC"
-      precision: SECOND
-    }
-    value_codeable_concept {
-      coding {
-        system {
-          value: "http:/acme.ec/gcsverbal"
-        }
-        code {
-          value: "4"
-        }
-        display {
-          value: "Confused, disoriented"
-        }
+    effective {
+      date_time {
+        value_us: 1418273056000000
+        timezone: "UTC"
+        precision: SECOND
       }
-      coding {
-        extension {
-          url {
-            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+    }
+    value {
+      codeable_concept {
+        coding {
+          system {
+            value: "http:/acme.ec/gcsverbal"
           }
-          value_decimal {
+          code {
             value: "4"
           }
+          display {
+            value: "Confused, disoriented"
+          }
         }
-        system {
-          value: "http://loinc.org"
+        coding {
+          extension {
+            url {
+              value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+            }
+            value {
+              decimal {
+                value: "4"
+              }
+            }
+          }
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "LA6560-2"
+          }
+          display {
+            value: "Confused"
+          }
         }
-        code {
-          value: "LA6560-2"
+        text {
+          value: "4 (Confused, disoriented)"
         }
-        display {
-          value: "Confused"
-        }
-      }
-      text {
-        value: "4 (Confused, disoriented)"
       }
     }
   }
@@ -180,44 +192,50 @@ contained {
         value: "example"
       }
     }
-    effective_date_time {
-      value_us: 1418273056000000
-      timezone: "UTC"
-      precision: SECOND
-    }
-    value_codeable_concept {
-      coding {
-        system {
-          value: "http:/acme.ec/gcseye"
-        }
-        code {
-          value: "4"
-        }
-        display {
-          value: "Opens eyes spontaneously"
-        }
+    effective {
+      date_time {
+        value_us: 1418273056000000
+        timezone: "UTC"
+        precision: SECOND
       }
-      coding {
-        extension {
-          url {
-            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+    }
+    value {
+      codeable_concept {
+        coding {
+          system {
+            value: "http:/acme.ec/gcseye"
           }
-          value_decimal {
+          code {
             value: "4"
           }
+          display {
+            value: "Opens eyes spontaneously"
+          }
         }
-        system {
-          value: "http://loinc.org"
+        coding {
+          extension {
+            url {
+              value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+            }
+            value {
+              decimal {
+                value: "4"
+              }
+            }
+          }
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "LA6556-0"
+          }
+          display {
+            value: "Eyes open spontaneously"
+          }
         }
-        code {
-          value: "LA6556-0"
+        text {
+          value: "4 (Opens eyes spontaneously)"
         }
-        display {
-          value: "Eyes open spontaneously"
-        }
-      }
-      text {
-        value: "4 (Opens eyes spontaneously)"
       }
     }
   }
@@ -249,20 +267,24 @@ subject {
     value: "Peter James Chalmers"
   }
 }
-effective_date_time {
-  value_us: 1418273056000000
-  timezone: "UTC"
-  precision: SECOND
+effective {
+  date_time {
+    value_us: 1418273056000000
+    timezone: "UTC"
+    precision: SECOND
+  }
 }
-value_quantity {
-  value {
-    value: "13"
-  }
-  system {
-    value: "http://unitsofmeasure.org"
-  }
-  code {
-    value: "{score}"
+value {
+  quantity {
+    value {
+      value: "13"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "{score}"
+    }
   }
 }
 reference_range {

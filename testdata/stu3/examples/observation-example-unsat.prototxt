@@ -44,16 +44,18 @@ subject {
     value: "P. van de Heuvel"
   }
 }
-effective_period {
-  start {
-    value_us: 1364891410000000
-    timezone: "+01:00"
-    precision: SECOND
-  }
-  end {
-    value_us: 1365150610000000
-    timezone: "+01:00"
-    precision: SECOND
+effective {
+  period {
+    start {
+      value_us: 1364891410000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1365150610000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
   }
 }
 issued {

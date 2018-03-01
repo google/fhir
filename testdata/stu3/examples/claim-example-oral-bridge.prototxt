@@ -173,9 +173,11 @@ information {
       }
     }
   }
-  timing_date {
-    value_us: 986601600000000
-    precision: DAY
+  timing {
+    date {
+      value_us: 986601600000000
+      precision: DAY
+    }
   }
 }
 procedure {
@@ -186,9 +188,11 @@ procedure {
     value_us: 1404432000000000
     precision: DAY
   }
-  procedure_codeable_concept {
-    text {
-      value: "Resection of gum to increase exposed tooth."
+  procedure {
+    codeable_concept {
+      text {
+        value: "Resection of gum to increase exposed tooth."
+      }
     }
   }
 }
@@ -228,17 +232,21 @@ item {
       }
     }
   }
-  serviced_date {
-    value_us: 1408147200000000
-    precision: DAY
+  serviced {
+    date {
+      value_us: 1408147200000000
+      precision: DAY
+    }
   }
-  location_codeable_concept {
-    coding {
-      system {
-        value: "http://hl7.org/fhir/ex-serviceplace"
-      }
-      code {
-        value: "11"
+  location {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-serviceplace"
+        }
+        code {
+          value: "11"
+        }
       }
     }
   }
@@ -300,17 +308,21 @@ item {
       }
     }
   }
-  serviced_date {
-    value_us: 1408147200000000
-    precision: DAY
+  serviced {
+    date {
+      value_us: 1408147200000000
+      precision: DAY
+    }
   }
-  location_codeable_concept {
-    coding {
-      system {
-        value: "http://hl7.org/fhir/ex-serviceplace"
-      }
-      code {
-        value: "11"
+  location {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-serviceplace"
+        }
+        code {
+          value: "11"
+        }
       }
     }
   }
@@ -377,17 +389,21 @@ item {
       }
     }
   }
-  serviced_date {
-    value_us: 1408147200000000
-    precision: DAY
+  serviced {
+    date {
+      value_us: 1408147200000000
+      precision: DAY
+    }
   }
-  location_codeable_concept {
-    coding {
-      system {
-        value: "http://hl7.org/fhir/ex-serviceplace"
-      }
-      code {
-        value: "11"
+  location {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-serviceplace"
+        }
+        code {
+          value: "11"
+        }
       }
     }
   }

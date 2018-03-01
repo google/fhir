@@ -41,16 +41,18 @@ context {
     value: "Roel\'s encounter on January 28th, 2013"
   }
 }
-performed_period {
-  start {
-    value_us: 1359376260000000
-    timezone: "+01:00"
-    precision: SECOND
-  }
-  end {
-    value_us: 1359379620000000
-    timezone: "+01:00"
-    precision: SECOND
+performed {
+  period {
+    start {
+      value_us: 1359376260000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1359379620000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
   }
 }
 performer {

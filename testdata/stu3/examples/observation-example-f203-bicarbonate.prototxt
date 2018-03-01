@@ -65,18 +65,20 @@ performer {
     value: "Luigi Maas"
   }
 }
-value_quantity {
-  value {
-    value: "28"
-  }
-  unit {
-    value: "mmol/L"
-  }
-  system {
-    value: "http://snomed.info/sct"
-  }
-  code {
-    value: "258813002"
+value {
+  quantity {
+    value {
+      value: "28"
+    }
+    unit {
+      value: "mmol/L"
+    }
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "258813002"
+    }
   }
 }
 interpretation {

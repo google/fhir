@@ -62,13 +62,17 @@ agent {
       }
     }
   }
-  who_reference {
-    practitioner_id {
-      value: "xcda-author"
+  who {
+    reference {
+      practitioner_id {
+        value: "xcda-author"
+      }
     }
   }
-  on_behalf_of_uri {
-    value: "#a1"
+  on_behalf_of {
+    uri {
+      value: "#a1"
+    }
   }
   related_agent_type {
     text {
@@ -90,9 +94,11 @@ agent {
       }
     }
   }
-  who_reference {
-    device_id {
-      value: "software"
+  who {
+    reference {
+      device_id {
+        value: "software"
+      }
     }
   }
 }
@@ -100,12 +106,14 @@ entity {
   role {
     value: SOURCE
   }
-  what_reference {
-    document_reference_id {
-      value: "example"
-    }
-    display {
-      value: "CDA Document in XDS repository"
+  what {
+    reference {
+      document_reference_id {
+        value: "example"
+      }
+      display {
+        value: "CDA Document in XDS repository"
+      }
     }
   }
 }

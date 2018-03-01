@@ -38,12 +38,14 @@ contained {
           }
         }
       }
-      who_reference {
-        practitioner_id {
-          value: "example"
-        }
-        display {
-          value: "Dr Adam Careful"
+      who {
+        reference {
+          practitioner_id {
+            value: "example"
+          }
+          display {
+            value: "Dr Adam Careful"
+          }
         }
       }
     }
@@ -64,12 +66,14 @@ contained {
         timezone: "UTC"
         precision: SECOND
       }
-      who_reference {
-        practitioner_id {
-          value: "example"
-        }
-        display {
-          value: "Dr Adam Careful"
+      who {
+        reference {
+          practitioner_id {
+            value: "example"
+          }
+          display {
+            value: "Dr Adam Careful"
+          }
         }
       }
       content_type {
@@ -139,9 +143,11 @@ contained {
         value: "example"
       }
     }
-    onset_date_time {
-      value_us: 1352678400000000
-      precision: DAY
+    onset {
+      date_time {
+        value_us: 1352678400000000
+        precision: DAY
+      }
     }
   }
 }
@@ -198,34 +204,38 @@ subject {
     value: "example"
   }
 }
-occurrence_timing {
-  repeat {
-    duration {
-      value: "15"
-    }
-    duration_max {
-      value: "25"
-    }
-    duration_unit {
-      value: MIN
-    }
-    frequency {
-      value: 1
-    }
-    frequency_max {
-      value: 4
-    }
-    period {
-      value: "1"
-    }
-    period_unit {
-      value: D
+occurrence {
+  timing {
+    repeat {
+      duration {
+        value: "15"
+      }
+      duration_max {
+        value: "25"
+      }
+      duration_unit {
+        value: MIN
+      }
+      frequency {
+        value: 1
+      }
+      frequency_max {
+        value: 4
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
     }
   }
 }
-as_needed_codeable_concept {
-  text {
-    value: "as needed to clear mucus"
+as_needed {
+  codeable_concept {
+    text {
+      value: "as needed to clear mucus"
+    }
   }
 }
 authored_on {

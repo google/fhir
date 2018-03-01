@@ -12,9 +12,11 @@ text {
 status {
   value: FINAL
 }
-occurrence_date_time {
-  value_us: 1290384000000000
-  precision: DAY
+occurrence {
+  date_time {
+    value_us: 1290384000000000
+    precision: DAY
+  }
 }
 condition {
   condition_id {

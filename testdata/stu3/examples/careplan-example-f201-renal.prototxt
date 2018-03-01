@@ -157,15 +157,19 @@ activity {
     }
     prohibited {
     }
-    scheduled_string {
-      value: "daily"
-    }
-    product_reference {
-      substance_id {
-        value: "f203"
+    scheduled {
+      string_value {
+        value: "daily"
       }
-      display {
-        value: "Potassium"
+    }
+    product {
+      reference {
+        substance_id {
+          value: "f203"
+        }
+        display {
+          value: "Potassium"
+        }
       }
     }
     daily_amount {

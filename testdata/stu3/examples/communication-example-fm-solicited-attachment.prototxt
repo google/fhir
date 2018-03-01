@@ -109,41 +109,45 @@ sender {
   }
 }
 payload {
-  content_attachment {
-    content_type {
-      value: "application/pdf"
-    }
-    data {
-      value: "Hello"
-    }
-    title {
-      value: "accident notes 20100201.pdf"
-    }
-    creation {
-      value_us: 1265043023000000
-      timezone: "-05:00"
-      precision: SECOND
+  content {
+    attachment {
+      content_type {
+        value: "application/pdf"
+      }
+      data {
+        value: "Hello"
+      }
+      title {
+        value: "accident notes 20100201.pdf"
+      }
+      creation {
+        value_us: 1265043023000000
+        timezone: "-05:00"
+        precision: SECOND
+      }
     }
   }
 }
 payload {
-  content_attachment {
-    content_type {
-      value: "application/pdf"
-    }
-    url {
-      value: "http://happyvalley.com/docs/AB12345"
-    }
-    size {
-      value: 104274
-    }
-    hash {
-      value: "Hello there"
-    }
-    creation {
-      value_us: 1265018254000000
-      timezone: "+01:00"
-      precision: SECOND
+  content {
+    attachment {
+      content_type {
+        value: "application/pdf"
+      }
+      url {
+        value: "http://happyvalley.com/docs/AB12345"
+      }
+      size {
+        value: 104274
+      }
+      hash {
+        value: "Hello there"
+      }
+      creation {
+        value_us: 1265018254000000
+        timezone: "+01:00"
+        precision: SECOND
+      }
     }
   }
 }

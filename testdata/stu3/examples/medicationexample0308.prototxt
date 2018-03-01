@@ -17,16 +17,18 @@ contained {
     is_brand {
     }
     ingredient {
-      item_codeable_concept {
-        coding {
-          system {
-            value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-          }
-          code {
-            value: "1049221"
-          }
-          display {
-            value: "Acetaminophen 325mg/Oxycodone Hydrochloride 5mg Oral Tablet"
+      item {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+            }
+            code {
+              value: "1049221"
+            }
+            display {
+              value: "Acetaminophen 325mg/Oxycodone Hydrochloride 5mg Oral Tablet"
+            }
           }
         }
       }
@@ -78,16 +80,18 @@ form {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-      }
-      code {
-        value: "82063"
-      }
-      display {
-        value: "Oxycodone HCl"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "82063"
+        }
+        display {
+          value: "Oxycodone HCl"
+        }
       }
     }
   }
@@ -117,16 +121,18 @@ ingredient {
   }
 }
 ingredient {
-  item_codeable_concept {
-    coding {
-      system {
-        value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-      }
-      code {
-        value: "161"
-      }
-      display {
-        value: "Acetaminophen"
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "161"
+        }
+        display {
+          value: "Acetaminophen"
+        }
       }
     }
   }
@@ -170,9 +176,11 @@ package_value {
     }
   }
   content {
-    item_reference {
-      fragment {
-        value: "med500"
+    item {
+      reference {
+        fragment {
+          value: "med500"
+        }
       }
     }
     amount {

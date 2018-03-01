@@ -169,9 +169,11 @@ output {
       value: "collected specimen"
     }
   }
-  value_reference {
-    specimen_id {
-      value: "101"
+  value {
+    reference {
+      specimen_id {
+        value: "101"
+      }
     }
   }
 }

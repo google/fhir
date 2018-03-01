@@ -54,10 +54,12 @@ contained {
           value: "Patient"
         }
       }
-      collected_date_time {
-        value_us: 1313475300000000
-        timezone: "UTC"
-        precision: SECOND
+      collected {
+        date_time {
+          value_us: 1313475300000000
+          timezone: "UTC"
+          precision: SECOND
+        }
       }
       method {
         coding {
@@ -117,10 +119,12 @@ collection {
       value: "f202"
     }
   }
-  collected_date_time {
-    value_us: 1439708580000000
-    timezone: "UTC"
-    precision: SECOND
+  collected {
+    date_time {
+      value_us: 1439708580000000
+      timezone: "UTC"
+      precision: SECOND
+    }
   }
   method {
     coding {

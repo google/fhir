@@ -35,16 +35,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NMTH"
-            }
-            display {
-              value: "natural mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NMTH"
+              }
+              display {
+                value: "natural mother"
+              }
             }
           }
         }
@@ -53,9 +55,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "2"
+        value {
+          reference {
+            fragment {
+              value: "2"
+            }
           }
         }
       }
@@ -68,16 +72,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NFTH"
-            }
-            display {
-              value: "natural father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NFTH"
+              }
+              display {
+                value: "natural father"
+              }
             }
           }
         }
@@ -86,9 +92,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "3"
+        value {
+          reference {
+            fragment {
+              value: "3"
+            }
           }
         }
       }
@@ -120,21 +128,25 @@ contained {
         }
       }
     }
-    age_age {
-      value {
-        value: "42"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "42"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
-    deceased_boolean {
+    deceased {
+      boolean {
+      }
     }
   }
 }
@@ -151,16 +163,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NMTH"
-            }
-            display {
-              value: "natural mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NMTH"
+              }
+              display {
+                value: "natural mother"
+              }
             }
           }
         }
@@ -169,9 +183,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "4"
+        value {
+          reference {
+            fragment {
+              value: "4"
+            }
           }
         }
       }
@@ -184,16 +200,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NFTH"
-            }
-            display {
-              value: "natural father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NFTH"
+              }
+              display {
+                value: "natural father"
+              }
             }
           }
         }
@@ -202,9 +220,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "5"
+        value {
+          reference {
+            fragment {
+              value: "5"
+            }
           }
         }
       }
@@ -236,18 +256,20 @@ contained {
         }
       }
     }
-    deceased_age {
-      value {
-        value: "50"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    deceased {
+      age {
+        value {
+          value: "50"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
     condition {
@@ -264,18 +286,20 @@ contained {
           }
         }
       }
-      onset_age {
-        value {
-          value: "45"
-        }
-        unit {
-          value: "years"
-        }
-        system {
-          value: "http://unitsofmeasure.org"
-        }
-        code {
-          value: "a"
+      onset {
+        age {
+          value {
+            value: "45"
+          }
+          unit {
+            value: "years"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "a"
+          }
         }
       }
     }
@@ -294,16 +318,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NMTH"
-            }
-            display {
-              value: "natural mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NMTH"
+              }
+              display {
+                value: "natural mother"
+              }
             }
           }
         }
@@ -312,9 +338,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "6"
+        value {
+          reference {
+            fragment {
+              value: "6"
+            }
           }
         }
       }
@@ -327,16 +355,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NFTH"
-            }
-            display {
-              value: "natural father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NFTH"
+              }
+              display {
+                value: "natural father"
+              }
             }
           }
         }
@@ -345,9 +375,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "7"
+        value {
+          reference {
+            fragment {
+              value: "7"
+            }
           }
         }
       }
@@ -379,21 +411,25 @@ contained {
         }
       }
     }
-    age_age {
-      value {
-        value: "72"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "72"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
-    deceased_boolean {
+    deceased {
+      boolean {
+      }
     }
   }
 }
@@ -429,18 +465,20 @@ contained {
         }
       }
     }
-    deceased_age {
-      value {
-        value: "77"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    deceased {
+      age {
+        value {
+          value: "77"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
     condition {
@@ -457,18 +495,20 @@ contained {
           }
         }
       }
-      onset_age {
-        value {
-          value: "55"
-        }
-        unit {
-          value: "years"
-        }
-        system {
-          value: "http://unitsofmeasure.org"
-        }
-        code {
-          value: "a"
+      onset {
+        age {
+          value {
+            value: "55"
+          }
+          unit {
+            value: "years"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "a"
+          }
         }
       }
     }
@@ -506,18 +546,20 @@ contained {
         }
       }
     }
-    deceased_age {
-      value {
-        value: "76"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    deceased {
+      age {
+        value {
+          value: "76"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
   }
@@ -554,18 +596,20 @@ contained {
         }
       }
     }
-    deceased_age {
-      value {
-        value: "74"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    deceased {
+      age {
+        value {
+          value: "74"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
   }
@@ -602,18 +646,20 @@ contained {
         }
       }
     }
-    deceased_age {
-      value {
-        value: "73"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    deceased {
+      age {
+        value {
+          value: "73"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
     condition {
@@ -630,18 +676,20 @@ contained {
           }
         }
       }
-      onset_age {
-        value {
-          value: "72"
-        }
-        unit {
-          value: "years"
-        }
-        system {
-          value: "http://unitsofmeasure.org"
-        }
-        code {
-          value: "a"
+      onset {
+        age {
+          value {
+            value: "72"
+          }
+          unit {
+            value: "years"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "a"
+          }
         }
       }
     }
@@ -660,16 +708,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NMTH"
-            }
-            display {
-              value: "natural mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NMTH"
+              }
+              display {
+                value: "natural mother"
+              }
             }
           }
         }
@@ -678,9 +728,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "2"
+        value {
+          reference {
+            fragment {
+              value: "2"
+            }
           }
         }
       }
@@ -693,16 +745,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NFTH"
-            }
-            display {
-              value: "natural father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NFTH"
+              }
+              display {
+                value: "natural father"
+              }
             }
           }
         }
@@ -711,9 +765,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "3"
+        value {
+          reference {
+            fragment {
+              value: "3"
+            }
           }
         }
       }
@@ -745,21 +801,25 @@ contained {
         }
       }
     }
-    age_age {
-      value {
-        value: "32"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "32"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
-    deceased_boolean {
+    deceased {
+      boolean {
+      }
     }
     condition {
       code {
@@ -775,18 +835,20 @@ contained {
           }
         }
       }
-      onset_age {
-        value {
-          value: "32"
-        }
-        unit {
-          value: "years"
-        }
-        system {
-          value: "http://unitsofmeasure.org"
-        }
-        code {
-          value: "a"
+      onset {
+        age {
+          value {
+            value: "32"
+          }
+          unit {
+            value: "years"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "a"
+          }
         }
       }
     }
@@ -805,16 +867,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NMTH"
-            }
-            display {
-              value: "natural mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NMTH"
+              }
+              display {
+                value: "natural mother"
+              }
             }
           }
         }
@@ -823,9 +887,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "2"
+        value {
+          reference {
+            fragment {
+              value: "2"
+            }
           }
         }
       }
@@ -838,16 +904,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NFTH"
-            }
-            display {
-              value: "natural father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NFTH"
+              }
+              display {
+                value: "natural father"
+              }
             }
           }
         }
@@ -856,9 +924,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "3"
+        value {
+          reference {
+            fragment {
+              value: "3"
+            }
           }
         }
       }
@@ -890,21 +960,25 @@ contained {
         }
       }
     }
-    age_age {
-      value {
-        value: "36"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "36"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
-    deceased_boolean {
+    deceased {
+      boolean {
+      }
     }
     condition {
       code {
@@ -920,18 +994,20 @@ contained {
           }
         }
       }
-      onset_age {
-        value {
-          value: "35"
-        }
-        unit {
-          value: "years"
-        }
-        system {
-          value: "http://unitsofmeasure.org"
-        }
-        code {
-          value: "a"
+      onset {
+        age {
+          value {
+            value: "35"
+          }
+          unit {
+            value: "years"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "a"
+          }
         }
       }
     }
@@ -966,18 +1042,20 @@ contained {
         }
       }
     }
-    age_age {
-      value {
-        value: "30"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "30"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
   }
@@ -995,16 +1073,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NMTH"
-            }
-            display {
-              value: "natural mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NMTH"
+              }
+              display {
+                value: "natural mother"
+              }
             }
           }
         }
@@ -1013,9 +1093,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "9"
+        value {
+          reference {
+            fragment {
+              value: "9"
+            }
           }
         }
       }
@@ -1028,16 +1110,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NFTH"
-            }
-            display {
-              value: "natural father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NFTH"
+              }
+              display {
+                value: "natural father"
+              }
             }
           }
         }
@@ -1046,9 +1130,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "10"
+        value {
+          reference {
+            fragment {
+              value: "10"
+            }
           }
         }
       }
@@ -1080,21 +1166,25 @@ contained {
         }
       }
     }
-    age_age {
-      value {
-        value: "16"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "16"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
-    deceased_boolean {
+    deceased {
+      boolean {
+      }
     }
   }
 }
@@ -1111,16 +1201,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NMTH"
-            }
-            display {
-              value: "natural mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NMTH"
+              }
+              display {
+                value: "natural mother"
+              }
             }
           }
         }
@@ -1129,9 +1221,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "9"
+        value {
+          reference {
+            fragment {
+              value: "9"
+            }
           }
         }
       }
@@ -1144,16 +1238,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NFTH"
-            }
-            display {
-              value: "natural father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NFTH"
+              }
+              display {
+                value: "natural father"
+              }
             }
           }
         }
@@ -1162,9 +1258,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "10"
+        value {
+          reference {
+            fragment {
+              value: "10"
+            }
           }
         }
       }
@@ -1196,21 +1294,25 @@ contained {
         }
       }
     }
-    age_age {
-      value {
-        value: "15"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "15"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
-    deceased_boolean {
+    deceased {
+      boolean {
+      }
     }
     condition {
       code {
@@ -1269,18 +1371,20 @@ contained {
         }
       }
     }
-    age_age {
-      value {
-        value: "35"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "35"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
   }
@@ -1298,16 +1402,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NMTH"
-            }
-            display {
-              value: "natural mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NMTH"
+              }
+              display {
+                value: "natural mother"
+              }
             }
           }
         }
@@ -1316,9 +1422,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "1"
+        value {
+          reference {
+            fragment {
+              value: "1"
+            }
           }
         }
       }
@@ -1331,16 +1439,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NFTH"
-            }
-            display {
-              value: "natural father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NFTH"
+              }
+              display {
+                value: "natural father"
+              }
             }
           }
         }
@@ -1349,9 +1459,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "13"
+        value {
+          reference {
+            fragment {
+              value: "13"
+            }
           }
         }
       }
@@ -1383,18 +1495,20 @@ contained {
         }
       }
     }
-    age_age {
-      value {
-        value: "17"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "17"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
   }
@@ -1412,16 +1526,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NMTH"
-            }
-            display {
-              value: "natural mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NMTH"
+              }
+              display {
+                value: "natural mother"
+              }
             }
           }
         }
@@ -1430,9 +1546,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "6"
+        value {
+          reference {
+            fragment {
+              value: "6"
+            }
           }
         }
       }
@@ -1445,16 +1563,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NFTH"
-            }
-            display {
-              value: "natural father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NFTH"
+              }
+              display {
+                value: "natural father"
+              }
             }
           }
         }
@@ -1463,9 +1583,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "7"
+        value {
+          reference {
+            fragment {
+              value: "7"
+            }
           }
         }
       }
@@ -1494,18 +1616,20 @@ contained {
         }
       }
     }
-    age_age {
-      value {
-        value: "56"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "56"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
   }
@@ -1523,16 +1647,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NMTH"
-            }
-            display {
-              value: "natural mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NMTH"
+              }
+              display {
+                value: "natural mother"
+              }
             }
           }
         }
@@ -1541,9 +1667,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "6"
+        value {
+          reference {
+            fragment {
+              value: "6"
+            }
           }
         }
       }
@@ -1556,16 +1684,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NFTH"
-            }
-            display {
-              value: "natural father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NFTH"
+              }
+              display {
+                value: "natural father"
+              }
             }
           }
         }
@@ -1574,9 +1704,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "7"
+        value {
+          reference {
+            fragment {
+              value: "7"
+            }
           }
         }
       }
@@ -1605,18 +1737,20 @@ contained {
         }
       }
     }
-    age_age {
-      value {
-        value: "57"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "57"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
     condition {
@@ -1649,16 +1783,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NMTH"
-            }
-            display {
-              value: "natural mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NMTH"
+              }
+              display {
+                value: "natural mother"
+              }
             }
           }
         }
@@ -1667,9 +1803,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "4"
+        value {
+          reference {
+            fragment {
+              value: "4"
+            }
           }
         }
       }
@@ -1682,16 +1820,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NFTH"
-            }
-            display {
-              value: "natural father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NFTH"
+              }
+              display {
+                value: "natural father"
+              }
             }
           }
         }
@@ -1700,9 +1840,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "5"
+        value {
+          reference {
+            fragment {
+              value: "5"
+            }
           }
         }
       }
@@ -1731,18 +1873,20 @@ contained {
         }
       }
     }
-    age_age {
-      value {
-        value: "60"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "60"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
   }
@@ -1760,16 +1904,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NMTH"
-            }
-            display {
-              value: "natural mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NMTH"
+              }
+              display {
+                value: "natural mother"
+              }
             }
           }
         }
@@ -1778,9 +1924,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "4"
+        value {
+          reference {
+            fragment {
+              value: "4"
+            }
           }
         }
       }
@@ -1793,16 +1941,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NFTH"
-            }
-            display {
-              value: "natural father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NFTH"
+              }
+              display {
+                value: "natural father"
+              }
             }
           }
         }
@@ -1811,9 +1961,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "5"
+        value {
+          reference {
+            fragment {
+              value: "5"
+            }
           }
         }
       }
@@ -1842,18 +1994,20 @@ contained {
         }
       }
     }
-    age_age {
-      value {
-        value: "57"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "57"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
   }
@@ -1902,16 +2056,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NMTH"
-            }
-            display {
-              value: "natural mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NMTH"
+              }
+              display {
+                value: "natural mother"
+              }
             }
           }
         }
@@ -1920,9 +2076,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "18"
+        value {
+          reference {
+            fragment {
+              value: "18"
+            }
           }
         }
       }
@@ -1935,16 +2093,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NFTH"
-            }
-            display {
-              value: "natural father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NFTH"
+              }
+              display {
+                value: "natural father"
+              }
             }
           }
         }
@@ -1953,9 +2113,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "19"
+        value {
+          reference {
+            fragment {
+              value: "19"
+            }
           }
         }
       }
@@ -1987,18 +2149,20 @@ contained {
     gender {
       value: FEMALE
     }
-    age_age {
-      value {
-        value: "30"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "30"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
     condition {
@@ -2015,18 +2179,20 @@ contained {
           }
         }
       }
-      onset_age {
-        value {
-          value: "30"
-        }
-        unit {
-          value: "years"
-        }
-        system {
-          value: "http://unitsofmeasure.org"
-        }
-        code {
-          value: "a"
+      onset {
+        age {
+          value {
+            value: "30"
+          }
+          unit {
+            value: "years"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "a"
+          }
         }
       }
     }
@@ -2045,16 +2211,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NMTH"
-            }
-            display {
-              value: "natural mother"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NMTH"
+              }
+              display {
+                value: "natural mother"
+              }
             }
           }
         }
@@ -2063,9 +2231,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "18"
+        value {
+          reference {
+            fragment {
+              value: "18"
+            }
           }
         }
       }
@@ -2078,16 +2248,18 @@ contained {
         url {
           value: "type"
         }
-        value_codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/v3/RoleCode"
-            }
-            code {
-              value: "NFTH"
-            }
-            display {
-              value: "natural father"
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://hl7.org/fhir/v3/RoleCode"
+              }
+              code {
+                value: "NFTH"
+              }
+              display {
+                value: "natural father"
+              }
             }
           }
         }
@@ -2096,9 +2268,11 @@ contained {
         url {
           value: "reference"
         }
-        value_reference {
-          fragment {
-            value: "19"
+        value {
+          reference {
+            fragment {
+              value: "19"
+            }
           }
         }
       }
@@ -2130,18 +2304,20 @@ contained {
     gender {
       value: FEMALE
     }
-    age_age {
-      value {
-        value: "31"
-      }
-      unit {
-        value: "years"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "a"
+    age {
+      age_value {
+        value {
+          value: "31"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
       }
     }
   }

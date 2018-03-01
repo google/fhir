@@ -95,14 +95,18 @@ contained {
     status {
       value: ACTIVE
     }
-    source_reference {
-      fragment {
-        value: "2179414"
+    source {
+      reference {
+        fragment {
+          value: "2179414"
+        }
       }
     }
-    target_reference {
-      fragment {
-        value: "2179414-permitted"
+    target {
+      reference {
+        fragment {
+          value: "2179414-permitted"
+        }
       }
     }
     group {
@@ -217,16 +221,20 @@ element {
     url {
       value: "http://hl7.org/fhir/StructureDefinition/minLength"
     }
-    value_integer {
-      value: 1
+    value {
+      integer {
+        value: 1
+      }
     }
   }
   extension {
     url {
       value: "http://hl7.org/fhir/StructureDefinition/elementdefinition-question"
     }
-    value_string {
-      value: "Gender"
+    value {
+      string_value {
+        value: "Gender"
+      }
     }
   }
   path {
@@ -258,29 +266,35 @@ element {
     strength {
       value: REQUIRED
     }
-    value_set_reference {
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/11179-permitted-value-valueset"
-        }
-        value_reference {
-          fragment {
-            value: "2179414-permitted"
+    value_set {
+      reference {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/11179-permitted-value-valueset"
+          }
+          value {
+            reference {
+              fragment {
+                value: "2179414-permitted"
+              }
+            }
           }
         }
-      }
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/11179-permitted-value-conceptmap"
-        }
-        value_reference {
-          fragment {
-            value: "2179414-cm"
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/11179-permitted-value-conceptmap"
+          }
+          value {
+            reference {
+              fragment {
+                value: "2179414-cm"
+              }
+            }
           }
         }
-      }
-      fragment {
-        value: "2179414"
+        fragment {
+          value: "2179414"
+        }
       }
     }
   }

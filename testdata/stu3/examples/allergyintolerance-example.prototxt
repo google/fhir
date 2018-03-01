@@ -50,9 +50,11 @@ patient {
     value: "example"
   }
 }
-onset_date_time {
-  value_us: 1072915200000000
-  precision: YEAR
+onset {
+  date_time {
+    value_us: 1072915200000000
+    precision: YEAR
+  }
 }
 asserted_date {
   value_us: 1412827080000000

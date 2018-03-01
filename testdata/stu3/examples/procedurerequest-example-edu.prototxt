@@ -52,9 +52,11 @@ subject {
     value: "Jane Doe"
   }
 }
-occurrence_date_time {
-  value_us: 1408147200000000
-  precision: DAY
+occurrence {
+  date_time {
+    value_us: 1408147200000000
+    precision: DAY
+  }
 }
 authored_on {
   value_us: 1471305600000000

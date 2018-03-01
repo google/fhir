@@ -13,8 +13,10 @@ extension {
   url {
     value: "http://hl7.org/fhir/StructureDefinition/organization-alias"
   }
-  value_string {
-    value: "HL7 International"
+  value {
+    string_value {
+      value: "HL7 International"
+    }
   }
 }
 name {

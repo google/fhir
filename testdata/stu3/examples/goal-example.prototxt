@@ -56,9 +56,11 @@ subject {
     value: "Peter James Chalmers"
   }
 }
-start_date {
-  value_us: 1428192000000000
-  precision: DAY
+start {
+  date {
+    value_us: 1428192000000000
+    precision: DAY
+  }
 }
 target {
   measure {
@@ -74,39 +76,43 @@ target {
       }
     }
   }
-  detail_range {
-    low {
-      value {
-        value: "160"
+  detail {
+    range {
+      low {
+        value {
+          value: "160"
+        }
+        unit {
+          value: "lbs"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "[lb_av]"
+        }
       }
-      unit {
-        value: "lbs"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "[lb_av]"
-      }
-    }
-    high {
-      value {
-        value: "180"
-      }
-      unit {
-        value: "lbs"
-      }
-      system {
-        value: "http://unitsofmeasure.org"
-      }
-      code {
-        value: "[lb_av]"
+      high {
+        value {
+          value: "180"
+        }
+        unit {
+          value: "lbs"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "[lb_av]"
+        }
       }
     }
   }
-  due_date {
-    value_us: 1459814400000000
-    precision: DAY
+  due {
+    date {
+      value_us: 1459814400000000
+      precision: DAY
+    }
   }
 }
 status_date {

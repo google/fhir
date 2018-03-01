@@ -93,12 +93,16 @@ context {
     value: "f201"
   }
 }
-onset_date_time {
-  value_us: 1364860800000000
-  precision: DAY
+onset {
+  date_time {
+    value_us: 1364860800000000
+    precision: DAY
+  }
 }
-abatement_string {
-  value: "around April 9, 2013"
+abatement {
+  string_value {
+    value: "around April 9, 2013"
+  }
 }
 asserted_date {
   value_us: 1365033600000000

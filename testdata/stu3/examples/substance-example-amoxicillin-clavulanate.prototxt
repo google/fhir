@@ -109,9 +109,11 @@ ingredient {
       }
     }
   }
-  substance_reference {
-    fragment {
-      value: "ingr1"
+  substance {
+    reference {
+      fragment {
+        value: "ingr1"
+      }
     }
   }
 }
@@ -146,9 +148,11 @@ ingredient {
       }
     }
   }
-  substance_reference {
-    fragment {
-      value: "ingr2"
+  substance {
+    reference {
+      fragment {
+        value: "ingr2"
+      }
     }
   }
 }

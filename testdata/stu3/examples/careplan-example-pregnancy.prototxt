@@ -145,9 +145,11 @@ extension {
   url {
     value: "http://example.org/fhir/StructureDefinition/careplan#lmp"
   }
-  value_date_time {
-    value_us: 1356998400000000
-    precision: DAY
+  value {
+    date_time {
+      value_us: 1356998400000000
+      precision: DAY
+    }
   }
 }
 status {
@@ -204,8 +206,10 @@ activity {
     url {
       value: "http://example.org/fhir/StructureDefinition/careplan#andetails"
     }
-    value_uri {
-      value: "http://orionhealth.com/fhir/careplan/1andetails"
+    value {
+      uri {
+        value: "http://orionhealth.com/fhir/careplan/1andetails"
+      }
     }
   }
   detail {
@@ -237,16 +241,20 @@ activity {
     }
     prohibited {
     }
-    scheduled_timing {
-      repeat {
-        bounds_period {
-          start {
-            value_us: 1360800000000000
-            precision: DAY
-          }
-          end {
-            value_us: 1362009600000000
-            precision: DAY
+    scheduled {
+      timing {
+        repeat {
+          bounds {
+            period {
+              start {
+                value_us: 1360800000000000
+                precision: DAY
+              }
+              end {
+                value_us: 1362009600000000
+                precision: DAY
+              }
+            }
           }
         }
       }
@@ -294,16 +302,20 @@ activity {
     }
     prohibited {
     }
-    scheduled_timing {
-      repeat {
-        bounds_period {
-          start {
-            value_us: 1362096000000000
-            precision: DAY
-          }
-          end {
-            value_us: 1363219200000000
-            precision: DAY
+    scheduled {
+      timing {
+        repeat {
+          bounds {
+            period {
+              start {
+                value_us: 1362096000000000
+                precision: DAY
+              }
+              end {
+                value_us: 1363219200000000
+                precision: DAY
+              }
+            }
           }
         }
       }
@@ -351,16 +363,20 @@ activity {
     }
     prohibited {
     }
-    scheduled_timing {
-      repeat {
-        bounds_period {
-          start {
-            value_us: 1377993600000000
-            precision: DAY
-          }
-          end {
-            value_us: 1379116800000000
-            precision: DAY
+    scheduled {
+      timing {
+        repeat {
+          bounds {
+            period {
+              start {
+                value_us: 1377993600000000
+                precision: DAY
+              }
+              end {
+                value_us: 1379116800000000
+                precision: DAY
+              }
+            }
           }
         }
       }

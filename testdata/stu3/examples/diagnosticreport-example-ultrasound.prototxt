@@ -54,10 +54,12 @@ subject {
     value: "example"
   }
 }
-effective_date_time {
-  value_us: 1354359600000000
-  timezone: "+01:00"
-  precision: SECOND
+effective {
+  date_time {
+    value_us: 1354359600000000
+    timezone: "+01:00"
+    precision: SECOND
+  }
 }
 issued {
   value_us: 1354359600000000

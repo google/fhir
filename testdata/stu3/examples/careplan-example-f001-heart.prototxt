@@ -138,8 +138,10 @@ activity {
     prohibited {
       value: true
     }
-    scheduled_string {
-      value: "2011-06-27T09:30:10+01:00"
+    scheduled {
+      string_value {
+        value: "2011-06-27T09:30:10+01:00"
+      }
     }
     performer {
       practitioner_id {

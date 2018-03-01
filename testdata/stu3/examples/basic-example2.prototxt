@@ -17,36 +17,9 @@ extension {
     url {
       value: "name"
     }
-    value_string {
-      value: "Class1"
-    }
-  }
-  extension {
-    url {
-      value: "attribute"
-    }
-    extension {
-      url {
-        value: "name"
-      }
-      value_string {
-        value: "attribute1"
-      }
-    }
-    extension {
-      url {
-        value: "minOccurs"
-      }
-      value_integer {
-        value: 1
-      }
-    }
-    extension {
-      url {
-        value: "maxOccurs"
-      }
-      value_code {
-        value: "*"
+    value {
+      string_value {
+        value: "Class1"
       }
     }
   }
@@ -58,23 +31,64 @@ extension {
       url {
         value: "name"
       }
-      value_string {
-        value: "attribute2"
+      value {
+        string_value {
+          value: "attribute1"
+        }
       }
     }
     extension {
       url {
         value: "minOccurs"
       }
-      value_integer {
+      value {
+        integer {
+          value: 1
+        }
       }
     }
     extension {
       url {
         value: "maxOccurs"
       }
-      value_integer {
-        value: 1
+      value {
+        code {
+          value: "*"
+        }
+      }
+    }
+  }
+  extension {
+    url {
+      value: "attribute"
+    }
+    extension {
+      url {
+        value: "name"
+      }
+      value {
+        string_value {
+          value: "attribute2"
+        }
+      }
+    }
+    extension {
+      url {
+        value: "minOccurs"
+      }
+      value {
+        integer {
+        }
+      }
+    }
+    extension {
+      url {
+        value: "maxOccurs"
+      }
+      value {
+        integer {
+          value: 1
+        }
       }
     }
   }

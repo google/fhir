@@ -40,23 +40,27 @@ item {
     value: "1.1"
   }
   answer {
-    value_coding {
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+    value {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+          }
+          value {
+            decimal {
+              value: "4"
+            }
+          }
         }
-        value_decimal {
-          value: "4"
+        system {
+          value: "http://loinc.org"
         }
-      }
-      system {
-        value: "http://loinc.org"
-      }
-      code {
-        value: "LA6560-2"
-      }
-      display {
-        value: "Confused"
+        code {
+          value: "LA6560-2"
+        }
+        display {
+          value: "Confused"
+        }
       }
     }
   }
@@ -66,23 +70,27 @@ item {
     value: "1.2"
   }
   answer {
-    value_coding {
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+    value {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+          }
+          value {
+            decimal {
+              value: "5"
+            }
+          }
         }
-        value_decimal {
-          value: "5"
+        system {
+          value: "http://loinc.org"
         }
-      }
-      system {
-        value: "http://loinc.org"
-      }
-      code {
-        value: "LA6566-9"
-      }
-      display {
-        value: "Localizing pain"
+        code {
+          value: "LA6566-9"
+        }
+        display {
+          value: "Localizing pain"
+        }
       }
     }
   }
@@ -92,23 +100,27 @@ item {
     value: "1.3"
   }
   answer {
-    value_coding {
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+    value {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value"
+          }
+          value {
+            decimal {
+              value: "4"
+            }
+          }
         }
-        value_decimal {
-          value: "4"
+        system {
+          value: "http://loinc.org"
         }
-      }
-      system {
-        value: "http://loinc.org"
-      }
-      code {
-        value: "LA6556-0"
-      }
-      display {
-        value: "Eyes open spontaneously"
+        code {
+          value: "LA6556-0"
+        }
+        display {
+          value: "Eyes open spontaneously"
+        }
       }
     }
   }

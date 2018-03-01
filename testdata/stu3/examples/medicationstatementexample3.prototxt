@@ -12,14 +12,18 @@ text {
 status {
   value: ACTIVE
 }
-medication_codeable_concept {
-  text {
-    value: "Little Pink Pill for water retention"
+medication {
+  codeable_concept {
+    text {
+      value: "Little Pink Pill for water retention"
+    }
   }
 }
-effective_date_time {
-  value_us: 1391212800000000
-  precision: DAY
+effective {
+  date_time {
+    value_us: 1391212800000000
+    precision: DAY
+  }
 }
 date_asserted {
   value_us: 1393027200000000
@@ -61,7 +65,9 @@ dosage {
   text {
     value: "1 tablet per day"
   }
-  as_needed_boolean {
+  as_needed {
+    boolean {
+    }
   }
   route {
     coding {
@@ -76,18 +82,20 @@ dosage {
       }
     }
   }
-  dose_quantity {
-    value {
-      value: "1"
-    }
-    unit {
-      value: "tab"
-    }
-    system {
-      value: "http://hl7.org/fhir/v3/orderableDrugForm"
-    }
-    code {
-      value: "tab"
+  dose {
+    quantity {
+      value {
+        value: "1"
+      }
+      unit {
+        value: "tab"
+      }
+      system {
+        value: "http://hl7.org/fhir/v3/orderableDrugForm"
+      }
+      code {
+        value: "tab"
+      }
     }
   }
   max_dose_per_period {
