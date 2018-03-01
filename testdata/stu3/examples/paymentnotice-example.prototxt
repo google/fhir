@@ -31,11 +31,13 @@ response {
   }
 }
 status_date {
-  value_us: 1408060800000000
+  value_us: 1408024800000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 created {
-  value_us: 1408147200000000
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 target {

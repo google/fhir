@@ -454,7 +454,8 @@ entry {
         value: true
       }
       date {
-        value_us: 1420070400000000
+        value_us: 1420030800000000
+        timezone: "Australia/Sydney"
         precision: YEAR
       }
       publisher {
@@ -467,11 +468,13 @@ entry {
         value: "Captures basic family history information"
       }
       approval_date {
-        value_us: 1446249600000000
+        value_us: 1446210000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       last_review_date {
-        value_us: 1489536000000000
+        value_us: 1489496400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       use_context {

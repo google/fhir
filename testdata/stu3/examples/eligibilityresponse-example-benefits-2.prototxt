@@ -29,7 +29,8 @@ contained {
       value: MALE
     }
     birth_date {
-      value_us: 516672000000000
+      value_us: 516636000000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     address {
@@ -138,7 +139,8 @@ status {
   value: ACTIVE
 }
 created {
-  value_us: 1410825600000000
+  value_us: 1410789600000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 request_provider {

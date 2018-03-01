@@ -10,7 +10,8 @@ text {
   }
 }
 issued {
-  value_us: 1408233600000000
+  value_us: 1408197600000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 subject {

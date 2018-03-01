@@ -89,7 +89,8 @@ context {
 }
 period {
   end {
-    value_us: 1496275200000000
+    value_us: 1496239200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

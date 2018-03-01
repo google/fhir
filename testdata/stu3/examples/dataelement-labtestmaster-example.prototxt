@@ -23,7 +23,8 @@ identifier {
   }
   period {
     start {
-      value_us: 1305763200000000
+      value_us: 1305727200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }

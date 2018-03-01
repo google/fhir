@@ -37,7 +37,8 @@ gender {
   value: FEMALE
 }
 birth_date {
-  value_us: -118195200000000
+  value_us: -118231200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 deceased {

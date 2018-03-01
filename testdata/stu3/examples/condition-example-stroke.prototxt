@@ -51,7 +51,8 @@ subject {
 }
 onset {
   date_time {
-    value_us: 1279411200000000
+    value_us: 1279375200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

@@ -99,11 +99,13 @@ entry {
       }
       period {
         start {
-          value_us: 1325376000000000
+          value_us: 1325336400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
         end {
-          value_us: 1333152000000000
+          value_us: 1333112400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -178,7 +180,8 @@ entry {
       }
       period {
         start {
-          value_us: 1325376000000000
+          value_us: 1325336400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -220,11 +223,13 @@ entry {
       }
       period {
         start {
-          value_us: 1467331200000000
+          value_us: 1467295200000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
         end {
-          value_us: 1498780800000000
+          value_us: 1498744800000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }

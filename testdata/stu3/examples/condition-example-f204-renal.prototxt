@@ -93,18 +93,21 @@ context {
 }
 onset {
   date_time {
-    value_us: 1362960000000000
+    value_us: 1362920400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
 abatement {
   date_time {
-    value_us: 1363737600000000
+    value_us: 1363698000000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
 asserted_date {
-  value_us: 1362960000000000
+  value_us: 1362920400000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 asserter {

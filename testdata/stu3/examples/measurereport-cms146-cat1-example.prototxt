@@ -47,11 +47,13 @@ reporting_organization {
 }
 period {
   start {
-    value_us: 1388534400000000
+    value_us: 1388494800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1396224000000000
+    value_us: 1396184400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

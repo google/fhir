@@ -147,11 +147,13 @@ event {
   }
   period {
     start {
-      value_us: 1279411200000000
+      value_us: 1279375200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     end {
-      value_us: 1352678400000000
+      value_us: 1352638800000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }

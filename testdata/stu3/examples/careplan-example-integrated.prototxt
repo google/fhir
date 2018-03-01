@@ -268,7 +268,8 @@ goal {
 activity {
   progress {
     time {
-      value_us: 1347235200000000
+      value_us: 1347199200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     text {
@@ -282,7 +283,8 @@ activity {
       }
       value {
         date {
-          value_us: 1347235200000000
+          value_us: 1347199200000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -310,7 +312,8 @@ activity {
     scheduled {
       period {
         start {
-          value_us: 1347235200000000
+          value_us: 1347199200000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -323,7 +326,8 @@ activity {
 activity {
   progress {
     time {
-      value_us: 1347235200000000
+      value_us: 1347199200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     text {
@@ -337,7 +341,8 @@ activity {
       }
       value {
         date {
-          value_us: 1347235200000000
+          value_us: 1347199200000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -365,7 +370,8 @@ activity {
     scheduled {
       period {
         start {
-          value_us: 1347235200000000
+          value_us: 1347199200000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -383,7 +389,8 @@ activity {
       }
       value {
         date {
-          value_us: 1347235200000000
+          value_us: 1347199200000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -411,7 +418,8 @@ activity {
     scheduled {
       period {
         start {
-          value_us: 1347235200000000
+          value_us: 1347199200000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -424,7 +432,8 @@ activity {
 activity {
   progress {
     time {
-      value_us: 1346025600000000
+      value_us: 1345989600000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     text {
@@ -433,7 +442,8 @@ activity {
   }
   progress {
     time {
-      value_us: 1347235200000000
+      value_us: 1347199200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     text {
@@ -447,7 +457,8 @@ activity {
       }
       value {
         date {
-          value_us: 1347235200000000
+          value_us: 1347199200000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -475,7 +486,8 @@ activity {
     scheduled {
       period {
         start {
-          value_us: 1346025600000000
+          value_us: 1345989600000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -488,7 +500,8 @@ activity {
 activity {
   progress {
     time {
-      value_us: 1344816000000000
+      value_us: 1344780000000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     text {
@@ -497,7 +510,8 @@ activity {
   }
   progress {
     time {
-      value_us: 1347235200000000
+      value_us: 1347199200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     text {
@@ -511,7 +525,8 @@ activity {
       }
       value {
         date {
-          value_us: 1347235200000000
+          value_us: 1347199200000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -539,7 +554,8 @@ activity {
     scheduled {
       period {
         start {
-          value_us: 1343001600000000
+          value_us: 1342965600000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -557,7 +573,8 @@ activity {
       }
       value {
         date {
-          value_us: 1344816000000000
+          value_us: 1344780000000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -585,7 +602,8 @@ activity {
     scheduled {
       period {
         start {
-          value_us: 1343001600000000
+          value_us: 1342965600000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -598,7 +616,8 @@ activity {
 activity {
   progress {
     time {
-      value_us: 1344816000000000
+      value_us: 1344780000000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     text {
@@ -607,7 +626,8 @@ activity {
   }
   progress {
     time {
-      value_us: 1346025600000000
+      value_us: 1345989600000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     text {
@@ -621,7 +641,8 @@ activity {
       }
       value {
         date {
-          value_us: 1346025600000000
+          value_us: 1345989600000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -649,7 +670,8 @@ activity {
     scheduled {
       period {
         start {
-          value_us: 1343001600000000
+          value_us: 1342965600000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -662,7 +684,8 @@ activity {
 activity {
   progress {
     time {
-      value_us: 1343001600000000
+      value_us: 1342965600000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     text {
@@ -676,7 +699,8 @@ activity {
       }
       value {
         date {
-          value_us: 1347235200000000
+          value_us: 1347199200000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -704,7 +728,8 @@ activity {
     scheduled {
       period {
         start {
-          value_us: 1341878400000000
+          value_us: 1341842400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -717,7 +742,8 @@ activity {
 activity {
   progress {
     time {
-      value_us: 1343606400000000
+      value_us: 1343570400000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     text {
@@ -726,7 +752,8 @@ activity {
   }
   progress {
     time {
-      value_us: 1344816000000000
+      value_us: 1344780000000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     text {
@@ -740,7 +767,8 @@ activity {
       }
       value {
         date {
-          value_us: 1345680000000000
+          value_us: 1345644000000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -768,7 +796,8 @@ activity {
     scheduled {
       period {
         start {
-          value_us: 1343001600000000
+          value_us: 1342965600000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -786,7 +815,8 @@ activity {
       }
       value {
         date {
-          value_us: 1343001600000000
+          value_us: 1342965600000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -814,7 +844,8 @@ activity {
     scheduled {
       period {
         start {
-          value_us: 1341878400000000
+          value_us: 1341842400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -827,7 +858,8 @@ activity {
 activity {
   progress {
     time {
-      value_us: 1342396800000000
+      value_us: 1342360800000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     text {
@@ -841,7 +873,8 @@ activity {
       }
       value {
         date {
-          value_us: 1342396800000000
+          value_us: 1342360800000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -869,7 +902,8 @@ activity {
     scheduled {
       period {
         start {
-          value_us: 1341878400000000
+          value_us: 1341842400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -882,7 +916,8 @@ activity {
 activity {
   progress {
     time {
-      value_us: 1342051200000000
+      value_us: 1342015200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     text {
@@ -891,7 +926,8 @@ activity {
   }
   progress {
     time {
-      value_us: 1344816000000000
+      value_us: 1344780000000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     text {
@@ -905,7 +941,8 @@ activity {
       }
       value {
         date {
-          value_us: 1344816000000000
+          value_us: 1344780000000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -933,7 +970,8 @@ activity {
     scheduled {
       period {
         start {
-          value_us: 1343001600000000
+          value_us: 1342965600000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }

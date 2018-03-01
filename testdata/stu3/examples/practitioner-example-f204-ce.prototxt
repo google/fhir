@@ -65,6 +65,7 @@ gender {
   value: FEMALE
 }
 birth_date {
-  value_us: -68083200000000
+  value_us: -68119200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }

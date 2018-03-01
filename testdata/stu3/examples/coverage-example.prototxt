@@ -57,11 +57,13 @@ relationship {
 }
 period {
   start {
-    value_us: 1306108800000000
+    value_us: 1306072800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1337731200000000
+    value_us: 1337695200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

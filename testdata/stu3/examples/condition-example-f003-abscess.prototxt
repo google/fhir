@@ -82,12 +82,14 @@ context {
 }
 onset {
   date_time {
-    value_us: 1330300800000000
+    value_us: 1330261200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
 asserted_date {
-  value_us: 1329696000000000
+  value_us: 1329656400000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 asserter {

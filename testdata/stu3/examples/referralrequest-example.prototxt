@@ -91,13 +91,15 @@ context {
 occurrence {
   period {
     end {
-      value_us: 1394755200000000
+      value_us: 1394715600000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }
 }
 authored_on {
-  value_us: 1392336000000000
+  value_us: 1392296400000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 requester {

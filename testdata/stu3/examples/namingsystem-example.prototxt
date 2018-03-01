@@ -19,7 +19,8 @@ kind {
   value: CODESYSTEM
 }
 date {
-  value_us: 1418428800000000
+  value_us: 1418389200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 publisher {

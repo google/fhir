@@ -60,7 +60,8 @@ context {
 }
 period {
   end {
-    value_us: 1356998400000000
+    value_us: 1356958800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
@@ -100,7 +101,8 @@ participant {
   }
   period {
     end {
-      value_us: 1356998400000000
+      value_us: 1356958800000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }

@@ -118,7 +118,8 @@ abatement {
   }
 }
 asserted_date {
-  value_us: 1354320000000000
+  value_us: 1354280400000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 evidence {

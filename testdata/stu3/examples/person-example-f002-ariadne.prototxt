@@ -32,7 +32,8 @@ gender {
   value: FEMALE
 }
 birth_date {
-  value_us: -220924800000000
+  value_us: -220960800000000
+  timezone: "Australia/Sydney"
   precision: YEAR
 }
 photo {

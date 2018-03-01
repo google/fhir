@@ -73,11 +73,13 @@ modifier_extension {
   value {
     period {
       start {
-        value_us: 1364774400000000
+        value_us: 1364734800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       end {
-        value_us: 1365984000000000
+        value_us: 1365948000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
     }
@@ -120,7 +122,8 @@ subject {
   }
 }
 created {
-  value_us: 1368489600000000
+  value_us: 1368453600000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 author {

@@ -71,7 +71,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -482716800000000
+        value_us: -482752800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -142,7 +143,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -1090281600000000
+        value_us: -1090317600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -213,7 +215,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -987292800000000
+        value_us: -987328800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -284,7 +287,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -987292800000000
+        value_us: -987328800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -355,7 +359,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 174873600000000
+        value_us: 174837600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -426,7 +431,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 160099200000000
+        value_us: 160059600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -497,7 +503,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 693619200000000
+        value_us: 693579600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -568,7 +575,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 97977600000000
+        value_us: 97938000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -639,7 +647,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -365040000000000
+        value_us: -365076000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -710,7 +719,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -778464000000000
+        value_us: -778500000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -781,7 +791,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -1192147200000000
+        value_us: -1192183200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -852,7 +863,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -630115200000000
+        value_us: -630151200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -923,7 +935,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -780710400000000
+        value_us: -780746400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -994,7 +1007,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -23328000000000
+        value_us: -23364000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -1065,7 +1079,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -514339200000000
+        value_us: -514375200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -1136,7 +1151,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -460512000000000
+        value_us: -460548000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -1207,7 +1223,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -809481600000000
+        value_us: -809517600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -1278,7 +1295,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -928022400000000
+        value_us: -928058400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -1349,7 +1367,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 360806400000000
+        value_us: 360770400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -1420,7 +1439,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -830563200000000
+        value_us: -830599200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -1491,7 +1511,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -1140739200000000
+        value_us: -1140775200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -1562,7 +1583,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -868752000000000
+        value_us: -868788000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -1633,7 +1655,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -629164800000000
+        value_us: -629200800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -1704,7 +1727,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -1148774400000000
+        value_us: -1148810400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -1775,7 +1799,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -304560000000000
+        value_us: -304596000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -1846,7 +1871,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 16329600000000
+        value_us: 16293600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -1917,7 +1943,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -480729600000000
+        value_us: -480765600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -1988,7 +2015,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -777945600000000
+        value_us: -777981600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -2059,7 +2087,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -41472000000000
+        value_us: -41508000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -2130,7 +2159,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -1093564800000000
+        value_us: -1093600800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -2201,7 +2231,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -989107200000000
+        value_us: -989143200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -2272,7 +2303,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -651715200000000
+        value_us: -651751200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -2343,7 +2375,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -1162425600000000
+        value_us: -1162461600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -2414,7 +2447,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 580262400000000
+        value_us: 580226400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -2485,7 +2519,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -1037577600000000
+        value_us: -1037613600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -2556,7 +2591,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -743731200000000
+        value_us: -743767200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -2627,7 +2663,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -784944000000000
+        value_us: -784980000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -2698,7 +2735,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -946166400000000
+        value_us: -946202400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -2769,7 +2807,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -774921600000000
+        value_us: -774957600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -2840,7 +2879,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -314668800000000
+        value_us: -314704800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -2911,7 +2951,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -775612800000000
+        value_us: -775648800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -2982,7 +3023,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 789264000000000
+        value_us: 789224400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -3053,7 +3095,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -848793600000000
+        value_us: -848833200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -3124,7 +3167,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 650246400000000
+        value_us: 650210400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -3195,7 +3239,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -972604800000000
+        value_us: -972640800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -3266,7 +3311,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -301881600000000
+        value_us: -301917600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -3337,7 +3383,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -1091145600000000
+        value_us: -1091181600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -3408,7 +3455,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -207273600000000
+        value_us: -207309600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -3479,7 +3527,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -217641600000000
+        value_us: -217677600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -3550,7 +3599,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -301881600000000
+        value_us: -301917600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -3621,7 +3671,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -1254441600000000
+        value_us: -1254477600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -3692,7 +3743,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 324000000000000
+        value_us: 323964000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -3763,7 +3815,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 202435200000000
+        value_us: 202399200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -3834,7 +3887,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -217296000000000
+        value_us: -217332000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -3905,7 +3959,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -829612800000000
+        value_us: -829648800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -3976,7 +4031,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -560736000000000
+        value_us: -560772000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -4047,7 +4103,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -873849600000000
+        value_us: -873885600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -4118,7 +4175,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -34560000000000
+        value_us: -34596000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -4189,7 +4247,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -328752000000000
+        value_us: -328788000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -4260,7 +4319,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -63417600000000
+        value_us: -63453600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -4331,7 +4391,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -172195200000000
+        value_us: -172231200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -4402,7 +4463,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -46656000000000
+        value_us: -46692000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -4473,7 +4535,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 301104000000000
+        value_us: 301068000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -4544,7 +4607,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 325296000000000
+        value_us: 325260000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -4615,7 +4679,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -413164800000000
+        value_us: -413200800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -4686,7 +4751,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 8812800000000
+        value_us: 8776800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -4757,7 +4823,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -765331200000000
+        value_us: -765367200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -4828,7 +4895,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -28684800000000
+        value_us: -28720800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -4899,7 +4967,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -860284800000000
+        value_us: -860324400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -4970,7 +5039,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -367200000000000
+        value_us: -367236000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -5041,7 +5111,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -548121600000000
+        value_us: -548157600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -5112,7 +5183,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 828230400000000
+        value_us: 828190800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -5183,7 +5255,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 754790400000000
+        value_us: 754750800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -5254,7 +5327,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 866505600000000
+        value_us: 866469600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -5325,7 +5399,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 103680000000000
+        value_us: 103644000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -5396,7 +5471,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 78364800000000
+        value_us: 78328800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -5467,7 +5543,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -41299200000000
+        value_us: -41335200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -5538,7 +5615,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 422496000000000
+        value_us: 422460000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -5609,7 +5687,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 47088000000000
+        value_us: 47052000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -5680,7 +5759,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 86486400000000
+        value_us: 86450400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -5751,7 +5831,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -561772800000000
+        value_us: -561808800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -5822,7 +5903,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -206496000000000
+        value_us: -206532000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -5893,7 +5975,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -212025600000000
+        value_us: -212061600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -5964,7 +6047,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -806025600000000
+        value_us: -806061600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -6035,7 +6119,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 172195200000000
+        value_us: 172159200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -6106,7 +6191,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 716860800000000
+        value_us: 716824800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -6177,7 +6263,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -1006128000000000
+        value_us: -1006164000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -6248,7 +6335,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -1069718400000000
+        value_us: -1069754400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -6319,7 +6407,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -851731200000000
+        value_us: -851770800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -6390,7 +6479,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -628041600000000
+        value_us: -628077600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -6461,7 +6551,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -775785600000000
+        value_us: -775821600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -6532,7 +6623,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -935712000000000
+        value_us: -935748000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -6603,7 +6695,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -843868800000000
+        value_us: -843904800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -6674,7 +6767,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -618278400000000
+        value_us: -618314400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -6745,7 +6839,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -838512000000000
+        value_us: -838548000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -6816,7 +6911,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 1237248000000000
+        value_us: 1237208400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -6887,7 +6983,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 1245456000000000
+        value_us: 1245420000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -6958,7 +7055,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 1237420800000000
+        value_us: 1237381200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -7029,7 +7127,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -277516800000000
+        value_us: -277552800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -7100,7 +7199,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 612489600000000
+        value_us: 612453600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -7171,7 +7271,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 646012800000000
+        value_us: 645976800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -7242,7 +7343,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 859766400000000
+        value_us: 859730400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -7313,7 +7415,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -656380800000000
+        value_us: -656416800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -7384,7 +7487,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -469756800000000
+        value_us: -469792800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -7455,7 +7559,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 387072000000000
+        value_us: 387036000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -7526,7 +7631,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 107740800000000
+        value_us: 107704800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -7597,7 +7703,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 40521600000000
+        value_us: 40485600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -7668,7 +7775,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 106963200000000
+        value_us: 106927200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -7739,7 +7847,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -704678400000000
+        value_us: -704714400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -7810,7 +7919,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -143510400000000
+        value_us: -143546400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -7881,7 +7991,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -961545600000000
+        value_us: -961581600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -7952,7 +8063,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -670032000000000
+        value_us: -670068000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -8023,7 +8135,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 12096000000000
+        value_us: 12060000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -8094,7 +8207,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -879984000000000
+        value_us: -880023600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -8165,7 +8279,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -555897600000000
+        value_us: -555933600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -8236,7 +8351,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 610070400000000
+        value_us: 610034400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -8307,7 +8423,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 69206400000000
+        value_us: 69170400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -8378,7 +8495,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 92102400000000
+        value_us: 92062800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -8449,7 +8567,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -998870400000000
+        value_us: -998906400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -8520,7 +8639,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -874886400000000
+        value_us: -874922400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -8591,7 +8711,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -862876800000000
+        value_us: -862912800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -8662,7 +8783,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -848361600000000
+        value_us: -848401200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -8733,7 +8855,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -845164800000000
+        value_us: -845204400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -8804,7 +8927,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -879811200000000
+        value_us: -879850800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -8875,7 +8999,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -998870400000000
+        value_us: -998906400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -8946,7 +9071,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -743731200000000
+        value_us: -743767200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -9017,7 +9143,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -869616000000000
+        value_us: -869652000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -9088,7 +9215,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -843004800000000
+        value_us: -843040800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -9159,7 +9287,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -621561600000000
+        value_us: -621597600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -9230,7 +9359,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -358560000000000
+        value_us: -358596000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -9301,7 +9431,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -586137600000000
+        value_us: -586173600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -9372,7 +9503,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -930528000000000
+        value_us: -930564000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -9443,7 +9575,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 693619200000000
+        value_us: 693579600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -9514,7 +9647,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -427507200000000
+        value_us: -427543200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -9585,7 +9719,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -518486400000000
+        value_us: -518522400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -9656,7 +9791,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -143164800000000
+        value_us: -143200800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -9727,7 +9863,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -1142640000000000
+        value_us: -1142676000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -9798,7 +9935,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -584755200000000
+        value_us: -584791200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -9869,7 +10007,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -785635200000000
+        value_us: -785671200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -9940,7 +10079,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 218073600000000
+        value_us: 218034000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -10011,7 +10151,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 628560000000000
+        value_us: 628520400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -10082,7 +10223,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -404697600000000
+        value_us: -404733600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -10153,7 +10295,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -1074816000000000
+        value_us: -1074852000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -10224,7 +10367,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 1234310400000000
+        value_us: 1234270800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -10295,7 +10439,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -858556800000000
+        value_us: -858596400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -10366,7 +10511,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -962928000000000
+        value_us: -962964000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -10437,7 +10583,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -546393600000000
+        value_us: -546429600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -10508,7 +10655,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -523238400000000
+        value_us: -523274400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -10579,7 +10727,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -503280000000000
+        value_us: -503316000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -10650,7 +10799,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -933120000000000
+        value_us: -933156000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -10721,7 +10871,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -322185600000000
+        value_us: -322221600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -10792,7 +10943,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -608947200000000
+        value_us: -608983200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -10863,7 +11015,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -947548800000000
+        value_us: -947584800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -10934,7 +11087,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -337824000000000
+        value_us: -337860000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11005,7 +11159,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 185328000000000
+        value_us: 185288400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11076,7 +11231,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -564364800000000
+        value_us: -564400800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11147,7 +11303,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -672105600000000
+        value_us: -672141600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11218,7 +11375,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -603504000000000
+        value_us: -603540000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11289,7 +11447,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -830908800000000
+        value_us: -830944800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11360,7 +11519,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -552096000000000
+        value_us: -552132000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11431,7 +11591,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -892080000000000
+        value_us: -892116000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11502,7 +11663,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -275097600000000
+        value_us: -275133600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11573,7 +11735,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 171331200000000
+        value_us: 171295200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11644,7 +11807,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -919900800000000
+        value_us: -919936800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11715,7 +11879,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 877478400000000
+        value_us: 877442400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11786,7 +11951,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 1238025600000000
+        value_us: 1237986000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11857,7 +12023,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -834624000000000
+        value_us: -834660000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11928,7 +12095,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -987552000000000
+        value_us: -987588000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -11999,7 +12167,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -299116800000000
+        value_us: -299152800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -12070,7 +12239,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 831340800000000
+        value_us: 831304800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -12141,7 +12311,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -225849600000000
+        value_us: -225885600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -12212,7 +12383,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 332294400000000
+        value_us: 332258400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -12283,7 +12455,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -763257600000000
+        value_us: -763293600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -12354,7 +12527,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -616896000000000
+        value_us: -616932000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -12425,7 +12599,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 187833600000000
+        value_us: 187794000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -12496,7 +12671,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 941500800000000
+        value_us: 941461200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -12567,7 +12743,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -529977600000000
+        value_us: -530013600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -12638,7 +12815,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -362275200000000
+        value_us: -362311200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -12709,7 +12887,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -300672000000000
+        value_us: -300708000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -12780,7 +12959,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 807753600000000
+        value_us: 807717600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -12851,7 +13031,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -764726400000000
+        value_us: -764762400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -12922,7 +13103,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 973123200000000
+        value_us: 973083600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -12993,7 +13175,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -781747200000000
+        value_us: -781783200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -13064,7 +13247,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 266457600000000
+        value_us: 266421600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -13135,7 +13319,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 783388800000000
+        value_us: 783352800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -13206,7 +13391,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 219456000000000
+        value_us: 219416400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -13277,7 +13463,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 572572800000000
+        value_us: 572533200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -13348,7 +13535,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 199411200000000
+        value_us: 199375200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -13419,7 +13607,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 520732800000000
+        value_us: 520696800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -13490,7 +13679,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 70156800000000
+        value_us: 70120800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -13561,7 +13751,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 1067731200000000
+        value_us: 1067691600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -13632,7 +13823,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -261878400000000
+        value_us: -261914400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -13703,7 +13895,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 1039824000000000
+        value_us: 1039784400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -13774,7 +13967,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 1004659200000000
+        value_us: 1004619600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -13845,7 +14039,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 1099353600000000
+        value_us: 1099314000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -13916,7 +14111,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 491875200000000
+        value_us: 491839200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -13987,7 +14183,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 255312000000000
+        value_us: 255272400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -14058,7 +14255,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 72921600000000
+        value_us: 72885600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -14129,7 +14327,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 399686400000000
+        value_us: 399650400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -14200,7 +14399,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 724291200000000
+        value_us: 724251600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -14271,7 +14471,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 621561600000000
+        value_us: 621525600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -14342,7 +14543,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 621561600000000
+        value_us: 621525600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -14413,7 +14615,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -830908800000000
+        value_us: -830944800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -14484,7 +14687,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 805075200000000
+        value_us: 805039200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -14555,7 +14759,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 771724800000000
+        value_us: 771688800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -14626,7 +14831,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -533779200000000
+        value_us: -533815200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -14697,7 +14903,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 123811200000000
+        value_us: 123771600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -14768,7 +14975,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -373420800000000
+        value_us: -373456800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -14839,7 +15047,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -239760000000000
+        value_us: -239796000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -14910,7 +15119,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -242784000000000
+        value_us: -242820000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -14981,7 +15191,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 712713600000000
+        value_us: 712677600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -15052,7 +15263,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -797904000000000
+        value_us: -797940000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -15123,7 +15335,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: -450835200000000
+        value_us: -450871200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -15194,7 +15407,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -697507200000000
+        value_us: -697543200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -15265,7 +15479,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 464400000000000
+        value_us: 464364000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -15336,7 +15551,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -415843200000000
+        value_us: -415879200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -15407,7 +15623,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: 504316800000000
+        value_us: 504277200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -15478,7 +15695,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 160099200000000
+        value_us: 160059600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -15549,7 +15767,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 291945600000000
+        value_us: 291909600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -15620,7 +15839,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 186624000000000
+        value_us: 186584400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -15691,7 +15911,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -124070400000000
+        value_us: -124106400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -15762,7 +15983,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 704764800000000
+        value_us: 704728800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -15833,7 +16055,8 @@ entry {
         value: MALE
       }
       birth_date {
-        value_us: 402796800000000
+        value_us: 402760800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -15904,7 +16127,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -142214400000000
+        value_us: -142250400000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {
@@ -15975,7 +16199,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -1214611200000000
+        value_us: -1214647200000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       managing_organization {

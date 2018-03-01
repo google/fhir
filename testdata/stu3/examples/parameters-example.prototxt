@@ -7,7 +7,8 @@ parameter {
   }
   value {
     date {
-      value_us: 1262304000000000
+      value_us: 1262264400000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }

@@ -19,7 +19,8 @@ status {
   value: DRAFT
 }
 date {
-  value_us: 1325376000000000
+  value_us: 1325336400000000
+  timezone: "Australia/Sydney"
   precision: MONTH
 }
 subject_type {

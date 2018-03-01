@@ -51,7 +51,8 @@ subject {
 }
 effective {
   date_time {
-    value_us: 930873600000000
+    value_us: 930837600000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

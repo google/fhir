@@ -41,7 +41,8 @@ patient {
   }
 }
 date {
-  value_us: 1326585600000000
+  value_us: 1326546000000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 primary_source {

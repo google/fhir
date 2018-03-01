@@ -21,7 +21,8 @@ patient {
   }
 }
 date_time {
-  value_us: 1466035200000000
+  value_us: 1465999200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 organization {

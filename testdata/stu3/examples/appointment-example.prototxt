@@ -86,7 +86,8 @@ end {
   precision: SECOND
 }
 created {
-  value_us: 1381363200000000
+  value_us: 1381323600000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 comment {

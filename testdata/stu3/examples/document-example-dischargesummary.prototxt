@@ -287,7 +287,8 @@ entry {
         value: FEMALE
       }
       birth_date {
-        value_us: -472953600000000
+        value_us: -472989600000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       address {
@@ -648,7 +649,8 @@ entry {
         }
       }
       asserted_date {
-        value_us: 1347840000000000
+        value_us: 1347804000000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       reaction {

@@ -65,7 +65,8 @@ gender {
   value: MALE
 }
 birth_date {
-  value_us: -1176163200000000
+  value_us: -1176199200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 general_practitioner {

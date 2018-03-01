@@ -19,7 +19,8 @@ kind {
   value: IDENTIFIER
 }
 date {
-  value_us: 1440979200000000
+  value_us: 1440943200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 publisher {
@@ -96,7 +97,8 @@ unique_id {
   }
   period {
     start {
-      value_us: 1440115200000000
+      value_us: 1440079200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }

@@ -51,12 +51,14 @@ ordered_item {
 }
 occurrence {
   date_time {
-    value_us: 1483142400000000
+    value_us: 1483102800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
 authored_on {
-  value_us: 1483142400000000
+  value_us: 1483102800000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 requester {

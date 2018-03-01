@@ -34,11 +34,13 @@ type {
   }
 }
 manufacture_date {
-  value_us: 1438992000000000
+  value_us: 1438956000000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 expiration_date {
-  value_us: 1596844800000000
+  value_us: 1596808800000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 owner {

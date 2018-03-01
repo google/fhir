@@ -49,21 +49,25 @@ subject {
 }
 period {
   start {
-    value_us: 1451606400000000
+    value_us: 1451566800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1467244800000000
+    value_us: 1467208800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
 active {
   start {
-    value_us: 1451606400000000
+    value_us: 1451566800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1467244800000000
+    value_us: 1467208800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
@@ -125,7 +129,8 @@ guarantor {
   }
   period {
     start {
-      value_us: 1451606400000000
+      value_us: 1451566800000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }

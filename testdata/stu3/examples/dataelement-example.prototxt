@@ -183,7 +183,8 @@ status {
   value: ACTIVE
 }
 date {
-  value_us: 1451606400000000
+  value_us: 1451566800000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 publisher {

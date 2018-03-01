@@ -24,7 +24,8 @@ action {
   value: POLL
 }
 created {
-  value_us: 1408147200000000
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 organization {
@@ -37,11 +38,13 @@ include {
 }
 period {
   start {
-    value_us: 1407628800000000
+    value_us: 1407592800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1408492800000000
+    value_us: 1408456800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

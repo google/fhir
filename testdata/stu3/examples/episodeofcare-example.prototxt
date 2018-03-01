@@ -26,11 +26,13 @@ status_history {
   }
   period {
     start {
-      value_us: 1409529600000000
+      value_us: 1409493600000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     end {
-      value_us: 1410652800000000
+      value_us: 1410616800000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }
@@ -41,11 +43,13 @@ status_history {
   }
   period {
     start {
-      value_us: 1410739200000000
+      value_us: 1410703200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     end {
-      value_us: 1411257600000000
+      value_us: 1411221600000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }
@@ -56,11 +60,13 @@ status_history {
   }
   period {
     start {
-      value_us: 1411344000000000
+      value_us: 1411308000000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     end {
-      value_us: 1411516800000000
+      value_us: 1411480800000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }
@@ -71,7 +77,8 @@ status_history {
   }
   period {
     start {
-      value_us: 1411603200000000
+      value_us: 1411567200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }
@@ -124,7 +131,8 @@ managing_organization {
 }
 period {
   start {
-    value_us: 1409529600000000
+    value_us: 1409493600000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

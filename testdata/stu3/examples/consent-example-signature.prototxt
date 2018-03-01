@@ -37,11 +37,13 @@ patient {
 }
 period {
   start {
-    value_us: 1444435200000000
+    value_us: 1444395600000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1476057600000000
+    value_us: 1476018000000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

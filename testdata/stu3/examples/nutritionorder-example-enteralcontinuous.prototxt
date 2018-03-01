@@ -37,7 +37,8 @@ encounter {
   }
 }
 date_time {
-  value_us: 1410912000000000
+  value_us: 1410876000000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 orderer {

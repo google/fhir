@@ -75,7 +75,8 @@ entry {
         }
       }
       created {
-        value_us: 1135382400000000
+        value_us: 1135342800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
       indexed {
@@ -215,7 +216,8 @@ entry {
         }
       }
       birth_date {
-        value_us: -429148800000000
+        value_us: -429184800000000
+        timezone: "Australia/Sydney"
         precision: DAY
       }
     }

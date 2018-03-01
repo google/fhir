@@ -50,7 +50,8 @@ subject {
   }
 }
 authored_on {
-  value_us: 1488672000000000
+  value_us: 1488632400000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 requester {

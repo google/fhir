@@ -82,7 +82,8 @@ content {
     }
   }
   creation {
-    value_us: 1251936000000000
+    value_us: 1251900000000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

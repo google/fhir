@@ -64,7 +64,8 @@ patient {
   }
 }
 created {
-  value_us: 1408147200000000
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 insurer {
@@ -175,7 +176,8 @@ information {
   }
   timing {
     date {
-      value_us: 986601600000000
+      value_us: 986565600000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }
@@ -185,7 +187,8 @@ procedure {
     value: 1
   }
   date {
-    value_us: 1404432000000000
+    value_us: 1404396000000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   procedure {
@@ -234,7 +237,8 @@ item {
   }
   serviced {
     date {
-      value_us: 1408147200000000
+      value_us: 1408111200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }
@@ -310,7 +314,8 @@ item {
   }
   serviced {
     date {
-      value_us: 1408147200000000
+      value_us: 1408111200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }
@@ -391,7 +396,8 @@ item {
   }
   serviced {
     date {
-      value_us: 1408147200000000
+      value_us: 1408111200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }

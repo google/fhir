@@ -26,7 +26,8 @@ patient {
   }
 }
 date_written {
-  value_us: 1402790400000000
+  value_us: 1402754400000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 prescriber {

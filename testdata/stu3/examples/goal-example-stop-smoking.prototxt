@@ -32,7 +32,8 @@ subject {
 }
 start {
   date {
-    value_us: 1428192000000000
+    value_us: 1428152400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

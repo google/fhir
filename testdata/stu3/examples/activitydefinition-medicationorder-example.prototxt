@@ -122,7 +122,8 @@ experimental {
   value: true
 }
 date {
-  value_us: 1439596800000000
+  value_us: 1439560800000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 publisher {
@@ -138,20 +139,24 @@ usage {
   value: "This activity definition is used as part of various suicide risk order sets"
 }
 approval_date {
-  value_us: 1457740800000000
+  value_us: 1457701200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 last_review_date {
-  value_us: 1471219200000000
+  value_us: 1471183200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 effective_period {
   start {
-    value_us: 1451606400000000
+    value_us: 1451566800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1514678400000000
+    value_us: 1514638800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

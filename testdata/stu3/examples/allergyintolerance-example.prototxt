@@ -52,7 +52,8 @@ patient {
 }
 onset {
   date_time {
-    value_us: 1072915200000000
+    value_us: 1072875600000000
+    timezone: "Australia/Sydney"
     precision: YEAR
   }
 }
@@ -72,7 +73,8 @@ asserter {
   }
 }
 last_occurrence {
-  value_us: 1338508800000000
+  value_us: 1338472800000000
+  timezone: "Australia/Sydney"
   precision: MONTH
 }
 note {
@@ -111,7 +113,8 @@ reaction {
     value: "Challenge Protocol. Severe reaction to subcutaneous cashew extract. Epinephrine administered"
   }
   onset {
-    value_us: 1339459200000000
+    value_us: 1339423200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   severity {
@@ -146,7 +149,8 @@ reaction {
     }
   }
   onset {
-    value_us: 1072915200000000
+    value_us: 1072875600000000
+    timezone: "Australia/Sydney"
     precision: YEAR
   }
   severity {

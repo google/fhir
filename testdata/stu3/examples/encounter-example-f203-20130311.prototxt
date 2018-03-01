@@ -26,7 +26,8 @@ status_history {
   }
   period {
     start {
-      value_us: 1362700800000000
+      value_us: 1362661200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }
@@ -110,11 +111,13 @@ appointment {
 }
 period {
   start {
-    value_us: 1362960000000000
+    value_us: 1362920400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1363737600000000
+    value_us: 1363698000000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

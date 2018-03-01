@@ -16,7 +16,8 @@ target {
 }
 period {
   start {
-    value_us: 1480464000000000
+    value_us: 1480424400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

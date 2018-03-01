@@ -37,7 +37,8 @@ type {
   }
 }
 date {
-  value_us: 1479081600000000
+  value_us: 1479042000000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 description {

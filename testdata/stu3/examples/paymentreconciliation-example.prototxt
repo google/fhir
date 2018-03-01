@@ -22,16 +22,19 @@ status {
 }
 period {
   start {
-    value_us: 1408147200000000
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1409443200000000
+    value_us: 1409407200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
 created {
-  value_us: 1408147200000000
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 organization {
@@ -109,7 +112,8 @@ detail {
     }
   }
   date {
-    value_us: 1408147200000000
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   amount {
@@ -141,7 +145,8 @@ detail {
     }
   }
   date {
-    value_us: 1407801600000000
+    value_us: 1407765600000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   amount {
@@ -168,7 +173,8 @@ detail {
     }
   }
   date {
-    value_us: 1408147200000000
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   amount {

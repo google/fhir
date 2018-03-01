@@ -65,7 +65,8 @@ entry {
     }
   }
   date {
-    value_us: 1353456000000000
+    value_us: 1353416400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   item {

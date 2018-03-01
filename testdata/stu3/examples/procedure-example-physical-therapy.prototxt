@@ -59,7 +59,8 @@ subject {
 }
 performed {
   date_time {
-    value_us: 1474934400000000
+    value_us: 1474898400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

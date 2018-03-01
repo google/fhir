@@ -28,7 +28,8 @@ experimental {
   value: true
 }
 date {
-  value_us: 1325635200000000
+  value_us: 1325595600000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 publisher {
@@ -105,7 +106,8 @@ software {
     value: "0.00.020.2134"
   }
   release_date {
-    value_us: 1325635200000000
+    value_us: 1325595600000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

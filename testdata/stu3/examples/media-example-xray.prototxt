@@ -52,7 +52,8 @@ context {
 }
 occurrence {
   date_time {
-    value_us: 1458000000000000
+    value_us: 1457960400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
@@ -86,7 +87,8 @@ content {
     value: "http://someimagingcenter.org/fhir/Binary/A12345"
   }
   creation {
-    value_us: 1458000000000000
+    value_us: 1457960400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

@@ -29,7 +29,8 @@ severity {
   value: HIGH
 }
 date {
-  value_us: 1388880000000000
+  value_us: 1388840400000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 author {
@@ -74,7 +75,8 @@ mitigation {
     }
   }
   date {
-    value_us: 1388880000000000
+    value_us: 1388840400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   author {

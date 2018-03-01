@@ -277,11 +277,13 @@ not_available {
   }
   during {
     start {
-      value_us: 1451001600000000
+      value_us: 1450962000000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     end {
-      value_us: 1451088000000000
+      value_us: 1451048400000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }
@@ -292,11 +294,13 @@ not_available {
   }
   during {
     start {
-      value_us: 1451606400000000
+      value_us: 1451566800000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     end {
-      value_us: 1451606400000000
+      value_us: 1451566800000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }

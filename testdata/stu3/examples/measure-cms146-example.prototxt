@@ -50,7 +50,8 @@ experimental {
   value: true
 }
 date {
-  value_us: 1489104000000000
+  value_us: 1489064400000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 publisher {
@@ -63,20 +64,24 @@ purpose {
   value: "Measure of children with a group A streptococcus test in the 7-day period from 3 days prior through 3 days after the diagnosis of pharyngitis"
 }
 approval_date {
-  value_us: 1451606400000000
+  value_us: 1451566800000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 last_review_date {
-  value_us: 1472688000000000
+  value_us: 1472652000000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 effective_period {
   start {
-    value_us: 1483228800000000
+    value_us: 1483189200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1514678400000000
+    value_us: 1514638800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

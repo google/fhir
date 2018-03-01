@@ -42,7 +42,8 @@ patient {
   }
 }
 date {
-  value_us: 1367971200000000
+  value_us: 1367935200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 author {

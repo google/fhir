@@ -23,7 +23,8 @@ identifier {
   }
   period {
     start {
-      value_us: 1275264000000000
+      value_us: 1275228000000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }
@@ -48,7 +49,8 @@ gender {
   value: FEMALE
 }
 birth_date {
-  value_us: 1269302400000000
+  value_us: 1269262800000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 contact {

@@ -54,12 +54,14 @@ subject {
 }
 occurrence {
   date_time {
-    value_us: 1474934400000000
+    value_us: 1474898400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
 authored_on {
-  value_us: 1474329600000000
+  value_us: 1474293600000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 requester {

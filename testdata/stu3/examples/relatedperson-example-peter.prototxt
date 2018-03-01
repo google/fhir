@@ -79,7 +79,8 @@ photo {
 }
 period {
   start {
-    value_us: 1331424000000000
+    value_us: 1331384400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

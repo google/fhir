@@ -22,11 +22,13 @@ active {
 }
 period {
   start {
-    value_us: 1325376000000000
+    value_us: 1325336400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1333152000000000
+    value_us: 1333112400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
@@ -142,11 +144,13 @@ not_available {
   }
   during {
     start {
-      value_us: 1493596800000000
+      value_us: 1493560800000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     end {
-      value_us: 1495238400000000
+      value_us: 1495202400000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }

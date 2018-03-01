@@ -23,7 +23,8 @@ subject {
   }
 }
 authored {
-  value_us: 1200528000000000
+  value_us: 1200488400000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 item {
@@ -40,7 +41,8 @@ item {
     answer {
       value {
         date {
-          value_us: 1200528000000000
+          value_us: 1200488400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -118,7 +120,8 @@ item {
       answer {
         value {
           date {
-            value_us: -118195200000000
+            value_us: -118231200000000
+            timezone: "Australia/Sydney"
             precision: DAY
           }
         }

@@ -19,7 +19,8 @@ status {
   value: DRAFT
 }
 date {
-  value_us: 1361232000000000
+  value_us: 1361192400000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 publisher {

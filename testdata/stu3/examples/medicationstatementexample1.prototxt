@@ -131,7 +131,8 @@ contained {
           value: "9494788"
         }
         expiration_date {
-          value_us: 1495411200000000
+          value_us: 1495375200000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -174,12 +175,14 @@ medication {
 }
 effective {
   date_time {
-    value_us: 1421971200000000
+    value_us: 1421931600000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
 date_asserted {
-  value_us: 1424563200000000
+  value_us: 1424523600000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 information_source {

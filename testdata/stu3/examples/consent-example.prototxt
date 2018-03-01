@@ -22,16 +22,19 @@ patient {
 }
 period {
   start {
-    value_us: -189388800000000
+    value_us: -189424800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1451606400000000
+    value_us: 1451566800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
 date_time {
-  value_us: 1462924800000000
+  value_us: 1462888800000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 organization {

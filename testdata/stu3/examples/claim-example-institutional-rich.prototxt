@@ -40,16 +40,19 @@ patient {
 }
 billable_period {
   start {
-    value_us: 1408060800000000
+    value_us: 1408024800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1408147200000000
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
 created {
-  value_us: 1408147200000000
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 enterer {
@@ -199,7 +202,8 @@ insurance {
 }
 accident {
   date {
-    value_us: 1404864000000000
+    value_us: 1404828000000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   type {
@@ -225,21 +229,25 @@ accident {
 }
 employment_impacted {
   start {
-    value_us: 1408147200000000
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1408147200000000
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
 hospitalization {
   start {
-    value_us: 1408060800000000
+    value_us: 1408024800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1408147200000000
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
@@ -262,7 +270,8 @@ item {
   }
   serviced {
     date {
-      value_us: 1408147200000000
+      value_us: 1408111200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }

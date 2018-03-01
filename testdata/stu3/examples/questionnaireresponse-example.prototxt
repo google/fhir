@@ -39,7 +39,8 @@ contained {
       value: MALE
     }
     birth_date {
-      value_us: 91929600000000
+      value_us: 91890000000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }

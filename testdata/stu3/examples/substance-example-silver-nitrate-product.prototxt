@@ -56,7 +56,8 @@ instance {
     }
   }
   expiry {
-    value_us: 1514764800000000
+    value_us: 1514725200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   quantity {

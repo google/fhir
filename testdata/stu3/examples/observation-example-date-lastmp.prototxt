@@ -51,13 +51,15 @@ subject {
 }
 effective {
   date_time {
-    value_us: 1453593600000000
+    value_us: 1453554000000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
 value {
   date_time {
-    value_us: 1483056000000000
+    value_us: 1483016400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

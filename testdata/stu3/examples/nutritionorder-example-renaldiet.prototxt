@@ -37,7 +37,8 @@ encounter {
   }
 }
 date_time {
-  value_us: 1410912000000000
+  value_us: 1410876000000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 orderer {
@@ -115,7 +116,8 @@ oral_diet {
       bounds {
         period {
           start {
-            value_us: 1423526400000000
+            value_us: 1423486800000000
+            timezone: "Australia/Sydney"
             precision: DAY
           }
         }

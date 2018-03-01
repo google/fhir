@@ -21,7 +21,8 @@ patient {
   }
 }
 date_time {
-  value_us: 1447804800000000
+  value_us: 1447765200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 actor {

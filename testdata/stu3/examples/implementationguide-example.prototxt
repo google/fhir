@@ -24,7 +24,8 @@ status {
 experimental {
 }
 date {
-  value_us: 1420070400000000
+  value_us: 1420030800000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 publisher {

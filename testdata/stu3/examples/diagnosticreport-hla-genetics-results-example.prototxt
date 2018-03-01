@@ -127,7 +127,8 @@ entry {
       }
       effective {
         date_time {
-          value_us: 1481760000000000
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -1175,7 +1176,8 @@ entry {
       }
       effective {
         date_time {
-          value_us: 1481760000000000
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -1334,7 +1336,8 @@ entry {
       }
       effective {
         date_time {
-          value_us: 1481760000000000
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -1463,7 +1466,8 @@ entry {
       }
       effective {
         date_time {
-          value_us: 1481760000000000
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -1622,7 +1626,8 @@ entry {
       }
       effective {
         date_time {
-          value_us: 1481760000000000
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -1781,7 +1786,8 @@ entry {
       }
       effective {
         date_time {
-          value_us: 1481760000000000
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -1910,7 +1916,8 @@ entry {
       }
       effective {
         date_time {
-          value_us: 1481760000000000
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -2069,7 +2076,8 @@ entry {
       }
       effective {
         date_time {
-          value_us: 1481760000000000
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -2228,7 +2236,8 @@ entry {
       }
       effective {
         date_time {
-          value_us: 1481760000000000
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }
@@ -2357,7 +2366,8 @@ entry {
       }
       effective {
         date_time {
-          value_us: 1481760000000000
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
           precision: DAY
         }
       }

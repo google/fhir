@@ -51,11 +51,13 @@ manufacturer {
   value: "GlobalMed, Inc"
 }
 manufacture_date {
-  value_us: 1359763200000000
+  value_us: 1359723600000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 expiration_date {
-  value_us: 1580601600000000
+  value_us: 1580562000000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 model {

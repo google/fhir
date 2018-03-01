@@ -137,7 +137,8 @@ item {
             answer {
               value {
                 date {
-                  value_us: 91929600000000
+                  value_us: 91890000000000
+                  timezone: "Australia/Sydney"
                   precision: DAY
                 }
               }
@@ -153,7 +154,8 @@ item {
             answer {
               value {
                 date {
-                  value_us: 92880000000000
+                  value_us: 92840400000000
+                  timezone: "Australia/Sydney"
                   precision: DAY
                 }
               }
@@ -185,7 +187,8 @@ item {
           answer {
             value {
               date {
-                value_us: 92275200000000
+                value_us: 92235600000000
+                timezone: "Australia/Sydney"
                 precision: DAY
               }
             }

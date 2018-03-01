@@ -45,11 +45,13 @@ manufacturer {
   value: "Acme Devices, Inc"
 }
 manufacture_date {
-  value_us: 1359676800000000
+  value_us: 1359637200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 expiration_date {
-  value_us: 1391212800000000
+  value_us: 1391173200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 patient {

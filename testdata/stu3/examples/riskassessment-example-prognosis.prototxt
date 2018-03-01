@@ -14,7 +14,8 @@ status {
 }
 occurrence {
   date_time {
-    value_us: 1290384000000000
+    value_us: 1290344400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

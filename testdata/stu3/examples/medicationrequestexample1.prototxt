@@ -85,7 +85,8 @@ context {
   }
 }
 authored_on {
-  value_us: 1421280000000000
+  value_us: 1421240400000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 requester {
@@ -197,11 +198,13 @@ dosage_instruction {
 dispense_request {
   validity_period {
     start {
-      value_us: 1421280000000000
+      value_us: 1421240400000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
     end {
-      value_us: 1452816000000000
+      value_us: 1452776400000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }

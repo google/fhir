@@ -87,7 +87,8 @@ slot {
   }
 }
 created {
-  value_us: 1449014400000000
+  value_us: 1448974800000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 comment {
@@ -145,11 +146,13 @@ participant {
 }
 requested_period {
   start {
-    value_us: 1464825600000000
+    value_us: 1464789600000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1465430400000000
+    value_us: 1465394400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

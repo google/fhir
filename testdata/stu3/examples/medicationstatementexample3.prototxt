@@ -21,12 +21,14 @@ medication {
 }
 effective {
   date_time {
-    value_us: 1391212800000000
+    value_us: 1391173200000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }
 date_asserted {
-  value_us: 1393027200000000
+  value_us: 1392987600000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 information_source {

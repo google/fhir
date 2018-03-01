@@ -81,11 +81,13 @@ subject {
 }
 period {
   start {
-    value_us: 1309046400000000
+    value_us: 1309010400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   end {
-    value_us: 1309132800000000
+    value_us: 1309096800000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
 }

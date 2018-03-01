@@ -27,7 +27,8 @@ status {
   value: ACTIVE
 }
 date {
-  value_us: 1394236800000000
+  value_us: 1394197200000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 description {

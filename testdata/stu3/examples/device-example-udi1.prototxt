@@ -81,7 +81,8 @@ manufacturer {
   value: "Acme Devices, Inc"
 }
 expiration_date {
-  value_us: 1416441600000000
+  value_us: 1416402000000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 model {

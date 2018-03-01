@@ -158,11 +158,13 @@ publisher {
   value: "National Comprehensive Cancer Network, Inc."
 }
 approval_date {
-  value_us: 1469577600000000
+  value_us: 1469541600000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 last_review_date {
-  value_us: 1469577600000000
+  value_us: 1469541600000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 use_context {

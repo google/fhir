@@ -75,7 +75,8 @@ qualification {
   }
   period {
     start {
-      value_us: 788918400000000
+      value_us: 788878800000000
+      timezone: "Australia/Sydney"
       precision: YEAR
     }
   }

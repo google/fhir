@@ -23,7 +23,8 @@ member {
   }
   period {
     start {
-      value_us: 1412726400000000
+      value_us: 1412686800000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }
@@ -36,7 +37,8 @@ member {
   }
   period {
     start {
-      value_us: 1427932800000000
+      value_us: 1427893200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }
@@ -52,7 +54,8 @@ member {
   }
   period {
     start {
-      value_us: 1438819200000000
+      value_us: 1438783200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }
@@ -65,7 +68,8 @@ member {
   }
   period {
     start {
-      value_us: 1438819200000000
+      value_us: 1438783200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }

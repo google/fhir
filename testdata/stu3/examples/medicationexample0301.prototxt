@@ -149,7 +149,8 @@ package_value {
       value: "9494788"
     }
     expiration_date {
-      value_us: 1495411200000000
+      value_us: 1495375200000000
+      timezone: "Australia/Sydney"
       precision: DAY
     }
   }

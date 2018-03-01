@@ -46,7 +46,8 @@ encounter {
   }
 }
 date {
-  value_us: 1357776000000000
+  value_us: 1357736400000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 primary_source {
@@ -66,7 +67,8 @@ lot_number {
   value: "AAJN11K"
 }
 expiration_date {
-  value_us: 1423958400000000
+  value_us: 1423918800000000
+  timezone: "Australia/Sydney"
   precision: DAY
 }
 site {
@@ -159,7 +161,8 @@ explanation {
 }
 reaction {
   date {
-    value_us: 1357776000000000
+    value_us: 1357736400000000
+    timezone: "Australia/Sydney"
     precision: DAY
   }
   detail {
