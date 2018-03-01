@@ -115,7 +115,7 @@ timing {
       }
       extension {
         url {
-          value: "https://fhir.google.com/extensions/primitiveHasNoValue"
+          value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue"
         }
         value {
           boolean {
