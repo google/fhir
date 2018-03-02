@@ -12,7 +12,7 @@ To run:
 
 ```
 ./01-get-synthea.sh
-./02-parse-into-protobuf
+./02-parse-into-protobuf.sh
 ./03-upload-to-bq.sh
 ./04-run-queries.sh
 ```
