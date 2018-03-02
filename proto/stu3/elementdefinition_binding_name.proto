@@ -19,8 +19,8 @@ package google.fhir.stu3.proto;
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.proto";
 
-import "google/fhir/proto/stu3/annotations.proto";
-import "google/fhir/proto/stu3/datatypes.proto";
+import "proto/stu3/annotations.proto";
+import "proto/stu3/datatypes.proto";
 
 // This is an extension described by
 // http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName

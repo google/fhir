@@ -12,22 +12,25 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-syntax = "proto3";
+package com.google.fhir.stu3;
 
-package google.fhir.stu3.proto;
+import com.google.gson.JsonPrimitive;
+import com.google.protobuf.Message;
+import java.math.BigDecimal;
 
-option java_multiple_files = true;
-option java_package = "com.google.fhir.stu3.proto";
+/** An abstract wrapper class around numeric FHIR primitive types. */
+public abstract class NumericTypeWrapper<T extends Message> extends PrimitiveWrapper<T> {
 
-import "proto/stu3/annotations.proto";
-import "proto/stu3/datatypes.proto";
+  protected NumericTypeWrapper(T t) {
+    super(t);
+  }
 
-// This is an extension described by
-// http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name
-message StructureDefinitionExplicitTypeName {
-  option (fhir_extension_url) =
-      "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name";
+  @Override
+  public JsonPrimitive toJson() {
+    return new JsonPrimitive(toBigDecimal());
+  }
 
-  // The value.
-  String value_string = 1;
+  public BigDecimal toBigDecimal() {
+    return new BigDecimal(toString());
+  }
 }
