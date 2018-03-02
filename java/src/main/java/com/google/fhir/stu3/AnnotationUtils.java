@@ -17,6 +17,7 @@ package com.google.fhir.stu3;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.Annotations.StructureDefinitionKindValue;
 import com.google.protobuf.Descriptors.Descriptor;
+import com.google.protobuf.MessageOrBuilder;
 
 /** Helper methods for dealing with FHIR protocol buffer annotations. */
 public final class AnnotationUtils {
@@ -27,9 +28,25 @@ public final class AnnotationUtils {
             == StructureDefinitionKindValue.KIND_RESOURCE;
   }
 
+  public static boolean isResource(MessageOrBuilder message) {
+    return isResource(message.getDescriptorForType());
+  }
+
   public static boolean isPrimitiveType(Descriptor descriptor) {
     return descriptor.getOptions().hasExtension(Annotations.structureDefinitionKind)
         && descriptor.getOptions().getExtension(Annotations.structureDefinitionKind)
             == StructureDefinitionKindValue.KIND_PRIMITIVE_TYPE;
+  }
+
+  public static boolean isPrimitiveType(MessageOrBuilder message) {
+    return isPrimitiveType(message.getDescriptorForType());
+  }
+
+  public static boolean isReference(Descriptor descriptor) {
+    return descriptor.getOptions().getExtensionCount(Annotations.fhirReferenceType) > 0;
+  }
+
+  public static boolean isReference(MessageOrBuilder message) {
+    return isReference(message.getDescriptorForType());
   }
 }

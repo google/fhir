@@ -21,6 +21,7 @@ import com.google.fhir.stu3.proto.Base64Binary;
 import com.google.fhir.stu3.proto.Boolean;
 import com.google.fhir.stu3.proto.Code;
 import com.google.fhir.stu3.proto.Patient;
+import com.google.fhir.stu3.proto.Reference;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -35,11 +36,26 @@ public final class AnnotationUtilsTest {
     assertTrue(AnnotationUtils.isPrimitiveType(Base64Binary.getDescriptor()));
     assertTrue(AnnotationUtils.isPrimitiveType(Code.getDescriptor()));
     assertFalse(AnnotationUtils.isPrimitiveType(Patient.getDescriptor()));
+
+    assertTrue(AnnotationUtils.isPrimitiveType(Code.getDefaultInstance()));
+    assertFalse(AnnotationUtils.isPrimitiveType(Patient.getDefaultInstance()));
   }
 
   @Test
   public void isResource() {
     assertFalse(AnnotationUtils.isResource(Boolean.getDescriptor()));
     assertTrue(AnnotationUtils.isResource(Patient.getDescriptor()));
+
+    assertFalse(AnnotationUtils.isResource(Code.getDefaultInstance()));
+    assertTrue(AnnotationUtils.isResource(Patient.getDefaultInstance()));
+  }
+
+  @Test
+  public void isReference() {
+    assertFalse(AnnotationUtils.isReference(Boolean.getDescriptor()));
+    assertTrue(AnnotationUtils.isReference(Reference.getDescriptor()));
+
+    assertFalse(AnnotationUtils.isReference(Code.getDefaultInstance()));
+    assertTrue(AnnotationUtils.isReference(Reference.getDefaultInstance()));
   }
 }

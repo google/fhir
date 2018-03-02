@@ -15,7 +15,6 @@
 package com.google.fhir.stu3;
 
 import com.google.common.base.CaseFormat;
-import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.Base64Binary;
@@ -263,11 +262,7 @@ public final class JsonFormat {
           wellKnownTypePrinters.get(message.getDescriptorForType().getFullName());
       if (specialPrinter != null) {
         specialPrinter.print(this, message);
-      } else if (message
-              .getDescriptorForType()
-              .getOptions()
-              .getExtensionCount(Annotations.fhirReferenceType)
-          > 0) {
+      } else if (AnnotationUtils.isReference(message)) {
         printReference(message);
       } else {
         printMessage(message);
@@ -740,37 +735,7 @@ public final class JsonFormat {
       // Parse the standard fields.
       mergeMessage(json, builder);
       // Special-case the "reference" field, which was parsed into the uri field.
-      FieldDescriptor uri = builder.getDescriptorForType().findFieldByName("uri");
-      if (!builder.hasField(uri)) {
-        return builder.build();
-      }
-      String string = ((com.google.fhir.stu3.proto.String) builder.getField(uri)).getValue();
-      if (string.startsWith("#")) {
-        FieldDescriptor fragment = builder.getDescriptorForType().findFieldByName("fragment");
-        return builder
-            .setField(
-                fragment,
-                com.google.fhir.stu3.proto.String.newBuilder()
-                    .setValue(string.substring(1))
-                    .build())
-            .build();
-      }
-      // Look for references of type "ResourceType/ResourceId"
-      List<String> parts = Splitter.on('/').splitToList(string);
-      if (parts.size() == 2 || (parts.size() == 4 && "_history".equals(parts.get(2)))) {
-        String resourceFieldName =
-            CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, parts.get(0)) + "_id";
-        FieldDescriptor field = builder.getDescriptorForType().findFieldByName(resourceFieldName);
-        if (field != null) {
-          ReferenceId.Builder refId = ReferenceId.newBuilder().setValue(parts.get(1));
-          if (parts.size() == 4) {
-            refId.setHistory(Id.newBuilder().setValue(parts.get(3)).build());
-          }
-          return builder.setField(field, refId.build()).build();
-        }
-      }
-      // Keep the uri field.
-      return builder.build();
+      return ResourceUtils.splitIfRelativeReference(builder);
     }
 
     private Message parseFieldValue(
@@ -789,11 +754,7 @@ public final class JsonFormat {
           mergeMessage((JsonObject) json, subBuilder);
         }
         return parseAndWrap(json, subBuilder, defaultTimeZone).copyInto(subBuilder).build();
-      } else if (field
-              .getMessageType()
-              .getOptions()
-              .getExtensionCount(Annotations.fhirReferenceType)
-          > 0) {
+      } else if (AnnotationUtils.isReference(field.getMessageType())) {
         // We split relative references into components using a special parser.
         return parseReference((JsonObject) json, subBuilder);
       }
