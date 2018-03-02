@@ -11,7 +11,7 @@ $ bazel test //...
 
 For some ideas of how to use this code, see the [examples](./examples/):
 
-* [querying with BigQuery](./examples/bigquery/README.md)
+* [Querying with BigQuery](./examples/bigquery/README.md)
 * [Converting FHIR json to proto](./java/src/main/java/com/google/fhir/examples/FhirToProtoMain.java)
 
 This is still an early version, subject to change. For some background, please
