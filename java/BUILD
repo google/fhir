@@ -29,6 +29,20 @@ java_binary(
     ],
 )
 
+java_binary(
+    name = "SplitBundle",
+    srcs = [
+        "src/main/java/com/google/fhir/examples/SplitBundleMain.java",
+    ],
+    main_class = "com.google.fhir.examples.SplitBundleMain",
+    deps = [
+        ":stu3",
+        "//external:guava",
+        "//proto/stu3:resources_java_proto",
+        "@com_google_protobuf//:protobuf_java_util",
+    ],
+)
+
 java_test(
     name = "AnnotationUtilsTest",
     size = "small",
