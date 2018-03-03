@@ -2,7 +2,7 @@
 
 This directory contains example code to upload FHIR data into BigQuery.
 
-We use synthetic data from [Synthea](syntheticmass.mitre.org) which is parsed into protocol buffers. We split the FHIR bundles into ndjson per resource type and upload them into BigQuery, and run a few example queries.
+We use synthetic data from [Synthea](https://syntheticmass.mitre.org/) which is parsed into protocol buffers. We split the FHIR bundles into ndjson per resource type and upload them into BigQuery, and run a few example queries.
 
 Note: do not download [this set of Synthea patients](https://syntheticmass.mitre.org/downloads/2017_11_06/synthea_sample_data_fhir_stu3_nov2017.zip) since the Claim resource in that release is not valid STU3.
 
