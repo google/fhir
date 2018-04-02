@@ -27,6 +27,7 @@ filegroup(
     name = "structure_definitions",
     srcs = glob([
         "structure_definitions/*.profile.json",
+        "structure_definitions/*.descriptor.prototxt",
     ]),
 )
 
