@@ -22,6 +22,7 @@ import com.google.fhir.stu3.proto.Boolean;
 import com.google.fhir.stu3.proto.Code;
 import com.google.fhir.stu3.proto.Patient;
 import com.google.fhir.stu3.proto.Reference;
+import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -33,9 +34,14 @@ public final class AnnotationUtilsTest {
   @Test
   public void isPrimitiveType() {
     assertTrue(AnnotationUtils.isPrimitiveType(Boolean.getDescriptor()));
+    assertTrue(AnnotationUtils.isPrimitiveType(Boolean.getDescriptor().toProto()));
     assertTrue(AnnotationUtils.isPrimitiveType(Base64Binary.getDescriptor()));
+    assertTrue(AnnotationUtils.isPrimitiveType(Base64Binary.getDescriptor().toProto()));
     assertTrue(AnnotationUtils.isPrimitiveType(Code.getDescriptor()));
+    assertTrue(AnnotationUtils.isPrimitiveType(Code.getDescriptor().toProto()));
     assertFalse(AnnotationUtils.isPrimitiveType(Patient.getDescriptor()));
+    assertFalse(AnnotationUtils.isPrimitiveType(Patient.getDescriptor().toProto()));
+    assertFalse(AnnotationUtils.isPrimitiveType(DescriptorProto.getDescriptor().toProto()));
 
     assertTrue(AnnotationUtils.isPrimitiveType(Code.getDefaultInstance()));
     assertFalse(AnnotationUtils.isPrimitiveType(Patient.getDefaultInstance()));
@@ -44,7 +50,10 @@ public final class AnnotationUtilsTest {
   @Test
   public void isResource() {
     assertFalse(AnnotationUtils.isResource(Boolean.getDescriptor()));
+    assertFalse(AnnotationUtils.isResource(Boolean.getDescriptor().toProto()));
     assertTrue(AnnotationUtils.isResource(Patient.getDescriptor()));
+    assertTrue(AnnotationUtils.isResource(Patient.getDescriptor().toProto()));
+    assertFalse(AnnotationUtils.isResource(DescriptorProto.getDescriptor().toProto()));
 
     assertFalse(AnnotationUtils.isResource(Code.getDefaultInstance()));
     assertTrue(AnnotationUtils.isResource(Patient.getDefaultInstance()));
@@ -53,9 +62,13 @@ public final class AnnotationUtilsTest {
   @Test
   public void isReference() {
     assertFalse(AnnotationUtils.isReference(Boolean.getDescriptor()));
+    assertFalse(AnnotationUtils.isReference(Boolean.getDescriptor().toProto()));
     assertTrue(AnnotationUtils.isReference(Reference.getDescriptor()));
+    assertTrue(AnnotationUtils.isReference(Reference.getDescriptor().toProto()));
 
     assertFalse(AnnotationUtils.isReference(Code.getDefaultInstance()));
+    assertFalse(AnnotationUtils.isReference(Code.getDescriptor().toProto()));
     assertTrue(AnnotationUtils.isReference(Reference.getDefaultInstance()));
+    assertTrue(AnnotationUtils.isReference(Reference.getDescriptor().toProto()));
   }
 }
