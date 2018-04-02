@@ -1,0 +1,1238 @@
+name: "Task"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Id"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Meta"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Uri"
+  options {
+    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.LanguageCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Narrative"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ContainedResource"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Identifier"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Task Instance Identifier"
+  }
+}
+field {
+  name: "definition"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Task.Definition"
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.stu3.proto.field_description]: "Formal definition of task"
+  }
+}
+field {
+  name: "based_on"
+  number: 11
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Request fulfilled by this task"
+  }
+}
+field {
+  name: "group_identifier"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Identifier"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Requisition or grouper id"
+  }
+}
+field {
+  name: "part_of"
+  number: 13
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Composite task"
+  }
+}
+field {
+  name: "status"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.TaskStatusCode"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "draft | requested | received | accepted | +"
+  }
+}
+field {
+  name: "status_reason"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Reason for current status"
+  }
+}
+field {
+  name: "business_status"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "E.g. \"Specimen collected\", \"IV prepped\""
+  }
+}
+field {
+  name: "intent"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.RequestIntentCode"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "proposal | plan | order +"
+  }
+}
+field {
+  name: "priority"
+  number: 18
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.RequestPriorityCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "normal | urgent | asap | stat"
+  }
+}
+field {
+  name: "code"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Task Type"
+  }
+}
+field {
+  name: "description"
+  number: 20
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Human-readable explanation of task"
+  }
+}
+field {
+  name: "focus"
+  number: 21
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "What task is acting on"
+  }
+}
+field {
+  name: "for_value"
+  number: 22
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Beneficiary of the Task"
+  }
+  json_name: "for"
+}
+field {
+  name: "context"
+  number: 23
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Healthcare event during which this task originated"
+  }
+}
+field {
+  name: "execution_period"
+  number: 24
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Period"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Start and end time of execution"
+  }
+}
+field {
+  name: "authored_on"
+  number: 25
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.DateTime"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Task Creation Date"
+  }
+}
+field {
+  name: "last_modified"
+  number: 26
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.DateTime"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Task Last Modified Date"
+  }
+}
+field {
+  name: "requester"
+  number: 27
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Task.Requester"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Who is asking for task to be done"
+  }
+}
+field {
+  name: "performer_type"
+  number: 28
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "requester | dispatcher | scheduler | performer | monitor | manager | acquirer | reviewer"
+  }
+}
+field {
+  name: "owner"
+  number: 29
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Responsible individual"
+  }
+}
+field {
+  name: "reason"
+  number: 30
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Why task is needed"
+  }
+}
+field {
+  name: "note"
+  number: 31
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Annotation"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Comments made about the task"
+  }
+}
+field {
+  name: "relevant_history"
+  number: 32
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Key events in history of the Task"
+  }
+}
+field {
+  name: "restriction"
+  number: 33
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Task.Restriction"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Constraints on fulfillment tasks"
+  }
+}
+field {
+  name: "input"
+  number: 34
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Task.Parameter"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Information used to perform task"
+  }
+}
+field {
+  name: "output"
+  number: 35
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Task.Output"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Information produced as part of task"
+  }
+}
+nested_type {
+  name: "Definition"
+  field {
+    name: "uri"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Uri"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    oneof_index: 0
+  }
+  oneof_decl {
+    name: "definition"
+  }
+}
+nested_type {
+  name: "Requester"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "agent"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Individual asking for task"
+    }
+  }
+  field {
+    name: "on_behalf_of"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Organization individual is acting for"
+    }
+  }
+}
+nested_type {
+  name: "Restriction"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "repetitions"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PositiveInt"
+    options {
+      [google.fhir.stu3.proto.field_description]: "How many times to repeat"
+    }
+  }
+  field {
+    name: "period"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Period"
+    options {
+      [google.fhir.stu3.proto.field_description]: "When fulfillment sought"
+    }
+  }
+  field {
+    name: "recipient"
+    number: 6
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.field_description]: "For whom is fulfillment sought?"
+    }
+  }
+}
+nested_type {
+  name: "Parameter"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "type"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Label for the input"
+    }
+  }
+  field {
+    name: "value"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Task.Parameter.Value"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.stu3.proto.field_description]: "Content to use in performing the task"
+    }
+  }
+  nested_type {
+    name: "Value"
+    field {
+      name: "base64_binary"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Base64Binary"
+      oneof_index: 0
+    }
+    field {
+      name: "boolean"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Boolean"
+      oneof_index: 0
+    }
+    field {
+      name: "code"
+      number: 3
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Code"
+      oneof_index: 0
+    }
+    field {
+      name: "date"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Date"
+      oneof_index: 0
+    }
+    field {
+      name: "date_time"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.DateTime"
+      oneof_index: 0
+    }
+    field {
+      name: "decimal"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Decimal"
+      oneof_index: 0
+    }
+    field {
+      name: "id"
+      number: 7
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Id"
+      oneof_index: 0
+    }
+    field {
+      name: "instant"
+      number: 8
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Instant"
+      oneof_index: 0
+    }
+    field {
+      name: "integer"
+      number: 9
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Integer"
+      oneof_index: 0
+    }
+    field {
+      name: "markdown"
+      number: 10
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Markdown"
+      oneof_index: 0
+    }
+    field {
+      name: "oid"
+      number: 11
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Oid"
+      oneof_index: 0
+    }
+    field {
+      name: "positive_int"
+      number: 12
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.PositiveInt"
+      oneof_index: 0
+    }
+    field {
+      name: "string_value"
+      number: 13
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      oneof_index: 0
+      json_name: "string"
+    }
+    field {
+      name: "time"
+      number: 14
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Time"
+      oneof_index: 0
+    }
+    field {
+      name: "unsigned_int"
+      number: 15
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.UnsignedInt"
+      oneof_index: 0
+    }
+    field {
+      name: "uri"
+      number: 16
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Uri"
+      oneof_index: 0
+    }
+    field {
+      name: "address"
+      number: 17
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Address"
+      oneof_index: 0
+    }
+    field {
+      name: "age"
+      number: 18
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Age"
+      oneof_index: 0
+    }
+    field {
+      name: "annotation"
+      number: 19
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Annotation"
+      oneof_index: 0
+    }
+    field {
+      name: "attachment"
+      number: 20
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Attachment"
+      oneof_index: 0
+    }
+    field {
+      name: "codeable_concept"
+      number: 21
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      oneof_index: 0
+    }
+    field {
+      name: "coding"
+      number: 22
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Coding"
+      oneof_index: 0
+    }
+    field {
+      name: "contact_point"
+      number: 23
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.ContactPoint"
+      oneof_index: 0
+    }
+    field {
+      name: "count"
+      number: 24
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Count"
+      oneof_index: 0
+    }
+    field {
+      name: "distance"
+      number: 25
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Distance"
+      oneof_index: 0
+    }
+    field {
+      name: "duration"
+      number: 26
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Duration"
+      oneof_index: 0
+    }
+    field {
+      name: "human_name"
+      number: 27
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.HumanName"
+      oneof_index: 0
+    }
+    field {
+      name: "identifier"
+      number: 28
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Identifier"
+      oneof_index: 0
+    }
+    field {
+      name: "money"
+      number: 29
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Money"
+      oneof_index: 0
+    }
+    field {
+      name: "period"
+      number: 30
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Period"
+      oneof_index: 0
+    }
+    field {
+      name: "quantity"
+      number: 31
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Quantity"
+      oneof_index: 0
+    }
+    field {
+      name: "range"
+      number: 32
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Range"
+      oneof_index: 0
+    }
+    field {
+      name: "ratio"
+      number: 33
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Ratio"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 34
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Reference"
+      oneof_index: 0
+    }
+    field {
+      name: "sampled_data"
+      number: 35
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.SampledData"
+      oneof_index: 0
+    }
+    field {
+      name: "signature"
+      number: 36
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Signature"
+      oneof_index: 0
+    }
+    field {
+      name: "timing"
+      number: 37
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Timing"
+      oneof_index: 0
+    }
+    field {
+      name: "meta"
+      number: 38
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Meta"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "value"
+      options {
+        [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
+      }
+    }
+  }
+}
+nested_type {
+  name: "Output"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "type"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Label for output"
+    }
+  }
+  field {
+    name: "value"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Task.Output.Value"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.stu3.proto.field_description]: "Result of output"
+    }
+  }
+  nested_type {
+    name: "Value"
+    field {
+      name: "base64_binary"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Base64Binary"
+      oneof_index: 0
+    }
+    field {
+      name: "boolean"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Boolean"
+      oneof_index: 0
+    }
+    field {
+      name: "code"
+      number: 3
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Code"
+      oneof_index: 0
+    }
+    field {
+      name: "date"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Date"
+      oneof_index: 0
+    }
+    field {
+      name: "date_time"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.DateTime"
+      oneof_index: 0
+    }
+    field {
+      name: "decimal"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Decimal"
+      oneof_index: 0
+    }
+    field {
+      name: "id"
+      number: 7
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Id"
+      oneof_index: 0
+    }
+    field {
+      name: "instant"
+      number: 8
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Instant"
+      oneof_index: 0
+    }
+    field {
+      name: "integer"
+      number: 9
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Integer"
+      oneof_index: 0
+    }
+    field {
+      name: "markdown"
+      number: 10
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Markdown"
+      oneof_index: 0
+    }
+    field {
+      name: "oid"
+      number: 11
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Oid"
+      oneof_index: 0
+    }
+    field {
+      name: "positive_int"
+      number: 12
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.PositiveInt"
+      oneof_index: 0
+    }
+    field {
+      name: "string_value"
+      number: 13
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      oneof_index: 0
+      json_name: "string"
+    }
+    field {
+      name: "time"
+      number: 14
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Time"
+      oneof_index: 0
+    }
+    field {
+      name: "unsigned_int"
+      number: 15
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.UnsignedInt"
+      oneof_index: 0
+    }
+    field {
+      name: "uri"
+      number: 16
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Uri"
+      oneof_index: 0
+    }
+    field {
+      name: "address"
+      number: 17
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Address"
+      oneof_index: 0
+    }
+    field {
+      name: "age"
+      number: 18
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Age"
+      oneof_index: 0
+    }
+    field {
+      name: "annotation"
+      number: 19
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Annotation"
+      oneof_index: 0
+    }
+    field {
+      name: "attachment"
+      number: 20
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Attachment"
+      oneof_index: 0
+    }
+    field {
+      name: "codeable_concept"
+      number: 21
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      oneof_index: 0
+    }
+    field {
+      name: "coding"
+      number: 22
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Coding"
+      oneof_index: 0
+    }
+    field {
+      name: "contact_point"
+      number: 23
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.ContactPoint"
+      oneof_index: 0
+    }
+    field {
+      name: "count"
+      number: 24
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Count"
+      oneof_index: 0
+    }
+    field {
+      name: "distance"
+      number: 25
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Distance"
+      oneof_index: 0
+    }
+    field {
+      name: "duration"
+      number: 26
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Duration"
+      oneof_index: 0
+    }
+    field {
+      name: "human_name"
+      number: 27
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.HumanName"
+      oneof_index: 0
+    }
+    field {
+      name: "identifier"
+      number: 28
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Identifier"
+      oneof_index: 0
+    }
+    field {
+      name: "money"
+      number: 29
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Money"
+      oneof_index: 0
+    }
+    field {
+      name: "period"
+      number: 30
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Period"
+      oneof_index: 0
+    }
+    field {
+      name: "quantity"
+      number: 31
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Quantity"
+      oneof_index: 0
+    }
+    field {
+      name: "range"
+      number: 32
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Range"
+      oneof_index: 0
+    }
+    field {
+      name: "ratio"
+      number: 33
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Ratio"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 34
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Reference"
+      oneof_index: 0
+    }
+    field {
+      name: "sampled_data"
+      number: 35
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.SampledData"
+      oneof_index: 0
+    }
+    field {
+      name: "signature"
+      number: 36
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Signature"
+      oneof_index: 0
+    }
+    field {
+      name: "timing"
+      number: 37
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Timing"
+      oneof_index: 0
+    }
+    field {
+      name: "meta"
+      number: 38
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Meta"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "value"
+      options {
+        [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
+      }
+    }
+  }
+}
+options {
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Task, last updated 2017-04-19T07:44:43.294+10:00.\nA task to be performed."
+}

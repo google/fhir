@@ -1,0 +1,462 @@
+name: "Medication"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Id"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Meta"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Uri"
+  options {
+    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.LanguageCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Narrative"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ContainedResource"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "code"
+  number: 9
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Codes that identify this medication"
+  }
+}
+field {
+  name: "status"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.MedicationStatusCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "active | inactive | entered-in-error"
+  }
+}
+field {
+  name: "is_brand"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Boolean"
+  options {
+    [google.fhir.stu3.proto.field_description]: "True if a brand"
+  }
+}
+field {
+  name: "is_over_the_counter"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Boolean"
+  options {
+    [google.fhir.stu3.proto.field_description]: "True if medication does not require a prescription"
+  }
+}
+field {
+  name: "manufacturer"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Manufacturer of the item"
+  }
+}
+field {
+  name: "form"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "powder | tablets | capsule +"
+  }
+}
+field {
+  name: "ingredient"
+  number: 15
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Medication.Ingredient"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Active or inactive ingredient"
+  }
+}
+field {
+  name: "package_value"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Medication.Package"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Details about packaged medications"
+  }
+  json_name: "package"
+}
+field {
+  name: "image"
+  number: 17
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Attachment"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Picture of the medication"
+  }
+}
+nested_type {
+  name: "Ingredient"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "item"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Medication.Ingredient.Item"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.stu3.proto.field_description]: "The product contained"
+    }
+  }
+  field {
+    name: "is_active"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Boolean"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Active ingredient indicator"
+    }
+  }
+  field {
+    name: "amount"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Ratio"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Quantity of ingredient present"
+    }
+  }
+  nested_type {
+    name: "Item"
+    field {
+      name: "codeable_concept"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Reference"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "item"
+      options {
+        [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
+      }
+    }
+  }
+}
+nested_type {
+  name: "Package"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "container"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "E.g. box, vial, blister-pack"
+    }
+  }
+  field {
+    name: "content"
+    number: 5
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Medication.Package.Content"
+    options {
+      [google.fhir.stu3.proto.field_description]: "What is  in the package"
+    }
+  }
+  field {
+    name: "batch"
+    number: 6
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Medication.Package.Batch"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Identifies a single production run"
+    }
+  }
+  nested_type {
+    name: "Content"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "item"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Medication.Package.Content.Item"
+      options {
+        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.stu3.proto.is_choice_type]: true
+        [google.fhir.stu3.proto.field_description]: "The item in the package"
+      }
+    }
+    field {
+      name: "amount"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Quantity"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Quantity present in the package"
+      }
+    }
+    nested_type {
+      name: "Item"
+      field {
+        name: "codeable_concept"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.CodeableConcept"
+        oneof_index: 0
+      }
+      field {
+        name: "reference"
+        number: 2
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Reference"
+        oneof_index: 0
+      }
+      oneof_decl {
+        name: "item"
+        options {
+          [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
+        }
+      }
+    }
+  }
+  nested_type {
+    name: "Batch"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "lot_number"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Identifier assigned to batch"
+      }
+    }
+    field {
+      name: "expiration_date"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.DateTime"
+      options {
+        [google.fhir.stu3.proto.field_description]: "When batch will expire"
+      }
+    }
+  }
+}
+options {
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Medication, last updated 2017-04-19T07:44:43.294+10:00.\nDefinition of a Medication."
+}

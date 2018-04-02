@@ -1,0 +1,2562 @@
+name: "ExplanationOfBenefit"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Id"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Meta"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Uri"
+  options {
+    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.LanguageCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Narrative"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ContainedResource"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Identifier"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Business Identifier"
+  }
+}
+field {
+  name: "status"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ExplanationOfBenefitStatusCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "active | cancelled | draft | entered-in-error"
+  }
+}
+field {
+  name: "type"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Type or discipline"
+  }
+}
+field {
+  name: "sub_type"
+  number: 12
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Finer grained claim type information"
+  }
+}
+field {
+  name: "patient"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "The subject of the Products and Services"
+  }
+}
+field {
+  name: "billable_period"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Period"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Period for charge submission"
+  }
+}
+field {
+  name: "created"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.DateTime"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Creation date"
+  }
+}
+field {
+  name: "enterer"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Author"
+  }
+}
+field {
+  name: "insurer"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Insurer responsible for the EOB"
+  }
+}
+field {
+  name: "provider"
+  number: 18
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Responsible provider for the claim"
+  }
+}
+field {
+  name: "organization"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Responsible organization for the claim"
+  }
+}
+field {
+  name: "referral"
+  number: 20
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Treatment Referral"
+  }
+}
+field {
+  name: "facility"
+  number: 21
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Servicing Facility"
+  }
+}
+field {
+  name: "claim"
+  number: 22
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Claim reference"
+  }
+}
+field {
+  name: "claim_response"
+  number: 23
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Claim response reference"
+  }
+}
+field {
+  name: "outcome"
+  number: 24
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "complete | error | partial"
+  }
+}
+field {
+  name: "disposition"
+  number: 25
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Disposition Message"
+  }
+}
+field {
+  name: "related"
+  number: 26
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.RelatedClaim"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Related Claims which may be revelant to processing this claim"
+  }
+}
+field {
+  name: "prescription"
+  number: 27
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Prescription authorizing services or products"
+  }
+}
+field {
+  name: "original_prescription"
+  number: 28
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Original prescription if superceded by fulfiller"
+  }
+}
+field {
+  name: "payee"
+  number: 29
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Payee"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Party to be paid any benefits payable"
+  }
+}
+field {
+  name: "information"
+  number: 30
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.SupportingInformation"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Exceptions, special considerations, the condition, situation, prior or concurrent issues"
+  }
+}
+field {
+  name: "care_team"
+  number: 31
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.CareTeam"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Care Team members"
+  }
+}
+field {
+  name: "diagnosis"
+  number: 32
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Diagnosis"
+  options {
+    [google.fhir.stu3.proto.field_description]: "List of Diagnosis"
+  }
+}
+field {
+  name: "procedure"
+  number: 33
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Procedure"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Procedures performed"
+  }
+}
+field {
+  name: "precedence"
+  number: 34
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.PositiveInt"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Precedence (primary, secondary, etc.)"
+  }
+}
+field {
+  name: "insurance"
+  number: 35
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Insurance"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Insurance or medical plan"
+  }
+}
+field {
+  name: "accident"
+  number: 36
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Accident"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Details of an accident"
+  }
+}
+field {
+  name: "employment_impacted"
+  number: 37
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Period"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Period unable to work"
+  }
+}
+field {
+  name: "hospitalization"
+  number: 38
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Period"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Period in hospital"
+  }
+}
+field {
+  name: "item"
+  number: 39
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Goods and Services"
+  }
+}
+field {
+  name: "add_item"
+  number: 40
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.AddedItem"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Insurer added line items"
+  }
+}
+field {
+  name: "total_cost"
+  number: 41
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Money"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Total Cost of service from the Claim"
+  }
+}
+field {
+  name: "unalloc_deductable"
+  number: 42
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Money"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Unallocated deductable"
+  }
+}
+field {
+  name: "total_benefit"
+  number: 43
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Money"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Total benefit payable for the Claim"
+  }
+}
+field {
+  name: "payment"
+  number: 44
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Payment"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Payment (if paid)"
+  }
+}
+field {
+  name: "form"
+  number: 45
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Printed Form Identifier"
+  }
+}
+field {
+  name: "process_note"
+  number: 46
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Note"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Processing notes"
+  }
+}
+field {
+  name: "benefit_balance"
+  number: 47
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.BenefitBalance"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Balance by Benefit Category"
+  }
+}
+nested_type {
+  name: "RelatedClaim"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "claim"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Reference to the related claim"
+    }
+  }
+  field {
+    name: "relationship"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "How the reference claim is related"
+    }
+  }
+  field {
+    name: "reference"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Identifier"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Related file or case reference"
+    }
+  }
+}
+nested_type {
+  name: "Payee"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "type"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Type of party: Subscriber, Provider, other"
+    }
+  }
+  field {
+    name: "resource_type"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "organization | patient | practitioner | relatedperson"
+    }
+  }
+  field {
+    name: "party"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Party to receive the payable"
+    }
+  }
+}
+nested_type {
+  name: "SupportingInformation"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "sequence"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PositiveInt"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Information instance identifier"
+    }
+  }
+  field {
+    name: "category"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "General class of information"
+    }
+  }
+  field {
+    name: "code"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Type of information"
+    }
+  }
+  field {
+    name: "timing"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.SupportingInformation.TimingType"
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.stu3.proto.field_description]: "When it occurred"
+    }
+  }
+  field {
+    name: "value"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.SupportingInformation.Value"
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.stu3.proto.field_description]: "Additional Data or supporting information"
+    }
+  }
+  field {
+    name: "reason"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Coding"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Reason associated with the information"
+    }
+  }
+  nested_type {
+    name: "TimingType"
+    field {
+      name: "date"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Date"
+      oneof_index: 0
+    }
+    field {
+      name: "period"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Period"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "timing"
+    }
+  }
+  nested_type {
+    name: "Value"
+    field {
+      name: "string_value"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      oneof_index: 0
+      json_name: "string"
+    }
+    field {
+      name: "quantity"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Quantity"
+      oneof_index: 0
+    }
+    field {
+      name: "attachment"
+      number: 3
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Attachment"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Reference"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "value"
+    }
+  }
+}
+nested_type {
+  name: "CareTeam"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "sequence"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PositiveInt"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Number to covey order of careteam"
+    }
+  }
+  field {
+    name: "provider"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Member of the Care Team"
+    }
+  }
+  field {
+    name: "responsible"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Boolean"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Billing practitioner"
+    }
+  }
+  field {
+    name: "role"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Role on the team"
+    }
+  }
+  field {
+    name: "qualification"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Type, classification or Specialization"
+    }
+  }
+}
+nested_type {
+  name: "Diagnosis"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "sequence"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PositiveInt"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Number to covey order of diagnosis"
+    }
+  }
+  field {
+    name: "diagnosis"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Diagnosis.DiagnosisType"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.stu3.proto.field_description]: "Patient\'s diagnosis"
+    }
+  }
+  field {
+    name: "type"
+    number: 6
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Timing or nature of the diagnosis"
+    }
+  }
+  field {
+    name: "package_code"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Package billing code"
+    }
+  }
+  nested_type {
+    name: "DiagnosisType"
+    field {
+      name: "codeable_concept"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Reference"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "diagnosis"
+      options {
+        [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
+      }
+    }
+  }
+}
+nested_type {
+  name: "Procedure"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "sequence"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PositiveInt"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Procedure sequence for reference"
+    }
+  }
+  field {
+    name: "date"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.DateTime"
+    options {
+      [google.fhir.stu3.proto.field_description]: "When the procedure was performed"
+    }
+  }
+  field {
+    name: "procedure"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Procedure.ProcedureType"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.stu3.proto.field_description]: "Patient\'s list of procedures performed"
+    }
+  }
+  nested_type {
+    name: "ProcedureType"
+    field {
+      name: "codeable_concept"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Reference"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "procedure"
+      options {
+        [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
+      }
+    }
+  }
+}
+nested_type {
+  name: "Insurance"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "coverage"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Insurance information"
+    }
+  }
+  field {
+    name: "pre_auth_ref"
+    number: 5
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Pre-Authorization/Determination Reference"
+    }
+  }
+}
+nested_type {
+  name: "Accident"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "date"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Date"
+    options {
+      [google.fhir.stu3.proto.field_description]: "When the accident occurred"
+    }
+  }
+  field {
+    name: "type"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "The nature of the accident"
+    }
+  }
+  field {
+    name: "location"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Accident.Location"
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.stu3.proto.field_description]: "Accident Place"
+    }
+  }
+  nested_type {
+    name: "Location"
+    field {
+      name: "address"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Address"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Reference"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "location"
+    }
+  }
+}
+nested_type {
+  name: "Item"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "sequence"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PositiveInt"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Service instance"
+    }
+  }
+  field {
+    name: "care_team_link_id"
+    number: 5
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PositiveInt"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Applicable careteam members"
+    }
+  }
+  field {
+    name: "diagnosis_link_id"
+    number: 6
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PositiveInt"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Applicable diagnoses"
+    }
+  }
+  field {
+    name: "procedure_link_id"
+    number: 7
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PositiveInt"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Applicable procedures"
+    }
+  }
+  field {
+    name: "information_link_id"
+    number: 8
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PositiveInt"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Applicable exception and supporting information"
+    }
+  }
+  field {
+    name: "revenue"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Revenue or cost center code"
+    }
+  }
+  field {
+    name: "category"
+    number: 10
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Type of service or product"
+    }
+  }
+  field {
+    name: "service"
+    number: 11
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Billing Code"
+    }
+  }
+  field {
+    name: "modifier"
+    number: 12
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Service/Product billing modifiers"
+    }
+  }
+  field {
+    name: "program_code"
+    number: 13
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Program specific reason for item inclusion"
+    }
+  }
+  field {
+    name: "serviced"
+    number: 14
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Serviced"
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.stu3.proto.field_description]: "Date or dates of Service"
+    }
+  }
+  field {
+    name: "location"
+    number: 15
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Location"
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.stu3.proto.field_description]: "Place of service"
+    }
+  }
+  field {
+    name: "quantity"
+    number: 16
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Quantity"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Count of Products or Services"
+    }
+  }
+  field {
+    name: "unit_price"
+    number: 17
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Money"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Fee, charge or cost per point"
+    }
+  }
+  field {
+    name: "factor"
+    number: 18
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Decimal"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Price scaling factor"
+    }
+  }
+  field {
+    name: "net"
+    number: 19
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Money"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Total item cost"
+    }
+  }
+  field {
+    name: "udi"
+    number: 20
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Unique Device Identifier"
+    }
+  }
+  field {
+    name: "body_site"
+    number: 21
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Service Location"
+    }
+  }
+  field {
+    name: "sub_site"
+    number: 22
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Service Sub-location"
+    }
+  }
+  field {
+    name: "encounter"
+    number: 23
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Encounters related to this billed item"
+    }
+  }
+  field {
+    name: "note_number"
+    number: 24
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PositiveInt"
+    options {
+      [google.fhir.stu3.proto.field_description]: "List of note numbers which apply"
+    }
+  }
+  field {
+    name: "adjudication"
+    number: 25
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Adjudication"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Adjudication details"
+    }
+  }
+  field {
+    name: "detail"
+    number: 26
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Detail"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional items"
+    }
+  }
+  nested_type {
+    name: "Serviced"
+    field {
+      name: "date"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Date"
+      oneof_index: 0
+    }
+    field {
+      name: "period"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Period"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "serviced"
+    }
+  }
+  nested_type {
+    name: "Location"
+    field {
+      name: "codeable_concept"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      oneof_index: 0
+    }
+    field {
+      name: "address"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Address"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 3
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Reference"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "location"
+    }
+  }
+  nested_type {
+    name: "Adjudication"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "category"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.stu3.proto.field_description]: "Adjudication category such as co-pay, eligible, benefit, etc."
+      }
+    }
+    field {
+      name: "reason"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Explanation of Adjudication outcome"
+      }
+    }
+    field {
+      name: "amount"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Money"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Monetary amount"
+      }
+    }
+    field {
+      name: "value"
+      number: 7
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Decimal"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Non-monitory value"
+      }
+    }
+  }
+  nested_type {
+    name: "Detail"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "sequence"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.PositiveInt"
+      options {
+        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.stu3.proto.field_description]: "Service instance"
+      }
+    }
+    field {
+      name: "type"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.stu3.proto.field_description]: "Group or type of product or service"
+      }
+    }
+    field {
+      name: "revenue"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Revenue or cost center code"
+      }
+    }
+    field {
+      name: "category"
+      number: 7
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Type of service or product"
+      }
+    }
+    field {
+      name: "service"
+      number: 8
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Billing Code"
+      }
+    }
+    field {
+      name: "modifier"
+      number: 9
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Service/Product billing modifiers"
+      }
+    }
+    field {
+      name: "program_code"
+      number: 10
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Program specific reason for item inclusion"
+      }
+    }
+    field {
+      name: "quantity"
+      number: 11
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Quantity"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Count of Products or Services"
+      }
+    }
+    field {
+      name: "unit_price"
+      number: 12
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Money"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Fee, charge or cost per point"
+      }
+    }
+    field {
+      name: "factor"
+      number: 13
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Decimal"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Price scaling factor"
+      }
+    }
+    field {
+      name: "net"
+      number: 14
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Money"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Total additional item cost"
+      }
+    }
+    field {
+      name: "udi"
+      number: 15
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Reference"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Unique Device Identifier"
+      }
+    }
+    field {
+      name: "note_number"
+      number: 16
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.PositiveInt"
+      options {
+        [google.fhir.stu3.proto.field_description]: "List of note numbers which apply"
+      }
+    }
+    field {
+      name: "adjudication"
+      number: 17
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Adjudication"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Detail level adjudication details"
+      }
+    }
+    field {
+      name: "sub_detail"
+      number: 18
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Detail.SubDetail"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional items"
+      }
+    }
+    nested_type {
+      name: "SubDetail"
+      field {
+        name: "id"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.String"
+        options {
+          [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        }
+      }
+      field {
+        name: "extension"
+        number: 2
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Extension"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        }
+      }
+      field {
+        name: "modifier_extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Extension"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        }
+      }
+      field {
+        name: "sequence"
+        number: 4
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.PositiveInt"
+        options {
+          [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+          [google.fhir.stu3.proto.field_description]: "Service instance"
+        }
+      }
+      field {
+        name: "type"
+        number: 5
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.CodeableConcept"
+        options {
+          [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+          [google.fhir.stu3.proto.field_description]: "Type of product or service"
+        }
+      }
+      field {
+        name: "revenue"
+        number: 6
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.CodeableConcept"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Revenue or cost center code"
+        }
+      }
+      field {
+        name: "category"
+        number: 7
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.CodeableConcept"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Type of service or product"
+        }
+      }
+      field {
+        name: "service"
+        number: 8
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.CodeableConcept"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Billing Code"
+        }
+      }
+      field {
+        name: "modifier"
+        number: 9
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.CodeableConcept"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Service/Product billing modifiers"
+        }
+      }
+      field {
+        name: "program_code"
+        number: 10
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.CodeableConcept"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Program specific reason for item inclusion"
+        }
+      }
+      field {
+        name: "quantity"
+        number: 11
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Quantity"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Count of Products or Services"
+        }
+      }
+      field {
+        name: "unit_price"
+        number: 12
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Money"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Fee, charge or cost per point"
+        }
+      }
+      field {
+        name: "factor"
+        number: 13
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Decimal"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Price scaling factor"
+        }
+      }
+      field {
+        name: "net"
+        number: 14
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Money"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Net additional item cost"
+        }
+      }
+      field {
+        name: "udi"
+        number: 15
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Reference"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Unique Device Identifier"
+        }
+      }
+      field {
+        name: "note_number"
+        number: 16
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.PositiveInt"
+        options {
+          [google.fhir.stu3.proto.field_description]: "List of note numbers which apply"
+        }
+      }
+      field {
+        name: "adjudication"
+        number: 17
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Adjudication"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Language if different from the resource"
+        }
+      }
+    }
+  }
+}
+nested_type {
+  name: "AddedItem"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "sequence_link_id"
+    number: 4
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PositiveInt"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Service instances"
+    }
+  }
+  field {
+    name: "revenue"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Revenue or cost center code"
+    }
+  }
+  field {
+    name: "category"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Type of service or product"
+    }
+  }
+  field {
+    name: "service"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Billing Code"
+    }
+  }
+  field {
+    name: "modifier"
+    number: 8
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Service/Product billing modifiers"
+    }
+  }
+  field {
+    name: "fee"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Money"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Professional fee or Product charge"
+    }
+  }
+  field {
+    name: "note_number"
+    number: 10
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PositiveInt"
+    options {
+      [google.fhir.stu3.proto.field_description]: "List of note numbers which apply"
+    }
+  }
+  field {
+    name: "adjudication"
+    number: 11
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Adjudication"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Added items adjudication"
+    }
+  }
+  field {
+    name: "detail"
+    number: 12
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.AddedItem.AddedItemsDetail"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Added items details"
+    }
+  }
+  nested_type {
+    name: "AddedItemsDetail"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "revenue"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Revenue or cost center code"
+      }
+    }
+    field {
+      name: "category"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Type of service or product"
+      }
+    }
+    field {
+      name: "service"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Billing Code"
+      }
+    }
+    field {
+      name: "modifier"
+      number: 7
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Service/Product billing modifiers"
+      }
+    }
+    field {
+      name: "fee"
+      number: 8
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Money"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Professional fee or Product charge"
+      }
+    }
+    field {
+      name: "note_number"
+      number: 9
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.PositiveInt"
+      options {
+        [google.fhir.stu3.proto.field_description]: "List of note numbers which apply"
+      }
+    }
+    field {
+      name: "adjudication"
+      number: 10
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Adjudication"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Added items detail adjudication"
+      }
+    }
+  }
+}
+nested_type {
+  name: "Payment"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "type"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Partial or Complete"
+    }
+  }
+  field {
+    name: "adjustment"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Money"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Payment adjustment for non-Claim issues"
+    }
+  }
+  field {
+    name: "adjustment_reason"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Explanation for the non-claim adjustment"
+    }
+  }
+  field {
+    name: "date"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Date"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Expected date of Payment"
+    }
+  }
+  field {
+    name: "amount"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Money"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Payable amount after adjustment"
+    }
+  }
+  field {
+    name: "identifier"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Identifier"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Identifier of the payment instrument"
+    }
+  }
+}
+nested_type {
+  name: "Note"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "number"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PositiveInt"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Sequence number for this note"
+    }
+  }
+  field {
+    name: "type"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "display | print | printoper"
+    }
+  }
+  field {
+    name: "text"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Note explanitory text"
+    }
+  }
+  field {
+    name: "language"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Language if different from the resource"
+    }
+  }
+}
+nested_type {
+  name: "BenefitBalance"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "category"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Type of services covered"
+    }
+  }
+  field {
+    name: "sub_category"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Detailed services covered within the type"
+    }
+  }
+  field {
+    name: "excluded"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Boolean"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Excluded from the plan"
+    }
+  }
+  field {
+    name: "name"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Short name for the benefit"
+    }
+  }
+  field {
+    name: "description"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Description of the benefit or services covered"
+    }
+  }
+  field {
+    name: "network"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "In or out of network"
+    }
+  }
+  field {
+    name: "unit"
+    number: 10
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Individual or family"
+    }
+  }
+  field {
+    name: "term"
+    number: 11
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Annual or lifetime"
+    }
+  }
+  field {
+    name: "financial"
+    number: 12
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.BenefitBalance.Benefit"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Benefit Summary"
+    }
+  }
+  nested_type {
+    name: "Benefit"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "type"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.stu3.proto.field_description]: "Deductable, visits, benefit amount"
+      }
+    }
+    field {
+      name: "allowed"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.BenefitBalance.Benefit.Allowed"
+      options {
+        [google.fhir.stu3.proto.is_choice_type]: true
+        [google.fhir.stu3.proto.field_description]: "Benefits allowed"
+      }
+    }
+    field {
+      name: "used"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.BenefitBalance.Benefit.Used"
+      options {
+        [google.fhir.stu3.proto.is_choice_type]: true
+        [google.fhir.stu3.proto.field_description]: "Benefits used"
+      }
+    }
+    nested_type {
+      name: "Allowed"
+      field {
+        name: "unsigned_int"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.UnsignedInt"
+        oneof_index: 0
+      }
+      field {
+        name: "string_value"
+        number: 2
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.String"
+        oneof_index: 0
+        json_name: "string"
+      }
+      field {
+        name: "money"
+        number: 3
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Money"
+        oneof_index: 0
+      }
+      oneof_decl {
+        name: "allowed"
+      }
+    }
+    nested_type {
+      name: "Used"
+      field {
+        name: "unsigned_int"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.UnsignedInt"
+        oneof_index: 0
+      }
+      field {
+        name: "money"
+        number: 2
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Money"
+        oneof_index: 0
+      }
+      oneof_decl {
+        name: "used"
+      }
+    }
+  }
+}
+options {
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for ExplanationOfBenefit, last updated 2017-04-19T07:44:43.294+10:00.\nExplanation of Benefit resource."
+}

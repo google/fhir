@@ -1,0 +1,565 @@
+name: "EligibilityResponse"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Id"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Meta"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Uri"
+  options {
+    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.LanguageCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Narrative"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ContainedResource"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Identifier"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Business Identifier"
+  }
+}
+field {
+  name: "status"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.FinancialResourceStatusCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "active | cancelled | draft | entered-in-error"
+  }
+}
+field {
+  name: "created"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.DateTime"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Creation date"
+  }
+}
+field {
+  name: "request_provider"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Responsible practitioner"
+  }
+}
+field {
+  name: "request_organization"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Responsible organization"
+  }
+}
+field {
+  name: "request"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Eligibility reference"
+  }
+}
+field {
+  name: "outcome"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "complete | error | partial"
+  }
+}
+field {
+  name: "disposition"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Disposition Message"
+  }
+}
+field {
+  name: "insurer"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Insurer issuing the coverage"
+  }
+}
+field {
+  name: "inforce"
+  number: 18
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Boolean"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Coverage inforce indicator"
+  }
+}
+field {
+  name: "insurance"
+  number: 19
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.EligibilityResponse.Insurance"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Details by insurance coverage"
+  }
+}
+field {
+  name: "form"
+  number: 20
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Printed Form Identifier"
+  }
+}
+field {
+  name: "error"
+  number: 21
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.EligibilityResponse.Errors"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Processing errors"
+  }
+}
+nested_type {
+  name: "Insurance"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "coverage"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Updated Coverage details"
+    }
+  }
+  field {
+    name: "contract"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Contract details"
+    }
+  }
+  field {
+    name: "benefit_balance"
+    number: 6
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.EligibilityResponse.Insurance.Benefits"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Benefits by Category"
+    }
+  }
+  nested_type {
+    name: "Benefits"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "category"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.stu3.proto.field_description]: "Type of services covered"
+      }
+    }
+    field {
+      name: "sub_category"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Detailed services covered within the type"
+      }
+    }
+    field {
+      name: "excluded"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Boolean"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Excluded from the plan"
+      }
+    }
+    field {
+      name: "name"
+      number: 7
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Short name for the benefit"
+      }
+    }
+    field {
+      name: "description"
+      number: 8
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Description of the benefit or services covered"
+      }
+    }
+    field {
+      name: "network"
+      number: 9
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "In or out of network"
+      }
+    }
+    field {
+      name: "unit"
+      number: 10
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Individual or family"
+      }
+    }
+    field {
+      name: "term"
+      number: 11
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Annual or lifetime"
+      }
+    }
+    field {
+      name: "financial"
+      number: 12
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.EligibilityResponse.Insurance.Benefits.Benefit"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Benefit Summary"
+      }
+    }
+    nested_type {
+      name: "Benefit"
+      field {
+        name: "id"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.String"
+        options {
+          [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        }
+      }
+      field {
+        name: "extension"
+        number: 2
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Extension"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        }
+      }
+      field {
+        name: "modifier_extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Extension"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        }
+      }
+      field {
+        name: "type"
+        number: 4
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.CodeableConcept"
+        options {
+          [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+          [google.fhir.stu3.proto.field_description]: "Deductable, visits, benefit amount"
+        }
+      }
+      field {
+        name: "allowed"
+        number: 5
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.EligibilityResponse.Insurance.Benefits.Benefit.Allowed"
+        options {
+          [google.fhir.stu3.proto.is_choice_type]: true
+          [google.fhir.stu3.proto.field_description]: "Benefits allowed"
+        }
+      }
+      field {
+        name: "used"
+        number: 6
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.EligibilityResponse.Insurance.Benefits.Benefit.Used"
+        options {
+          [google.fhir.stu3.proto.is_choice_type]: true
+          [google.fhir.stu3.proto.field_description]: "Benefits used"
+        }
+      }
+      nested_type {
+        name: "Allowed"
+        field {
+          name: "unsigned_int"
+          number: 1
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.UnsignedInt"
+          oneof_index: 0
+        }
+        field {
+          name: "string_value"
+          number: 2
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.String"
+          oneof_index: 0
+          json_name: "string"
+        }
+        field {
+          name: "money"
+          number: 3
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Money"
+          oneof_index: 0
+        }
+        oneof_decl {
+          name: "allowed"
+        }
+      }
+      nested_type {
+        name: "Used"
+        field {
+          name: "unsigned_int"
+          number: 1
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.UnsignedInt"
+          oneof_index: 0
+        }
+        field {
+          name: "money"
+          number: 2
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Money"
+          oneof_index: 0
+        }
+        oneof_decl {
+          name: "used"
+        }
+      }
+    }
+  }
+}
+nested_type {
+  name: "Errors"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "code"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Error code detailing processing issues"
+    }
+  }
+}
+options {
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for EligibilityResponse, last updated 2017-04-19T07:44:43.294+10:00.\nEligibilityResponse resource."
+}

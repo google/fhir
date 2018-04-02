@@ -1,0 +1,1320 @@
+name: "StructureMap"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Id"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Meta"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Uri"
+  options {
+    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.LanguageCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Narrative"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ContainedResource"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "url"
+  number: 9
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Uri"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Logical URI to reference this structure map (globally unique)"
+  }
+}
+field {
+  name: "identifier"
+  number: 10
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Identifier"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional identifier for the structure map"
+  }
+}
+field {
+  name: "version"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Business version of the structure map"
+  }
+}
+field {
+  name: "name"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Name for this structure map (computer friendly)"
+  }
+}
+field {
+  name: "title"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Name for this structure map (human friendly)"
+  }
+}
+field {
+  name: "status"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.PublicationStatusCode"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "draft | active | retired | unknown"
+  }
+}
+field {
+  name: "experimental"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Boolean"
+  options {
+    [google.fhir.stu3.proto.field_description]: "For testing purposes, not real usage"
+  }
+}
+field {
+  name: "date"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.DateTime"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Date this was last changed"
+  }
+}
+field {
+  name: "publisher"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Name of the publisher (organization or individual)"
+  }
+}
+field {
+  name: "contact"
+  number: 18
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ContactDetail"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Contact details for the publisher"
+  }
+}
+field {
+  name: "description"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Markdown"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Natural language description of the structure map"
+  }
+}
+field {
+  name: "use_context"
+  number: 20
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.UsageContext"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Context the content is intended to support"
+  }
+}
+field {
+  name: "jurisdiction"
+  number: 21
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Intended jurisdiction for structure map (if applicable)"
+  }
+}
+field {
+  name: "purpose"
+  number: 22
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Markdown"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Why this structure map is defined"
+  }
+}
+field {
+  name: "copyright"
+  number: 23
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Markdown"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Use and/or publishing restrictions"
+  }
+}
+field {
+  name: "structure"
+  number: 24
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.StructureMap.Structure"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Structure Definition used by this map"
+  }
+}
+field {
+  name: "import"
+  number: 25
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Uri"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Other maps used by this map (canonical URLs)"
+  }
+}
+field {
+  name: "group"
+  number: 26
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.StructureMap.Group"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Named sections for reader convenience"
+  }
+}
+nested_type {
+  name: "Structure"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "url"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Uri"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Canonical URL for structure definition"
+    }
+  }
+  field {
+    name: "mode"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.StructureMapModelModeCode"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "source | queried | target | produced"
+    }
+  }
+  field {
+    name: "alias"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Name for type in this map"
+    }
+  }
+  field {
+    name: "documentation"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Documentation on use of structure"
+    }
+  }
+}
+nested_type {
+  name: "Group"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "name"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Id"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Human-readable label"
+    }
+  }
+  field {
+    name: "extends"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Id"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Another group that this group adds rules to"
+    }
+  }
+  field {
+    name: "type_mode"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.StructureMapGroupTypeModeCode"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "none | types | type-and-types"
+    }
+  }
+  field {
+    name: "documentation"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional description/explaination for group"
+    }
+  }
+  field {
+    name: "input"
+    number: 8
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.StructureMap.Group.Input"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Named instance provided when invoking the map"
+    }
+  }
+  field {
+    name: "rule"
+    number: 9
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.StructureMap.Group.Rule"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Transform Rule from source to target"
+    }
+  }
+  nested_type {
+    name: "Input"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "name"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Id"
+      options {
+        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.stu3.proto.field_description]: "Name for this instance of data"
+      }
+    }
+    field {
+      name: "type"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Type for this instance of data"
+      }
+    }
+    field {
+      name: "mode"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.StructureMapInputModeCode"
+      options {
+        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.stu3.proto.field_description]: "source | target"
+      }
+    }
+    field {
+      name: "documentation"
+      number: 7
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Documentation for this instance of data"
+      }
+    }
+  }
+  nested_type {
+    name: "Rule"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "name"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Id"
+      options {
+        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.stu3.proto.field_description]: "Name of the rule for internal references"
+      }
+    }
+    field {
+      name: "source"
+      number: 5
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.StructureMap.Group.Rule.Source"
+      options {
+        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.stu3.proto.field_description]: "Source inputs to the mapping"
+      }
+    }
+    field {
+      name: "target"
+      number: 6
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.StructureMap.Group.Rule.Target"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Content to create because of this mapping rule"
+      }
+    }
+    field {
+      name: "rule"
+      number: 7
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.StructureMap.Group.Rule"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Rules contained in this rule"
+      }
+    }
+    field {
+      name: "dependent"
+      number: 8
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.StructureMap.Group.Rule.Dependent"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Which other rules to apply in the context of this rule"
+      }
+    }
+    field {
+      name: "documentation"
+      number: 9
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Documentation for this instance of data"
+      }
+    }
+    nested_type {
+      name: "Source"
+      field {
+        name: "id"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.String"
+        options {
+          [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        }
+      }
+      field {
+        name: "extension"
+        number: 2
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Extension"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        }
+      }
+      field {
+        name: "modifier_extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Extension"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        }
+      }
+      field {
+        name: "context"
+        number: 4
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Id"
+        options {
+          [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+          [google.fhir.stu3.proto.field_description]: "Type or variable this rule applies to"
+        }
+      }
+      field {
+        name: "min"
+        number: 5
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Integer"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Specified minimum cardinality"
+        }
+      }
+      field {
+        name: "max"
+        number: 6
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.String"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Specified maximum cardinality (number or *)"
+        }
+      }
+      field {
+        name: "type"
+        number: 7
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.String"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Rule only applies if source has this type"
+        }
+      }
+      field {
+        name: "default_value"
+        number: 8
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.StructureMap.Group.Rule.Source.DefaultValue"
+        options {
+          [google.fhir.stu3.proto.is_choice_type]: true
+          [google.fhir.stu3.proto.field_description]: "Default value if no value exists"
+        }
+      }
+      field {
+        name: "element"
+        number: 9
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.String"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Optional field for this source"
+        }
+      }
+      field {
+        name: "list_mode"
+        number: 10
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.StructureMapSourceListModeCode"
+        options {
+          [google.fhir.stu3.proto.field_description]: "first | not_first | last | not_last | only_one"
+        }
+      }
+      field {
+        name: "variable"
+        number: 11
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Id"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Named context for field, if a field is specified"
+        }
+      }
+      field {
+        name: "condition"
+        number: 12
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.String"
+        options {
+          [google.fhir.stu3.proto.field_description]: "FHIRPath expression  - must be true or the rule does not apply"
+        }
+      }
+      field {
+        name: "check"
+        number: 13
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.String"
+        options {
+          [google.fhir.stu3.proto.field_description]: "FHIRPath expression  - must be true or the mapping engine throws an error instead of completing"
+        }
+      }
+      nested_type {
+        name: "DefaultValue"
+        field {
+          name: "base64_binary"
+          number: 1
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Base64Binary"
+          oneof_index: 0
+        }
+        field {
+          name: "boolean"
+          number: 2
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Boolean"
+          oneof_index: 0
+        }
+        field {
+          name: "code"
+          number: 3
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Code"
+          oneof_index: 0
+        }
+        field {
+          name: "date"
+          number: 4
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Date"
+          oneof_index: 0
+        }
+        field {
+          name: "date_time"
+          number: 5
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.DateTime"
+          oneof_index: 0
+        }
+        field {
+          name: "decimal"
+          number: 6
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Decimal"
+          oneof_index: 0
+        }
+        field {
+          name: "id"
+          number: 7
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Id"
+          oneof_index: 0
+        }
+        field {
+          name: "instant"
+          number: 8
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Instant"
+          oneof_index: 0
+        }
+        field {
+          name: "integer"
+          number: 9
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Integer"
+          oneof_index: 0
+        }
+        field {
+          name: "markdown"
+          number: 10
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Markdown"
+          oneof_index: 0
+        }
+        field {
+          name: "oid"
+          number: 11
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Oid"
+          oneof_index: 0
+        }
+        field {
+          name: "positive_int"
+          number: 12
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.PositiveInt"
+          oneof_index: 0
+        }
+        field {
+          name: "string_value"
+          number: 13
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.String"
+          oneof_index: 0
+          json_name: "string"
+        }
+        field {
+          name: "time"
+          number: 14
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Time"
+          oneof_index: 0
+        }
+        field {
+          name: "unsigned_int"
+          number: 15
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.UnsignedInt"
+          oneof_index: 0
+        }
+        field {
+          name: "uri"
+          number: 16
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Uri"
+          oneof_index: 0
+        }
+        field {
+          name: "address"
+          number: 17
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Address"
+          oneof_index: 0
+        }
+        field {
+          name: "age"
+          number: 18
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Age"
+          oneof_index: 0
+        }
+        field {
+          name: "annotation"
+          number: 19
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Annotation"
+          oneof_index: 0
+        }
+        field {
+          name: "attachment"
+          number: 20
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Attachment"
+          oneof_index: 0
+        }
+        field {
+          name: "codeable_concept"
+          number: 21
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.CodeableConcept"
+          oneof_index: 0
+        }
+        field {
+          name: "coding"
+          number: 22
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Coding"
+          oneof_index: 0
+        }
+        field {
+          name: "contact_point"
+          number: 23
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.ContactPoint"
+          oneof_index: 0
+        }
+        field {
+          name: "count"
+          number: 24
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Count"
+          oneof_index: 0
+        }
+        field {
+          name: "distance"
+          number: 25
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Distance"
+          oneof_index: 0
+        }
+        field {
+          name: "duration"
+          number: 26
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Duration"
+          oneof_index: 0
+        }
+        field {
+          name: "human_name"
+          number: 27
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.HumanName"
+          oneof_index: 0
+        }
+        field {
+          name: "identifier"
+          number: 28
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Identifier"
+          oneof_index: 0
+        }
+        field {
+          name: "money"
+          number: 29
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Money"
+          oneof_index: 0
+        }
+        field {
+          name: "period"
+          number: 30
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Period"
+          oneof_index: 0
+        }
+        field {
+          name: "quantity"
+          number: 31
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Quantity"
+          oneof_index: 0
+        }
+        field {
+          name: "range"
+          number: 32
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Range"
+          oneof_index: 0
+        }
+        field {
+          name: "ratio"
+          number: 33
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Ratio"
+          oneof_index: 0
+        }
+        field {
+          name: "reference"
+          number: 34
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Reference"
+          oneof_index: 0
+        }
+        field {
+          name: "sampled_data"
+          number: 35
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.SampledData"
+          oneof_index: 0
+        }
+        field {
+          name: "signature"
+          number: 36
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Signature"
+          oneof_index: 0
+        }
+        field {
+          name: "timing"
+          number: 37
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Timing"
+          oneof_index: 0
+        }
+        field {
+          name: "meta"
+          number: 38
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Meta"
+          oneof_index: 0
+        }
+        oneof_decl {
+          name: "default_value"
+        }
+      }
+    }
+    nested_type {
+      name: "Target"
+      field {
+        name: "id"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.String"
+        options {
+          [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        }
+      }
+      field {
+        name: "extension"
+        number: 2
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Extension"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        }
+      }
+      field {
+        name: "modifier_extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Extension"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        }
+      }
+      field {
+        name: "context"
+        number: 4
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Id"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Type or variable this rule applies to"
+        }
+      }
+      field {
+        name: "context_type"
+        number: 5
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.StructureMapContextTypeCode"
+        options {
+          [google.fhir.stu3.proto.field_description]: "type | variable"
+        }
+      }
+      field {
+        name: "element"
+        number: 6
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.String"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Field to create in the context"
+        }
+      }
+      field {
+        name: "variable"
+        number: 7
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Id"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Named context for field, if desired, and a field is specified"
+        }
+      }
+      field {
+        name: "list_mode"
+        number: 8
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.StructureMapTargetListModeCode"
+        options {
+          [google.fhir.stu3.proto.field_description]: "first | share | last | collate"
+        }
+      }
+      field {
+        name: "list_rule_id"
+        number: 9
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Id"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Internal rule reference for shared list items"
+        }
+      }
+      field {
+        name: "transform"
+        number: 10
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.StructureMapTransformCode"
+        options {
+          [google.fhir.stu3.proto.field_description]: "create | copy +"
+        }
+      }
+      field {
+        name: "parameter"
+        number: 11
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.StructureMap.Group.Rule.Target.Parameter"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Parameters to the transform"
+        }
+      }
+      nested_type {
+        name: "Parameter"
+        field {
+          name: "id"
+          number: 1
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.String"
+          options {
+            [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+          }
+        }
+        field {
+          name: "extension"
+          number: 2
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Extension"
+          options {
+            [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+          }
+        }
+        field {
+          name: "modifier_extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.Extension"
+          options {
+            [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+          }
+        }
+        field {
+          name: "value"
+          number: 4
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.stu3.proto.StructureMap.Group.Rule.Target.Parameter.Value"
+          options {
+            [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+            [google.fhir.stu3.proto.is_choice_type]: true
+            [google.fhir.stu3.proto.field_description]: "Parameter value - variable or literal"
+          }
+        }
+        nested_type {
+          name: "Value"
+          field {
+            name: "id"
+            number: 1
+            label: LABEL_OPTIONAL
+            type: TYPE_MESSAGE
+            type_name: ".google.fhir.stu3.proto.Id"
+            oneof_index: 0
+          }
+          field {
+            name: "string_value"
+            number: 2
+            label: LABEL_OPTIONAL
+            type: TYPE_MESSAGE
+            type_name: ".google.fhir.stu3.proto.String"
+            oneof_index: 0
+            json_name: "string"
+          }
+          field {
+            name: "boolean"
+            number: 3
+            label: LABEL_OPTIONAL
+            type: TYPE_MESSAGE
+            type_name: ".google.fhir.stu3.proto.Boolean"
+            oneof_index: 0
+          }
+          field {
+            name: "integer"
+            number: 4
+            label: LABEL_OPTIONAL
+            type: TYPE_MESSAGE
+            type_name: ".google.fhir.stu3.proto.Integer"
+            oneof_index: 0
+          }
+          field {
+            name: "decimal"
+            number: 5
+            label: LABEL_OPTIONAL
+            type: TYPE_MESSAGE
+            type_name: ".google.fhir.stu3.proto.Decimal"
+            oneof_index: 0
+          }
+          oneof_decl {
+            name: "value"
+            options {
+              [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
+            }
+          }
+        }
+      }
+    }
+    nested_type {
+      name: "Dependent"
+      field {
+        name: "id"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.String"
+        options {
+          [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        }
+      }
+      field {
+        name: "extension"
+        number: 2
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Extension"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        }
+      }
+      field {
+        name: "modifier_extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Extension"
+        options {
+          [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        }
+      }
+      field {
+        name: "name"
+        number: 4
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Id"
+        options {
+          [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+          [google.fhir.stu3.proto.field_description]: "Name of a rule or group to apply"
+        }
+      }
+      field {
+        name: "variable"
+        number: 5
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.String"
+        options {
+          [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+          [google.fhir.stu3.proto.field_description]: "Variable to pass to the rule or group"
+        }
+      }
+    }
+  }
+}
+options {
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for StructureMap, last updated 2017-04-19T07:44:43.294+10:00.\nA Map of relationships between 2 structures that can be used to transform data."
+}
