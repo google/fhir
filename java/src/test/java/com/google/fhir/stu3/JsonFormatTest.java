@@ -157,58 +157,42 @@ import org.junit.runners.JUnit4;
 /** Unit tests for {@link JsonFormat}. */
 @RunWith(JUnit4.class)
 public class JsonFormatTest {
-  // Set to true to generate golden testdata.
-  private static final boolean generateGolden = false;
-
   JsonFormat.Parser jsonParser;
   JsonFormat.Printer jsonPrinter;
   TextFormat.Parser textParser;
 
   /** Read the specifed json file from the testdata directory as a String. */
-  private java.lang.String loadJson(java.lang.String filename) throws IOException {
+  private String loadJson(String filename) throws IOException {
     File file = new File("testdata/stu3/examples/" + filename);
     return Files.asCharSource(file, StandardCharsets.UTF_8).read();
   }
 
   /** Read the specifed prototxt file from the testdata directory and parse it. */
-  private void mergeText(java.lang.String filename, Message.Builder builder) throws IOException {
+  private void mergeText(String filename, Message.Builder builder) throws IOException {
     File file = new File("testdata/stu3/examples/" + filename);
     textParser.merge(Files.asCharSource(file, StandardCharsets.UTF_8).read(), builder);
   }
 
-  /** Save the provided protocol buffer in text format to the specified file. */
-  private void saveText(java.lang.String filename, Message.Builder builder) throws IOException {
-    java.lang.String text = TextFormat.printToString(builder);
-    File file = new File("/tmp/JsonFormatTest/" + filename);
-    System.out.println("Saving golden file: " + file);
-    Files.asCharSink(file, StandardCharsets.UTF_8).write(text);
-  }
-
-  private void testParse(java.lang.String name, Builder builder) throws IOException {
+  private void testParse(String name, Builder builder) throws IOException {
     // Parse the json version of the input.
     Builder jsonBuilder = builder.clone();
     jsonParser.merge(loadJson(name + ".json"), jsonBuilder);
-    // If requested, print the parsed json to a golden file in the current directory.
-    if (generateGolden) {
-      saveText(name + ".prototxt", jsonBuilder);
-    } else {
-      // Parse the proto text version of the input.
-      Builder textBuilder = builder.clone();
-      mergeText(name + ".prototxt", textBuilder);
+    // Parse the proto text version of the input.
+    Builder textBuilder = builder.clone();
+    mergeText(name + ".prototxt", textBuilder);
 
-      assertThat(jsonBuilder.build().toString()).isEqualTo(textBuilder.build().toString());
-    }
+    assertThat(jsonBuilder.build().toString()).isEqualTo(textBuilder.build().toString());
   }
 
   private JsonElement canonicalize(JsonElement element) {
     if (element.isJsonObject()) {
       JsonObject object = element.getAsJsonObject();
       JsonObject sorted = new JsonObject();
-      TreeSet<java.lang.String> keys = new TreeSet<java.lang.String>();
-      for (Map.Entry<java.lang.String, JsonElement> entry : object.entrySet()) {
+      TreeSet<String> keys = new TreeSet<>();
+      for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
         keys.add(entry.getKey());
       }
-      for (java.lang.String key : keys) {
+      for (String key : keys) {
         sorted.add(key, canonicalize(object.get(key)));
       }
       return sorted;
@@ -223,25 +207,24 @@ public class JsonFormatTest {
     return element;
   }
 
-  private java.lang.String canonicalizeJson(java.lang.String json) {
+  private String canonicalizeJson(String json) {
     com.google.gson.JsonParser gsonParser = new com.google.gson.JsonParser();
     JsonElement testJson = canonicalize(gsonParser.parse(new JsonReader(new StringReader(json))));
     return testJson.toString();
   }
 
   /** Test that two json-encoded strings are equal, allowing for some minor transformations. */
-  private void assertJsonEqual(java.lang.String test, java.lang.String golden) {
+  private void assertJsonEqual(String test, String golden) {
     // If the strings are equal, we're done. Otherwise, try a few more transforms.
     if (test.equals(golden)) {
       return;
     }
 
     // Format UTC times to always be of the form "+00:00".
-    java.lang.String utcPatternIn =
-        "\"([0-9]+-[01][0-9]-[0-3][0-9]T[012][0-9]:[0-5][0-9]:[0-5][0-9\\.]+)Z\"";
-    java.lang.String utcPatternOut = "\"$1+00:00\"";
-    java.lang.String utcTest = test.replaceAll(utcPatternIn, utcPatternOut);
-    java.lang.String utcGolden = golden.replaceAll(utcPatternIn, utcPatternOut);
+    String utcPatternIn = "\"([0-9]+-[01][0-9]-[0-3][0-9]T[012][0-9]:[0-5][0-9]:[0-5][0-9\\.]+)Z\"";
+    String utcPatternOut = "\"$1+00:00\"";
+    String utcTest = test.replaceAll(utcPatternIn, utcPatternOut);
+    String utcGolden = golden.replaceAll(utcPatternIn, utcPatternOut);
     if (utcTest.equals(utcGolden)) {
       return;
     }
@@ -250,14 +233,14 @@ public class JsonFormatTest {
     assertThat(test).isEqualTo(golden);
   }
 
-  private void testPrint(java.lang.String name, Builder builder) throws IOException {
+  private void testPrint(String name, Builder builder) throws IOException {
     // Parse the proto text version of the input.
     Builder textBuilder = builder.clone();
     mergeText(name + ".prototxt", textBuilder);
     // Load the json version of the input as a String.
-    java.lang.String jsonGolden = loadJson(name + ".json");
+    String jsonGolden = loadJson(name + ".json");
     // Print the proto as json and compare.
-    java.lang.String jsonTest = jsonPrinter.print(textBuilder);
+    String jsonTest = jsonPrinter.print(textBuilder);
     assertJsonEqual(jsonTest, jsonGolden);
   }
 
@@ -281,10 +264,10 @@ public class JsonFormatTest {
    */
   @Test
   public void printEdgeCases() throws Exception {
-    java.lang.String jsonGolden = loadJson("json-edge-cases.json");
+    String jsonGolden = loadJson("json-edge-cases.json");
     Patient.Builder patient = Patient.newBuilder();
     mergeText("json-edge-cases.prototxt", patient);
-    java.lang.String jsonTest = jsonPrinter.print(patient);
+    String jsonTest = jsonPrinter.print(patient);
     assertJsonEqual(canonicalizeJson(jsonTest), canonicalizeJson(jsonGolden));
   }
 
