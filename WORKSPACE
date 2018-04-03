@@ -12,7 +12,8 @@ http_archive(
 
 maven_jar(
     name = "guava_maven",
-    artifact = "com.google.guava:guava:24.0-jre",
+    artifact = "com.google.guava:guava:24.1-jre",
+    sha1 = "96c528475465aeb22cce60605d230a7e67cebd7b",
 )
 
 bind(
@@ -22,7 +23,8 @@ bind(
 
 maven_jar(
     name = "gson_maven",
-    artifact = "com.google.code.gson:gson:2.7",
+    artifact = "com.google.code.gson:gson:2.8.2",
+    sha1 = "3edcfe49d2c6053a70a2a47e4e1c2f94998a49cf",
 )
 
 bind(
@@ -31,8 +33,20 @@ bind(
 )
 
 maven_jar(
+    name = "jcommander_maven",
+    artifact = "com.beust:jcommander:1.72",
+    sha1 = "6375e521c1e11d6563d4f25a07ce124ccf8cd171",
+)
+
+bind(
+    name = "jcommander",
+    actual = "@jcommander_maven//jar",
+)
+
+maven_jar(
     name = "junit_maven",
     artifact = "junit:junit:4.12",
+    sha1 = "2973d150c0dc1fefe998f834810d68f278ea58ec",
 )
 
 bind(
@@ -42,7 +56,8 @@ bind(
 
 maven_jar(
     name = "truth_maven",
-    artifact = "com.google.truth:truth:0.39",
+    artifact = "com.google.truth:truth:0.40",
+    sha1 = "0d74e716afec045cc4a178dbbfde2a8314ae5574",
 )
 
 bind(

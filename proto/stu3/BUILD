@@ -54,3 +54,11 @@ java_proto_library(
     strict_deps = 0,
     deps = [":extensions"],
 )
+
+# We also make the .proto files readable for testing.
+filegroup(
+    name = "testdata",
+    srcs = glob([
+        "*.proto",
+    ]),
+)

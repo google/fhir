@@ -43,6 +43,21 @@ java_binary(
     ],
 )
 
+java_binary(
+    name = "ProtoGenerator",
+    srcs = [
+        "src/main/java/com/google/fhir/examples/ProtoGeneratorMain.java",
+    ],
+    main_class = "com.google.fhir.examples.ProtoGeneratorMain",
+    deps = [
+        ":stu3",
+        "//external:guava",
+        "//external:jcommander",
+        "//proto/stu3:resources_java_proto",
+        "@com_google_protobuf//:protobuf_java_util",
+    ],
+)
+
 java_test(
     name = "AnnotationUtilsTest",
     size = "small",
@@ -142,6 +157,46 @@ java_test(
         "//external:junit",
         "//external:truth",
         "//proto/stu3:resources_java_proto",
+    ],
+)
+
+java_test(
+    name = "ProtoFilePrinterTest",
+    size = "medium",
+    srcs = ["src/test/java/com/google/fhir/stu3/ProtoFilePrinterTest.java"],
+    data = [
+        "//proto/stu3:testdata",
+        "//testdata/stu3:structure_definitions",
+    ],
+    test_class = "com.google.fhir.stu3.ProtoFilePrinterTest",
+    deps = [
+        ":stu3",
+        "//external:guava",
+        "//external:junit",
+        "//external:truth",
+        "//proto/stu3:resources_java_proto",
+        "@com_google_protobuf//:descriptor_proto",
+        "@com_google_protobuf//:protobuf_java",
+    ],
+)
+
+java_test(
+    name = "ProtoGeneratorTest",
+    size = "medium",
+    srcs = ["src/test/java/com/google/fhir/stu3/ProtoGeneratorTest.java"],
+    data = [
+        "//testdata/stu3:structure_definitions",
+    ],
+    test_class = "com.google.fhir.stu3.ProtoGeneratorTest",
+    deps = [
+        ":stu3",
+        "//external:guava",
+        "//external:junit",
+        "//external:truth",
+        "//proto/stu3:datatypes_java_proto",
+        "//proto/stu3:resources_java_proto",
+        "@com_google_protobuf//:descriptor_proto",
+        "@com_google_protobuf//:protobuf_java",
     ],
 )
 
