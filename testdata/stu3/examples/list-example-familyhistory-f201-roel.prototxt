@@ -10,7 +10,7 @@ text {
   }
 }
 contained {
-  family_memberhistory {
+  family_member_history {
     id {
       value: "fmh-1"
     }
@@ -60,7 +60,7 @@ contained {
   }
 }
 contained {
-  family_memberhistory {
+  family_member_history {
     id {
       value: "fmh-2"
     }

@@ -10,7 +10,7 @@ text {
   }
 }
 contained {
-  family_memberhistory {
+  family_member_history {
     id {
       value: "1"
     }
@@ -84,7 +84,7 @@ contained {
   }
 }
 contained {
-  family_memberhistory {
+  family_member_history {
     id {
       value: "2"
     }
@@ -115,7 +115,7 @@ contained {
   }
 }
 contained {
-  family_memberhistory {
+  family_member_history {
     id {
       value: "3"
     }
@@ -186,7 +186,7 @@ contained {
   }
 }
 contained {
-  family_memberhistory {
+  family_member_history {
     id {
       value: "4"
     }
@@ -217,7 +217,7 @@ contained {
   }
 }
 contained {
-  family_memberhistory {
+  family_member_history {
     id {
       value: "5"
     }
@@ -251,7 +251,7 @@ contained {
   }
 }
 contained {
-  family_memberhistory {
+  family_member_history {
     id {
       value: "6"
     }
@@ -282,7 +282,7 @@ contained {
   }
 }
 contained {
-  family_memberhistory {
+  family_member_history {
     id {
       value: "7"
     }
@@ -313,7 +313,7 @@ contained {
   }
 }
 contained {
-  family_memberhistory {
+  family_member_history {
     id {
       value: "8"
     }

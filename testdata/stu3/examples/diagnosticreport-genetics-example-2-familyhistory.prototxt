@@ -10,7 +10,7 @@ text {
   }
 }
 contained {
-  family_memberhistory {
+  family_member_history {
     id {
       value: "f1-genetics"
     }

@@ -53,6 +53,9 @@ extend google.protobuf.MessageOptions {
 
   // What type of fhir structure does this message represent?
   StructureDefinitionKindValue structure_definition_kind = 182131192;
+
+  // A brief description of the intended use of this message.
+  string message_description = 190563156;
 }
 
 extend google.protobuf.EnumValueOptions {
@@ -67,6 +70,9 @@ extend google.protobuf.FieldOptions {
 
   // Is this field a wrapper around a choice type?
   bool is_choice_type = 187112991;
+
+  // A brief description of the intended use of this field.
+  string field_description = 190357977;
 }
 
 extend google.protobuf.OneofOptions {
