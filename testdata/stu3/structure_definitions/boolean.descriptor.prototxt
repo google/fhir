@@ -1,0 +1,24 @@
+name: "Boolean"
+field {
+  name: "value"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_BOOL
+}
+field {
+  name: "id"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+}
+field {
+  name: "extension"
+  number: 3
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+}
+options {
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+}

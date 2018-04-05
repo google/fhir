@@ -1,0 +1,68 @@
+name: "DateTime"
+field {
+  name: "value_us"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_INT64
+}
+field {
+  name: "timezone"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_STRING
+}
+field {
+  name: "precision"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_ENUM
+  type_name: ".google.fhir.stu3.proto.DateTime.Precision"
+}
+field {
+  name: "id"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+}
+field {
+  name: "extension"
+  number: 5
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+}
+enum_type {
+  name: "Precision"
+  value {
+    name: "PRECISION_UNSPECIFIED"
+    number: 0
+  }
+  value {
+    name: "YEAR"
+    number: 1
+  }
+  value {
+    name: "MONTH"
+    number: 2
+  }
+  value {
+    name: "DAY"
+    number: 3
+  }
+  value {
+    name: "SECOND"
+    number: 4
+  }
+  value {
+    name: "MILLISECOND"
+    number: 5
+  }
+  value {
+    name: "MICROSECOND"
+    number: 6
+  }
+}
+options {
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+}

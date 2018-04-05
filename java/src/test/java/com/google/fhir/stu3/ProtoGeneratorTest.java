@@ -20,6 +20,7 @@ import com.google.common.io.Files;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
+import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.TextFormat;
 import java.io.File;
@@ -68,6 +69,11 @@ public class ProtoGeneratorTest {
     assertThat(golden).isEqualTo(generatedProto);
   }
 
+  private void verifyCompiledDescriptor(Descriptor descriptor) throws IOException {
+    DescriptorProto golden = readDescriptorProto(descriptor.getName());
+    assertThat(golden).isEqualTo(descriptor.toProto());
+  }
+
   @Before
   public void setUp() {
     jsonParser = JsonFormat.getParser();
@@ -80,9 +86,336 @@ public class ProtoGeneratorTest {
     registry.add(Annotations.oneofValidationRequirement);
     registry.add(Annotations.fieldDescription);
     registry.add(Annotations.messageDescription);
+    registry.add(Annotations.fhirReferenceType);
   }
 
-  // TODO(sundberg): Test the basic FHIR data types.
+  // We don't yet generate the FHIR primitive type descriptors. As a result, here we just verify
+  // that the descriptors in testdata/ correspond to the compiled protos in the test binary.
+
+  /** Verify the Base64Binary FHIR primitive type. */
+  @Test
+  public void verifyBase64Binary() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Base64Binary.getDescriptor());
+  }
+
+  /** Verify the Boolean FHIR primitive type. */
+  @Test
+  public void verifyBoolean() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Boolean.getDescriptor());
+  }
+
+  /** Verify the Code FHIR primitive type. */
+  @Test
+  public void verifyCode() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Code.getDescriptor());
+  }
+
+  /** Verify the Date FHIR primitive type. */
+  @Test
+  public void verifyDate() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Date.getDescriptor());
+  }
+
+  /** Verify the DateTime FHIR primitive type. */
+  @Test
+  public void verifyDateTime() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.DateTime.getDescriptor());
+  }
+
+  /** Verify the Decimal FHIR primitive type. */
+  @Test
+  public void verifyDecimal() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Decimal.getDescriptor());
+  }
+
+  /** Verify the Id FHIR primitive type. */
+  @Test
+  public void verifyId() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Id.getDescriptor());
+  }
+
+  /** Verify the Instant FHIR primitive type. */
+  @Test
+  public void verifyInstant() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Instant.getDescriptor());
+  }
+
+  /** Verify the Integer FHIR primitive type. */
+  @Test
+  public void verifyInteger() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Integer.getDescriptor());
+  }
+
+  /** Verify the Markdown FHIR primitive type. */
+  @Test
+  public void verifyMarkdown() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Markdown.getDescriptor());
+  }
+
+  /** Verify the Oid FHIR primitive type. */
+  @Test
+  public void verifyOid() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Oid.getDescriptor());
+  }
+
+  /** Verify the PositiveInt FHIR primitive type. */
+  @Test
+  public void verifyPositiveInt() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.PositiveInt.getDescriptor());
+  }
+
+  /** Verify the String FHIR primitive type. */
+  @Test
+  public void verifyString() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.String.getDescriptor());
+  }
+
+  /** Verify the Time FHIR primitive type. */
+  @Test
+  public void verifyTime() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Time.getDescriptor());
+  }
+
+  /** Verify the UnsignedInt FHIR primitive type. */
+  @Test
+  public void verifyUnsignedInt() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.UnsignedInt.getDescriptor());
+  }
+
+  /** Verify the Uri FHIR primitive type. */
+  @Test
+  public void verifyUri() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Uri.getDescriptor());
+  }
+
+  // Test the complex FHIR data types individually. */
+
+  /** Test generating the Address FHIR complex type. */
+  @Test
+  public void generateAddress() throws Exception {
+    testGeneratedProto("Address");
+  }
+
+  /** Test generating the Age FHIR complex type. */
+  @Test
+  public void generateAge() throws Exception {
+    testGeneratedProto("Age");
+  }
+
+  /** Test generating the Annotation FHIR complex type. */
+  @Test
+  public void generateAnnotation() throws Exception {
+    testGeneratedProto("Annotation");
+  }
+
+  /** Test generating the Attachment FHIR complex type. */
+  @Test
+  public void generateAttachment() throws Exception {
+    testGeneratedProto("Attachment");
+  }
+
+  /** Test generating the CodeableConcept FHIR complex type. */
+  @Test
+  public void generateCodeableConcept() throws Exception {
+    testGeneratedProto("CodeableConcept");
+  }
+
+  /** Test generating the Coding FHIR complex type. */
+  @Test
+  public void generateCoding() throws Exception {
+    testGeneratedProto("Coding");
+  }
+
+  /** Test generating the ContactPoint FHIR complex type. */
+  @Test
+  public void generateContactPoint() throws Exception {
+    testGeneratedProto("ContactPoint");
+  }
+
+  /** Test generating the Count FHIR complex type. */
+  @Test
+  public void generateCount() throws Exception {
+    testGeneratedProto("Count");
+  }
+
+  /** Test generating the Distance FHIR complex type. */
+  @Test
+  public void generateDistance() throws Exception {
+    testGeneratedProto("Distance");
+  }
+
+  /** Test generating the Duration FHIR complex type. */
+  @Test
+  public void generateDuration() throws Exception {
+    testGeneratedProto("Duration");
+  }
+
+  /** Test generating the HumanName FHIR complex type. */
+  @Test
+  public void generateHumanName() throws Exception {
+    testGeneratedProto("HumanName");
+  }
+
+  /** Test generating the Identifier FHIR complex type. */
+  @Test
+  public void generateIdentifier() throws Exception {
+    testGeneratedProto("Identifier");
+  }
+
+  /** Test generating the Money FHIR complex type. */
+  @Test
+  public void generateMoney() throws Exception {
+    testGeneratedProto("Money");
+  }
+
+  /** Test generating the Period FHIR complex type. */
+  @Test
+  public void generatePeriod() throws Exception {
+    testGeneratedProto("Period");
+  }
+
+  /** Test generating the Quantity FHIR complex type. */
+  @Test
+  public void generateQuantity() throws Exception {
+    testGeneratedProto("Quantity");
+  }
+
+  /** Test generating the Range FHIR complex type. */
+  @Test
+  public void generateRange() throws Exception {
+    testGeneratedProto("Range");
+  }
+
+  /** Test generating the Ratio FHIR complex type. */
+  @Test
+  public void generateRatio() throws Exception {
+    testGeneratedProto("Ratio");
+  }
+
+  /** Test generating the SampledData FHIR complex type. */
+  @Test
+  public void generateSampledData() throws Exception {
+    testGeneratedProto("SampledData");
+  }
+
+  /** Test generating the Signature FHIR complex type. */
+  @Test
+  public void generateSignature() throws Exception {
+    testGeneratedProto("Signature");
+  }
+
+  /** Test generating the Timing FHIR complex type. */
+  @Test
+  public void generateTiming() throws Exception {
+    testGeneratedProto("Timing");
+  }
+
+  // Test the FHIR metadata types individually.
+
+  /** Test generating the ContactDetail FHIR metadata type. */
+  @Test
+  public void generateContactDetail() throws Exception {
+    testGeneratedProto("ContactDetail");
+  }
+
+  /** Test generating the Contributor FHIR metadata type. */
+  @Test
+  public void generateContributor() throws Exception {
+    testGeneratedProto("Contributor");
+  }
+
+  /** Test generating the DataRequirement FHIR metadata type. */
+  @Test
+  public void generateDataRequirement() throws Exception {
+    testGeneratedProto("DataRequirement");
+  }
+
+  /** Test generating the ParameterDefinition FHIR metadata type. */
+  @Test
+  public void generateParameterDefinition() throws Exception {
+    testGeneratedProto("ParameterDefinition");
+  }
+
+  /** Test generating the RelatedArtifact FHIR metadata type. */
+  @Test
+  public void generateRelatedArtifact() throws Exception {
+    testGeneratedProto("RelatedArtifact");
+  }
+
+  /** Test generating the TriggerDefinition FHIR metadata type. */
+  @Test
+  public void generateTriggerDefinition() throws Exception {
+    testGeneratedProto("TriggerDefinition");
+  }
+
+  /** Test generating the UsageContext FHIR metadata type. */
+  @Test
+  public void generateUsageContext() throws Exception {
+    testGeneratedProto("UsageContext");
+  }
+
+  // Test the FHIR special-purpose data types individually.
+
+  /** Test generating the BackboneElement FHIR special-purpose type. */
+  @Test
+  public void generateBackboneElement() throws Exception {
+    testGeneratedProto("BackboneElement");
+  }
+
+  /** Test generating the DomainResource FHIR special-purpose type. */
+  @Test
+  public void generateDomainResource() throws Exception {
+    testGeneratedProto("DomainResource");
+  }
+
+  /** Test generating the Dosage FHIR special-purpose type. */
+  @Test
+  public void generateDosage() throws Exception {
+    testGeneratedProto("Dosage");
+  }
+
+  /** Test generating the Element FHIR special-purpose type. */
+  @Test
+  public void generateElement() throws Exception {
+    testGeneratedProto("Element");
+  }
+
+  /** Test generating the ElementDefinition FHIR special-purpose type. */
+  @Test
+  public void generateElementDefinition() throws Exception {
+    testGeneratedProto("ElementDefinition");
+  }
+
+  /** Verify the Extension FHIR special-purpose type. */
+  @Test
+  public void verifyExtension() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Extension.getDescriptor());
+  }
+
+  /** Test generating the Meta FHIR special-purpose type. */
+  @Test
+  public void generateMeta() throws Exception {
+    testGeneratedProto("Meta");
+  }
+
+  /** Test generating the Narrative FHIR special-purpose type. */
+  @Test
+  public void generateNarrative() throws Exception {
+    testGeneratedProto("Narrative");
+  }
+
+  /** Verify the Reference FHIR special-purpose type. */
+  @Test
+  public void verifyReference() throws Exception {
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Reference.getDescriptor());
+    verifyCompiledDescriptor(com.google.fhir.stu3.proto.ReferenceId.getDescriptor());
+  }
+
+  /** Test generating the Resource FHIR special-purpose type. */
+  @Test
+  public void generateResource() throws Exception {
+    testGeneratedProto("Resource");
+  }
 
   // Test the FHIR resource types individually.
 
