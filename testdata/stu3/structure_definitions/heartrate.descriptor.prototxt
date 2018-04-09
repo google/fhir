@@ -1,0 +1,558 @@
+name: "Heartrate"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Id"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Meta"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Uri"
+  options {
+    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.LanguageCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Narrative"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ContainedResource"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Identifier"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Business Identifier for observation"
+  }
+}
+field {
+  name: "based_on"
+  number: 10
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Fulfills plan, proposal or order"
+  }
+}
+field {
+  name: "status"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.StatusCode"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "registered | preliminary | final | amended +"
+  }
+}
+field {
+  name: "category"
+  number: 12
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Classification of  type of observation"
+  }
+}
+field {
+  name: "code"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Heart Rate"
+  }
+}
+field {
+  name: "subject"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Who and/or what this is about"
+  }
+}
+field {
+  name: "context"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Healthcare event during which this observation is made"
+  }
+}
+field {
+  name: "effective"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Observation.Effective"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.stu3.proto.field_description]: "Often just a dateTime for Vital Signs"
+  }
+}
+field {
+  name: "issued"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Instant"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Date/Time this was made available"
+  }
+}
+field {
+  name: "performer"
+  number: 18
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Who is responsible for the observation"
+  }
+}
+field {
+  name: "value_quantity"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Quantity"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Vital Sign Value recorded with UCUM"
+  }
+}
+field {
+  name: "data_absent_reason"
+  number: 20
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Why the result is missing"
+  }
+}
+field {
+  name: "interpretation"
+  number: 21
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "High, low, normal, etc."
+  }
+}
+field {
+  name: "comment"
+  number: 22
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Comments about result"
+  }
+}
+field {
+  name: "body_site"
+  number: 23
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Observed body part"
+  }
+}
+field {
+  name: "method"
+  number: 24
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "How it was done"
+  }
+}
+field {
+  name: "specimen"
+  number: 25
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Specimen used for this observation"
+  }
+}
+field {
+  name: "device"
+  number: 26
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "(Measurement) Device"
+  }
+}
+field {
+  name: "reference_range"
+  number: 27
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Observation.ReferenceRange"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation"
+  }
+}
+field {
+  name: "related"
+  number: 28
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Observation.Related"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Used when reporting vital signs panel components"
+  }
+}
+field {
+  name: "component"
+  number: 29
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Observation.Component"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Used when reporting systolic and diastolic blood pressure."
+  }
+}
+nested_type {
+  name: "Effective"
+  field {
+    name: "date_time"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.DateTime"
+    oneof_index: 0
+  }
+  field {
+    name: "period"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Period"
+    oneof_index: 0
+  }
+  oneof_decl {
+    name: "effective"
+    options {
+      [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
+    }
+  }
+}
+nested_type {
+  name: "ReferenceRange"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "low"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Quantity"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Low Range, if relevant"
+    }
+  }
+  field {
+    name: "high"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Quantity"
+    options {
+      [google.fhir.stu3.proto.field_description]: "High Range, if relevant"
+    }
+  }
+  field {
+    name: "type"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Reference range qualifier"
+    }
+  }
+  field {
+    name: "applies_to"
+    number: 7
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Reference range population"
+    }
+  }
+  field {
+    name: "age"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Range"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Applicable age range, if relevant"
+    }
+  }
+  field {
+    name: "text"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Text based reference range in an observation"
+    }
+  }
+}
+nested_type {
+  name: "Related"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "type"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.ObservationRelationshipTypeCode"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "has-member | derived-from | sequel-to | replaces | qualified-by | interfered-by"
+    }
+  }
+  field {
+    name: "target"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Resource that is related to this one"
+    }
+  }
+}
+nested_type {
+  name: "Component"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "code"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Type of component observation (code / type)"
+    }
+  }
+  field {
+    name: "value_quantity"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Quantity"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Vital Sign Value recorded with UCUM"
+    }
+  }
+  field {
+    name: "data_absent_reason"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Why the component result is missing"
+    }
+  }
+  field {
+    name: "interpretation"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "High, low, normal, etc."
+    }
+  }
+  field {
+    name: "reference_range"
+    number: 8
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Observation.ReferenceRange"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation of component result"
+    }
+  }
+}
+options {
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Vital Signs Profile.\nFHIR Heart Rate Profile."
+}

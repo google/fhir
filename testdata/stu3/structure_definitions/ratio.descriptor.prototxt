@@ -41,5 +41,5 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Ratio\nA ratio of two Quantity values - a numerator and a denominator."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Ratio.\nA ratio of two Quantity values - a numerator and a denominator."
 }

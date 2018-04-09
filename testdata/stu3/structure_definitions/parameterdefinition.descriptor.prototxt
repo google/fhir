@@ -93,5 +93,5 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for ParameterDefinition\nDefinition of a parameter to a module."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for ParameterDefinition.\nDefinition of a parameter to a module."
 }

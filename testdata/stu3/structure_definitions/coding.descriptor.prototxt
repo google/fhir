@@ -71,5 +71,5 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Coding\nA reference to a code defined by a terminology system."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Coding.\nA reference to a code defined by a terminology system."
 }

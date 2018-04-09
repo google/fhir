@@ -1,0 +1,768 @@
+name: "Shareablecodesystem"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Id"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Meta"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Uri"
+  options {
+    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.LanguageCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Narrative"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ContainedResource"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "url"
+  number: 9
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Uri"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Logical URI to reference this code system (globally unique) (Coding.system)"
+  }
+}
+field {
+  name: "identifier"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Identifier"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional identifier for the code system"
+  }
+}
+field {
+  name: "version"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Business version of the code system (Coding.version)"
+  }
+}
+field {
+  name: "name"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Name for this code system (computer friendly)"
+  }
+}
+field {
+  name: "title"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Name for this code system (human friendly)"
+  }
+}
+field {
+  name: "status"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.PublicationStatusCode"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "draft | active | retired | unknown"
+  }
+}
+field {
+  name: "experimental"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Boolean"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "For testing purposes, not real usage"
+  }
+}
+field {
+  name: "date"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.DateTime"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Date this was last changed"
+  }
+}
+field {
+  name: "publisher"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Name of the publisher (organization or individual)"
+  }
+}
+field {
+  name: "contact"
+  number: 18
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ContactDetail"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Contact details for the publisher"
+  }
+}
+field {
+  name: "description"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Markdown"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Natural language description of the code system"
+  }
+}
+field {
+  name: "use_context"
+  number: 20
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.UsageContext"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Context the content is intended to support"
+  }
+}
+field {
+  name: "jurisdiction"
+  number: 21
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Intended jurisdiction for code system (if applicable)"
+  }
+}
+field {
+  name: "purpose"
+  number: 22
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Markdown"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Why this code system is defined"
+  }
+}
+field {
+  name: "copyright"
+  number: 23
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Markdown"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Use and/or publishing restrictions"
+  }
+}
+field {
+  name: "case_sensitive"
+  number: 24
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Boolean"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "If code comparison is case sensitive"
+  }
+}
+field {
+  name: "value_set"
+  number: 25
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Uri"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Canonical URL for value set with entire code system"
+  }
+}
+field {
+  name: "hierarchy_meaning"
+  number: 26
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeSystemHierarchyMeaningCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "grouped-by | is-a | part-of | classified-with"
+  }
+}
+field {
+  name: "compositional"
+  number: 27
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Boolean"
+  options {
+    [google.fhir.stu3.proto.field_description]: "If code system defines a post-composition grammar"
+  }
+}
+field {
+  name: "version_needed"
+  number: 28
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Boolean"
+  options {
+    [google.fhir.stu3.proto.field_description]: "If definitions are not stable"
+  }
+}
+field {
+  name: "content"
+  number: 29
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeSystemContentModeCode"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "not-present | example | fragment | complete"
+  }
+}
+field {
+  name: "count"
+  number: 30
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.UnsignedInt"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Total concepts in the code system"
+  }
+}
+field {
+  name: "filter"
+  number: 31
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeSystem.Filter"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Filter that can be used in a value set"
+  }
+}
+field {
+  name: "property"
+  number: 32
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeSystem.Property"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional information supplied about each concept"
+  }
+}
+field {
+  name: "concept"
+  number: 33
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeSystem.ConceptDefinition"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Concepts in the code system"
+  }
+}
+nested_type {
+  name: "Filter"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "code"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Code"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Code that identifies the filter"
+    }
+  }
+  field {
+    name: "description"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "How or why the filter is used"
+    }
+  }
+  field {
+    name: "operator"
+    number: 6
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.FilterOperatorCode"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Operators that can be used with filter"
+    }
+  }
+  field {
+    name: "value"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "What to use for the value"
+    }
+  }
+}
+nested_type {
+  name: "Property"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "code"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Code"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Identifies the property on the concepts, and when referred to in operations"
+    }
+  }
+  field {
+    name: "uri"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Uri"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Formal identifier for the property"
+    }
+  }
+  field {
+    name: "description"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Why the property is defined, and/or what it conveys"
+    }
+  }
+  field {
+    name: "type"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.PropertyTypeCode"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "code | Coding | string | integer | boolean | dateTime"
+    }
+  }
+}
+nested_type {
+  name: "ConceptDefinition"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "code"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Code"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Code that identifies concept"
+    }
+  }
+  field {
+    name: "display"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Text to display to the user"
+    }
+  }
+  field {
+    name: "definition"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Formal definition"
+    }
+  }
+  field {
+    name: "designation"
+    number: 7
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeSystem.ConceptDefinition.Designation"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional representations for the concept"
+    }
+  }
+  field {
+    name: "property"
+    number: 8
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeSystem.ConceptDefinition.ConceptProperty"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Property value for the concept"
+    }
+  }
+  field {
+    name: "concept"
+    number: 9
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeSystem.ConceptDefinition"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Child Concepts (is-a/contains/categorizes)"
+    }
+  }
+  nested_type {
+    name: "Designation"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "language"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.LanguageCode"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Human language of the designation"
+      }
+    }
+    field {
+      name: "use"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Coding"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Details how this designation would be used"
+      }
+    }
+    field {
+      name: "value"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.stu3.proto.field_description]: "The text value for this designation"
+      }
+    }
+  }
+  nested_type {
+    name: "ConceptProperty"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "code"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Code"
+      options {
+        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.stu3.proto.field_description]: "Reference to CodeSystem.property.code"
+      }
+    }
+    field {
+      name: "value"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeSystem.ConceptDefinition.ConceptProperty.Value"
+      options {
+        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.stu3.proto.is_choice_type]: true
+        [google.fhir.stu3.proto.field_description]: "Value of the property for this concept"
+      }
+    }
+    nested_type {
+      name: "Value"
+      field {
+        name: "code"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Code"
+        oneof_index: 0
+      }
+      field {
+        name: "coding"
+        number: 2
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Coding"
+        oneof_index: 0
+      }
+      field {
+        name: "string_value"
+        number: 3
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.String"
+        oneof_index: 0
+        json_name: "string"
+      }
+      field {
+        name: "integer"
+        number: 4
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Integer"
+        oneof_index: 0
+      }
+      field {
+        name: "boolean"
+        number: 5
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Boolean"
+        oneof_index: 0
+      }
+      field {
+        name: "date_time"
+        number: 6
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.DateTime"
+        oneof_index: 0
+      }
+      oneof_decl {
+        name: "value"
+        options {
+          [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
+        }
+      }
+    }
+  }
+}
+options {
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Shareable CodeSystem.\nA set of codes drawn from one or more code systems."
+}

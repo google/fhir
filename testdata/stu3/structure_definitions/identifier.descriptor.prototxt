@@ -81,5 +81,5 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Identifier\nAn identifier intended for computation."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Identifier.\nAn identifier intended for computation."
 }

@@ -1,0 +1,1081 @@
+name: "Consentdirective"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Id"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Meta"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Uri"
+  options {
+    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Code"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Narrative"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ContainedResource"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 9
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Identifier"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Consent Directive identifier"
+  }
+}
+field {
+  name: "issued"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.DateTime"
+  options {
+    [google.fhir.stu3.proto.field_description]: "When this Consent Directive was issued"
+  }
+}
+field {
+  name: "applies"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Period"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Effective time"
+  }
+}
+field {
+  name: "subject"
+  number: 12
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Patient who is the subject of this Privacy Consent Directive"
+  }
+}
+field {
+  name: "authority"
+  number: 13
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Authority under which this Consent Directive has standing"
+  }
+}
+field {
+  name: "domain"
+  number: 14
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Domain in which this Consent Directive applies"
+  }
+}
+field {
+  name: "type"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Consent Directive Type"
+  }
+}
+field {
+  name: "sub_type"
+  number: 16
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Consent Directive Subtype"
+  }
+}
+field {
+  name: "action"
+  number: 17
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Consent Directive Action"
+  }
+}
+field {
+  name: "action_reason"
+  number: 18
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Consent Directive Action Reason"
+  }
+}
+field {
+  name: "actor"
+  number: 19
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Contract.Actor"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Consent Directive Actor"
+  }
+}
+field {
+  name: "signer"
+  number: 21
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Contract.Signatory"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Consent Directive Signer"
+  }
+}
+field {
+  name: "term"
+  number: 22
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Contract.Term"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Consent Directive Term List"
+  }
+}
+field {
+  name: "binding"
+  number: 23
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Contract.Binding"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.stu3.proto.field_description]: "Binding Consent Directive"
+  }
+}
+field {
+  name: "friendly"
+  number: 24
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Contract.FriendlyLanguage"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Consent Directive Friendly Language"
+  }
+}
+field {
+  name: "legal"
+  number: 25
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Contract.LegalLanguage"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Consent Directive Legal Language"
+  }
+}
+field {
+  name: "rule"
+  number: 26
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Contract.ComputableLanguage"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Computable Consent Directive Language"
+  }
+}
+nested_type {
+  name: "Actor"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Id"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "entity"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Consent Directive Actor Type"
+    }
+  }
+  field {
+    name: "role"
+    number: 5
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Consent Directive Actor Role"
+    }
+  }
+}
+nested_type {
+  name: "ValuedItem"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Id"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "entity"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Contract.ValuedItem.Entity"
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.stu3.proto.field_description]: "Contract Valued Item Type"
+    }
+  }
+  field {
+    name: "identifier"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Identifier"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Contract Valued Item Identifier"
+    }
+  }
+  field {
+    name: "effective_time"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.DateTime"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Contract Valued Item Effective Time"
+    }
+  }
+  field {
+    name: "quantity"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Quantity"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Count of Contract Valued Items"
+    }
+  }
+  field {
+    name: "unit_price"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Quantity"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Contract Valued Item fee, charge, or cost."
+    }
+  }
+  field {
+    name: "factor"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Decimal"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Contract Valued Item Price Scaling Factor"
+    }
+  }
+  field {
+    name: "points"
+    number: 10
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Decimal"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Contract Valued Item Difficulty Scaling Factor"
+    }
+  }
+  field {
+    name: "net"
+    number: 11
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Quantity"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Total Contract Valued Item Value"
+    }
+  }
+  nested_type {
+    name: "Entity"
+    field {
+      name: "codeable_concept"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Reference"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "entity"
+    }
+  }
+}
+nested_type {
+  name: "Signatory"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Id"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "type"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Coding"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Consent Directive Signer Type"
+    }
+  }
+  field {
+    name: "party"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Consent Directive Signatory party"
+    }
+  }
+  field {
+    name: "signature"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Consent Directive Documentation Signature"
+    }
+  }
+}
+nested_type {
+  name: "Term"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Id"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "identifier"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Identifier"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Consent Directive Term identifier"
+    }
+  }
+  field {
+    name: "issued"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.DateTime"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Consent Directive Term Issue Date Time"
+    }
+  }
+  field {
+    name: "applies"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Period"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Consent Directive Term Effective Time"
+    }
+  }
+  field {
+    name: "type"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Consent Directive Term Type"
+    }
+  }
+  field {
+    name: "sub_type"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Consent Directive Term Subtype"
+    }
+  }
+  field {
+    name: "topic"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Topic of this Consent Directive Term"
+    }
+  }
+  field {
+    name: "action"
+    number: 10
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Consent Directive Term Action"
+    }
+  }
+  field {
+    name: "action_reason"
+    number: 11
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Consent Directive Term Action Reason"
+    }
+  }
+  field {
+    name: "actor"
+    number: 12
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Contract.Term.TermActor"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Consent Directive  Term Actor List"
+    }
+  }
+  field {
+    name: "text"
+    number: 13
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Human readable Consent Directive term text"
+    }
+  }
+  field {
+    name: "group"
+    number: 15
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Contract.Term"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Nested Consent DirectiveTerm Group"
+    }
+  }
+  nested_type {
+    name: "TermActor"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Id"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "entity"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Reference"
+      options {
+        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.stu3.proto.field_description]: "Consent Directive Term Actor"
+      }
+    }
+    field {
+      name: "role"
+      number: 5
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.CodeableConcept"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Consent Directive Term Actor Role"
+      }
+    }
+  }
+  nested_type {
+    name: "TermValuedItem"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Id"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "entity"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Contract.Term.TermValuedItem.Entity"
+      options {
+        [google.fhir.stu3.proto.is_choice_type]: true
+        [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Type"
+      }
+    }
+    field {
+      name: "identifier"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Identifier"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Identifier"
+      }
+    }
+    field {
+      name: "effective_time"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.DateTime"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Effective Time"
+      }
+    }
+    field {
+      name: "quantity"
+      number: 7
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Quantity"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Count"
+      }
+    }
+    field {
+      name: "unit_price"
+      number: 8
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Quantity"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item fee, charge, or cost."
+      }
+    }
+    field {
+      name: "factor"
+      number: 9
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Decimal"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Price Scaling Factor"
+      }
+    }
+    field {
+      name: "points"
+      number: 10
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Decimal"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Difficulty Scaling Factor"
+      }
+    }
+    field {
+      name: "net"
+      number: 11
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Quantity"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Total Contract Term Valued Item Value"
+      }
+    }
+    nested_type {
+      name: "Entity"
+      field {
+        name: "codeable_concept"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.CodeableConcept"
+        oneof_index: 0
+      }
+      field {
+        name: "reference"
+        number: 2
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.stu3.proto.Reference"
+        oneof_index: 0
+      }
+      oneof_decl {
+        name: "entity"
+      }
+    }
+  }
+}
+nested_type {
+  name: "Binding"
+  field {
+    name: "attachment"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Attachment"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    oneof_index: 0
+  }
+  oneof_decl {
+    name: "binding"
+    options {
+      [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
+    }
+  }
+}
+nested_type {
+  name: "FriendlyLanguage"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Id"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "content"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Contract.FriendlyLanguage.Content"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.stu3.proto.field_description]: "Easily comprehended representation of this Consent Directive"
+    }
+  }
+  nested_type {
+    name: "Content"
+    field {
+      name: "attachment"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Attachment"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Reference"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "content"
+      options {
+        [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
+      }
+    }
+  }
+}
+nested_type {
+  name: "LegalLanguage"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Id"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "content"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Contract.LegalLanguage.Content"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.stu3.proto.field_description]: "Consent Directive Legal Text"
+    }
+  }
+  nested_type {
+    name: "Content"
+    field {
+      name: "attachment"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Attachment"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Reference"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "content"
+      options {
+        [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
+      }
+    }
+  }
+}
+nested_type {
+  name: "ComputableLanguage"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Id"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "content"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Contract.ComputableLanguage.Content"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.stu3.proto.field_description]: "Computable Consent Directive Rules"
+    }
+  }
+  nested_type {
+    name: "Content"
+    field {
+      name: "attachment"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Attachment"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Reference"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "content"
+      options {
+        [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
+      }
+    }
+  }
+}
+options {
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Consent Directive.\nConsent Directive."
+}

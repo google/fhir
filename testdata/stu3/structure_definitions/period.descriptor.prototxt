@@ -41,5 +41,5 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Period\nTime range defined by start and end date/time."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Period.\nTime range defined by start and end date/time."
 }

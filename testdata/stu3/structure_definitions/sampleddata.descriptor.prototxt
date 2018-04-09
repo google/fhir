@@ -95,5 +95,5 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for SampledData\nA series of measurements taken by a device."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for SampledData.\nA series of measurements taken by a device."
 }

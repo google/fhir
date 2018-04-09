@@ -2274,5 +2274,5 @@ nested_type {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for ElementDefinition\nDefinition of an element in a resource or extension."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for ElementDefinition.\nDefinition of an element in a resource or extension."
 }

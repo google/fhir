@@ -158,11 +158,9 @@ public class ProtoGenerator {
             .append("Auto-generated from StructureDefinition for ")
             .append(def.getName().getValue());
     if (def.getMeta().hasLastUpdated()) {
-      comment
-          .append(", last updated ")
-          .append(new InstantWrapper(def.getMeta().getLastUpdated()))
-          .append(".");
+      comment.append(", last updated ").append(new InstantWrapper(def.getMeta().getLastUpdated()));
     }
+    comment.append(".");
     if (root.hasShort()) {
       comment.append("\n").append((root.getShort().getValue() + ".").replaceAll("[\\n\\r]", "\n"));
     }
@@ -178,8 +176,13 @@ public class ProtoGenerator {
             .setExtension(Annotations.messageDescription, comment.toString())
             .build());
 
-    // Build the actual descriptor.
-    return generateMessage(root, elementList, builder);
+    // Build the actual descriptor, and replace the top-level name. If the first character is
+    // lowercase, assume it needs to be camelcased.
+    String name = def.getId().getValue();
+    if (Character.isLowerCase(name.charAt(0))) {
+      name = CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, name);
+    }
+    return generateMessage(root, elementList, builder).toBuilder().setName(name).build();
   }
 
   /** Generate a .proto file descriptor from a list of StructureDefinitions. */
@@ -248,8 +251,13 @@ public class ProtoGenerator {
       }
 
       if (isSingleType(element)) {
-        // Generate a single field
-        builder.addField(buildField(element, elementList, nextTag++));
+        // Generate a single field. If this field doesn't actually exist in this version of the
+        // message, for example, the max attribute is 0, buildField returns null and no field
+        // should be added.
+        FieldDescriptorProto field = buildField(element, elementList, nextTag++);
+        if (field != null) {
+          builder.addField(field);
+        }
       } else if (element.getPath().getValue().endsWith("[x]")) {
         // Emit a oneof to handle fhir fields that don't have a fixed type.
         addChoiceType(element, elementList, nextTag++, builder);
@@ -477,6 +485,10 @@ public class ProtoGenerator {
       int tag,
       DescriptorProto.Builder builder) {
     FieldDescriptorProto field = buildField(element, elementList, tag);
+    if (field == null) {
+      // We're actually not adding this field, most likely because it has a max_count of 0.
+      return;
+    }
     builder.addField(field);
 
     List<String> typeNameParts = Splitter.on('.').splitToList(field.getTypeName());

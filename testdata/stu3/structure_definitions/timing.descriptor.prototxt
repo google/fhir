@@ -255,5 +255,5 @@ nested_type {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Timing\nA timing schedule that specifies an event that may occur multiple times."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Timing.\nA timing schedule that specifies an event that may occur multiple times."
 }

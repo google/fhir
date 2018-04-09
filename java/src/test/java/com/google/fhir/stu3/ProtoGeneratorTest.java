@@ -1120,4 +1120,194 @@ public class ProtoGeneratorTest {
   public void generateVisionPrescription() throws Exception {
     testGeneratedProto("VisionPrescription");
   }
+
+  // Test generating profiles.
+
+  /** Test generating the bmi profile. */
+  @Test
+  public void generateBmi() throws Exception {
+    testGeneratedProto("bmi");
+  }
+
+  /** Test generating the bodyheight profile. */
+  @Test
+  public void generateBodyheight() throws Exception {
+    testGeneratedProto("bodyheight");
+  }
+
+  /** Test generating the bodylength profile. */
+  @Test
+  public void generateBodylength() throws Exception {
+    testGeneratedProto("bodylength");
+  }
+
+  /** Test generating the bodytemp profile. */
+  @Test
+  public void generateBodytemp() throws Exception {
+    testGeneratedProto("bodytemp");
+  }
+
+  /** Test generating the bodyweight profile. */
+  @Test
+  public void generateBodyweight() throws Exception {
+    testGeneratedProto("bodyweight");
+  }
+
+  /** Test generating the bp profile. */
+  @Test
+  public void generateBp() throws Exception {
+    testGeneratedProto("bp");
+  }
+
+  /** Test generating the cholesterol profile. */
+  @Test
+  public void generateCholesterol() throws Exception {
+    testGeneratedProto("cholesterol");
+  }
+
+  /** Test generating the clinicaldocument profile. */
+  @Test
+  public void generateClinicaldocument() throws Exception {
+    testGeneratedProto("clinicaldocument");
+  }
+
+  /** Test generating the consentdirective profile. */
+  @Test
+  public void generateConsentdirective() throws Exception {
+    testGeneratedProto("consentdirective");
+  }
+
+  /** Test generating the devicemetricobservation profile. */
+  @Test
+  public void generateDevicemetricobservation() throws Exception {
+    testGeneratedProto("devicemetricobservation");
+  }
+
+  /** Test generating the diagnosticreport-genetics profile. */
+  @Test
+  public void generateDiagnosticreportGenetics() throws Exception {
+    testGeneratedProto("diagnosticreport-genetics");
+  }
+
+  /** Test generating the elementdefinition-de profile. */
+  @Test
+  public void generateElementdefinitionDe() throws Exception {
+    testGeneratedProto("elementdefinition-de");
+  }
+
+  /** Test generating the familymemberhistory-genetic profile. */
+  @Test
+  public void generateFamilymemberhistoryGenetic() throws Exception {
+    testGeneratedProto("familymemberhistory-genetic");
+  }
+
+  /** Test generating the hdlcholesterol profile. */
+  @Test
+  public void generateHdlcholesterol() throws Exception {
+    testGeneratedProto("hdlcholesterol");
+  }
+
+  /** Test generating the headcircum profile. */
+  @Test
+  public void generateHeadcircum() throws Exception {
+    testGeneratedProto("headcircum");
+  }
+
+  /** Test generating the heartrate profile. */
+  @Test
+  public void generateHeartrate() throws Exception {
+    testGeneratedProto("heartrate");
+  }
+
+  /** Test generating the hlaresult profile. */
+  @Test
+  public void generateHlaresult() throws Exception {
+    testGeneratedProto("hlaresult");
+  }
+
+  /** Test generating the ldlcholesterol profile. */
+  @Test
+  public void generateLdlcholesterol() throws Exception {
+    testGeneratedProto("ldlcholesterol");
+  }
+
+  /** Test generating the lipidprofile profile. */
+  @Test
+  public void generateLipidprofile() throws Exception {
+    testGeneratedProto("lipidprofile");
+  }
+
+  // TODO(sundberg): test the metadataresource profile.
+
+  /** Test generating the observation-genetics profile. */
+  @Test
+  public void generateObservationGenetics() throws Exception {
+    testGeneratedProto("observation-genetics");
+  }
+
+  /** Test generating the oxygensat profile. */
+  @Test
+  public void generateOxygensat() throws Exception {
+    testGeneratedProto("oxygensat");
+  }
+
+  /** Test generating the procedurerequest-genetics profile. */
+  @Test
+  public void generateProcedurerequestGenetics() throws Exception {
+    testGeneratedProto("procedurerequest-genetics");
+  }
+
+  /** Test generating the resprate profile. */
+  @Test
+  public void generateResprate() throws Exception {
+    testGeneratedProto("resprate");
+  }
+
+  /** Test generating the shareablecodesystem profile. */
+  @Test
+  public void generateShareablecodesystem() throws Exception {
+    testGeneratedProto("shareablecodesystem");
+  }
+
+  /** Test generating the shareablevalueset profile. */
+  @Test
+  public void generateShareablevalueset() throws Exception {
+    testGeneratedProto("shareablevalueset");
+  }
+
+  /** Test generating the simplequantity profile. */
+  @Test
+  public void generateSimplequantity() throws Exception {
+    testGeneratedProto("simplequantity");
+  }
+
+  /** Test generating the triglyceride profile. */
+  @Test
+  public void generateTriglyceride() throws Exception {
+    testGeneratedProto("triglyceride");
+  }
+
+  /** Test generating the uuid profile. */
+  @Test
+  public void generateUuid() throws Exception {
+    testGeneratedProto("uuid");
+  }
+
+  /** Test generating the vitalsigns profile. */
+  @Test
+  public void generateVitalsigns() throws Exception {
+    testGeneratedProto("vitalsigns");
+  }
+
+  /** Test generating the vitalspanel profile. */
+  @Test
+  public void generateVitalspanel() throws Exception {
+    testGeneratedProto("vitalspanel");
+  }
+
+  /** Test generating the xhtml profile. */
+  @Test
+  public void generateXhtml() throws Exception {
+    testGeneratedProto("xhtml");
+  }
 }

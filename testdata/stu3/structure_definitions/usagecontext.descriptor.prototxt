@@ -77,5 +77,5 @@ nested_type {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for UsageContext\nDescribes the context of use for a conformance or knowledge resource."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for UsageContext.\nDescribes the context of use for a conformance or knowledge resource."
 }
