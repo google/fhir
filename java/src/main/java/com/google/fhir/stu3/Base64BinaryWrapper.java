@@ -21,7 +21,6 @@ import com.google.fhir.stu3.proto.PositiveInt;
 import com.google.fhir.stu3.proto.String;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Message;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
