@@ -13,10 +13,12 @@ filegroup(
     ]),
 )
 
-# These files contain testdata for parsing extensions.
+# These files contain testdata for generating and parsing extensions.
 filegroup(
     name = "extensions",
     srcs = glob([
+        "extensions/*.json",
+        "extensions/*.descriptor.prototxt",
         "extensions/*.extension.prototxt",
         "extensions/*.message.prototxt",
     ]),

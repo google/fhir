@@ -15,6 +15,7 @@
 
 ROOT_PATH=../..
 INPUT_PATH=$ROOT_PATH/testdata/stu3/structure_definitions
+EXTENSION_PATH=$ROOT_PATH/testdata/stu3/extensions
 PROTO_GENERATOR=$ROOT_PATH/bazel-bin/java/ProtoGenerator
 OUTPUT_PATH=.
 
@@ -25,6 +26,7 @@ PRIMITIVES="Base64Binary Boolean Code Date DateTime Decimal Id Integer Instant M
 DATATYPES="Address Age Annotation Attachment CodeableConcept Coding ContactPoint Count Distance Dosage Duration Extension HumanName Identifier Meta Money Period Quantity Range Ratio Reference SampledData Signature SimpleQuantity Timing"
 METADATATYPES="BackboneElement ContactDetail Contributor DataRequirement Element ElementDefinition Narrative ParameterDefinition RelatedArtifact Resource TriggerDefinition UsageContext"
 RESOURCETYPES="Account ActivityDefinition AdverseEvent AllergyIntolerance Appointment AppointmentResponse AuditEvent Basic Binary BodySite Bundle CapabilityStatement CarePlan CareTeam ChargeItem Claim ClaimResponse ClinicalImpression CodeSystem Communication CommunicationRequest CompartmentDefinition Composition ConceptMap Condition Consent Contract Coverage DataElement DetectedIssue Device DeviceComponent DeviceMetric DeviceRequest DeviceUseStatement DiagnosticReport DocumentManifest DocumentReference EligibilityRequest EligibilityResponse Encounter Endpoint EnrollmentRequest EnrollmentResponse EpisodeOfCare ExpansionProfile ExplanationOfBenefit FamilyMemberHistory Flag Goal GraphDefinition Group GuidanceResponse HealthcareService ImagingManifest ImagingStudy Immunization ImmunizationRecommendation ImplementationGuide Library Linkage List Location Measure MeasureReport Media Medication MedicationAdministration MedicationDispense MedicationRequest MedicationStatement MessageDefinition MessageHeader NamingSystem NutritionOrder Observation OperationDefinition OperationOutcome Organization Parameters Patient PaymentNotice PaymentReconciliation Person PlanDefinition Practitioner PractitionerRole Procedure ProcedureRequest ProcessRequest ProcessResponse Provenance Questionnaire QuestionnaireResponse ReferralRequest RelatedPerson RequestGroup ResearchStudy ResearchSubject RiskAssessment Schedule SearchParameter Sequence ServiceDefinition Slot Specimen StructureDefinition StructureMap Subscription Substance SupplyDelivery SupplyRequest Task TestReport TestScript ValueSet VisionPrescription"
+EXTENSIONS="extension-elementdefinition-bindingname extension-structuredefinition-explicit-type-name extension-structuredefinition-regex"
 
 # TODO(sundberg): generate codes.proto
 
@@ -45,4 +47,11 @@ $PROTO_GENERATOR \
   --emit_proto --include_contained_resource \
   --output_directory $OUTPUT_PATH --output_filename resources.proto \
   $(for i in $RESOURCETYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
+
+# generate extensions
+for extension in $EXTENSIONS; do
+  $PROTO_GENERATOR \
+    --emit_proto --output_directory $OUTPUT_PATH \
+    --output_filename ${extension}.proto ${EXTENSION_PATH}/${extension}.json
+done
 

@@ -41,36 +41,46 @@ public class ProtoGeneratorTest {
   private ProtoGenerator protoGenerator;
 
   /** Read the specifed file from the testdata directory into a String. */
-  private String loadFile(String filename) throws IOException {
-    File file = new File("testdata/stu3/structure_definitions/" + filename);
+  private String loadFile(String relativePath) throws IOException {
+    File file = new File("testdata/stu3/" + relativePath);
     return Files.asCharSource(file, StandardCharsets.UTF_8).read();
   }
 
   /** Read and parse the specified StructureDefinition. */
-  private StructureDefinition readStructureDefinition(String messageName) throws IOException {
-    String json = loadFile(messageName.toLowerCase() + ".profile.json");
+  private StructureDefinition readStructureDefinition(String relativePath) throws IOException {
+    String json = loadFile(relativePath);
     StructureDefinition.Builder builder = StructureDefinition.newBuilder();
     jsonParser.merge(json, builder);
     return builder.build();
   }
 
   /** Read and parse the specified DescriptorProto. */
-  private DescriptorProto readDescriptorProto(String messageName) throws IOException {
-    String text = loadFile(messageName.toLowerCase() + ".descriptor.prototxt");
+  private DescriptorProto readDescriptorProto(String relativePath) throws IOException {
+    String text = loadFile(relativePath);
     DescriptorProto.Builder builder = DescriptorProto.newBuilder();
     textParser.merge(text, registry, builder);
     return builder.build();
   }
 
   private void testGeneratedProto(String resourceName) throws IOException {
-    StructureDefinition resource = readStructureDefinition(resourceName);
+    String relativePath = "structure_definitions/" + resourceName.toLowerCase();
+    StructureDefinition resource = readStructureDefinition(relativePath + ".profile.json");
     DescriptorProto generatedProto = protoGenerator.generateProto(resource);
-    DescriptorProto golden = readDescriptorProto(resourceName);
+    DescriptorProto golden = readDescriptorProto(relativePath + ".descriptor.prototxt");
+    assertThat(generatedProto).isEqualTo(golden);
+  }
+
+  private void testGeneratedExtension(String extensionFileName) throws IOException {
+    String relativePath = "extensions/" + extensionFileName;
+    StructureDefinition resource = readStructureDefinition(relativePath + ".json");
+    DescriptorProto generatedProto = protoGenerator.generateProto(resource);
+    DescriptorProto golden = readDescriptorProto(relativePath + ".descriptor.prototxt");
     assertThat(generatedProto).isEqualTo(golden);
   }
 
   private void verifyCompiledDescriptor(Descriptor descriptor) throws IOException {
-    DescriptorProto golden = readDescriptorProto(descriptor.getName());
+    String relativePath = "structure_definitions/" + descriptor.getName().toLowerCase();
+    DescriptorProto golden = readDescriptorProto(relativePath + ".descriptor.prototxt");
     assertThat(descriptor.toProto()).isEqualTo(golden);
   }
 
@@ -86,6 +96,7 @@ public class ProtoGeneratorTest {
     registry.add(Annotations.oneofValidationRequirement);
     registry.add(Annotations.fieldDescription);
     registry.add(Annotations.messageDescription);
+    registry.add(Annotations.fhirExtensionUrl);
     registry.add(Annotations.fhirReferenceType);
   }
 
@@ -1312,5 +1323,25 @@ public class ProtoGeneratorTest {
   @Test
   public void generateXhtml() throws Exception {
     testGeneratedProto("xhtml");
+  }
+
+  // Test generating extensions.
+
+  /** Test generating the elementdefinition-bindingname extension. */
+  @Test
+  public void generateElementDefinitionBindingName() throws Exception {
+    testGeneratedExtension("extension-elementdefinition-bindingname");
+  }
+
+  /** Test generating the structuredefinition-explicit-type-name extension. */
+  @Test
+  public void generateStructureDefinitionExplicitTypeName() throws Exception {
+    testGeneratedExtension("extension-structuredefinition-explicit-type-name");
+  }
+
+  /** Test generating the structuredefinition-regex extension. */
+  @Test
+  public void generateStructureDefinitionRegex() throws Exception {
+    testGeneratedExtension("extension-structuredefinition-regex");
   }
 }

@@ -22,12 +22,12 @@ import "proto/stu3/datatypes.proto";
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.proto";
 
-// Auto-generated from StructureDefinition for explicit-type-name.
-// Advisory - name of Type for implementations.
-message StructureDefinitionExplicitTypeName {
+// Auto-generated from StructureDefinition for regex.
+// Regex applies to the value.
+message StructureDefinitionRegex {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_extension_url) =
-      "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name";
+      "http://hl7.org/fhir/StructureDefinition/structuredefinition-regex";
 
   // Value of extension
   String value_string = 1;

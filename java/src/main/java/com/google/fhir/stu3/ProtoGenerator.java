@@ -28,6 +28,7 @@ import com.google.fhir.stu3.proto.ElementDefinitionBindingName;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.fhir.stu3.proto.StructureDefinitionExplicitTypeName;
 import com.google.fhir.stu3.proto.StructureDefinitionKindCode;
+import com.google.fhir.stu3.proto.TypeDerivationRuleCode;
 import com.google.fhir.stu3.proto.Uri;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
@@ -240,9 +241,26 @@ public class ProtoGenerator {
       generatePrimitiveValue(def, builder.setName(name));
     }
 
-    // Build the actual descriptor, and replace the top-level name. If the first character is
-    // lowercase, assume it needs to be camelcased.
-    return generateMessage(root, elementList, builder).toBuilder().setName(name).build();
+    if (def.getType().getValue().equals("Extension")
+        && def.getDerivation().getValue() == TypeDerivationRuleCode.Value.CONSTRAINT) {
+      // Generate a specialized extension definition.
+      // Get the name of this extension.
+      name = def.getName().getValue();
+      if (name.contains("-")) {
+        name = CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, name);
+      } else if (Character.isLowerCase(name.charAt(0))) {
+        name = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, name);
+      }
+      if (def.getContextCount() == 1) {
+        String resource = Splitter.on('.').splitToList(def.getContext(0).getValue()).get(0);
+        name = resource + name;
+      }
+      builder.setName(name);
+      return generateExtension(root, elementList, builder);
+    } else {
+      // Build the actual descriptor, and replace the top-level name.
+      return generateMessage(root, elementList, builder).toBuilder().setName(name).build();
+    }
   }
 
   /** Generate a .proto file descriptor from a list of StructureDefinitions. */
@@ -253,21 +271,41 @@ public class ProtoGenerator {
     options.setJavaPackage("com." + packageName).setJavaMultipleFiles(true);
     builder.setOptions(options);
     boolean hasPrimitiveType = false;
+    boolean hasCodeType = false;
     for (StructureDefinition def : defs) {
       DescriptorProto proto = generateProto(def);
       if (AnnotationUtils.isPrimitiveType(proto)) {
         hasPrimitiveType = true;
       }
+      if (usesCodeType(proto)) {
+        hasCodeType = true;
+      }
       builder.addMessageType(proto);
     }
     // Add imports. Annotations is always needed; datatypes is needed unless we are building them.
     builder.addDependency(new File(protoRootPath, "annotations.proto").toString());
+    if (hasCodeType && !hasPrimitiveType) {
+      builder.addDependency(new File(protoRootPath, "codes.proto").toString());
+    }
     if (!hasPrimitiveType) {
-      builder
-          .addDependency(new File(protoRootPath, "codes.proto").toString())
-          .addDependency(new File(protoRootPath, "datatypes.proto").toString());
+      builder.addDependency(new File(protoRootPath, "datatypes.proto").toString());
     }
     return builder.build();
+  }
+
+  private boolean usesCodeType(DescriptorProto proto) {
+    for (FieldDescriptorProto field : proto.getFieldList()) {
+      if (field.getType() == FieldDescriptorProto.Type.TYPE_MESSAGE
+          && field.getTypeName().endsWith("Code")) {
+        return true;
+      }
+    }
+    for (DescriptorProto nested : proto.getNestedTypeList()) {
+      if (usesCodeType(nested)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -294,6 +332,63 @@ public class ProtoGenerator {
     return resultBuilder.addMessageType(contained).build();
   }
 
+  DescriptorProto generateExtension(
+      ElementDefinition currentElement,
+      List<ElementDefinition> elementList,
+      DescriptorProto.Builder builder) {
+    List<String> messagePathParts =
+        Splitter.on('.').splitToList(currentElement.getPath().getValue());
+    int nextTag = 1;
+
+    // Loop over the elements.
+    for (ElementDefinition element : elementList) {
+      List<String> parts = Splitter.on('.').splitToList(element.getPath().getValue());
+      if (!element.getPath().getValue().startsWith(currentElement.getPath().getValue() + ".")
+          || parts.size() != messagePathParts.size() + 1) {
+        // Not relevant to the message we're building. Skip.
+        continue;
+      }
+
+      // We handle extensions differently.
+      if ("Extension.url".equals(element.getId().getValue()) && element.getFixed().hasUri()) {
+        builder.setOptions(
+            builder
+                .getOptions()
+                .toBuilder()
+                .setExtension(
+                    Annotations.fhirExtensionUrl, element.getFixed().getUri().getValue()));
+        continue;
+      }
+      if ("Extension.id".equals(element.getId().getValue())) {
+        // We don't allow ids on the extension element itself in this format.
+        continue;
+      }
+      if ("Extension.extension".equals(element.getId().getValue())) {
+        continue;
+      }
+
+      if (isSingleType(element)) {
+        // Generate a single field. If this field doesn't actually exist in this version of the
+        // message, for example, the max attribute is 0, buildField returns null and no field
+        // should be added.
+        FieldDescriptorProto field = buildField(element, elementList, nextTag++);
+        if (field != null) {
+          builder.addField(field);
+        }
+      } else if (element.getPath().getValue().endsWith("[x]")) {
+        // Emit a oneof to handle fhir fields that don't have a fixed type.
+        addChoiceType(element, elementList, nextTag++, builder);
+      } else {
+        // We don't know how to deal with this kind of field. Skip for now.
+        System.out.println("Skipping field: " + element.getPath().getValue());
+        // We still increment the tag number for stability, and to allow manual fixes.
+        nextTag++;
+      }
+    }
+
+    return builder.build();
+  }
+
   DescriptorProto generateMessage(
       ElementDefinition currentElement,
       List<ElementDefinition> elementList,
@@ -308,6 +403,9 @@ public class ProtoGenerator {
         Splitter.on('.').splitToList(currentElement.getPath().getValue());
     // When generating a descriptor for a primitive type, the value part may already be present.
     int nextTag = builder.getFieldCount() + 1;
+
+    // If we're processing extensions, put sub-extensions at the end.
+    ElementDefinition extension = null;
 
     // Loop over the elements.
     for (ElementDefinition element : elementList) {
@@ -340,6 +438,10 @@ public class ProtoGenerator {
         // We still increment the tag number for stability, and to allow manual fixes.
         nextTag++;
       }
+    }
+
+    if (extension != null) {
+      builder.addField(buildField(extension, elementList, nextTag++));
     }
 
     return builder.build();

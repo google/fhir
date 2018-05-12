@@ -18,6 +18,7 @@ import static com.google.common.truth.Truth.assertWithMessage;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
@@ -54,9 +55,8 @@ public final class ProtoFilePrinterTest {
   private ProtoFilePrinter protoPrinter;
 
   /** Read and parse the specified StructureDefinition. */
-  private StructureDefinition readProfile(String messageName) throws IOException {
-    File file = new File(
-        "testdata/stu3/structure_definitions/" + messageName.toLowerCase() + ".profile.json");
+  private StructureDefinition readProfile(String relativePath) throws IOException {
+    File file = new File("testdata/stu3/" + relativePath);
     String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
     StructureDefinition.Builder builder = StructureDefinition.newBuilder();
     jsonParser.merge(json, builder);
@@ -165,12 +165,13 @@ public final class ProtoFilePrinterTest {
     for (Descriptor message : compiled.getMessageTypes()) {
       if (!TYPES_TO_IGNORE.contains(message.getName())
           && !message.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
-        resourceDefinitions.add(readProfile(message.getName()));
+        String relativePath =
+            "structure_definitions/" + message.getName().toLowerCase() + ".profile.json";
+        resourceDefinitions.add(readProfile(relativePath));
       }
     }
     return resourceDefinitions;
   }
-
 
   @Before
   public void setUp() {
@@ -209,12 +210,33 @@ public final class ProtoFilePrinterTest {
   public void generateResources() throws Exception {
     List<StructureDefinition> resourceDefinitions = new ArrayList<>();
     for (FieldDescriptor resource : ContainedResource.getDescriptor().getFields()) {
-      resourceDefinitions.add(readProfile(resource.getMessageType().getName()));
+      String relativePath =
+          "structure_definitions/"
+              + resource.getMessageType().getName().toLowerCase()
+              + ".profile.json";
+      resourceDefinitions.add(readProfile(relativePath));
     }
     FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(resourceDefinitions);
     descriptor = protoGenerator.addContainedResource(descriptor);
     String generated = protoPrinter.print(descriptor);
     String golden = readGolden("resources");
     assertEqualsIgnoreClangFormat(golden, generated);
+  }
+
+  // Test generating a few of the extension protos.
+
+  private void testExtensionProto(String extensionName, String protoName) throws IOException {
+    StructureDefinition extension = readProfile("extensions/" + extensionName + ".json");
+    FileDescriptorProto descriptor =
+        protoGenerator.generateFileDescriptor(ImmutableList.of(extension));
+    String generated = protoPrinter.print(descriptor);
+    String golden = readGolden(protoName);
+    assertEqualsIgnoreClangFormat(golden, generated);
+  }
+
+  /** Test generating elementdefinition_binding_name.proto. */
+  @Test
+  public void generateElementDefinitionBindingName() throws Exception {
+    testExtensionProto("extension-elementdefinition-bindingname", "elementdefinition_binding_name");
   }
 }

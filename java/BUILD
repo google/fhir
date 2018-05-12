@@ -177,6 +177,7 @@ java_test(
     srcs = ["src/test/java/com/google/fhir/stu3/ProtoFilePrinterTest.java"],
     data = [
         "//proto/stu3:testdata",
+        "//testdata/stu3:extensions",
         "//testdata/stu3:structure_definitions",
     ],
     test_class = "com.google.fhir.stu3.ProtoFilePrinterTest",
@@ -199,6 +200,7 @@ java_test(
     size = "medium",
     srcs = ["src/test/java/com/google/fhir/stu3/ProtoGeneratorTest.java"],
     data = [
+        "//testdata/stu3:extensions",
         "//testdata/stu3:structure_definitions",
     ],
     test_class = "com.google.fhir.stu3.ProtoGeneratorTest",
