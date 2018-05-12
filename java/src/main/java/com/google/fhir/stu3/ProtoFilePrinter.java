@@ -147,7 +147,7 @@ public class ProtoFilePrinter {
       if (AnnotationUtils.isPrimitiveType(descriptor)) {
         message
             .append("// See https://www.hl7.org/fhir/datatypes.html#")
-            .append(messageName)
+            .append(messageName.toLowerCase())
             .append("\n");
       } else if (AnnotationUtils.isResource(descriptor)) {
         message
@@ -267,7 +267,7 @@ public class ProtoFilePrinter {
     }
 
     // Add the type of the field.
-    if (field.hasTypeName()) {
+    if (field.getType() == FieldDescriptorProto.Type.TYPE_MESSAGE && field.hasTypeName()) {
       List<String> typeNameParts = Splitter.on('.').splitToList(field.getTypeName());
       List<String> containingTypeParts = Splitter.on('.').splitToList(containingType);
       int numCommon = 0;
@@ -277,8 +277,10 @@ public class ProtoFilePrinter {
         numCommon++;
       }
       message.append(Joiner.on('.').join(typeNameParts.subList(numCommon, typeNameParts.size())));
+    } else if (field.getType().toString().startsWith("TYPE_")) {
+      message.append(field.getType().toString().substring(5).toLowerCase());
     } else {
-      message.append(field.getType());
+      message.append("INVALID_TYPE");
     }
 
     // Add the name and field number.

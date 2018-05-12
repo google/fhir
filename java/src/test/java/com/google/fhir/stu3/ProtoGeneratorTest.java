@@ -66,12 +66,12 @@ public class ProtoGeneratorTest {
     StructureDefinition resource = readStructureDefinition(resourceName);
     DescriptorProto generatedProto = protoGenerator.generateProto(resource);
     DescriptorProto golden = readDescriptorProto(resourceName);
-    assertThat(golden).isEqualTo(generatedProto);
+    assertThat(generatedProto).isEqualTo(golden);
   }
 
   private void verifyCompiledDescriptor(Descriptor descriptor) throws IOException {
     DescriptorProto golden = readDescriptorProto(descriptor.getName());
-    assertThat(golden).isEqualTo(descriptor.toProto());
+    assertThat(descriptor.toProto()).isEqualTo(golden);
   }
 
   @Before
@@ -89,25 +89,24 @@ public class ProtoGeneratorTest {
     registry.add(Annotations.fhirReferenceType);
   }
 
-  // We don't yet generate the FHIR primitive type descriptors. As a result, here we just verify
-  // that the descriptors in testdata/ correspond to the compiled protos in the test binary.
+  // Test the primitive FHIR data types individually. */
 
-  /** Verify the Base64Binary FHIR primitive type. */
+  /** Test generating the Base64Binary FHIR primitive type. */
   @Test
-  public void verifyBase64Binary() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Base64Binary.getDescriptor());
+  public void generateBase64Binary() throws Exception {
+    testGeneratedProto("Base64Binary");
   }
 
-  /** Verify the Boolean FHIR primitive type. */
+  /** Test generating the Boolean FHIR primitive type. */
   @Test
-  public void verifyBoolean() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Boolean.getDescriptor());
+  public void generateBoolean() throws Exception {
+    testGeneratedProto("Boolean");
   }
 
-  /** Verify the Code FHIR primitive type. */
+  /** Test generating the Code FHIR primitive type. */
   @Test
-  public void verifyCode() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Code.getDescriptor());
+  public void generateCode() throws Exception {
+    testGeneratedProto("Code");
   }
 
   /** Verify the Date FHIR primitive type. */
@@ -122,16 +121,16 @@ public class ProtoGeneratorTest {
     verifyCompiledDescriptor(com.google.fhir.stu3.proto.DateTime.getDescriptor());
   }
 
-  /** Verify the Decimal FHIR primitive type. */
+  /** Test generating the Decimal FHIR primitive type. */
   @Test
-  public void verifyDecimal() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Decimal.getDescriptor());
+  public void generateDecimal() throws Exception {
+    testGeneratedProto("Decimal");
   }
 
-  /** Verify the Id FHIR primitive type. */
+  /** Test generating the Id FHIR primitive type. */
   @Test
-  public void verifyId() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Id.getDescriptor());
+  public void generateId() throws Exception {
+    testGeneratedProto("Id");
   }
 
   /** Verify the Instant FHIR primitive type. */
@@ -140,34 +139,34 @@ public class ProtoGeneratorTest {
     verifyCompiledDescriptor(com.google.fhir.stu3.proto.Instant.getDescriptor());
   }
 
-  /** Verify the Integer FHIR primitive type. */
+  /** Test generating the Integer FHIR primitive type. */
   @Test
-  public void verifyInteger() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Integer.getDescriptor());
+  public void generateInteger() throws Exception {
+    testGeneratedProto("Integer");
   }
 
-  /** Verify the Markdown FHIR primitive type. */
+  /** Test generating the Markdown FHIR primitive type. */
   @Test
-  public void verifyMarkdown() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Markdown.getDescriptor());
+  public void generateMarkdown() throws Exception {
+    testGeneratedProto("Markdown");
   }
 
-  /** Verify the Oid FHIR primitive type. */
+  /** Test generating the Oid FHIR primitive type. */
   @Test
-  public void verifyOid() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Oid.getDescriptor());
+  public void generateOid() throws Exception {
+    testGeneratedProto("Oid");
   }
 
-  /** Verify the PositiveInt FHIR primitive type. */
+  /** Test generating the PositiveInt FHIR primitive type. */
   @Test
-  public void verifyPositiveInt() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.PositiveInt.getDescriptor());
+  public void generatePositiveInt() throws Exception {
+    testGeneratedProto("PositiveInt");
   }
 
-  /** Verify the String FHIR primitive type. */
+  /** Test generating the String FHIR primitive type. */
   @Test
-  public void verifyString() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.String.getDescriptor());
+  public void generateString() throws Exception {
+    testGeneratedProto("String");
   }
 
   /** Verify the Time FHIR primitive type. */
@@ -176,16 +175,16 @@ public class ProtoGeneratorTest {
     verifyCompiledDescriptor(com.google.fhir.stu3.proto.Time.getDescriptor());
   }
 
-  /** Verify the UnsignedInt FHIR primitive type. */
+  /** Test generating the UnsignedInt FHIR primitive type. */
   @Test
-  public void verifyUnsignedInt() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.UnsignedInt.getDescriptor());
+  public void generateUnsignedInt() throws Exception {
+    testGeneratedProto("UnsignedInt");
   }
 
-  /** Verify the Uri FHIR primitive type. */
+  /** Test generating the Uri FHIR primitive type. */
   @Test
-  public void verifyUri() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Uri.getDescriptor());
+  public void generateUri() throws Exception {
+    testGeneratedProto("Uri");
   }
 
   // Test the complex FHIR data types individually. */

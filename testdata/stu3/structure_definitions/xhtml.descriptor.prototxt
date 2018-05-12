@@ -1,23 +1,22 @@
 name: "Xhtml"
 field {
-  name: "id"
+  name: "value"
   number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_STRING
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Actual xhtml"
+  }
+}
+field {
+  name: "id"
+  number: 2
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
     [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
-  }
-}
-field {
-  name: "value"
-  number: 3
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto."
-  options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Actual xhtml"
   }
 }
 options {

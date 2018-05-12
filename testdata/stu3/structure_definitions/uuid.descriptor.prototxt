@@ -1,7 +1,16 @@
 name: "Uuid"
 field {
-  name: "id"
+  name: "value"
   number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_STRING
+  options {
+    [google.fhir.stu3.proto.field_description]: "Primitive value for uuid"
+  }
+}
+field {
+  name: "id"
+  number: 2
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
@@ -11,22 +20,12 @@ field {
 }
 field {
   name: "extension"
-  number: 2
+  number: 3
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
     [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
-  }
-}
-field {
-  name: "value"
-  number: 3
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto."
-  options {
-    [google.fhir.stu3.proto.field_description]: "Primitive value for uuid"
   }
 }
 options {

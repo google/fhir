@@ -4,6 +4,9 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_SINT32
+  options {
+    [google.fhir.stu3.proto.field_description]: "Primitive value for integer"
+  }
 }
 field {
   name: "id"
@@ -11,6 +14,9 @@ field {
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
 }
 field {
   name: "extension"
@@ -18,7 +24,11 @@ field {
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+  }
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for integer.\nPrimitive Type integer."
 }

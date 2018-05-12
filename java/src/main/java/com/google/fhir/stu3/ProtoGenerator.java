@@ -25,6 +25,8 @@ import com.google.fhir.stu3.proto.ElementDefinition;
 import com.google.fhir.stu3.proto.ElementDefinitionBindingName;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.fhir.stu3.proto.StructureDefinitionExplicitTypeName;
+import com.google.fhir.stu3.proto.StructureDefinitionKindCode;
+import com.google.fhir.stu3.proto.Uri;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldOptions;
@@ -47,13 +49,15 @@ import java.util.TreeSet;
 /** A class which turns FHIR StructureDefinitions into protocol messages. */
 public class ProtoGenerator {
 
-  private final ImmutableMap<String, String> fieldTypeMap;
-
   // Certain type names are reserved symbols in various languages.
-  private static final ImmutableMap<String, String> reservedTypeNames =
+  private static final ImmutableMap<String, String> RESERVED_TYPE_NAMES =
       ImmutableMap.of("Object", "ObjectType");
 
-  private static final ImmutableMap<String, String> renamedCodeTypes = getRenamedCodeTypes();
+  // Map of primitive type ids to proto message names.
+  private static final ImmutableMap<String, String> FIELD_TYPE_MAP = getFieldTypeMap();
+
+  // For various reasons, we rename certain codes.
+  private static final ImmutableMap<String, String> RENAMED_CODE_TYPES = getRenamedCodeTypes();
 
   // Certain field names are reserved symbols in various languages.
   private static final ImmutableMap<String, String> reservedFieldNames =
@@ -67,7 +71,15 @@ public class ProtoGenerator {
   private static final String STRUCTURE_DEFINITION_PREFIX =
       "http://hl7.org/fhir/StructureDefinition/";
 
-  // Use custom types for constrained references
+  private static final ImmutableMap<String, FieldDescriptorProto.Type> PRIMITIVE_TYPE_OVERRIDES =
+      ImmutableMap.of(
+          "base64Binary", FieldDescriptorProto.Type.TYPE_BYTES,
+          "boolean", FieldDescriptorProto.Type.TYPE_BOOL,
+          "integer", FieldDescriptorProto.Type.TYPE_SINT32,
+          "positiveInt", FieldDescriptorProto.Type.TYPE_UINT32,
+          "unsignedInt", FieldDescriptorProto.Type.TYPE_UINT32);
+
+  // Should we use custom types for constrained references?
   private static final boolean USE_TYPED_REFERENCES = false;
 
   private final String packageName;
@@ -76,6 +88,9 @@ public class ProtoGenerator {
   public ProtoGenerator(String packageName, String protoRootPath) {
     this.packageName = packageName;
     this.protoRootPath = protoRootPath;
+  }
+
+  private static ImmutableMap<String, String> getFieldTypeMap() {
     Map<String, String> fieldTypeMap = new HashMap<>();
     fieldTypeMap.put("base64Binary", "Base64Binary");
     fieldTypeMap.put("boolean", "Boolean");
@@ -95,7 +110,7 @@ public class ProtoGenerator {
     fieldTypeMap.put("uri", "Uri");
     fieldTypeMap.put("xhtml", "String");
     fieldTypeMap.put("Resource", "ContainedResource");
-    this.fieldTypeMap = ImmutableMap.copyOf(fieldTypeMap);
+    return ImmutableMap.copyOf(fieldTypeMap);
   }
 
   private static ImmutableMap<String, String> getRenamedCodeTypes() {
@@ -175,12 +190,22 @@ public class ProtoGenerator {
             .setExtension(Annotations.messageDescription, comment.toString())
             .build());
 
-    // Build the actual descriptor, and replace the top-level name. If the first character is
-    // lowercase, assume it needs to be camelcased.
+    // Build the name of the descriptor.
     String name = def.getId().getValue();
     if (Character.isLowerCase(name.charAt(0))) {
       name = CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, name);
     }
+
+    // If this is a primitive type, generate the value field first.
+    if (def.getKind().getValue() == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE) {
+      generatePrimitiveValue(def, builder);
+      // Fix up the name. TODO(sundberg): remove the Xhtml special case.
+      name =
+          "Xhtml".equals(name) ? name : FIELD_TYPE_MAP.getOrDefault(def.getId().getValue(), name);
+    }
+
+    // Build the actual descriptor, and replace the top-level name. If the first character is
+    // lowercase, assume it needs to be camelcased.
     return generateMessage(root, elementList, builder).toBuilder().setName(name).build();
   }
 
@@ -233,7 +258,8 @@ public class ProtoGenerator {
 
     List<String> messagePathParts =
         Splitter.on('.').splitToList(currentElement.getPath().getValue());
-    int nextTag = 1;
+    // When generating a descriptor for a primitive type, the value part may already be present.
+    int nextTag = builder.getFieldCount() + 1;
 
     // Loop over the elements.
     for (ElementDefinition element : elementList) {
@@ -269,6 +295,29 @@ public class ProtoGenerator {
     }
 
     return builder.build();
+  }
+
+  /** Generate the primitive value part of a datatype. */
+  private void generatePrimitiveValue(StructureDefinition def, DescriptorProto.Builder builder) {
+    // Find the value field.
+    String valueFieldId = def.getId().getValue() + ".value";
+    FieldDescriptorProto.Type primitiveType =
+        PRIMITIVE_TYPE_OVERRIDES.getOrDefault(
+            def.getId().getValue(), FieldDescriptorProto.Type.TYPE_STRING);
+    ElementDefinition.TypeRef mockType =
+        ElementDefinition.TypeRef.newBuilder().setCode(Uri.newBuilder().setValue("string")).build();
+    for (ElementDefinition element : def.getSnapshot().getElementList()) {
+      if (valueFieldId.equals(element.getId().getValue())) {
+        // The value field typically has no type. We need to add a fake one here.
+        ElementDefinition elementWithType =
+            element.toBuilder().clearType().addType(mockType).build();
+        FieldDescriptorProto field =
+            buildField(elementWithType, null /* no nested types */, 1 /* nextTag */);
+        if (field != null) {
+          builder.addField(field.toBuilder().clearTypeName().setType(primitiveType));
+        }
+      }
+    }
   }
 
   /**
@@ -348,8 +397,8 @@ public class ProtoGenerator {
       String typeName;
       if (!typeNames.isEmpty()) {
         typeName = typeNames.get(0).getValueString().getValue();
-      } else if (reservedTypeNames.containsKey(part)) {
-        typeName = reservedTypeNames.get(part);
+      } else if (RESERVED_TYPE_NAMES.containsKey(part)) {
+        typeName = RESERVED_TYPE_NAMES.get(part);
       } else {
         typeName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, part);
       }
@@ -371,9 +420,9 @@ public class ProtoGenerator {
     // Either this field is of a primitive type, or the type code should be
     // copied verbatim.
     String typeCode = typeList.get(0).getCode().getValue();
-    if (fieldTypeMap.containsKey(typeCode)) {
+    if (FIELD_TYPE_MAP.containsKey(typeCode)) {
       // This field is of a primitive type.
-      return fieldTypeMap.get(typeCode);
+      return FIELD_TYPE_MAP.get(typeCode);
     } else if (typeCode.equals("Reference") && USE_TYPED_REFERENCES) {
       // Sort.
       Set<String> refTypes = new TreeSet<>();
@@ -426,6 +475,10 @@ public class ProtoGenerator {
 
     // Deduce the type of the field.
     String fieldType;
+    if (element.getTypeCount() == 1 && element.getType(0).getCode().getValue().isEmpty()) {
+      // This happens for primitive types; we ignore those here.
+      return null;
+    }
     if (isContainer(element) || element.hasContentReference() || isChoiceType) {
       // Get the type for this container, possibly from a named reference to another element.
       fieldType = getContainerType(element, elementList);
@@ -433,9 +486,7 @@ public class ProtoGenerator {
       fieldType = getFieldType(element.getTypeList());
       if (fieldType.equals("Code") && bindingName != null) {
         fieldType = bindingName + "Code";
-        if (renamedCodeTypes.containsKey(fieldType)) {
-          fieldType = renamedCodeTypes.get(fieldType);
-        }
+        fieldType = RENAMED_CODE_TYPES.getOrDefault(fieldType, fieldType);
       }
     }
 
@@ -542,8 +593,8 @@ public class ProtoGenerator {
 
     List<String> fieldTypeParts = new ArrayList<>();
     for (String part : Splitter.on('.').split(fieldType)) {
-      if (reservedTypeNames.containsKey(part)) {
-        fieldTypeParts.add(reservedTypeNames.get(fieldType));
+      if (RESERVED_TYPE_NAMES.containsKey(part)) {
+        fieldTypeParts.add(RESERVED_TYPE_NAMES.get(fieldType));
       } else {
         fieldTypeParts.add(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, part));
       }
