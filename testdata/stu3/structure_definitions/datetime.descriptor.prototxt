@@ -4,6 +4,9 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_INT64
+  options {
+    [google.fhir.stu3.proto.field_description]: "Primitive value for dateTime"
+  }
 }
 field {
   name: "timezone"
@@ -24,6 +27,9 @@ field {
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
 }
 field {
   name: "extension"
@@ -31,6 +37,9 @@ field {
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+  }
 }
 enum_type {
   name: "Precision"
@@ -65,4 +74,5 @@ enum_type {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for dateTime.\nPrimitive Type dateTime."
 }

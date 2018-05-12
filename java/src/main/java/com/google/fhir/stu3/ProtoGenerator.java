@@ -17,7 +17,9 @@ package com.google.fhir.stu3;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.BindingStrengthCode;
 import com.google.fhir.stu3.proto.ContainedResource;
@@ -28,6 +30,8 @@ import com.google.fhir.stu3.proto.StructureDefinitionExplicitTypeName;
 import com.google.fhir.stu3.proto.StructureDefinitionKindCode;
 import com.google.fhir.stu3.proto.Uri;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
+import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
+import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
@@ -56,6 +60,17 @@ public class ProtoGenerator {
   // Map of primitive type ids to proto message names.
   private static final ImmutableMap<String, String> FIELD_TYPE_MAP = getFieldTypeMap();
 
+  // Map of time-like primitive type ids to supported granularity
+  private static final ImmutableMap<String, List<String>> TIME_LIKE_PRECISION_MAP =
+      ImmutableMap.of(
+          "date", ImmutableList.of("YEAR", "MONTH", "DAY"),
+          "dateTime",
+              ImmutableList.of("YEAR", "MONTH", "DAY", "SECOND", "MILLISECOND", "MICROSECOND"),
+          "instant", ImmutableList.of("SECOND", "MILLISECOND", "MICROSECOND"),
+          "time", ImmutableList.of("SECOND", "MILLISECOND", "MICROSECOND"));
+  private static final ImmutableSet<String> TYPES_WITH_TIMEZONE =
+      ImmutableSet.of("date", "dateTime", "instant");
+
   // For various reasons, we rename certain codes.
   private static final ImmutableMap<String, String> RENAMED_CODE_TYPES = getRenamedCodeTypes();
 
@@ -70,6 +85,24 @@ public class ProtoGenerator {
 
   private static final String STRUCTURE_DEFINITION_PREFIX =
       "http://hl7.org/fhir/StructureDefinition/";
+
+  private static final EnumDescriptorProto PRECISION_ENUM =
+      EnumDescriptorProto.newBuilder()
+          .setName("Precision")
+          .addValue(
+              EnumValueDescriptorProto.newBuilder()
+                  .setName("PRECISION_UNSPECIFIED")
+                  .setNumber(0)
+                  .build())
+          .build();
+
+  private static final FieldDescriptorProto TIMEZONE_FIELD =
+      FieldDescriptorProto.newBuilder()
+          .setName("timezone")
+          .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+          .setType(FieldDescriptorProto.Type.TYPE_STRING)
+          .setNumber(2)
+          .build();
 
   private static final ImmutableMap<String, FieldDescriptorProto.Type> PRIMITIVE_TYPE_OVERRIDES =
       ImmutableMap.of(
@@ -198,10 +231,10 @@ public class ProtoGenerator {
 
     // If this is a primitive type, generate the value field first.
     if (def.getKind().getValue() == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE) {
-      generatePrimitiveValue(def, builder);
       // Fix up the name. TODO(sundberg): remove the Xhtml special case.
       name =
           "Xhtml".equals(name) ? name : FIELD_TYPE_MAP.getOrDefault(def.getId().getValue(), name);
+      generatePrimitiveValue(def, builder.setName(name));
     }
 
     // Build the actual descriptor, and replace the top-level name. If the first character is
@@ -314,7 +347,35 @@ public class ProtoGenerator {
         FieldDescriptorProto field =
             buildField(elementWithType, null /* no nested types */, 1 /* nextTag */);
         if (field != null) {
-          builder.addField(field.toBuilder().clearTypeName().setType(primitiveType));
+          if (TIME_LIKE_PRECISION_MAP.containsKey(def.getId().getValue())) {
+            // Handle time-like types differently.
+            EnumDescriptorProto.Builder enumBuilder = PRECISION_ENUM.toBuilder();
+            for (String value : TIME_LIKE_PRECISION_MAP.get(def.getId().getValue())) {
+              enumBuilder.addValue(
+                  EnumValueDescriptorProto.newBuilder()
+                      .setName(value)
+                      .setNumber(enumBuilder.getValueCount()));
+            }
+            builder.addEnumType(enumBuilder);
+            builder.addField(
+                field
+                    .toBuilder()
+                    .clearTypeName()
+                    .setType(FieldDescriptorProto.Type.TYPE_INT64)
+                    .setName("value_us"));
+            if (TYPES_WITH_TIMEZONE.contains(def.getId().getValue())) {
+              builder.addField(TIMEZONE_FIELD);
+            }
+            builder.addField(
+                FieldDescriptorProto.newBuilder()
+                    .setName("precision")
+                    .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                    .setType(FieldDescriptorProto.Type.TYPE_ENUM)
+                    .setTypeName("." + packageName + "." + builder.getName() + ".Precision")
+                    .setNumber(builder.getFieldCount() + 1));
+          } else {
+            builder.addField(field.toBuilder().clearTypeName().setType(primitiveType));
+          }
         }
       }
     }

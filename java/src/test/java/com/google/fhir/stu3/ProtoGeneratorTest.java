@@ -109,16 +109,16 @@ public class ProtoGeneratorTest {
     testGeneratedProto("Code");
   }
 
-  /** Verify the Date FHIR primitive type. */
+  /** Test generating the Date FHIR primitive type. */
   @Test
-  public void verifyDate() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Date.getDescriptor());
+  public void generateDate() throws Exception {
+    testGeneratedProto("Date");
   }
 
-  /** Verify the DateTime FHIR primitive type. */
+  /** Test generating the DateTime FHIR primitive type. */
   @Test
-  public void verifyDateTime() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.DateTime.getDescriptor());
+  public void generateDateTime() throws Exception {
+    testGeneratedProto("DateTime");
   }
 
   /** Test generating the Decimal FHIR primitive type. */
@@ -133,10 +133,10 @@ public class ProtoGeneratorTest {
     testGeneratedProto("Id");
   }
 
-  /** Verify the Instant FHIR primitive type. */
+  /** Test generating the Instant FHIR primitive type. */
   @Test
-  public void verifyInstant() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Instant.getDescriptor());
+  public void generateInstant() throws Exception {
+    testGeneratedProto("Instant");
   }
 
   /** Test generating the Integer FHIR primitive type. */
@@ -169,10 +169,10 @@ public class ProtoGeneratorTest {
     testGeneratedProto("String");
   }
 
-  /** Verify the Time FHIR primitive type. */
+  /** Test generating the Time FHIR primitive type. */
   @Test
-  public void verifyTime() throws Exception {
-    verifyCompiledDescriptor(com.google.fhir.stu3.proto.Time.getDescriptor());
+  public void generateTime() throws Exception {
+    testGeneratedProto("Time");
   }
 
   /** Test generating the UnsignedInt FHIR primitive type. */
