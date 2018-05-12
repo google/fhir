@@ -9,9 +9,12 @@ java_library(
     deps = [
         "//external:gson",
         "//external:guava",
+        "//proto/stu3:annotations_java_proto",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
         "//proto/stu3:resources_java_proto",
+        "@com_google_protobuf//:descriptor_proto",
+        "@com_google_protobuf//:protobuf_java",
     ],
 )
 
@@ -25,6 +28,7 @@ java_binary(
         ":stu3",
         "//external:guava",
         "//proto/stu3:resources_java_proto",
+        "@com_google_protobuf//:protobuf_java",
         "@com_google_protobuf//:protobuf_java_util",
     ],
 )
@@ -39,6 +43,7 @@ java_binary(
         ":stu3",
         "//external:guava",
         "//proto/stu3:resources_java_proto",
+        "@com_google_protobuf//:protobuf_java",
         "@com_google_protobuf//:protobuf_java_util",
     ],
 )
@@ -54,6 +59,7 @@ java_binary(
         "//external:guava",
         "//external:jcommander",
         "//proto/stu3:resources_java_proto",
+        "@com_google_protobuf//:protobuf_java",
         "@com_google_protobuf//:protobuf_java_util",
     ],
 )
@@ -69,6 +75,7 @@ java_test(
         "//external:truth",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:resources_java_proto",
+        "@com_google_protobuf//:protobuf_java",
     ],
 )
 
@@ -126,6 +133,7 @@ java_test(
         "//external:truth",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
+        "@com_google_protobuf//:protobuf_java",
     ],
 )
 
@@ -157,6 +165,7 @@ java_test(
         "//external:junit",
         "//external:truth",
         "//proto/stu3:resources_java_proto",
+        "@com_google_protobuf//:protobuf_java",
     ],
 )
 
@@ -193,6 +202,7 @@ java_test(
         "//external:guava",
         "//external:junit",
         "//external:truth",
+        "//proto/stu3:annotations_java_proto",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:resources_java_proto",
         "@com_google_protobuf//:descriptor_proto",
@@ -227,5 +237,6 @@ java_test(
         "//external:junit",
         "//external:truth",
         "//proto/stu3:datatypes_java_proto",
+        "@com_google_protobuf//:protobuf_java",
     ],
 )
