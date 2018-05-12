@@ -12,7 +12,7 @@ $ bazel test //...
 For some ideas of how to use this code, see the [examples](./examples/):
 
 * [Querying with BigQuery](./examples/bigquery/README.md)
-* [Converting FHIR json to proto](./java/src/main/java/com/google/fhir/examples/FhirToProtoMain.java)
+* [Converting FHIR json to proto](./java/src/main/java/com/google/fhir/examples/JsonToProtoMain.java)
 
 This is still an early version, subject to change. For some background, please
 see our blog post. Support for c++, go, and python is coming soon.
