@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class SplitBundleMain {
 
-  public static void main(java.lang.String[] args) throws IOException {
+  public static void main(String[] args) throws IOException {
     Parser fhirParser = com.google.fhir.stu3.JsonFormat.getParser();
     Printer protoPrinter =
         com.google.protobuf.util.JsonFormat.printer().omittingInsignificantWhitespace();

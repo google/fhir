@@ -33,7 +33,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,7 +90,7 @@ class ProtoGeneratorMain {
       names = {"--proto_root"},
       description = "Generated proto import root path"
     )
-    private String protoRoot = "proto/stu3";
+    private String protoRoot = "third_party/fhir/proto/stu3";
 
     @Parameter(description = "List of input files")
     private List<String> inputFiles = new ArrayList<>();
@@ -107,14 +106,12 @@ class ProtoGeneratorMain {
     JsonFormat.Parser jsonParser = JsonFormat.getParser();
 
     // Read the inputs in sequence.
-    ArrayList<String> inputFiles = new ArrayList();
     ArrayList<StructureDefinition> definitions = new ArrayList<>();
     for (String filename : args.inputFiles) {
       writer.println("Reading " + filename + "...");
 
       File file = new File(filename);
-      inputFiles.add(file.getName());
-      String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
+      String json = Files.asCharSource(file, UTF_8).read();
       StructureDefinition.Builder builder = StructureDefinition.newBuilder();
       jsonParser.merge(json, builder);
       definitions.add(builder.build());
@@ -135,7 +132,7 @@ class ProtoGeneratorMain {
       writer.println("Writing " + args.outputFilename + "...");
       writer.flush();
       File outputFile = new File(args.outputDirectory, args.outputFilename);
-      Files.asCharSink(outputFile, StandardCharsets.UTF_8).write(protoFileContents);
+      Files.asCharSink(outputFile, UTF_8).write(protoFileContents);
     }
 
     if (args.emitDescriptors) {
@@ -146,8 +143,7 @@ class ProtoGeneratorMain {
         File outputFile =
             new File(
                 args.outputDirectory, descriptor.getName().toLowerCase() + ".descriptor.prototxt");
-        Files.asCharSink(outputFile, StandardCharsets.UTF_8)
-            .write(TextFormat.printToString(descriptor));
+        Files.asCharSink(outputFile, UTF_8).write(TextFormat.printToString(descriptor));
       }
     }
   }

@@ -20,6 +20,7 @@ import com.google.fhir.stu3.JsonFormat.Parser;
 import com.google.fhir.stu3.ResourceUtils;
 import com.google.fhir.stu3.proto.ContainedResource;
 import com.google.protobuf.Message;
+import com.google.protobuf.util.JsonFormat;
 import com.google.protobuf.util.JsonFormat.Printer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -30,28 +31,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This example reads FHIR resources in standard ndjson format, and emits protobuf ndjson files,
- * suitable for loading into a database like BigQuery.
+ * This example reads FHIR resources in standard ndjson format, containing one message per line, and
+ * multiple messages per file. It emits protobuf ndjson files, suitable for loading into a database
+ * like BigQuery. At a high level, the main difference between the input and output formats is that
+ * proto-json can be mapped to a standard db schema unchanged, whereas FHIR json can not. For a more
+ * detailed explanation of the differences, see the main FHIR protobuf documentation.
  */
-public class FhirToProtoMain {
+public class ConvertNdJsonForBigQueryMain {
 
-  public static void main(java.lang.String[] args) throws IOException {
-    // Each non-flag argument is assumed to be an input file.
-    Parser fhirParser = com.google.fhir.stu3.JsonFormat.getParser();
-    Printer protoPrinter =
-        com.google.protobuf.util.JsonFormat.printer().omittingInsignificantWhitespace();
+  public static void main(String[] argv) throws IOException {
+    JsonParserArgs args = new JsonParserArgs(argv);
+    Parser fhirParser = Parser.newBuilder().withDefaultTimeZone(args.getDefaultTimezone()).build();
+    Printer protoPrinter = JsonFormat.printer().omittingInsignificantWhitespace();
 
     // Process the input files one by one, and count the number of processed resources.
     Map<String, Integer> counts = new HashMap<>();
-    for (String file : args) {
-      System.out.println("Processing " + file + "...");
-      BufferedReader input = Files.newBufferedReader(Paths.get(file));
-      BufferedWriter output = Files.newBufferedWriter(Paths.get(file + ".out"), UTF_8);
+    for (JsonParserArgs.InputOutputFilePair entry : args.getInputOutputFilePairs()) {
+      System.out.println("Processing " + entry.input + "...");
+      BufferedReader input = Files.newBufferedReader(Paths.get(entry.input.toString()), UTF_8);
+      BufferedWriter output = Files.newBufferedWriter(Paths.get(entry.output.toString()), UTF_8);
       for (String line = input.readLine(); line != null; line = input.readLine()) {
         // We parse as a ContainedResource, because we don't know what type of resource this is.
         ContainedResource.Builder builder = ContainedResource.newBuilder();
         fhirParser.merge(line, builder);
-        // Extract and print the (one) parsed field.
+        // Extract and print the (one) parsed resource.
         Message parsed = ResourceUtils.getContainedResource(builder.build());
         protoPrinter.appendTo(parsed, output);
         output.newLine();
@@ -62,7 +65,10 @@ public class FhirToProtoMain {
       }
       output.close();
     }
-    System.out.println("Processed " + args.length + " input files. Total number of resources:");
+    System.out.println(
+        "Processed "
+            + args.getInputOutputFilePairs().size()
+            + " input files. Total number of resources:");
     for (Map.Entry<String, Integer> count : counts.entrySet()) {
       System.out.println(count.getKey() + ": " + count.getValue());
     }
