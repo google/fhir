@@ -18,14 +18,19 @@ import static com.google.common.truth.Truth.assertWithMessage;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
 import com.google.common.io.Files;
+import com.google.fhir.stu3.proto.Annotations;
+import com.google.fhir.stu3.proto.ContactDetail;
 import com.google.fhir.stu3.proto.ContainedResource;
+import com.google.fhir.stu3.proto.Extension;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
+import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Descriptors.FileDescriptor;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -112,6 +117,9 @@ public final class ProtoFilePrinterTest {
           }
         }
       }
+      if (value.contains("End of auto-generated messages.")) {
+        return result;
+      }
       if (!value.isEmpty()) {
         result.put(current.getKey(), value);
       }
@@ -149,14 +157,20 @@ public final class ProtoFilePrinterTest {
     }
   }
 
-  private void testGeneratedProto(String resourceName) throws IOException {
-    StructureDefinition resource = readProfile(resourceName);
-    FileDescriptorProto descriptor =
-        protoGenerator.generateFileDescriptor(ImmutableList.of(resource));
-    String generated = protoPrinter.print(descriptor);
-    String golden = readGolden(resourceName);
-    assertEqualsIgnoreClangFormat(golden, generated);
+  private static final ImmutableSet<String> TYPES_TO_IGNORE =
+      ImmutableSet.of("Extension", "Reference", "ReferenceId");
+
+  private List<StructureDefinition> getResourcesInFile(FileDescriptor compiled) throws IOException {
+    List<StructureDefinition> resourceDefinitions = new ArrayList<>();
+    for (Descriptor message : compiled.getMessageTypes()) {
+      if (!TYPES_TO_IGNORE.contains(message.getName())
+          && !message.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
+        resourceDefinitions.add(readProfile(message.getName()));
+      }
+    }
+    return resourceDefinitions;
   }
+
 
   @Before
   public void setUp() {
@@ -166,9 +180,31 @@ public final class ProtoFilePrinterTest {
     protoPrinter = new ProtoFilePrinter().withApacheLicense();
   }
 
-  // TODO(sundberg): Test the basic FHIR data types.
+  // TODO(sundberg): Test the FHIR code types.
 
-  /** Test generating the main FHIR resource proto. */
+  /** Test generating datatypes.proto. */
+  @Test
+  public void generateDataTypes() throws Exception {
+    List<StructureDefinition> resourceDefinitions =
+        getResourcesInFile(Extension.getDescriptor().getFile());
+    FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(resourceDefinitions);
+    String generated = protoPrinter.print(descriptor);
+    String golden = readGolden("datatypes");
+    assertEqualsIgnoreClangFormat(golden, generated);
+  }
+
+  /** Test generating metadatatypes.proto. */
+  @Test
+  public void generateMetadataTypes() throws Exception {
+    List<StructureDefinition> resourceDefinitions =
+        getResourcesInFile(ContactDetail.getDescriptor().getFile());
+    FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(resourceDefinitions);
+    String generated = protoPrinter.print(descriptor);
+    String golden = readGolden("metadatatypes");
+    assertEqualsIgnoreClangFormat(golden, generated);
+  }
+
+  /** Test generating resources.proto. */
   @Test
   public void generateResources() throws Exception {
     List<StructureDefinition> resourceDefinitions = new ArrayList<>();

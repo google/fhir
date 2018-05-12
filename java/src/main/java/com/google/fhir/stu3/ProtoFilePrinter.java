@@ -20,6 +20,8 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
+import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
+import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
@@ -232,6 +234,36 @@ public class ProtoFilePrinter {
     return message.toString();
   }
 
+  private String printEnum(EnumDescriptorProto descriptor, String typePrefix, String packageName) {
+    // Get the name of this message.
+    String messageName = descriptor.getName();
+
+    CharMatcher matcher = CharMatcher.is('.');
+    String indent =
+        Strings.repeat("  ", matcher.countIn(typePrefix) - matcher.countIn(packageName));
+    StringBuilder message = new StringBuilder();
+
+    // Start the enum.
+    message.append(indent).append("enum ").append(messageName).append(" {\n");
+
+    String fieldIndent = indent + "  ";
+
+    // Loop over the elements.
+    for (EnumValueDescriptorProto field : descriptor.getValueList()) {
+      message
+          .append(fieldIndent)
+          .append(field.getName())
+          .append(" = ")
+          .append(field.getNumber())
+          .append(";\n");
+    }
+
+    // Close the enum.
+    message.append(indent).append("}\n");
+
+    return message.toString();
+  }
+
   private String maybePrintNestedType(
       DescriptorProto descriptor,
       FieldDescriptorProto field,
@@ -239,16 +271,24 @@ public class ProtoFilePrinter {
       String packageName,
       Set<String> alreadyPrinted) {
     String prefix = typePrefix + "." + descriptor.getName();
-    if (field.getType() == FieldDescriptorProto.Type.TYPE_MESSAGE
-        && field.hasTypeName()
+    if (field.hasTypeName()
         && field.getTypeName().startsWith(prefix + ".")
         && !alreadyPrinted.contains(field.getTypeName())) {
       List<String> typeNameParts = Splitter.on('.').splitToList(field.getTypeName());
       String typeName = typeNameParts.get(typeNameParts.size() - 1);
-      for (DescriptorProto nested : descriptor.getNestedTypeList()) {
-        if (nested.getName().equals(typeName)) {
-          alreadyPrinted.add(field.getTypeName());
-          return printMessage(nested, prefix, packageName);
+      if (field.getType() == FieldDescriptorProto.Type.TYPE_MESSAGE) {
+        for (DescriptorProto nested : descriptor.getNestedTypeList()) {
+          if (nested.getName().equals(typeName)) {
+            alreadyPrinted.add(field.getTypeName());
+            return printMessage(nested, prefix, packageName);
+          }
+        }
+      } else if (field.getType() == FieldDescriptorProto.Type.TYPE_ENUM) {
+        for (EnumDescriptorProto nested : descriptor.getEnumTypeList()) {
+          if (nested.getName().equals(typeName)) {
+            alreadyPrinted.add(field.getTypeName());
+            return printEnum(nested, prefix, packageName);
+          }
         }
       }
     }
@@ -267,7 +307,9 @@ public class ProtoFilePrinter {
     }
 
     // Add the type of the field.
-    if (field.getType() == FieldDescriptorProto.Type.TYPE_MESSAGE && field.hasTypeName()) {
+    if ((field.getType() == FieldDescriptorProto.Type.TYPE_MESSAGE
+            || field.getType() == FieldDescriptorProto.Type.TYPE_ENUM)
+        && field.hasTypeName()) {
       List<String> typeNameParts = Splitter.on('.').splitToList(field.getTypeName());
       List<String> containingTypeParts = Splitter.on('.').splitToList(containingType);
       int numCommon = 0;

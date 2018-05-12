@@ -187,7 +187,7 @@ nested_type {
     number: 14
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.DayOfWeekCode"
+    type_name: ".google.fhir.stu3.proto.DaysOfWeekCode"
     options {
       [google.fhir.stu3.proto.field_description]: "mon | tue | wed | thu | fri | sat | sun"
     }

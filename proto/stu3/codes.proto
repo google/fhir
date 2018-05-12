@@ -43,6 +43,171 @@ message AbstractTypeCode {
   repeated Extension extension = 3;
 }
 
+// How resource references can be aggregated.
+// See http://hl7.org/fhir/ValueSet/resource-aggregation-mode
+message AggregationModeCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/resource-aggregation-mode";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    CONTAINED = 1;
+    REFERENCED = 2;
+    BUNDLED = 3;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// Indication of the degree of conformance expectations associated with a
+// binding. See http://hl7.org/fhir/ValueSet/binding-strength
+message BindingStrengthCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/binding-strength";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    REQUIRED = 1;
+    EXTENSIBLE = 2;
+    PREFERRED = 3;
+    EXAMPLE = 4;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// SHALL applications comply with this constraint?
+// See http://hl7.org/fhir/ValueSet/constraint-severity
+message ConstraintSeverityCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/constraint-severity";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ERROR = 1;
+    WARNING = 2;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// How slices are interpreted when evaluating an instance.
+// See http://hl7.org/fhir/ValueSet/resource-slicing-rules
+message SlicingRulesCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/resource-slicing-rules";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    CLOSED = 1;
+    OPEN = 2;
+    OPEN_AT_END = 3 [(fhir_original_code) = "openAtEnd"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// How an element value is interpreted when discrimination is evaluated
+// See http://hl7.org/fhir/ValueSet/discriminator-type
+message DiscriminatorTypeCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/discriminator-type";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    VALUE = 1;
+    EXISTS = 2;
+    PATTERN = 3;
+    TYPE = 4;
+    PROFILE = 5;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// How a property is represented when serialized.
+// See http://hl7.org/fhir/ValueSet/property-representation
+message PropertyRepresentationCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/property-representation";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    XML_ATTR = 1 [(fhir_original_code) = "xmlAttr"];
+    XML_TEXT = 2 [(fhir_original_code) = "xmlText"];
+    TYPE_ATTR = 3 [(fhir_original_code) = "typeAttr"];
+    CDA_TEXT = 4 [(fhir_original_code) = "cdaText"];
+    XHTML = 5;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// Whether a reference needs to be version specific or version independent, or
+// whether either can be used See
+// http://hl7.org/fhir/ValueSet/reference-version-rules
+message ReferenceVersionRulesCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/reference-version-rules";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    EITHER = 1;
+    INDEPENDENT = 2;
+    SPECIFIC = 3;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
 // Indicates whether the account is available to be used.
 // See http://hl7.org/fhir/ValueSet/account-status
 message AccountStatusCode {
@@ -1813,6 +1978,29 @@ message ContractResourceStatusCode {
   repeated Extension extension = 3;
 }
 
+// The type of contributor
+// See http://hl7.org/fhir/ValueSet/contributor-type
+message ContributorTypeCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/contributor-type";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    AUTHOR = 1;
+    EDITOR = 2;
+    REVIEWER = 3;
+    ENDORSER = 4;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
 // Copy Number Event
 // See http://hl7.org/fhir/ValueSet/copy-number-event
 message CopyNumberEventCode {
@@ -1891,6 +2079,32 @@ message DataElementStringencyCode {
   repeated Extension extension = 3;
 }
 
+// The type of trigger
+// See http://hl7.org/fhir/ValueSet/trigger-type
+message TriggerTypeCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/trigger-type";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    NAMED_EVENT = 1;
+    PERIODIC = 2;
+    DATA_ADDED = 3;
+    DATA_MODIFIED = 4;
+    DATA_REMOVED = 5;
+    DATA_ACCESSED = 6;
+    DATA_ACCESS_ENDED = 7;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
 // The type of an element - one of the FHIR data types.
 // See http://hl7.org/fhir/ValueSet/data-types
 message DataTypeCode {
@@ -1954,6 +2168,206 @@ message DataTypeCode {
     URI = 52;
     UUID = 53;
     XHTML = 54;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// Either an abstract type, a resource or a data type.
+// See http://hl7.org/fhir/ValueSet/all-types
+message FHIRAllTypesCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/all-types";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ADDRESS = 1 [(fhir_original_code) = "Address"];
+    AGE = 2 [(fhir_original_code) = "Age"];
+    ANNOTATION = 3 [(fhir_original_code) = "Annotation"];
+    ATTACHMENT = 4 [(fhir_original_code) = "Attachment"];
+    BACKBONE_ELEMENT = 5 [(fhir_original_code) = "BackboneElement"];
+    CODEABLE_CONCEPT = 6 [(fhir_original_code) = "CodeableConcept"];
+    CODING = 7 [(fhir_original_code) = "Coding"];
+    CONTACT_DETAIL = 8 [(fhir_original_code) = "ContactDetail"];
+    CONTACT_POINT = 9 [(fhir_original_code) = "ContactPoint"];
+    CONTRIBUTOR = 10 [(fhir_original_code) = "Contributor"];
+    COUNT = 11 [(fhir_original_code) = "Count"];
+    DATA_REQUIREMENT = 12 [(fhir_original_code) = "DataRequirement"];
+    DISTANCE = 13 [(fhir_original_code) = "Distance"];
+    DOSAGE = 14 [(fhir_original_code) = "Dosage"];
+    DURATION = 15 [(fhir_original_code) = "Duration"];
+    ELEMENT = 16 [(fhir_original_code) = "Element"];
+    ELEMENT_DEFINITION = 17 [(fhir_original_code) = "ElementDefinition"];
+    EXTENSION = 18 [(fhir_original_code) = "Extension"];
+    HUMAN_NAME = 19 [(fhir_original_code) = "HumanName"];
+    IDENTIFIER = 20 [(fhir_original_code) = "Identifier"];
+    META = 21 [(fhir_original_code) = "Meta"];
+    MONEY = 22 [(fhir_original_code) = "Money"];
+    NARRATIVE = 23 [(fhir_original_code) = "Narrative"];
+    PARAMETER_DEFINITION = 24 [(fhir_original_code) = "ParameterDefinition"];
+    PERIOD = 25 [(fhir_original_code) = "Period"];
+    QUANTITY = 26 [(fhir_original_code) = "Quantity"];
+    RANGE = 27 [(fhir_original_code) = "Range"];
+    RATIO = 28 [(fhir_original_code) = "Ratio"];
+    REFERENCE = 29 [(fhir_original_code) = "Reference"];
+    RELATED_ARTIFACT = 30 [(fhir_original_code) = "RelatedArtifact"];
+    SAMPLED_DATA = 31 [(fhir_original_code) = "SampledData"];
+    SIGNATURE = 32 [(fhir_original_code) = "Signature"];
+    SIMPLE_QUANTITY = 33 [(fhir_original_code) = "SimpleQuantity"];
+    TIMING = 34 [(fhir_original_code) = "Timing"];
+    TRIGGER_DEFINITION = 35 [(fhir_original_code) = "TriggerDefinition"];
+    USAGE_CONTEXT = 36 [(fhir_original_code) = "UsageContext"];
+    BASE64_BINARY = 37 [(fhir_original_code) = "base64Binary"];
+    BOOLEAN = 38;
+    CODE = 39;
+    DATE = 40;
+    DATE_TIME = 41 [(fhir_original_code) = "dateTime"];
+    DECIMAL = 42;
+    ID = 43;
+    INSTANT = 44;
+    INTEGER = 45;
+    MARKDOWN = 46;
+    OID = 47;
+    POSITIVE_INT = 48 [(fhir_original_code) = "positiveInt"];
+    STRING = 49;
+    TIME = 50;
+    UNSIGNED_INT = 51 [(fhir_original_code) = "unsignedInt"];
+    URI = 52;
+    UUID = 53;
+    XHTML = 54;
+    ACCOUNT = 55 [(fhir_original_code) = "Account"];
+    ACTIVITY_DEFINITION = 56 [(fhir_original_code) = "ActivityDefinition"];
+    ADVERSE_EVENT = 57 [(fhir_original_code) = "AdverseEvent"];
+    ALLERGY_INTOLERANCE = 58 [(fhir_original_code) = "AllergyIntolerance"];
+    APPOINTMENT = 59 [(fhir_original_code) = "Appointment"];
+    APPOINTMENT_RESPONSE = 60 [(fhir_original_code) = "AppointmentResponse"];
+    AUDIT_EVENT = 61 [(fhir_original_code) = "AuditEvent"];
+    BASIC = 62 [(fhir_original_code) = "Basic"];
+    BINARY = 63 [(fhir_original_code) = "Binary"];
+    BODY_SITE = 64 [(fhir_original_code) = "BodySite"];
+    BUNDLE = 65 [(fhir_original_code) = "Bundle"];
+    CAPABILITY_STATEMENT = 66 [(fhir_original_code) = "CapabilityStatement"];
+    CARE_PLAN = 67 [(fhir_original_code) = "CarePlan"];
+    CARE_TEAM = 68 [(fhir_original_code) = "CareTeam"];
+    CHARGE_ITEM = 69 [(fhir_original_code) = "ChargeItem"];
+    CLAIM = 70 [(fhir_original_code) = "Claim"];
+    CLAIM_RESPONSE = 71 [(fhir_original_code) = "ClaimResponse"];
+    CLINICAL_IMPRESSION = 72 [(fhir_original_code) = "ClinicalImpression"];
+    CODE_SYSTEM = 73 [(fhir_original_code) = "CodeSystem"];
+    COMMUNICATION = 74 [(fhir_original_code) = "Communication"];
+    COMMUNICATION_REQUEST = 75 [(fhir_original_code) = "CommunicationRequest"];
+    COMPARTMENT_DEFINITION = 76
+        [(fhir_original_code) = "CompartmentDefinition"];
+    COMPOSITION = 77 [(fhir_original_code) = "Composition"];
+    CONCEPT_MAP = 78 [(fhir_original_code) = "ConceptMap"];
+    CONDITION = 79 [(fhir_original_code) = "Condition"];
+    CONSENT = 80 [(fhir_original_code) = "Consent"];
+    CONTRACT = 81 [(fhir_original_code) = "Contract"];
+    COVERAGE = 82 [(fhir_original_code) = "Coverage"];
+    DATA_ELEMENT = 83 [(fhir_original_code) = "DataElement"];
+    DETECTED_ISSUE = 84 [(fhir_original_code) = "DetectedIssue"];
+    DEVICE = 85 [(fhir_original_code) = "Device"];
+    DEVICE_COMPONENT = 86 [(fhir_original_code) = "DeviceComponent"];
+    DEVICE_METRIC = 87 [(fhir_original_code) = "DeviceMetric"];
+    DEVICE_REQUEST = 88 [(fhir_original_code) = "DeviceRequest"];
+    DEVICE_USE_STATEMENT = 89 [(fhir_original_code) = "DeviceUseStatement"];
+    DIAGNOSTIC_REPORT = 90 [(fhir_original_code) = "DiagnosticReport"];
+    DOCUMENT_MANIFEST = 91 [(fhir_original_code) = "DocumentManifest"];
+    DOCUMENT_REFERENCE = 92 [(fhir_original_code) = "DocumentReference"];
+    DOMAIN_RESOURCE = 93 [(fhir_original_code) = "DomainResource"];
+    ELIGIBILITY_REQUEST = 94 [(fhir_original_code) = "EligibilityRequest"];
+    ELIGIBILITY_RESPONSE = 95 [(fhir_original_code) = "EligibilityResponse"];
+    ENCOUNTER = 96 [(fhir_original_code) = "Encounter"];
+    ENDPOINT = 97 [(fhir_original_code) = "Endpoint"];
+    ENROLLMENT_REQUEST = 98 [(fhir_original_code) = "EnrollmentRequest"];
+    ENROLLMENT_RESPONSE = 99 [(fhir_original_code) = "EnrollmentResponse"];
+    EPISODE_OF_CARE = 100 [(fhir_original_code) = "EpisodeOfCare"];
+    EXPANSION_PROFILE = 101 [(fhir_original_code) = "ExpansionProfile"];
+    EXPLANATION_OF_BENEFIT = 102
+        [(fhir_original_code) = "ExplanationOfBenefit"];
+    FAMILY_MEMBER_HISTORY = 103 [(fhir_original_code) = "FamilyMemberHistory"];
+    FLAG = 104 [(fhir_original_code) = "Flag"];
+    GOAL = 105 [(fhir_original_code) = "Goal"];
+    GRAPH_DEFINITION = 106 [(fhir_original_code) = "GraphDefinition"];
+    GROUP = 107 [(fhir_original_code) = "Group"];
+    GUIDANCE_RESPONSE = 108 [(fhir_original_code) = "GuidanceResponse"];
+    HEALTHCARE_SERVICE = 109 [(fhir_original_code) = "HealthcareService"];
+    IMAGING_MANIFEST = 110 [(fhir_original_code) = "ImagingManifest"];
+    IMAGING_STUDY = 111 [(fhir_original_code) = "ImagingStudy"];
+    IMMUNIZATION = 112 [(fhir_original_code) = "Immunization"];
+    IMMUNIZATION_RECOMMENDATION = 113
+        [(fhir_original_code) = "ImmunizationRecommendation"];
+    IMPLEMENTATION_GUIDE = 114 [(fhir_original_code) = "ImplementationGuide"];
+    LIBRARY = 115 [(fhir_original_code) = "Library"];
+    LINKAGE = 116 [(fhir_original_code) = "Linkage"];
+    LIST = 117 [(fhir_original_code) = "List"];
+    LOCATION = 118 [(fhir_original_code) = "Location"];
+    MEASURE = 119 [(fhir_original_code) = "Measure"];
+    MEASURE_REPORT = 120 [(fhir_original_code) = "MeasureReport"];
+    MEDIA = 121 [(fhir_original_code) = "Media"];
+    MEDICATION = 122 [(fhir_original_code) = "Medication"];
+    MEDICATION_ADMINISTRATION = 123
+        [(fhir_original_code) = "MedicationAdministration"];
+    MEDICATION_DISPENSE = 124 [(fhir_original_code) = "MedicationDispense"];
+    MEDICATION_REQUEST = 125 [(fhir_original_code) = "MedicationRequest"];
+    MEDICATION_STATEMENT = 126 [(fhir_original_code) = "MedicationStatement"];
+    MESSAGE_DEFINITION = 127 [(fhir_original_code) = "MessageDefinition"];
+    MESSAGE_HEADER = 128 [(fhir_original_code) = "MessageHeader"];
+    NAMING_SYSTEM = 129 [(fhir_original_code) = "NamingSystem"];
+    NUTRITION_ORDER = 130 [(fhir_original_code) = "NutritionOrder"];
+    OBSERVATION = 131 [(fhir_original_code) = "Observation"];
+    OPERATIONDEFINITION = 132 [(fhir_original_code) = "OperationDefinition"];
+    OPERATION_OUTCOME = 133 [(fhir_original_code) = "OperationOutcome"];
+    ORGANIZATION = 134 [(fhir_original_code) = "Organization"];
+    PARAMETERS = 135 [(fhir_original_code) = "Parameters"];
+    PATIENT = 136 [(fhir_original_code) = "Patient"];
+    PAYMENT_NOTICE = 137 [(fhir_original_code) = "PaymentNotice"];
+    PAYMENT_RECONCILIATION = 138
+        [(fhir_original_code) = "PaymentReconciliation"];
+    PERSON = 139 [(fhir_original_code) = "Person"];
+    PLAN_DEFINITION = 140 [(fhir_original_code) = "PlanDefinition"];
+    PRACTITIONER = 141 [(fhir_original_code) = "Practitioner"];
+    PRACTITIONER_ROLE = 142 [(fhir_original_code) = "PractitionerRole"];
+    PROCEDURE = 143 [(fhir_original_code) = "Procedure"];
+    PROCEDURE_REQUEST = 144 [(fhir_original_code) = "ProcedureRequest"];
+    PROCESS_REQUEST = 145 [(fhir_original_code) = "ProcessRequest"];
+    PROCESS_RESPONSE = 146 [(fhir_original_code) = "ProcessResponse"];
+    PROVENANCE = 147 [(fhir_original_code) = "Provenance"];
+    QUESTIONNAIRE = 148 [(fhir_original_code) = "Questionnaire"];
+    QUESTIONNAIRE_RESPONSE = 149
+        [(fhir_original_code) = "QuestionnaireResponse"];
+    REFERRAL_REQUEST = 150 [(fhir_original_code) = "ReferralRequest"];
+    RELATED_PERSON = 151 [(fhir_original_code) = "RelatedPerson"];
+    REQUEST_GROUP = 152 [(fhir_original_code) = "RequestGroup"];
+    RESEARCH_STUDY = 153 [(fhir_original_code) = "ResearchStudy"];
+    RESEARCH_SUBJECT = 154 [(fhir_original_code) = "ResearchSubject"];
+    RESOURCE = 155 [(fhir_original_code) = "Resource"];
+    RISK_ASSESSMENT = 156 [(fhir_original_code) = "RiskAssessment"];
+    SCHEDULE = 157 [(fhir_original_code) = "Schedule"];
+    SEARCH_PARAMETER = 158 [(fhir_original_code) = "SearchParameter"];
+    SEQUENCE = 159 [(fhir_original_code) = "Sequence"];
+    SERVICE_DEFINITION = 160 [(fhir_original_code) = "ServiceDefinition"];
+    SLOT = 161 [(fhir_original_code) = "Slot"];
+    SPECIMEN = 162 [(fhir_original_code) = "Specimen"];
+    STRUCTURE_DEFINITION = 163 [(fhir_original_code) = "StructureDefinition"];
+    STRUCTURE_MAP = 164 [(fhir_original_code) = "StructureMap"];
+    SUBSCRIPTION = 165 [(fhir_original_code) = "Subscription"];
+    SUBSTANCE = 166 [(fhir_original_code) = "Substance"];
+    SUPPLY_DELIVERY = 167 [(fhir_original_code) = "SupplyDelivery"];
+    SUPPLY_REQUEST = 168 [(fhir_original_code) = "SupplyRequest"];
+    TASK = 169 [(fhir_original_code) = "Task"];
+    TEST_REPORT = 170 [(fhir_original_code) = "TestReport"];
+    TEST_SCRIPT = 171 [(fhir_original_code) = "TestScript"];
+    VALUE_SET = 172 [(fhir_original_code) = "ValueSet"];
+    VISION_PRESCRIPTION = 173 [(fhir_original_code) = "VisionPrescription"];
+    TYPE = 174 [(fhir_original_code) = "Type"];
+    ANY = 175 [(fhir_original_code) = "Any"];
   }
   Value value = 1;
 
@@ -5279,6 +5693,51 @@ message OperationOutcomeCodesCode {
   repeated Extension extension = 3;
 }
 
+// The status of a resource narrative
+// See http://hl7.org/fhir/ValueSet/narrative-status
+message NarrativeStatusCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/narrative-status";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    GENERATED = 1;
+    EXTENSIONS = 2;
+    ADDITIONAL = 3;
+    EMPTY = 4;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// Whether an operation parameter is an input or an output parameter.
+// See http://hl7.org/fhir/ValueSet/operation-parameter-use
+message OperationParameterUseCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/operation-parameter-use";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    IN = 1;
+    OUT = 2;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
 // This example value set defines a set of codes that can be used to indicate
 // a type of organization. See http://hl7.org/fhir/ValueSet/organization-type
 message OrganizationTypeCode {
@@ -5781,6 +6240,34 @@ message ReferenceHandlingPolicyCode {
     RESOLVES = 3;
     ENFORCED = 4;
     LOCAL = 5;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// The type of relationship to the related artifact
+// See http://hl7.org/fhir/ValueSet/related-artifact-type
+message RelatedArtifactTypeCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/related-artifact-type";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    DOCUMENTATION = 1;
+    JUSTIFICATION = 2;
+    CITATION = 3;
+    PREDECESSOR = 4;
+    SUCCESSOR = 5;
+    DERIVED_FROM = 6;
+    DEPENDS_ON = 7;
+    COMPOSED_OF = 8;
   }
   Value value = 1;
 

@@ -159,6 +159,7 @@ public class ProtoGenerator {
     renamedCodeTypes.put("ConditionClinicalStatusCode", "ConditionClinicalStatusCodesCode");
     renamedCodeTypes.put("ContractStatusCode", "ContractResourceStatusCode");
     renamedCodeTypes.put("CoverageStatusCode", "FinancialResourceStatusCode");
+    renamedCodeTypes.put("DayOfWeekCode", "DaysOfWeekCode");
     renamedCodeTypes.put("DetectedIssueStatusCode", "ObservationStatusCode");
     renamedCodeTypes.put("DeviceRequestStatusCode", "RequestStatusCode");
     renamedCodeTypes.put("DocumentConfidentialityCode", "ConfidentialityClassificationCode");
@@ -167,6 +168,8 @@ public class ProtoGenerator {
     renamedCodeTypes.put("EnrollmentRequestStatusCode", "FinancialResourceStatusCode");
     renamedCodeTypes.put("EnrollmentResponseStatusCode", "FinancialResourceStatusCode");
     renamedCodeTypes.put("ImmunizationStatusCode", "ImmunizationStatusCodesCode");
+    renamedCodeTypes.put("ParameterStatusCode", "OperationParameterStatusCode");
+    renamedCodeTypes.put("ParameterUseCode", "OperationParameterUseCode");
     renamedCodeTypes.put("ParticipantStatusCode", "ParticipationStatusCode");
     renamedCodeTypes.put("PaymentNoticeStatusCode", "FinancialResourceStatusCode");
     renamedCodeTypes.put("PaymentReconciliationStatusCode", "FinancialResourceStatusCode");
@@ -246,14 +249,23 @@ public class ProtoGenerator {
   public FileDescriptorProto generateFileDescriptor(List<StructureDefinition> defs) {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
     builder.setPackage(packageName).setSyntax("proto3");
-    builder.addDependency(new File(protoRootPath, "annotations.proto").toString());
-    builder.addDependency(new File(protoRootPath, "codes.proto").toString());
-    builder.addDependency(new File(protoRootPath, "datatypes.proto").toString());
     FileOptions.Builder options = FileOptions.newBuilder();
     options.setJavaPackage("com." + packageName).setJavaMultipleFiles(true);
     builder.setOptions(options);
+    boolean hasPrimitiveType = false;
     for (StructureDefinition def : defs) {
-      builder.addMessageType(generateProto(def));
+      DescriptorProto proto = generateProto(def);
+      if (AnnotationUtils.isPrimitiveType(proto)) {
+        hasPrimitiveType = true;
+      }
+      builder.addMessageType(proto);
+    }
+    // Add imports. Annotations is always needed; datatypes is needed unless we are building them.
+    builder.addDependency(new File(protoRootPath, "annotations.proto").toString());
+    if (!hasPrimitiveType) {
+      builder
+          .addDependency(new File(protoRootPath, "codes.proto").toString())
+          .addDependency(new File(protoRootPath, "datatypes.proto").toString());
     }
     return builder.build();
   }
@@ -264,7 +276,10 @@ public class ProtoGenerator {
    * FileDescriptorProto.
    */
   public FileDescriptorProto addContainedResource(FileDescriptorProto descriptor) {
-    FileDescriptorProto.Builder resultBuilder = descriptor.toBuilder();
+    FileDescriptorProto.Builder resultBuilder =
+        descriptor
+            .toBuilder()
+            .addDependency(new File(protoRootPath, "metadatatypes.proto").toString());
     Set<String> types = new HashSet<>();
     for (DescriptorProto type : resultBuilder.getMessageTypeList()) {
       types.add(type.getName());
