@@ -118,7 +118,6 @@ public class ProtoGenerator {
     renamedCodeTypes.put("EligibilityResponseStatusCode", "FinancialResourceStatusCode");
     renamedCodeTypes.put("EnrollmentRequestStatusCode", "FinancialResourceStatusCode");
     renamedCodeTypes.put("EnrollmentResponseStatusCode", "FinancialResourceStatusCode");
-    renamedCodeTypes.put("FHIRDefinedTypeExtCode", "FHIRDefinedTypeCode");
     renamedCodeTypes.put("ImmunizationStatusCode", "ImmunizationStatusCodesCode");
     renamedCodeTypes.put("ParticipantStatusCode", "ParticipationStatusCode");
     renamedCodeTypes.put("PaymentNoticeStatusCode", "FinancialResourceStatusCode");

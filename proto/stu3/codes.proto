@@ -2162,6 +2162,22 @@ message FHIRDefinedTypeCode {
   repeated Extension extension = 3;
 }
 
+// Either a resource or a data type, extended to allow arbitrary other codes
+// representing FHIR resources. See http://hl7.org/fhir/ValueSet/defined-types
+message FHIRDefinedTypeExtCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/defined-types";
+
+  // Primitive value for code
+  string value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
 // Codes identifying the lifecycle stage of a definition
 // See http://hl7.org/fhir/ValueSet/definition-status
 message DefinitionStatusCode {

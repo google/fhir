@@ -398,6 +398,12 @@ public class ProtoGeneratorTest {
     testGeneratedProto("Meta");
   }
 
+  /** Test generating the MetadataResource special-purpose type. */
+  @Test
+  public void generateMetadataResource() throws Exception {
+    testGeneratedProto("MetadataResource");
+  }
+
   /** Test generating the Narrative FHIR special-purpose type. */
   @Test
   public void generateNarrative() throws Exception {
@@ -1236,8 +1242,6 @@ public class ProtoGeneratorTest {
   public void generateLipidprofile() throws Exception {
     testGeneratedProto("lipidprofile");
   }
-
-  // TODO(sundberg): test the metadataresource profile.
 
   /** Test generating the observation-genetics profile. */
   @Test

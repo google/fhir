@@ -137,7 +137,7 @@ kind {
 abstract {
 }
 type {
-  value: DIAGNOSTIC_REPORT
+  value: "DiagnosticReport"
 }
 base_definition {
   value: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"

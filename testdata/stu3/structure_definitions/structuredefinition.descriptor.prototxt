@@ -319,7 +319,7 @@ field {
   number: 32
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.FHIRDefinedTypeCode"
+  type_name: ".google.fhir.stu3.proto.FHIRDefinedTypeExtCode"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Type defined or constrained by this structure"

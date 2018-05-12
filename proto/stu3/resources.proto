@@ -15548,7 +15548,8 @@ message StructureDefinition {
   repeated String context_invariant = 31;
 
   // Type defined or constrained by this structure
-  FHIRDefinedTypeCode type = 32 [(validation_requirement) = REQUIRED_BY_FHIR];
+  FHIRDefinedTypeExtCode type = 32
+      [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Definition that this type is constrained/specialized from
   Uri base_definition = 33;
