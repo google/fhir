@@ -213,26 +213,6 @@ public class JsonFormatTest {
     return testJson.toString();
   }
 
-  /** Test that two json-encoded strings are equal, allowing for some minor transformations. */
-  private void assertJsonEqual(String test, String golden) {
-    // If the strings are equal, we're done. Otherwise, try a few more transforms.
-    if (test.equals(golden)) {
-      return;
-    }
-
-    // Format UTC times to always be of the form "+00:00".
-    String utcPatternIn = "\"([0-9]+-[01][0-9]-[0-3][0-9]T[012][0-9]:[0-5][0-9]:[0-5][0-9\\.]+)Z\"";
-    String utcPatternOut = "\"$1+00:00\"";
-    String utcTest = test.replaceAll(utcPatternIn, utcPatternOut);
-    String utcGolden = golden.replaceAll(utcPatternIn, utcPatternOut);
-    if (utcTest.equals(utcGolden)) {
-      return;
-    }
-
-    // At this point, this assertion will fail. Print output based on the original strings.
-    assertThat(test).isEqualTo(golden);
-  }
-
   private void testPrint(String name, Builder builder) throws IOException {
     // Parse the proto text version of the input.
     Builder textBuilder = builder.clone();
@@ -241,7 +221,7 @@ public class JsonFormatTest {
     String jsonGolden = loadJson(name + ".json");
     // Print the proto as json and compare.
     String jsonTest = jsonPrinter.print(textBuilder);
-    assertJsonEqual(jsonTest, jsonGolden);
+    assertThat(jsonTest).isEqualTo(jsonGolden);
   }
 
   @Before
@@ -268,7 +248,7 @@ public class JsonFormatTest {
     Patient.Builder patient = Patient.newBuilder();
     mergeText("json-edge-cases.prototxt", patient);
     String jsonTest = jsonPrinter.print(patient);
-    assertJsonEqual(canonicalizeJson(jsonTest), canonicalizeJson(jsonGolden));
+    assertThat(canonicalizeJson(jsonTest)).isEqualTo(canonicalizeJson(jsonGolden));
   }
 
   /* Resource tests start here. */
