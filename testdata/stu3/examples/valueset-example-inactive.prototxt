@@ -51,7 +51,7 @@ expansion {
   }
   timestamp {
     value_us: 1488103200000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
   contains {

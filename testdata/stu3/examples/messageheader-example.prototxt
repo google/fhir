@@ -37,7 +37,7 @@ sender {
 }
 timestamp {
   value_us: 1325668214000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 enterer {

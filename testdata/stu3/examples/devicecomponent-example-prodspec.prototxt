@@ -29,7 +29,7 @@ type {
 }
 last_system_change {
   value_us: 1412693100000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 source {

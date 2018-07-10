@@ -68,7 +68,7 @@ subject {
 }
 received_time {
   value_us: 1299222180000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 request {
@@ -85,7 +85,7 @@ collection {
   collected {
     date_time {
       value_us: 1306736100000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
   }

@@ -61,7 +61,7 @@ encounter {
 }
 date {
   value_us: 1325668214000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 author {
@@ -84,7 +84,7 @@ attester {
   }
   time {
     value_us: 1325668214000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
   party {

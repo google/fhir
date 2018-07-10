@@ -7,7 +7,7 @@ meta {
   }
   last_updated {
     value_us: 1463360152000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
 }

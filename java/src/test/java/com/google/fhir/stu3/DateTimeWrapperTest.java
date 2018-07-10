@@ -34,7 +34,7 @@ public final class DateTimeWrapperTest {
         DateTime.newBuilder()
             .setValueUs(31536000000000L)
             .setPrecision(DateTime.Precision.YEAR)
-            .setTimezone("UTC")
+            .setTimezone("Z")
             .build();
     assertThat(parsed).isEqualTo(expected);
 
@@ -55,7 +55,7 @@ public final class DateTimeWrapperTest {
         DateTime.newBuilder()
             .setValueUs(2678400000000L)
             .setPrecision(DateTime.Precision.MONTH)
-            .setTimezone("UTC")
+            .setTimezone("Z")
             .build();
     assertThat(parsed).isEqualTo(expected);
 
@@ -76,7 +76,7 @@ public final class DateTimeWrapperTest {
         DateTime.newBuilder()
             .setValueUs(0)
             .setPrecision(DateTime.Precision.DAY)
-            .setTimezone("UTC")
+            .setTimezone("Z")
             .build();
     assertThat(parsed).isEqualTo(expected);
 
@@ -98,7 +98,29 @@ public final class DateTimeWrapperTest {
         DateTime.newBuilder()
             .setValueUs(43200123000L)
             .setPrecision(DateTime.Precision.MILLISECOND)
-            .setTimezone("UTC")
+            .setTimezone("Z")
+            .build();
+    assertThat(parsed).isEqualTo(expected);
+
+    parsed =
+        new DateTimeWrapper("1970-01-01T12:00:00.123+00:00", ZoneId.of("Australia/Sydney"))
+            .getWrapped();
+    expected =
+        DateTime.newBuilder()
+            .setValueUs(43200123000L)
+            .setPrecision(DateTime.Precision.MILLISECOND)
+            .setTimezone("+00:00")
+            .build();
+    assertThat(parsed).isEqualTo(expected);
+
+    parsed =
+        new DateTimeWrapper("1970-01-01T12:00:00.123-00:00", ZoneId.of("Australia/Sydney"))
+            .getWrapped();
+    expected =
+        DateTime.newBuilder()
+            .setValueUs(43200123000L)
+            .setPrecision(DateTime.Precision.MILLISECOND)
+            .setTimezone("-00:00")
             .build();
     assertThat(parsed).isEqualTo(expected);
 
@@ -120,7 +142,7 @@ public final class DateTimeWrapperTest {
         DateTime.newBuilder()
             .setValueUs(0)
             .setPrecision(DateTime.Precision.YEAR)
-            .setTimezone("UTC")
+            .setTimezone("Z")
             .build();
     assertThat(new DateTimeWrapper(input).toString()).isEqualTo("1970");
     assertThat(new DateTimeWrapper(input, ZoneId.of("Australia/Sydney")).toString())
@@ -138,7 +160,7 @@ public final class DateTimeWrapperTest {
         DateTime.newBuilder()
             .setValueUs(0)
             .setPrecision(DateTime.Precision.MONTH)
-            .setTimezone("UTC")
+            .setTimezone("Z")
             .build();
     assertThat(new DateTimeWrapper(input).toString()).isEqualTo("1970-01");
     assertThat(new DateTimeWrapper(input, ZoneId.of("Australia/Sydney")).toString())
@@ -156,7 +178,7 @@ public final class DateTimeWrapperTest {
         DateTime.newBuilder()
             .setValueUs(0)
             .setPrecision(DateTime.Precision.DAY)
-            .setTimezone("UTC")
+            .setTimezone("Z")
             .build();
     assertThat(new DateTimeWrapper(input).toString()).isEqualTo("1970-01-01");
     assertThat(new DateTimeWrapper(input, ZoneId.of("Australia/Sydney")).toString())
@@ -171,6 +193,15 @@ public final class DateTimeWrapperTest {
   @Test
   public void printDateTime() {
     DateTime input =
+        DateTime.newBuilder()
+            .setValueUs(43200123000L)
+            .setPrecision(DateTime.Precision.MILLISECOND)
+            .setTimezone("Z")
+            .build();
+    assertThat(new DateTimeWrapper(input, ZoneId.of("Europe/London")).toString())
+        .isEqualTo("1970-01-01T12:00:00.123Z");
+
+    input =
         DateTime.newBuilder()
             .setValueUs(43200123000L)
             .setPrecision(DateTime.Precision.MILLISECOND)
@@ -196,5 +227,23 @@ public final class DateTimeWrapperTest {
             .build();
     assertThat(new DateTimeWrapper(input, ZoneId.of("Australia/Sydney")).toString())
         .isEqualTo("2014-10-09T14:58:00");
+
+    input =
+        DateTime.newBuilder()
+            .setValueUs(43200123000L)
+            .setPrecision(DateTime.Precision.MILLISECOND)
+            .setTimezone("+00:00")
+            .build();
+    assertThat(new DateTimeWrapper(input, ZoneId.of("Europe/London")).toString())
+        .isEqualTo("1970-01-01T12:00:00.123+00:00");
+
+    input =
+        DateTime.newBuilder()
+            .setValueUs(43200123000L)
+            .setPrecision(DateTime.Precision.MILLISECOND)
+            .setTimezone("-00:00")
+            .build();
+    assertThat(new DateTimeWrapper(input, ZoneId.of("Europe/London")).toString())
+        .isEqualTo("1970-01-01T12:00:00.123-00:00");
   }
 }

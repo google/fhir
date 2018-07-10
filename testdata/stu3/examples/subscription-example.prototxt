@@ -22,7 +22,7 @@ contact {
 }
 end {
   value_us: 1609459200000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 reason {

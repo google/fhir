@@ -49,7 +49,7 @@ collection {
   collected {
     date_time {
       value_us: 1439707217000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
   }

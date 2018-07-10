@@ -4,7 +4,7 @@ id {
 meta {
   last_updated {
     value_us: 1439721323000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
 }
@@ -56,7 +56,7 @@ contained {
       collected {
         date_time {
           value_us: 1439707217000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -118,7 +118,7 @@ contained {
       collected {
         date_time {
           value_us: 1439707217000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -180,7 +180,7 @@ contained {
       collected {
         date_time {
           value_us: 1439707217000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -226,13 +226,13 @@ contained {
     effective {
       date_time {
         value_us: 1439707217000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
     issued {
       value_us: 1439793617000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
     performer {
@@ -1770,13 +1770,13 @@ contained {
     effective {
       date_time {
         value_us: 1439707217000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
     issued {
       value_us: 1439793617000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
     performer {
@@ -3645,13 +3645,13 @@ contained {
     effective {
       date_time {
         value_us: 1439707217000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
     issued {
       value_us: 1439793617000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
     performer {
@@ -3791,13 +3791,13 @@ contained {
     effective {
       date_time {
         value_us: 1439707217000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
     issued {
       value_us: 1439793617000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
     performer {
@@ -3857,13 +3857,13 @@ contained {
     effective {
       date_time {
         value_us: 1439707217000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
     issued {
       value_us: 1439793617000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
     performer {
@@ -3928,13 +3928,13 @@ contained {
     effective {
       date_time {
         value_us: 1439707217000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
     issued {
       value_us: 1439793617000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
     performer {
@@ -3991,13 +3991,13 @@ contained {
     effective {
       date_time {
         value_us: 1439707217000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
     issued {
       value_us: 1439793617000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
     performer {
@@ -4062,13 +4062,13 @@ contained {
     effective {
       date_time {
         value_us: 1439707217000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
     issued {
       value_us: 1439793617000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
     performer {
@@ -4133,13 +4133,13 @@ contained {
     effective {
       date_time {
         value_us: 1439707217000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
     issued {
       value_us: 1439793617000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
     performer {
@@ -4204,13 +4204,13 @@ contained {
     effective {
       date_time {
         value_us: 1439707217000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
     issued {
       value_us: 1439793617000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
     performer {
@@ -4270,13 +4270,13 @@ contained {
     effective {
       date_time {
         value_us: 1439707217000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
     issued {
       value_us: 1439793617000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
     performer {
@@ -4339,13 +4339,13 @@ contained {
     effective {
       date_time {
         value_us: 1439707217000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
     issued {
       value_us: 1439793617000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
     performer {
@@ -4411,13 +4411,13 @@ subject {
 effective {
   date_time {
     value_us: 1439707217000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
 }
 issued {
   value_us: 1439793617000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 performer {

@@ -23,6 +23,7 @@ import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
+import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -115,5 +116,21 @@ public abstract class PrimitiveWrapper<T extends Message> {
       builder.addAllExtension(extensions);
     }
     return builder.build();
+  }
+
+  protected static String withOriginalTimezone(String timeString, String originalTimezone) {
+    // Restore [+-]00:00 if necessary.
+    return timeString.endsWith("Z")
+            && (originalTimezone.startsWith("+") || originalTimezone.startsWith("-"))
+        ? timeString.replace("Z", originalTimezone)
+        : timeString;
+  }
+
+  // Extracts a valid fhir timezone from a time string, maintaining original.  This is necessary
+  // because OffsetDateTime will convert +00:00, -00:00, and Z to Z, which is not reversible.
+  protected static String extractFhirTimezone(String timeString, OffsetDateTime offsetDateTime) {
+    return timeString.endsWith("+00:00")
+        ? "+00:00"
+        : (timeString.endsWith("-00:00") ? "-00:00" : offsetDateTime.getOffset().toString());
   }
 }

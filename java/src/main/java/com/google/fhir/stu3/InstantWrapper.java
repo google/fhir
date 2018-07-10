@@ -53,25 +53,32 @@ public class InstantWrapper extends PrimitiveWrapper<Instant> {
   private static Instant parseAndValidate(String input) {
     validateUsingPattern(INSTANT_PATTERN, input);
     try {
-      return buildInstant(OffsetDateTime.parse(input, SECOND_WITH_TZ), Instant.Precision.SECOND);
+      OffsetDateTime offsetDateTime = OffsetDateTime.parse(input, SECOND_WITH_TZ);
+      String timezone = extractFhirTimezone(input, offsetDateTime);
+      return buildInstant(
+          offsetDateTime.toInstant().toEpochMilli() * 1000L, timezone, Instant.Precision.SECOND);
     } catch (DateTimeParseException e) {
       // Fall through.
     }
     try {
       // The default parser for OffsetDateTime handles fractional seconds.
-      return buildInstant(OffsetDateTime.parse(input), Instant.Precision.MILLISECOND);
+      OffsetDateTime offsetDateTime = OffsetDateTime.parse(input);
+      String timezone = extractFhirTimezone(input, offsetDateTime);
+      return buildInstant(
+          offsetDateTime.toInstant().toEpochMilli() * 1000L,
+          timezone,
+          Instant.Precision.MILLISECOND);
     } catch (DateTimeParseException e) {
       // Fall through.
     }
     throw new IllegalArgumentException("Invalid Instant: " + input);
   }
 
-  private static Instant buildInstant(OffsetDateTime dateTime, Instant.Precision precision) {
-    String timezone = dateTime.getOffset().toString();
+  private static Instant buildInstant(long valueUs, String timezone, Instant.Precision precision) {
     return Instant.newBuilder()
-        .setValueUs(dateTime.toInstant().toEpochMilli() * 1000L)
+        .setValueUs(valueUs)
         .setPrecision(precision)
-        .setTimezone("Z".equals(timezone) ? "UTC" : timezone)
+        .setTimezone(timezone)
         .build();
   }
 
@@ -81,8 +88,10 @@ public class InstantWrapper extends PrimitiveWrapper<Instant> {
     if (formatter == null) {
       throw new IllegalArgumentException("Invalid precision: " + getWrapped().getPrecision());
     }
-    return java.time.Instant.ofEpochMilli(getWrapped().getValueUs() / 1000L)
-        .atZone(ZoneId.of(getWrapped().getTimezone()))
-        .format(formatter);
+    return withOriginalTimezone(
+        java.time.Instant.ofEpochMilli(getWrapped().getValueUs() / 1000L)
+            .atZone(ZoneId.of(getWrapped().getTimezone()))
+            .format(formatter),
+        getWrapped().getTimezone());
   }
 }

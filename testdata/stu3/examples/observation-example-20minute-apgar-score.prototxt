@@ -50,7 +50,7 @@ contained {
         value {
           date_time {
             value_us: 1463567325000000
-            timezone: "UTC"
+            timezone: "Z"
             precision: SECOND
           }
         }
@@ -101,7 +101,7 @@ subject {
 effective {
   date_time {
     value_us: 1463610802000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
 }

@@ -4,7 +4,7 @@ id {
 meta {
   last_updated {
     value_us: 1408326210000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
 }

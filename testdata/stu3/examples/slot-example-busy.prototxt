@@ -37,12 +37,12 @@ status {
 }
 start {
   value_us: 1387962000000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 end {
   value_us: 1387962900000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 overbooked {

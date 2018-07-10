@@ -4,7 +4,7 @@ id {
 meta {
   last_updated {
     value_us: 1369779141000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
 }
@@ -31,7 +31,7 @@ entry {
       meta {
         last_updated {
           value_us: 1369779141000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -74,7 +74,7 @@ entry {
       }
       date {
         value_us: 1359721802000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
       author {
@@ -207,7 +207,7 @@ entry {
       meta {
         last_updated {
           value_us: 1367770383000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -314,7 +314,7 @@ entry {
       meta {
         last_updated {
           value_us: 1367770383000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -358,12 +358,12 @@ entry {
       period {
         start {
           value_us: 1358685002000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
         end {
           value_us: 1359721802000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -386,7 +386,7 @@ entry {
       meta {
         last_updated {
           value_us: 1367770383000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -444,7 +444,7 @@ entry {
       meta {
         last_updated {
           value_us: 1367770383000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -580,7 +580,7 @@ entry {
       }
       date_asserted {
         value_us: 1367770383000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
       subject {
@@ -611,7 +611,7 @@ entry {
       meta {
         last_updated {
           value_us: 1367770383000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }

@@ -120,7 +120,7 @@ supplement {
         period {
           start {
             value_us: 1423580400000000
-            timezone: "UTC"
+            timezone: "Z"
             precision: SECOND
           }
         }

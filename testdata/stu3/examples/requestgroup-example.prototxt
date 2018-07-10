@@ -87,7 +87,7 @@ context {
 }
 authored_on {
   value_us: 1488821460000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 author {
@@ -123,7 +123,7 @@ action {
   timing {
     date_time {
       value_us: 1488826800000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
   }

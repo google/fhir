@@ -45,7 +45,7 @@ contained {
     }
     received_time {
       value_us: 1439708580000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
     collection {
@@ -57,7 +57,7 @@ contained {
       collected {
         date_time {
           value_us: 1313475300000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -105,7 +105,7 @@ subject {
 }
 received_time {
   value_us: 1439881380000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 parent {
@@ -122,7 +122,7 @@ collection {
   collected {
     date_time {
       value_us: 1439708580000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
   }

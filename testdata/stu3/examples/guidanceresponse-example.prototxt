@@ -99,7 +99,7 @@ context {
 }
 occurrence_date_time {
   value_us: 1489161720000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 performer {

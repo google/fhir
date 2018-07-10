@@ -35,7 +35,7 @@ public final class InstantWrapperTest {
         Instant.newBuilder()
             .setValueUs(0)
             .setPrecision(Instant.Precision.SECOND)
-            .setTimezone("UTC")
+            .setTimezone("+00:00")
             .build();
     assertThat(parsed).isEqualTo(expected);
 
@@ -44,7 +44,16 @@ public final class InstantWrapperTest {
         Instant.newBuilder()
             .setValueUs(0)
             .setPrecision(Instant.Precision.SECOND)
-            .setTimezone("UTC")
+            .setTimezone("Z")
+            .build();
+    assertThat(parsed).isEqualTo(expected);
+
+    parsed = new InstantWrapper("1970-01-01T00:00:00-00:00").getWrapped();
+    expected =
+        Instant.newBuilder()
+            .setValueUs(0)
+            .setPrecision(Instant.Precision.SECOND)
+            .setTimezone("-00:00")
             .build();
     assertThat(parsed).isEqualTo(expected);
   }
@@ -57,9 +66,33 @@ public final class InstantWrapperTest {
         Instant.newBuilder()
             .setValueUs(0)
             .setPrecision(Instant.Precision.SECOND)
+            .setTimezone("Z")
+            .build();
+    assertThat(new InstantWrapper(input).toString()).isEqualTo("1970-01-01T00:00:00Z");
+
+    input =
+        Instant.newBuilder()
+            .setValueUs(0)
+            .setPrecision(Instant.Precision.SECOND)
             .setTimezone("UTC")
             .build();
     assertThat(new InstantWrapper(input).toString()).isEqualTo("1970-01-01T00:00:00Z");
+
+    input =
+        Instant.newBuilder()
+            .setValueUs(0)
+            .setPrecision(Instant.Precision.SECOND)
+            .setTimezone("+00:00")
+            .build();
+    assertThat(new InstantWrapper(input).toString()).isEqualTo("1970-01-01T00:00:00+00:00");
+
+    input =
+        Instant.newBuilder()
+            .setValueUs(0)
+            .setPrecision(Instant.Precision.SECOND)
+            .setTimezone("-00:00")
+            .build();
+    assertThat(new InstantWrapper(input).toString()).isEqualTo("1970-01-01T00:00:00-00:00");
 
     input =
         Instant.newBuilder()

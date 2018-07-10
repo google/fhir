@@ -74,12 +74,12 @@ supporting_information {
 }
 start {
   value_us: 1386579600000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 end {
   value_us: 1386586800000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 comment {

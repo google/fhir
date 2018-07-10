@@ -24,7 +24,7 @@ contained {
     }
     recorded {
       value_us: 1485969787000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
     agent {
@@ -63,7 +63,7 @@ contained {
       }
       when {
         value_us: 1485969787000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
       who {
@@ -241,7 +241,7 @@ as_needed {
 }
 authored_on {
   value_us: 1485969787000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 requester {

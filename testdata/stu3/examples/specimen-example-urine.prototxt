@@ -40,7 +40,7 @@ subject {
 }
 received_time {
   value_us: 1439881380000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 collection {
@@ -52,7 +52,7 @@ collection {
   collected {
     date_time {
       value_us: 1439881380000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
   }
@@ -79,7 +79,7 @@ processing {
   time {
     date_time {
       value_us: 1439885400000000
-      timezone: "UTC"
+      timezone: "Z"
       precision: SECOND
     }
   }

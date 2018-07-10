@@ -64,12 +64,12 @@ actor {
 planning_horizon {
   start {
     value_us: 1387962900000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
   end {
     value_us: 1387963800000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
 }

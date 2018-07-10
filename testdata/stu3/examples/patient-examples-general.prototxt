@@ -4,7 +4,7 @@ id {
 meta {
   last_updated {
     value_us: 1338335132000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
 }
@@ -23,7 +23,7 @@ entry {
       meta {
         last_updated {
           value_us: 1338335132000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -114,7 +114,7 @@ entry {
       meta {
         last_updated {
           value_us: 1338335132000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -200,7 +200,7 @@ entry {
       meta {
         last_updated {
           value_us: 1338335132000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -286,7 +286,7 @@ entry {
       meta {
         last_updated {
           value_us: 1338335132000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -372,7 +372,7 @@ entry {
       meta {
         last_updated {
           value_us: 1338335132000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -458,7 +458,7 @@ entry {
       meta {
         last_updated {
           value_us: 1338335132000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -544,7 +544,7 @@ entry {
       meta {
         last_updated {
           value_us: 1338335132000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -630,7 +630,7 @@ entry {
       meta {
         last_updated {
           value_us: 1338335132000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -716,7 +716,7 @@ entry {
       meta {
         last_updated {
           value_us: 1338335132000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -829,7 +829,7 @@ entry {
       meta {
         last_updated {
           value_us: 1338335132000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -915,7 +915,7 @@ entry {
       meta {
         last_updated {
           value_us: 1338335132000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }
@@ -1001,7 +1001,7 @@ entry {
       meta {
         last_updated {
           value_us: 1338335132000000
-          timezone: "UTC"
+          timezone: "Z"
           precision: SECOND
         }
       }

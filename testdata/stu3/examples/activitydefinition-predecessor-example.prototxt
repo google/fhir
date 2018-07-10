@@ -40,7 +40,7 @@ experimental {
 }
 date {
   value_us: 1488549960000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 publisher {

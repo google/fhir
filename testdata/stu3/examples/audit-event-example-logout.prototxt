@@ -36,7 +36,7 @@ action {
 }
 recorded {
   value_us: 1371772001000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 outcome {

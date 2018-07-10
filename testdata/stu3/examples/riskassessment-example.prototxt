@@ -22,7 +22,7 @@ method {
 occurrence {
   date_time {
     value_us: 1137193260000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
 }

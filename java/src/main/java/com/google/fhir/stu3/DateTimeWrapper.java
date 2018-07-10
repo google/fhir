@@ -127,12 +127,20 @@ public class DateTimeWrapper extends PrimitiveWrapper<DateTime> {
 
     // DateTime, with timezone offset.
     try {
-      return buildDateTime(OffsetDateTime.parse(input, SECOND_WITH_TZ), DateTime.Precision.SECOND);
+      OffsetDateTime offsetDateTime = OffsetDateTime.parse(input, SECOND_WITH_TZ);
+      String timezone = extractFhirTimezone(input, offsetDateTime);
+      return buildDateTime(
+          offsetDateTime.toInstant().toEpochMilli() * 1000L, timezone, DateTime.Precision.SECOND);
     } catch (DateTimeParseException e) {
       // Fall through.
     }
     try {
-      return buildDateTime(OffsetDateTime.parse(input), DateTime.Precision.MILLISECOND);
+      OffsetDateTime offsetDateTime = OffsetDateTime.parse(input);
+      String timezone = extractFhirTimezone(input, offsetDateTime);
+      return buildDateTime(
+          offsetDateTime.toInstant().toEpochMilli() * 1000L,
+          timezone,
+          DateTime.Precision.MILLISECOND);
     } catch (DateTimeParseException e) {
       // Fall through.
     }
@@ -144,17 +152,17 @@ public class DateTimeWrapper extends PrimitiveWrapper<DateTime> {
     String timezone = defaultTimeZone.toString();
     return DateTime.newBuilder()
         .setValueUs(dateTime.atZone(defaultTimeZone).toInstant().toEpochMilli() * 1000L)
-        .setTimezone("Z".equals(timezone) ? "UTC" : timezone) // Prefer "UTC" over "Z" for GMT
+        .setTimezone(timezone)
         .setPrecision(precision)
         .build();
   }
 
-  private static DateTime buildDateTime(OffsetDateTime dateTime, DateTime.Precision precision) {
-    String timezone = dateTime.getOffset().toString();
+  private static DateTime buildDateTime(
+      long valueUs, String timezone, DateTime.Precision precision) {
     return DateTime.newBuilder()
-        .setValueUs(dateTime.toInstant().toEpochMilli() * 1000L)
+        .setValueUs(valueUs)
         .setPrecision(precision)
-        .setTimezone("Z".equals(timezone) ? "UTC" : timezone) // Prefer "UTC" over "Z" for GMT
+        .setTimezone(timezone)
         .build();
   }
 
@@ -175,6 +183,8 @@ public class DateTimeWrapper extends PrimitiveWrapper<DateTime> {
     if (formatter == null) {
       throw new IllegalArgumentException("Invalid precision: " + dateTime.getPrecision());
     }
-    return Instant.ofEpochMilli(dateTime.getValueUs() / 1000L).atZone(zoneId).format(formatter);
+    return withOriginalTimezone(
+        Instant.ofEpochMilli(dateTime.getValueUs() / 1000L).atZone(zoneId).format(formatter),
+        dateTime.getTimezone());
   }
 }

@@ -41,7 +41,7 @@ contained {
     effective {
       date_time {
         value_us: 1418273056000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
@@ -118,7 +118,7 @@ contained {
     effective {
       date_time {
         value_us: 1418273056000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
@@ -195,7 +195,7 @@ contained {
     effective {
       date_time {
         value_us: 1418273056000000
-        timezone: "UTC"
+        timezone: "Z"
         precision: SECOND
       }
     }
@@ -270,7 +270,7 @@ subject {
 effective {
   date_time {
     value_us: 1418273056000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
 }

@@ -77,12 +77,12 @@ description {
 }
 start {
   value_us: 1386666000000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 end {
   value_us: 1386673200000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 created {

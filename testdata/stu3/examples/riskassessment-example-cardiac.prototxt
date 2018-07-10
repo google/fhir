@@ -36,7 +36,7 @@ context {
 occurrence {
   date_time {
     value_us: 1405785840000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
 }

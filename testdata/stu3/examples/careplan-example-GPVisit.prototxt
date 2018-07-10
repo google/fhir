@@ -134,7 +134,7 @@ subject {
 period {
   start {
     value_us: 1357036200000000
-    timezone: "UTC"
+    timezone: "+00:00"
     precision: SECOND
   }
 }
@@ -195,12 +195,12 @@ activity {
       period {
         start {
           value_us: 1357036680000000
-          timezone: "UTC"
+          timezone: "+00:00"
           precision: SECOND
         }
         end {
           value_us: 1357037400000000
-          timezone: "UTC"
+          timezone: "+00:00"
           precision: SECOND
         }
       }

@@ -100,7 +100,7 @@ enteral_formula {
           period {
             start {
               value_us: 1410937200000000
-              timezone: "UTC"
+              timezone: "Z"
               precision: SECOND
             }
           }
@@ -131,7 +131,7 @@ enteral_formula {
           period {
             start {
               value_us: 1410951600000000
-              timezone: "UTC"
+              timezone: "Z"
               precision: SECOND
             }
           }
@@ -162,7 +162,7 @@ enteral_formula {
           period {
             start {
               value_us: 1410966000000000
-              timezone: "UTC"
+              timezone: "Z"
               precision: SECOND
             }
           }

@@ -34,7 +34,7 @@ public final class DateWrapperTest {
         Date.newBuilder()
             .setValueUs(31536000000000L)
             .setPrecision(Date.Precision.YEAR)
-            .setTimezone("UTC")
+            .setTimezone("Z")
             .build();
     assertThat(parsed).isEqualTo(expected);
 
@@ -55,7 +55,7 @@ public final class DateWrapperTest {
         Date.newBuilder()
             .setValueUs(2678400000000L)
             .setPrecision(Date.Precision.MONTH)
-            .setTimezone("UTC")
+            .setTimezone("Z")
             .build();
     assertThat(parsed).isEqualTo(expected);
 
@@ -73,7 +73,7 @@ public final class DateWrapperTest {
   public void parseYearMonthDay() {
     Date parsed = new DateWrapper("1970-01-01", ZoneOffset.UTC).getWrapped();
     Date expected =
-        Date.newBuilder().setValueUs(0).setPrecision(Date.Precision.DAY).setTimezone("UTC").build();
+        Date.newBuilder().setValueUs(0).setPrecision(Date.Precision.DAY).setTimezone("Z").build();
     assertThat(parsed).isEqualTo(expected);
 
     parsed = new DateWrapper("1970-01-01", ZoneId.of("Australia/Sydney")).getWrapped();
@@ -92,7 +92,7 @@ public final class DateWrapperTest {
         Date.newBuilder()
             .setValueUs(0)
             .setPrecision(Date.Precision.YEAR)
-            .setTimezone("UTC")
+            .setTimezone("Z")
             .build();
     assertThat(new DateWrapper(input).toString()).isEqualTo("1970");
     assertThat(new DateWrapper(input, ZoneId.of("Australia/Sydney")).toString()).isEqualTo("1970");
@@ -108,7 +108,7 @@ public final class DateWrapperTest {
         Date.newBuilder()
             .setValueUs(0)
             .setPrecision(Date.Precision.MONTH)
-            .setTimezone("UTC")
+            .setTimezone("Z")
             .build();
     assertThat(new DateWrapper(input).toString()).isEqualTo("1970-01");
     assertThat(new DateWrapper(input, ZoneId.of("Australia/Sydney")).toString())
@@ -123,7 +123,7 @@ public final class DateWrapperTest {
   @Test
   public void printYearMonthDay() {
     Date input =
-        Date.newBuilder().setValueUs(0).setPrecision(Date.Precision.DAY).setTimezone("UTC").build();
+        Date.newBuilder().setValueUs(0).setPrecision(Date.Precision.DAY).setTimezone("Z").build();
     assertThat(new DateWrapper(input).toString()).isEqualTo("1970-01-01");
     assertThat(new DateWrapper(input, ZoneId.of("Australia/Sydney")).toString())
         .isEqualTo("1970-01-01");

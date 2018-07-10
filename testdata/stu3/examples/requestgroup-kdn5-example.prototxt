@@ -170,7 +170,7 @@ context {
 }
 authored_on {
   value_us: 1488821460000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 author {

@@ -87,7 +87,7 @@ expansion {
   }
   timestamp {
     value_us: 1434981367000000
-    timezone: "UTC"
+    timezone: "Z"
     precision: SECOND
   }
   total {

@@ -84,7 +84,7 @@ public class DateWrapper extends PrimitiveWrapper<Date> {
     return Date.newBuilder()
         .setValueUs(date.atStartOfDay().atZone(defaultTimeZone).toInstant().toEpochMilli() * 1000L)
         .setPrecision(precision)
-        .setTimezone("Z".equals(timezone) ? "UTC" : timezone) // Prefer "UTC" over "Z" for GMT
+        .setTimezone(timezone)
         .build();
   }
 

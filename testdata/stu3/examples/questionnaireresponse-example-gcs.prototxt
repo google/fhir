@@ -27,7 +27,7 @@ subject {
 }
 authored {
   value_us: 1418273056000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 source {

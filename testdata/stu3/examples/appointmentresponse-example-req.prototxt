@@ -27,12 +27,12 @@ appointment {
 }
 start {
   value_us: 1387977300000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 end {
   value_us: 1387978200000000
-  timezone: "UTC"
+  timezone: "Z"
   precision: SECOND
 }
 participant_type {
