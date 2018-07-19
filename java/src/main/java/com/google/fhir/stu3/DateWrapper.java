@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 public class DateWrapper extends PrimitiveWrapper<Date> {
 
   private static final Pattern DATE_PATTERN =
-      Pattern.compile("-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?");
+      Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Date.getDefaultInstance()));
   private static final Date NULL_DATE =
       Date.newBuilder().addExtension(getNoValueExtension()).build();
 

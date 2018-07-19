@@ -62,4 +62,20 @@ public final class AnnotationUtils {
   public static boolean isReference(DescriptorProto descriptor) {
     return descriptor.getOptions().getExtensionCount(Annotations.fhirReferenceType) > 0;
   }
+
+  public static String getValueRegexForPrimitiveType(MessageOrBuilder message) {
+    return getValueRegexForPrimitiveType(message.getDescriptorForType());
+  }
+
+  public static String getValueRegexForPrimitiveType(Descriptor descriptor) {
+    return getValueRegexForPrimitiveType(descriptor.toProto());
+  }
+
+  public static String getValueRegexForPrimitiveType(DescriptorProto descriptor) {
+    if (!isPrimitiveType(descriptor)
+        || !descriptor.getOptions().hasExtension(Annotations.valueRegex)) {
+      return null;
+    }
+    return descriptor.getOptions().getExtension(Annotations.valueRegex);
+  }
 }

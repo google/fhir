@@ -20,7 +20,9 @@ import java.util.regex.Pattern;
 /** A wrapper around the PositiveInt FHIR primitive type. */
 public class PositiveIntWrapper extends NumericTypeWrapper<PositiveInt> {
 
-  private static final Pattern POSITIVE_INT_PATTERN = Pattern.compile("\\+?[1-9][0-9]*");
+  private static final Pattern POSITIVE_INT_PATTERN =
+      Pattern.compile(
+          AnnotationUtils.getValueRegexForPrimitiveType(PositiveInt.getDefaultInstance()));
   private static final PositiveInt NULL_POSITIVE_INT =
       PositiveInt.newBuilder().addExtension(getNoValueExtension()).build();
 

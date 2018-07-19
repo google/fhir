@@ -20,7 +20,9 @@ import java.util.regex.Pattern;
 /** A wrapper around the UnsignedInt FHIR primitive type. */
 public class UnsignedIntWrapper extends NumericTypeWrapper<UnsignedInt> {
 
-  private static final Pattern UNSIGNED_INT_PATTERN = Pattern.compile("0|(\\+?[1-9][0-9]*)");
+  private static final Pattern UNSIGNED_INT_PATTERN =
+      Pattern.compile(
+          AnnotationUtils.getValueRegexForPrimitiveType(UnsignedInt.getDefaultInstance()));
   private static final UnsignedInt NULL_UNSIGNED_INT =
       UnsignedInt.newBuilder().addExtension(getNoValueExtension()).build();
 

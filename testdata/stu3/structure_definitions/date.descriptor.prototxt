@@ -63,4 +63,5 @@ enum_type {
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
   [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for date.\nPrimitive Type date."
+  [google.fhir.stu3.proto.value_regex]: "-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?"
 }

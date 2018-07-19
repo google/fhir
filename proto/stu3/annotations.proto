@@ -56,6 +56,9 @@ extend google.protobuf.MessageOptions {
 
   // A brief description of the intended use of this message.
   string message_description = 190563156;
+
+  // For primitive types, values must match this regex if present.
+  string value_regex = 204543906;
 }
 
 extend google.protobuf.EnumValueOptions {

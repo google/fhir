@@ -20,7 +20,8 @@ import java.util.regex.Pattern;
 /** A wrapper around the Oid FHIR primitive type. */
 public class OidWrapper extends PrimitiveWrapper<Oid> {
 
-  private static final Pattern OID_PATTERN = Pattern.compile("urn:oid:[0-2](\\.[1-9]\\d*)+");
+  private static final Pattern OID_PATTERN =
+      Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Oid.getDefaultInstance()));
   private static final Oid NULL_OID = Oid.newBuilder().addExtension(getNoValueExtension()).build();
 
   /** Create an OidWrapper from an Oid. */

@@ -31,4 +31,5 @@ field {
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
   [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for uuid.\nPrimitive Type uuid."
+  [google.fhir.stu3.proto.value_regex]: "urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 }

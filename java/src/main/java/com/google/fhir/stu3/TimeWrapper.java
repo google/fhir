@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 public class TimeWrapper extends PrimitiveWrapper<Time> {
 
   private static final Pattern TIME_PATTERN =
-      Pattern.compile("([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?");
+      Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Time.getDefaultInstance()));
   private static final Time NULL_TIME =
       Time.newBuilder().addExtension(getNoValueExtension()).build();
 

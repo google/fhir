@@ -20,7 +20,8 @@ import java.util.regex.Pattern;
 /** A wrapper around the Integer FHIR primitive type. */
 public class IntegerWrapper extends NumericTypeWrapper<Integer> {
 
-  private static final Pattern INTEGER_PATTERN = Pattern.compile("[0]|[-+]?[1-9][0-9]*");
+  private static final Pattern INTEGER_PATTERN =
+      Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Integer.getDefaultInstance()));
   private static final Integer NULL_INTEGER =
       Integer.newBuilder().addExtension(getNoValueExtension()).build();
 

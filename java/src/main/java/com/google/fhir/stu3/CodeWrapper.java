@@ -22,6 +22,7 @@ import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
+import java.util.regex.Pattern;
 
 /**
  * A wrapper around the Code FHIR primitive type. This wrapper also supports reading from and
@@ -29,6 +30,8 @@ import com.google.protobuf.MessageOrBuilder;
  */
 public class CodeWrapper extends PrimitiveWrapper<Code> {
 
+  private static final Pattern CODE_PATTERN =
+      Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Code.getDefaultInstance()));
   private static final Code NULL_CODE =
       Code.newBuilder().addExtension(getNoValueExtension()).build();
 
@@ -142,6 +145,7 @@ public class CodeWrapper extends PrimitiveWrapper<Code> {
   }
 
   private static Code parseAndValidate(String input) {
+    validateUsingPattern(CODE_PATTERN, input);
     return Code.newBuilder().setValue(input).build();
   }
 

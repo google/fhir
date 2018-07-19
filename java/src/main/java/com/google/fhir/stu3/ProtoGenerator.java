@@ -28,6 +28,7 @@ import com.google.fhir.stu3.proto.ElementDefinitionBindingName;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.fhir.stu3.proto.StructureDefinitionExplicitTypeName;
 import com.google.fhir.stu3.proto.StructureDefinitionKindCode;
+import com.google.fhir.stu3.proto.StructureDefinitionRegex;
 import com.google.fhir.stu3.proto.TypeDerivationRuleCode;
 import com.google.fhir.stu3.proto.Uri;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
@@ -458,7 +459,23 @@ public class ProtoGenerator {
         ElementDefinition.TypeRef.newBuilder().setCode(Uri.newBuilder().setValue("string")).build();
     for (ElementDefinition element : def.getSnapshot().getElementList()) {
       if (valueFieldId.equals(element.getId().getValue())) {
-        // The value field typically has no type. We need to add a fake one here.
+
+        // If present, add the regex for this primitive type as a message-level annotation.
+        if (element.getTypeCount() == 1) {
+          List<StructureDefinitionRegex> regex =
+              ExtensionWrapper.fromExtensionsIn(element.getType(0))
+                  .getMatchingExtensions(StructureDefinitionRegex.getDefaultInstance());
+          if (regex.size() == 1) {
+            builder.setOptions(
+                builder
+                    .getOptions()
+                    .toBuilder()
+                    .setExtension(Annotations.valueRegex, regex.get(0).getValueString().getValue())
+                    .build());
+          }
+        }
+
+        // The value field sometimes has no type. We need to add a fake one here.
         ElementDefinition elementWithType =
             element.toBuilder().clearType().addType(mockType).build();
         FieldDescriptorProto field =

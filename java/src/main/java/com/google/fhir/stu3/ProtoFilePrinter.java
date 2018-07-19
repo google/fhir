@@ -18,6 +18,8 @@ import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.google.common.escape.CharEscaperBuilder;
+import com.google.common.escape.Escaper;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
@@ -51,6 +53,9 @@ public class ProtoFilePrinter {
           + "//    limitations under the License.\n";
 
   private boolean addLicense = false;
+
+  private static final Escaper VALUE_REGEX_ESCAPER =
+      new CharEscaperBuilder().addEscape('\\', "\\\\").toEscaper();
 
   /** Creates a ProtoFilePrinter with default parameters. */
   public ProtoFilePrinter() {
@@ -172,6 +177,14 @@ public class ProtoFilePrinter {
           .append("option (structure_definition_kind) = ")
           .append(options.getExtension(Annotations.structureDefinitionKind))
           .append(";\n");
+      printedField = true;
+    }
+    if (options.hasExtension(Annotations.valueRegex)) {
+      message
+          .append(fieldIndent)
+          .append("option (value_regex) = \"")
+          .append(VALUE_REGEX_ESCAPER.escape(options.getExtension(Annotations.valueRegex)))
+          .append("\";\n");
       printedField = true;
     }
     if (options.hasExtension(Annotations.fhirExtensionUrl)) {

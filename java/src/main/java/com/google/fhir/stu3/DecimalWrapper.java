@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 public class DecimalWrapper extends NumericTypeWrapper<Decimal> {
 
   private static final Pattern DECIMAL_PATTERN =
-      Pattern.compile("[-\\+]?(0|[1-9][0-9]*)(\\.[0-9]+)?");
+      Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Decimal.getDefaultInstance()));
   private static final Decimal NULL_DECIMAL =
       Decimal.newBuilder().addExtension(getNoValueExtension()).build();
 

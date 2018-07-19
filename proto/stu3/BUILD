@@ -72,6 +72,7 @@ proto_library(
         "elementdefinition_binding_name.proto",
         "primitive_has_no_value.proto",
         "structuredefinition_explicit_type_name.proto",
+        "structuredefinition_regex.proto",
     ],
     deps = [
         ":annotations_proto",

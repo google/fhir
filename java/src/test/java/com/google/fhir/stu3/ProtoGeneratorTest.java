@@ -98,6 +98,7 @@ public class ProtoGeneratorTest {
     registry.add(Annotations.messageDescription);
     registry.add(Annotations.fhirExtensionUrl);
     registry.add(Annotations.fhirReferenceType);
+    registry.add(Annotations.valueRegex);
   }
 
   // Test the primitive FHIR data types individually. */

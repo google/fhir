@@ -58,6 +58,7 @@ message Boolean {
 // See https://www.hl7.org/fhir/datatypes.html#code
 message Code {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (value_regex) = "[^\\s]+([\\s]?[^\\s]+)*";
 
   // Primitive value for code
   string value = 1;
@@ -74,6 +75,8 @@ message Code {
 // See https://www.hl7.org/fhir/datatypes.html#date
 message Date {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (value_regex) =
+      "-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?";
 
   // Primitive value for date
   int64 value_us = 1;
@@ -100,6 +103,8 @@ message Date {
 // See https://www.hl7.org/fhir/datatypes.html#datetime
 message DateTime {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (value_regex) =
+      "-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?";
 
   // Primitive value for dateTime
   int64 value_us = 1;
@@ -129,6 +134,7 @@ message DateTime {
 // See https://www.hl7.org/fhir/datatypes.html#decimal
 message Decimal {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (value_regex) = "-?([0]|([1-9][0-9]*))(\\.[0-9]+)?";
 
   // Primitive value for decimal
   string value = 1;
@@ -145,6 +151,7 @@ message Decimal {
 // See https://www.hl7.org/fhir/datatypes.html#id
 message Id {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (value_regex) = "[A-Za-z0-9\\-\\.]{1,64}";
 
   // Primitive value for id
   string value = 1;
@@ -187,6 +194,7 @@ message Instant {
 // See https://www.hl7.org/fhir/datatypes.html#integer
 message Integer {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (value_regex) = "-?([0]|([1-9][0-9]*))";
 
   // Primitive value for integer
   sint32 value = 1;
@@ -219,6 +227,7 @@ message Markdown {
 // See https://www.hl7.org/fhir/datatypes.html#oid
 message Oid {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (value_regex) = "urn:oid:(0|[1-9][0-9]*)(\\.(0|[1-9][0-9]*))*";
 
   // Primitive value for oid
   string value = 1;
@@ -235,6 +244,7 @@ message Oid {
 // See https://www.hl7.org/fhir/datatypes.html#positiveint
 message PositiveInt {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (value_regex) = "[1-9][0-9]*";
 
   // Primitive value for positiveInt
   uint32 value = 1;
@@ -267,6 +277,7 @@ message String {
 // See https://www.hl7.org/fhir/datatypes.html#time
 message Time {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (value_regex) = "([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?";
 
   // Primitive value for time
   int64 value_us = 1;
@@ -291,6 +302,7 @@ message Time {
 // See https://www.hl7.org/fhir/datatypes.html#unsignedint
 message UnsignedInt {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (value_regex) = "[0]|([1-9][0-9]*)";
 
   // Primitive value for unsignedInt
   uint32 value = 1;
@@ -323,6 +335,8 @@ message Uri {
 // See https://www.hl7.org/fhir/datatypes.html#uuid
 message Uuid {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (value_regex) =
+      "urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 
   // Primitive value for uuid
   string value = 1;

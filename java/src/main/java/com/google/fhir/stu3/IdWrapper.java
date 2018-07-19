@@ -20,7 +20,8 @@ import java.util.regex.Pattern;
 /** A wrapper around the Id FHIR primitive type. */
 public class IdWrapper extends PrimitiveWrapper<Id> {
 
-  private static final Pattern ID_PATTERN = Pattern.compile("[A-Za-z0-9\\-\\.]{1,64}");
+  private static final Pattern ID_PATTERN =
+      Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Id.getDefaultInstance()));
   private static final Id NULL_ID = Id.newBuilder().addExtension(getNoValueExtension()).build();
 
   /** Create an IdWrapper from an Id. */
