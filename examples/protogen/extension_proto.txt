@@ -1,0 +1,60 @@
+
+// Optional Extensions Element
+// See https://www.hl7.org/fhir/datatypes.html#Extension
+message Extension {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // identifies the meaning of the extension
+  Uri url = 2 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Value of extension
+  message Value {
+    oneof value {
+      Base64Binary base64_binary = 1;
+      Boolean boolean = 2;
+      Code code = 3;
+      Date date = 4;
+      DateTime date_time = 5;
+      Decimal decimal = 6;
+      Id id = 7;
+      Instant instant = 8;
+      Integer integer = 9;
+      Markdown markdown = 10;
+      Oid oid = 11;
+      PositiveInt positive_int = 12;
+      String string_value = 13 [json_name = "string"];
+      Time time = 14;
+      UnsignedInt unsigned_int = 15;
+      Uri uri = 16;
+      Address address = 17;
+      Age age = 18;
+      Annotation annotation = 19;
+      Attachment attachment = 20;
+      CodeableConcept codeable_concept = 21;
+      Coding coding = 22;
+      ContactPoint contact_point = 23;
+      Count count = 24;
+      Distance distance = 25;
+      Duration duration = 26;
+      HumanName human_name = 27;
+      Identifier identifier = 28;
+      Money money = 29;
+      Period period = 30;
+      Quantity quantity = 31;
+      Range range = 32;
+      Ratio ratio = 33;
+      Reference reference = 34;
+      SampledData sampled_data = 35;
+      Signature signature = 36;
+      Timing timing = 37;
+      Meta meta = 38;
+    }
+  }
+  Value value = 3 [(is_choice_type) = true];
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 4;
+}

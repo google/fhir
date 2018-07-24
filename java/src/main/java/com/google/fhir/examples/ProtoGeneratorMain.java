@@ -90,7 +90,7 @@ class ProtoGeneratorMain {
       names = {"--proto_root"},
       description = "Generated proto import root path"
     )
-    private String protoRoot = "third_party/fhir/proto/stu3";
+    private String protoRoot = "proto/stu3";
 
     @Parameter(description = "List of input files")
     private List<String> inputFiles = new ArrayList<>();

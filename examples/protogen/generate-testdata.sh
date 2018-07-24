@@ -18,6 +18,24 @@ INPUT_PATH=$ROOT_PATH/testdata/stu3/examples
 JSON_TO_PROTO=$ROOT_PATH/bazel-bin/java/JsonToProto
 OUTPUT_PATH=.
 
+while getopts ":io:" opt; do
+  case ${opt} in
+    i )
+      INPUT_PATH=$OPTARG
+      ;;
+    o )
+      OUTPUT_PATH=$OPTARG
+      ;;
+    \? )
+      echo "Invalid option: $OPTARG" 1>&2
+      ;;
+    : )
+      echo "Invalid option: $OPTARG requires an argument" 1>&2
+      ;;
+  esac
+done
+shift $((OPTIND -1))
+
 # Build the binary.
 bazel build //java:JsonToProto
 

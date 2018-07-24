@@ -1,5 +1,8 @@
 # Tools for working with FHIR protocol buffers in java.
-package(default_visibility = ["//visibility:public"])
+package(
+    default_visibility = ["//visibility:public"],
+    features = ["-jpl_strict_deps"],
+)
 
 licenses(["notice"])
 
@@ -15,7 +18,6 @@ java_library(
         "//proto/stu3:extensions_java_proto",
         "//proto/stu3:metadatatypes_java_proto",
         "//proto/stu3:resources_java_proto",
-        "@com_google_protobuf//:descriptor_proto",
         "@com_google_protobuf//:protobuf_java",
     ],
 )
@@ -64,6 +66,9 @@ java_test(
     test_class = "com.google.fhir.stu3.AnnotationUtilsTest",
     deps = [
         ":stu3",
+        "//external:junit",
+        "//external:truth",
+        "//proto/stu3:annotations_java_proto",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:resources_java_proto",
         "@com_google_protobuf//:protobuf_java",
@@ -119,12 +124,12 @@ java_test(
     test_class = "com.google.fhir.stu3.ExtensionWrapperTest",
     deps = [
         ":stu3",
+        "//external:guava",
         "//external:junit",
         "//external:truth",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
         "@com_google_protobuf//:protobuf_java",
-        "@guava_maven//jar",
     ],
 )
 
@@ -151,13 +156,12 @@ java_test(
     test_class = "com.google.fhir.stu3.JsonFormatTest",
     deps = [
         ":stu3",
+        "//external:gson",
+        "//external:guava",
         "//external:junit",
         "//external:truth",
-        "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:resources_java_proto",
         "@com_google_protobuf//:protobuf_java",
-        "@gson_maven//jar",
-        "@guava_maven//jar",
     ],
 )
 
@@ -173,15 +177,15 @@ java_test(
     test_class = "com.google.fhir.stu3.ProtoFilePrinterTest",
     deps = [
         ":stu3",
+        "//external:gson",
+        "//external:guava",
         "//external:junit",
         "//external:truth",
         "//proto/stu3:annotations_java_proto",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:metadatatypes_java_proto",
         "//proto/stu3:resources_java_proto",
-        "@com_google_protobuf//:descriptor_proto",
         "@com_google_protobuf//:protobuf_java",
-        "@guava_maven//jar",
     ],
 )
 
@@ -196,14 +200,14 @@ java_test(
     test_class = "com.google.fhir.stu3.ProtoGeneratorTest",
     deps = [
         ":stu3",
+        "//external:gson",
+        "//external:guava",
         "//external:junit",
         "//external:truth",
         "//proto/stu3:annotations_java_proto",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:resources_java_proto",
-        "@com_google_protobuf//:descriptor_proto",
         "@com_google_protobuf//:protobuf_java",
-        "@guava_maven//jar",
     ],
 )
 
@@ -230,10 +234,10 @@ java_test(
     test_class = "com.google.fhir.stu3.ValidationTest",
     deps = [
         ":stu3",
+        "//external:guava",
         "//external:junit",
         "//external:truth",
         "//proto/stu3:datatypes_java_proto",
         "@com_google_protobuf//:protobuf_java",
-        "@guava_maven//jar",
     ],
 )

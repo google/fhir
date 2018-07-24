@@ -64,4 +64,3 @@ bind(
     name = "truth",
     actual = "@truth_maven//jar",
 )
-

@@ -20,6 +20,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.MoreCollectors;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.BindingStrengthCode;
 import com.google.fhir.stu3.proto.ContainedResource;
@@ -49,6 +50,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -60,7 +62,10 @@ public class ProtoGenerator {
       ImmutableMap.of("Object", "ObjectType");
 
   // Map of primitive type ids to proto message names.
-  private static final ImmutableMap<String, String> FIELD_TYPE_MAP = getFieldTypeMap();
+  private static final ImmutableMap<String, String> FIELD_TYPE_OVERRIDES =
+      ImmutableMap.of(
+          "Xhtml", "String",
+          "Resource", "ContainedResource");
 
   // Map of time-like primitive type ids to supported granularity
   private static final ImmutableMap<String, List<String>> TIME_LIKE_PRECISION_MAP =
@@ -123,29 +128,6 @@ public class ProtoGenerator {
   public ProtoGenerator(String packageName, String protoRootPath) {
     this.packageName = packageName;
     this.protoRootPath = protoRootPath;
-  }
-
-  private static ImmutableMap<String, String> getFieldTypeMap() {
-    Map<String, String> fieldTypeMap = new HashMap<>();
-    fieldTypeMap.put("base64Binary", "Base64Binary");
-    fieldTypeMap.put("boolean", "Boolean");
-    fieldTypeMap.put("code", "Code");
-    fieldTypeMap.put("decimal", "Decimal");
-    fieldTypeMap.put("dateTime", "DateTime");
-    fieldTypeMap.put("date", "Date");
-    fieldTypeMap.put("id", "Id");
-    fieldTypeMap.put("instant", "Instant");
-    fieldTypeMap.put("integer", "Integer");
-    fieldTypeMap.put("markdown", "Markdown");
-    fieldTypeMap.put("positiveInt", "PositiveInt");
-    fieldTypeMap.put("oid", "Oid");
-    fieldTypeMap.put("string", "String");
-    fieldTypeMap.put("time", "Time");
-    fieldTypeMap.put("unsignedInt", "UnsignedInt");
-    fieldTypeMap.put("uri", "Uri");
-    fieldTypeMap.put("xhtml", "String");
-    fieldTypeMap.put("Resource", "ContainedResource");
-    return ImmutableMap.copyOf(fieldTypeMap);
   }
 
   private static ImmutableMap<String, String> getRenamedCodeTypes() {
@@ -229,16 +211,10 @@ public class ProtoGenerator {
             .build());
 
     // Build the name of the descriptor.
-    String name = def.getId().getValue();
-    if (Character.isLowerCase(name.charAt(0))) {
-      name = CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, name);
-    }
+    String name = normalizeType(def.getId().getValue());
 
     // If this is a primitive type, generate the value field first.
     if (def.getKind().getValue() == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE) {
-      // Fix up the name. TODO(sundberg): remove the Xhtml special case.
-      name =
-          "Xhtml".equals(name) ? name : FIELD_TYPE_MAP.getOrDefault(def.getId().getValue(), name);
       generatePrimitiveValue(def, builder.setName(name));
     }
 
@@ -246,12 +222,7 @@ public class ProtoGenerator {
         && def.getDerivation().getValue() == TypeDerivationRuleCode.Value.CONSTRAINT) {
       // Generate a specialized extension definition.
       // Get the name of this extension.
-      name = def.getName().getValue();
-      if (name.contains("-")) {
-        name = CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, name);
-      } else if (Character.isLowerCase(name.charAt(0))) {
-        name = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, name);
-      }
+      name = normalizeType(def.getName().getValue());
       if (def.getContextCount() == 1) {
         String resource = Splitter.on('.').splitToList(def.getContext(0).getValue()).get(0);
         name = resource + name;
@@ -448,69 +419,82 @@ public class ProtoGenerator {
     return builder.build();
   }
 
+  private static final ElementDefinition.TypeRef STRING_TYPE =
+      ElementDefinition.TypeRef.newBuilder().setCode(Uri.newBuilder().setValue("string")).build();
+
   /** Generate the primitive value part of a datatype. */
   private void generatePrimitiveValue(StructureDefinition def, DescriptorProto.Builder builder) {
-    // Find the value field.
     String valueFieldId = def.getId().getValue() + ".value";
-    FieldDescriptorProto.Type primitiveType =
-        PRIMITIVE_TYPE_OVERRIDES.getOrDefault(
-            def.getId().getValue(), FieldDescriptorProto.Type.TYPE_STRING);
-    ElementDefinition.TypeRef mockType =
-        ElementDefinition.TypeRef.newBuilder().setCode(Uri.newBuilder().setValue("string")).build();
-    for (ElementDefinition element : def.getSnapshot().getElementList()) {
-      if (valueFieldId.equals(element.getId().getValue())) {
+    // Find the value field.
+    ElementDefinition valueElement;
+    try {
+      valueElement =
+          getElementDefinitionById(def.getSnapshot().getElementList(), valueFieldId)
+              .orElseThrow(
+                  () -> new IllegalArgumentException("Unable to find value field on: " + def));
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException(
+          "Multiple Elements found on StructureDefinition with id: "
+              + valueFieldId
+              + ".\nStructureDefinition: "
+              + def);
+    }
+    // If present, add the regex for this primitive type as a message-level annotation.
+    if (valueElement.getTypeCount() == 1) {
+      List<StructureDefinitionRegex> regex =
+          ExtensionWrapper.fromExtensionsIn(valueElement.getType(0))
+              .getMatchingExtensions(StructureDefinitionRegex.getDefaultInstance());
+      if (regex.size() == 1) {
+        builder.setOptions(
+            builder
+                .getOptions()
+                .toBuilder()
+                .setExtension(Annotations.valueRegex, regex.get(0).getValueString().getValue())
+                .build());
+      }
+    }
 
-        // If present, add the regex for this primitive type as a message-level annotation.
-        if (element.getTypeCount() == 1) {
-          List<StructureDefinitionRegex> regex =
-              ExtensionWrapper.fromExtensionsIn(element.getType(0))
-                  .getMatchingExtensions(StructureDefinitionRegex.getDefaultInstance());
-          if (regex.size() == 1) {
-            builder.setOptions(
-                builder
-                    .getOptions()
-                    .toBuilder()
-                    .setExtension(Annotations.valueRegex, regex.get(0).getValueString().getValue())
-                    .build());
-          }
+    // The value field sometimes has no type. We need to add a fake one here for buildField
+    // to succeed.  This will get overridden with the correct time,
+    ElementDefinition elementWithType =
+        valueElement.toBuilder().clearType().addType(STRING_TYPE).build();
+    FieldDescriptorProto field =
+        buildField(elementWithType, null /* no nested types */, 1 /* nextTag */);
+    if (field != null) {
+      if (TIME_LIKE_PRECISION_MAP.containsKey(def.getId().getValue())) {
+        // Handle time-like types differently.
+        EnumDescriptorProto.Builder enumBuilder = PRECISION_ENUM.toBuilder();
+        for (String value : TIME_LIKE_PRECISION_MAP.get(def.getId().getValue())) {
+          enumBuilder.addValue(
+              EnumValueDescriptorProto.newBuilder()
+                  .setName(value)
+                  .setNumber(enumBuilder.getValueCount()));
         }
-
-        // The value field sometimes has no type. We need to add a fake one here.
-        ElementDefinition elementWithType =
-            element.toBuilder().clearType().addType(mockType).build();
-        FieldDescriptorProto field =
-            buildField(elementWithType, null /* no nested types */, 1 /* nextTag */);
-        if (field != null) {
-          if (TIME_LIKE_PRECISION_MAP.containsKey(def.getId().getValue())) {
-            // Handle time-like types differently.
-            EnumDescriptorProto.Builder enumBuilder = PRECISION_ENUM.toBuilder();
-            for (String value : TIME_LIKE_PRECISION_MAP.get(def.getId().getValue())) {
-              enumBuilder.addValue(
-                  EnumValueDescriptorProto.newBuilder()
-                      .setName(value)
-                      .setNumber(enumBuilder.getValueCount()));
-            }
-            builder.addEnumType(enumBuilder);
-            builder.addField(
-                field
-                    .toBuilder()
-                    .clearTypeName()
-                    .setType(FieldDescriptorProto.Type.TYPE_INT64)
-                    .setName("value_us"));
-            if (TYPES_WITH_TIMEZONE.contains(def.getId().getValue())) {
-              builder.addField(TIMEZONE_FIELD);
-            }
-            builder.addField(
-                FieldDescriptorProto.newBuilder()
-                    .setName("precision")
-                    .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
-                    .setType(FieldDescriptorProto.Type.TYPE_ENUM)
-                    .setTypeName("." + packageName + "." + builder.getName() + ".Precision")
-                    .setNumber(builder.getFieldCount() + 1));
-          } else {
-            builder.addField(field.toBuilder().clearTypeName().setType(primitiveType));
-          }
+        builder.addEnumType(enumBuilder);
+        builder.addField(
+            field
+                .toBuilder()
+                .clearTypeName()
+                .setType(FieldDescriptorProto.Type.TYPE_INT64)
+                .setName("value_us"));
+        if (TYPES_WITH_TIMEZONE.contains(def.getId().getValue())) {
+          builder.addField(TIMEZONE_FIELD);
         }
+        builder.addField(
+            FieldDescriptorProto.newBuilder()
+                .setName("precision")
+                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                .setType(FieldDescriptorProto.Type.TYPE_ENUM)
+                .setTypeName("." + packageName + "." + builder.getName() + ".Precision")
+                .setNumber(builder.getFieldCount() + 1));
+      } else {
+        // Handle non-time-like types.
+        // If they don't explicitly appear in the PRIMITIVE_TYPE_OVERRIDES, they are assumed
+        // to be of type TYPE_STRING.
+        FieldDescriptorProto.Type primitiveType =
+            PRIMITIVE_TYPE_OVERRIDES.getOrDefault(
+                def.getId().getValue(), FieldDescriptorProto.Type.TYPE_STRING);
+        builder.addField(field.toBuilder().clearTypeName().setType(primitiveType));
       }
     }
   }
@@ -592,10 +576,8 @@ public class ProtoGenerator {
       String typeName;
       if (!typeNames.isEmpty()) {
         typeName = typeNames.get(0).getValueString().getValue();
-      } else if (RESERVED_TYPE_NAMES.containsKey(part)) {
-        typeName = RESERVED_TYPE_NAMES.get(part);
       } else {
-        typeName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, part);
+        typeName = normalizeType(part);
       }
       if (typeNameParts.contains(typeName)
           || (!typeNameParts.isEmpty() && (typeName.equals("Timing") || typeName.equals("Age")))) {
@@ -612,12 +594,10 @@ public class ProtoGenerator {
       throw new IllegalArgumentException("Empty typeList");
     }
 
-    // Either this field is of a primitive type, or the type code should be
-    // copied verbatim.
-    String typeCode = typeList.get(0).getCode().getValue();
-    if (FIELD_TYPE_MAP.containsKey(typeCode)) {
-      // This field is of a primitive type.
-      return FIELD_TYPE_MAP.get(typeCode);
+    String typeCode = normalizeType(typeList.get(0).getCode().getValue());
+    if (FIELD_TYPE_OVERRIDES.containsKey(typeCode)) {
+      // There are a small number of names we override, primarily Resource -> ContainedResource.
+      return FIELD_TYPE_OVERRIDES.get(typeCode);
     } else if (typeCode.equals("Reference") && USE_TYPED_REFERENCES) {
       // Sort.
       Set<String> refTypes = new TreeSet<>();
@@ -788,16 +768,9 @@ public class ProtoGenerator {
 
     List<String> fieldTypeParts = new ArrayList<>();
     for (String part : Splitter.on('.').split(fieldType)) {
-      if (RESERVED_TYPE_NAMES.containsKey(part)) {
-        fieldTypeParts.add(RESERVED_TYPE_NAMES.get(fieldType));
-      } else {
-        fieldTypeParts.add(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, part));
-      }
+      fieldTypeParts.add(normalizeType(part));
     }
-    fieldType = Joiner.on('.').join(fieldTypeParts);
-
-    // Handle reserved symbols by hard-coded substitutions.
-    builder.setTypeName("." + packageName + "." + fieldType);
+    builder.setTypeName("." + packageName + "." + Joiner.on('.').join(fieldTypeParts));
 
     if (reservedFieldNames.containsKey(fieldName)) {
       builder.setName(reservedFieldNames.get(fieldName)).setJsonName(fieldName);
@@ -812,5 +785,29 @@ public class ProtoGenerator {
       builder.setOptions(options);
     }
     return builder;
+  }
+
+  private static String normalizeType(String type) {
+    if (RESERVED_TYPE_NAMES.containsKey(type)) {
+      return RESERVED_TYPE_NAMES.get(type);
+    }
+    String normalizedType = type;
+    if (Character.isLowerCase(type.charAt(0))) {
+      normalizedType = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, type);
+    }
+    if (type.contains("-")) {
+      normalizedType = CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, type);
+    }
+    return normalizedType;
+  }
+
+  // Returns an optional containing the only element in the list matching a given id, if present.
+  // Throws IllegalArgumentException if multiple matching elements are found.
+  private static Optional<ElementDefinition> getElementDefinitionById(
+      List<ElementDefinition> elements, String id) {
+    return elements
+        .stream()
+        .filter(element -> element.getId().getValue().equals(id))
+        .collect(MoreCollectors.toOptional());
   }
 }
