@@ -12,6 +12,11 @@ proto_library(
     ],
 )
 
+cc_proto_library(
+    name = "annotations_cc_proto",
+    deps = [":annotations_proto"],
+)
+
 java_proto_library(
     name = "annotations_java_proto",
     deps = [":annotations_proto"],
@@ -26,6 +31,11 @@ proto_library(
         ":annotations_proto",
         ":datatypes_proto",
     ],
+)
+
+cc_proto_library(
+    name = "codes_cc_proto",
+    deps = [":codes_proto"],
 )
 
 java_proto_library(
@@ -43,6 +53,11 @@ proto_library(
     ],
 )
 
+cc_proto_library(
+    name = "datatypes_cc_proto",
+    deps = [":datatypes_proto"],
+)
+
 java_proto_library(
     name = "datatypes_java_proto",
     deps = [":datatypes_proto"],
@@ -58,6 +73,11 @@ proto_library(
         ":codes_proto",
         ":datatypes_proto",
     ],
+)
+
+cc_proto_library(
+    name = "metadatatypes_cc_proto",
+    deps = [":metadatatypes_proto"],
 )
 
 java_proto_library(
@@ -80,6 +100,11 @@ proto_library(
     ],
 )
 
+cc_proto_library(
+    name = "extensions_cc_proto",
+    deps = [":extensions_proto"],
+)
+
 java_proto_library(
     name = "extensions_java_proto",
     deps = [":extensions_proto"],
@@ -96,6 +121,11 @@ proto_library(
         ":datatypes_proto",
         ":metadatatypes_proto",
     ],
+)
+
+cc_proto_library(
+    name = "resources_cc_proto",
+    deps = [":resources_proto"],
 )
 
 java_proto_library(
