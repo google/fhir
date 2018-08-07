@@ -18,6 +18,8 @@ java_library(
         "//proto/stu3:extensions_java_proto",
         "//proto/stu3:metadatatypes_java_proto",
         "//proto/stu3:resources_java_proto",
+        "@com_google_apis_google_api_services_bigquery//jar",
+        "@com_google_http_client_google_http_client//jar",
         "@com_google_protobuf//:protobuf_java",
     ],
 )
@@ -28,8 +30,8 @@ java_library(
     deps = [
         ":stu3",
         "//external:guava",
-        "//external:jcommander",
         "//proto/stu3:resources_java_proto",
+        "@com_beust_jcommander//jar",
         "@com_google_protobuf//:protobuf_java",
         "@com_google_protobuf//:protobuf_java_util",
     ],
@@ -66,12 +68,36 @@ java_test(
     test_class = "com.google.fhir.stu3.AnnotationUtilsTest",
     deps = [
         ":stu3",
-        "//external:junit",
-        "//external:truth",
         "//proto/stu3:annotations_java_proto",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:resources_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
+    ],
+)
+
+java_test(
+    name = "BigQuerySchemaTest",
+    size = "small",
+    srcs = ["src/test/java/com/google/fhir/stu3/BigQuerySchemaTest.java"],
+    data = [
+        "//testdata/stu3:bigquery",
+        "//testdata/stu3:examples",
+    ],
+    test_class = "com.google.fhir.stu3.BigQuerySchemaTest",
+    deps = [
+        ":stu3",
+        "//external:guava",
+        "//proto/stu3:datatypes_java_proto",
+        "//proto/stu3:resources_java_proto",
+        "@com_google_apis_google_api_services_bigquery//jar",
+        "@com_google_http_client_google_http_client//jar",
+        "@com_google_http_client_google_http_client_gson//jar",
+        "@com_google_protobuf//:protobuf_java",
+        "@com_google_protobuf//:protobuf_java_util",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
     ],
 )
 
@@ -82,9 +108,9 @@ java_test(
     test_class = "com.google.fhir.stu3.DateTimeWrapperTest",
     deps = [
         ":stu3",
-        "//external:junit",
-        "//external:truth",
         "//proto/stu3:datatypes_java_proto",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
     ],
 )
 
@@ -95,9 +121,9 @@ java_test(
     test_class = "com.google.fhir.stu3.DateWrapperTest",
     deps = [
         ":stu3",
-        "//external:junit",
-        "//external:truth",
         "//proto/stu3:datatypes_java_proto",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
     ],
 )
 
@@ -108,9 +134,9 @@ java_test(
     test_class = "com.google.fhir.stu3.DecimalWrapperTest",
     deps = [
         ":stu3",
-        "//external:junit",
-        "//external:truth",
         "//proto/stu3:datatypes_java_proto",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
     ],
 )
 
@@ -125,11 +151,11 @@ java_test(
     deps = [
         ":stu3",
         "//external:guava",
-        "//external:junit",
-        "//external:truth",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
     ],
 )
 
@@ -140,9 +166,9 @@ java_test(
     test_class = "com.google.fhir.stu3.InstantWrapperTest",
     deps = [
         ":stu3",
-        "//external:junit",
-        "//external:truth",
         "//proto/stu3:datatypes_java_proto",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
     ],
 )
 
@@ -158,10 +184,10 @@ java_test(
         ":stu3",
         "//external:gson",
         "//external:guava",
-        "//external:junit",
-        "//external:truth",
         "//proto/stu3:resources_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
     ],
 )
 
@@ -179,13 +205,13 @@ java_test(
         ":stu3",
         "//external:gson",
         "//external:guava",
-        "//external:junit",
-        "//external:truth",
         "//proto/stu3:annotations_java_proto",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:metadatatypes_java_proto",
         "//proto/stu3:resources_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
     ],
 )
 
@@ -202,12 +228,12 @@ java_test(
         ":stu3",
         "//external:gson",
         "//external:guava",
-        "//external:junit",
-        "//external:truth",
         "//proto/stu3:annotations_java_proto",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:resources_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
     ],
 )
 
@@ -218,9 +244,9 @@ java_test(
     test_class = "com.google.fhir.stu3.TimeWrapperTest",
     deps = [
         ":stu3",
-        "//external:junit",
-        "//external:truth",
         "//proto/stu3:datatypes_java_proto",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
     ],
 )
 
@@ -235,9 +261,9 @@ java_test(
     deps = [
         ":stu3",
         "//external:guava",
-        "//external:junit",
-        "//external:truth",
         "//proto/stu3:datatypes_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
     ],
 )

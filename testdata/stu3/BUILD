@@ -4,6 +4,14 @@ package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
 
+# These files are used to help test bigquery integration.
+filegroup(
+    name = "bigquery",
+    srcs = glob([
+        "bigquery/*.schema.json",
+    ]),
+)
+
 # These files are sample resources from the FHIR spec.
 filegroup(
     name = "examples",
