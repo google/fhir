@@ -25,8 +25,11 @@ option java_package = "com.google.fhir.stu3.proto";
 
 // Auto-generated from StructureDefinition for BackboneElement.
 // Base for elements defined inside a resource.
+// See http://hl7.org/fhir/StructureDefinition/BackboneElement
 message BackboneElement {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/BackboneElement";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -40,8 +43,11 @@ message BackboneElement {
 
 // Auto-generated from StructureDefinition for ContactDetail.
 // Contact information.
+// See http://hl7.org/fhir/StructureDefinition/ContactDetail
 message ContactDetail {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ContactDetail";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -58,8 +64,11 @@ message ContactDetail {
 
 // Auto-generated from StructureDefinition for Contributor.
 // Contributor information.
+// See http://hl7.org/fhir/StructureDefinition/Contributor
 message Contributor {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Contributor";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -79,8 +88,11 @@ message Contributor {
 
 // Auto-generated from StructureDefinition for DataRequirement.
 // Describes a required data item.
+// See http://hl7.org/fhir/StructureDefinition/DataRequirement
 message DataRequirement {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/DataRequirement";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -155,8 +167,11 @@ message DataRequirement {
 
 // Auto-generated from StructureDefinition for Element.
 // Base for all elements.
+// See http://hl7.org/fhir/StructureDefinition/Element
 message Element {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Element";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -167,8 +182,11 @@ message Element {
 
 // Auto-generated from StructureDefinition for ElementDefinition.
 // Definition of an element in a resource or extension.
+// See http://hl7.org/fhir/StructureDefinition/ElementDefinition
 message ElementDefinition {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ElementDefinition";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -626,8 +644,11 @@ message ElementDefinition {
 
 // Auto-generated from StructureDefinition for Narrative.
 // A human-readable formatted text, including images.
+// See http://hl7.org/fhir/StructureDefinition/Narrative
 message Narrative {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Narrative";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -644,8 +665,11 @@ message Narrative {
 
 // Auto-generated from StructureDefinition for ParameterDefinition.
 // Definition of a parameter to a module.
+// See http://hl7.org/fhir/StructureDefinition/ParameterDefinition
 message ParameterDefinition {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ParameterDefinition";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -678,8 +702,11 @@ message ParameterDefinition {
 
 // Auto-generated from StructureDefinition for RelatedArtifact.
 // Related artifacts for a knowledge resource.
+// See http://hl7.org/fhir/StructureDefinition/RelatedArtifact
 message RelatedArtifact {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/RelatedArtifact";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -710,9 +737,11 @@ message RelatedArtifact {
 
 // Auto-generated from StructureDefinition for Resource, last updated
 // 2017-04-19T07:44:43.294+10:00. Base Resource. See
-// https://www.hl7.org/fhir/resource.html
+// http://hl7.org/fhir/StructureDefinition/Resource
 message Resource {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Resource";
 
   // Logical id of this artifact
   Id id = 1;
@@ -729,8 +758,11 @@ message Resource {
 
 // Auto-generated from StructureDefinition for TriggerDefinition.
 // Defines an expected trigger for a module.
+// See http://hl7.org/fhir/StructureDefinition/TriggerDefinition
 message TriggerDefinition {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/TriggerDefinition";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -762,8 +794,11 @@ message TriggerDefinition {
 
 // Auto-generated from StructureDefinition for UsageContext.
 // Describes the context of use for a conformance or knowledge resource.
+// See http://hl7.org/fhir/StructureDefinition/UsageContext
 message UsageContext {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/UsageContext";
 
   // xml:id (or equivalent in JSON)
   String id = 1;

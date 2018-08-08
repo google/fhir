@@ -198,6 +198,7 @@ public class ProtoGenerator {
     if (root.hasShort()) {
       comment.append("\n").append((root.getShort().getValue() + ".").replaceAll("[\\n\\r]", "\n"));
     }
+    comment.append("\nSee ").append(def.getUrl().getValue());
 
     // Add message-level annotations.
     DescriptorProto.Builder builder = DescriptorProto.newBuilder();
@@ -208,6 +209,7 @@ public class ProtoGenerator {
                 Annotations.StructureDefinitionKindValue.valueOf(
                     "KIND_" + def.getKind().getValue()))
             .setExtension(Annotations.messageDescription, comment.toString())
+            .setExtension(Annotations.fhirStructureDefinitionUrl, def.getUrl().getValue())
             .build());
 
     // Build the name of the descriptor.

@@ -59,6 +59,9 @@ extend google.protobuf.MessageOptions {
 
   // For primitive types, values must match this regex if present.
   string value_regex = 204543906;
+
+  // Url for the structure definition this message was built from.
+  string fhir_structure_definition_url = 207562726;
 }
 
 extend google.protobuf.EnumValueOptions {

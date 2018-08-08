@@ -59,6 +59,7 @@ $PROTO_GENERATOR \
 # * Extension, which has a field order discrepancy between spec and test data.
 # TODO(nickgeorge): generate Extension proto with custom ordering.
 # TODO(sundberg): generate codes.proto
+echo -e "\n//End of auto-generated messages.\n" >> $OUTPUT_PATH/datatypes.proto
 cat $MANUAL_ADDITIONS_ROOT/extension_proto.txt >> $OUTPUT_PATH/datatypes.proto
 cat $MANUAL_ADDITIONS_ROOT/reference_proto.txt >> $OUTPUT_PATH/datatypes.proto
 cat $MANUAL_ADDITIONS_ROOT/codes_proto.txt >> $OUTPUT_PATH/datatypes.proto

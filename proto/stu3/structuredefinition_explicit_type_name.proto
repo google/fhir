@@ -24,9 +24,13 @@ option java_package = "com.google.fhir.stu3.proto";
 
 // Auto-generated from StructureDefinition for explicit-type-name.
 // Advisory - name of Type for implementations.
+// See
+// http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name
 message StructureDefinitionExplicitTypeName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_extension_url) =
+      "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name";
+  option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name";
 
   // Value of extension

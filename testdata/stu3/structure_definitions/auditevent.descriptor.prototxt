@@ -634,5 +634,6 @@ nested_type {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for AuditEvent, last updated 2017-04-19T07:44:43.294+10:00.\nEvent record kept for security purposes."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for AuditEvent, last updated 2017-04-19T07:44:43.294+10:00.\nEvent record kept for security purposes.\nSee http://hl7.org/fhir/StructureDefinition/AuditEvent"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/AuditEvent"
 }

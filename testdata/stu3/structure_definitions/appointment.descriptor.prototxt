@@ -357,5 +357,6 @@ nested_type {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Appointment, last updated 2017-04-19T07:44:43.294+10:00.\nA booking of a healthcare event among patient(s), practitioner(s), related person(s) and/or device(s) for a specific date/time. This may result in one or more Encounter(s)."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Appointment, last updated 2017-04-19T07:44:43.294+10:00.\nA booking of a healthcare event among patient(s), practitioner(s), related person(s) and/or device(s) for a specific date/time. This may result in one or more Encounter(s).\nSee http://hl7.org/fhir/StructureDefinition/Appointment"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Appointment"
 }

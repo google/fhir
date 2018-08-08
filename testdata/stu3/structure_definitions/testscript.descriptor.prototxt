@@ -2211,5 +2211,6 @@ nested_type {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for TestScript, last updated 2017-04-19T07:44:43.294+10:00.\nDescribes a set of tests."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for TestScript, last updated 2017-04-19T07:44:43.294+10:00.\nDescribes a set of tests.\nSee http://hl7.org/fhir/StructureDefinition/TestScript"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/TestScript"
 }

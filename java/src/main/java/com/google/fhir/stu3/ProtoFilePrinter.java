@@ -149,21 +149,6 @@ public class ProtoFilePrinter {
           .append("\n");
     }
 
-    // Add a link to the main fhir documentation page for top-level messages.
-    if (indent.isEmpty()) {
-      if (AnnotationUtils.isPrimitiveType(descriptor)) {
-        message
-            .append("// See https://www.hl7.org/fhir/datatypes.html#")
-            .append(messageName.toLowerCase())
-            .append("\n");
-      } else if (AnnotationUtils.isResource(descriptor)) {
-        message
-            .append("// See https://www.hl7.org/fhir/")
-            .append(messageName.toLowerCase())
-            .append(".html\n");
-      }
-    }
-
     // Start the main message.
     message.append(indent).append("message ").append(messageName).append(" {\n");
 
@@ -192,6 +177,14 @@ public class ProtoFilePrinter {
           .append(fieldIndent)
           .append("option (fhir_extension_url) = \"")
           .append(options.getExtension(Annotations.fhirExtensionUrl))
+          .append("\";\n");
+      printedField = true;
+    }
+    if (options.hasExtension(Annotations.fhirStructureDefinitionUrl)) {
+      message
+          .append(fieldIndent)
+          .append("option (fhir_structure_definition_url) = \"")
+          .append(options.getExtension(Annotations.fhirStructureDefinitionUrl))
           .append("\";\n");
       printedField = true;
     }

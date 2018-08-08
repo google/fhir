@@ -300,5 +300,6 @@ nested_type {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for CompartmentDefinition, last updated 2017-04-19T07:44:43.294+10:00.\nCompartment Definition for a resource."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for CompartmentDefinition, last updated 2017-04-19T07:44:43.294+10:00.\nCompartment Definition for a resource.\nSee http://hl7.org/fhir/StructureDefinition/CompartmentDefinition"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/CompartmentDefinition"
 }

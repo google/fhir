@@ -163,5 +163,6 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for AppointmentResponse, last updated 2017-04-19T07:44:43.294+10:00.\nA reply to an appointment request for a patient and/or practitioner(s), such as a confirmation or rejection."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for AppointmentResponse, last updated 2017-04-19T07:44:43.294+10:00.\nA reply to an appointment request for a patient and/or practitioner(s), such as a confirmation or rejection.\nSee http://hl7.org/fhir/StructureDefinition/AppointmentResponse"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/AppointmentResponse"
 }

@@ -82,5 +82,6 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for RelatedArtifact.\nRelated artifacts for a knowledge resource."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for RelatedArtifact.\nRelated artifacts for a knowledge resource.\nSee http://hl7.org/fhir/StructureDefinition/RelatedArtifact"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/RelatedArtifact"
 }

@@ -164,5 +164,6 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Flag, last updated 2017-04-19T07:44:43.294+10:00.\nKey information to flag to healthcare providers."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Flag, last updated 2017-04-19T07:44:43.294+10:00.\nKey information to flag to healthcare providers.\nSee http://hl7.org/fhir/StructureDefinition/Flag"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Flag"
 }

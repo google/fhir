@@ -24,9 +24,12 @@ option java_package = "com.google.fhir.stu3.proto";
 
 // Auto-generated from StructureDefinition for regex.
 // Regex applies to the value.
+// See http://hl7.org/fhir/StructureDefinition/structuredefinition-regex
 message StructureDefinitionRegex {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_extension_url) =
+      "http://hl7.org/fhir/StructureDefinition/structuredefinition-regex";
+  option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-regex";
 
   // Value of extension

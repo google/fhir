@@ -202,5 +202,6 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_LOGICAL
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for MetadataResource.\nCommon Ancestor declaration for definitional resources."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for MetadataResource.\nCommon Ancestor declaration for definitional resources.\nSee http://hl7.org/fhir/StructureDefinition/MetadataResource"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MetadataResource"
 }

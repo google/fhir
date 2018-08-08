@@ -26,9 +26,11 @@ option java_package = "com.google.fhir.stu3.proto";
 
 // Auto-generated from StructureDefinition for Account, last updated
 // 2017-04-19T07:44:43.294+10:00. Tracks balance, charges, for patient or cost
-// center. See https://www.hl7.org/fhir/account.html
+// center. See http://hl7.org/fhir/StructureDefinition/Account
 message Account {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Account";
 
   // Logical id of this artifact
   Id id = 1;
@@ -131,9 +133,11 @@ message Account {
 // Auto-generated from StructureDefinition for ActivityDefinition, last updated
 // 2017-04-19T07:44:43.294+10:00. The definition of a specific activity to be
 // taken, independent of any particular patient or context. See
-// https://www.hl7.org/fhir/activitydefinition.html
+// http://hl7.org/fhir/StructureDefinition/ActivityDefinition
 message ActivityDefinition {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ActivityDefinition";
 
   // Logical id of this artifact
   Id id = 1;
@@ -319,9 +323,11 @@ message ActivityDefinition {
 // Auto-generated from StructureDefinition for AdverseEvent, last updated
 // 2017-04-19T07:44:43.294+10:00. Medical care, research study or other
 // healthcare event causing physical injury. See
-// https://www.hl7.org/fhir/adverseevent.html
+// http://hl7.org/fhir/StructureDefinition/AdverseEvent
 message AdverseEvent {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/AdverseEvent";
 
   // Logical id of this artifact
   Id id = 1;
@@ -435,9 +441,11 @@ message AdverseEvent {
 // Auto-generated from StructureDefinition for AllergyIntolerance, last updated
 // 2017-04-19T07:44:43.294+10:00. Allergy or Intolerance (generally: Risk of
 // adverse reaction to a substance). See
-// https://www.hl7.org/fhir/allergyintolerance.html
+// http://hl7.org/fhir/StructureDefinition/AllergyIntolerance
 message AllergyIntolerance {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/AllergyIntolerance";
 
   // Logical id of this artifact
   Id id = 1;
@@ -556,9 +564,11 @@ message AllergyIntolerance {
 // 2017-04-19T07:44:43.294+10:00. A booking of a healthcare event among
 // patient(s), practitioner(s), related person(s) and/or device(s) for a
 // specific date/time. This may result in one or more Encounter(s). See
-// https://www.hl7.org/fhir/appointment.html
+// http://hl7.org/fhir/StructureDefinition/Appointment
 message Appointment {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Appointment";
 
   // Logical id of this artifact
   Id id = 1;
@@ -678,9 +688,11 @@ message Appointment {
 // Auto-generated from StructureDefinition for AppointmentResponse, last updated
 // 2017-04-19T07:44:43.294+10:00. A reply to an appointment request for a
 // patient and/or practitioner(s), such as a confirmation or rejection. See
-// https://www.hl7.org/fhir/appointmentresponse.html
+// http://hl7.org/fhir/StructureDefinition/AppointmentResponse
 message AppointmentResponse {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/AppointmentResponse";
 
   // Logical id of this artifact
   Id id = 1;
@@ -735,9 +747,11 @@ message AppointmentResponse {
 
 // Auto-generated from StructureDefinition for AuditEvent, last updated
 // 2017-04-19T07:44:43.294+10:00. Event record kept for security purposes. See
-// https://www.hl7.org/fhir/auditevent.html
+// http://hl7.org/fhir/StructureDefinition/AuditEvent
 message AuditEvent {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/AuditEvent";
 
   // Logical id of this artifact
   Id id = 1;
@@ -930,9 +944,11 @@ message AuditEvent {
 
 // Auto-generated from StructureDefinition for Basic, last updated
 // 2017-04-19T07:44:43.294+10:00. Resource for non-supported content. See
-// https://www.hl7.org/fhir/basic.html
+// http://hl7.org/fhir/StructureDefinition/Basic
 message Basic {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Basic";
 
   // Logical id of this artifact
   Id id = 1;
@@ -976,9 +992,11 @@ message Basic {
 
 // Auto-generated from StructureDefinition for Binary, last updated
 // 2017-04-19T07:44:43.294+10:00. Pure binary content defined by a format other
-// than FHIR. See https://www.hl7.org/fhir/binary.html
+// than FHIR. See http://hl7.org/fhir/StructureDefinition/Binary
 message Binary {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Binary";
 
   // Logical id of this artifact
   Id id = 1;
@@ -1004,9 +1022,11 @@ message Binary {
 
 // Auto-generated from StructureDefinition for BodySite, last updated
 // 2017-04-19T07:44:43.294+10:00. Specific and identified anatomical location.
-// See https://www.hl7.org/fhir/bodysite.html
+// See http://hl7.org/fhir/StructureDefinition/BodySite
 message BodySite {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/BodySite";
 
   // Logical id of this artifact
   Id id = 1;
@@ -1056,9 +1076,11 @@ message BodySite {
 
 // Auto-generated from StructureDefinition for Bundle, last updated
 // 2017-04-19T07:44:43.294+10:00. Contains a collection of resources. See
-// https://www.hl7.org/fhir/bundle.html
+// http://hl7.org/fhir/StructureDefinition/Bundle
 message Bundle {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Bundle";
 
   // Logical id of this artifact
   Id id = 1;
@@ -1208,9 +1230,11 @@ message Bundle {
 
 // Auto-generated from StructureDefinition for CapabilityStatement, last updated
 // 2017-04-19T07:44:43.294+10:00. A statement of system capabilities. See
-// https://www.hl7.org/fhir/capabilitystatement.html
+// http://hl7.org/fhir/StructureDefinition/CapabilityStatement
 message CapabilityStatement {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/CapabilityStatement";
 
   // Logical id of this artifact
   Id id = 1;
@@ -1672,9 +1696,11 @@ message CapabilityStatement {
 
 // Auto-generated from StructureDefinition for CarePlan, last updated
 // 2017-04-19T07:44:43.294+10:00. Healthcare plan for patient or group. See
-// https://www.hl7.org/fhir/careplan.html
+// http://hl7.org/fhir/StructureDefinition/CarePlan
 message CarePlan {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/CarePlan";
 
   // Logical id of this artifact
   Id id = 1;
@@ -1863,9 +1889,11 @@ message CarePlan {
 // Auto-generated from StructureDefinition for CareTeam, last updated
 // 2017-04-19T07:44:43.294+10:00. Planned participants in the coordination and
 // delivery of care for a patient or group. See
-// https://www.hl7.org/fhir/careteam.html
+// http://hl7.org/fhir/StructureDefinition/CareTeam
 message CareTeam {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/CareTeam";
 
   // Logical id of this artifact
   Id id = 1;
@@ -1953,9 +1981,11 @@ message CareTeam {
 // Auto-generated from StructureDefinition for ChargeItem, last updated
 // 2017-04-19T07:44:43.294+10:00. Item containing charge code(s) associated with
 // the provision of healthcare provider products. See
-// https://www.hl7.org/fhir/chargeitem.html
+// http://hl7.org/fhir/StructureDefinition/ChargeItem
 message ChargeItem {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ChargeItem";
 
   // Logical id of this artifact
   Id id = 1;
@@ -2078,9 +2108,11 @@ message ChargeItem {
 
 // Auto-generated from StructureDefinition for Claim, last updated
 // 2017-04-19T07:44:43.294+10:00. Claim, Pre-determination or Pre-authorization.
-// See https://www.hl7.org/fhir/claim.html
+// See http://hl7.org/fhir/StructureDefinition/Claim
 message Claim {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Claim";
 
   // Logical id of this artifact
   Id id = 1;
@@ -2592,9 +2624,11 @@ message Claim {
 
 // Auto-generated from StructureDefinition for ClaimResponse, last updated
 // 2017-04-19T07:44:43.294+10:00. Remittance resource. See
-// https://www.hl7.org/fhir/claimresponse.html
+// http://hl7.org/fhir/StructureDefinition/ClaimResponse
 message ClaimResponse {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ClaimResponse";
 
   // Logical id of this artifact
   Id id = 1;
@@ -2950,9 +2984,11 @@ message ClaimResponse {
 // Auto-generated from StructureDefinition for ClinicalImpression, last updated
 // 2017-04-19T07:44:43.294+10:00. A clinical assessment performed when planning
 // treatments and management strategies for a patient. See
-// https://www.hl7.org/fhir/clinicalimpression.html
+// http://hl7.org/fhir/StructureDefinition/ClinicalImpression
 message ClinicalImpression {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ClinicalImpression";
 
   // Logical id of this artifact
   Id id = 1;
@@ -3085,9 +3121,11 @@ message ClinicalImpression {
 
 // Auto-generated from StructureDefinition for CodeSystem, last updated
 // 2017-04-19T07:44:43.294+10:00. A set of codes drawn from one or more code
-// systems. See https://www.hl7.org/fhir/codesystem.html
+// systems. See http://hl7.org/fhir/StructureDefinition/CodeSystem
 message CodeSystem {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/CodeSystem";
 
   // Logical id of this artifact
   Id id = 1;
@@ -3316,9 +3354,12 @@ message CodeSystem {
 
 // Auto-generated from StructureDefinition for Communication, last updated
 // 2017-04-19T07:44:43.294+10:00. A record of information transmitted from a
-// sender to a receiver. See https://www.hl7.org/fhir/communication.html
+// sender to a receiver. See
+// http://hl7.org/fhir/StructureDefinition/Communication
 message Communication {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Communication";
 
   // Logical id of this artifact
   Id id = 1;
@@ -3430,9 +3471,12 @@ message Communication {
 
 // Auto-generated from StructureDefinition for CommunicationRequest, last
 // updated 2017-04-19T07:44:43.294+10:00. A request for information to be sent
-// to a receiver. See https://www.hl7.org/fhir/communicationrequest.html
+// to a receiver. See
+// http://hl7.org/fhir/StructureDefinition/CommunicationRequest
 message CommunicationRequest {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/CommunicationRequest";
 
   // Logical id of this artifact
   Id id = 1;
@@ -3566,9 +3610,11 @@ message CommunicationRequest {
 
 // Auto-generated from StructureDefinition for CompartmentDefinition, last
 // updated 2017-04-19T07:44:43.294+10:00. Compartment Definition for a resource.
-// See https://www.hl7.org/fhir/compartmentdefinition.html
+// See http://hl7.org/fhir/StructureDefinition/CompartmentDefinition
 message CompartmentDefinition {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/CompartmentDefinition";
 
   // Logical id of this artifact
   Id id = 1;
@@ -3663,9 +3709,11 @@ message CompartmentDefinition {
 // Auto-generated from StructureDefinition for Composition, last updated
 // 2017-04-19T07:44:43.294+10:00. A set of resources composed into a single
 // coherent clinical statement with clinical attestation. See
-// https://www.hl7.org/fhir/composition.html
+// http://hl7.org/fhir/StructureDefinition/Composition
 message Composition {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Composition";
 
   // Logical id of this artifact
   Id id = 1;
@@ -3838,9 +3886,11 @@ message Composition {
 
 // Auto-generated from StructureDefinition for ConceptMap, last updated
 // 2017-04-19T07:44:43.294+10:00. A map from one set of concepts to one or more
-// other concepts. See https://www.hl7.org/fhir/conceptmap.html
+// other concepts. See http://hl7.org/fhir/StructureDefinition/ConceptMap
 message ConceptMap {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ConceptMap";
 
   // Logical id of this artifact
   Id id = 1;
@@ -4058,9 +4108,11 @@ message ConceptMap {
 
 // Auto-generated from StructureDefinition for Condition, last updated
 // 2017-04-19T07:44:43.294+10:00. Detailed information about conditions,
-// problems or diagnoses. See https://www.hl7.org/fhir/condition.html
+// problems or diagnoses. See http://hl7.org/fhir/StructureDefinition/Condition
 message Condition {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Condition";
 
   // Logical id of this artifact
   Id id = 1;
@@ -4190,9 +4242,12 @@ message Condition {
 // Auto-generated from StructureDefinition for Consent, last updated
 // 2017-04-19T07:44:43.294+10:00. A healthcare consumer's policy choices to
 // permits or denies recipients or roles to perform actions for specific
-// purposes and periods of time. See https://www.hl7.org/fhir/consent.html
+// purposes and periods of time. See
+// http://hl7.org/fhir/StructureDefinition/Consent
 message Consent {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Consent";
 
   // Logical id of this artifact
   Id id = 1;
@@ -4405,9 +4460,11 @@ message Consent {
 
 // Auto-generated from StructureDefinition for Contract, last updated
 // 2017-04-19T07:44:43.294+10:00. Legal Agreement. See
-// https://www.hl7.org/fhir/contract.html
+// http://hl7.org/fhir/StructureDefinition/Contract
 message Contract {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Contract";
 
   // Logical id of this artifact
   Id id = 1;
@@ -4757,9 +4814,11 @@ message Contract {
 
 // Auto-generated from StructureDefinition for Coverage, last updated
 // 2017-04-19T07:44:43.294+10:00. Insurance or medical plan or a payment
-// agreement. See https://www.hl7.org/fhir/coverage.html
+// agreement. See http://hl7.org/fhir/StructureDefinition/Coverage
 message Coverage {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Coverage";
 
   // Logical id of this artifact
   Id id = 1;
@@ -4882,9 +4941,11 @@ message Coverage {
 
 // Auto-generated from StructureDefinition for DataElement, last updated
 // 2017-04-19T07:44:43.294+10:00. Resource data element. See
-// https://www.hl7.org/fhir/dataelement.html
+// http://hl7.org/fhir/StructureDefinition/DataElement
 message DataElement {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/DataElement";
 
   // Logical id of this artifact
   Id id = 1;
@@ -4986,9 +5047,11 @@ message DataElement {
 
 // Auto-generated from StructureDefinition for DetectedIssue, last updated
 // 2017-04-19T07:44:43.294+10:00. Clinical issue with action. See
-// https://www.hl7.org/fhir/detectedissue.html
+// http://hl7.org/fhir/StructureDefinition/DetectedIssue
 message DetectedIssue {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/DetectedIssue";
 
   // Logical id of this artifact
   Id id = 1;
@@ -5070,9 +5133,11 @@ message DetectedIssue {
 
 // Auto-generated from StructureDefinition for Device, last updated
 // 2017-04-19T07:44:43.294+10:00. Item used in healthcare. See
-// https://www.hl7.org/fhir/device.html
+// http://hl7.org/fhir/StructureDefinition/Device
 message Device {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Device";
 
   // Logical id of this artifact
   Id id = 1;
@@ -5183,9 +5248,11 @@ message Device {
 
 // Auto-generated from StructureDefinition for DeviceComponent, last updated
 // 2017-04-19T07:44:43.294+10:00. An instance of a medical-related component of
-// a medical device. See https://www.hl7.org/fhir/devicecomponent.html
+// a medical device. See http://hl7.org/fhir/StructureDefinition/DeviceComponent
 message DeviceComponent {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/DeviceComponent";
 
   // Logical id of this artifact
   Id id = 1;
@@ -5265,9 +5332,11 @@ message DeviceComponent {
 
 // Auto-generated from StructureDefinition for DeviceMetric, last updated
 // 2017-04-19T07:44:43.294+10:00. Measurement, calculation or setting capability
-// of a medical device. See https://www.hl7.org/fhir/devicemetric.html
+// of a medical device. See http://hl7.org/fhir/StructureDefinition/DeviceMetric
 message DeviceMetric {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/DeviceMetric";
 
   // Logical id of this artifact
   Id id = 1;
@@ -5347,9 +5416,11 @@ message DeviceMetric {
 
 // Auto-generated from StructureDefinition for DeviceRequest, last updated
 // 2017-04-19T07:44:43.294+10:00. Medical device request. See
-// https://www.hl7.org/fhir/devicerequest.html
+// http://hl7.org/fhir/StructureDefinition/DeviceRequest
 message DeviceRequest {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/DeviceRequest";
 
   // Logical id of this artifact
   Id id = 1;
@@ -5473,9 +5544,11 @@ message DeviceRequest {
 
 // Auto-generated from StructureDefinition for DeviceUseStatement, last updated
 // 2017-04-19T07:44:43.294+10:00. Record of use of a device. See
-// https://www.hl7.org/fhir/deviceusestatement.html
+// http://hl7.org/fhir/StructureDefinition/DeviceUseStatement
 message DeviceUseStatement {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/DeviceUseStatement";
 
   // Logical id of this artifact
   Id id = 1;
@@ -5546,9 +5619,11 @@ message DeviceUseStatement {
 // Auto-generated from StructureDefinition for DiagnosticReport, last updated
 // 2017-04-19T07:44:43.294+10:00. A Diagnostic report - a combination of request
 // information, atomic results, images, interpretation, as well as formatted
-// reports. See https://www.hl7.org/fhir/diagnosticreport.html
+// reports. See http://hl7.org/fhir/StructureDefinition/DiagnosticReport
 message DiagnosticReport {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/DiagnosticReport";
 
   // Logical id of this artifact
   Id id = 1;
@@ -5667,9 +5742,11 @@ message DiagnosticReport {
 
 // Auto-generated from StructureDefinition for DocumentManifest, last updated
 // 2017-04-19T07:44:43.294+10:00. A list that defines a set of documents. See
-// https://www.hl7.org/fhir/documentmanifest.html
+// http://hl7.org/fhir/StructureDefinition/DocumentManifest
 message DocumentManifest {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/DocumentManifest";
 
   // Logical id of this artifact
   Id id = 1;
@@ -5772,9 +5849,11 @@ message DocumentManifest {
 
 // Auto-generated from StructureDefinition for DocumentReference, last updated
 // 2017-04-19T07:44:43.294+10:00. A reference to a document. See
-// https://www.hl7.org/fhir/documentreference.html
+// http://hl7.org/fhir/StructureDefinition/DocumentReference
 message DocumentReference {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/DocumentReference";
 
   // Logical id of this artifact
   Id id = 1;
@@ -5936,9 +6015,11 @@ message DocumentReference {
 
 // Auto-generated from StructureDefinition for EligibilityRequest, last updated
 // 2017-04-19T07:44:43.294+10:00. Determine insurance validity and scope of
-// coverage. See https://www.hl7.org/fhir/eligibilityrequest.html
+// coverage. See http://hl7.org/fhir/StructureDefinition/EligibilityRequest
 message EligibilityRequest {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/EligibilityRequest";
 
   // Logical id of this artifact
   Id id = 1;
@@ -6018,9 +6099,11 @@ message EligibilityRequest {
 
 // Auto-generated from StructureDefinition for EligibilityResponse, last updated
 // 2017-04-19T07:44:43.294+10:00. EligibilityResponse resource. See
-// https://www.hl7.org/fhir/eligibilityresponse.html
+// http://hl7.org/fhir/StructureDefinition/EligibilityResponse
 message EligibilityResponse {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/EligibilityResponse";
 
   // Logical id of this artifact
   Id id = 1;
@@ -6190,9 +6273,12 @@ message EligibilityResponse {
 
 // Auto-generated from StructureDefinition for Encounter, last updated
 // 2017-04-19T07:44:43.294+10:00. An interaction during which services are
-// provided to the patient. See https://www.hl7.org/fhir/encounter.html
+// provided to the patient. See
+// http://hl7.org/fhir/StructureDefinition/Encounter
 message Encounter {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Encounter";
 
   // Logical id of this artifact
   Id id = 1;
@@ -6415,9 +6501,12 @@ message Encounter {
 
 // Auto-generated from StructureDefinition for Endpoint, last updated
 // 2017-04-19T07:44:43.294+10:00. The technical details of an endpoint that can
-// be used for electronic services. See https://www.hl7.org/fhir/endpoint.html
+// be used for electronic services. See
+// http://hl7.org/fhir/StructureDefinition/Endpoint
 message Endpoint {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Endpoint";
 
   // Logical id of this artifact
   Id id = 1;
@@ -6483,9 +6572,11 @@ message Endpoint {
 
 // Auto-generated from StructureDefinition for EnrollmentRequest, last updated
 // 2017-04-19T07:44:43.294+10:00. Enrollment request. See
-// https://www.hl7.org/fhir/enrollmentrequest.html
+// http://hl7.org/fhir/StructureDefinition/EnrollmentRequest
 message EnrollmentRequest {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/EnrollmentRequest";
 
   // Logical id of this artifact
   Id id = 1;
@@ -6538,9 +6629,11 @@ message EnrollmentRequest {
 
 // Auto-generated from StructureDefinition for EnrollmentResponse, last updated
 // 2017-04-19T07:44:43.294+10:00. EnrollmentResponse resource. See
-// https://www.hl7.org/fhir/enrollmentresponse.html
+// http://hl7.org/fhir/StructureDefinition/EnrollmentResponse
 message EnrollmentResponse {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/EnrollmentResponse";
 
   // Logical id of this artifact
   Id id = 1;
@@ -6598,9 +6691,11 @@ message EnrollmentResponse {
 // 2017-04-19T07:44:43.294+10:00. An association of a Patient with an
 // Organization and  Healthcare Provider(s) for a period of time that the
 // Organization assumes some level of responsibility. See
-// https://www.hl7.org/fhir/episodeofcare.html
+// http://hl7.org/fhir/StructureDefinition/EpisodeOfCare
 message EpisodeOfCare {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare";
 
   // Logical id of this artifact
   Id id = 1;
@@ -6707,9 +6802,11 @@ message EpisodeOfCare {
 // Auto-generated from StructureDefinition for ExpansionProfile, last updated
 // 2017-04-19T07:44:43.294+10:00. Defines behaviour and contraints on the
 // ValueSet Expansion operation. See
-// https://www.hl7.org/fhir/expansionprofile.html
+// http://hl7.org/fhir/StructureDefinition/ExpansionProfile
 message ExpansionProfile {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ExpansionProfile";
 
   // Logical id of this artifact
   Id id = 1;
@@ -6922,9 +7019,11 @@ message ExpansionProfile {
 
 // Auto-generated from StructureDefinition for ExplanationOfBenefit, last
 // updated 2017-04-19T07:44:43.294+10:00. Explanation of Benefit resource. See
-// https://www.hl7.org/fhir/explanationofbenefit.html
+// http://hl7.org/fhir/StructureDefinition/ExplanationOfBenefit
 message ExplanationOfBenefit {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ExplanationOfBenefit";
 
   // Logical id of this artifact
   Id id = 1;
@@ -7683,9 +7782,12 @@ message ExplanationOfBenefit {
 
 // Auto-generated from StructureDefinition for FamilyMemberHistory, last updated
 // 2017-04-19T07:44:43.294+10:00. Information about patient's relatives,
-// relevant for patient. See https://www.hl7.org/fhir/familymemberhistory.html
+// relevant for patient. See
+// http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory
 message FamilyMemberHistory {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory";
 
   // Logical id of this artifact
   Id id = 1;
@@ -7823,9 +7925,11 @@ message FamilyMemberHistory {
 
 // Auto-generated from StructureDefinition for Flag, last updated
 // 2017-04-19T07:44:43.294+10:00. Key information to flag to healthcare
-// providers. See https://www.hl7.org/fhir/flag.html
+// providers. See http://hl7.org/fhir/StructureDefinition/Flag
 message Flag {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Flag";
 
   // Logical id of this artifact
   Id id = 1;
@@ -7878,9 +7982,12 @@ message Flag {
 
 // Auto-generated from StructureDefinition for Goal, last updated
 // 2017-04-19T07:44:43.294+10:00. Describes the intended objective(s) for a
-// patient, group or organization. See https://www.hl7.org/fhir/goal.html
+// patient, group or organization. See
+// http://hl7.org/fhir/StructureDefinition/Goal
 message Goal {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Goal";
 
   // Logical id of this artifact
   Id id = 1;
@@ -7995,9 +8102,11 @@ message Goal {
 
 // Auto-generated from StructureDefinition for GraphDefinition, last updated
 // 2017-04-19T07:44:43.294+10:00. Definition of an graph of resources. See
-// https://www.hl7.org/fhir/graphdefinition.html
+// http://hl7.org/fhir/StructureDefinition/GraphDefinition
 message GraphDefinition {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/GraphDefinition";
 
   // Logical id of this artifact
   Id id = 1;
@@ -8146,9 +8255,11 @@ message GraphDefinition {
 
 // Auto-generated from StructureDefinition for Group, last updated
 // 2017-04-19T07:44:43.294+10:00. Group of multiple entities. See
-// https://www.hl7.org/fhir/group.html
+// http://hl7.org/fhir/StructureDefinition/Group
 message Group {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Group";
 
   // Logical id of this artifact
   Id id = 1;
@@ -8255,9 +8366,11 @@ message Group {
 
 // Auto-generated from StructureDefinition for GuidanceResponse, last updated
 // 2017-04-19T07:44:43.294+10:00. The formal response to a guidance request. See
-// https://www.hl7.org/fhir/guidanceresponse.html
+// http://hl7.org/fhir/StructureDefinition/GuidanceResponse
 message GuidanceResponse {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/GuidanceResponse";
 
   // Logical id of this artifact
   Id id = 1;
@@ -8336,9 +8449,11 @@ message GuidanceResponse {
 
 // Auto-generated from StructureDefinition for HealthcareService, last updated
 // 2017-04-19T07:44:43.294+10:00. The details of a healthcare service available
-// at a location. See https://www.hl7.org/fhir/healthcareservice.html
+// at a location. See http://hl7.org/fhir/StructureDefinition/HealthcareService
 message HealthcareService {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/HealthcareService";
 
   // Logical id of this artifact
   Id id = 1;
@@ -8477,9 +8592,11 @@ message HealthcareService {
 
 // Auto-generated from StructureDefinition for ImagingManifest, last updated
 // 2017-04-19T07:44:43.294+10:00. Key Object Selection. See
-// https://www.hl7.org/fhir/imagingmanifest.html
+// http://hl7.org/fhir/StructureDefinition/ImagingManifest
 message ImagingManifest {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ImagingManifest";
 
   // Logical id of this artifact
   Id id = 1;
@@ -8585,9 +8702,11 @@ message ImagingManifest {
 // Auto-generated from StructureDefinition for ImagingStudy, last updated
 // 2017-04-19T07:44:43.294+10:00. A set of images produced in single study (one
 // or more series of references images). See
-// https://www.hl7.org/fhir/imagingstudy.html
+// http://hl7.org/fhir/StructureDefinition/ImagingStudy
 message ImagingStudy {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ImagingStudy";
 
   // Logical id of this artifact
   Id id = 1;
@@ -8741,9 +8860,11 @@ message ImagingStudy {
 
 // Auto-generated from StructureDefinition for Immunization, last updated
 // 2017-04-19T07:44:43.294+10:00. Immunization event information. See
-// https://www.hl7.org/fhir/immunization.html
+// http://hl7.org/fhir/StructureDefinition/Immunization
 message Immunization {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Immunization";
 
   // Logical id of this artifact
   Id id = 1;
@@ -8924,9 +9045,12 @@ message Immunization {
 
 // Auto-generated from StructureDefinition for ImmunizationRecommendation, last
 // updated 2017-04-19T07:44:43.294+10:00. Guidance or advice relating to an
-// immunization. See https://www.hl7.org/fhir/immunizationrecommendation.html
+// immunization. See
+// http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation
 message ImmunizationRecommendation {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation";
 
   // Logical id of this artifact
   Id id = 1;
@@ -9041,9 +9165,11 @@ message ImmunizationRecommendation {
 
 // Auto-generated from StructureDefinition for ImplementationGuide, last updated
 // 2017-04-19T07:44:43.294+10:00. A set of rules about how FHIR is used. See
-// https://www.hl7.org/fhir/implementationguide.html
+// http://hl7.org/fhir/StructureDefinition/ImplementationGuide
 message ImplementationGuide {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ImplementationGuide";
 
   // Logical id of this artifact
   Id id = 1;
@@ -9249,9 +9375,11 @@ message ImplementationGuide {
 
 // Auto-generated from StructureDefinition for Library, last updated
 // 2017-04-19T07:44:43.294+10:00. Represents a library of quality improvement
-// components. See https://www.hl7.org/fhir/library.html
+// components. See http://hl7.org/fhir/StructureDefinition/Library
 message Library {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Library";
 
   // Logical id of this artifact
   Id id = 1;
@@ -9359,9 +9487,11 @@ message Library {
 
 // Auto-generated from StructureDefinition for Linkage, last updated
 // 2017-04-19T07:44:43.294+10:00. Links records for 'same' item. See
-// https://www.hl7.org/fhir/linkage.html
+// http://hl7.org/fhir/StructureDefinition/Linkage
 message Linkage {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Linkage";
 
   // Logical id of this artifact
   Id id = 1;
@@ -9415,9 +9545,11 @@ message Linkage {
 
 // Auto-generated from StructureDefinition for List, last updated
 // 2017-04-19T07:44:43.294+10:00. Information summarized from a list of other
-// resources. See https://www.hl7.org/fhir/list.html
+// resources. See http://hl7.org/fhir/StructureDefinition/List
 message List {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/List";
 
   // Logical id of this artifact
   Id id = 1;
@@ -9507,9 +9639,11 @@ message List {
 
 // Auto-generated from StructureDefinition for Location, last updated
 // 2017-04-19T07:44:43.294+10:00. Details and position information for a
-// physical place. See https://www.hl7.org/fhir/location.html
+// physical place. See http://hl7.org/fhir/StructureDefinition/Location
 message Location {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Location";
 
   // Logical id of this artifact
   Id id = 1;
@@ -9604,9 +9738,11 @@ message Location {
 
 // Auto-generated from StructureDefinition for Measure, last updated
 // 2017-04-19T07:44:43.294+10:00. A quality measure definition. See
-// https://www.hl7.org/fhir/measure.html
+// http://hl7.org/fhir/StructureDefinition/Measure
 message Measure {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Measure";
 
   // Logical id of this artifact
   Id id = 1;
@@ -9843,9 +9979,11 @@ message Measure {
 
 // Auto-generated from StructureDefinition for MeasureReport, last updated
 // 2017-04-19T07:44:43.294+10:00. Results of a measure evaluation. See
-// https://www.hl7.org/fhir/measurereport.html
+// http://hl7.org/fhir/StructureDefinition/MeasureReport
 message MeasureReport {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MeasureReport";
 
   // Logical id of this artifact
   Id id = 1;
@@ -10011,9 +10149,11 @@ message MeasureReport {
 // Auto-generated from StructureDefinition for Media, last updated
 // 2017-04-19T07:44:43.294+10:00. A photo, video, or audio recording acquired or
 // used in healthcare. The actual content may be inline or provided by direct
-// reference. See https://www.hl7.org/fhir/media.html
+// reference. See http://hl7.org/fhir/StructureDefinition/Media
 message Media {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Media";
 
   // Logical id of this artifact
   Id id = 1;
@@ -10102,9 +10242,11 @@ message Media {
 
 // Auto-generated from StructureDefinition for Medication, last updated
 // 2017-04-19T07:44:43.294+10:00. Definition of a Medication. See
-// https://www.hl7.org/fhir/medication.html
+// http://hl7.org/fhir/StructureDefinition/Medication
 message Medication {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Medication";
 
   // Logical id of this artifact
   Id id = 1;
@@ -10248,9 +10390,11 @@ message Medication {
 
 // Auto-generated from StructureDefinition for MedicationAdministration, last
 // updated 2017-04-19T07:44:43.294+10:00. Administration of medication to a
-// patient. See https://www.hl7.org/fhir/medicationadministration.html
+// patient. See http://hl7.org/fhir/StructureDefinition/MedicationAdministration
 message MedicationAdministration {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MedicationAdministration";
 
   // Logical id of this artifact
   Id id = 1;
@@ -10406,9 +10550,11 @@ message MedicationAdministration {
 
 // Auto-generated from StructureDefinition for MedicationDispense, last updated
 // 2017-04-19T07:44:43.294+10:00. Dispensing a medication to a named patient.
-// See https://www.hl7.org/fhir/medicationdispense.html
+// See http://hl7.org/fhir/StructureDefinition/MedicationDispense
 message MedicationDispense {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MedicationDispense";
 
   // Logical id of this artifact
   Id id = 1;
@@ -10564,9 +10710,11 @@ message MedicationDispense {
 
 // Auto-generated from StructureDefinition for MedicationRequest, last updated
 // 2017-04-19T07:44:43.294+10:00. Ordering of medication for patient or group.
-// See https://www.hl7.org/fhir/medicationrequest.html
+// See http://hl7.org/fhir/StructureDefinition/MedicationRequest
 message MedicationRequest {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MedicationRequest";
 
   // Logical id of this artifact
   Id id = 1;
@@ -10735,9 +10883,11 @@ message MedicationRequest {
 
 // Auto-generated from StructureDefinition for MedicationStatement, last updated
 // 2017-04-19T07:44:43.294+10:00. Record of medication being taken by a patient.
-// See https://www.hl7.org/fhir/medicationstatement.html
+// See http://hl7.org/fhir/StructureDefinition/MedicationStatement
 message MedicationStatement {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MedicationStatement";
 
   // Logical id of this artifact
   Id id = 1;
@@ -10839,9 +10989,11 @@ message MedicationStatement {
 // Auto-generated from StructureDefinition for MessageDefinition, last updated
 // 2017-04-19T07:44:43.294+10:00. A resource that defines a type of message that
 // can be exchanged between systems. See
-// https://www.hl7.org/fhir/messagedefinition.html
+// http://hl7.org/fhir/StructureDefinition/MessageDefinition
 message MessageDefinition {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MessageDefinition";
 
   // Logical id of this artifact
   Id id = 1;
@@ -10978,9 +11130,12 @@ message MessageDefinition {
 
 // Auto-generated from StructureDefinition for MessageHeader, last updated
 // 2017-04-19T07:44:43.294+10:00. A resource that describes a message that is
-// exchanged between systems. See https://www.hl7.org/fhir/messageheader.html
+// exchanged between systems. See
+// http://hl7.org/fhir/StructureDefinition/MessageHeader
 message MessageHeader {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MessageHeader";
 
   // Logical id of this artifact
   Id id = 1;
@@ -11108,9 +11263,11 @@ message MessageHeader {
 
 // Auto-generated from StructureDefinition for NamingSystem, last updated
 // 2017-04-19T07:44:43.294+10:00. System of unique identification. See
-// https://www.hl7.org/fhir/namingsystem.html
+// http://hl7.org/fhir/StructureDefinition/NamingSystem
 message NamingSystem {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/NamingSystem";
 
   // Logical id of this artifact
   Id id = 1;
@@ -11209,9 +11366,11 @@ message NamingSystem {
 
 // Auto-generated from StructureDefinition for NutritionOrder, last updated
 // 2017-04-19T07:44:43.294+10:00. Diet, formula or nutritional supplement
-// request. See https://www.hl7.org/fhir/nutritionorder.html
+// request. See http://hl7.org/fhir/StructureDefinition/NutritionOrder
 message NutritionOrder {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/NutritionOrder";
 
   // Logical id of this artifact
   Id id = 1;
@@ -11426,9 +11585,11 @@ message NutritionOrder {
 
 // Auto-generated from StructureDefinition for Observation, last updated
 // 2017-04-19T07:44:43.294+10:00. Measurements and simple assertions. See
-// https://www.hl7.org/fhir/observation.html
+// http://hl7.org/fhir/StructureDefinition/Observation
 message Observation {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
 
   // Logical id of this artifact
   Id id = 1;
@@ -11626,9 +11787,11 @@ message Observation {
 
 // Auto-generated from StructureDefinition for OperationDefinition, last updated
 // 2017-04-19T07:44:43.294+10:00. Definition of an operation or a named query.
-// See https://www.hl7.org/fhir/operationdefinition.html
+// See http://hl7.org/fhir/StructureDefinition/OperationDefinition
 message OperationDefinition {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/OperationDefinition";
 
   // Logical id of this artifact
   Id id = 1;
@@ -11811,9 +11974,11 @@ message OperationDefinition {
 
 // Auto-generated from StructureDefinition for OperationOutcome, last updated
 // 2017-04-19T07:44:43.294+10:00. Information about the success/failure of an
-// action. See https://www.hl7.org/fhir/operationoutcome.html
+// action. See http://hl7.org/fhir/StructureDefinition/OperationOutcome
 message OperationOutcome {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/OperationOutcome";
 
   // Logical id of this artifact
   Id id = 1;
@@ -11874,9 +12039,11 @@ message OperationOutcome {
 
 // Auto-generated from StructureDefinition for Organization, last updated
 // 2017-04-19T07:44:43.294+10:00. A grouping of people or organizations with a
-// common purpose. See https://www.hl7.org/fhir/organization.html
+// common purpose. See http://hl7.org/fhir/StructureDefinition/Organization
 message Organization {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Organization";
 
   // Logical id of this artifact
   Id id = 1;
@@ -11959,9 +12126,11 @@ message Organization {
 
 // Auto-generated from StructureDefinition for Parameters, last updated
 // 2017-04-19T07:44:43.294+10:00. Operation Request or Response. See
-// https://www.hl7.org/fhir/parameters.html
+// http://hl7.org/fhir/StructureDefinition/Parameters
 message Parameters {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Parameters";
 
   // Logical id of this artifact
   Id id = 1;
@@ -12045,9 +12214,12 @@ message Parameters {
 
 // Auto-generated from StructureDefinition for Patient, last updated
 // 2017-04-19T07:44:43.294+10:00. Information about an individual or animal
-// receiving health care services. See https://www.hl7.org/fhir/patient.html
+// receiving health care services. See
+// http://hl7.org/fhir/StructureDefinition/Patient
 message Patient {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Patient";
 
   // Logical id of this artifact
   Id id = 1;
@@ -12224,9 +12396,11 @@ message Patient {
 
 // Auto-generated from StructureDefinition for PaymentNotice, last updated
 // 2017-04-19T07:44:43.294+10:00. PaymentNotice request. See
-// https://www.hl7.org/fhir/paymentnotice.html
+// http://hl7.org/fhir/StructureDefinition/PaymentNotice
 message PaymentNotice {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/PaymentNotice";
 
   // Logical id of this artifact
   Id id = 1;
@@ -12285,9 +12459,11 @@ message PaymentNotice {
 
 // Auto-generated from StructureDefinition for PaymentReconciliation, last
 // updated 2017-04-19T07:44:43.294+10:00. PaymentReconciliation resource. See
-// https://www.hl7.org/fhir/paymentreconciliation.html
+// http://hl7.org/fhir/StructureDefinition/PaymentReconciliation
 message PaymentReconciliation {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/PaymentReconciliation";
 
   // Logical id of this artifact
   Id id = 1;
@@ -12405,9 +12581,11 @@ message PaymentReconciliation {
 
 // Auto-generated from StructureDefinition for Person, last updated
 // 2017-04-19T07:44:43.294+10:00. A generic person record. See
-// https://www.hl7.org/fhir/person.html
+// http://hl7.org/fhir/StructureDefinition/Person
 message Person {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Person";
 
   // Logical id of this artifact
   Id id = 1;
@@ -12483,9 +12661,11 @@ message Person {
 // Auto-generated from StructureDefinition for PlanDefinition, last updated
 // 2017-04-19T07:44:43.294+10:00. The definition of a plan for a series of
 // actions, independent of any specific patient or context. See
-// https://www.hl7.org/fhir/plandefinition.html
+// http://hl7.org/fhir/StructureDefinition/PlanDefinition
 message PlanDefinition {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/PlanDefinition";
 
   // Logical id of this artifact
   Id id = 1;
@@ -12836,9 +13016,11 @@ message PlanDefinition {
 // Auto-generated from StructureDefinition for Practitioner, last updated
 // 2017-04-19T07:44:43.294+10:00. A person with a  formal responsibility in the
 // provisioning of healthcare or related services. See
-// https://www.hl7.org/fhir/practitioner.html
+// http://hl7.org/fhir/StructureDefinition/Practitioner
 message Practitioner {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Practitioner";
 
   // Logical id of this artifact
   Id id = 1;
@@ -12920,9 +13102,11 @@ message Practitioner {
 
 // Auto-generated from StructureDefinition for PractitionerRole, last updated
 // 2017-04-19T07:44:43.294+10:00. Roles/organizations the practitioner is
-// associated with. See https://www.hl7.org/fhir/practitionerrole.html
+// associated with. See http://hl7.org/fhir/StructureDefinition/PractitionerRole
 message PractitionerRole {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/PractitionerRole";
 
   // Logical id of this artifact
   Id id = 1;
@@ -13035,9 +13219,11 @@ message PractitionerRole {
 
 // Auto-generated from StructureDefinition for Procedure, last updated
 // 2017-04-19T07:44:43.294+10:00. An action that is being or was performed on a
-// patient. See https://www.hl7.org/fhir/procedure.html
+// patient. See http://hl7.org/fhir/StructureDefinition/Procedure
 message Procedure {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Procedure";
 
   // Logical id of this artifact
   Id id = 1;
@@ -13186,9 +13372,11 @@ message Procedure {
 
 // Auto-generated from StructureDefinition for ProcedureRequest, last updated
 // 2017-04-19T07:44:43.294+10:00. A request for a procedure or diagnostic to be
-// performed. See https://www.hl7.org/fhir/procedurerequest.html
+// performed. See http://hl7.org/fhir/StructureDefinition/ProcedureRequest
 message ProcedureRequest {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ProcedureRequest";
 
   // Logical id of this artifact
   Id id = 1;
@@ -13325,9 +13513,11 @@ message ProcedureRequest {
 // Auto-generated from StructureDefinition for ProcessRequest, last updated
 // 2017-04-19T07:44:43.294+10:00. Request to perform some action on or in
 // regards to an existing resource. See
-// https://www.hl7.org/fhir/processrequest.html
+// http://hl7.org/fhir/StructureDefinition/ProcessRequest
 message ProcessRequest {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ProcessRequest";
 
   // Logical id of this artifact
   Id id = 1;
@@ -13414,9 +13604,11 @@ message ProcessRequest {
 
 // Auto-generated from StructureDefinition for ProcessResponse, last updated
 // 2017-04-19T07:44:43.294+10:00. ProcessResponse resource. See
-// https://www.hl7.org/fhir/processresponse.html
+// http://hl7.org/fhir/StructureDefinition/ProcessResponse
 message ProcessResponse {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ProcessResponse";
 
   // Logical id of this artifact
   Id id = 1;
@@ -13500,9 +13692,11 @@ message ProcessResponse {
 
 // Auto-generated from StructureDefinition for Provenance, last updated
 // 2017-04-19T07:44:43.294+10:00. Who, What, When for a set of resources. See
-// https://www.hl7.org/fhir/provenance.html
+// http://hl7.org/fhir/StructureDefinition/Provenance
 message Provenance {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Provenance";
 
   // Logical id of this artifact
   Id id = 1;
@@ -13626,9 +13820,11 @@ message Provenance {
 
 // Auto-generated from StructureDefinition for Questionnaire, last updated
 // 2017-04-19T07:44:43.294+10:00. A structured set of questions. See
-// https://www.hl7.org/fhir/questionnaire.html
+// http://hl7.org/fhir/StructureDefinition/Questionnaire
 message Questionnaire {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Questionnaire";
 
   // Logical id of this artifact
   Id id = 1;
@@ -13854,9 +14050,12 @@ message Questionnaire {
 
 // Auto-generated from StructureDefinition for QuestionnaireResponse, last
 // updated 2017-04-19T07:44:43.294+10:00. A structured set of questions and
-// their answers. See https://www.hl7.org/fhir/questionnaireresponse.html
+// their answers. See
+// http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse
 message QuestionnaireResponse {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse";
 
   // Logical id of this artifact
   Id id = 1;
@@ -13979,9 +14178,11 @@ message QuestionnaireResponse {
 
 // Auto-generated from StructureDefinition for ReferralRequest, last updated
 // 2017-04-19T07:44:43.294+10:00. A request for referral or transfer of care.
-// See https://www.hl7.org/fhir/referralrequest.html
+// See http://hl7.org/fhir/StructureDefinition/ReferralRequest
 message ReferralRequest {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ReferralRequest";
 
   // Logical id of this artifact
   Id id = 1;
@@ -14103,9 +14304,11 @@ message ReferralRequest {
 // Auto-generated from StructureDefinition for RelatedPerson, last updated
 // 2017-04-19T07:44:43.294+10:00. An person that is related to a patient, but
 // who is not a direct target of care. See
-// https://www.hl7.org/fhir/relatedperson.html
+// http://hl7.org/fhir/StructureDefinition/RelatedPerson
 message RelatedPerson {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/RelatedPerson";
 
   // Logical id of this artifact
   Id id = 1;
@@ -14167,9 +14370,11 @@ message RelatedPerson {
 
 // Auto-generated from StructureDefinition for RequestGroup, last updated
 // 2017-04-19T07:44:43.294+10:00. A group of related requests. See
-// https://www.hl7.org/fhir/requestgroup.html
+// http://hl7.org/fhir/StructureDefinition/RequestGroup
 message RequestGroup {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/RequestGroup";
 
   // Logical id of this artifact
   Id id = 1;
@@ -14375,9 +14580,11 @@ message RequestGroup {
 // Auto-generated from StructureDefinition for ResearchStudy, last updated
 // 2017-04-19T07:44:43.294+10:00. Investigation to increase healthcare-related
 // patient-independent knowledge. See
-// https://www.hl7.org/fhir/researchstudy.html
+// http://hl7.org/fhir/StructureDefinition/ResearchStudy
 message ResearchStudy {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ResearchStudy";
 
   // Logical id of this artifact
   Id id = 1;
@@ -14487,9 +14694,11 @@ message ResearchStudy {
 // Auto-generated from StructureDefinition for ResearchSubject, last updated
 // 2017-04-19T07:44:43.294+10:00. Investigation to increase healthcare-related
 // patient-independent knowledge. See
-// https://www.hl7.org/fhir/researchsubject.html
+// http://hl7.org/fhir/StructureDefinition/ResearchSubject
 message ResearchSubject {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ResearchSubject";
 
   // Logical id of this artifact
   Id id = 1;
@@ -14543,9 +14752,11 @@ message ResearchSubject {
 
 // Auto-generated from StructureDefinition for RiskAssessment, last updated
 // 2017-04-19T07:44:43.294+10:00. Potential outcomes for a subject with
-// likelihood. See https://www.hl7.org/fhir/riskassessment.html
+// likelihood. See http://hl7.org/fhir/StructureDefinition/RiskAssessment
 message RiskAssessment {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/RiskAssessment";
 
   // Logical id of this artifact
   Id id = 1;
@@ -14676,9 +14887,11 @@ message RiskAssessment {
 // Auto-generated from StructureDefinition for Schedule, last updated
 // 2017-04-19T07:44:43.294+10:00. A container for slots of time that may be
 // available for booking appointments. See
-// https://www.hl7.org/fhir/schedule.html
+// http://hl7.org/fhir/StructureDefinition/Schedule
 message Schedule {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Schedule";
 
   // Logical id of this artifact
   Id id = 1;
@@ -14740,9 +14953,11 @@ message Schedule {
 
 // Auto-generated from StructureDefinition for SearchParameter, last updated
 // 2017-04-19T07:44:43.294+10:00. Search Parameter for a resource. See
-// https://www.hl7.org/fhir/searchparameter.html
+// http://hl7.org/fhir/StructureDefinition/SearchParameter
 message SearchParameter {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/SearchParameter";
 
   // Logical id of this artifact
   Id id = 1;
@@ -14862,9 +15077,11 @@ message SearchParameter {
 
 // Auto-generated from StructureDefinition for Sequence, last updated
 // 2017-04-19T07:44:43.294+10:00. Information about a biological sequence. See
-// https://www.hl7.org/fhir/sequence.html
+// http://hl7.org/fhir/StructureDefinition/Sequence
 message Sequence {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Sequence";
 
   // Logical id of this artifact
   Id id = 1;
@@ -15086,9 +15303,11 @@ message Sequence {
 
 // Auto-generated from StructureDefinition for ServiceDefinition, last updated
 // 2017-04-19T07:44:43.294+10:00. A description of decision support service
-// functionality. See https://www.hl7.org/fhir/servicedefinition.html
+// functionality. See http://hl7.org/fhir/StructureDefinition/ServiceDefinition
 message ServiceDefinition {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ServiceDefinition";
 
   // Logical id of this artifact
   Id id = 1;
@@ -15193,9 +15412,12 @@ message ServiceDefinition {
 
 // Auto-generated from StructureDefinition for Slot, last updated
 // 2017-04-19T07:44:43.294+10:00. A slot of time on a schedule that may be
-// available for booking appointments. See https://www.hl7.org/fhir/slot.html
+// available for booking appointments. See
+// http://hl7.org/fhir/StructureDefinition/Slot
 message Slot {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Slot";
 
   // Logical id of this artifact
   Id id = 1;
@@ -15266,9 +15488,11 @@ message Slot {
 
 // Auto-generated from StructureDefinition for Specimen, last updated
 // 2017-04-19T07:44:43.294+10:00. Sample for analysis. See
-// https://www.hl7.org/fhir/specimen.html
+// http://hl7.org/fhir/StructureDefinition/Specimen
 message Specimen {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Specimen";
 
   // Logical id of this artifact
   Id id = 1;
@@ -15427,9 +15651,11 @@ message Specimen {
 
 // Auto-generated from StructureDefinition for StructureDefinition, last updated
 // 2017-04-19T07:44:43.294+10:00. Structural Definition. See
-// https://www.hl7.org/fhir/structuredefinition.html
+// http://hl7.org/fhir/StructureDefinition/StructureDefinition
 message StructureDefinition {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/StructureDefinition";
 
   // Logical id of this artifact
   Id id = 1;
@@ -15596,9 +15822,11 @@ message StructureDefinition {
 // Auto-generated from StructureDefinition for StructureMap, last updated
 // 2017-04-19T07:44:43.294+10:00. A Map of relationships between 2 structures
 // that can be used to transform data. See
-// https://www.hl7.org/fhir/structuremap.html
+// http://hl7.org/fhir/StructureDefinition/StructureMap
 message StructureMap {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/StructureMap";
 
   // Logical id of this artifact
   Id id = 1;
@@ -15945,9 +16173,11 @@ message StructureMap {
 
 // Auto-generated from StructureDefinition for Subscription, last updated
 // 2017-04-19T07:44:43.294+10:00. A server push subscription criteria. See
-// https://www.hl7.org/fhir/subscription.html
+// http://hl7.org/fhir/StructureDefinition/Subscription
 message Subscription {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Subscription";
 
   // Logical id of this artifact
   Id id = 1;
@@ -16024,9 +16254,11 @@ message Subscription {
 
 // Auto-generated from StructureDefinition for Substance, last updated
 // 2017-04-19T07:44:43.294+10:00. A homogeneous material with a definite
-// composition. See https://www.hl7.org/fhir/substance.html
+// composition. See http://hl7.org/fhir/StructureDefinition/Substance
 message Substance {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Substance";
 
   // Logical id of this artifact
   Id id = 1;
@@ -16119,9 +16351,11 @@ message Substance {
 
 // Auto-generated from StructureDefinition for SupplyDelivery, last updated
 // 2017-04-19T07:44:43.294+10:00. Delivery of bulk Supplies. See
-// https://www.hl7.org/fhir/supplydelivery.html
+// http://hl7.org/fhir/StructureDefinition/SupplyDelivery
 message SupplyDelivery {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/SupplyDelivery";
 
   // Logical id of this artifact
   Id id = 1;
@@ -16212,9 +16446,11 @@ message SupplyDelivery {
 
 // Auto-generated from StructureDefinition for SupplyRequest, last updated
 // 2017-04-19T07:44:43.294+10:00. Request for a medication, substance or device.
-// See https://www.hl7.org/fhir/supplyrequest.html
+// See http://hl7.org/fhir/StructureDefinition/SupplyRequest
 message SupplyRequest {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/SupplyRequest";
 
   // Logical id of this artifact
   Id id = 1;
@@ -16330,9 +16566,11 @@ message SupplyRequest {
 
 // Auto-generated from StructureDefinition for Task, last updated
 // 2017-04-19T07:44:43.294+10:00. A task to be performed. See
-// https://www.hl7.org/fhir/task.html
+// http://hl7.org/fhir/StructureDefinition/Task
 message Task {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Task";
 
   // Logical id of this artifact
   Id id = 1;
@@ -16604,9 +16842,11 @@ message Task {
 
 // Auto-generated from StructureDefinition for TestReport, last updated
 // 2017-04-19T07:44:43.294+10:00. Describes the results of a TestScript
-// execution. See https://www.hl7.org/fhir/testreport.html
+// execution. See http://hl7.org/fhir/StructureDefinition/TestReport
 message TestReport {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/TestReport";
 
   // Logical id of this artifact
   Id id = 1;
@@ -16831,9 +17071,11 @@ message TestReport {
 
 // Auto-generated from StructureDefinition for TestScript, last updated
 // 2017-04-19T07:44:43.294+10:00. Describes a set of tests. See
-// https://www.hl7.org/fhir/testscript.html
+// http://hl7.org/fhir/StructureDefinition/TestScript
 message TestScript {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/TestScript";
 
   // Logical id of this artifact
   Id id = 1;
@@ -17508,9 +17750,11 @@ message TestScript {
 
 // Auto-generated from StructureDefinition for ValueSet, last updated
 // 2017-04-19T07:44:43.294+10:00. A set of codes drawn from one or more code
-// systems. See https://www.hl7.org/fhir/valueset.html
+// systems. See http://hl7.org/fhir/StructureDefinition/ValueSet
 message ValueSet {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ValueSet";
 
   // Logical id of this artifact
   Id id = 1;
@@ -17792,9 +18036,11 @@ message ValueSet {
 
 // Auto-generated from StructureDefinition for VisionPrescription, last updated
 // 2017-04-19T07:44:43.294+10:00. Prescription for vision correction products
-// for a patient. See https://www.hl7.org/fhir/visionprescription.html
+// for a patient. See http://hl7.org/fhir/StructureDefinition/VisionPrescription
 message VisionPrescription {
   option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/VisionPrescription";
 
   // Logical id of this artifact
   Id id = 1;

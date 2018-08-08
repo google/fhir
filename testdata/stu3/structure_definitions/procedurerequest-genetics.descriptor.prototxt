@@ -463,5 +463,6 @@ nested_type {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for ProcedureRequest-Genetics.\nA request for a procedure or diagnostic to be performed."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for ProcedureRequest-Genetics.\nA request for a procedure or diagnostic to be performed.\nSee http://hl7.org/fhir/StructureDefinition/procedurerequest-genetics"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/procedurerequest-genetics"
 }

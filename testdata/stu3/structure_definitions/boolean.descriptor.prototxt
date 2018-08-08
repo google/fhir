@@ -30,5 +30,6 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for boolean.\nPrimitive Type boolean."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for boolean.\nPrimitive Type boolean.\nSee http://hl7.org/fhir/StructureDefinition/boolean"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/boolean"
 }

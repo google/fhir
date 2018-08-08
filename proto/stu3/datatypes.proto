@@ -23,9 +23,11 @@ option java_package = "com.google.fhir.stu3.proto";
 
 // Auto-generated from StructureDefinition for base64Binary.
 // Primitive Type base64Binary.
-// See https://www.hl7.org/fhir/datatypes.html#base64binary
+// See http://hl7.org/fhir/StructureDefinition/base64Binary
 message Base64Binary {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/base64Binary";
 
   // Primitive value for base64Binary
   bytes value = 1;
@@ -39,9 +41,11 @@ message Base64Binary {
 
 // Auto-generated from StructureDefinition for boolean.
 // Primitive Type boolean.
-// See https://www.hl7.org/fhir/datatypes.html#boolean
+// See http://hl7.org/fhir/StructureDefinition/boolean
 message Boolean {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/boolean";
 
   // Primitive value for boolean
   bool value = 1;
@@ -55,10 +59,12 @@ message Boolean {
 
 // Auto-generated from StructureDefinition for code.
 // Primitive Type code.
-// See https://www.hl7.org/fhir/datatypes.html#code
+// See http://hl7.org/fhir/StructureDefinition/code
 message Code {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
   option (value_regex) = "[^\\s]+([\\s]?[^\\s]+)*";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/code";
 
   // Primitive value for code
   string value = 1;
@@ -72,11 +78,13 @@ message Code {
 
 // Auto-generated from StructureDefinition for date.
 // Primitive Type date.
-// See https://www.hl7.org/fhir/datatypes.html#date
+// See http://hl7.org/fhir/StructureDefinition/date
 message Date {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
   option (value_regex) =
       "-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/date";
 
   // Primitive value for date
   int64 value_us = 1;
@@ -100,11 +108,13 @@ message Date {
 
 // Auto-generated from StructureDefinition for dateTime.
 // Primitive Type dateTime.
-// See https://www.hl7.org/fhir/datatypes.html#datetime
+// See http://hl7.org/fhir/StructureDefinition/dateTime
 message DateTime {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
   option (value_regex) =
       "-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/dateTime";
 
   // Primitive value for dateTime
   int64 value_us = 1;
@@ -131,10 +141,12 @@ message DateTime {
 
 // Auto-generated from StructureDefinition for decimal.
 // Primitive Type decimal.
-// See https://www.hl7.org/fhir/datatypes.html#decimal
+// See http://hl7.org/fhir/StructureDefinition/decimal
 message Decimal {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
   option (value_regex) = "-?([0]|([1-9][0-9]*))(\\.[0-9]+)?";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/decimal";
 
   // Primitive value for decimal
   string value = 1;
@@ -148,10 +160,12 @@ message Decimal {
 
 // Auto-generated from StructureDefinition for id.
 // Primitive Type id.
-// See https://www.hl7.org/fhir/datatypes.html#id
+// See http://hl7.org/fhir/StructureDefinition/id
 message Id {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
   option (value_regex) = "[A-Za-z0-9\\-\\.]{1,64}";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/id";
 
   // Primitive value for id
   string value = 1;
@@ -165,9 +179,11 @@ message Id {
 
 // Auto-generated from StructureDefinition for instant.
 // Primitive Type instant.
-// See https://www.hl7.org/fhir/datatypes.html#instant
+// See http://hl7.org/fhir/StructureDefinition/instant
 message Instant {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/instant";
 
   // Primitive value for instant
   int64 value_us = 1;
@@ -191,10 +207,12 @@ message Instant {
 
 // Auto-generated from StructureDefinition for integer.
 // Primitive Type integer.
-// See https://www.hl7.org/fhir/datatypes.html#integer
+// See http://hl7.org/fhir/StructureDefinition/integer
 message Integer {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
   option (value_regex) = "-?([0]|([1-9][0-9]*))";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/integer";
 
   // Primitive value for integer
   sint32 value = 1;
@@ -208,9 +226,11 @@ message Integer {
 
 // Auto-generated from StructureDefinition for markdown.
 // Primitive Type markdown.
-// See https://www.hl7.org/fhir/datatypes.html#markdown
+// See http://hl7.org/fhir/StructureDefinition/markdown
 message Markdown {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/markdown";
 
   // Primitive value for markdown
   string value = 1;
@@ -224,10 +244,12 @@ message Markdown {
 
 // Auto-generated from StructureDefinition for oid.
 // Primitive Type oid.
-// See https://www.hl7.org/fhir/datatypes.html#oid
+// See http://hl7.org/fhir/StructureDefinition/oid
 message Oid {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
   option (value_regex) = "urn:oid:(0|[1-9][0-9]*)(\\.(0|[1-9][0-9]*))*";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/oid";
 
   // Primitive value for oid
   string value = 1;
@@ -241,10 +263,12 @@ message Oid {
 
 // Auto-generated from StructureDefinition for positiveInt.
 // Primitive Type positiveInt.
-// See https://www.hl7.org/fhir/datatypes.html#positiveint
+// See http://hl7.org/fhir/StructureDefinition/positiveInt
 message PositiveInt {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
   option (value_regex) = "[1-9][0-9]*";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/positiveInt";
 
   // Primitive value for positiveInt
   uint32 value = 1;
@@ -258,9 +282,11 @@ message PositiveInt {
 
 // Auto-generated from StructureDefinition for string.
 // Primitive Type string.
-// See https://www.hl7.org/fhir/datatypes.html#string
+// See http://hl7.org/fhir/StructureDefinition/string
 message String {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/string";
 
   // Primitive value for string
   string value = 1;
@@ -274,10 +300,12 @@ message String {
 
 // Auto-generated from StructureDefinition for time.
 // Primitive Type time.
-// See https://www.hl7.org/fhir/datatypes.html#time
+// See http://hl7.org/fhir/StructureDefinition/time
 message Time {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
   option (value_regex) = "([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/time";
 
   // Primitive value for time
   int64 value_us = 1;
@@ -299,10 +327,12 @@ message Time {
 
 // Auto-generated from StructureDefinition for unsignedInt.
 // Primitive Type unsignedInt.
-// See https://www.hl7.org/fhir/datatypes.html#unsignedint
+// See http://hl7.org/fhir/StructureDefinition/unsignedInt
 message UnsignedInt {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
   option (value_regex) = "[0]|([1-9][0-9]*)";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/unsignedInt";
 
   // Primitive value for unsignedInt
   uint32 value = 1;
@@ -316,9 +346,11 @@ message UnsignedInt {
 
 // Auto-generated from StructureDefinition for uri.
 // Primitive Type uri.
-// See https://www.hl7.org/fhir/datatypes.html#uri
+// See http://hl7.org/fhir/StructureDefinition/uri
 message Uri {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/uri";
 
   // Primitive value for uri
   string value = 1;
@@ -332,11 +364,13 @@ message Uri {
 
 // Auto-generated from StructureDefinition for uuid.
 // Primitive Type uuid.
-// See https://www.hl7.org/fhir/datatypes.html#uuid
+// See http://hl7.org/fhir/StructureDefinition/uuid
 message Uuid {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
   option (value_regex) =
       "urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/uuid";
 
   // Primitive value for uuid
   string value = 1;
@@ -350,9 +384,11 @@ message Uuid {
 
 // Auto-generated from StructureDefinition for xhtml.
 // Primitive Type xhtml.
-// See https://www.hl7.org/fhir/datatypes.html#xhtml
+// See http://hl7.org/fhir/StructureDefinition/xhtml
 message Xhtml {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/xhtml";
 
   // Actual xhtml
   string value = 1 [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -363,9 +399,12 @@ message Xhtml {
 
 // Auto-generated from StructureDefinition for Address.
 // An address expressed using postal conventions (as opposed to GPS or other
-// location definition formats).
+// location definition formats). See
+// http://hl7.org/fhir/StructureDefinition/Address
 message Address {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Address";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -406,8 +445,11 @@ message Address {
 
 // Auto-generated from StructureDefinition for Age.
 // A duration of time during which an organism (or a process) has existed.
+// See http://hl7.org/fhir/StructureDefinition/Age
 message Age {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Age";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -433,8 +475,11 @@ message Age {
 
 // Auto-generated from StructureDefinition for Annotation.
 // Text node with attribution.
+// See http://hl7.org/fhir/StructureDefinition/Annotation
 message Annotation {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Annotation";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -460,8 +505,11 @@ message Annotation {
 
 // Auto-generated from StructureDefinition for Attachment.
 // Content in a format defined elsewhere.
+// See http://hl7.org/fhir/StructureDefinition/Attachment
 message Attachment {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Attachment";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -496,8 +544,11 @@ message Attachment {
 
 // Auto-generated from StructureDefinition for CodeableConcept.
 // Concept - reference to a terminology or just  text.
+// See http://hl7.org/fhir/StructureDefinition/CodeableConcept
 message CodeableConcept {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -514,8 +565,11 @@ message CodeableConcept {
 
 // Auto-generated from StructureDefinition for Coding.
 // A reference to a code defined by a terminology system.
+// See http://hl7.org/fhir/StructureDefinition/Coding
 message Coding {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Coding";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -541,8 +595,11 @@ message Coding {
 
 // Auto-generated from StructureDefinition for ContactPoint.
 // Details of a Technology mediated contact point (phone, fax, email, etc.).
+// See http://hl7.org/fhir/StructureDefinition/ContactPoint
 message ContactPoint {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ContactPoint";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -568,8 +625,11 @@ message ContactPoint {
 
 // Auto-generated from StructureDefinition for Count.
 // A measured or measurable amount.
+// See http://hl7.org/fhir/StructureDefinition/Count
 message Count {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Count";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -595,8 +655,11 @@ message Count {
 
 // Auto-generated from StructureDefinition for Distance.
 // A length - a value with a unit that is a physical distance.
+// See http://hl7.org/fhir/StructureDefinition/Distance
 message Distance {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Distance";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -622,8 +685,11 @@ message Distance {
 
 // Auto-generated from StructureDefinition for Dosage.
 // How the medication is/was taken or should be taken.
+// See http://hl7.org/fhir/StructureDefinition/Dosage
 message Dosage {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Dosage";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -695,8 +761,11 @@ message Dosage {
 
 // Auto-generated from StructureDefinition for Duration.
 // A length of time.
+// See http://hl7.org/fhir/StructureDefinition/Duration
 message Duration {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Duration";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -722,8 +791,11 @@ message Duration {
 
 // Auto-generated from StructureDefinition for HumanName.
 // Name of a human - parts and usage.
+// See http://hl7.org/fhir/StructureDefinition/HumanName
 message HumanName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/HumanName";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -755,8 +827,11 @@ message HumanName {
 
 // Auto-generated from StructureDefinition for Identifier.
 // An identifier intended for computation.
+// See http://hl7.org/fhir/StructureDefinition/Identifier
 message Identifier {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Identifier";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -785,8 +860,11 @@ message Identifier {
 
 // Auto-generated from StructureDefinition for Meta.
 // Metadata about a resource.
+// See http://hl7.org/fhir/StructureDefinition/Meta
 message Meta {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Meta";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -812,8 +890,11 @@ message Meta {
 
 // Auto-generated from StructureDefinition for Money.
 // An amount of economic utility in some recognized currency.
+// See http://hl7.org/fhir/StructureDefinition/Money
 message Money {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Money";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -839,8 +920,11 @@ message Money {
 
 // Auto-generated from StructureDefinition for Period.
 // Time range defined by start and end date/time.
+// See http://hl7.org/fhir/StructureDefinition/Period
 message Period {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Period";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -857,8 +941,11 @@ message Period {
 
 // Auto-generated from StructureDefinition for Quantity.
 // A measured or measurable amount.
+// See http://hl7.org/fhir/StructureDefinition/Quantity
 message Quantity {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Quantity";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -884,8 +971,11 @@ message Quantity {
 
 // Auto-generated from StructureDefinition for Range.
 // Set of values bounded by low and high.
+// See http://hl7.org/fhir/StructureDefinition/Range
 message Range {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Range";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -902,8 +992,11 @@ message Range {
 
 // Auto-generated from StructureDefinition for Ratio.
 // A ratio of two Quantity values - a numerator and a denominator.
+// See http://hl7.org/fhir/StructureDefinition/Ratio
 message Ratio {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Ratio";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -920,8 +1013,11 @@ message Ratio {
 
 // Auto-generated from StructureDefinition for SampledData.
 // A series of measurements taken by a device.
+// See http://hl7.org/fhir/StructureDefinition/SampledData
 message SampledData {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/SampledData";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -953,8 +1049,11 @@ message SampledData {
 
 // Auto-generated from StructureDefinition for Signature.
 // A digital Signature - XML DigSig, JWT, Graphical image of signature, etc..
+// See http://hl7.org/fhir/StructureDefinition/Signature
 message Signature {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Signature";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -997,8 +1096,11 @@ message Signature {
 
 // Auto-generated from StructureDefinition for SimpleQuantity.
 // A fixed quantity (no comparator).
+// See http://hl7.org/fhir/StructureDefinition/SimpleQuantity
 message SimpleQuantity {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/SimpleQuantity";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -1021,8 +1123,11 @@ message SimpleQuantity {
 
 // Auto-generated from StructureDefinition for Timing.
 // A timing schedule that specifies an event that may occur multiple times.
+// See http://hl7.org/fhir/StructureDefinition/Timing
 message Timing {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Timing";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -1105,6 +1210,8 @@ message Timing {
 // See https://www.hl7.org/fhir/datatypes.html#Extension
 message Extension {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -1160,22 +1267,6 @@ message Extension {
   // Additional Content defined by implementations
   repeated Extension extension = 4;
 }
-
-message ReferenceId {
-  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  // Primitive value for id
-  string value = 1;
-
-  // History version, if present.
-  Id history = 2;
-
-  // xml:id (or equivalent in JSON)
-  String id = 3;
-
-  // Additional Content defined by implementations
-  repeated Extension extension = 4;
-}
-
 // A reference from one resource to another
 // See https://www.hl7.org/fhir/datatypes.html#Reference
 message Reference {
@@ -1324,6 +1415,20 @@ message Reference {
   String display = 123;
 }
 
+message ReferenceId {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  // Primitive value for id
+  string value = 1;
+
+  // History version, if present.
+  Id history = 2;
+
+  // xml:id (or equivalent in JSON)
+  String id = 3;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 4;
+}
 // Code specializations with required valueset bindings, used by messages
 // defined in this file. The majority of the code specializations are defined
 // in other files, but these need to be here for technical reasons.

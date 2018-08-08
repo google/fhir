@@ -98,6 +98,7 @@ public class ProtoGeneratorTest {
     registry.add(Annotations.messageDescription);
     registry.add(Annotations.fhirExtensionUrl);
     registry.add(Annotations.fhirReferenceType);
+    registry.add(Annotations.fhirStructureDefinitionUrl);
     registry.add(Annotations.valueRegex);
   }
 

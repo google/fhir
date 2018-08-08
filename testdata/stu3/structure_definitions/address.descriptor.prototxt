@@ -121,5 +121,6 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Address.\nAn address expressed using postal conventions (as opposed to GPS or other location definition formats)."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Address.\nAn address expressed using postal conventions (as opposed to GPS or other location definition formats).\nSee http://hl7.org/fhir/StructureDefinition/Address"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Address"
 }

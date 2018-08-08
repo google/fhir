@@ -133,5 +133,6 @@ nested_type {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Signature.\nA digital Signature - XML DigSig, JWT, Graphical image of signature, etc.."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Signature.\nA digital Signature - XML DigSig, JWT, Graphical image of signature, etc..\nSee http://hl7.org/fhir/StructureDefinition/Signature"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Signature"
 }

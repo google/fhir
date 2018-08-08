@@ -71,5 +71,6 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Money.\nAn amount of economic utility in some recognized currency."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Money.\nAn amount of economic utility in some recognized currency.\nSee http://hl7.org/fhir/StructureDefinition/Money"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Money"
 }

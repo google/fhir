@@ -73,5 +73,6 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Binary, last updated 2017-04-19T07:44:43.294+10:00.\nPure binary content defined by a format other than FHIR."
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Binary, last updated 2017-04-19T07:44:43.294+10:00.\nPure binary content defined by a format other than FHIR.\nSee http://hl7.org/fhir/StructureDefinition/Binary"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Binary"
 }
