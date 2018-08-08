@@ -2,6 +2,8 @@ package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
 
+load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
+
 proto_library(
     name = "annotations_proto",
     srcs = [
@@ -20,6 +22,16 @@ cc_proto_library(
 java_proto_library(
     name = "annotations_java_proto",
     deps = [":annotations_proto"],
+)
+
+py_proto_library(
+    name = "annotations_py_pb2",
+    srcs = ["annotations.proto"],
+    default_runtime = "@com_google_protobuf//:protobuf_python",
+    protoc = "@com_google_protobuf//:protoc",
+    deps = [
+        "@com_google_protobuf//:protobuf_python",
+    ],
 )
 
 proto_library(
@@ -43,6 +55,17 @@ java_proto_library(
     deps = [":codes_proto"],
 )
 
+py_proto_library(
+    name = "codes_py_pb2",
+    srcs = ["codes.proto"],
+    default_runtime = "@com_google_protobuf//:protobuf_python",
+    protoc = "@com_google_protobuf//:protoc",
+    deps = [
+        ":annotations_py_pb2",
+        ":datatypes_py_pb2",
+    ],
+)
+
 proto_library(
     name = "datatypes_proto",
     srcs = [
@@ -61,6 +84,16 @@ cc_proto_library(
 java_proto_library(
     name = "datatypes_java_proto",
     deps = [":datatypes_proto"],
+)
+
+py_proto_library(
+    name = "datatypes_py_pb2",
+    srcs = ["datatypes.proto"],
+    default_runtime = "@com_google_protobuf//:protobuf_python",
+    protoc = "@com_google_protobuf//:protoc",
+    deps = [
+        ":annotations_py_pb2",
+    ],
 )
 
 proto_library(
@@ -83,6 +116,18 @@ cc_proto_library(
 java_proto_library(
     name = "metadatatypes_java_proto",
     deps = [":metadatatypes_proto"],
+)
+
+py_proto_library(
+    name = "metadatatypes_py_pb2",
+    srcs = ["metadatatypes.proto"],
+    default_runtime = "@com_google_protobuf//:protobuf_python",
+    protoc = "@com_google_protobuf//:protoc",
+    deps = [
+        ":annotations_py_pb2",
+        ":codes_py_pb2",
+        ":datatypes_py_pb2",
+    ],
 )
 
 proto_library(
@@ -110,6 +155,23 @@ java_proto_library(
     deps = [":extensions_proto"],
 )
 
+py_proto_library(
+    name = "extensions_py_pb2",
+    srcs = [
+        "base64_separator_stride.proto",
+        "elementdefinition_binding_name.proto",
+        "primitive_has_no_value.proto",
+        "structuredefinition_explicit_type_name.proto",
+        "structuredefinition_regex.proto",
+    ],
+    default_runtime = "@com_google_protobuf//:protobuf_python",
+    protoc = "@com_google_protobuf//:protoc",
+    deps = [
+        ":annotations_py_pb2",
+        ":datatypes_py_pb2",
+    ],
+)
+
 proto_library(
     name = "resources_proto",
     srcs = [
@@ -131,6 +193,19 @@ cc_proto_library(
 java_proto_library(
     name = "resources_java_proto",
     deps = [":resources_proto"],
+)
+
+py_proto_library(
+    name = "resources_py_pb2",
+    srcs = ["resources.proto"],
+    default_runtime = "@com_google_protobuf//:protobuf_python",
+    protoc = "@com_google_protobuf//:protoc",
+    deps = [
+        ":annotations_py_pb2",
+        ":codes_py_pb2",
+        ":datatypes_py_pb2",
+        ":metadatatypes_py_pb2",
+    ],
 )
 
 # We also make the .proto files readable for testing.

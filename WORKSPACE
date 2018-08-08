@@ -1,5 +1,26 @@
 workspace(name = "com_google_fhir")
 
+# defines py_proto_library.
+git_repository(
+    name = "protobuf_bzl",
+    # v3.6.0
+    commit = "ab8edf1dbe2237b4717869eaab11a2998541ad8d",
+    remote = "https://github.com/google/protobuf.git",
+)
+
+# required by py_proto_library.
+new_http_archive(
+    name = "six_archive",
+    build_file = "@protobuf_bzl//:six.BUILD",
+    sha256 = "105f8d68616f8248e24bf0e9372ef04d3cc10104f1980f54d57b2ce73a5ad56a",
+    url = "https://pypi.python.org/packages/source/s/six/six-1.10.0.tar.gz#md5=34eed507548117b2ab523ab14b2f8b55",
+)
+
+bind(
+    name = "six",
+    actual = "@six_archive//:six",
+)
+
 # proto_library, cc_proto_library, and java_proto_library rules implicitly
 # depend on @com_google_protobuf for protoc and proto runtimes.
 # This statement defines the @com_google_protobuf repo.
