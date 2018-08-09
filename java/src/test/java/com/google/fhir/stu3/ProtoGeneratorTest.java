@@ -17,6 +17,7 @@ package com.google.fhir.stu3;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.io.Files;
+import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
@@ -39,10 +40,12 @@ public class ProtoGeneratorTest {
   private TextFormat.Parser textParser;
   private ExtensionRegistry registry;
   private ProtoGenerator protoGenerator;
+  private Runfiles runfiles;
 
   /** Read the specifed file from the testdata directory into a String. */
   private String loadFile(String relativePath) throws IOException {
-    File file = new File("testdata/stu3/" + relativePath);
+    File file =
+        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/" + relativePath));
     return Files.asCharSource(file, StandardCharsets.UTF_8).read();
   }
 
@@ -85,9 +88,10 @@ public class ProtoGeneratorTest {
   }
 
   @Before
-  public void setUp() {
+  public void setUp() throws IOException {
     jsonParser = JsonFormat.getParser();
     textParser = TextFormat.getParser();
+    runfiles = Runfiles.create();
     protoGenerator = new ProtoGenerator("google.fhir.stu3.proto", "proto/stu3");
     registry = ExtensionRegistry.newInstance();
     registry.add(Annotations.structureDefinitionKind);

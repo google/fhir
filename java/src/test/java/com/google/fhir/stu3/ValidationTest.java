@@ -18,6 +18,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.fail;
 
 import com.google.common.base.CaseFormat;
+import com.google.devtools.build.runfiles.Runfiles;
 import com.google.protobuf.Message.Builder;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -36,7 +37,8 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class ValidationTest {
 
-  JsonFormat.Parser jsonParser;
+  private JsonFormat.Parser jsonParser;
+  private Runfiles runfiles;
 
   /** Parse the given line, expecting it to be valid. */
   private void expectValid(java.lang.String line, Builder builder) throws IOException {
@@ -58,7 +60,7 @@ public final class ValidationTest {
       throws IOException {
     Path path =
         Paths.get(
-            "testdata/stu3/validation/",
+            runfiles.rlocation("com_google_fhir/testdata/stu3/validation/"),
             CaseFormat.UPPER_CAMEL.to(
                     CaseFormat.LOWER_UNDERSCORE, type.getDescriptorForType().getName())
                 + (valid ? ".valid.ndjson" : ".invalid.ndjson"));
@@ -76,8 +78,9 @@ public final class ValidationTest {
   }
 
   @Before
-  public void setUp() {
+  public void setUp() throws IOException {
     jsonParser = JsonFormat.getParser();
+    runfiles = Runfiles.create();
   }
 
   /* Test validation of primitive types. */

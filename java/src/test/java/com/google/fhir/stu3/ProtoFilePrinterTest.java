@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
 import com.google.common.io.Files;
+import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.ContactDetail;
 import com.google.fhir.stu3.proto.ContainedResource;
@@ -53,10 +54,12 @@ public final class ProtoFilePrinterTest {
   private JsonFormat.Parser jsonParser;
   private ProtoGenerator protoGenerator;
   private ProtoFilePrinter protoPrinter;
+  private Runfiles runfiles;
 
   /** Read and parse the specified StructureDefinition. */
   private StructureDefinition readProfile(String relativePath) throws IOException {
-    File file = new File("testdata/stu3/" + relativePath);
+    File file =
+        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/" + relativePath));
     String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
     StructureDefinition.Builder builder = StructureDefinition.newBuilder();
     jsonParser.merge(json, builder);
@@ -71,7 +74,8 @@ public final class ProtoFilePrinterTest {
     String filename = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, messageName);
 
     // Use the actual .proto file as golden.
-    File file = new File("proto/stu3/" + filename + ".proto");
+    File file =
+        new File(runfiles.rlocation("com_google_fhir/proto/stu3/" + filename + ".proto"));
     return Files.asCharSource(file, StandardCharsets.UTF_8).read();
   }
 
@@ -174,9 +178,10 @@ public final class ProtoFilePrinterTest {
   }
 
   @Before
-  public void setUp() {
+  public void setUp() throws IOException {
     String packageName = "google.fhir.stu3.proto";
     jsonParser = JsonFormat.getParser();
+    runfiles = Runfiles.create();
     protoGenerator = new ProtoGenerator(packageName, "proto/stu3");
     protoPrinter = new ProtoFilePrinter().withApacheLicense();
   }

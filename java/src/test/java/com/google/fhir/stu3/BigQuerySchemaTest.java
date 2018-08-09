@@ -21,6 +21,7 @@ import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableSchema;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
+import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.stu3.proto.Base64Binary;
 import com.google.fhir.stu3.proto.Composition;
 import com.google.fhir.stu3.proto.DateTime;
@@ -41,19 +42,24 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class BigQuerySchemaTest {
 
-  JsonFormat.Parser jsonParser;
-  GsonFactory gsonFactory;
+  private JsonFormat.Parser jsonParser;
+  private GsonFactory gsonFactory;
+  private Runfiles runfiles;
 
   @Before
-  public void setUp() {
+  public void setUp() throws IOException {
     jsonParser =
         JsonFormat.Parser.newBuilder().withDefaultTimeZone(ZoneId.of("Australia/Sydney")).build();
     gsonFactory = new GsonFactory();
+    runfiles = Runfiles.create();
   }
 
   /** Read the specifed json file from the testdata directory as a String. */
   private Message loadMessage(String name, Builder builder) throws IOException {
-    File file = new File("testdata/stu3/examples/" + name + ".json");
+    File file =
+        new File(
+            runfiles.rlocation(
+                "com_google_fhir/testdata/stu3/examples/" + name + ".json"));
     String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
     Builder jsonBuilder = builder.clone();
     jsonParser.merge(json, jsonBuilder);
@@ -63,10 +69,13 @@ public final class BigQuerySchemaTest {
   /** Read the specifed json schema file from the testdata directory and parse it. */
   @SuppressWarnings("unchecked")
   private TableSchema readSchema(String filename) throws IOException {
-    File file = new File("testdata/stu3/bigquery/" + filename);
-    ArrayList<TableFieldSchema> fields = (ArrayList<TableFieldSchema>)
-        gsonFactory.fromString(
-            Files.asCharSource(file, StandardCharsets.UTF_8).read(), ArrayList.class);
+    Runfiles runfiles = Runfiles.create();
+    File file =
+        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/bigquery/" + filename));
+    ArrayList<TableFieldSchema> fields =
+        (ArrayList<TableFieldSchema>)
+            gsonFactory.fromString(
+                Files.asCharSource(file, StandardCharsets.UTF_8).read(), ArrayList.class);
     return new TableSchema().setFields(fields);
   }
 

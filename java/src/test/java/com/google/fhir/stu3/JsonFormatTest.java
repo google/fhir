@@ -17,6 +17,7 @@ package com.google.fhir.stu3;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.io.Files;
+import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.stu3.proto.Account;
 import com.google.fhir.stu3.proto.ActivityDefinition;
 import com.google.fhir.stu3.proto.AdverseEvent;
@@ -156,19 +157,22 @@ import org.junit.runners.JUnit4;
 /** Unit tests for {@link JsonFormat}. */
 @RunWith(JUnit4.class)
 public class JsonFormatTest {
-  JsonFormat.Parser jsonParser;
-  JsonFormat.Printer jsonPrinter;
-  TextFormat.Parser textParser;
+  private JsonFormat.Parser jsonParser;
+  private JsonFormat.Printer jsonPrinter;
+  private TextFormat.Parser textParser;
+  private Runfiles runfiles;
 
   /** Read the specifed json file from the testdata directory as a String. */
   private String loadJson(String filename) throws IOException {
-    File file = new File("testdata/stu3/examples/" + filename);
+    File file =
+        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/examples/" + filename));
     return Files.asCharSource(file, StandardCharsets.UTF_8).read();
   }
 
   /** Read the specifed prototxt file from the testdata directory and parse it. */
   private void mergeText(String filename, Message.Builder builder) throws IOException {
-    File file = new File("testdata/stu3/examples/" + filename);
+    File file =
+        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/examples/" + filename));
     textParser.merge(Files.asCharSource(file, StandardCharsets.UTF_8).read(), builder);
   }
 
@@ -224,11 +228,12 @@ public class JsonFormatTest {
   }
 
   @Before
-  public void setUp() {
+  public void setUp() throws IOException {
     jsonParser =
         JsonFormat.Parser.newBuilder().withDefaultTimeZone(ZoneId.of("Australia/Sydney")).build();
     jsonPrinter = JsonFormat.getPrinter().withDefaultTimeZone(ZoneId.of("Australia/Sydney"));
     textParser = TextFormat.getParser();
+    runfiles = Runfiles.create();
   }
 
   /** Test parsing JSON edge cases. */
