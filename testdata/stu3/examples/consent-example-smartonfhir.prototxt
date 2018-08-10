@@ -61,7 +61,7 @@ except {
       }
     }
   }
-  class {
+  class_value {
     system {
       value: "http://hl7.org/fhir/resource-types"
     }

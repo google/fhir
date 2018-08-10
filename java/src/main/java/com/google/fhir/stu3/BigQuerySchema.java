@@ -16,6 +16,7 @@ package com.google.fhir.stu3;
 
 import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableSchema;
+import com.google.common.base.CaseFormat;
 import com.google.fhir.stu3.proto.ContainedResource;
 import com.google.fhir.stu3.proto.Extension;
 import com.google.fhir.stu3.proto.Identifier;
@@ -31,9 +32,11 @@ final class BigQuerySchema {
   /* Generate a schema for a specific FieldDescriptor, with an optional message instance. */
   private static TableFieldSchema fromFieldDescriptor(
       FieldDescriptor descriptor, MessageOrBuilder instance) {
+    String fieldName =
+        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, descriptor.getJsonName());
     TableFieldSchema field =
         new TableFieldSchema()
-            .setName(descriptor.getName())
+            .setName(fieldName)
             .setMode(descriptor.isRepeated() ? "REPEATED" : "NULLABLE");
     if (descriptor.getType() != FieldDescriptor.Type.MESSAGE) {
       field.setType(schemaTypeForField(descriptor));
@@ -70,8 +73,7 @@ final class BigQuerySchema {
           return null;
         }
         // We don't include the "id" field unless it exists, except for resources.
-        if (descriptor.getName().equals("id")
-            && !AnnotationUtils.isResource(descriptor.getMessageType())) {
+        if (fieldName.equals("id") && !AnnotationUtils.isResource(descriptor.getMessageType())) {
           return null;
         }
         // We don't include nested types unless they exist in the data.
@@ -81,7 +83,7 @@ final class BigQuerySchema {
         // Identifier and Reference refer to each other. We stop the recursion by not including
         // Identifier.assigner unless it exists in the data.
         if (descriptor.getContainingType().equals(Identifier.getDescriptor())
-            && descriptor.getName().equals("assigner")) {
+            && fieldName.equals("assigner")) {
           return null;
         }
         field.setFields(fromDescriptor(descriptor.getMessageType()).getFields());

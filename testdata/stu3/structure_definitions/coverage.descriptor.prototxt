@@ -352,7 +352,7 @@ nested_type {
     }
   }
   field {
-    name: "class"
+    name: "class_value"
     number: 12
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
@@ -360,6 +360,7 @@ nested_type {
     options {
       [google.fhir.stu3.proto.field_description]: "An identifier for the class"
     }
+    json_name: "class"
   }
   field {
     name: "class_display"

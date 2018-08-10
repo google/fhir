@@ -92,7 +92,7 @@ status_history {
     }
   }
 }
-class {
+class_value {
   system {
     value: "http://hl7.org/fhir/v3/ActCode"
   }
@@ -104,7 +104,7 @@ class {
   }
 }
 class_history {
-  class {
+  class_value {
     system {
       value: "http://hl7.org/fhir/v3/ActCode"
     }
@@ -129,7 +129,7 @@ class_history {
   }
 }
 class_history {
-  class {
+  class_value {
     system {
       value: "http://hl7.org/fhir/v3/ActCode"
     }

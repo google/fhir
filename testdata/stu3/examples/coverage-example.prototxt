@@ -97,7 +97,7 @@ grouping {
   sub_plan_display {
     value: "Includes afterlife benefits"
   }
-  class {
+  class_value {
     value: "SILVER"
   }
   class_display {

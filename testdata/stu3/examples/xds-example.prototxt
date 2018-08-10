@@ -56,7 +56,7 @@ entry {
           }
         }
       }
-      class {
+      class_value {
         coding {
           system {
             value: "http://loinc.org"

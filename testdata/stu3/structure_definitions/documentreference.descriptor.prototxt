@@ -132,7 +132,7 @@ field {
   }
 }
 field {
-  name: "class"
+  name: "class_value"
   number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
@@ -140,6 +140,7 @@ field {
   options {
     [google.fhir.stu3.proto.field_description]: "Categorization of document"
   }
+  json_name: "class"
 }
 field {
   name: "subject"

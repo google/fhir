@@ -3750,7 +3750,7 @@ message Composition {
   CodeableConcept type = 11 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Categorization of Composition
-  CodeableConcept class = 12;
+  CodeableConcept class_value = 12 [json_name = "class"];
 
   // Who and/or what the composition is about
   Reference subject = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -4427,7 +4427,7 @@ message Consent {
     repeated Coding purpose = 9;
 
     // e.g. Resource Type, Profile, or CDA etc
-    repeated Coding class = 10;
+    repeated Coding class_value = 10 [json_name = "class"];
 
     // e.g. LOINC or SNOMED CT code, etc in the content
     repeated Coding code = 11;
@@ -4910,7 +4910,7 @@ message Coverage {
     String sub_plan_display = 11;
 
     // An identifier for the class
-    String class = 12;
+    String class_value = 12 [json_name = "class"];
 
     // Display text for the class
     String class_display = 13;
@@ -5896,7 +5896,7 @@ message DocumentReference {
   CodeableConcept type = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Categorization of document
-  CodeableConcept class = 14;
+  CodeableConcept class_value = 14 [json_name = "class"];
 
   // Who/what is the subject of the document
   Reference subject = 15;
@@ -6333,7 +6333,7 @@ message Encounter {
   repeated StatusHistory status_history = 11;
 
   // inpatient | outpatient | ambulatory | emergency +
-  Coding class = 12;
+  Coding class_value = 12 [json_name = "class"];
 
   // List of past encounter classes
   message ClassHistory {
@@ -6347,7 +6347,8 @@ message Encounter {
     repeated Extension modifier_extension = 3;
 
     // inpatient | outpatient | ambulatory | emergency +
-    Coding class = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Coding class_value = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR, json_name = "class"];
 
     // The time that the episode was in the specified class
     Period period = 5 [(validation_requirement) = REQUIRED_BY_FHIR];

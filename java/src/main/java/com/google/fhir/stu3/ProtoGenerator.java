@@ -83,12 +83,14 @@ public class ProtoGenerator {
 
   // Certain field names are reserved symbols in various languages.
   private static final ImmutableMap<String, String> reservedFieldNames =
-      ImmutableMap.of(
-          "assert", "assert_value",
-          "for", "for_value",
-          "hasAnswer", "has_answer_value",
-          "package", "package_value",
-          "string", "string_value");
+      new ImmutableMap.Builder<String, String>()
+          .put("assert", "assert_value")
+          .put("for", "for_value")
+          .put("hasAnswer", "has_answer_value")
+          .put("package", "package_value")
+          .put("string", "string_value")
+          .put("class", "class_value")
+          .build();
 
   private static final String STRUCTURE_DEFINITION_PREFIX =
       "http://hl7.org/fhir/StructureDefinition/";

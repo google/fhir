@@ -628,7 +628,7 @@
           }
         ],
         "mode": "NULLABLE",
-        "name": "uri",
+        "name": "reference",
         "type": "RECORD"
       },
       {
@@ -3659,7 +3659,7 @@
           }
         ],
         "mode": "NULLABLE",
-        "name": "uri",
+        "name": "reference",
         "type": "RECORD"
       },
       {
@@ -6712,7 +6712,7 @@
           }
         ],
         "mode": "NULLABLE",
-        "name": "uri",
+        "name": "reference",
         "type": "RECORD"
       },
       {
@@ -9803,7 +9803,7 @@
               }
             ],
             "mode": "NULLABLE",
-            "name": "uri",
+            "name": "reference",
             "type": "RECORD"
           },
           {
@@ -12839,7 +12839,7 @@
           }
         ],
         "mode": "NULLABLE",
-        "name": "uri",
+        "name": "reference",
         "type": "RECORD"
       },
       {
@@ -16066,7 +16066,7 @@
                   }
                 ],
                 "mode": "NULLABLE",
-                "name": "uri",
+                "name": "reference",
                 "type": "RECORD"
               },
               {
@@ -19246,7 +19246,7 @@
               }
             ],
             "mode": "NULLABLE",
-            "name": "uri",
+            "name": "reference",
             "type": "RECORD"
           },
           {
@@ -22511,7 +22511,7 @@
               }
             ],
             "mode": "NULLABLE",
-            "name": "uri",
+            "name": "reference",
             "type": "RECORD"
           },
           {

@@ -111,7 +111,7 @@ field {
   }
 }
 field {
-  name: "class"
+  name: "class_value"
   number: 12
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
@@ -119,6 +119,7 @@ field {
   options {
     [google.fhir.stu3.proto.field_description]: "inpatient | outpatient | ambulatory | emergency +"
   }
+  json_name: "class"
 }
 field {
   name: "class_history"
@@ -378,7 +379,7 @@ nested_type {
     }
   }
   field {
-    name: "class"
+    name: "class_value"
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
@@ -387,6 +388,7 @@ nested_type {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "inpatient | outpatient | ambulatory | emergency +"
     }
+    json_name: "class"
   }
   field {
     name: "period"

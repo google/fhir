@@ -59,7 +59,7 @@ type {
     }
   }
 }
-class {
+class_value {
   coding {
     system {
       value: "http://ihe.net/xds/connectathon/classCodes"

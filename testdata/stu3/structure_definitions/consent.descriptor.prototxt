@@ -549,7 +549,7 @@ nested_type {
     }
   }
   field {
-    name: "class"
+    name: "class_value"
     number: 10
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
@@ -557,6 +557,7 @@ nested_type {
     options {
       [google.fhir.stu3.proto.field_description]: "e.g. Resource Type, Profile, or CDA etc"
     }
+    json_name: "class"
   }
   field {
     name: "code"

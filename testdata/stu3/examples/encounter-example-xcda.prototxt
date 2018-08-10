@@ -23,7 +23,7 @@ identifier {
 status {
   value: FINISHED
 }
-class {
+class_value {
   system {
     value: "http://hl7.org/fhir/v3/ActCode"
   }
