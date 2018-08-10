@@ -42,6 +42,8 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class BigQuerySchemaTest {
 
+  private static final Boolean GENERATE_GOLDEN = true;
+
   private JsonFormat.Parser jsonParser;
   private GsonFactory gsonFactory;
   private Runfiles runfiles;
@@ -84,10 +86,19 @@ public final class BigQuerySchemaTest {
     Message input = loadMessage(name, builder);
     TableSchema schema = BigQuerySchema.fromMessage(input);
 
-    // Parse the json-schema version of the input.
-    TableSchema expected = readSchema(name + ".schema.json");
-
-    assertThat(schema).isEqualTo(expected);
+    if (GENERATE_GOLDEN) {
+      // Not actually testing, just generating test data.
+      String filename = "/tmp/" + name + ".schema.json";
+      System.out.println("Writing " + filename + "...");
+      File file = new File(filename);
+      Files.asCharSink(file, StandardCharsets.UTF_8)
+          .write(gsonFactory.toPrettyString(schema.getFields()));
+    } else {
+      // Testing.
+      // Parse the json-schema version of the input.
+      TableSchema expected = readSchema(name + ".schema.json");
+      assertThat(schema).isEqualTo(expected);
+    }
   }
 
   @Test
