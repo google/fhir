@@ -42,7 +42,8 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class BigQuerySchemaTest {
 
-  private static final Boolean GENERATE_GOLDEN = true;
+  private static final Boolean GENERATE_GOLDEN = false;
+  private static final String GOLDEN_OUTPUT_DIRECTORY = "/tmp";
 
   private JsonFormat.Parser jsonParser;
   private GsonFactory gsonFactory;
@@ -88,7 +89,7 @@ public final class BigQuerySchemaTest {
 
     if (GENERATE_GOLDEN) {
       // Not actually testing, just generating test data.
-      String filename = "/tmp/" + name + ".schema.json";
+      String filename = GOLDEN_OUTPUT_DIRECTORY + "/" + name + ".schema.json";
       System.out.println("Writing " + filename + "...");
       File file = new File(filename);
       Files.asCharSink(file, StandardCharsets.UTF_8)
