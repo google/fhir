@@ -3876,7 +3876,7 @@
         "definition": "Nested group of Consent Directive Provision.",
         "min": 0,
         "max": "*",
-        "contentReference": "#term"
+        "contentReference": "#Contract.term"
       },
       {
         "id": "Contract.binding[x]",
