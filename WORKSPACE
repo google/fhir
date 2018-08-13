@@ -1,35 +1,30 @@
 workspace(name = "com_google_fhir")
 
-# defines py_proto_library.
-git_repository(
-    name = "protobuf_bzl",
-    # v3.6.0
-    commit = "ab8edf1dbe2237b4717869eaab11a2998541ad8d",
-    remote = "https://github.com/google/protobuf.git",
-)
-
-# required by py_proto_library.
-new_http_archive(
-    name = "six_archive",
-    build_file = "@protobuf_bzl//:six.BUILD",
-    sha256 = "105f8d68616f8248e24bf0e9372ef04d3cc10104f1980f54d57b2ce73a5ad56a",
-    url = "https://pypi.python.org/packages/source/s/six/six-1.10.0.tar.gz#md5=34eed507548117b2ab523ab14b2f8b55",
-)
-
-bind(
-    name = "six",
-    actual = "@six_archive//:six",
-)
-
-# proto_library, cc_proto_library, and java_proto_library rules implicitly
-# depend on @com_google_protobuf for protoc and proto runtimes.
-# This statement defines the @com_google_protobuf repo.
+# Needed by TensorFlow. com_google_protobuf and com_google_googletest
+# are also imported here.
 http_archive(
-    name = "com_google_protobuf",
-    sha256 = "cef7f1b5a7c5fba672bec2a319246e8feba471f04dcebfe362d55930ee7c1c30",
-    strip_prefix = "protobuf-3.5.0",
-    urls = ["https://github.com/google/protobuf/archive/v3.5.0.zip"],
+    name = "io_bazel_rules_closure",
+    sha256 = "a38539c5b5c358548e75b44141b4ab637bba7c4dc02b46b1f62a96d6433f56ae",
+    strip_prefix = "rules_closure-dbb96841cc0a5fb2664c37822803b06dab20c7d1",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_closure/archive/dbb96841cc0a5fb2664c37822803b06dab20c7d1.tar.gz",
+        "https://github.com/bazelbuild/rules_closure/archive/dbb96841cc0a5fb2664c37822803b06dab20c7d1.tar.gz",  # 2018-04-13
+    ],
 )
+
+# TensorFlow v1.10.0 (2018-04-12), com_google_absl is also provided by
+# tensorflow.
+http_archive(
+    name = "org_tensorflow",
+    sha256 = "0f02347f4e3993a97f790a795d5257ee5d43e7671979cab2f12c285adf787009",
+    strip_prefix = "tensorflow-1.10.0-rc0",
+    urls = [
+        "https://github.com/tensorflow/tensorflow/archive/v1.10.0-rc0.tar.gz",
+    ],
+)
+
+load("@org_tensorflow//tensorflow:workspace.bzl", "tf_workspace")
+tf_workspace("", "@org_tensorflow")
 
 # When possible, we fetch java dependencies from maven central, including
 # transitive dependencies.
