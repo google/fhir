@@ -70,18 +70,8 @@ field {
   }
 }
 field {
-  name: "extension"
-  number: 8
-  label: LABEL_REPEATED
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "The items the orderer requested"
-  }
-}
-field {
   name: "modifier_extension"
-  number: 9
+  number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
@@ -91,7 +81,7 @@ field {
 }
 field {
   name: "identifier"
-  number: 10
+  number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
@@ -101,7 +91,7 @@ field {
 }
 field {
   name: "definition"
-  number: 11
+  number: 10
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -111,7 +101,7 @@ field {
 }
 field {
   name: "based_on"
-  number: 12
+  number: 11
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -121,7 +111,7 @@ field {
 }
 field {
   name: "replaces"
-  number: 13
+  number: 12
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -131,7 +121,7 @@ field {
 }
 field {
   name: "requisition"
-  number: 14
+  number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
@@ -141,7 +131,7 @@ field {
 }
 field {
   name: "status"
-  number: 15
+  number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.RequestStatusCode"
@@ -152,7 +142,7 @@ field {
 }
 field {
   name: "intent"
-  number: 16
+  number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.RequestIntentCode"
@@ -163,7 +153,7 @@ field {
 }
 field {
   name: "priority"
-  number: 17
+  number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.RequestPriorityCode"
@@ -173,7 +163,7 @@ field {
 }
 field {
   name: "do_not_perform"
-  number: 18
+  number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
@@ -183,7 +173,7 @@ field {
 }
 field {
   name: "category"
-  number: 19
+  number: 18
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -193,7 +183,7 @@ field {
 }
 field {
   name: "code"
-  number: 20
+  number: 19
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -204,7 +194,7 @@ field {
 }
 field {
   name: "subject"
-  number: 21
+  number: 20
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -215,7 +205,7 @@ field {
 }
 field {
   name: "context"
-  number: 22
+  number: 21
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -225,10 +215,10 @@ field {
 }
 field {
   name: "occurrence"
-  number: 23
+  number: 22
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.ProcedureRequest.Occurrence"
+  type_name: ".google.fhir.stu3.proto.ProcedurerequestGenetics.Occurrence"
   options {
     [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "When procedure should occur"
@@ -236,10 +226,10 @@ field {
 }
 field {
   name: "as_needed"
-  number: 24
+  number: 23
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.ProcedureRequest.AsNeeded"
+  type_name: ".google.fhir.stu3.proto.ProcedurerequestGenetics.AsNeeded"
   options {
     [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Preconditions for procedure or diagnostic"
@@ -247,7 +237,7 @@ field {
 }
 field {
   name: "authored_on"
-  number: 25
+  number: 24
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
@@ -257,17 +247,17 @@ field {
 }
 field {
   name: "requester"
-  number: 26
+  number: 25
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.ProcedureRequest.Requester"
+  type_name: ".google.fhir.stu3.proto.ProcedurerequestGenetics.Requester"
   options {
     [google.fhir.stu3.proto.field_description]: "Who/what is requesting procedure or diagnostic"
   }
 }
 field {
   name: "performer_type"
-  number: 27
+  number: 26
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -277,7 +267,7 @@ field {
 }
 field {
   name: "performer"
-  number: 28
+  number: 27
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -287,7 +277,7 @@ field {
 }
 field {
   name: "reason_code"
-  number: 29
+  number: 28
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -297,7 +287,7 @@ field {
 }
 field {
   name: "reason_reference"
-  number: 30
+  number: 29
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -307,7 +297,7 @@ field {
 }
 field {
   name: "supporting_info"
-  number: 31
+  number: 30
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -317,7 +307,7 @@ field {
 }
 field {
   name: "specimen"
-  number: 32
+  number: 31
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -327,7 +317,7 @@ field {
 }
 field {
   name: "body_site"
-  number: 33
+  number: 32
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -337,7 +327,7 @@ field {
 }
 field {
   name: "note"
-  number: 34
+  number: 33
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Annotation"
@@ -347,7 +337,7 @@ field {
 }
 field {
   name: "relevant_history"
-  number: 35
+  number: 34
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -464,5 +454,6 @@ nested_type {
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for ProcedureRequest-Genetics.\nA request for a procedure or diagnostic to be performed.\nSee http://hl7.org/fhir/StructureDefinition/procedurerequest-genetics"
+  [google.fhir.stu3.proto.fhir_profile_base]: "ProcedureRequest"
   [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/procedurerequest-genetics"
 }

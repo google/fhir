@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /** Helper methods for handling extensions. */
 public final class ExtensionWrapper {
@@ -194,11 +195,19 @@ public final class ExtensionWrapper {
     }
   }
 
+  // TODO(nickgeorge): This should handle the id and extension fields.
   private static void addExtensionToMessage(Extension extension, Message.Builder builder) {
     if (extension.hasValue()) {
       // We only hit this case for simple extensions. The output type had better have just one
-      // field, and it had better be of the right type.
-      List<FieldDescriptor> fields = builder.getDescriptorForType().getFields();
+      // field other than extension and id, and it had better be of the right type.
+      List<FieldDescriptor> fields =
+          builder
+              .getDescriptorForType()
+              .getFields()
+              .stream()
+              .filter(
+                  field -> !field.getName().equals("extension") && !field.getName().equals("id"))
+              .collect(Collectors.toList());
       if (fields.size() == 1 && fields.get(0).getType() == FieldDescriptor.Type.MESSAGE) {
         FieldDescriptor targetField = fields.get(0);
         for (Map.Entry<FieldDescriptor, Object> entry :

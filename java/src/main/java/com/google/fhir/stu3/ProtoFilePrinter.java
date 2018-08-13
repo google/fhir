@@ -180,6 +180,14 @@ public class ProtoFilePrinter {
           .append("\";\n");
       printedField = true;
     }
+    if (options.hasExtension(Annotations.fhirProfileBase)) {
+      message
+          .append(fieldIndent)
+          .append("option (fhir_profile_base) = \"")
+          .append(options.getExtension(Annotations.fhirProfileBase))
+          .append("\";\n");
+      printedField = true;
+    }
     if (options.hasExtension(Annotations.fhirStructureDefinitionUrl)) {
       message
           .append(fieldIndent)
@@ -357,6 +365,14 @@ public class ProtoFilePrinter {
           addFieldOption(
               "(validation_requirement)",
               options.getExtension(Annotations.validationRequirement).toString(),
+              hasFieldOption,
+              message);
+    }
+    if (options.hasExtension(Annotations.fhirInlinedExtensionUrl)) {
+      hasFieldOption =
+          addFieldOption(
+              "(fhir_inlined_extension_url)",
+              "\"" + options.getExtension(Annotations.fhirInlinedExtensionUrl) + "\"",
               hasFieldOption,
               message);
     }

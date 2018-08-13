@@ -45,6 +45,7 @@ PRIMITIVES="Base64Binary Boolean Code Date DateTime Decimal Id Instant Integer M
 DATATYPES="Address Age Annotation Attachment CodeableConcept Coding ContactPoint Count Distance Dosage Duration HumanName Identifier Meta Money Period Quantity Range Ratio SampledData Signature SimpleQuantity Timing"
 METADATATYPES="BackboneElement ContactDetail Contributor DataRequirement Element ElementDefinition Narrative ParameterDefinition RelatedArtifact Resource TriggerDefinition UsageContext"
 RESOURCETYPES="Account ActivityDefinition AdverseEvent AllergyIntolerance Appointment AppointmentResponse AuditEvent Basic Binary BodySite Bundle CapabilityStatement CarePlan CareTeam ChargeItem Claim ClaimResponse ClinicalImpression CodeSystem Communication CommunicationRequest CompartmentDefinition Composition ConceptMap Condition Consent Contract Coverage DataElement DetectedIssue Device DeviceComponent DeviceMetric DeviceRequest DeviceUseStatement DiagnosticReport DocumentManifest DocumentReference EligibilityRequest EligibilityResponse Encounter Endpoint EnrollmentRequest EnrollmentResponse EpisodeOfCare ExpansionProfile ExplanationOfBenefit FamilyMemberHistory Flag Goal GraphDefinition Group GuidanceResponse HealthcareService ImagingManifest ImagingStudy Immunization ImmunizationRecommendation ImplementationGuide Library Linkage List Location Measure MeasureReport Media Medication MedicationAdministration MedicationDispense MedicationRequest MedicationStatement MessageDefinition MessageHeader NamingSystem NutritionOrder Observation OperationDefinition OperationOutcome Organization Parameters Patient PaymentNotice PaymentReconciliation Person PlanDefinition Practitioner PractitionerRole Procedure ProcedureRequest ProcessRequest ProcessResponse Provenance Questionnaire QuestionnaireResponse ReferralRequest RelatedPerson RequestGroup ResearchStudy ResearchSubject RiskAssessment Schedule SearchParameter Sequence ServiceDefinition Slot Specimen StructureDefinition StructureMap Subscription Substance SupplyDelivery SupplyRequest Task TestReport TestScript ValueSet VisionPrescription"
+PROFILES="observation-genetics ../extensions/extension-observation-geneticsdnasequencevariantname"
 EXTENSIONS="extension-elementdefinition-bindingname extension-structuredefinition-explicit-type-name extension-structuredefinition-regex"
 
 # generate datatypes.proto
@@ -73,12 +74,24 @@ $PROTO_GENERATOR \
 # generate resources.proto
 $PROTO_GENERATOR \
   --emit_proto --include_contained_resource \
+  --include_metadatatypes \
+  $(for i in $PROFILES; do echo " --typed_extensions $INPUT_PATH/${i}.profile.json "; done) \
   --output_directory $OUTPUT_PATH --output_filename resources.proto \
   $(for i in $RESOURCETYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
+# generate profiles.proto
+$PROTO_GENERATOR \
+  --emit_proto --include_resources \
+  --include_metadatatypes \
+  $(for i in $PROFILES; do echo " --typed_extensions $INPUT_PATH/${i}.profile.json "; done) \
+  --output_directory $OUTPUT_PATH --output_filename profiles.proto \
+  $(for i in $PROFILES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
+
 # generate extensions
-for extension in $EXTENSIONS; do
-  $PROTO_GENERATOR \
-    --emit_proto --output_directory $OUTPUT_PATH \
-    --output_filename ${extension}.proto ${EXTENSION_PATH}/${extension}.json
-done
+# TODO(nickgeorge): have smarter importing logic for profiles so that all
+# extensions don't have to get lumped into a single file.
+$PROTO_GENERATOR \
+  --emit_proto --output_directory $OUTPUT_PATH \
+  $(for i in $PROFILES; do echo " --typed_extensions $INPUT_PATH/${i}.profile.json "; done) \
+  --output_filename extensions.proto \
+  $(for i in $EXTENSIONS; do echo "$EXTENSION_PATH/${i,,}.json"; done)

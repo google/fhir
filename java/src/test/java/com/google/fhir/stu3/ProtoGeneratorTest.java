@@ -16,6 +16,7 @@ package com.google.fhir.stu3;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.stu3.proto.Annotations;
@@ -27,6 +28,8 @@ import com.google.protobuf.TextFormat;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +38,10 @@ import org.junit.runners.JUnit4;
 /** Unit tests for {@link ProtoGenerator}. */
 @RunWith(JUnit4.class)
 public class ProtoGeneratorTest {
+
+  private static final ImmutableSet<String> TYPED_EXTENSIONS =
+      ImmutableSet.of(
+          "extensions/extension-observation-geneticsdnasequencevariantname.profile.json");
 
   private JsonFormat.Parser jsonParser;
   private TextFormat.Parser textParser;
@@ -87,12 +94,23 @@ public class ProtoGeneratorTest {
     assertThat(descriptor.toProto()).isEqualTo(golden);
   }
 
+  private List<StructureDefinition> getTypedExtensions() throws IOException {
+    ArrayList<StructureDefinition> typedExtensionDefinitions = new ArrayList<>();
+    for (String filename : TYPED_EXTENSIONS) {
+      typedExtensionDefinitions.add(readStructureDefinition(filename));
+    }
+    return typedExtensionDefinitions;
+  }
+
   @Before
   public void setUp() throws IOException {
     jsonParser = JsonFormat.getParser();
     textParser = TextFormat.getParser();
     runfiles = Runfiles.create();
-    protoGenerator = new ProtoGenerator("google.fhir.stu3.proto", "proto/stu3");
+    protoGenerator =
+        new ProtoGenerator(
+            "google.fhir.stu3.proto", "proto/stu3", getTypedExtensions());
+
     registry = ExtensionRegistry.newInstance();
     registry.add(Annotations.structureDefinitionKind);
     registry.add(Annotations.validationRequirement);
@@ -104,6 +122,9 @@ public class ProtoGeneratorTest {
     registry.add(Annotations.fhirReferenceType);
     registry.add(Annotations.fhirStructureDefinitionUrl);
     registry.add(Annotations.valueRegex);
+    registry.add(Annotations.fhirProfileBase);
+    registry.add(Annotations.fhirStructureDefinitionUrl);
+    registry.add(Annotations.fhirInlinedExtensionUrl);
   }
 
   // Test the primitive FHIR data types individually. */
@@ -1341,13 +1362,13 @@ public class ProtoGeneratorTest {
 
   /** Test generating the structuredefinition-explicit-type-name extension. */
   @Test
-  public void generateStructureDefinitionExplicitTypeName() throws Exception {
+  public void generateElementDefinitionExplicitTypeName() throws Exception {
     testGeneratedExtension("extension-structuredefinition-explicit-type-name");
   }
 
   /** Test generating the structuredefinition-regex extension. */
   @Test
-  public void generateStructureDefinitionRegex() throws Exception {
+  public void generateElementDefinitionRegex() throws Exception {
     testGeneratedExtension("extension-structuredefinition-regex");
   }
 }

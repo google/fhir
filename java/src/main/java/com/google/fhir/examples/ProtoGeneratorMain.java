@@ -20,6 +20,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.google.common.base.Splitter;
 import com.google.common.io.Files;
 import com.google.fhir.stu3.JsonFormat;
 import com.google.fhir.stu3.ProtoFilePrinter;
@@ -34,7 +35,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A class that runs ProtoGenerator on the specified inputs, turning FHIR StructureDefinition files
@@ -43,9 +46,13 @@ import java.util.List;
  */
 class ProtoGeneratorMain {
 
-  private final ProtoGenerator generator;
   private final ProtoFilePrinter printer;
   private final PrintWriter writer;
+
+  // The convention is to name profiles as the lowercased version of the element they define,
+  // but this is not guaranteed by the spec, so we don't rely on it.
+  // This mapping lets us keep track of source filenames for generated types.
+  private final Map<String, String> typeToSourceFileBaseName = new HashMap<>();
 
   private static class Args {
     @Parameter(
@@ -92,12 +99,27 @@ class ProtoGeneratorMain {
     )
     private String protoRoot = "proto/stu3";
 
+    @Parameter(
+        names = {"--typed_extensions"},
+        description = "List of typed Extensions to inline as fields")
+    private List<String> typedExtensions = new ArrayList<>();
+
+    // TODO(nickgeorge): figure out a smarter way to handle dependencies
+    @Parameter(
+        names = {"--include_resources"},
+        description = "Includes a dependency on resources.proto")
+    private boolean includeResources = false;
+
+    @Parameter(
+        names = {"--include_metadatatypes"},
+        description = "Includes a dependency on metadatatypes.proto")
+    private boolean includeMetadatatypes = false;
+
     @Parameter(description = "List of input files")
     private List<String> inputFiles = new ArrayList<>();
   }
 
-  ProtoGeneratorMain(ProtoGenerator generator, PrintWriter writer, ProtoFilePrinter protoPrinter) {
-    this.generator = checkNotNull(generator);
+  ProtoGeneratorMain(PrintWriter writer, ProtoFilePrinter protoPrinter) {
     this.writer = checkNotNull(writer);
     this.printer = checkNotNull(protoPrinter);
   }
@@ -105,25 +127,56 @@ class ProtoGeneratorMain {
   void run(Args args) throws IOException {
     JsonFormat.Parser jsonParser = JsonFormat.getParser();
 
+    // Read any typed extension structure definitions that should be inlined into the
+    // output protos.  This will not generate proto definitions for these extensions -
+    // that must be done separately.
+    ArrayList<StructureDefinition> typedExtensionDefinitions = new ArrayList<>();
+    for (String filename : args.typedExtensions) {
+      typedExtensionDefinitions.add(readStructureDefinition(filename, jsonParser));
+    }
+
     // Read the inputs in sequence.
     ArrayList<StructureDefinition> definitions = new ArrayList<>();
     for (String filename : args.inputFiles) {
-      writer.println("Reading " + filename + "...");
+      StructureDefinition definition = readStructureDefinition(filename, jsonParser);
+      // TODO(nickgeorge): We could skip over simple extensions here (since they'll get inlined as
+      // primitives, but that would break usages of things like ExtensionWrapper.fromExtensionsIn.
+      // Think about this a bit more.
+      definitions.add(definition);
 
-      File file = new File(filename);
-      String json = Files.asCharSource(file, UTF_8).read();
-      StructureDefinition.Builder builder = StructureDefinition.newBuilder();
-      jsonParser.merge(json, builder);
-      definitions.add(builder.build());
+      // Keep a mapping from Message name that will be generated to file name that it came from.
+      // This allows us to generate parallel file names between input and output files.
+
+      // File base name is the last token, stripped of any extension
+      // e.g., my-oddly_namedFile from foo/bar/my-oddly_namedFile.profile.json
+      String fileBaseName = Splitter.on('.').splitToList(new File(filename).getName()).get(0);
+      typeToSourceFileBaseName.put(ProtoGenerator.getTypeName(definition), fileBaseName);
     }
 
     // Generate the proto file.
     writer.println("Generating proto descriptors...");
     writer.flush();
     FileDescriptorProto proto;
+    ProtoGenerator generator =
+        new ProtoGenerator(args.protoPackage, args.protoRoot, typedExtensionDefinitions);
     proto = generator.generateFileDescriptor(definitions);
     if (args.includeContainedResource) {
       proto = generator.addContainedResource(proto);
+    }
+    // TODO(nickgeorge): deduce these automatically
+    if (args.includeResources) {
+      proto =
+          proto
+              .toBuilder()
+              .addDependency(new File(args.protoRoot, "resources.proto").toString())
+              .build();
+    }
+    if (args.includeMetadatatypes) {
+      proto =
+          proto
+              .toBuilder()
+              .addDependency(new File(args.protoRoot, "metadatatypes.proto").toString())
+              .build();
     }
     String protoFileContents = printer.print(proto);
 
@@ -140,12 +193,29 @@ class ProtoGeneratorMain {
       writer.println("Writing individual descriptors to " + args.outputDirectory + "...");
       writer.flush();
       for (DescriptorProto descriptor : proto.getMessageTypeList()) {
-        File outputFile =
-            new File(
-                args.outputDirectory, descriptor.getName().toLowerCase() + ".descriptor.prototxt");
+        String fileBaseName = typeToSourceFileBaseName.get(descriptor.getName());
+        if (fileBaseName == null) {
+          throw new IllegalArgumentException(
+              "No file basename associated with type: "
+                  + descriptor.getName()
+                  + "\n"
+                  + typeToSourceFileBaseName);
+        }
+        File outputFile = new File(args.outputDirectory, fileBaseName + ".descriptor.prototxt");
         Files.asCharSink(outputFile, UTF_8).write(TextFormat.printToString(descriptor));
       }
     }
+  }
+
+  private StructureDefinition readStructureDefinition(String filename, JsonFormat.Parser jsonParser)
+      throws IOException {
+    writer.println("Reading " + filename + "...");
+
+    File file = new File(filename);
+    String json = Files.asCharSource(file, UTF_8).read();
+    StructureDefinition.Builder builder = StructureDefinition.newBuilder();
+    jsonParser.merge(json, builder);
+    return builder.build();
   }
 
   public static void main(String[] argv) throws IOException {
@@ -160,7 +230,6 @@ class ProtoGeneratorMain {
     }
 
     new ProtoGeneratorMain(
-            new ProtoGenerator(args.protoPackage, args.protoRoot),
             new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out, UTF_8))),
             new ProtoFilePrinter().withApacheLicense())
         .run(args);

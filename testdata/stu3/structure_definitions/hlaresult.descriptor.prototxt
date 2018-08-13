@@ -70,48 +70,8 @@ field {
   }
 }
 field {
-  name: "extension"
-  number: 8
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Allele Database"
-  }
-}
-field {
-  name: "extension"
-  number: 9
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Glstring"
-  }
-}
-field {
-  name: "extension"
-  number: 10
-  label: LABEL_REPEATED
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Haploid"
-  }
-}
-field {
-  name: "extension"
-  number: 11
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "The platform, methodology and software applied at the time of the\rgenotyping"
-  }
-}
-field {
   name: "modifier_extension"
-  number: 12
+  number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
@@ -121,7 +81,7 @@ field {
 }
 field {
   name: "identifier"
-  number: 13
+  number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
@@ -131,7 +91,7 @@ field {
 }
 field {
   name: "based_on"
-  number: 14
+  number: 10
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -141,7 +101,7 @@ field {
 }
 field {
   name: "status"
-  number: 15
+  number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DiagnosticReportStatusCode"
@@ -152,7 +112,7 @@ field {
 }
 field {
   name: "category"
-  number: 16
+  number: 12
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -162,7 +122,7 @@ field {
 }
 field {
   name: "code"
-  number: 17
+  number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -173,7 +133,7 @@ field {
 }
 field {
   name: "subject"
-  number: 18
+  number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -183,7 +143,7 @@ field {
 }
 field {
   name: "context"
-  number: 19
+  number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -193,10 +153,10 @@ field {
 }
 field {
   name: "effective"
-  number: 20
+  number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.DiagnosticReport.Effective"
+  type_name: ".google.fhir.stu3.proto.Hlaresult.Effective"
   options {
     [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Clinically relevant time/time-period for report"
@@ -204,7 +164,7 @@ field {
 }
 field {
   name: "issued"
-  number: 21
+  number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Instant"
@@ -214,17 +174,17 @@ field {
 }
 field {
   name: "performer"
-  number: 22
+  number: 18
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.DiagnosticReport.Performer"
+  type_name: ".google.fhir.stu3.proto.Hlaresult.Performer"
   options {
     [google.fhir.stu3.proto.field_description]: "Participants in producing the report"
   }
 }
 field {
   name: "specimen"
-  number: 23
+  number: 19
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -234,7 +194,7 @@ field {
 }
 field {
   name: "result"
-  number: 24
+  number: 20
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -244,7 +204,7 @@ field {
 }
 field {
   name: "imaging_study"
-  number: 25
+  number: 21
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -254,17 +214,17 @@ field {
 }
 field {
   name: "image"
-  number: 26
+  number: 22
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.DiagnosticReport.Image"
+  type_name: ".google.fhir.stu3.proto.Hlaresult.Image"
   options {
     [google.fhir.stu3.proto.field_description]: "Key images associated with this report"
   }
 }
 field {
   name: "conclusion"
-  number: 27
+  number: 23
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
@@ -274,7 +234,7 @@ field {
 }
 field {
   name: "coded_diagnosis"
-  number: 28
+  number: 24
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -284,7 +244,7 @@ field {
 }
 field {
   name: "presented_form"
-  number: 29
+  number: 25
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Attachment"
@@ -425,5 +385,6 @@ nested_type {
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Profile for HLA Genotyping Results.\nA Diagnostic report - a combination of request information, atomic results, images, interpretation, as well as formatted reports.\nSee http://hl7.org/fhir/StructureDefinition/hlaresult"
+  [google.fhir.stu3.proto.fhir_profile_base]: "DiagnosticReport"
   [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/hlaresult"
 }

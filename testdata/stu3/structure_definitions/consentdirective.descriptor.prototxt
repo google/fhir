@@ -146,6 +146,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Consent Directive Type"
   }
 }
@@ -184,7 +185,7 @@ field {
   number: 19
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Contract.Actor"
+  type_name: ".google.fhir.stu3.proto.Consentdirective.Actor"
   options {
     [google.fhir.stu3.proto.field_description]: "Consent Directive Actor"
   }
@@ -194,7 +195,7 @@ field {
   number: 21
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Contract.Signatory"
+  type_name: ".google.fhir.stu3.proto.Consentdirective.Signatory"
   options {
     [google.fhir.stu3.proto.field_description]: "Consent Directive Signer"
   }
@@ -204,7 +205,7 @@ field {
   number: 22
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Contract.Term"
+  type_name: ".google.fhir.stu3.proto.Consentdirective.Term"
   options {
     [google.fhir.stu3.proto.field_description]: "Consent Directive Term List"
   }
@@ -214,7 +215,7 @@ field {
   number: 23
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Contract.Binding"
+  type_name: ".google.fhir.stu3.proto.Consentdirective.Binding"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.is_choice_type]: true
@@ -226,7 +227,7 @@ field {
   number: 24
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Contract.FriendlyLanguage"
+  type_name: ".google.fhir.stu3.proto.Consentdirective.FriendlyLanguage"
   options {
     [google.fhir.stu3.proto.field_description]: "Consent Directive Friendly Language"
   }
@@ -236,7 +237,7 @@ field {
   number: 25
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Contract.LegalLanguage"
+  type_name: ".google.fhir.stu3.proto.Consentdirective.LegalLanguage"
   options {
     [google.fhir.stu3.proto.field_description]: "Consent Directive Legal Language"
   }
@@ -246,7 +247,7 @@ field {
   number: 26
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Contract.ComputableLanguage"
+  type_name: ".google.fhir.stu3.proto.Consentdirective.ComputableLanguage"
   options {
     [google.fhir.stu3.proto.field_description]: "Computable Consent Directive Language"
   }
@@ -342,7 +343,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Contract.ValuedItem.Entity"
+    type_name: ".google.fhir.stu3.proto.Consentdirective.ValuedItem.Entity"
     options {
       [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Contract Valued Item Type"
@@ -592,7 +593,7 @@ nested_type {
   field {
     name: "topic"
     number: 9
-    label: LABEL_OPTIONAL
+    label: LABEL_REPEATED
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
@@ -624,7 +625,7 @@ nested_type {
     number: 12
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Contract.Term.TermActor"
+    type_name: ".google.fhir.stu3.proto.Consentdirective.Term.TermActor"
     options {
       [google.fhir.stu3.proto.field_description]: "Consent Directive  Term Actor List"
     }
@@ -644,7 +645,7 @@ nested_type {
     number: 15
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Contract.Term"
+    type_name: ".google.fhir.stu3.proto.Consentdirective.Term"
     options {
       [google.fhir.stu3.proto.field_description]: "Nested Consent DirectiveTerm Group"
     }
@@ -740,7 +741,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.stu3.proto.Contract.Term.TermValuedItem.Entity"
+      type_name: ".google.fhir.stu3.proto.Consentdirective.Term.TermValuedItem.Entity"
       options {
         [google.fhir.stu3.proto.is_choice_type]: true
         [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Type"
@@ -902,7 +903,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Contract.FriendlyLanguage.Content"
+    type_name: ".google.fhir.stu3.proto.Consentdirective.FriendlyLanguage.Content"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.is_choice_type]: true
@@ -972,7 +973,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Contract.LegalLanguage.Content"
+    type_name: ".google.fhir.stu3.proto.Consentdirective.LegalLanguage.Content"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.is_choice_type]: true
@@ -1042,7 +1043,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Contract.ComputableLanguage.Content"
+    type_name: ".google.fhir.stu3.proto.Consentdirective.ComputableLanguage.Content"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.is_choice_type]: true
@@ -1078,5 +1079,6 @@ nested_type {
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Consent Directive.\nConsent Directive.\nSee http://hl7.org/fhir/StructureDefinition/consentdirective"
+  [google.fhir.stu3.proto.fhir_profile_base]: "Contract"
   [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/consentdirective"
 }

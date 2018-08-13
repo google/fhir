@@ -20,28 +20,8 @@ field {
   }
 }
 field {
-  name: "extension"
-  number: 3
-  label: LABEL_REPEATED
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Extension"
-  }
-}
-field {
-  name: "extension"
-  number: 4
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Extension"
-  }
-}
-field {
   name: "path"
-  number: 5
+  number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
@@ -52,7 +32,7 @@ field {
 }
 field {
   name: "slice_name"
-  number: 7
+  number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
@@ -62,7 +42,7 @@ field {
 }
 field {
   name: "label"
-  number: 8
+  number: 6
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
@@ -72,7 +52,7 @@ field {
 }
 field {
   name: "code"
-  number: 9
+  number: 7
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Coding"
@@ -82,7 +62,7 @@ field {
 }
 field {
   name: "definition"
-  number: 12
+  number: 10
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Markdown"
@@ -92,7 +72,7 @@ field {
 }
 field {
   name: "comment"
-  number: 13
+  number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Markdown"
@@ -102,7 +82,7 @@ field {
 }
 field {
   name: "requirements"
-  number: 14
+  number: 12
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Markdown"
@@ -112,7 +92,7 @@ field {
 }
 field {
   name: "alias"
-  number: 15
+  number: 13
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
@@ -122,7 +102,7 @@ field {
 }
 field {
   name: "min"
-  number: 16
+  number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.UnsignedInt"
@@ -132,7 +112,7 @@ field {
 }
 field {
   name: "max"
-  number: 17
+  number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
@@ -142,30 +122,30 @@ field {
 }
 field {
   name: "base"
-  number: 18
+  number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.ElementDefinition.Base"
+  type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.Base"
   options {
     [google.fhir.stu3.proto.field_description]: "Base definition information for tools"
   }
 }
 field {
   name: "type"
-  number: 20
+  number: 18
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.ElementDefinition.TypeRef"
+  type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.TypeRef"
   options {
     [google.fhir.stu3.proto.field_description]: "Data type and Profile for this element"
   }
 }
 field {
   name: "default_value"
-  number: 21
+  number: 19
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.ElementDefinition.DefaultValue"
+  type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.DefaultValue"
   options {
     [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Specified value if missing from instance"
@@ -173,7 +153,7 @@ field {
 }
 field {
   name: "meaning_when_missing"
-  number: 22
+  number: 20
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Markdown"
@@ -183,7 +163,7 @@ field {
 }
 field {
   name: "order_meaning"
-  number: 23
+  number: 21
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
@@ -193,20 +173,20 @@ field {
 }
 field {
   name: "example"
-  number: 26
+  number: 24
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.ElementDefinition.Example"
+  type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.Example"
   options {
     [google.fhir.stu3.proto.field_description]: "Example value (as defined for type)"
   }
 }
 field {
   name: "min_value"
-  number: 27
+  number: 25
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.ElementDefinition.MinValue"
+  type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.MinValue"
   options {
     [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Minimum Allowed Value (for some types)"
@@ -214,10 +194,10 @@ field {
 }
 field {
   name: "max_value"
-  number: 28
+  number: 26
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.ElementDefinition.MaxValue"
+  type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.MaxValue"
   options {
     [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Maximum Allowed Value (for some types)"
@@ -225,7 +205,7 @@ field {
 }
 field {
   name: "max_length"
-  number: 29
+  number: 27
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Integer"
@@ -235,7 +215,7 @@ field {
 }
 field {
   name: "condition"
-  number: 30
+  number: 28
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
@@ -245,17 +225,17 @@ field {
 }
 field {
   name: "constraint"
-  number: 31
+  number: 29
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.ElementDefinition.Constraint"
+  type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.Constraint"
   options {
     [google.fhir.stu3.proto.field_description]: "Condition that must evaluate to true"
   }
 }
 field {
   name: "must_support"
-  number: 32
+  number: 30
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
@@ -265,20 +245,20 @@ field {
 }
 field {
   name: "binding"
-  number: 35
+  number: 33
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.ElementDefinition.ElementDefinitionBinding"
+  type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.ElementDefinitionBinding"
   options {
     [google.fhir.stu3.proto.field_description]: "ValueSet details if this is coded"
   }
 }
 field {
   name: "mapping"
-  number: 36
+  number: 34
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.ElementDefinition.Mapping"
+  type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.Mapping"
   options {
     [google.fhir.stu3.proto.field_description]: "Map element to another set of definitions"
   }
@@ -310,7 +290,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.ElementDefinition.Slicing.Discriminator"
+    type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.Slicing.Discriminator"
     options {
       [google.fhir.stu3.proto.field_description]: "Element values that are used to distinguish the slices"
     }
@@ -851,7 +831,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.ElementDefinition.Example.Value"
+    type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.Example.Value"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.is_choice_type]: true
@@ -1474,7 +1454,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.ElementDefinition.ElementDefinitionBinding.ValueSet"
+    type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.ElementDefinitionBinding.ValueSet"
     options {
       [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Source of value set"
@@ -1571,5 +1551,6 @@ nested_type {
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
   [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for DataElement constraint on ElementDefinition data type.\nDefinition of an element in a resource or extension.\nSee http://hl7.org/fhir/StructureDefinition/elementdefinition-de"
+  [google.fhir.stu3.proto.fhir_profile_base]: "ElementDefinition"
   [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/elementdefinition-de"
 }

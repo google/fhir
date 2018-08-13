@@ -1,0 +1,256 @@
+//    Copyright 2018 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.stu3.proto;
+
+import "proto/stu3/annotations.proto";
+import "proto/stu3/codes.proto";
+import "proto/stu3/datatypes.proto";
+import "proto/stu3/resources.proto";
+import "proto/stu3/metadatatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.stu3.proto";
+
+// Auto-generated from StructureDefinition for Observation-genetics.
+// Measurements and simple assertions.
+// See http://hl7.org/fhir/StructureDefinition/observation-genetics
+message ObservationGenetics {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) = "Observation";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/observation-genetics";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Extension
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12;
+
+  // Type of observation (code / type)
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14;
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Clinically relevant time/time-period for observation
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16 [(is_choice_type) = true];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Actual result
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+      CodeableConcept codeable_concept = 2;
+      String string_value = 3 [json_name = "string"];
+      Boolean boolean = 4;
+      Range range = 5;
+      Ratio ratio = 6;
+      SampledData sampled_data = 7;
+      Attachment attachment = 8;
+      Time time = 9;
+      DateTime date_time = 10;
+      Period period = 11;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    Quantity low = 4;
+
+    // High Range, if relevant
+    Quantity high = 5;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Resource related to this observation
+  message Related {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    ObservationRelationshipTypeCode type = 4;
+
+    // Resource that is related to this one
+    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28;
+
+  // Component results
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Actual component result
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+        CodeableConcept codeable_concept = 2;
+        String string_value = 3 [json_name = "string"];
+        Range range = 4;
+        Ratio ratio = 5;
+        SampledData sampled_data = 6;
+        Attachment attachment = 7;
+        Time time = 8;
+        DateTime date_time = 9;
+        Period period = 10;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+
+  // DNA sequence variant
+  // This is a FHIR extension that has been inlined based on the profile for
+  // this resource.
+  CodeableConcept d_n_a_sequence_variant_name = 30 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName"
+  ];
+}
+
+// Auto-generated from StructureDefinition for DNASequenceVariantName.
+// HGVS nomenclature for observed DNA sequence variant.
+// See
+// http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName
+message ObservationDNASequenceVariantName {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_extension_url) =
+      "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName";
+  option (fhir_profile_base) = "Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  CodeableConcept value_codeable_concept = 3;
+}

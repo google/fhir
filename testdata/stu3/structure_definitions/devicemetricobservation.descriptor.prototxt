@@ -168,7 +168,7 @@ field {
   number: 19
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Observation.Value"
+  type_name: ".google.fhir.stu3.proto.Devicemetricobservation.Value"
   options {
     [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Actual result"
@@ -230,7 +230,7 @@ field {
   number: 27
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Observation.ReferenceRange"
+  type_name: ".google.fhir.stu3.proto.Devicemetricobservation.ReferenceRange"
   options {
     [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation"
   }
@@ -240,7 +240,7 @@ field {
   number: 28
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Observation.Related"
+  type_name: ".google.fhir.stu3.proto.Devicemetricobservation.Related"
   options {
     [google.fhir.stu3.proto.field_description]: "Resource related to this observation"
   }
@@ -250,7 +250,7 @@ field {
   number: 29
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Observation.Component"
+  type_name: ".google.fhir.stu3.proto.Devicemetricobservation.Component"
   options {
     [google.fhir.stu3.proto.field_description]: "Component results"
   }
@@ -537,7 +537,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Observation.Component.Value"
+    type_name: ".google.fhir.stu3.proto.Devicemetricobservation.Component.Value"
     options {
       [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Actual component result"
@@ -568,7 +568,7 @@ nested_type {
     number: 8
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Observation.ReferenceRange"
+    type_name: ".google.fhir.stu3.proto.Devicemetricobservation.ReferenceRange"
     options {
       [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation of component result"
     }
@@ -664,5 +664,6 @@ nested_type {
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Device Metric Observation Profile.\nMeasurements and simple assertions.\nSee http://hl7.org/fhir/StructureDefinition/devicemetricobservation"
+  [google.fhir.stu3.proto.fhir_profile_base]: "Observation"
   [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/devicemetricobservation"
 }

@@ -18,7 +18,6 @@ import static com.google.common.truth.Truth.assertWithMessage;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
@@ -223,6 +222,11 @@ public final class ProtoFilePrinterTest {
     }
     FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(resourceDefinitions);
     descriptor = protoGenerator.addContainedResource(descriptor);
+    descriptor =
+        descriptor
+            .toBuilder()
+            .addDependency("proto/stu3/metadatatypes.proto")
+            .build();
     String generated = protoPrinter.print(descriptor);
     String golden = readGolden("resources");
     assertEqualsIgnoreClangFormat(golden, generated);
@@ -230,18 +234,21 @@ public final class ProtoFilePrinterTest {
 
   // Test generating a few of the extension protos.
 
-  private void testExtensionProto(String extensionName, String protoName) throws IOException {
-    StructureDefinition extension = readProfile("extensions/" + extensionName + ".json");
-    FileDescriptorProto descriptor =
-        protoGenerator.generateFileDescriptor(ImmutableList.of(extension));
-    String generated = protoPrinter.print(descriptor);
-    String golden = readGolden(protoName);
-    assertEqualsIgnoreClangFormat(golden, generated);
-  }
-
   /** Test generating elementdefinition_binding_name.proto. */
   @Test
-  public void generateElementDefinitionBindingName() throws Exception {
-    testExtensionProto("extension-elementdefinition-bindingname", "elementdefinition_binding_name");
+  public void generateElementDefinitionExtensions() throws Exception {
+    String[] extensionNames = {
+      "extension-elementdefinition-bindingname",
+      "extension-structuredefinition-explicit-type-name",
+      "extension-structuredefinition-regex"
+    };
+    List<StructureDefinition> extensionDefinitions = new ArrayList<>();
+    for (String extensionName : extensionNames) {
+      extensionDefinitions.add(readProfile("extensions/" + extensionName + ".json"));
+    }
+    FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(extensionDefinitions);
+    String generated = protoPrinter.print(descriptor);
+    String golden = readGolden("extensions");
+    assertEqualsIgnoreClangFormat(golden, generated);
   }
 }

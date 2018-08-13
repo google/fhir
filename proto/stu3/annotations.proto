@@ -62,6 +62,9 @@ extend google.protobuf.MessageOptions {
 
   // Url for the structure definition this message was built from.
   string fhir_structure_definition_url = 207562726;
+
+  // This element is a profile version of the base resource named here.
+  string fhir_profile_base = 206336851;
 }
 
 extend google.protobuf.EnumValueOptions {
@@ -79,6 +82,10 @@ extend google.protobuf.FieldOptions {
 
   // A brief description of the intended use of this field.
   string field_description = 190357977;
+
+  // If this field is an inlined fhir extension, this is the
+  // extension identifier.
+  string fhir_inlined_extension_url = 206340037;
 }
 
 extend google.protobuf.OneofOptions {

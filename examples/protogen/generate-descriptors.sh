@@ -46,14 +46,17 @@ DATATYPES="Address Age Annotation Attachment CodeableConcept Coding ContactPoint
 METADATATYPES="BackboneElement ContactDetail Contributor DataRequirement DomainResource Element ElementDefinition Narrative ParameterDefinition RelatedArtifact Resource TriggerDefinition UsageContext"
 RESOURCETYPES="Account ActivityDefinition AdverseEvent AllergyIntolerance Appointment AppointmentResponse AuditEvent Basic Binary BodySite Bundle CapabilityStatement CarePlan CareTeam ChargeItem Claim ClaimResponse ClinicalImpression CodeSystem Communication CommunicationRequest CompartmentDefinition Composition ConceptMap Condition Consent Contract Coverage DataElement DetectedIssue Device DeviceComponent DeviceMetric DeviceRequest DeviceUseStatement DiagnosticReport DocumentManifest DocumentReference EligibilityRequest EligibilityResponse Encounter Endpoint EnrollmentRequest EnrollmentResponse EpisodeOfCare ExpansionProfile ExplanationOfBenefit FamilyMemberHistory Flag Goal GraphDefinition Group GuidanceResponse HealthcareService ImagingManifest ImagingStudy Immunization ImmunizationRecommendation ImplementationGuide Library Linkage List Location Measure MeasureReport Media Medication MedicationAdministration MedicationDispense MedicationRequest MedicationStatement MessageDefinition MessageHeader NamingSystem NutritionOrder Observation OperationDefinition OperationOutcome Organization Parameters Patient PaymentNotice PaymentReconciliation Person PlanDefinition Practitioner PractitionerRole Procedure ProcedureRequest ProcessRequest ProcessResponse Provenance Questionnaire QuestionnaireResponse ReferralRequest RelatedPerson RequestGroup ResearchStudy ResearchSubject RiskAssessment Schedule SearchParameter Sequence ServiceDefinition Slot Specimen StructureDefinition StructureMap Subscription Substance SupplyDelivery SupplyRequest Task TestReport TestScript ValueSet VisionPrescription"
 PROFILES="Bmi Bodyheight Bodylength Bodytemp Bodyweight Bp Cholesterol Clinicaldocument Consentdirective Devicemetricobservation Diagnosticreport-genetics Elementdefinition-de Familymemberhistory-genetic Hdlcholesterol Headcircum Heartrate Hlaresult Ldlcholesterol Lipidprofile MetadataResource Observation-genetics Oxygensat Procedurerequest-genetics Resprate Shareablecodesystem Shareablevalueset Simplequantity Triglyceride Vitalsigns Vitalspanel"
-EXTENSIONS="extension-observation-geneticsdnasequencevariantname extension-elementdefinition-bindingname extension-structuredefinition-explicit-type-name extension-structuredefinition-regex risk_assessment_predicted_label risk_assessment_prediction_threshold risk_assessment_true_label risk_assessment_binary_classification_metadata"
+EXTENSIONS="extension-elementdefinition-bindingname extension-structuredefinition-explicit-type-name extension-structuredefinition-regex "
 
 # Generate descriptors for the main FHIR types.
 $PROTO_GENERATOR \
   --emit_descriptors --output_directory $OUTPUT_PATH \
-  $(for i in $PRIMITIVES $DATATYPES $METADATATYPES $RESOURCETYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
+  $(for i in $EXTENSIONS; do echo " --typed_extensions $EXTENSION_PATH/${i}.json "; done) \
+  $(for i in $PRIMITIVES $DATATYPES $METADATATYPES $RESOURCETYPES $PROFILES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
 # Generate descriptors for FHIR extensions.
 $PROTO_GENERATOR \
   --emit_descriptors --output_directory $EXTENSION_PATH \
+  $(for i in $EXTENSIONS; do echo " --typed_extensions $EXTENSION_PATH/${i}.json "; done) \
   $(for i in $EXTENSIONS; do echo "$EXTENSION_PATH/${i,,}.json"; done) \
+

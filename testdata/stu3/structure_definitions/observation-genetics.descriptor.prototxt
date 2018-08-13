@@ -70,158 +70,8 @@ field {
   }
 }
 field {
-  name: "extension"
-  number: 8
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "DNA sequence variant"
-  }
-}
-field {
-  name: "extension"
-  number: 9
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "DNA sequence variant ID"
-  }
-}
-field {
-  name: "extension"
-  number: 10
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "DNA sequence variant type"
-  }
-}
-field {
-  name: "extension"
-  number: 11
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Amino acid change"
-  }
-}
-field {
-  name: "extension"
-  number: 12
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Amino Acid Change Type"
-  }
-}
-field {
-  name: "extension"
-  number: 13
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "HGNC gene symbol"
-  }
-}
-field {
-  name: "extension"
-  number: 14
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "DNA region name"
-  }
-}
-field {
-  name: "extension"
-  number: 15
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Name of allele"
-  }
-}
-field {
-  name: "extension"
-  number: 16
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "The level of occurrence of a single DNA sequence variant within a set of chromosomes: Heteroplasmic / Homoplasmic / Homozygous / Heterozygous / Hemizygous"
-  }
-}
-field {
-  name: "extension"
-  number: 17
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Allele frequency"
-  }
-}
-field {
-  name: "extension"
-  number: 18
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Copy number variation"
-  }
-}
-field {
-  name: "extension"
-  number: 19
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Genomic source class"
-  }
-}
-field {
-  name: "extension"
-  number: 20
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Phase set identifier (UUID/OID)"
-  }
-}
-field {
-  name: "extension"
-  number: 21
-  label: LABEL_REPEATED
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Sequence"
-  }
-}
-field {
-  name: "extension"
-  number: 22
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Clinical interpretations for variant"
-  }
-}
-field {
   name: "modifier_extension"
-  number: 23
+  number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
@@ -231,7 +81,7 @@ field {
 }
 field {
   name: "identifier"
-  number: 24
+  number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
@@ -241,7 +91,7 @@ field {
 }
 field {
   name: "based_on"
-  number: 25
+  number: 10
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -251,7 +101,7 @@ field {
 }
 field {
   name: "status"
-  number: 26
+  number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ObservationStatusCode"
@@ -262,7 +112,7 @@ field {
 }
 field {
   name: "category"
-  number: 27
+  number: 12
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -272,7 +122,7 @@ field {
 }
 field {
   name: "code"
-  number: 28
+  number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -283,7 +133,7 @@ field {
 }
 field {
   name: "subject"
-  number: 29
+  number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -293,7 +143,7 @@ field {
 }
 field {
   name: "context"
-  number: 30
+  number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -303,10 +153,10 @@ field {
 }
 field {
   name: "effective"
-  number: 31
+  number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Observation.Effective"
+  type_name: ".google.fhir.stu3.proto.ObservationGenetics.Effective"
   options {
     [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Clinically relevant time/time-period for observation"
@@ -314,7 +164,7 @@ field {
 }
 field {
   name: "issued"
-  number: 32
+  number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Instant"
@@ -324,7 +174,7 @@ field {
 }
 field {
   name: "performer"
-  number: 33
+  number: 18
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -334,10 +184,10 @@ field {
 }
 field {
   name: "value"
-  number: 34
+  number: 19
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Observation.Value"
+  type_name: ".google.fhir.stu3.proto.ObservationGenetics.Value"
   options {
     [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Actual result"
@@ -345,7 +195,7 @@ field {
 }
 field {
   name: "data_absent_reason"
-  number: 35
+  number: 20
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -355,7 +205,7 @@ field {
 }
 field {
   name: "interpretation"
-  number: 36
+  number: 21
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -365,7 +215,7 @@ field {
 }
 field {
   name: "comment"
-  number: 37
+  number: 22
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
@@ -375,7 +225,7 @@ field {
 }
 field {
   name: "body_site"
-  number: 38
+  number: 23
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -385,7 +235,7 @@ field {
 }
 field {
   name: "method"
-  number: 39
+  number: 24
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -395,7 +245,7 @@ field {
 }
 field {
   name: "specimen"
-  number: 40
+  number: 25
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -405,7 +255,7 @@ field {
 }
 field {
   name: "device"
-  number: 41
+  number: 26
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -415,32 +265,43 @@ field {
 }
 field {
   name: "reference_range"
-  number: 42
+  number: 27
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Observation.ReferenceRange"
+  type_name: ".google.fhir.stu3.proto.ObservationGenetics.ReferenceRange"
   options {
     [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation"
   }
 }
 field {
   name: "related"
-  number: 43
+  number: 28
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Observation.Related"
+  type_name: ".google.fhir.stu3.proto.ObservationGenetics.Related"
   options {
     [google.fhir.stu3.proto.field_description]: "Resource related to this observation"
   }
 }
 field {
   name: "component"
-  number: 44
+  number: 29
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Observation.Component"
+  type_name: ".google.fhir.stu3.proto.ObservationGenetics.Component"
   options {
     [google.fhir.stu3.proto.field_description]: "Component results"
+  }
+}
+field {
+  name: "d_n_a_sequence_variant_name"
+  number: 30
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "DNA sequence variant\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName"
   }
 }
 nested_type {
@@ -755,7 +616,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Observation.Component.Value"
+    type_name: ".google.fhir.stu3.proto.ObservationGenetics.Component.Value"
     options {
       [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Actual component result"
@@ -786,7 +647,7 @@ nested_type {
     number: 8
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Observation.ReferenceRange"
+    type_name: ".google.fhir.stu3.proto.ObservationGenetics.ReferenceRange"
     options {
       [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation of component result"
     }
@@ -882,5 +743,6 @@ nested_type {
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Observation-genetics.\nMeasurements and simple assertions.\nSee http://hl7.org/fhir/StructureDefinition/observation-genetics"
+  [google.fhir.stu3.proto.fhir_profile_base]: "Observation"
   [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/observation-genetics"
 }

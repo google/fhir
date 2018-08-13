@@ -313,7 +313,7 @@ field {
   number: 31
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.CodeSystem.Filter"
+  type_name: ".google.fhir.stu3.proto.Shareablecodesystem.Filter"
   options {
     [google.fhir.stu3.proto.field_description]: "Filter that can be used in a value set"
   }
@@ -323,7 +323,7 @@ field {
   number: 32
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.CodeSystem.Property"
+  type_name: ".google.fhir.stu3.proto.Shareablecodesystem.Property"
   options {
     [google.fhir.stu3.proto.field_description]: "Additional information supplied about each concept"
   }
@@ -333,7 +333,7 @@ field {
   number: 33
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.CodeSystem.ConceptDefinition"
+  type_name: ".google.fhir.stu3.proto.Shareablecodesystem.ConceptDefinition"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Concepts in the code system"
@@ -558,7 +558,7 @@ nested_type {
     number: 7
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeSystem.ConceptDefinition.Designation"
+    type_name: ".google.fhir.stu3.proto.Shareablecodesystem.ConceptDefinition.Designation"
     options {
       [google.fhir.stu3.proto.field_description]: "Additional representations for the concept"
     }
@@ -568,7 +568,7 @@ nested_type {
     number: 8
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeSystem.ConceptDefinition.ConceptProperty"
+    type_name: ".google.fhir.stu3.proto.Shareablecodesystem.ConceptDefinition.ConceptProperty"
     options {
       [google.fhir.stu3.proto.field_description]: "Property value for the concept"
     }
@@ -578,7 +578,7 @@ nested_type {
     number: 9
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeSystem.ConceptDefinition"
+    type_name: ".google.fhir.stu3.proto.Shareablecodesystem.ConceptDefinition"
     options {
       [google.fhir.stu3.proto.field_description]: "Child Concepts (is-a/contains/categorizes)"
     }
@@ -695,7 +695,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.stu3.proto.CodeSystem.ConceptDefinition.ConceptProperty.Value"
+      type_name: ".google.fhir.stu3.proto.Shareablecodesystem.ConceptDefinition.ConceptProperty.Value"
       options {
         [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.stu3.proto.is_choice_type]: true
@@ -765,5 +765,6 @@ nested_type {
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Shareable CodeSystem.\nA set of codes drawn from one or more code systems.\nSee http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
+  [google.fhir.stu3.proto.fhir_profile_base]: "CodeSystem"
   [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
 }

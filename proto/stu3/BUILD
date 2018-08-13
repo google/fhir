@@ -134,10 +134,8 @@ proto_library(
     name = "extensions_proto",
     srcs = [
         "base64_separator_stride.proto",
-        "elementdefinition_binding_name.proto",
+        "extensions.proto",
         "primitive_has_no_value.proto",
-        "structuredefinition_explicit_type_name.proto",
-        "structuredefinition_regex.proto",
     ],
     deps = [
         ":annotations_proto",
@@ -159,10 +157,8 @@ py_proto_library(
     name = "extensions_py_pb2",
     srcs = [
         "base64_separator_stride.proto",
-        "elementdefinition_binding_name.proto",
+        "extensions.proto",
         "primitive_has_no_value.proto",
-        "structuredefinition_explicit_type_name.proto",
-        "structuredefinition_regex.proto",
     ],
     default_runtime = "@com_google_protobuf//:protobuf_python",
     protoc = "@com_google_protobuf//:protoc",

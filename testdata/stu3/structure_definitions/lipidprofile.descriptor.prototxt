@@ -156,7 +156,7 @@ field {
   number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.DiagnosticReport.Effective"
+  type_name: ".google.fhir.stu3.proto.Lipidprofile.Effective"
   options {
     [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Clinically relevant time/time-period for report"
@@ -177,7 +177,7 @@ field {
   number: 18
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.DiagnosticReport.Performer"
+  type_name: ".google.fhir.stu3.proto.Lipidprofile.Performer"
   options {
     [google.fhir.stu3.proto.field_description]: "Participants in producing the report"
   }
@@ -260,7 +260,7 @@ field {
   number: 26
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.DiagnosticReport.Image"
+  type_name: ".google.fhir.stu3.proto.Lipidprofile.Image"
   options {
     [google.fhir.stu3.proto.field_description]: "Key images associated with this report"
   }
@@ -418,5 +418,6 @@ nested_type {
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Example Lipid Profile.\nLipid Lab Report.\nSee http://hl7.org/fhir/StructureDefinition/lipidprofile"
+  [google.fhir.stu3.proto.fhir_profile_base]: "DiagnosticReport"
   [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/lipidprofile"
 }
