@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Quantity"
+  type_name: ".google.fhir.stu3.proto.SimpleQuantity"
   options {
     [google.fhir.stu3.proto.field_description]: "Low limit"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Quantity"
+  type_name: ".google.fhir.stu3.proto.SimpleQuantity"
   options {
     [google.fhir.stu3.proto.field_description]: "High limit"
   }

@@ -534,7 +534,7 @@ nested_type {
       number: 17
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.stu3.proto.Quantity"
+      type_name: ".google.fhir.stu3.proto.SimpleQuantity"
       options {
         [google.fhir.stu3.proto.field_description]: "How to consume/day?"
       }
@@ -544,7 +544,7 @@ nested_type {
       number: 18
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.stu3.proto.Quantity"
+      type_name: ".google.fhir.stu3.proto.SimpleQuantity"
       options {
         [google.fhir.stu3.proto.field_description]: "How much to administer/supply/consume"
       }

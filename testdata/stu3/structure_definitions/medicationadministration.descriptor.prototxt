@@ -466,7 +466,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
       [google.fhir.stu3.proto.field_description]: "Amount of medication per dose"
     }
@@ -497,7 +497,7 @@ nested_type {
       number: 2
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.stu3.proto.Quantity"
+      type_name: ".google.fhir.stu3.proto.SimpleQuantity"
       oneof_index: 0
     }
     oneof_decl {

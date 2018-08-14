@@ -1329,7 +1329,7 @@ nested_type {
     number: 16
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
       [google.fhir.stu3.proto.field_description]: "Count of Products or Services"
     }
@@ -1669,7 +1669,7 @@ nested_type {
       number: 11
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.stu3.proto.Quantity"
+      type_name: ".google.fhir.stu3.proto.SimpleQuantity"
       options {
         [google.fhir.stu3.proto.field_description]: "Count of Products or Services"
       }
@@ -1853,7 +1853,7 @@ nested_type {
         number: 11
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.stu3.proto.Quantity"
+        type_name: ".google.fhir.stu3.proto.SimpleQuantity"
         options {
           [google.fhir.stu3.proto.field_description]: "Count of Products or Services"
         }

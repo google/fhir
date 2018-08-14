@@ -734,7 +734,7 @@ message Dosage {
   message Dose {
     oneof dose {
       Range range = 1;
-      Quantity quantity = 2;
+      SimpleQuantity quantity = 2;
     }
   }
   Dose dose = 12 [(is_choice_type) = true];
@@ -743,17 +743,17 @@ message Dosage {
   Ratio max_dose_per_period = 13;
 
   // Upper limit on medication per administration
-  Quantity max_dose_per_administration = 14;
+  SimpleQuantity max_dose_per_administration = 14;
 
   // Upper limit on medication per lifetime of the patient
-  Quantity max_dose_per_lifetime = 15;
+  SimpleQuantity max_dose_per_lifetime = 15;
 
   // Amount of medication per unit of time
   message Rate {
     oneof rate {
       Ratio ratio = 1;
       Range range = 2;
-      Quantity quantity = 3;
+      SimpleQuantity quantity = 3;
     }
   }
   Rate rate = 16 [(is_choice_type) = true];
@@ -984,10 +984,10 @@ message Range {
   repeated Extension extension = 2;
 
   // Low limit
-  Quantity low = 3;
+  SimpleQuantity low = 3;
 
   // High limit
-  Quantity high = 4;
+  SimpleQuantity high = 4;
 }
 
 // Auto-generated from StructureDefinition for Ratio.
@@ -1026,7 +1026,7 @@ message SampledData {
   repeated Extension extension = 2;
 
   // Zero value and units
-  Quantity origin = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
+  SimpleQuantity origin = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Number of milliseconds between samples
   Decimal period = 4 [(validation_requirement) = REQUIRED_BY_FHIR];

@@ -207,7 +207,7 @@ public class ProtoGenerator {
   public static String getTypeName(StructureDefinition def) {
     return isTypedExtensionDefinition(def)
         ? getProfileTypeName(def)
-        : normalizeType(def.getId().getValue());
+        : normalizeTypeName(def.getId().getValue());
   }
 
   /**
@@ -525,7 +525,11 @@ public class ProtoGenerator {
                 .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
                 .setType(FieldDescriptorProto.Type.TYPE_ENUM)
                 .setTypeName(
-                    "." + packageName + "." + normalizeType(def.getId().getValue()) + ".Precision")
+                    "."
+                        + packageName
+                        + "."
+                        + normalizeTypeName(def.getId().getValue())
+                        + ".Precision")
                 .setNumber(builder.getFieldCount() + 1));
       } else {
         // Handle non-time-like types.
@@ -639,7 +643,7 @@ public class ProtoGenerator {
         typeName = typeNames.get(0).getValueString().getValue();
       } else {
         typeName =
-            normalizeType(
+            normalizeTypeName(
                 part.endsWith("[x]") ? part.substring(0, part.length() - "[x]".length()) : part);
       }
       if (typeNameParts.contains(typeName)
@@ -676,7 +680,7 @@ public class ProtoGenerator {
         return "ContainedResource";
       }
 
-      String normalizedFhirTypeName = normalizeType(fhirType.getCode().getValue());
+      String normalizedFhirTypeName = normalizeType(fhirType);
       if (normalizedFhirTypeName.equals("Code")) {
         // If this is a code, check for a binding name and handle it here.
         String bindingName = getBindingName(element);
@@ -801,7 +805,7 @@ public class ProtoGenerator {
     }
 
     for (ElementDefinition.TypeRef t : types) {
-      String fieldType = normalizeType(t.getCode().getValue());
+      String fieldType = normalizeType(t);
       String fieldName = t.getCode().getValue();
       FieldDescriptorProto.Builder fieldBuilder =
           buildFieldInternal(
@@ -830,7 +834,7 @@ public class ProtoGenerator {
 
     List<String> fieldTypeParts = new ArrayList<>();
     for (String part : Splitter.on('.').split(fieldType)) {
-      fieldTypeParts.add(normalizeType(part));
+      fieldTypeParts.add(normalizeTypeName(part));
     }
     builder.setTypeName("." + packageName + "." + Joiner.on('.').join(fieldTypeParts));
 
@@ -849,10 +853,22 @@ public class ProtoGenerator {
     return builder;
   }
 
+  private static String normalizeType(ElementDefinition.TypeRef type) {
+    if (!type.hasProfile()) {
+      return normalizeTypeName(type.getCode().getValue());
+    } else if (type.getProfile().getValue().startsWith(STRUCTURE_DEFINITION_PREFIX)) {
+      return normalizeTypeName(
+          type.getProfile().getValue().substring(STRUCTURE_DEFINITION_PREFIX.length()));
+    } else {
+      throw new IllegalArgumentException(
+          "Unable to deduce typename for profile: " + type.getProfile().getValue());
+    }
+  }
+
   // Normalizes the casing of a type string.
   // E.g., FHIR types primitives with all lower-case, but we use Title case for our primitive
   // messages (e.g., boolean -> Boolean)
-  private static String normalizeType(String type) {
+  private static String normalizeTypeName(String type) {
     String normalizedType = type;
     if (Character.isLowerCase(type.charAt(0))) {
       normalizedType = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, type);
@@ -915,7 +931,7 @@ public class ProtoGenerator {
         if (element.getTypeCount() != 1) {
           return null;
         }
-        return normalizeType(element.getType(0).getCode().getValue());
+        return normalizeType(element.getType(0));
       }
     }
     return null;
@@ -931,7 +947,7 @@ public class ProtoGenerator {
    * apply to, uses that as a prefix.
    */
   private static String getProfileTypeName(StructureDefinition def) {
-    String name = normalizeType(def.getName().getValue());
+    String name = normalizeTypeName(def.getName().getValue());
     Set<String> contexts = new HashSet<>();
     Splitter splitter = Splitter.on('.').limit(2);
     for (com.google.fhir.stu3.proto.String context : def.getContextList()) {

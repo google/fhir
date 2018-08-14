@@ -340,7 +340,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.stu3.proto.Quantity"
+      type_name: ".google.fhir.stu3.proto.SimpleQuantity"
       options {
         [google.fhir.stu3.proto.field_description]: "Quantity of the specified nutrient"
       }
@@ -467,7 +467,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
       [google.fhir.stu3.proto.field_description]: "Amount of the nutritional supplement"
     }
@@ -560,7 +560,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
       [google.fhir.stu3.proto.field_description]: "Amount of energy per specified volume that is required"
     }
@@ -590,7 +590,7 @@ nested_type {
     number: 11
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
       [google.fhir.stu3.proto.field_description]: "Upper limit on formula volume per unit of time"
     }
@@ -652,7 +652,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.stu3.proto.Quantity"
+      type_name: ".google.fhir.stu3.proto.SimpleQuantity"
       options {
         [google.fhir.stu3.proto.field_description]: "The volume of formula to provide"
       }
@@ -675,7 +675,7 @@ nested_type {
         number: 1
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.stu3.proto.Quantity"
+        type_name: ".google.fhir.stu3.proto.SimpleQuantity"
         oneof_index: 0
       }
       field {

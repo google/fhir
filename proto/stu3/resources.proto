@@ -283,7 +283,7 @@ message ActivityDefinition {
   Product product = 37 [(is_choice_type) = true];
 
   // How much is administered/consumed/supplied
-  Quantity quantity = 38;
+  SimpleQuantity quantity = 38;
 
   // Detailed dosage instructions
   repeated Dosage dosage = 39;
@@ -1870,10 +1870,10 @@ message CarePlan {
       Product product = 16 [(is_choice_type) = true];
 
       // How to consume/day?
-      Quantity daily_amount = 17;
+      SimpleQuantity daily_amount = 17;
 
       // How much to administer/supply/consume
-      Quantity quantity = 18;
+      SimpleQuantity quantity = 18;
 
       // Extra info describing activity to perform
       String description = 19;
@@ -2501,7 +2501,7 @@ message Claim {
     Location location = 15 [(is_choice_type) = true];
 
     // Count of Products or Services
-    Quantity quantity = 16;
+    SimpleQuantity quantity = 16;
 
     // Fee, charge or cost per point
     Money unit_price = 17;
@@ -2554,7 +2554,7 @@ message Claim {
       repeated CodeableConcept program_code = 9;
 
       // Count of Products or Services
-      Quantity quantity = 10;
+      SimpleQuantity quantity = 10;
 
       // Fee, charge or cost per point
       Money unit_price = 11;
@@ -2598,7 +2598,7 @@ message Claim {
         repeated CodeableConcept program_code = 9;
 
         // Count of Products or Services
-        Quantity quantity = 10;
+        SimpleQuantity quantity = 10;
 
         // Fee, charge or cost per point
         Money unit_price = 11;
@@ -4606,7 +4606,7 @@ message Contract {
     DateTime effective_time = 6;
 
     // Count of Contract Valued Items
-    Quantity quantity = 7;
+    SimpleQuantity quantity = 7;
 
     // Contract Valued Item fee, charge, or cost
     Money unit_price = 8;
@@ -4709,7 +4709,7 @@ message Contract {
       DateTime effective_time = 6;
 
       // Contract Term Valued Item Count
-      Quantity quantity = 7;
+      SimpleQuantity quantity = 7;
 
       // Contract Term Valued Item fee, charge, or cost
       Money unit_price = 8;
@@ -7405,7 +7405,7 @@ message ExplanationOfBenefit {
     Location location = 15 [(is_choice_type) = true];
 
     // Count of Products or Services
-    Quantity quantity = 16;
+    SimpleQuantity quantity = 16;
 
     // Fee, charge or cost per point
     Money unit_price = 17;
@@ -7490,7 +7490,7 @@ message ExplanationOfBenefit {
       repeated CodeableConcept program_code = 10;
 
       // Count of Products or Services
-      Quantity quantity = 11;
+      SimpleQuantity quantity = 11;
 
       // Fee, charge or cost per point
       Money unit_price = 12;
@@ -7543,7 +7543,7 @@ message ExplanationOfBenefit {
         repeated CodeableConcept program_code = 10;
 
         // Count of Products or Services
-        Quantity quantity = 11;
+        SimpleQuantity quantity = 11;
 
         // Fee, charge or cost per point
         Money unit_price = 12;
@@ -8939,7 +8939,7 @@ message Immunization {
   CodeableConcept route = 23;
 
   // Amount of vaccine administered
-  Quantity dose_quantity = 24;
+  SimpleQuantity dose_quantity = 24;
 
   // Who performed event
   message Practitioner {
@@ -10360,7 +10360,7 @@ message Medication {
       ];
 
       // Quantity present in the package
-      Quantity amount = 5;
+      SimpleQuantity amount = 5;
     }
     repeated Content content = 5;
 
@@ -10532,13 +10532,13 @@ message MedicationAdministration {
     CodeableConcept method = 7;
 
     // Amount of medication per dose
-    Quantity dose = 8;
+    SimpleQuantity dose = 8;
 
     // Dose quantity per unit of time
     message Rate {
       oneof rate {
         Ratio ratio = 1;
-        Quantity quantity = 2;
+        SimpleQuantity quantity = 2;
       }
     }
     Rate rate = 9 [(is_choice_type) = true];
@@ -10640,10 +10640,10 @@ message MedicationDispense {
   CodeableConcept type = 19;
 
   // Amount dispensed
-  Quantity quantity = 20;
+  SimpleQuantity quantity = 20;
 
   // Amount of medication expressed as a timing amount
-  Quantity days_supply = 21;
+  SimpleQuantity days_supply = 21;
 
   // When product was packaged and reviewed
   DateTime when_prepared = 22;
@@ -10843,7 +10843,7 @@ message MedicationRequest {
     PositiveInt number_of_repeats_allowed = 5;
 
     // Amount of medication to supply per dispense
-    Quantity quantity = 6;
+    SimpleQuantity quantity = 6;
 
     // Number of days supply per dispense
     Duration expected_supply_duration = 7;
@@ -11458,7 +11458,7 @@ message NutritionOrder {
       CodeableConcept modifier = 4;
 
       // Quantity of the specified nutrient
-      Quantity amount = 5;
+      SimpleQuantity amount = 5;
     }
     repeated Nutrient nutrient = 6;
 
@@ -11511,7 +11511,7 @@ message NutritionOrder {
     repeated Timing schedule = 6;
 
     // Amount of the nutritional supplement
-    Quantity quantity = 7;
+    SimpleQuantity quantity = 7;
 
     // Instructions or additional information about the oral supplement
     String instruction = 8;
@@ -11542,7 +11542,7 @@ message NutritionOrder {
     String additive_product_name = 7;
 
     // Amount of energy per specified volume that is required
-    Quantity caloric_density = 8;
+    SimpleQuantity caloric_density = 8;
 
     // How the formula should enter the patient's gastrointestinal tract
     CodeableConcept routeof_administration = 9;
@@ -11562,12 +11562,12 @@ message NutritionOrder {
       Timing schedule = 4;
 
       // The volume of formula to provide
-      Quantity quantity = 5;
+      SimpleQuantity quantity = 5;
 
       // Speed with which the formula is provided per period of time
       message Rate {
         oneof rate {
-          Quantity quantity = 1;
+          SimpleQuantity quantity = 1;
           Ratio ratio = 2;
         }
       }
@@ -11576,7 +11576,7 @@ message NutritionOrder {
     repeated Administration administration = 10;
 
     // Upper limit on formula volume per unit of time
-    Quantity max_volume_to_deliver = 11;
+    SimpleQuantity max_volume_to_deliver = 11;
 
     // Formula feeding instructions expressed as text
     String administration_instruction = 12;
@@ -11704,10 +11704,10 @@ message Observation {
     repeated Extension modifier_extension = 3;
 
     // Low Range, if relevant
-    Quantity low = 4;
+    SimpleQuantity low = 4;
 
     // High Range, if relevant
-    Quantity high = 5;
+    SimpleQuantity high = 5;
 
     // Reference range qualifier
     CodeableConcept type = 6;
@@ -15568,7 +15568,7 @@ message Specimen {
     Collected collected = 5 [(is_choice_type) = true];
 
     // The quantity of specimen collected
-    Quantity quantity = 6;
+    SimpleQuantity quantity = 6;
 
     // Technique used to perform collection
     CodeableConcept method = 7;
@@ -15630,10 +15630,10 @@ message Specimen {
     CodeableConcept type = 6;
 
     // Container volume or size
-    Quantity capacity = 7;
+    SimpleQuantity capacity = 7;
 
     // Quantity of specimen within container
-    Quantity specimen_quantity = 8;
+    SimpleQuantity specimen_quantity = 8;
 
     // Additive associated with container
     message Additive {
@@ -16318,7 +16318,7 @@ message Substance {
     DateTime expiry = 5;
 
     // Amount of substance in the package
-    Quantity quantity = 6;
+    SimpleQuantity quantity = 6;
   }
   repeated Instance instance = 14;
 
@@ -16412,7 +16412,7 @@ message SupplyDelivery {
     repeated Extension modifier_extension = 3;
 
     // Amount dispensed
-    Quantity quantity = 4;
+    SimpleQuantity quantity = 4;
 
     // Medication, Substance, or Device supplied
     message Item {
@@ -18139,7 +18139,7 @@ message VisionPrescription {
     Decimal diameter = 14;
 
     // Lens wear duration
-    Quantity duration = 15;
+    SimpleQuantity duration = 15;
 
     // Color required
     String color = 16;

@@ -377,7 +377,7 @@ field {
   number: 38
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Quantity"
+  type_name: ".google.fhir.stu3.proto.SimpleQuantity"
   options {
     [google.fhir.stu3.proto.field_description]: "How much is administered/consumed/supplied"
   }

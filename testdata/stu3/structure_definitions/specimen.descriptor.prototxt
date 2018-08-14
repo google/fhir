@@ -258,7 +258,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
       [google.fhir.stu3.proto.field_description]: "The quantity of specimen collected"
     }
@@ -469,7 +469,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
       [google.fhir.stu3.proto.field_description]: "Container volume or size"
     }
@@ -479,7 +479,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
       [google.fhir.stu3.proto.field_description]: "Quantity of specimen within container"
     }

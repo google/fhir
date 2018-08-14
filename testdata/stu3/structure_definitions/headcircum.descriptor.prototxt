@@ -357,7 +357,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
       [google.fhir.stu3.proto.field_description]: "Low Range, if relevant"
     }
@@ -367,7 +367,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
       [google.fhir.stu3.proto.field_description]: "High Range, if relevant"
     }

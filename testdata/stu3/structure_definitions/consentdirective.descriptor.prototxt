@@ -374,7 +374,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
       [google.fhir.stu3.proto.field_description]: "Count of Contract Valued Items"
     }
@@ -384,7 +384,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.Money"
     options {
       [google.fhir.stu3.proto.field_description]: "Contract Valued Item fee, charge, or cost."
     }
@@ -414,7 +414,7 @@ nested_type {
     number: 11
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.Money"
     options {
       [google.fhir.stu3.proto.field_description]: "Total Contract Valued Item Value"
     }
@@ -772,7 +772,7 @@ nested_type {
       number: 7
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.stu3.proto.Quantity"
+      type_name: ".google.fhir.stu3.proto.SimpleQuantity"
       options {
         [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Count"
       }
@@ -782,7 +782,7 @@ nested_type {
       number: 8
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.stu3.proto.Quantity"
+      type_name: ".google.fhir.stu3.proto.Money"
       options {
         [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item fee, charge, or cost."
       }
@@ -812,7 +812,7 @@ nested_type {
       number: 11
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.stu3.proto.Quantity"
+      type_name: ".google.fhir.stu3.proto.Money"
       options {
         [google.fhir.stu3.proto.field_description]: "Total Contract Term Valued Item Value"
       }
