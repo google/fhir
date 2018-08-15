@@ -181,7 +181,11 @@ public final class ProtoFilePrinterTest {
     String packageName = "google.fhir.stu3.proto";
     jsonParser = JsonFormat.getParser();
     runfiles = Runfiles.create();
-    protoGenerator = new ProtoGenerator(packageName, "proto/stu3");
+    protoGenerator =
+        new ProtoGenerator(
+            packageName,
+            "proto/stu3",
+            getResourcesInFile(Extension.getDescriptor().getFile()));
     protoPrinter = new ProtoFilePrinter().withApacheLicense();
   }
 

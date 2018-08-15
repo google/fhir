@@ -51,12 +51,14 @@ EXTENSIONS="extension-elementdefinition-bindingname extension-structuredefinitio
 # Generate descriptors for the main FHIR types.
 $PROTO_GENERATOR \
   --emit_descriptors --output_directory $OUTPUT_PATH \
-  $(for i in $EXTENSIONS; do echo " --typed_extensions $EXTENSION_PATH/${i}.json "; done) \
+  $(for i in $EXTENSIONS; do echo " --known_types $EXTENSION_PATH/${i}.json "; done) \
+  $(for i in $DATATYPES; do echo " --known_types $INPUT_PATH/${i,,}.profile.json "; done) \
   $(for i in $PRIMITIVES $DATATYPES $METADATATYPES $RESOURCETYPES $PROFILES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
 # Generate descriptors for FHIR extensions.
 $PROTO_GENERATOR \
   --emit_descriptors --output_directory $EXTENSION_PATH \
-  $(for i in $EXTENSIONS; do echo " --typed_extensions $EXTENSION_PATH/${i}.json "; done) \
+  $(for i in $EXTENSIONS; do echo " --known_types $EXTENSION_PATH/${i}.json "; done) \
+  $(for i in $DATATYPES; do echo " --known_types $INPUT_PATH/${i,,}.profile.json "; done) \
   $(for i in $EXTENSIONS; do echo "$EXTENSION_PATH/${i,,}.json"; done) \
 

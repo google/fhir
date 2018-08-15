@@ -51,6 +51,7 @@ EXTENSIONS="extension-elementdefinition-bindingname extension-structuredefinitio
 # generate datatypes.proto
 $PROTO_GENERATOR \
   --emit_proto --output_directory $OUTPUT_PATH \
+  $(for i in $DATATYPES; do echo " --known_types $INPUT_PATH/${i,,}.profile.json "; done) \
   --output_filename datatypes.proto \
   $(for i in $PRIMITIVES $DATATYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 # Some datatypes are manually generated.
@@ -75,7 +76,9 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   --emit_proto --include_contained_resource \
   --include_metadatatypes \
-  $(for i in $PROFILES; do echo " --typed_extensions $INPUT_PATH/${i}.profile.json "; done) \
+  $(for i in $EXTENSIONS; do echo " --known_types $EXTENSION_PATH/${i}.json "; done) \
+  $(for i in $DATATYPES; do echo " --known_types $INPUT_PATH/${i,,}.profile.json "; done) \
+  $(for i in $PROFILES; do echo " --known_types $INPUT_PATH/${i}.profile.json "; done) \
   --output_directory $OUTPUT_PATH --output_filename resources.proto \
   $(for i in $RESOURCETYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
@@ -83,7 +86,9 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   --emit_proto --include_resources \
   --include_metadatatypes \
-  $(for i in $PROFILES; do echo " --typed_extensions $INPUT_PATH/${i}.profile.json "; done) \
+  $(for i in $EXTENSIONS; do echo " --known_types $EXTENSION_PATH/${i}.json "; done) \
+  $(for i in $DATATYPES; do echo " --known_types $INPUT_PATH/${i,,}.profile.json "; done) \
+  $(for i in $PROFILES; do echo " --known_types $INPUT_PATH/${i}.profile.json "; done) \
   --output_directory $OUTPUT_PATH --output_filename profiles.proto \
   $(for i in $PROFILES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
@@ -92,6 +97,8 @@ $PROTO_GENERATOR \
 # extensions don't have to get lumped into a single file.
 $PROTO_GENERATOR \
   --emit_proto --output_directory $OUTPUT_PATH \
-  $(for i in $PROFILES; do echo " --typed_extensions $INPUT_PATH/${i}.profile.json "; done) \
+  $(for i in $EXTENSIONS; do echo " --known_types $EXTENSION_PATH/${i}.json "; done) \
+  $(for i in $DATATYPES; do echo " --known_types $INPUT_PATH/${i,,}.profile.json "; done) \
+  $(for i in $PROFILES; do echo " --known_types $INPUT_PATH/${i}.profile.json "; done) \
   --output_filename extensions.proto \
   $(for i in $EXTENSIONS; do echo "$EXTENSION_PATH/${i,,}.json"; done)

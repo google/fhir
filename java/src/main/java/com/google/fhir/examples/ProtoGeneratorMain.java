@@ -100,9 +100,9 @@ class ProtoGeneratorMain {
     private String protoRoot = "proto/stu3";
 
     @Parameter(
-        names = {"--typed_extensions"},
-        description = "List of typed Extensions to inline as fields")
-    private List<String> typedExtensions = new ArrayList<>();
+        names = {"--known_types"},
+        description = "List of known StructureDefinitions, for inlining types.")
+    private List<String> knownTypes = new ArrayList<>();
 
     // TODO(nickgeorge): figure out a smarter way to handle dependencies
     @Parameter(
@@ -130,9 +130,9 @@ class ProtoGeneratorMain {
     // Read any typed extension structure definitions that should be inlined into the
     // output protos.  This will not generate proto definitions for these extensions -
     // that must be done separately.
-    ArrayList<StructureDefinition> typedExtensionDefinitions = new ArrayList<>();
-    for (String filename : args.typedExtensions) {
-      typedExtensionDefinitions.add(readStructureDefinition(filename, jsonParser));
+    ArrayList<StructureDefinition> knownTypes = new ArrayList<>();
+    for (String filename : args.knownTypes) {
+      knownTypes.add(readStructureDefinition(filename, jsonParser));
     }
 
     // Read the inputs in sequence.
@@ -157,8 +157,7 @@ class ProtoGeneratorMain {
     writer.println("Generating proto descriptors...");
     writer.flush();
     FileDescriptorProto proto;
-    ProtoGenerator generator =
-        new ProtoGenerator(args.protoPackage, args.protoRoot, typedExtensionDefinitions);
+    ProtoGenerator generator = new ProtoGenerator(args.protoPackage, args.protoRoot, knownTypes);
     proto = generator.generateFileDescriptor(definitions);
     if (args.includeContainedResource) {
       proto = generator.addContainedResource(proto);

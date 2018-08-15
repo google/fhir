@@ -39,9 +39,11 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class ProtoGeneratorTest {
 
-  private static final ImmutableSet<String> TYPED_EXTENSIONS =
+  private static final ImmutableSet<String> KNOWN_STRUCTURE_DEFINITIONS =
       ImmutableSet.of(
-          "extensions/extension-observation-geneticsdnasequencevariantname.profile.json");
+          "extensions/extension-observation-geneticsdnasequencevariantname.profile.json",
+          "structure_definitions/money.profile.json",
+          "structure_definitions/simplequantity.profile.json");
 
   private JsonFormat.Parser jsonParser;
   private TextFormat.Parser textParser;
@@ -94,12 +96,12 @@ public class ProtoGeneratorTest {
     assertThat(descriptor.toProto()).isEqualTo(golden);
   }
 
-  private List<StructureDefinition> getTypedExtensions() throws IOException {
-    ArrayList<StructureDefinition> typedExtensionDefinitions = new ArrayList<>();
-    for (String filename : TYPED_EXTENSIONS) {
-      typedExtensionDefinitions.add(readStructureDefinition(filename));
+  private List<StructureDefinition> getKnownStructureDefinitions() throws IOException {
+    ArrayList<StructureDefinition> knownStructureDefinitions = new ArrayList<>();
+    for (String filename : KNOWN_STRUCTURE_DEFINITIONS) {
+      knownStructureDefinitions.add(readStructureDefinition(filename));
     }
-    return typedExtensionDefinitions;
+    return knownStructureDefinitions;
   }
 
   @Before
@@ -109,7 +111,9 @@ public class ProtoGeneratorTest {
     runfiles = Runfiles.create();
     protoGenerator =
         new ProtoGenerator(
-            "google.fhir.stu3.proto", "proto/stu3", getTypedExtensions());
+            "google.fhir.stu3.proto",
+            "proto/stu3",
+            getKnownStructureDefinitions());
 
     registry = ExtensionRegistry.newInstance();
     registry.add(Annotations.structureDefinitionKind);

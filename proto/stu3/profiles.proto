@@ -146,10 +146,10 @@ message ObservationGenetics {
     repeated Extension modifier_extension = 3;
 
     // Low Range, if relevant
-    Quantity low = 4;
+    SimpleQuantity low = 4;
 
     // High Range, if relevant
-    Quantity high = 5;
+    SimpleQuantity high = 5;
 
     // Reference range qualifier
     CodeableConcept type = 6;
