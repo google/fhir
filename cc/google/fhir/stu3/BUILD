@@ -59,3 +59,31 @@ cc_test(
         "@org_tensorflow//tensorflow/core:lib",
     ],
 )
+
+cc_library(
+    name = "proto_util",
+    srcs = ["proto_util.cc"],
+    hdrs = ["proto_util.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
+        "@com_google_absl//absl/strings",
+        "@com_google_protobuf//:protobuf",
+        "@com_googlesource_code_re2//:re2",
+        "@org_tensorflow//tensorflow/core:lib",
+    ],
+)
+
+cc_test(
+    name = "proto_util_test",
+    srcs = ["proto_util_test.cc"],
+    deps = [
+        ":proto_util",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "@com_google_googletest//:gtest_main",
+        "@com_google_protobuf//:protobuf",
+    ],
+)
