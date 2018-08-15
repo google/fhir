@@ -87,3 +87,17 @@ cc_test(
         "@com_google_protobuf//:protobuf",
     ],
 )
+
+cc_library(
+    name = "test_helper",
+    testonly = 1,
+    hdrs = ["test_helper.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":resource_validation",
+        "//cc/google/fhir/status",
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest",
+        "@com_google_protobuf//:protobuf",
+    ],
+)
