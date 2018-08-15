@@ -226,7 +226,7 @@ public final class DateTimeWrapperTest {
             .setTimezone("Australia/Sydney")
             .build();
     assertThat(new DateTimeWrapper(input, ZoneId.of("Australia/Sydney")).toString())
-        .isEqualTo("2014-10-09T14:58:00");
+        .isEqualTo("2014-10-09T14:58:00+11:00");
 
     input =
         DateTime.newBuilder()

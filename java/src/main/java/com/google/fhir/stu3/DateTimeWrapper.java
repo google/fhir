@@ -35,49 +35,31 @@ public class DateTimeWrapper extends PrimitiveWrapper<DateTime> {
   private static final DateTime NULL_DATE_TIME =
       DateTime.newBuilder().addExtension(getNoValueExtension()).build();
 
-  private static final DateTimeFormatter SECOND =
-      DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
   private static final DateTimeFormatter SECOND_WITH_TZ =
       DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
+  private static final DateTimeFormatter MILLISECOND_WITH_TZ =
+      DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
   private static final ImmutableMap<DateTime.Precision, DateTimeFormatter> FORMATTERS =
       ImmutableMap.of(
           DateTime.Precision.YEAR, DateTimeFormatter.ofPattern("yyyy"),
           DateTime.Precision.MONTH, DateTimeFormatter.ofPattern("yyyy-MM"),
           DateTime.Precision.DAY, DateTimeFormatter.ofPattern("yyyy-MM-dd"),
-          DateTime.Precision.SECOND, SECOND,
-          DateTime.Precision.MILLISECOND, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"));
-  private static final ImmutableMap<DateTime.Precision, DateTimeFormatter> TZ_FORMATTERS =
-      ImmutableMap.of(
-          DateTime.Precision.YEAR,
-          DateTimeFormatter.ofPattern("yyyy"),
-          DateTime.Precision.MONTH,
-          DateTimeFormatter.ofPattern("yyyy-MM"),
-          DateTime.Precision.DAY,
-          DateTimeFormatter.ofPattern("yyyy-MM-dd"),
-          DateTime.Precision.SECOND,
-          SECOND_WITH_TZ,
-          DateTime.Precision.MILLISECOND,
-          DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
-
-  private ZoneId defaultTimeZone;
+          DateTime.Precision.SECOND, SECOND_WITH_TZ,
+          DateTime.Precision.MILLISECOND, MILLISECOND_WITH_TZ);
 
   /** Create a DateTimeWrapper from a DateTime. */
   public DateTimeWrapper(DateTime dateTime) {
     super(dateTime);
-    this.defaultTimeZone = null;
   }
 
   /**
-   * Create a DateTimeWrapper from a DateTime and a default timezone. The default timezone is used
-   * when printing the DateTime; if the timezone of dateTime is defaultTimeZone, it is considered to
-   * be local, and no timezone information will be printed. Note that explicit offsets such as
-   * "+11:00" or "UTC" are considered different from "Australia/Sydney" or "Europe/London", even
-   * when they happen to resolve to the same offset.
+   * Create a DateTimeWrapper from a DateTime and a default timezone. The default timezone is
+   * currently unused. Once there are finalized timezone extension, this class will use those to
+   * emit timezones when they differ from the default.
    */
   public DateTimeWrapper(DateTime dateTime, ZoneId defaultTimeZone) {
     super(dateTime);
-    this.defaultTimeZone = defaultTimeZone;
   }
 
   /** Create a DateTimeWrapper from a java String and a default timezone. */
@@ -106,20 +88,6 @@ public class DateTimeWrapper extends PrimitiveWrapper<DateTime> {
     try {
       return buildDateTime(
           LocalDate.parse(input).atStartOfDay(), defaultTimeZone, DateTime.Precision.DAY);
-    } catch (DateTimeParseException e) {
-      // Fall through.
-    }
-
-    // DateTime, without timezone offset.
-    try {
-      return buildDateTime(
-          LocalDateTime.parse(input, SECOND), defaultTimeZone, DateTime.Precision.SECOND);
-    } catch (DateTimeParseException e) {
-      // Fall through.
-    }
-    try {
-      return buildDateTime(
-          LocalDateTime.parse(input), defaultTimeZone, DateTime.Precision.MILLISECOND);
     } catch (DateTimeParseException e) {
       // Fall through.
     }
@@ -174,11 +142,7 @@ public class DateTimeWrapper extends PrimitiveWrapper<DateTime> {
       throw new IllegalArgumentException("DateTime missing timezone");
     }
     zoneId = ZoneId.of(dateTime.getTimezone());
-    if (zoneId.equals(defaultTimeZone)) {
-      formatter = FORMATTERS.get(dateTime.getPrecision());
-    } else {
-      formatter = TZ_FORMATTERS.get(dateTime.getPrecision());
-    }
+    formatter = FORMATTERS.get(dateTime.getPrecision());
     if (formatter == null) {
       throw new IllegalArgumentException("Invalid precision: " + dateTime.getPrecision());
     }
