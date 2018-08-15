@@ -864,10 +864,6 @@ public class ProtoGenerator {
     if (type.contains("-")) {
       normalizedType = CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, type);
     }
-    // We don't support Xhtml yet - remove this special case once we do.
-    if (type.equals("Xhtml")) {
-      return "String";
-    }
     return normalizedType;
   }
 

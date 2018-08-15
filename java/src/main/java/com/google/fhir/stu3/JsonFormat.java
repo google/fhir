@@ -36,6 +36,7 @@ import com.google.fhir.stu3.proto.ReferenceId;
 import com.google.fhir.stu3.proto.Time;
 import com.google.fhir.stu3.proto.UnsignedInt;
 import com.google.fhir.stu3.proto.Uri;
+import com.google.fhir.stu3.proto.Xhtml;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -807,10 +808,12 @@ public final class JsonFormat {
         return new StringWrapper((com.google.fhir.stu3.proto.String) message);
       case "Time":
         return new TimeWrapper((Time) message);
-      case "Uri":
-        return new UriWrapper((Uri) message);
       case "UnsignedInt":
         return new UnsignedIntWrapper((UnsignedInt) message);
+      case "Uri":
+        return new UriWrapper((Uri) message);
+      case "Xhtml":
+        return new XhtmlWrapper((Xhtml) message);
       default:
         throw new IllegalArgumentException(
             "Unexpected primitive FHIR type: " + descriptor.getName());
@@ -869,6 +872,8 @@ public final class JsonFormat {
         return new UnsignedIntWrapper(jsonValue);
       case "Uri":
         return new UriWrapper(jsonValue);
+      case "Xhtml":
+        return new XhtmlWrapper(jsonValue);
       default:
         throw new IllegalArgumentException(
             "Unexpected primitive FHIR type: " + descriptor.getName());

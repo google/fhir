@@ -164,4 +164,9 @@ public final class ValidationTest {
   public void testUri() throws IOException {
     testValidation(com.google.fhir.stu3.proto.Uri.newBuilder());
   }
+
+  @Test
+  public void testXhtml() throws IOException {
+    testValidation(com.google.fhir.stu3.proto.Xhtml.newBuilder());
+  }
 }

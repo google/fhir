@@ -660,7 +660,7 @@ message Narrative {
   NarrativeStatusCode status = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Limited xhtml content
-  String div = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Xhtml div = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for ParameterDefinition.
