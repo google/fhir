@@ -1,0 +1,28 @@
+name: "DataAbsentReason"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "value_code"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.DataAbsentReasonCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Value of extension"
+  }
+}
+options {
+  [google.fhir.stu3.proto.fhir_extension_url]: "http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Data Absent Reason.\nunknown | asked | temp | notasked | masked | unsupported | astext | error.\nSee http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+  [google.fhir.stu3.proto.fhir_profile_base]: "Extension"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+}

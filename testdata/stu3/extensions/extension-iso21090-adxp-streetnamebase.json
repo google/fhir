@@ -1,32 +1,32 @@
 {
   "resourceType": "StructureDefinition",
-  "id": "observation-geneticsDNASequenceVariantName",
+  "id": "iso21090-ADXP-streetNameBase",
   "extension": [
     {
       "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
-      "valueCode": "oo"
+      "valueCode": "fhir"
     },
     {
       "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
       "valueInteger": 1
     }
   ],
-  "url": "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName",
-  "name": "DNASequenceVariantName",
+  "url": "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetNameBase",
+  "name": "ADXP-streetNameBase",
   "status": "draft",
-  "date": "2016-03-14",
-  "publisher": "Health Level Seven International (Clinical Genomics)",
+  "date": "2012-06-24",
+  "publisher": "Health Level Seven International (Modeling and Methodology)",
   "contact": [
     {
       "telecom": [
         {
           "system": "url",
-          "value": "http://www.hl7.org/Special/committees/clingenomics"
+          "value": "http://www.hl7.org/Special/committees/mnm"
         }
       ]
     }
   ],
-  "description": "Human Genome Variation Society (HGVS) nomenclature for a single or set of DNA Sequence Variation(s) identified in testing.  The use of the nomenclature is also used to describe non-variations (aka. wild types). LOINC Code: ([48004-6](http://loinc.org/48004-6)).",
+  "description": "The base name of a roadway or artery recognized by a municipality (excluding street type and direction).",
   "fhirVersion": "3.0.1",
   "mapping": [
     {
@@ -37,9 +37,9 @@
   ],
   "kind": "complex-type",
   "abstract": false,
-  "contextType": "resource",
+  "contextType": "datatype",
   "context": [
-    "Observation"
+    "Address.line"
   ],
   "type": "Extension",
   "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
@@ -49,10 +49,10 @@
       {
         "id": "Extension",
         "path": "Extension",
-        "short": "HGVS nomenclature for observed DNA sequence variant",
-        "definition": "Human Genome Variation Society (HGVS) nomenclature for a single or set of DNA Sequence Variation(s) identified in testing.  The use of the nomenclature is also used to describe non-variations (aka. wild types). LOINC Code: ([48004-6](http://loinc.org/48004-6)).",
+        "short": "streetNameBase",
+        "definition": "The base name of a roadway or artery recognized by a municipality (excluding street type and direction).",
         "min": 0,
-        "max": "1",
+        "max": "*",
         "base": {
           "path": "Extension",
           "min": 0,
@@ -77,6 +77,12 @@
             "expression": "extension.exists() != value.exists()",
             "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
             "source": "Extension"
+          }
+        ],
+        "mapping": [
+          {
+            "identity": "rim",
+            "map": "ADXP[partType=STB]"
           }
         ]
       },
@@ -167,7 +173,7 @@
             "code": "uri"
           }
         ],
-        "fixedUri": "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName",
+        "fixedUri": "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetNameBase",
         "mapping": [
           {
             "identity": "rim",
@@ -176,8 +182,8 @@
         ]
       },
       {
-        "id": "Extension.valueCodeableConcept",
-        "path": "Extension.valueCodeableConcept",
+        "id": "Extension.valueString",
+        "path": "Extension.valueString",
         "short": "Value of extension",
         "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
         "min": 0,
@@ -189,20 +195,9 @@
         },
         "type": [
           {
-            "code": "CodeableConcept"
+            "code": "string"
           }
         ],
-        "binding": {
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-              "valueString": "ClinVar-variant-database"
-            }
-          ],
-          "strength": "preferred",
-          "description": "NCBI central repository of potentially clinically relevant variants",
-          "valueSetUri": "http://www.ncbi.nlm.nih.gov/clinvar/variation"
-        },
         "mapping": [
           {
             "identity": "rim",
@@ -217,10 +212,16 @@
       {
         "id": "Extension",
         "path": "Extension",
-        "short": "HGVS nomenclature for observed DNA sequence variant",
-        "definition": "Human Genome Variation Society (HGVS) nomenclature for a single or set of DNA Sequence Variation(s) identified in testing.  The use of the nomenclature is also used to describe non-variations (aka. wild types). LOINC Code: ([48004-6](http://loinc.org/48004-6)).",
+        "short": "streetNameBase",
+        "definition": "The base name of a roadway or artery recognized by a municipality (excluding street type and direction).",
         "min": 0,
-        "max": "1"
+        "max": "*",
+        "mapping": [
+          {
+            "identity": "rim",
+            "map": "ADXP[partType=STB]"
+          }
+        ]
       },
       {
         "id": "Extension.extension",
@@ -235,27 +236,16 @@
             "code": "uri"
           }
         ],
-        "fixedUri": "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName"
+        "fixedUri": "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetNameBase"
       },
       {
-        "id": "Extension.valueCodeableConcept",
-        "path": "Extension.valueCodeableConcept",
+        "id": "Extension.valueString",
+        "path": "Extension.valueString",
         "type": [
           {
-            "code": "CodeableConcept"
+            "code": "string"
           }
-        ],
-        "binding": {
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-              "valueString": "ClinVar-variant-database"
-            }
-          ],
-          "strength": "preferred",
-          "description": "NCBI central repository of potentially clinically relevant variants",
-          "valueSetUri": "http://www.ncbi.nlm.nih.gov/clinvar/variation"
-        }
+        ]
       }
     ]
   }

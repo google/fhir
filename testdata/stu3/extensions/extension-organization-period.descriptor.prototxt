@@ -1,0 +1,28 @@
+name: "OrganizationPeriod"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "value_period"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Period"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Value of extension"
+  }
+}
+options {
+  [google.fhir.stu3.proto.fhir_extension_url]: "http://hl7.org/fhir/StructureDefinition/organization-period"
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for period.\nExtension.\nSee http://hl7.org/fhir/StructureDefinition/organization-period"
+  [google.fhir.stu3.proto.fhir_profile_base]: "Extension"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/organization-period"
+}

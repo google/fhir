@@ -1,0 +1,47 @@
+name: "ConditionPartOf"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "value"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ConditionPartOf.Value"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.stu3.proto.field_description]: "Value of extension"
+  }
+}
+nested_type {
+  name: "Value"
+  field {
+    name: "reference"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Reference"
+    oneof_index: 0
+  }
+  oneof_decl {
+    name: "value"
+    options {
+      [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
+    }
+  }
+}
+options {
+  [google.fhir.stu3.proto.fhir_extension_url]: "http://hl7.org/fhir/StructureDefinition/condition-partOf"
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for partOf.\nPart of this condition.\nSee http://hl7.org/fhir/StructureDefinition/condition-partOf"
+  [google.fhir.stu3.proto.fhir_profile_base]: "Extension"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/condition-partOf"
+}

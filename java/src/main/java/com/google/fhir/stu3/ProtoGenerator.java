@@ -864,6 +864,8 @@ public class ProtoGenerator {
     if (type.contains("-")) {
       normalizedType = CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, type);
     }
+    // Remove any invalid characters from the name.
+    normalizedType = normalizedType.replaceAll("[ ]", "");
     return normalizedType;
   }
 
@@ -940,7 +942,10 @@ public class ProtoGenerator {
       contexts.add(splitter.splitToList(context.getValue()).get(0));
     }
     if (contexts.size() == 1) {
-      name = Iterables.getOnlyElement(contexts) + name;
+      String context = Iterables.getOnlyElement(contexts);
+      if (!context.equals("*")) {
+        name = context + name;
+      }
     }
     return name;
   }

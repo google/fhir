@@ -242,6 +242,39 @@ field {
     [google.fhir.stu3.proto.field_description]: "Entire report as issued"
   }
 }
+field {
+  name: "assessed_condition"
+  number: 26
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "AssessedCondition\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition"
+  }
+}
+field {
+  name: "family_member_history"
+  number: 27
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "FamilyHistory\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory"
+  }
+}
+field {
+  name: "analysis"
+  number: 28
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Analysis\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis"
+  }
+}
 nested_type {
   name: "Effective"
   field {

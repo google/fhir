@@ -1,0 +1,69 @@
+name: "DiagnosticReportItem"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "extension"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Code to indicate the item (test, panel or sequence variant) being ordered"
+  }
+}
+field {
+  name: "extension"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Indicate the genetic variant ordered to be tested"
+  }
+}
+field {
+  name: "extension"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "If this item relates to specific specimens"
+  }
+}
+field {
+  name: "extension"
+  number: 6
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "proposed | draft | planned | requested | received | accepted | in-progress | review | completed | cancelled | suspended | rejected | failed"
+  }
+}
+options {
+  [google.fhir.stu3.proto.fhir_extension_url]: "http://hl7.org/fhir/StructureDefinition/procedurerequest-geneticsItem"
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Item.\nThe items the orderer requested.\nSee http://hl7.org/fhir/StructureDefinition/procedurerequest-geneticsItem"
+  [google.fhir.stu3.proto.fhir_profile_base]: "Extension"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/procedurerequest-geneticsItem"
+}

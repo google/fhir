@@ -345,6 +345,17 @@ field {
     [google.fhir.stu3.proto.field_description]: "Request provenance"
   }
 }
+field {
+  name: "item"
+  number: 35
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "The items the orderer requested\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/procedurerequest-geneticsItem"
+  }
+}
 nested_type {
   name: "Occurrence"
   field {

@@ -1,0 +1,48 @@
+name: "CodeSystemHistory"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "extension"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "The name of this set of history entries"
+  }
+}
+field {
+  name: "extension"
+  number: 4
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Audit of all changes for a history entry"
+  }
+}
+options {
+  [google.fhir.stu3.proto.fhir_extension_url]: "http://hl7.org/fhir/StructureDefinition/codesystem-history"
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for history.\nWhat has happened over time.\nSee http://hl7.org/fhir/StructureDefinition/codesystem-history"
+  [google.fhir.stu3.proto.fhir_profile_base]: "Extension"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/codesystem-history"
+}

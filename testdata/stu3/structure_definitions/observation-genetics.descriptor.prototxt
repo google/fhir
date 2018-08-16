@@ -304,6 +304,160 @@ field {
     [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName"
   }
 }
+field {
+  name: "d_n_a_variant_id"
+  number: 31
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "DNA sequence variant ID\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNAVariantId"
+  }
+}
+field {
+  name: "d_n_a_sequence_variant_type"
+  number: 32
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "DNA sequence variant type\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantType"
+  }
+}
+field {
+  name: "amino_acid_change_name"
+  number: 33
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Amino acid change\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName"
+  }
+}
+field {
+  name: "amino_acid_change_type"
+  number: 34
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Amino Acid Change Type\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeType"
+  }
+}
+field {
+  name: "gene_symbol"
+  number: 35
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "HGNC gene symbol\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
+  }
+}
+field {
+  name: "d_n_a_region_name"
+  number: 36
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "DNA region name\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNARegionName"
+  }
+}
+field {
+  name: "allele_name"
+  number: 37
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Name of allele\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName"
+  }
+}
+field {
+  name: "allelic_state"
+  number: 38
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "The level of occurrence of a single DNA sequence variant within a set of chromosomes: Heteroplasmic / Homoplasmic / Homozygous / Heterozygous / Hemizygous\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicState"
+  }
+}
+field {
+  name: "allelic_frequency"
+  number: 39
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Decimal"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Allele frequency\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicFrequency"
+  }
+}
+field {
+  name: "copy_number_event"
+  number: 40
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Copy number variation\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsCopyNumberEvent"
+  }
+}
+field {
+  name: "genomic_source_class"
+  number: 41
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Genomic source class\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
+  }
+}
+field {
+  name: "phase_set"
+  number: 42
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Uri"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Phase set identifier (UUID/OID)\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet"
+  }
+}
+field {
+  name: "sequence"
+  number: 43
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Sequence\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsSequence"
+  }
+}
+field {
+  name: "interpretation"
+  number: 44
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Clinical interpretations for variant\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsInterpretation"
+  }
+}
 nested_type {
   name: "Effective"
   field {
