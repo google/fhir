@@ -1,6 +1,6 @@
 # Example Code for Generating STU3 FHIR Protos and Test Data.
 
-This directory contains example code for generating Proto definitions and test data based on FHIR STU3 StructureDefintions defined by https://www.hl7.org/fhir/.
+This directory contains example code for generating Proto definitions and test data based on FHIR STU3 StructureDefinitions defined by https://www.hl7.org/fhir/.
 
 They use StructureDefinitions defined in `fhir/testdata/stu3/structure_definitions/`, which were obtained from https://www.hl7.org/fhir/fhir.schema.json.zip.
 
