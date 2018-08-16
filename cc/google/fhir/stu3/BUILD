@@ -32,6 +32,41 @@ cc_test(
 )
 
 cc_library(
+    name = "util",
+    srcs = ["util.cc"],
+    hdrs = ["util.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
+        "//proto/stu3:annotations_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@com_google_protobuf//:protobuf",
+        "@org_tensorflow//tensorflow/core:lib",
+    ],
+)
+
+cc_test(
+    name = "util_test",
+    srcs = ["util_test.cc"],
+    deps = [
+        ":util",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/stu3:codes_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:metadatatypes_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "@com_google_absl//absl/time",
+        "@com_google_googletest//:gtest_main",
+        "@com_google_protobuf//:protobuf",
+        "@org_tensorflow//tensorflow/core:lib",
+    ],
+)
+
+cc_library(
     name = "resource_validation",
     srcs = ["resource_validation.cc"],
     hdrs = ["resource_validation.h"],
