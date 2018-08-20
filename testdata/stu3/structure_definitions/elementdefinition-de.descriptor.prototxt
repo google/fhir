@@ -270,7 +270,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extension\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.field_description]: "Extension"
     [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/elementdefinition-question"
   }
 }
@@ -281,7 +281,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementDefinitionAllowedUnits"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extension\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.field_description]: "Extension"
     [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits"
   }
 }

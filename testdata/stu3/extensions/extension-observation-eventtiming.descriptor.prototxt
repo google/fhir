@@ -20,21 +20,21 @@ field {
   }
 }
 field {
-  name: "extension"
-  number: 3
+  name: "code"
+  number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
     [google.fhir.stu3.proto.field_description]: "Life events"
   }
 }
 field {
-  name: "extension"
-  number: 4
+  name: "offset"
+  number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.Quantity"
   options {
     [google.fhir.stu3.proto.field_description]: "How close to event"
   }

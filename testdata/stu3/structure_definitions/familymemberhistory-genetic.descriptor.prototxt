@@ -162,8 +162,81 @@ field {
   }
 }
 field {
-  name: "relationship"
+  name: "estimated_age"
   number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Boolean"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Age is estimated?"
+  }
+}
+field {
+  name: "reason_code"
+  number: 18
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Why was family member history performed?"
+  }
+}
+field {
+  name: "reason_reference"
+  number: 19
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Why was family member history performed?"
+  }
+}
+field {
+  name: "note"
+  number: 20
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Annotation"
+  options {
+    [google.fhir.stu3.proto.field_description]: "General note about related person"
+  }
+}
+field {
+  name: "parent"
+  number: 21
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.FamilyMemberHistoryParent"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Extension"
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-parent"
+  }
+}
+field {
+  name: "sibling"
+  number: 22
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.FamilyMemberHistorySibling"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Extension"
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-sibling"
+  }
+}
+field {
+  name: "observation"
+  number: 23
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Extension"
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation"
+  }
+}
+field {
+  name: "relationship"
+  number: 24
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
@@ -174,7 +247,7 @@ field {
 }
 field {
   name: "gender"
-  number: 18
+  number: 25
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.AdministrativeGenderCode"
@@ -183,11 +256,11 @@ field {
   }
 }
 field {
-  name: "born"
-  number: 19
+  name: "born_age"
+  number: 26
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.FamilymemberhistoryGenetic.Born"
+  type_name: ".google.fhir.stu3.proto.FamilymemberhistoryGenetic.BornAge"
   options {
     [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "(approximate) date of birth"
@@ -195,7 +268,7 @@ field {
 }
 field {
   name: "age"
-  number: 20
+  number: 27
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.FamilymemberhistoryGenetic.AgeType"
@@ -205,207 +278,24 @@ field {
   }
 }
 field {
-  name: "estimated_age"
-  number: 21
+  name: "deceased_age"
+  number: 28
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Boolean"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Age is estimated?"
-  }
-}
-field {
-  name: "deceased"
-  number: 22
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.FamilymemberhistoryGenetic.Deceased"
+  type_name: ".google.fhir.stu3.proto.FamilymemberhistoryGenetic.DeceasedAge"
   options {
     [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Dead? How old/when?"
   }
 }
 field {
-  name: "reason_code"
-  number: 23
-  label: LABEL_REPEATED
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.CodeableConcept"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Why was family member history performed?"
-  }
-}
-field {
-  name: "reason_reference"
-  number: 24
-  label: LABEL_REPEATED
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Why was family member history performed?"
-  }
-}
-field {
-  name: "note"
-  number: 25
-  label: LABEL_REPEATED
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Annotation"
-  options {
-    [google.fhir.stu3.proto.field_description]: "General note about related person"
-  }
-}
-field {
   name: "condition"
-  number: 26
+  number: 29
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.FamilymemberhistoryGenetic.Condition"
   options {
     [google.fhir.stu3.proto.field_description]: "Condition that the related person had"
-  }
-}
-field {
-  name: "parent"
-  number: 27
-  label: LABEL_REPEATED
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.CodeableConcept"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Extension\nThis is a FHIR extension that has been inlined based on the profile for this resource."
-    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-parent"
-  }
-}
-field {
-  name: "sibling"
-  number: 28
-  label: LABEL_REPEATED
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.CodeableConcept"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Extension\nThis is a FHIR extension that has been inlined based on the profile for this resource."
-    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-sibling"
-  }
-}
-field {
-  name: "observation"
-  number: 29
-  label: LABEL_REPEATED
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
-  options {
-    [google.fhir.stu3.proto.field_description]: "Extension\nThis is a FHIR extension that has been inlined based on the profile for this resource."
-    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation"
-  }
-}
-nested_type {
-  name: "Born"
-  field {
-    name: "period"
-    number: 1
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Period"
-    oneof_index: 0
-  }
-  field {
-    name: "date"
-    number: 2
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Date"
-    oneof_index: 0
-  }
-  field {
-    name: "string_value"
-    number: 3
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
-    oneof_index: 0
-    json_name: "string"
-  }
-  oneof_decl {
-    name: "born"
-  }
-}
-nested_type {
-  name: "AgeType"
-  field {
-    name: "age_value"
-    number: 1
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Age"
-    oneof_index: 0
-    json_name: "age"
-  }
-  field {
-    name: "range"
-    number: 2
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Range"
-    oneof_index: 0
-  }
-  field {
-    name: "string_value"
-    number: 3
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
-    oneof_index: 0
-    json_name: "string"
-  }
-  oneof_decl {
-    name: "age"
-  }
-}
-nested_type {
-  name: "Deceased"
-  field {
-    name: "boolean"
-    number: 1
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Boolean"
-    oneof_index: 0
-  }
-  field {
-    name: "age"
-    number: 2
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Age"
-    oneof_index: 0
-  }
-  field {
-    name: "range"
-    number: 3
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Range"
-    oneof_index: 0
-  }
-  field {
-    name: "date"
-    number: 4
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Date"
-    oneof_index: 0
-  }
-  field {
-    name: "string_value"
-    number: 5
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
-    oneof_index: 0
-    json_name: "string"
-  }
-  oneof_decl {
-    name: "deceased"
   }
 }
 nested_type {
@@ -520,6 +410,116 @@ nested_type {
     oneof_decl {
       name: "onset"
     }
+  }
+}
+nested_type {
+  name: "BornAge"
+  field {
+    name: "period"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Period"
+    oneof_index: 0
+  }
+  field {
+    name: "date"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Date"
+    oneof_index: 0
+  }
+  field {
+    name: "string_value"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    oneof_index: 0
+    json_name: "string"
+  }
+  oneof_decl {
+    name: "born_age"
+  }
+}
+nested_type {
+  name: "AgeType"
+  field {
+    name: "age_value"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Age"
+    oneof_index: 0
+    json_name: "age"
+  }
+  field {
+    name: "range"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Range"
+    oneof_index: 0
+  }
+  field {
+    name: "string_value"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    oneof_index: 0
+    json_name: "string"
+  }
+  oneof_decl {
+    name: "age"
+  }
+}
+nested_type {
+  name: "DeceasedAge"
+  field {
+    name: "boolean"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Boolean"
+    oneof_index: 0
+  }
+  field {
+    name: "age"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Age"
+    oneof_index: 0
+  }
+  field {
+    name: "range"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Range"
+    oneof_index: 0
+  }
+  field {
+    name: "date"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Date"
+    oneof_index: 0
+  }
+  field {
+    name: "string_value"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    oneof_index: 0
+    json_name: "string"
+  }
+  oneof_decl {
+    name: "deceased_age"
   }
 }
 options {

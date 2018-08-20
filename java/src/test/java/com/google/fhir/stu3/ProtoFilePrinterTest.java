@@ -236,15 +236,17 @@ public final class ProtoFilePrinterTest {
     assertEqualsIgnoreClangFormat(golden, generated);
   }
 
-  // Test generating a few of the extension protos.
-
-  /** Test generating elementdefinition_binding_name.proto. */
+  /** Test generating extensions.proto. */
   @Test
   public void generateElementDefinitionExtensions() throws Exception {
     String[] extensionNames = {
       "extension-elementdefinition-bindingname",
+      "extension-elementdefinition-allowedunits",
+      "extension-observation-geneticsdnasequencevariantname",
+      "extension-patient-clinicaltrial",
       "extension-structuredefinition-explicit-type-name",
-      "extension-structuredefinition-regex"
+      "extension-structuredefinition-regex",
+      "extension-timing-daysofcycle",
     };
     List<StructureDefinition> extensionDefinitions = new ArrayList<>();
     for (String extensionName : extensionNames) {

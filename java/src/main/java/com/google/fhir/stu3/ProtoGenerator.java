@@ -51,7 +51,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -125,6 +124,51 @@ public class ProtoGenerator {
   private final String packageName;
   private final String protoRootPath;
 
+  // Token in a id string.  The sequence of tokens forms a heirarchical relationship, where each
+  // dot-delimited token is of the form pathpart:slicename/reslicename.
+  // See https://www.hl7.org/fhir/elementdefinition.html#id
+  private static class IdToken {
+    final String pathpart;
+    final boolean isChoiceType;
+    final String slicename;
+    final String reslice;
+
+    private IdToken(String pathpart, boolean isChoiceType, String slicename, String reslice) {
+      this.pathpart = pathpart;
+      this.isChoiceType = isChoiceType;
+      this.slicename = slicename;
+      this.reslice = reslice;
+    }
+
+    static IdToken fromTokenString(String tokenString) {
+      List<String> colonSplit = Splitter.on(':').splitToList(tokenString);
+      String pathpart = colonSplit.get(0);
+      boolean isChoiceType = pathpart.endsWith("[x]");
+      if (isChoiceType) {
+        pathpart = pathpart.substring(0, pathpart.length() - "[x]".length());
+      }
+      if (colonSplit.size() == 1) {
+        return new IdToken(pathpart, isChoiceType, null, null);
+      }
+      if (colonSplit.size() != 2) {
+        throw new IllegalArgumentException("Bad token string: " + tokenString);
+      }
+      List<String> slashSplit = Splitter.on('/').splitToList(colonSplit.get(1));
+      if (slashSplit.size() == 1) {
+        return new IdToken(pathpart, isChoiceType, slashSplit.get(0), null);
+      }
+      if (slashSplit.size() == 2) {
+        return new IdToken(pathpart, isChoiceType, slashSplit.get(0), slashSplit.get(1));
+      }
+      throw new IllegalArgumentException("Bad token string: " + tokenString);
+    }
+  }
+
+  private static IdToken lastIdToken(String idString) {
+    List<String> tokenStrings = Splitter.on('.').splitToList(idString);
+    return IdToken.fromTokenString(Iterables.getLast(tokenStrings));
+  }
+
   public ProtoGenerator(
       String packageName, String protoRootPath, List<StructureDefinition> structureDefinitions) {
     this.packageName = packageName;
@@ -137,10 +181,11 @@ public class ProtoGenerator {
         throw new IllegalArgumentException(
             "Invalid FHIR structure definition: " + def.getId().getValue() + " has no url");
       }
-      String simpleExtensionType = getSimpleExtensionType(def);
-      String messageName =
-          simpleExtensionType != null ? simpleExtensionType : getProfileTypeName(def);
-      mutableStructureDefinitions.put(url, messageName);
+      mutableStructureDefinitions.put(
+          url,
+          isSimpleExtensionDefinition(def)
+              ? getSimpleExtensionDefinitionType(def)
+              : getTypeName(def));
     }
     this.knownStructureDefinitions = ImmutableMap.copyOf(mutableStructureDefinitions);
   }
@@ -365,23 +410,29 @@ public class ProtoGenerator {
     // will result in the data in the typed fields being dropped.
     List<ElementDefinition> deferredElements = new ArrayList<>();
 
-    // Loop over the elements.
-    for (ElementDefinition element : getFieldsToPrint(elementList, currentElement)) {
-      // If this is a hardcoded extension url, it should get inlined instead of being treated like a
-      // field.
-      // TODO(nickgeorge): generalize this beyond extensions and urls
-      if ("Extension.url".equals(element.getId().getValue()) && element.getFixed().hasUri()) {
-        builder.setOptions(
-            builder
-                .getOptions()
-                .toBuilder()
-                .setExtension(
-                    Annotations.fhirExtensionUrl, element.getFixed().getUri().getValue()));
+    // Loop over the direct children of this element.
+    for (ElementDefinition element : getDirectChildren(currentElement, elementList)) {
+      if (element.getTypeCount() == 1 && element.getType(0).getCode().getValue().isEmpty()) {
+        // This is a primitive field.  Skip it, as primitive fields are handled specially.
         continue;
       }
 
-      // If this is a container type, define the inner message.
-      if (isContainer(element)) {
+      // Per spec, the fixed Extension.url on a top-level extension must matchthe
+      // StructureDefinition
+      // url.  Since that is already added to the message via the fhir_structure_definition_url,
+      // we can skip over it here.
+      if (element.getBase().getPath().getValue().equals("Extension.url")
+          && element.getFixed().hasUri()) {
+        // TODO(nickgeorge): This annotation is redundant with fhir_structure_definition_url.
+        // Deprecated it, and remove it once tooling is switched to use structure definition url.
+        builder
+            .getOptionsBuilder()
+            .setExtension(Annotations.fhirExtensionUrl, element.getFixed().getUri().getValue());
+        continue;
+      }
+
+      // If this is a container type, or a complex internal extension, define the inner message.
+      if (isContainer(element) || isComplexInternalExtension(element, elementList)) {
         builder.addNestedType(generateMessage(element, elementList, DescriptorProto.newBuilder()));
       }
 
@@ -390,8 +441,8 @@ public class ProtoGenerator {
             "Illegal field has multiple types but is not a Choice Type:\n" + element);
       }
 
-      if (isTypedExtension(element)) {
-        // Defer this field until the end of the message.
+      if (lastIdToken(element.getId().getValue()).slicename != null) {
+        // This is a slie this field until the end of the message.
         deferredElements.add(element);
       } else {
         buildAndAddField(element, elementList, nextTag++, builder);
@@ -422,27 +473,22 @@ public class ProtoGenerator {
     }
   }
 
-  private static List<ElementDefinition> getFieldsToPrint(
-      List<ElementDefinition> allElements, ElementDefinition parentElement) {
-    List<String> messagePathParts =
-        Splitter.on('.').splitToList(parentElement.getPath().getValue());
-    return allElements
+  private static List<ElementDefinition> getDirectChildren(
+      ElementDefinition element, List<ElementDefinition> elementList) {
+    List<String> messagePathParts = Splitter.on('.').splitToList(element.getId().getValue());
+    return elementList
         .stream()
         .filter(
-            element -> {
-              if (element.getTypeCount() == 1
-                  && element.getType(0).getCode().getValue().isEmpty()) {
-                // This is a primitive value field.  Ignore it, as it should be already handled by
-                // generatePrimitiveValue.
-                return false;
-              }
-              List<String> parts = Splitter.on('.').splitToList(element.getPath().getValue());
-              if (!element.getPath().getValue().startsWith(parentElement.getPath().getValue() + ".")
-                  || parts.size() != messagePathParts.size() + 1) {
-                // This field doesn't "live" on the parent message. It's irrelevant here.
-                return false;
-              }
-              return true;
+            candidateElement -> {
+              List<String> parts =
+                  Splitter.on('.').splitToList(candidateElement.getId().getValue());
+              // To be a direct child, the id should start with the parent id, and add a single
+              // additional token.
+              return candidateElement
+                      .getId()
+                      .getValue()
+                      .startsWith(element.getId().getValue() + ".")
+                  && parts.size() == messagePathParts.size() + 1;
             })
         .collect(Collectors.toList());
   }
@@ -452,7 +498,8 @@ public class ProtoGenerator {
 
   /** Generate the primitive value part of a datatype. */
   private void generatePrimitiveValue(StructureDefinition def, DescriptorProto.Builder builder) {
-    String valueFieldId = def.getId().getValue() + ".value";
+    String defId = def.getId().getValue();
+    String valueFieldId = defId + ".value";
     // Find the value field.
     ElementDefinition valueElement;
     try {
@@ -487,12 +534,15 @@ public class ProtoGenerator {
     ElementDefinition elementWithType =
         valueElement.toBuilder().clearType().addType(STRING_TYPE).build();
     FieldDescriptorProto field =
-        buildField(elementWithType, null /* no nested types */, 1 /* nextTag */);
+        buildField(
+            elementWithType,
+            new ArrayList<ElementDefinition>() /* no child ElementDefinition */,
+            1 /* nextTag */);
     if (field != null) {
-      if (TIME_LIKE_PRECISION_MAP.containsKey(def.getId().getValue())) {
+      if (TIME_LIKE_PRECISION_MAP.containsKey(defId)) {
         // Handle time-like types differently.
         EnumDescriptorProto.Builder enumBuilder = PRECISION_ENUM.toBuilder();
-        for (String value : TIME_LIKE_PRECISION_MAP.get(def.getId().getValue())) {
+        for (String value : TIME_LIKE_PRECISION_MAP.get(defId)) {
           enumBuilder.addValue(
               EnumValueDescriptorProto.newBuilder()
                   .setName(value)
@@ -505,7 +555,7 @@ public class ProtoGenerator {
                 .clearTypeName()
                 .setType(FieldDescriptorProto.Type.TYPE_INT64)
                 .setName("value_us"));
-        if (TYPES_WITH_TIMEZONE.contains(def.getId().getValue())) {
+        if (TYPES_WITH_TIMEZONE.contains(defId)) {
           builder.addField(TIMEZONE_FIELD);
         }
         builder.addField(
@@ -513,20 +563,14 @@ public class ProtoGenerator {
                 .setName("precision")
                 .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
                 .setType(FieldDescriptorProto.Type.TYPE_ENUM)
-                .setTypeName(
-                    "."
-                        + packageName
-                        + "."
-                        + normalizeTypeName(def.getId().getValue())
-                        + ".Precision")
+                .setTypeName("." + packageName + "." + normalizeTypeName(defId) + ".Precision")
                 .setNumber(builder.getFieldCount() + 1));
       } else {
         // Handle non-time-like types.
         // If they don't explicitly appear in the PRIMITIVE_TYPE_OVERRIDES, they are assumed
         // to be of type TYPE_STRING.
         FieldDescriptorProto.Type primitiveType =
-            PRIMITIVE_TYPE_OVERRIDES.getOrDefault(
-                def.getId().getValue(), FieldDescriptorProto.Type.TYPE_STRING);
+            PRIMITIVE_TYPE_OVERRIDES.getOrDefault(defId, FieldDescriptorProto.Type.TYPE_STRING);
         builder.addField(field.toBuilder().clearTypeName().setType(primitiveType));
       }
     }
@@ -541,11 +585,21 @@ public class ProtoGenerator {
     if (element.getTypeCount() != 1) {
       return false;
     }
-    if (element.getPath().getValue().indexOf('.') == -1) {
+    if (element.getId().getValue().indexOf('.') == -1) {
       return true;
     }
     String type = element.getType(0).getCode().getValue();
     return type.equals("BackboneElement") || type.equals("Element");
+  }
+
+  /** Returns true if this is an extension slice that is NOT defined by an external profile. */
+  private static boolean isInternalExtensionSlice(ElementDefinition element) {
+    if (element.getTypeCount() != 1) {
+      return false;
+    }
+    String type = element.getType(0).getCode().getValue();
+    IdToken idToken = lastIdToken(element.getId().getValue());
+    return type.equals("Extension") && idToken.slicename != null && !isTypedExtension(element);
   }
 
   /**
@@ -584,56 +638,55 @@ public class ProtoGenerator {
   }
 
   private static boolean isChoiceType(ElementDefinition element) {
-    return element.getPath().getValue().endsWith("[x]");
+    return lastIdToken(element.getId().getValue()).isChoiceType;
   }
 
   /** Extract the type of a container field, possibly by reference. */
   private static String getContainerType(
       ElementDefinition element, List<ElementDefinition> elementList) {
     if (element.hasContentReference()) {
-      try {
-        // Find the named element which was referenced. We'll use the type of that element.
-        ElementDefinition referencedElement =
-            elementList
-                .stream()
-                .filter(
-                    e ->
-                        element.getContentReference().getValue().equals("#" + e.getId().getValue()))
-                .filter(e -> isContainer(e))
-                .findFirst()
-                .get();
-        return getContainerType(referencedElement, elementList);
-      } catch (NoSuchElementException e) {
+      // Find the named element which was referenced. We'll use the type of that element.
+      // Strip the first character from the content reference since it is a '#'
+      String referencedElementId = element.getContentReference().getValue().substring(1);
+      ElementDefinition referencedElement =
+          getElementDefinitionById(elementList, referencedElementId)
+              .orElseThrow(
+                  () ->
+                      new IllegalArgumentException(
+                          "Undefined reference: " + element.getContentReference()));
+      if (!isContainer(referencedElement)) {
         throw new IllegalArgumentException(
-            "Undefined reference: " + element.getContentReference(), e);
+            "ContentReference does not reference a container: " + element.getContentReference());
       }
+      return getContainerType(referencedElement, elementList);
     }
 
-    // Any part of the path could have been renamed. We need to translate them all.
+    // Any part of the path could have been renamed via explicit type name extensions.
+    // We need to translate them all.
     List<String> typeNameParts = new ArrayList<>();
     List<String> elementPathParts = new ArrayList<>();
-    for (String part : Splitter.on('.').split(element.getPath().getValue())) {
+    for (String part : Splitter.on('.').split(element.getId().getValue())) {
       elementPathParts.add(part);
       String path = Joiner.on('.').join(elementPathParts);
       ElementDefinition pathElement =
           elementList
               .stream()
-              .filter(e -> e.getPath().getValue().equals(path))
+              .filter(e -> e.getId().getValue().equals(path))
               .findFirst()
               .orElseThrow(
                   () ->
                       new IllegalArgumentException(
                           "No elements with path: " + path + "on element: " + element.getId()));
-      List<ElementDefinitionExplicitTypeName> typeNames =
+      List<ElementDefinitionExplicitTypeName> explicitTypeNames =
           ExtensionWrapper.fromExtensionsIn(pathElement)
               .getMatchingExtensions(ElementDefinitionExplicitTypeName.getDefaultInstance());
       String typeName;
-      if (!typeNames.isEmpty()) {
-        typeName = typeNames.get(0).getValueString().getValue();
+      if (explicitTypeNames.isEmpty()) {
+        // There were no renamings from explicit type name extensions
+        typeName = normalizeTypeName(getElementName(pathElement));
       } else {
-        typeName =
-            normalizeTypeName(
-                part.endsWith("[x]") ? part.substring(0, part.length() - "[x]".length()) : part);
+        // There was an explicit renaming for this type
+        typeName = explicitTypeNames.get(0).getValueString().getValue();
       }
       if (typeNameParts.contains(typeName)
           || (!typeNameParts.isEmpty() && (typeName.equals("Timing") || typeName.equals("Age")))) {
@@ -653,6 +706,8 @@ public class ProtoGenerator {
     if (isContainer(element) || element.hasContentReference() || isChoiceType(element)) {
       // Get the type for this container, possibly from a named reference to another element.
       return getContainerType(element, elementList);
+    } else if (isInternalExtensionSlice(element)) {
+      return getInternalExtensionType(element, elementList);
     } else if (element.getType(0).getCode().getValue().equals("Reference")) {
       return USE_TYPED_REFERENCES ? getTypedReferenceName(element.getTypeList()) : "Reference";
     } else {
@@ -729,7 +784,7 @@ public class ProtoGenerator {
     }
 
     if (isTypedExtension(element)) {
-      // This is an extension with a type defined by a profile.
+      // This is an extension with a type defined by an external profile.
       // If we know about it, we'll inline a field for it.
       // Otherwise, we'll return null here, which means it'll get ignored
       String profileUrl = element.getType(0).getProfile().getValue();
@@ -738,32 +793,64 @@ public class ProtoGenerator {
         // Return null, indicating that we shouldn't generate a proto field for this extension.
         return null;
       }
-
       String fieldTypeString = knownStructureDefinitions.get(profileUrl);
       String fieldName = element.getSliceName().getValue();
       options.setExtension(
-          Annotations.fieldDescription,
-          options.getExtension(Annotations.fieldDescription)
-              + "\nThis is a FHIR extension that has been inlined based on the profile for this "
-              + "resource.");
-      options.setExtension(Annotations.fhirInlinedExtensionUrl, profileUrl);
+          Annotations.fhirInlinedExtensionUrl, element.getType(0).getProfile().getValue());
       return buildFieldInternal(fieldName, fieldTypeString, nextTag, repeated, options.build())
           .build();
     }
 
-    // Extract the name of the field.
-    String fieldName =
-        element.getPath().getValue().substring(element.getPath().getValue().lastIndexOf('.') + 1);
-    // Is this field a choice type?
+    String fieldTypeString = getFieldType(element, elementList);
+    if (isInternalExtensionSlice(element) && reservedFieldNames.containsKey(fieldTypeString)) {
+      // This is a internally-defined extension slice that will be inlined as a nested type.
+      // Since extensions are sliced on url, the url for the extension matches the slicename.
+      // Since the field name is the slice name wherever possible, annotating the field with the
+      // inlined extension url is redundant.
+      // If, however, the slicename is a reserved word like "string" or "optional",
+      // the field will be renamed.  In this case, add the inlined extension url as an annotation.
+      String url =
+          getElementDefinitionById(elementList, element.getId().getValue() + ".url")
+              .orElseThrow(
+                  () ->
+                      new IllegalArgumentException(
+                          "Internal Extension has no url: " + element.getId().getValue()))
+              .getFixed()
+              .getUri()
+              .getValue();
+      options.setExtension(Annotations.fhirInlinedExtensionUrl, url);
+    }
+
     if (isChoiceType(element)) {
-      fieldName = fieldName.substring(0, fieldName.length() - "[x]".length());
       options.setExtension(Annotations.isChoiceType, true);
     }
 
-    String fieldTypeString = getFieldType(element, elementList);
-
-    return buildFieldInternal(fieldName, fieldTypeString, nextTag, repeated, options.build())
+    return buildFieldInternal(
+            getElementName(element), fieldTypeString, nextTag, repeated, options.build())
         .build();
+  }
+
+  /**
+   * Returns the field name that should be used for an element. If element is a slice, uses that
+   * slice name. Since the id token slice name is all-lowercase, uses the SliceName field on the
+   * element. Otherwise, uses the last token's pathpart. Logs a warning if the slice name in the id
+   * token does not match the SliceName field. TODO(nickgeorge): Handle reslices. Could be as easy
+   * as adding it to the end of SliceName.
+   */
+  private static String getElementName(ElementDefinition element) {
+    IdToken lastToken = lastIdToken(element.getId().getValue());
+    if (lastToken.slicename == null) {
+      return lastToken.pathpart;
+    }
+    if (!lastToken.slicename.equalsIgnoreCase(element.getSliceName().getValue())) {
+      // TODO(nickgeorge): pull this into a common validator that runs ealier.
+      System.out.println(
+          "Warning: Inconsistent slice name for element with id "
+              + element.getId().getValue()
+              + " and slicename "
+              + element.getSliceName());
+    }
+    return element.getSliceName().getValue();
   }
 
   /** Add a choice type field to the proto. */
@@ -909,29 +996,57 @@ public class ProtoGenerator {
 
   // If an extension consists of a single primitive type, returns that type as a string.
   // Otherwise, returns null.
-  private static String getSimpleExtensionType(StructureDefinition def) {
+  private static String getSimpleExtensionDefinitionType(StructureDefinition def) {
     if (!isTypedExtensionDefinition(def)) {
       return null;
     }
-    for (ElementDefinition element : def.getSnapshot().getElementList()) {
-      if (element.getBase().getPath().getValue().equals("Extension.value[x]")) {
-        if (element.getTypeCount() != 1) {
+    return getSimpleInternalExtensionType(
+        def.getSnapshot().getElement(0), def.getSnapshot().getElementList());
+  }
+
+  private static String getSimpleInternalExtensionType(
+      ElementDefinition element, List<ElementDefinition> elementList) {
+    for (ElementDefinition child : getDirectChildren(element, elementList)) {
+      if (child.getBase().getPath().getValue().equals("Extension.value[x]")) {
+        if (child.getTypeCount() != 1) {
           return null;
         }
-        return normalizeTypeName(element.getType(0).getCode().getValue());
+        return normalizeTypeName(child.getType(0).getCode().getValue());
       }
     }
     return null;
   }
 
-  public static boolean isSimpleExtension(StructureDefinition def) {
-    return getSimpleExtensionType(def) != null;
+  private static boolean isSimpleInternalExtension(
+      ElementDefinition element, List<ElementDefinition> elementList) {
+    return getSimpleInternalExtensionType(element, elementList) != null;
+  }
+
+  private static boolean isComplexInternalExtension(
+      ElementDefinition element, List<ElementDefinition> elementList) {
+    return isInternalExtensionSlice(element) && !isSimpleInternalExtension(element, elementList);
+  }
+
+  private static boolean isSimpleExtensionDefinition(StructureDefinition def) {
+    return getSimpleExtensionDefinitionType(def) != null;
   }
 
   /**
-   * Derives a message name for the typed extension. Uses the name field from the
-   * StructureDefinition. If the context field indicates a single Element type the extension should
-   * apply to, uses that as a prefix.
+   * Returns the type that should be used for an internal extension. If this is a simple internal
+   * extension, uses the appropriate primitive type. If this is a complex interanl extension, treats
+   * the element like a backbone container.
+   */
+  private static String getInternalExtensionType(
+      ElementDefinition element, List<ElementDefinition> elementList) {
+    return isSimpleInternalExtension(element, elementList)
+        ? getSimpleInternalExtensionType(element, elementList)
+        : getContainerType(element, elementList);
+  }
+
+  /**
+   * Derives a message type for a Profile. Uses the name field from the StructureDefinition. If the
+   * StructureDefinition has a context indicating a single Element type, that type is used as a
+   * prefix. If the element is a simple extension, returns the type defined by the extension.
    */
   private static String getProfileTypeName(StructureDefinition def) {
     String name = normalizeTypeName(def.getName().getValue());

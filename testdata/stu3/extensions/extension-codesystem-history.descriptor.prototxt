@@ -20,23 +20,82 @@ field {
   }
 }
 field {
-  name: "extension"
-  number: 3
+  name: "name"
+  number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.String"
   options {
     [google.fhir.stu3.proto.field_description]: "The name of this set of history entries"
   }
 }
 field {
-  name: "extension"
-  number: 4
+  name: "revision"
+  number: 5
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.CodeSystemHistory.Revision"
   options {
     [google.fhir.stu3.proto.field_description]: "Audit of all changes for a history entry"
+  }
+}
+nested_type {
+  name: "Revision"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "date"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.DateTime"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Date the change was made"
+    }
+  }
+  field {
+    name: "id"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Version marker after the change was made"
+    }
+  }
+  field {
+    name: "author"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.field_description]: "Who made the change"
+    }
+  }
+  field {
+    name: "notes"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Information about the change"
+    }
+  }
+  options {
+    [google.fhir.stu3.proto.fhir_extension_url]: "revision"
   }
 }
 options {

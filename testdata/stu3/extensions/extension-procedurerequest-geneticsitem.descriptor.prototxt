@@ -20,42 +20,42 @@ field {
   }
 }
 field {
-  name: "extension"
-  number: 3
+  name: "code"
+  number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Code to indicate the item (test, panel or sequence variant) being ordered"
   }
 }
 field {
-  name: "extension"
-  number: 4
+  name: "genetics_observation"
+  number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Indicate the genetic variant ordered to be tested"
   }
 }
 field {
-  name: "extension"
-  number: 5
+  name: "specimen"
+  number: 6
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "If this item relates to specific specimens"
   }
 }
 field {
-  name: "extension"
-  number: 6
+  name: "status"
+  number: 7
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.Code"
   options {
     [google.fhir.stu3.proto.field_description]: "proposed | draft | planned | requested | received | accepted | in-progress | review | completed | cancelled | suspended | rejected | failed"
   }

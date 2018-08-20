@@ -20,32 +20,32 @@ field {
   }
 }
 field {
-  name: "extension"
-  number: 3
+  name: "n_c_t"
+  number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.String"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "National Clinical Trial number"
   }
 }
 field {
-  name: "extension"
-  number: 4
+  name: "period"
+  number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.Period"
   options {
     [google.fhir.stu3.proto.field_description]: "The period of participation in the clinical trial"
   }
 }
 field {
-  name: "extension"
-  number: 5
+  name: "reason"
+  number: 6
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
     [google.fhir.stu3.proto.field_description]: "The reason for participation in the clinical trial"
   }

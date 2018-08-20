@@ -286,21 +286,21 @@ field {
   }
 }
 field {
-  name: "component"
+  name: "systolic_b_p"
   number: 30
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Bp.Component"
+  type_name: ".google.fhir.stu3.proto.Bp.SystolicBP"
   options {
     [google.fhir.stu3.proto.field_description]: "Used when reporting systolic and diastolic blood pressure."
   }
 }
 field {
-  name: "component"
+  name: "diastolic_b_p"
   number: 31
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Bp.Component"
+  type_name: ".google.fhir.stu3.proto.Bp.DiastolicBP"
   options {
     [google.fhir.stu3.proto.field_description]: "Used when reporting systolic and diastolic blood pressure."
   }
@@ -480,6 +480,9 @@ nested_type {
 }
 nested_type {
   name: "Component"
+}
+nested_type {
+  name: "SystolicBP"
   field {
     name: "id"
     number: 1
@@ -554,87 +557,6 @@ nested_type {
   field {
     name: "reference_range"
     number: 8
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Bp.ReferenceRange"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation of component result"
-    }
-  }
-  field {
-    name: "id"
-    number: 9
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
-    options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
-    }
-  }
-  field {
-    name: "extension"
-    number: 10
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Extension"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
-    }
-  }
-  field {
-    name: "modifier_extension"
-    number: 11
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Extension"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
-    }
-  }
-  field {
-    name: "code"
-    number: 12
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
-    options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Type of component observation (code / type)"
-    }
-  }
-  field {
-    name: "value_quantity"
-    number: 13
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Vital Sign Value recorded with UCUM"
-    }
-  }
-  field {
-    name: "data_absent_reason"
-    number: 14
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Why the component result is missing"
-    }
-  }
-  field {
-    name: "interpretation"
-    number: 15
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
-    options {
-      [google.fhir.stu3.proto.field_description]: "High, low, normal, etc."
-    }
-  }
-  field {
-    name: "reference_range"
-    number: 16
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Bp.ReferenceRange"
@@ -644,7 +566,7 @@ nested_type {
   }
 }
 nested_type {
-  name: "Component"
+  name: "DiastolicBP"
   field {
     name: "id"
     number: 1
@@ -719,252 +641,6 @@ nested_type {
   field {
     name: "reference_range"
     number: 8
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Bp.ReferenceRange"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation of component result"
-    }
-  }
-  field {
-    name: "id"
-    number: 9
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
-    options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
-    }
-  }
-  field {
-    name: "extension"
-    number: 10
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Extension"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
-    }
-  }
-  field {
-    name: "modifier_extension"
-    number: 11
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Extension"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
-    }
-  }
-  field {
-    name: "code"
-    number: 12
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
-    options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Type of component observation (code / type)"
-    }
-  }
-  field {
-    name: "value_quantity"
-    number: 13
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Vital Sign Value recorded with UCUM"
-    }
-  }
-  field {
-    name: "data_absent_reason"
-    number: 14
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Why the component result is missing"
-    }
-  }
-  field {
-    name: "interpretation"
-    number: 15
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
-    options {
-      [google.fhir.stu3.proto.field_description]: "High, low, normal, etc."
-    }
-  }
-  field {
-    name: "reference_range"
-    number: 16
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Bp.ReferenceRange"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation of component result"
-    }
-  }
-}
-nested_type {
-  name: "Component"
-  field {
-    name: "id"
-    number: 1
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
-    options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
-    }
-  }
-  field {
-    name: "extension"
-    number: 2
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Extension"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
-    }
-  }
-  field {
-    name: "modifier_extension"
-    number: 3
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Extension"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
-    }
-  }
-  field {
-    name: "code"
-    number: 4
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
-    options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Type of component observation (code / type)"
-    }
-  }
-  field {
-    name: "value_quantity"
-    number: 5
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Vital Sign Value recorded with UCUM"
-    }
-  }
-  field {
-    name: "data_absent_reason"
-    number: 6
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Why the component result is missing"
-    }
-  }
-  field {
-    name: "interpretation"
-    number: 7
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
-    options {
-      [google.fhir.stu3.proto.field_description]: "High, low, normal, etc."
-    }
-  }
-  field {
-    name: "reference_range"
-    number: 8
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Bp.ReferenceRange"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation of component result"
-    }
-  }
-  field {
-    name: "id"
-    number: 9
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
-    options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
-    }
-  }
-  field {
-    name: "extension"
-    number: 10
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Extension"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
-    }
-  }
-  field {
-    name: "modifier_extension"
-    number: 11
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Extension"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
-    }
-  }
-  field {
-    name: "code"
-    number: 12
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
-    options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Type of component observation (code / type)"
-    }
-  }
-  field {
-    name: "value_quantity"
-    number: 13
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Vital Sign Value recorded with UCUM"
-    }
-  }
-  field {
-    name: "data_absent_reason"
-    number: 14
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Why the component result is missing"
-    }
-  }
-  field {
-    name: "interpretation"
-    number: 15
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
-    options {
-      [google.fhir.stu3.proto.field_description]: "High, low, normal, etc."
-    }
-  }
-  field {
-    name: "reference_range"
-    number: 16
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Bp.ReferenceRange"

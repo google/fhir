@@ -203,51 +203,8 @@ field {
   }
 }
 field {
-  name: "result"
-  number: 21
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
-  options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Cholesterol Result"
-  }
-}
-field {
-  name: "result"
-  number: 22
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
-  options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Triglyceride Result"
-  }
-}
-field {
-  name: "result"
-  number: 23
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
-  options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "HDL Cholesterol Result"
-  }
-}
-field {
-  name: "result"
-  number: 24
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
-  options {
-    [google.fhir.stu3.proto.field_description]: "LDL Cholesterol result, if reported"
-  }
-}
-field {
   name: "imaging_study"
-  number: 25
+  number: 21
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
@@ -257,7 +214,7 @@ field {
 }
 field {
   name: "image"
-  number: 26
+  number: 22
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Lipidprofile.Image"
@@ -267,7 +224,7 @@ field {
 }
 field {
   name: "conclusion"
-  number: 27
+  number: 23
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
@@ -277,12 +234,55 @@ field {
 }
 field {
   name: "presented_form"
-  number: 29
+  number: 25
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Attachment"
   options {
     [google.fhir.stu3.proto.field_description]: "Entire report as issued"
+  }
+}
+field {
+  name: "cholesterol"
+  number: 26
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Cholesterol Result"
+  }
+}
+field {
+  name: "triglyceride"
+  number: 27
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "Triglyceride Result"
+  }
+}
+field {
+  name: "h_d_l_cholesterol"
+  number: 28
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.field_description]: "HDL Cholesterol Result"
+  }
+}
+field {
+  name: "l_d_l_cholesterol"
+  number: 29
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Reference"
+  options {
+    [google.fhir.stu3.proto.field_description]: "LDL Cholesterol result, if reported"
   }
 }
 nested_type {

@@ -20,11 +20,11 @@ field {
   }
 }
 field {
-  name: "extension"
-  number: 3
+  name: "day"
+  number: 4
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.Integer"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "What day to perform"

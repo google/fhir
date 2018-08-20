@@ -249,7 +249,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "AssessedCondition\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.field_description]: "AssessedCondition"
     [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition"
   }
 }
@@ -260,7 +260,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "FamilyHistory\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.field_description]: "FamilyHistory"
     [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory"
   }
 }
@@ -269,9 +269,9 @@ field {
   number: 28
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  type_name: ".google.fhir.stu3.proto.DiagnosticReportAnalysis"
   options {
-    [google.fhir.stu3.proto.field_description]: "Analysis\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.field_description]: "Analysis"
     [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis"
   }
 }

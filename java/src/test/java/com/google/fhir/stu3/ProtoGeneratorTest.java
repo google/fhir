@@ -1402,4 +1402,28 @@ public class ProtoGeneratorTest {
   public void generateElementDefinitionRegex() throws Exception {
     testGeneratedExtension("extension-structuredefinition-regex");
   }
+
+  /** Test generating the patient-clinicaltrial extension. */
+  @Test
+  public void generatePatientClinicalTrial() throws Exception {
+    testGeneratedExtension("extension-patient-clinicaltrial");
+  }
+
+  /** Test generating the elementdefinition-allowedunits extension. */
+  @Test
+  public void generateElementDefinitionAllowedUnits() throws Exception {
+    testGeneratedExtension("extension-elementdefinition-allowedunits");
+  }
+
+  /** Test generating the codename-history extension. */
+  @Test
+  public void generateCodesystemHistory() throws Exception {
+    testGeneratedExtension("extension-codesystem-history");
+  }
+
+  /** Test generating the extension-timing-daysofcycle extension. */
+  @Test
+  public void generateTimingDaysofcycle() throws Exception {
+    testGeneratedExtension("extension-timing-daysofcycle");
+  }
 }

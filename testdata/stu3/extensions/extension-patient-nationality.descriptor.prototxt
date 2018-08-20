@@ -20,21 +20,21 @@ field {
   }
 }
 field {
-  name: "extension"
-  number: 3
+  name: "code"
+  number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
     [google.fhir.stu3.proto.field_description]: "Nationality Code"
   }
 }
 field {
-  name: "extension"
-  number: 4
+  name: "period"
+  number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.Period"
   options {
     [google.fhir.stu3.proto.field_description]: "Nationality Period"
   }

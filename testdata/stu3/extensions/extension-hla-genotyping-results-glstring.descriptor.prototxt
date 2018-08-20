@@ -20,21 +20,21 @@ field {
   }
 }
 field {
-  name: "extension"
-  number: 3
+  name: "url"
+  number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.Uri"
   options {
     [google.fhir.stu3.proto.field_description]: "glstring.url"
   }
 }
 field {
-  name: "extension"
-  number: 4
+  name: "text"
+  number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.stu3.proto.String"
   options {
     [google.fhir.stu3.proto.field_description]: "glstring.text"
   }

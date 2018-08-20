@@ -350,9 +350,9 @@ field {
   number: 35
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  type_name: ".google.fhir.stu3.proto.DiagnosticReportItem"
   options {
-    [google.fhir.stu3.proto.field_description]: "The items the orderer requested\nThis is a FHIR extension that has been inlined based on the profile for this resource."
+    [google.fhir.stu3.proto.field_description]: "The items the orderer requested"
     [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/procedurerequest-geneticsItem"
   }
 }

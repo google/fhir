@@ -40,6 +40,78 @@ message ElementDefinitionBindingName {
   String value_string = 3;
 }
 
+// Auto-generated from StructureDefinition for allowedUnits.
+// Units to use for measured value.
+// See http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits
+message ElementDefinitionAllowedUnits {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_extension_url) =
+      "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits";
+  option (fhir_profile_base) = "Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  message Value {
+    oneof value {
+      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2;
+    }
+  }
+  Value value = 3
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+}
+
+// Auto-generated from StructureDefinition for DNASequenceVariantName.
+// HGVS nomenclature for observed DNA sequence variant.
+// See
+// http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName
+message ObservationDNASequenceVariantName {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_extension_url) =
+      "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName";
+  option (fhir_profile_base) = "Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  CodeableConcept value_codeable_concept = 3;
+}
+
+// Auto-generated from StructureDefinition for clinicalTrial.
+// The patient's participation in clinical trials.
+// See http://hl7.org/fhir/StructureDefinition/patient-clinicalTrial
+message PatientClinicalTrial {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_extension_url) =
+      "http://hl7.org/fhir/StructureDefinition/patient-clinicalTrial";
+  option (fhir_profile_base) = "Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/patient-clinicalTrial";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 2;
+
+  // National Clinical Trial number
+  String n_c_t = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The period of participation in the clinical trial
+  Period period = 5;
+
+  // The reason for participation in the clinical trial
+  CodeableConcept reason = 6;
+}
+
 // Auto-generated from StructureDefinition for explicit-type-name.
 // Advisory - name of Type for implementations.
 // See
@@ -75,4 +147,25 @@ message ElementDefinitionRegex {
 
   // Value of extension
   String value_string = 3;
+}
+
+// Auto-generated from StructureDefinition for daysOfCycle.
+// Days on which the action should be performed.
+// See http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle
+message DaysOfCycle {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_extension_url) =
+      "http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle";
+  option (fhir_profile_base) = "Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 2;
+
+  // What day to perform
+  repeated Integer day = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 }

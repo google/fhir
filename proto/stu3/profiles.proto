@@ -228,29 +228,9 @@ message ObservationGenetics {
   repeated Component component = 29;
 
   // DNA sequence variant
-  // This is a FHIR extension that has been inlined based on the profile for
-  // this resource.
   CodeableConcept d_n_a_sequence_variant_name = 30 [
     (fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName"
   ];
 }
 
-// Auto-generated from StructureDefinition for DNASequenceVariantName.
-// HGVS nomenclature for observed DNA sequence variant.
-// See
-// http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName
-message ObservationDNASequenceVariantName {
-  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_extension_url) =
-      "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName";
-  option (fhir_profile_base) = "Extension";
-  option (fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName";
-
-  // xml:id (or equivalent in JSON)
-  String id = 1;
-
-  // Value of extension
-  CodeableConcept value_codeable_concept = 3;
-}
