@@ -39,6 +39,7 @@ cc_library(
     deps = [
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
+        "//cc/google/fhir/systems",
         "//proto/stu3:annotations_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",
@@ -54,6 +55,7 @@ cc_test(
     srcs = ["util_test.cc"],
     deps = [
         ":util",
+        "//cc/google/fhir/systems",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/stu3:codes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",

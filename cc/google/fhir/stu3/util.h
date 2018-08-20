@@ -18,6 +18,7 @@
 #define GOOGLE_FHIR_STU3_UTIL_H_
 
 #include "google/protobuf/message.h"
+#include "absl/strings/string_view.h"
 #include "absl/time/time.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
@@ -27,6 +28,17 @@
 namespace google {
 namespace fhir {
 namespace stu3 {
+
+using std::string;
+using ::google::fhir::stu3::proto::CodeableConcept;
+
+// Extract code value for a given system code. Return as soon as we find one.
+StatusOr<string> ExtractCodeBySystem(const CodeableConcept& codeable_concept,
+                                     absl::string_view system_value);
+
+// Extract the icd code for the given schemes.
+StatusOr<string> ExtractIcdCode(const CodeableConcept& codeable_concept,
+                                const std::vector<string>& schemes);
 
 template <typename R>
 stu3::proto::Meta* MutableMetadataFromResource(R* resource) {

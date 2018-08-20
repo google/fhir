@@ -16,6 +16,7 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/time/time.h"
+#include "google/fhir/systems/systems.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
@@ -33,6 +34,7 @@ using ::google::fhir::stu3::proto::ContainedResource;
 using ::google::fhir::stu3::proto::Date;
 using ::google::fhir::stu3::proto::DateTime;
 using ::google::fhir::stu3::proto::Encounter;
+using ::google::fhir::systems::kIcd9Schemes;
 using ::google::fhir::testutil::EqualsProto;
 
 TEST(GetTimeFromTimelikeElement, DateTime) {
@@ -99,6 +101,49 @@ TEST(SetContainedResource, InvalidType) {
             ::tensorflow::errors::InvalidArgument(
                 "Resource type DateTime not found in "
                 "fhir::Bundle::Entry::resource"));
+}
+
+TEST(ExtractIcdCodeTest, ExtractIcd9) {
+  const char kSystemCode[] = "http://hl7.org/fhir/sid/icd-9-cm";
+  const char kCode[] = "1.1";
+  CodeableConcept concept;
+  auto coding = concept.add_coding();
+  coding->mutable_system()->set_value(kSystemCode);
+  coding->mutable_code()->set_value(kCode);
+  // Shouldn't be extracted.
+  coding = concept.add_coding();
+  coding->mutable_system()->set_value("random system");
+  coding->mutable_code()->set_value("1.2");
+  string code;
+  auto result = ExtractIcdCode(concept, *kIcd9Schemes);
+  ASSERT_TRUE(result.ok());
+  EXPECT_EQ(kCode, result.ValueOrDie());
+}
+
+TEST(ExtractIcdCodeTest, ExtractIcd9_NotFound) {
+  CodeableConcept concept;
+  auto coding = concept.add_coding();
+  coding->mutable_system()->set_value("random system");
+  coding->mutable_code()->set_value("1.2");
+  string code;
+  auto result = ExtractIcdCode(concept, *kIcd9Schemes);
+  ASSERT_FALSE(result.ok());
+  EXPECT_EQ(::tensorflow::errors::Code::NOT_FOUND, result.status().code());
+}
+
+TEST(ExtractIcdCodeTest, ExtractIcd9_MultiCode) {
+  CodeableConcept concept;
+  auto coding = concept.add_coding();
+  coding->mutable_system()->set_value("http://hl7.org/fhir/sid/icd-9-cm");
+  coding->mutable_code()->set_value("1.1");
+  coding = concept.add_coding();
+  coding->mutable_system()->set_value(
+      "http://hl7.org/fhir/sid/icd-9-cm/diagnosis");
+  coding->mutable_code()->set_value("1.2");
+  string code;
+  auto result = ExtractIcdCode(concept, *kIcd9Schemes);
+  ASSERT_FALSE(result.ok());
+  EXPECT_EQ(::tensorflow::errors::Code::ALREADY_EXISTS, result.status().code());
 }
 
 }  // namespace

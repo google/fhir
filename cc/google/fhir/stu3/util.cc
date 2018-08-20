@@ -22,6 +22,7 @@
 #include "absl/strings/str_cat.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/systems/systems.h"
 #include "proto/stu3/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
@@ -31,8 +32,53 @@ namespace google {
 namespace fhir {
 namespace stu3 {
 
-using ::google::protobuf::Message;
 using ::google::fhir::stu3::proto::ContainedResource;
+using ::google::protobuf::Message;
+
+using std::string;
+StatusOr<string> ExtractCodeBySystem(
+    const stu3::proto::CodeableConcept& codeable_concept,
+    absl::string_view system_value) {
+  for (int i = 0; i < codeable_concept.coding_size(); i++) {
+    auto coding = codeable_concept.coding(i);
+    if (coding.has_system() && coding.has_code() &&
+        coding.system().value() == system_value) {
+      return coding.code().value();
+    }
+  }
+
+  return ::tensorflow::errors::NotFound(
+      "Cannot find a value for the corresponding system code.");
+}
+
+StatusOr<string> ExtractIcdCode(
+    const stu3::proto::CodeableConcept& codeable_concept,
+    const std::vector<string>& schemes) {
+  bool found_response = false;
+  StatusOr<string> result;
+  for (int i = 0; i < schemes.size(); i++) {
+    StatusOr<string> s = ExtractCodeBySystem(codeable_concept, schemes[i]);
+
+    if (s.status().code() == ::tensorflow::errors::Code::ALREADY_EXISTS) {
+      // Multiple codes, so we can return an error already.
+      return s;
+    } else if (s.ok()) {
+      if (found_response) {
+        // We found _another_ code. That shouldn't have happened.
+        return ::tensorflow::errors::AlreadyExists("Found more than one code");
+      } else {
+        result = s;
+        found_response = true;
+      }
+    }
+  }
+  if (found_response) {
+    return result;
+  } else {
+    return ::tensorflow::errors::NotFound(
+        "No ICD code with the provided schemes in concept.");
+  }
+}
 
 Status SetContainedResource(const Message& resource,
                             ContainedResource* contained) {
