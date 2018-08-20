@@ -56,7 +56,7 @@ StatusOr<string> ExtractIcdCode(
     const std::vector<string>& schemes) {
   bool found_response = false;
   StatusOr<string> result;
-  for (int i = 0; i < schemes.size(); i++) {
+  for (size_t i = 0; i < schemes.size(); i++) {
     StatusOr<string> s = ExtractCodeBySystem(codeable_concept, schemes[i]);
 
     if (s.status().code() == ::tensorflow::errors::Code::ALREADY_EXISTS) {
