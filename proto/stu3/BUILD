@@ -2,6 +2,8 @@ package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
 
+exports_files(["version_config.textproto"])
+
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 
 proto_library(
@@ -202,6 +204,25 @@ py_proto_library(
         ":datatypes_py_pb2",
         ":metadatatypes_py_pb2",
     ],
+)
+
+proto_library(
+    name = "version_config_proto",
+    srcs = [
+        "version_config.proto",
+    ],
+)
+
+cc_proto_library(
+    name = "version_config_cc_proto",
+    deps = [":version_config_proto"],
+)
+
+py_proto_library(
+    name = "version_config_py_pb2",
+    srcs = ["version_config.proto"],
+    default_runtime = "@com_google_protobuf//:protobuf_python",
+    protoc = "@com_google_protobuf//:protoc",
 )
 
 # We also make the .proto files readable for testing.
