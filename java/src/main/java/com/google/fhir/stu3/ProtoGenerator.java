@@ -417,17 +417,11 @@ public class ProtoGenerator {
         continue;
       }
 
-      // Per spec, the fixed Extension.url on a top-level extension must matchthe
-      // StructureDefinition
-      // url.  Since that is already added to the message via the fhir_structure_definition_url,
-      // we can skip over it here.
+      // Per spec, the fixed Extension.url on a top-level extension must match the
+      // StructureDefinition url.  Since that is already added to the message via the
+      // fhir_structure_definition_url, we can skip over it here.
       if (element.getBase().getPath().getValue().equals("Extension.url")
           && element.getFixed().hasUri()) {
-        // TODO(nickgeorge): This annotation is redundant with fhir_structure_definition_url.
-        // Deprecated it, and remove it once tooling is switched to use structure definition url.
-        builder
-            .getOptionsBuilder()
-            .setExtension(Annotations.fhirExtensionUrl, element.getFixed().getUri().getValue());
         continue;
       }
 

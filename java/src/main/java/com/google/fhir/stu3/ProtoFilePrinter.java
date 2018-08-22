@@ -172,14 +172,6 @@ public class ProtoFilePrinter {
           .append("\";\n");
       printedField = true;
     }
-    if (options.hasExtension(Annotations.fhirExtensionUrl)) {
-      message
-          .append(fieldIndent)
-          .append("option (fhir_extension_url) = \"")
-          .append(options.getExtension(Annotations.fhirExtensionUrl))
-          .append("\";\n");
-      printedField = true;
-    }
     if (options.hasExtension(Annotations.fhirProfileBase)) {
       message
           .append(fieldIndent)

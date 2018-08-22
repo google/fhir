@@ -24,8 +24,10 @@ import "proto/stu3/datatypes.proto";
 
 // This is a Google extension described by
 // https://g.co/fhir/StructureDefinition/base64Binary-separatorStride
+// TODO(nickgeorge): autogenerate from Structure Definition
 message Base64SeparatorStride {
-  option (fhir_extension_url) =
+  option (fhir_profile_base) = "Extension";
+  option (fhir_structure_definition_url) =
       "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride";
 
   // The separator, usually a sequence of spaces.

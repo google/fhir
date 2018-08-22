@@ -27,8 +27,6 @@ option java_package = "com.google.fhir.stu3.proto";
 // See http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName
 message ElementDefinitionBindingName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_extension_url) =
-      "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName";
   option (fhir_profile_base) = "Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName";
@@ -45,8 +43,6 @@ message ElementDefinitionBindingName {
 // See http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits
 message ElementDefinitionAllowedUnits {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_extension_url) =
-      "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits";
   option (fhir_profile_base) = "Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits";
@@ -72,8 +68,6 @@ message ElementDefinitionAllowedUnits {
 // http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName
 message ObservationDNASequenceVariantName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_extension_url) =
-      "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName";
   option (fhir_profile_base) = "Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName";
@@ -90,8 +84,6 @@ message ObservationDNASequenceVariantName {
 // See http://hl7.org/fhir/StructureDefinition/patient-clinicalTrial
 message PatientClinicalTrial {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_extension_url) =
-      "http://hl7.org/fhir/StructureDefinition/patient-clinicalTrial";
   option (fhir_profile_base) = "Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-clinicalTrial";
@@ -118,8 +110,6 @@ message PatientClinicalTrial {
 // http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name
 message ElementDefinitionExplicitTypeName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_extension_url) =
-      "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name";
   option (fhir_profile_base) = "Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name";
@@ -136,8 +126,6 @@ message ElementDefinitionExplicitTypeName {
 // See http://hl7.org/fhir/StructureDefinition/structuredefinition-regex
 message ElementDefinitionRegex {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_extension_url) =
-      "http://hl7.org/fhir/StructureDefinition/structuredefinition-regex";
   option (fhir_profile_base) = "Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-regex";
@@ -154,8 +142,6 @@ message ElementDefinitionRegex {
 // See http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle
 message DaysOfCycle {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_extension_url) =
-      "http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle";
   option (fhir_profile_base) = "Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle";

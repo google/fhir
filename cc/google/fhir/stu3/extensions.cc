@@ -128,15 +128,29 @@ Status ValueToMessage(const Extension& extension, google::protobuf::Message* mes
 
 }  // namespace
 
-Status ConvertToExtension(const google::protobuf::Message& message,
-                          Extension* extension) {
-  const google::protobuf::Descriptor* descriptor = message.GetDescriptor();
-  if (!descriptor->options().HasExtension(stu3::proto::fhir_extension_url)) {
+Status ValidateExtension(const google::protobuf::Descriptor* descriptor) {
+  if (descriptor->options().GetExtension(stu3::proto::fhir_profile_base) !=
+      "Extension") {
     return ::tensorflow::errors::InvalidArgument(
         absl::StrCat(descriptor->full_name(), " is not a FHIR extension type"));
   }
-  extension->mutable_url()->set_value(
-      descriptor->options().GetExtension(stu3::proto::fhir_extension_url));
+  if (!descriptor->options().HasExtension(
+          stu3::proto::fhir_structure_definition_url)) {
+    return ::tensorflow::errors::InvalidArgument(
+        absl::StrCat(descriptor->full_name(),
+                     " is not a valid FHIR extension type: No "
+                     "fhir_structure_definition_url."));
+  }
+  return Status::OK();
+}
+
+Status ConvertToExtension(const google::protobuf::Message& message,
+                          Extension* extension) {
+  const google::protobuf::Descriptor* descriptor = message.GetDescriptor();
+  TF_RETURN_IF_ERROR(ValidateExtension(descriptor));
+
+  extension->mutable_url()->set_value(descriptor->options().GetExtension(
+      stu3::proto::fhir_structure_definition_url));
 
   // TODO(sundberg): also check that the field is a primitive type.
   bool is_single_value_extension = descriptor->field_count() == 1 &&
@@ -201,14 +215,11 @@ Status ExtensionToMessage(const Extension& extension,
   return Status::OK();
 }
 
-void ClearTypedExtensions(const google::protobuf::Descriptor* descriptor,
-                          google::protobuf::Message* message) {
-  if (!descriptor->options().HasExtension(stu3::proto::fhir_extension_url)) {
-    LOG(ERROR) << descriptor->full_name() << " is not a FHIR extension type";
-    return;
-  }
-  const string url =
-      descriptor->options().GetExtension(stu3::proto::fhir_extension_url);
+Status ClearTypedExtensions(const google::protobuf::Descriptor* descriptor,
+                            google::protobuf::Message* message) {
+  TF_RETURN_IF_ERROR(ValidateExtension(descriptor));
+  const string url = descriptor->options().GetExtension(
+      stu3::proto::fhir_structure_definition_url);
 
   const google::protobuf::Reflection* reflection = message->GetReflection();
   const google::protobuf::FieldDescriptor* field =
@@ -225,6 +236,7 @@ void ClearTypedExtensions(const google::protobuf::Descriptor* descriptor,
   for (const Extension& extension : other_extensions) {
     message->GetReflection()->AddMessage(message, field)->CopyFrom(extension);
   }
+  return Status::OK();
 }
 
 }  // namespace stu3

@@ -24,8 +24,10 @@ import "proto/stu3/datatypes.proto";
 
 // This is a Google extension described by
 // https://g.co/fhir/StructureDefinition/primitiveHasNoValue
+// TODO(nickgeorge): autogenerate from Structure Definition
 message PrimitiveHasNoValue {
-  option (fhir_extension_url) =
+  option (fhir_profile_base) = "Extension";
+  option (fhir_structure_definition_url) =
       "https://g.co/fhir/StructureDefinition/primitiveHasNoValue";
 
   // The value.

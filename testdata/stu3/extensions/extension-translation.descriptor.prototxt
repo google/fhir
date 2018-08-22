@@ -91,12 +91,8 @@ nested_type {
       }
     }
   }
-  options {
-    [google.fhir.stu3.proto.fhir_extension_url]: "content"
-  }
 }
 options {
-  [google.fhir.stu3.proto.fhir_extension_url]: "http://hl7.org/fhir/StructureDefinition/translation"
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
   [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Translation.\nLangauge Translation (Localization).\nSee http://hl7.org/fhir/StructureDefinition/translation"
   [google.fhir.stu3.proto.fhir_profile_base]: "Extension"

@@ -39,9 +39,6 @@ enum Requirement {
 }
 
 extend google.protobuf.MessageOptions {
-  // If this message is the proto version of a fhir extension, this is the
-  // extension identifier.
-  string fhir_extension_url = 177048773;
 
   // If this message is a Code constrained to a specific valueset, this is the
   // valueset identifier.
@@ -65,6 +62,10 @@ extend google.protobuf.MessageOptions {
 
   // This element is a profile version of the base resource named here.
   string fhir_profile_base = 206336851;
+
+  // DEPRECATED: use fhir_base_profile to identify extension, and
+  // fhir_structure_definition_url to get the extension url.
+  string fhir_extension_url = 177048773 [deprecated = true];
 }
 
 extend google.protobuf.EnumValueOptions {

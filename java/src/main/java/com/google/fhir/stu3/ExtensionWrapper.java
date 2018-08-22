@@ -68,15 +68,13 @@ public final class ExtensionWrapper {
     if (content.isEmpty()) {
       return this;
     }
-    MessageOptions options = template.getDescriptorForType().getOptions();
-    if (!options.hasExtension(Annotations.fhirExtensionUrl)) {
-      throw new IllegalArgumentException(
-          "Message type "
-              + template.getDescriptorForType().getFullName()
-              + " is not a FHIR extension");
-    }
+    validateFhirExtension(template);
     List<Extension> result = new ArrayList<>();
-    String type = options.getExtension(Annotations.fhirExtensionUrl);
+    String type =
+        template
+            .getDescriptorForType()
+            .getOptions()
+            .getExtension(Annotations.fhirStructureDefinitionUrl);
     for (Extension e : content) {
       if (!e.getUrl().getValue().equals(type)) {
         result.add(e);
@@ -98,11 +96,21 @@ public final class ExtensionWrapper {
   private void validateFhirExtension(MessageOrBuilder message) {
     MessageOptions options = message.getDescriptorForType().getOptions();
     // Note that this method checks proto extensions, which are different from FHIR extensions.
-    if (!options.hasExtension(Annotations.fhirExtensionUrl)) {
+    String baseType = options.getExtension(Annotations.fhirProfileBase);
+    // TODO(nickgeorge): This would reject profiles on profiles on extensions (and so on).
+    // If we want to support that, we'll probably need a "fhir_is_extension" annotation.
+    if (!baseType.equals("Extension")) {
       throw new IllegalArgumentException(
           "Message type "
               + message.getDescriptorForType().getFullName()
-              + " is not a FHIR extension");
+              + " is not a FHIR extension.  Base Profile: "
+              + baseType);
+    }
+    if (!options.hasExtension(Annotations.fhirStructureDefinitionUrl)) {
+      throw new IllegalArgumentException(
+          "Message type "
+              + message.getDescriptorForType().getFullName()
+              + " is an invalid FHIR extension: Missing fhir_structure_definition_url annotation.");
     }
   }
 
@@ -117,7 +125,7 @@ public final class ExtensionWrapper {
                         message
                             .getDescriptorForType()
                             .getOptions()
-                            .getExtension(Annotations.fhirExtensionUrl)));
+                            .getExtension(Annotations.fhirStructureDefinitionUrl)));
     List<FieldDescriptor> messageFields = message.getDescriptorForType().getFields();
     boolean isSingleValueExtension =
         messageFields.size() == 1
@@ -147,7 +155,10 @@ public final class ExtensionWrapper {
     }
     List<T> result = new ArrayList<T>();
     String type =
-        template.getDescriptorForType().getOptions().getExtension(Annotations.fhirExtensionUrl);
+        template
+            .getDescriptorForType()
+            .getOptions()
+            .getExtension(Annotations.fhirStructureDefinitionUrl);
     for (Extension e : content) {
       if (e.getUrl().getValue().equals(type)) {
         Message.Builder builder = template.newBuilderForType();

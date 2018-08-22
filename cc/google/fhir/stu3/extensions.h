@@ -42,6 +42,8 @@ tensorflow::Status ExtensionToMessage(const stu3::proto::Extension& extension,
 tensorflow::Status ConvertToExtension(const google::protobuf::Message& message,
                                       stu3::proto::Extension* extension);
 
+tensorflow::Status ValidateExtension(const google::protobuf::Descriptor* descriptor);
+
 // Extract all matching extensions from a container into a vector, and parse
 // them into protos. Example usage:
 // Patient patient = ...
@@ -51,12 +53,9 @@ template <class C, class T>
 tensorflow::Status GetRepeatedFromExtension(const C& extension_container,
                                             std::vector<T>* result) {
   const google::protobuf::Descriptor* descriptor = T::descriptor();
-  if (!descriptor->options().HasExtension(stu3::proto::fhir_extension_url)) {
-    return ::tensorflow::errors::InvalidArgument(
-        absl::StrCat(descriptor->full_name(), " is not a FHIR extension type"));
-  }
-  const string url =
-      descriptor->options().GetExtension(stu3::proto::fhir_extension_url);
+  TF_RETURN_IF_ERROR(ValidateExtension(descriptor));
+  const string url = descriptor->options().GetExtension(
+      stu3::proto::fhir_structure_definition_url);
   for (const auto& extension : extension_container) {
     if (extension.url().value() == url) {
       T message;
@@ -67,8 +66,8 @@ tensorflow::Status GetRepeatedFromExtension(const C& extension_container,
   return tensorflow::Status::OK();
 }
 
-void ClearTypedExtensions(const google::protobuf::Descriptor* descriptor,
-                          google::protobuf::Message* message);
+tensorflow::Status ClearTypedExtensions(const google::protobuf::Descriptor* descriptor,
+                                        google::protobuf::Message* message);
 
 }  // namespace stu3
 }  // namespace fhir
