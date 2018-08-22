@@ -45,6 +45,10 @@ TEST(UtilTest, ToShortSystemNameIcd9) {
   EXPECT_EQ("icd9", ToShortSystemName("http://hl7.org/fhir/sid/icd-9-cm"));
 }
 
+TEST(UtilTest, ToShortSystemNameActCode) {
+  EXPECT_EQ("actcode", ToShortSystemName("http://hl7.org/fhir/v3/ActCode"));
+}
+
 TEST(UtilTest, ToShortSystemNameUnknown) {
   EXPECT_EQ("http-hl7-org-fhir-sid-cvx",
             ToShortSystemName("http://hl7.org/fhir/sid/cvx"));

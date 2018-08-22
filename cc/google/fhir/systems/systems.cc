@@ -64,6 +64,9 @@ string ToShortSystemName(const string& system) {
   if (system == kAdmitSource) {
     return "admit_source";
   }
+  if (system == kEncounterClass) {
+    return "actcode";
+  }
   if (system == kDischargeDisposition) {
     return "discharge_disposition";
   }

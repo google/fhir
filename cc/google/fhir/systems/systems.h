@@ -34,6 +34,7 @@ const char kDiagnosisRole[] = "http://hl7.org/fhir/diagnosis-role";
 const char kDischargeDisposition[] =
     "http://hl7.org/fhir/discharge-disposition";
 const char kEncounterType[] = "http://hl7.org/fhir/encounter-type";
+const char kEncounterClass[] = "http://hl7.org/fhir/v3/ActCode";
 const char kLocationType[] = "http://hl7.org/fhir/v3/RoleCode";
 const char kIcd9[] = "http://hl7.org/fhir/sid/icd-9-cm";
 const char kIcd9Diagnosis[] = "http://hl7.org/fhir/sid/icd-9-cm/diagnosis";

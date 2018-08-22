@@ -177,6 +177,9 @@ Status GetPreferredCode(const CodeableConcept& concept, string* result) {
   } else if (ExtractCodeBySystem(concept, systems::kDiagnosisRole, &code)
                  .ok()) {
     *result = absl::StrCat("diagnosis_role:" + code);
+  } else if (ExtractCodeBySystem(concept, systems::kEncounterClass, &code)
+                 .ok()) {
+    *result = absl::StrCat("actcode:" + code);
   } else {
     return ::tensorflow::errors::NotFound(
         absl::StrCat("No known coding system found in CodeableConcept: ",
