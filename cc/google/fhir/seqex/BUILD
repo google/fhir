@@ -3,6 +3,13 @@ licenses(["notice"])
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
+    name = "feature_keys",
+    srcs = ["feature_keys.cc"],
+    hdrs = ["feature_keys.h"],
+    strip_include_prefix = "//cc/",
+)
+
+cc_library(
     name = "resource_to_example",
     srcs = ["resource_to_example.cc"],
     hdrs = ["resource_to_example.h"],
