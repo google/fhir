@@ -3,6 +3,29 @@ licenses(["notice"])
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
+    name = "example_key",
+    srcs = ["example_key.cc"],
+    hdrs = ["example_key.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@com_googlesource_code_re2//:re2",
+        "@org_tensorflow//tensorflow/core:lib",
+    ],
+)
+
+cc_test(
+    name = "example_key_test",
+    srcs = ["example_key_test.cc"],
+    deps = [
+        ":example_key",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_library(
     name = "feature_keys",
     srcs = ["feature_keys.cc"],
     hdrs = ["feature_keys.h"],

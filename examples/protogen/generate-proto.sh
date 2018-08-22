@@ -43,13 +43,7 @@ bazel build //java:ProtoGenerator
 
 source "common.sh"
 PROFILES="observation-genetics"
-EXTENSIONS="extension-elementdefinition-bindingname \
-            extension-elementdefinition-allowedunits \
-            extension-observation-geneticsdnasequencevariantname \
-            extension-patient-clinicaltrial \
-            extension-structuredefinition-explicit-type-name \
-            extension-structuredefinition-regex \
-            extension-timing-daysofcycle"
+EXTENSIONS=$(cd $EXTENSION_PATH; ls extension-*.json | sed s/\\.json$//g)
 
 # generate datatypes.proto
 $PROTO_GENERATOR \
