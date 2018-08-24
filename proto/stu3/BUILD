@@ -141,6 +141,7 @@ proto_library(
     ],
     deps = [
         ":annotations_proto",
+        ":codes_proto",
         ":datatypes_proto",
     ],
 )
@@ -166,6 +167,7 @@ py_proto_library(
     protoc = "@com_google_protobuf//:protoc",
     deps = [
         ":annotations_py_pb2",
+        ":codes_py_pb2",
         ":datatypes_py_pb2",
     ],
 )

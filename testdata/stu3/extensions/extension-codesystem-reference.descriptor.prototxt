@@ -1,4 +1,4 @@
-name: "ValueSetReference"
+name: "CodeSystemReference"
 field {
   name: "id"
   number: 1
@@ -21,7 +21,7 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for reference.\nUrl of Value set the code was chosen from.\nSee http://hl7.org/fhir/StructureDefinition/valueset-reference"
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for reference.\nUrl of Value set the code was chosen from.\nSee http://hl7.org/fhir/StructureDefinition/codesystem-reference"
   [google.fhir.stu3.proto.fhir_profile_base]: "Extension"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/valueset-reference"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/codesystem-reference"
 }

@@ -51,7 +51,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
@@ -76,15 +75,8 @@ public class ProtoGenerator {
   private static final ImmutableMap<String, String> RENAMED_CODE_TYPES = getRenamedCodeTypes();
 
   // Certain field names are reserved symbols in various languages.
-  private static final ImmutableMap<String, String> reservedFieldNames =
-      new ImmutableMap.Builder<String, String>()
-          .put("assert", "assert_value")
-          .put("for", "for_value")
-          .put("hasAnswer", "has_answer_value")
-          .put("package", "package_value")
-          .put("string", "string_value")
-          .put("class", "class_value")
-          .build();
+  private static final ImmutableSet<String> RESERVED_FIELD_NAMES =
+      ImmutableSet.of("assert", "for", "hasAnswer", "package", "string", "class");
 
   private static final EnumDescriptorProto PRECISION_ENUM =
       EnumDescriptorProto.newBuilder()
@@ -237,11 +229,22 @@ public class ProtoGenerator {
     return ImmutableMap.copyOf(renamedCodeTypes);
   }
 
+  // Map from StructureDefinition url to explicit renaming for the type that should be generated.
+  // This is necessary for cases where the generated name type is problematic, e.g., when two
+  // generated name types collide, or just to provide nicer names.
+  private static final ImmutableMap<String, String> STRUCTURE_DEFINITION_RENAMINGS =
+      ImmutableMap.of(
+          "http://hl7.org/fhir/StructureDefinition/valueset-reference", "ValueSetReference",
+          "http://hl7.org/fhir/StructureDefinition/codesystem-reference", "CodeSystemReference");
+
   // Given a structure definition, gets the name of the top-level message that will be generated.
   public static String getTypeName(StructureDefinition def) {
+    if (STRUCTURE_DEFINITION_RENAMINGS.containsKey(def.getUrl().getValue())) {
+      return STRUCTURE_DEFINITION_RENAMINGS.get(def.getUrl().getValue());
+    }
     return isTypedExtensionDefinition(def)
         ? getProfileTypeName(def)
-        : normalizeTypeName(def.getId().getValue());
+        : toFieldTypeCase(def.getId().getValue());
   }
 
   /**
@@ -495,20 +498,9 @@ public class ProtoGenerator {
     String defId = def.getId().getValue();
     String valueFieldId = defId + ".value";
     // Find the value field.
-    ElementDefinition valueElement;
-    try {
-      valueElement =
-          getElementDefinitionById(def.getSnapshot().getElementList(), valueFieldId)
-              .orElseThrow(
-                  () -> new IllegalArgumentException("Unable to find value field on: " + def));
-    } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException(
-          "Multiple Elements found on StructureDefinition with id: "
-              + valueFieldId
-              + ".\nStructureDefinition: "
-              + def);
-    }
-    // If present, add the regex for this primitive type as a message-level annotation.
+    ElementDefinition valueElement =
+        getElementDefinitionById(valueFieldId, def.getSnapshot().getElementList());
+    // If a regex for this primitive type is present, add it as a message-level annotation.
     if (valueElement.getTypeCount() == 1) {
       List<ElementDefinitionRegex> regex =
           ExtensionWrapper.fromExtensionsIn(valueElement.getType(0))
@@ -557,7 +549,7 @@ public class ProtoGenerator {
                 .setName("precision")
                 .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
                 .setType(FieldDescriptorProto.Type.TYPE_ENUM)
-                .setTypeName("." + packageName + "." + normalizeTypeName(defId) + ".Precision")
+                .setTypeName("." + packageName + "." + toFieldTypeCase(defId) + ".Precision")
                 .setNumber(builder.getFieldCount() + 1));
       } else {
         // Handle non-time-like types.
@@ -643,11 +635,7 @@ public class ProtoGenerator {
       // Strip the first character from the content reference since it is a '#'
       String referencedElementId = element.getContentReference().getValue().substring(1);
       ElementDefinition referencedElement =
-          getElementDefinitionById(elementList, referencedElementId)
-              .orElseThrow(
-                  () ->
-                      new IllegalArgumentException(
-                          "Undefined reference: " + element.getContentReference()));
+          getElementDefinitionById(referencedElementId, elementList);
       if (!isContainer(referencedElement)) {
         throw new IllegalArgumentException(
             "ContentReference does not reference a container: " + element.getContentReference());
@@ -655,39 +643,40 @@ public class ProtoGenerator {
       return getContainerType(referencedElement, elementList);
     }
 
-    // Any part of the path could have been renamed via explicit type name extensions.
-    // We need to translate them all.
+    // The container type is the full type of the message that will be generated (minus package).
+    // It is derived from the id (e.g., Medication.package.content), and these are usually equal.
+    // However, any parent in the path could have been renamed via  a explicit type name extensions.
+    // So, starting with the root, we need to check every element in the path, and append either the
+    // name based on the path token, or an explicit renaming if present.
+
+    // List we'll build up of actual id parts from the original id, starting from root
+    List<String> idParts = new ArrayList<>();
+    // Final result we'll build up with one type name part for each id part, starting from root
     List<String> typeNameParts = new ArrayList<>();
-    List<String> elementPathParts = new ArrayList<>();
-    for (String part : Splitter.on('.').split(element.getId().getValue())) {
-      elementPathParts.add(part);
-      String path = Joiner.on('.').join(elementPathParts);
-      ElementDefinition pathElement =
-          elementList
-              .stream()
-              .filter(e -> e.getId().getValue().equals(path))
-              .findFirst()
-              .orElseThrow(
-                  () ->
-                      new IllegalArgumentException(
-                          "No elements with path: " + path + "on element: " + element.getId()));
+    for (String idPart : Splitter.on('.').split(element.getId().getValue())) {
+      idParts.add(idPart);
+      // Find the element corresponding to this chunk of the id.
+      ElementDefinition idChunkElement =
+          getElementDefinitionById(Joiner.on('.').join(idParts), elementList);
+      // Check for explicit renamings on that element.
       List<ElementDefinitionExplicitTypeName> explicitTypeNames =
-          ExtensionWrapper.fromExtensionsIn(pathElement)
+          ExtensionWrapper.fromExtensionsIn(idChunkElement)
               .getMatchingExtensions(ElementDefinitionExplicitTypeName.getDefaultInstance());
-      String typeName;
-      if (explicitTypeNames.isEmpty()) {
-        // There were no renamings from explicit type name extensions
-        typeName = normalizeTypeName(getElementName(pathElement));
-      } else {
-        // There was an explicit renaming for this type
-        typeName = explicitTypeNames.get(0).getValueString().getValue();
+
+      // Add explicit type name if present.  Otherwise, use the field_name, converted to FieldType
+      // casing, as the submessage name.
+      String typeNamePart =
+          explicitTypeNames.isEmpty()
+              ? toFieldTypeCase(getJsonNameForElement(idChunkElement))
+              : explicitTypeNames.get(0).getValueString().getValue();
+
+      // We can't reuse field names in multiple parts in the path (e.g., Foo.bar.bar.baz)
+      if (typeNameParts.contains(typeNamePart)
+          || (!typeNameParts.isEmpty()
+              && (typeNamePart.equals("Timing") || typeNamePart.equals("Age")))) {
+        typeNamePart = typeNamePart + "Type";
       }
-      if (typeNameParts.contains(typeName)
-          || (!typeNameParts.isEmpty() && (typeName.equals("Timing") || typeName.equals("Age")))) {
-        // There's already a message with this name, append "Type" to disambiguate.
-        typeName = typeName + "Type";
-      }
-      typeNameParts.add(typeName);
+      typeNameParts.add(typeNamePart);
     }
     return Joiner.on('.').join(typeNameParts);
   }
@@ -788,31 +777,36 @@ public class ProtoGenerator {
         return null;
       }
       String fieldTypeString = knownStructureDefinitions.get(profileUrl);
-      String fieldName = element.getSliceName().getValue();
       options.setExtension(
           Annotations.fhirInlinedExtensionUrl, element.getType(0).getProfile().getValue());
-      return buildFieldInternal(fieldName, fieldTypeString, nextTag, repeated, options.build())
+      return buildFieldInternal(
+              getJsonNameForElement(element), fieldTypeString, nextTag, repeated, options.build())
           .build();
     }
 
-    String fieldTypeString = getFieldType(element, elementList);
-    if (isInternalExtensionSlice(element) && reservedFieldNames.containsKey(fieldTypeString)) {
+    String jsonFieldNameString = getJsonNameForElement(element);
+    if (isInternalExtensionSlice(element)) {
       // This is a internally-defined extension slice that will be inlined as a nested type.
       // Since extensions are sliced on url, the url for the extension matches the slicename.
       // Since the field name is the slice name wherever possible, annotating the field with the
-      // inlined extension url is redundant.
-      // If, however, the slicename is a reserved word like "string" or "optional",
-      // the field will be renamed.  In this case, add the inlined extension url as an annotation.
+      // inlined extension url is usually redundant.
+      // We will only add it if we have to rename the field name.  This can happen if the slice
+      // name is reserved (e.g., string or optional), or if the slice name conflicts with a field
+      // on the base element (e.g., id or url), or if the slicename/url are in an unexpected casing.
+      // If, for any reason, the urlField is not the camelCase version of the lower_underscore
+      // field_name, add an annotation with the explicit name.
+      if (RESERVED_FIELD_NAMES.contains(jsonFieldNameString)
+          || sliceNameHasConflict(jsonFieldNameString, element, elementList)) {
+        jsonFieldNameString += "Slice";
+      }
       String url =
-          getElementDefinitionById(elementList, element.getId().getValue() + ".url")
-              .orElseThrow(
-                  () ->
-                      new IllegalArgumentException(
-                          "Internal Extension has no url: " + element.getId().getValue()))
+          getElementDefinitionById(element.getId().getValue() + ".url", elementList)
               .getFixed()
               .getUri()
               .getValue();
-      options.setExtension(Annotations.fhirInlinedExtensionUrl, url);
+      if (!jsonFieldNameString.equals(url)) {
+        options.setExtension(Annotations.fhirInlinedExtensionUrl, url);
+      }
     }
 
     if (isChoiceType(element)) {
@@ -820,7 +814,11 @@ public class ProtoGenerator {
     }
 
     return buildFieldInternal(
-            getElementName(element), fieldTypeString, nextTag, repeated, options.build())
+            jsonFieldNameString,
+            getFieldType(element, elementList),
+            nextTag,
+            repeated,
+            options.build())
         .build();
   }
 
@@ -828,15 +826,16 @@ public class ProtoGenerator {
    * Returns the field name that should be used for an element. If element is a slice, uses that
    * slice name. Since the id token slice name is all-lowercase, uses the SliceName field on the
    * element. Otherwise, uses the last token's pathpart. Logs a warning if the slice name in the id
-   * token does not match the SliceName field. TODO(nickgeorge): Handle reslices. Could be as easy
-   * as adding it to the end of SliceName.
+   * token does not match the SliceName field.
    */
-  private static String getElementName(ElementDefinition element) {
+  // TODO(nickgeorge): Handle reslices. Could be as easy as adding it to the end of SliceName.
+  private static String getJsonNameForElement(ElementDefinition element) {
     IdToken lastToken = lastIdToken(element.getId().getValue());
     if (lastToken.slicename == null) {
       return lastToken.pathpart;
     }
-    if (!lastToken.slicename.equalsIgnoreCase(element.getSliceName().getValue())) {
+    String sliceName = element.getSliceName().getValue();
+    if (!lastToken.slicename.equals(sliceName.toLowerCase())) {
       // TODO(nickgeorge): pull this into a common validator that runs ealier.
       System.out.println(
           "Warning: Inconsistent slice name for element with id "
@@ -844,7 +843,32 @@ public class ProtoGenerator {
               + " and slicename "
               + element.getSliceName());
     }
-    return element.getSliceName().getValue();
+    return sliceName;
+  }
+
+  // Given a potential slice field name and an element, returns true if that slice name would
+  // conflict with the field name of any siblings to that elements.
+  private static boolean sliceNameHasConflict(
+      String sliceName, ElementDefinition element, List<ElementDefinition> elementList) {
+    String elementId = element.getId().getValue();
+    int lastDotIndex = elementId.lastIndexOf('.');
+    if (lastDotIndex == -1) {
+      // This is a profile on a top-level Element. There can't be any conflicts.
+      return false;
+    }
+    String parentElementId = elementId.substring(0, lastDotIndex);
+    // TODO(nickgeorge): This only checks against non-slice names.  Theoretically, you could have
+    // two identically-named slices of different base fields.
+    List<ElementDefinition> elementsWithIdsConflictingWithSliceName =
+        getDirectChildren(getElementDefinitionById(parentElementId, elementList), elementList)
+            .stream()
+            .filter(
+                candidateElement ->
+                    lastIdToken(candidateElement.getId().getValue()).pathpart.equals(sliceName)
+                        && !candidateElement.getBase().getPath().getValue().equals("Extension.url"))
+            .collect(Collectors.toList());
+
+    return !elementsWithIdsConflictingWithSliceName.isEmpty();
   }
 
   /** Add a choice type field to the proto. */
@@ -891,7 +915,7 @@ public class ProtoGenerator {
   }
 
   private FieldDescriptorProto.Builder buildFieldInternal(
-      String fieldName, String fieldType, int tag, boolean repeated, FieldOptions options) {
+      String fieldJsonName, String fieldType, int tag, boolean repeated, FieldOptions options) {
     FieldDescriptorProto.Builder builder =
         FieldDescriptorProto.newBuilder()
             .setNumber(tag)
@@ -904,16 +928,14 @@ public class ProtoGenerator {
 
     List<String> fieldTypeParts = new ArrayList<>();
     for (String part : Splitter.on('.').split(fieldType)) {
-      fieldTypeParts.add(normalizeTypeName(part));
+      fieldTypeParts.add(toFieldTypeCase(part));
     }
     builder.setTypeName("." + packageName + "." + Joiner.on('.').join(fieldTypeParts));
 
-    if (reservedFieldNames.containsKey(fieldName)) {
-      builder.setName(reservedFieldNames.get(fieldName)).setJsonName(fieldName);
+    if (RESERVED_FIELD_NAMES.contains(fieldJsonName)) {
+      builder.setName(toFieldNameCase(fieldJsonName + "Value")).setJsonName(fieldJsonName);
     } else {
-      // Make sure the field name is snake case, as required by the proto style guide.
-      fieldName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName);
-      builder.setName(fieldName);
+      builder.setName(toFieldNameCase(fieldJsonName));
     }
 
     // Add annotations.
@@ -925,7 +947,7 @@ public class ProtoGenerator {
 
   private String normalizeType(ElementDefinition.TypeRef type) {
     if (!type.hasProfile()) {
-      return normalizeTypeName(type.getCode().getValue());
+      return toFieldTypeCase(type.getCode().getValue());
     } else if (knownStructureDefinitions.containsKey(type.getProfile().getValue())) {
       return knownStructureDefinitions.get(type.getProfile().getValue());
     } else {
@@ -934,10 +956,9 @@ public class ProtoGenerator {
     }
   }
 
-  // Normalizes the casing of a type string.
-  // E.g., FHIR types primitives with all lower-case, but we use Title case for our primitive
-  // messages (e.g., boolean -> Boolean)
-  private static String normalizeTypeName(String type) {
+  // Converts a FHIR id strings to correct casing for FieldTypes.
+  // This converts from lowerCamel to UpperCamel stripped of invalid characters.
+  private static String toFieldTypeCase(String type) {
     String normalizedType = type;
     if (Character.isLowerCase(type.charAt(0))) {
       normalizedType = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, type);
@@ -945,19 +966,29 @@ public class ProtoGenerator {
     if (type.contains("-")) {
       normalizedType = CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, type);
     }
+    if (type.contains("_")) {
+      normalizedType = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, type);
+    }
     // Remove any invalid characters from the name.
     normalizedType = normalizedType.replaceAll("[ ]", "");
     return normalizedType;
   }
 
-  // Returns an optional containing the only element in the list matching a given id, if present.
-  // Throws IllegalArgumentException if multiple matching elements are found.
-  private static Optional<ElementDefinition> getElementDefinitionById(
-      List<ElementDefinition> elements, String id) {
-    return elements
-        .stream()
+  private static String toFieldNameCase(String fieldName) {
+    // Make sure the field name is snake case, as required by the proto style guide.
+    String normalizedFieldName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName);
+    // TODO(nickgeorge): add more normalization here if necessary.  I think this is enough for now.
+    return normalizedFieldName;
+  }
+
+  // Returns the only element in the list matching a given id.
+  // Throws IllegalArgumentException if zero or more than one matching elements are found.
+  private static ElementDefinition getElementDefinitionById(
+      String id, List<ElementDefinition> elements) {
+    return elements.stream()
         .filter(element -> element.getId().getValue().equals(id))
-        .collect(MoreCollectors.toOptional());
+        .collect(MoreCollectors.toOptional())
+        .orElseThrow(() -> new IllegalArgumentException("No element with id: " + id));
   }
 
   private String getTypedReferenceName(List<ElementDefinition.TypeRef> typeList) {
@@ -1005,7 +1036,7 @@ public class ProtoGenerator {
         if (child.getTypeCount() != 1) {
           return null;
         }
-        return normalizeTypeName(child.getType(0).getCode().getValue());
+        return toFieldTypeCase(child.getType(0).getCode().getValue());
       }
     }
     return null;
@@ -1043,7 +1074,7 @@ public class ProtoGenerator {
    * prefix. If the element is a simple extension, returns the type defined by the extension.
    */
   private static String getProfileTypeName(StructureDefinition def) {
-    String name = normalizeTypeName(def.getName().getValue());
+    String name = toFieldTypeCase(def.getName().getValue());
     Set<String> contexts = new HashSet<>();
     Splitter splitter = Splitter.on('.').limit(2);
     for (com.google.fhir.stu3.proto.String context : def.getContextList()) {
@@ -1116,7 +1147,7 @@ public class ProtoGenerator {
                   + snapshot.getField(field)
                   + "but differential\n"
                   + differential.getField(field)
-                  + "\nUsing differential value for protogeneration.\n\n");
+                  + "Using differential value for protogeneration.\n");
         } else {
           reconciledElement.setField(
               field,
@@ -1145,7 +1176,7 @@ public class ProtoGenerator {
                     + elementId
                     + " has value on differential that is missing from snapshot:\n"
                     + differentialValue
-                    + "\nAdding in for use in protogeneration.\n\n");
+                    + "Adding in for use in protogeneration.\n");
             reconciledElement.addRepeatedField(field, differentialValue);
           }
         }

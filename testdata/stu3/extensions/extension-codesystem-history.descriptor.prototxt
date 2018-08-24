@@ -63,7 +63,7 @@ nested_type {
     }
   }
   field {
-    name: "id"
+    name: "id_slice"
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
@@ -71,6 +71,7 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Version marker after the change was made"
+      [google.fhir.stu3.proto.fhir_inlined_extension_url]: "id"
     }
   }
   field {
