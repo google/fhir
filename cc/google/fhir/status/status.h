@@ -24,6 +24,8 @@ namespace fhir {
 
 using ::tensorflow::Status;  // TENSORFLOW_STATUS_OK
 
+#define FHIR_RETURN_IF_ERROR(x) TF_RETURN_IF_ERROR(x)
+
 }  // namespace fhir
 }  // namespace google
 
