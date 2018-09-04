@@ -76,6 +76,23 @@ limitations under the License.
 #include "google/fhir/status/statusor_internals.h"
 #include "tensorflow/core/platform/macros.h"
 
+// Internal helper for concatenating macro values.
+#define FHIR_STATUS_MACROS_CONCAT_NAME_INNER(x, y) x##y
+#define FHIR_STATUS_MACROS_CONCAT_NAME(x, y) \
+  FHIR_STATUS_MACROS_CONCAT_NAME_INNER(x, y)
+
+#define FHIR_ASSIGN_OR_RETURN(lhs, rexpr)                                 \
+  FHIR_ASSIGN_OR_RETURN_IMPL(                                             \
+      FHIR_STATUS_MACROS_CONCAT_NAME(_status_or_value, __COUNTER__), lhs, \
+      rexpr)
+
+#define FHIR_ASSIGN_OR_RETURN_IMPL(statusor, lhs, rexpr) \
+  auto statusor = (rexpr);                               \
+  if (!statusor.ok()) {                                  \
+    return statusor.status();                            \
+  }                                                      \
+  lhs = std::move(statusor.ValueOrDie())
+
 namespace google {
 namespace fhir {
 
@@ -201,20 +218,6 @@ class StatusOr : private internal_statusor::StatusOrData<T>,
   // the floor.
   void IgnoreError() const;
 };
-
-#define FHIR_STATUS_MACROS_CONCAT_NAME(x, y) x##y
-
-#define FHIR_ASSIGN_OR_RETURN(lhs, rexpr)                                 \
-  FHIR_ASSIGN_OR_RETURN_IMPL(                                             \
-      FHIR_STATUS_MACROS_CONCAT_NAME(_status_or_value, __COUNTER__), lhs, \
-      rexpr)
-
-#define FHIR_ASSIGN_OR_RETURN_IMPL(statusor, lhs, rexpr) \
-  auto statusor = (rexpr);                               \
-  if (!statusor.ok()) {                                  \
-    return statusor.status();                            \
-  }                                                      \
-  lhs = std::move(statusor.ValueOrDie())
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation details for StatusOr<T>
