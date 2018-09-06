@@ -49,10 +49,10 @@ cc_library(
         "@com_google_absl//absl/memory",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
-        "@com_google_protobuf//:protobuf",
         "@com_googlesource_code_re2//:re2",
         "@org_tensorflow//tensorflow/core:lib",
         "@org_tensorflow//tensorflow/core:protos_all_cc",
+        "@protobuf_archive//:protobuf",
     ],
 )
 
@@ -66,9 +66,9 @@ cc_test(
         "//proto/stu3:resources_cc_proto",
         "@com_github_gflags_gflags//:gflags",
         "@com_google_googletest//:gtest_main",
-        "@com_google_protobuf//:protobuf",
         "@org_tensorflow//tensorflow/core:lib",
         "@org_tensorflow//tensorflow/core:protos_all_cc",
+        "@protobuf_archive//:protobuf",
     ],
 )
 
