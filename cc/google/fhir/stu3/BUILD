@@ -23,11 +23,46 @@ cc_test(
     data = ["//testdata/stu3:extensions"],
     deps = [
         ":extensions",
+        ":test_helper",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:extensions_cc_proto",
+        "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@org_tensorflow//tensorflow/core:lib",
+    ],
+)
+
+cc_library(
+    name = "profiles",
+    srcs = ["profiles.cc"],
+    hdrs = ["profiles.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":extensions",
+        "//cc/google/fhir/status",
+        "//proto/stu3:annotations_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "@com_google_absl//absl/strings",
+        "@org_tensorflow//tensorflow/core:lib",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "profiles_test",
+    srcs = ["profiles_test.cc"],
+    data = ["//testdata/stu3:examples"],
+    deps = [
+        ":profiles",
+        ":test_helper",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:extensions_cc_proto",
+        "//proto/stu3:profiles_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest_main",
     ],
 )
 
@@ -135,6 +170,7 @@ cc_library(
         "//cc/google/fhir/status",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest",
+        "@org_tensorflow//tensorflow/core:lib",
         "@protobuf_archive//:protobuf",
     ],
 )

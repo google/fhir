@@ -823,16 +823,16 @@ public class ProtoGenerator {
   }
 
   /**
-   * Returns the field name that should be used for an element. If element is a slice, uses that
-   * slice name. Since the id token slice name is all-lowercase, uses the SliceName field on the
-   * element. Otherwise, uses the last token's pathpart. Logs a warning if the slice name in the id
-   * token does not match the SliceName field.
+   * Returns the field name that should be used for an element, in jsonCase. If element is a slice,
+   * uses that slice name. Since the id token slice name is all-lowercase, uses the SliceName field.
+   * Otherwise, uses the last token's pathpart. Logs a warning if the slice name in the id token
+   * does not match the SliceName field.
    */
   // TODO(nickgeorge): Handle reslices. Could be as easy as adding it to the end of SliceName.
   private static String getJsonNameForElement(ElementDefinition element) {
     IdToken lastToken = lastIdToken(element.getId().getValue());
     if (lastToken.slicename == null) {
-      return lastToken.pathpart;
+      return toJsonCase(lastToken.pathpart);
     }
     String sliceName = element.getSliceName().getValue();
     if (!lastToken.slicename.equals(sliceName.toLowerCase())) {
@@ -843,7 +843,7 @@ public class ProtoGenerator {
               + " and slicename "
               + element.getSliceName());
     }
-    return sliceName;
+    return toJsonCase(sliceName);
   }
 
   // Given a potential slice field name and an element, returns true if that slice name would
@@ -979,6 +979,16 @@ public class ProtoGenerator {
     String normalizedFieldName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName);
     // TODO(nickgeorge): add more normalization here if necessary.  I think this is enough for now.
     return normalizedFieldName;
+  }
+
+  private static String toJsonCase(String fieldName) {
+    if (fieldName.contains("-")) {
+      return CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, fieldName);
+    }
+    if (fieldName.contains("_")) {
+      return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, fieldName);
+    }
+    return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, fieldName);
   }
 
   // Returns the only element in the list matching a given id.

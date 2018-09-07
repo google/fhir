@@ -89,6 +89,7 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   --emit_proto --include_resources \
   --include_metadatatypes \
+  --include_extensions \
   $(for i in $EXTENSIONS; do echo " --known_types $EXTENSION_PATH/${i}.json "; done) \
   $(for i in $DATATYPES; do echo " --known_types $INPUT_PATH/${i,,}.profile.json "; done) \
   $(for i in $PROFILES; do echo " --known_types $INPUT_PATH/${i}.profile.json "; done) \

@@ -95,7 +95,10 @@ message PatientClinicalTrial {
   repeated Extension extension = 2;
 
   // National Clinical Trial number
-  String n_c_t = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+  String n_c_t = 4 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_inlined_extension_url) = "NCT"
+  ];
 
   // The period of participation in the clinical trial
   Period period = 5;

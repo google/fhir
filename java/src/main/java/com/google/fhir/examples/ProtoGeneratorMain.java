@@ -111,6 +111,11 @@ class ProtoGeneratorMain {
     private boolean includeResources = false;
 
     @Parameter(
+        names = {"--include_extensions"},
+        description = "Includes a dependency on extensions.proto")
+    private boolean includeExtensions = false;
+
+    @Parameter(
         names = {"--include_metadatatypes"},
         description = "Includes a dependency on metadatatypes.proto")
     private boolean includeMetadatatypes = false;
@@ -168,6 +173,13 @@ class ProtoGeneratorMain {
           proto
               .toBuilder()
               .addDependency(new File(args.protoRoot, "resources.proto").toString())
+              .build();
+    }
+    if (args.includeExtensions) {
+      proto =
+          proto
+              .toBuilder()
+              .addDependency(new File(args.protoRoot, "extensions.proto").toString())
               .build();
     }
     if (args.includeMetadatatypes) {

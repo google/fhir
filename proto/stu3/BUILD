@@ -70,6 +70,21 @@ fhir_proto_library(
 
 fhir_proto_library(
     srcs = [
+        "profiles.proto",
+    ],
+    proto_deps = [
+        ":annotations_proto",
+        ":codes_proto",
+        ":datatypes_proto",
+        ":extensions_proto",
+        ":metadatatypes_proto",
+        ":resources_proto",
+    ],
+    proto_library_prefix = "profiles",
+)
+
+fhir_proto_library(
+    srcs = [
         "version_config.proto",
     ],
     proto_library_prefix = "version_config",

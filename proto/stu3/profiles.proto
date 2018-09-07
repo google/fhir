@@ -20,6 +20,7 @@ import "proto/stu3/annotations.proto";
 import "proto/stu3/codes.proto";
 import "proto/stu3/datatypes.proto";
 import "proto/stu3/resources.proto";
+import "proto/stu3/extensions.proto";
 import "proto/stu3/metadatatypes.proto";
 
 option java_multiple_files = true;

@@ -27,6 +27,7 @@
 #include "absl/strings/string_view.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/stu3/resource_validation.h"
+#include "tensorflow/core/platform/env.h"
 
 // When comparing converted FHIR resources to their expected value, you should
 // also check whether that resource is considered valid. Invalid resources are
@@ -43,6 +44,8 @@ namespace google {
 namespace fhir {
 namespace stu3 {
 
+using std::string;
+
 class FhirProtoParseHelper {
  public:
   FhirProtoParseHelper(absl::string_view asciipb, bool valid,
@@ -53,7 +56,7 @@ class FhirProtoParseHelper {
   operator T() {
     T tmp;
     google::protobuf::TextFormat::ParseFromString(asciipb_, &tmp);
-    tensorflow::Status status = ValidateFhirConstraints(tmp);
+    Status status = ValidateFhirConstraints(tmp);
     if (valid_) {
       EXPECT_TRUE(status.ok())
           << "Invalid FHIR resource of type " << T::descriptor()->name()
@@ -74,6 +77,16 @@ class FhirProtoParseHelper {
   std::string file_;
   int line_;
 };
+
+template <class T>
+T ReadProto(const string& filename) {
+  T result;
+  TF_CHECK_OK(::tensorflow::ReadTextProto(
+      tensorflow::Env::Default(),
+      "testdata/stu3/" + filename,
+      &result));
+  return result;
+}
 
 }  // namespace stu3
 }  // namespace fhir

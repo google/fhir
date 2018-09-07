@@ -13,13 +13,15 @@
 // limitations under the License.
 
 #include "google/fhir/stu3/extensions.h"
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/strings/str_cat.h"
+#include "google/fhir/stu3/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/primitive_has_no_value.pb.h"
-#include "tensorflow/core/platform/env.h"
-
+#include "tensorflow/core/lib/core/status.h"
 
 namespace google {
 namespace fhir {
@@ -30,28 +32,15 @@ using ::google::fhir::stu3::proto::Extension;
 using ::google::fhir::stu3::proto::PrimitiveHasNoValue;
 using ::google::fhir::testutil::EqualsProto;
 
-class ExtensionsTest : public ::testing::Test {
- private:
-  template <class T>
-  T ReadProto(const string& filename) {
-    T result;
-    TF_CHECK_OK(::tensorflow::ReadTextProto(
-        tensorflow::Env::Default(),
-        "testdata/stu3/extensions/" + filename,
-        &result));
-    return result;
-  }
+template <class T>
+void ReadTestData(const string& type, T* message, Extension* extension) {
+  *message =
+      ReadProto<T>(absl::StrCat("extensions/", type, ".message.prototxt"));
+  *extension = ReadProto<Extension>(
+      absl::StrCat("extensions/", type, ".extension.prototxt"));
+}
 
- protected:
-  template <class T>
-  void ReadTestData(const string& type, T* message, Extension* extension) {
-    *message = ReadProto<T>(absl::StrCat(type, ".message.prototxt"));
-    *extension =
-        ReadProto<Extension>(absl::StrCat(type, ".extension.prototxt"));
-  }
-};
-
-TEST_F(ExtensionsTest, ParsePrimitiveHasNoValue) {
+TEST(ExtensionsTest, ParsePrimitiveHasNoValue) {
   PrimitiveHasNoValue message;
   Extension extension;
   ReadTestData("primitive_has_no_value", &message, &extension);
@@ -61,7 +50,7 @@ TEST_F(ExtensionsTest, ParsePrimitiveHasNoValue) {
   EXPECT_THAT(output, EqualsProto(message));
 }
 
-TEST_F(ExtensionsTest, ParsePrimitiveHasNoValue_Empty) {
+TEST(ExtensionsTest, ParsePrimitiveHasNoValue_Empty) {
   PrimitiveHasNoValue message;
   Extension extension;
   ReadTestData("empty", &message, &extension);
@@ -71,7 +60,7 @@ TEST_F(ExtensionsTest, ParsePrimitiveHasNoValue_Empty) {
   EXPECT_THAT(output, EqualsProto(message));
 }
 
-TEST_F(ExtensionsTest, PrintPrimitiveHasNoValue) {
+TEST(ExtensionsTest, PrintPrimitiveHasNoValue) {
   PrimitiveHasNoValue message;
   Extension extension;
   ReadTestData("primitive_has_no_value", &message, &extension);
@@ -81,7 +70,7 @@ TEST_F(ExtensionsTest, PrintPrimitiveHasNoValue) {
   EXPECT_THAT(output, EqualsProto(extension));
 }
 
-TEST_F(ExtensionsTest, PrintPrimitiveHasNoValue_Empty) {
+TEST(ExtensionsTest, PrintPrimitiveHasNoValue_Empty) {
   PrimitiveHasNoValue message;
   Extension extension;
   ReadTestData("empty", &message, &extension);

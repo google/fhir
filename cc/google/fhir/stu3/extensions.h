@@ -29,6 +29,7 @@
 #include "proto/stu3/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
+#include "tensorflow/core/lib/core/status.h"
 
 namespace google {
 namespace fhir {
@@ -68,6 +69,8 @@ tensorflow::Status GetRepeatedFromExtension(const C& extension_container,
 
 tensorflow::Status ClearTypedExtensions(const google::protobuf::Descriptor* descriptor,
                                         google::protobuf::Message* message);
+
+string GetInlinedExtensionUrl(const google::protobuf::FieldDescriptor* field);
 
 }  // namespace stu3
 }  // namespace fhir

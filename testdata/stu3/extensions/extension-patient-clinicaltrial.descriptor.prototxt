@@ -28,6 +28,7 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "National Clinical Trial number"
+    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "NCT"
   }
 }
 field {

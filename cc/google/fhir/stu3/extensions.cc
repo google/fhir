@@ -14,11 +14,15 @@
 
 #include "google/fhir/stu3/extensions.h"
 
+#include <unordered_map>
+
 #include "google/protobuf/descriptor.h"
+#include "absl/strings/str_cat.h"
 #include "google/fhir/status/status.h"
 #include "proto/stu3/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
+#include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/platform/logging.h"
 
 namespace google {
@@ -76,7 +80,7 @@ Status AddFieldsToExtension(const google::protobuf::Message& message,
       }
     } else {
       Extension* child = extension->add_extension();
-      child->mutable_url()->set_value(field->name());
+      child->mutable_url()->set_value(GetInlinedExtensionUrl(field));
       TF_RETURN_IF_ERROR(
           AddValueToExtension(reflection->GetMessage(message, field), child));
     }
@@ -185,9 +189,14 @@ Status ExtensionToMessage(const Extension& extension,
     return ValueToMessage(extension, message, descriptor->field(0));
   }
 
+  std::unordered_map<string, const google::protobuf::FieldDescriptor*> fields_by_url;
+  for (int i = 0; i < descriptor->field_count(); i++) {
+    const google::protobuf::FieldDescriptor* field = descriptor->field(i);
+    fields_by_url[GetInlinedExtensionUrl(field)] = field;
+  }
+
   for (const Extension& inner : extension.extension()) {
-    const google::protobuf::FieldDescriptor* field =
-        descriptor->FindFieldByName(inner.url().value());
+    const google::protobuf::FieldDescriptor* field = fields_by_url[inner.url().value()];
 
     if (field == nullptr) {
       return ::tensorflow::errors::InvalidArgument(
@@ -237,6 +246,12 @@ Status ClearTypedExtensions(const google::protobuf::Descriptor* descriptor,
     message->GetReflection()->AddMessage(message, field)->CopyFrom(extension);
   }
   return Status::OK();
+}
+
+string GetInlinedExtensionUrl(const google::protobuf::FieldDescriptor* field) {
+  return field->options().HasExtension(proto::fhir_inlined_extension_url)
+             ? field->options().GetExtension(proto::fhir_inlined_extension_url)
+             : field->json_name();
 }
 
 }  // namespace stu3

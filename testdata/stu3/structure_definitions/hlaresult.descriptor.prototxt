@@ -253,7 +253,7 @@ field {
   }
 }
 field {
-  name: "allele-database"
+  name: "allele_database"
   number: 26
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
