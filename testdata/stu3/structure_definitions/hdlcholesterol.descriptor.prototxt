@@ -360,60 +360,6 @@ nested_type {
   }
 }
 nested_type {
-  name: "Related"
-  field {
-    name: "id"
-    number: 1
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
-    options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
-    }
-  }
-  field {
-    name: "extension"
-    number: 2
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Extension"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
-    }
-  }
-  field {
-    name: "modifier_extension"
-    number: 3
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Extension"
-    options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
-    }
-  }
-  field {
-    name: "type"
-    number: 4
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.ObservationRelationshipTypeCode"
-    options {
-      [google.fhir.stu3.proto.field_description]: "has-member | derived-from | sequel-to | replaces | qualified-by | interfered-by"
-    }
-  }
-  field {
-    name: "target"
-    number: 5
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Reference"
-    options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Resource that is related to this one"
-    }
-  }
-}
-nested_type {
   name: "Component"
   field {
     name: "id"

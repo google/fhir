@@ -428,11 +428,6 @@ public class ProtoGenerator {
         continue;
       }
 
-      // If this is a container type, or a complex internal extension, define the inner message.
-      if (isContainer(element) || isComplexInternalExtension(element, elementList)) {
-        builder.addNestedType(generateMessage(element, elementList, DescriptorProto.newBuilder()));
-      }
-
       if (!isChoiceType(element) && !isSingleType(element)) {
         throw new IllegalArgumentException(
             "Illegal field has multiple types but is not a Choice Type:\n" + element);
@@ -466,6 +461,11 @@ public class ProtoGenerator {
       builder.addField(field);
       if (isChoiceType(element)) {
         addChoiceType(element, field, builder);
+      }
+
+      // If this is a container type, or a complex internal extension, define the inner message.
+      if (isContainer(element) || isComplexInternalExtension(element, elementList)) {
+        builder.addNestedType(generateMessage(element, elementList, DescriptorProto.newBuilder()));
       }
     }
   }

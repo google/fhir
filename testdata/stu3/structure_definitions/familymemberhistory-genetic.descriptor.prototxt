@@ -299,6 +299,116 @@ field {
   }
 }
 nested_type {
+  name: "BornAge"
+  field {
+    name: "period"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Period"
+    oneof_index: 0
+  }
+  field {
+    name: "date"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Date"
+    oneof_index: 0
+  }
+  field {
+    name: "string_value"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    oneof_index: 0
+    json_name: "string"
+  }
+  oneof_decl {
+    name: "born_age"
+  }
+}
+nested_type {
+  name: "AgeType"
+  field {
+    name: "age_value"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Age"
+    oneof_index: 0
+    json_name: "age"
+  }
+  field {
+    name: "range"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Range"
+    oneof_index: 0
+  }
+  field {
+    name: "string_value"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    oneof_index: 0
+    json_name: "string"
+  }
+  oneof_decl {
+    name: "age"
+  }
+}
+nested_type {
+  name: "DeceasedAge"
+  field {
+    name: "boolean"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Boolean"
+    oneof_index: 0
+  }
+  field {
+    name: "age"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Age"
+    oneof_index: 0
+  }
+  field {
+    name: "range"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Range"
+    oneof_index: 0
+  }
+  field {
+    name: "date"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Date"
+    oneof_index: 0
+  }
+  field {
+    name: "string_value"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    oneof_index: 0
+    json_name: "string"
+  }
+  oneof_decl {
+    name: "deceased_age"
+  }
+}
+nested_type {
   name: "Condition"
   field {
     name: "id"
@@ -410,116 +520,6 @@ nested_type {
     oneof_decl {
       name: "onset"
     }
-  }
-}
-nested_type {
-  name: "BornAge"
-  field {
-    name: "period"
-    number: 1
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Period"
-    oneof_index: 0
-  }
-  field {
-    name: "date"
-    number: 2
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Date"
-    oneof_index: 0
-  }
-  field {
-    name: "string_value"
-    number: 3
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
-    oneof_index: 0
-    json_name: "string"
-  }
-  oneof_decl {
-    name: "born_age"
-  }
-}
-nested_type {
-  name: "AgeType"
-  field {
-    name: "age_value"
-    number: 1
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Age"
-    oneof_index: 0
-    json_name: "age"
-  }
-  field {
-    name: "range"
-    number: 2
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Range"
-    oneof_index: 0
-  }
-  field {
-    name: "string_value"
-    number: 3
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
-    oneof_index: 0
-    json_name: "string"
-  }
-  oneof_decl {
-    name: "age"
-  }
-}
-nested_type {
-  name: "DeceasedAge"
-  field {
-    name: "boolean"
-    number: 1
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Boolean"
-    oneof_index: 0
-  }
-  field {
-    name: "age"
-    number: 2
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Age"
-    oneof_index: 0
-  }
-  field {
-    name: "range"
-    number: 3
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Range"
-    oneof_index: 0
-  }
-  field {
-    name: "date"
-    number: 4
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Date"
-    oneof_index: 0
-  }
-  field {
-    name: "string_value"
-    number: 5
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
-    oneof_index: 0
-    json_name: "string"
-  }
-  oneof_decl {
-    name: "deceased_age"
   }
 }
 options {
