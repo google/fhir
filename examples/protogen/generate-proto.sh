@@ -41,6 +41,12 @@ shift $((OPTIND -1))
 # Build the binary.
 bazel build //java:ProtoGenerator
 
+if [ $? -ne 0 ]
+then
+ echo "Build Failed"
+ exit 1;
+fi
+
 source "common.sh"
 PROFILES="observation-genetics"
 EXTENSIONS="extension-elementdefinition-bindingname \

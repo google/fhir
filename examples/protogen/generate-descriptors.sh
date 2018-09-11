@@ -40,6 +40,12 @@ shift $((OPTIND -1))
 # Build the binary.
 bazel build //java:ProtoGenerator
 
+if [ $? -ne 0 ]
+then
+ echo "Build Failed"
+ exit 1;
+fi
+
 source "common.sh"
 PROFILES="Bmi Bodyheight Bodylength Bodytemp Bodyweight Bp Cholesterol Clinicaldocument Consentdirective Devicemetricobservation Diagnosticreport-genetics Elementdefinition-de Familymemberhistory-genetic Hdlcholesterol Headcircum Heartrate Hlaresult Ldlcholesterol Lipidprofile MetadataResource Observation-genetics Oxygensat Procedurerequest-genetics Resprate Shareablecodesystem Shareablevalueset Triglyceride Vitalsigns Vitalspanel"
 EXTENSIONS=$(cd $EXTENSION_PATH; ls extension-*.json | sed s/\\.json$//g)
