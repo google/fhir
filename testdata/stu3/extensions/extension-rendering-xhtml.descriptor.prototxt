@@ -1,4 +1,4 @@
-name: "stringXhtml"
+name: "StringXhtml"
 field {
   name: "id"
   number: 1

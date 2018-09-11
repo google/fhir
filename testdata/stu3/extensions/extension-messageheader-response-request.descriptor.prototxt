@@ -14,7 +14,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.MessageheaderResponseRequestcode"
+  type_name: ".google.fhir.stu3.proto.MessageHeaderResponseRequestCode"
   options {
     [google.fhir.stu3.proto.field_description]: "Value of extension"
   }

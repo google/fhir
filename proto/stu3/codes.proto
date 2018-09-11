@@ -3073,6 +3073,38 @@ message EndpointStatusCode {
   repeated Extension extension = 3;
 }
 
+// A set of codes each of which specifies a certain subcategory of the name part
+// in addition to the main name part type See
+// http://hl7.org/fhir/ValueSet/name-part-qualifier
+message EntityNamePartQualifierCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/name-part-qualifier";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    LS = 1 [(fhir_original_code) = "LS"];
+    AC = 2 [(fhir_original_code) = "AC"];
+    NB = 3 [(fhir_original_code) = "NB"];
+    PR = 4 [(fhir_original_code) = "PR"];
+    HON = 5 [(fhir_original_code) = "HON"];
+    BR = 6 [(fhir_original_code) = "BR"];
+    AD = 7 [(fhir_original_code) = "AD"];
+    SP = 8 [(fhir_original_code) = "SP"];
+    MID = 9 [(fhir_original_code) = "MID"];
+    CL = 10 [(fhir_original_code) = "CL"];
+    IN = 11 [(fhir_original_code) = "IN"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
 // EnteralFormulaAdditiveType: Codes for the type of modular component such as
 // protein, carbohydrate or fiber to be provided in addition to or mixed with
 // the base formula. This value set is provided as a suggestive example. See
@@ -4369,6 +4401,35 @@ message LocationStatusCode {
   repeated Extension extension = 3;
 }
 
+// Codes specifying the type of probability distribution.
+// See http://hl7.org/fhir/ValueSet/probability-distribution-type
+message ProbabilityDistributionTypeCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/probability-distribution-type";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    B = 1 [(fhir_original_code) = "B"];
+    E = 2 [(fhir_original_code) = "E"];
+    F = 3 [(fhir_original_code) = "F"];
+    G = 4 [(fhir_original_code) = "G"];
+    LN = 5 [(fhir_original_code) = "LN"];
+    N = 6 [(fhir_original_code) = "N"];
+    T = 7 [(fhir_original_code) = "T"];
+    U = 8 [(fhir_original_code) = "U"];
+    X2 = 9 [(fhir_original_code) = "X2"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
 // How to interpret the context
 // See http://hl7.org/fhir/ValueSet/map-context-type
 message StructureMapContextTypeCode {
@@ -5101,6 +5162,30 @@ message MessageEventCode {
   repeated Extension extension = 3;
 }
 
+// One of the message events defined as part of FHIR.
+// See http://hl7.org/fhir/ValueSet/messageheader-response-request
+message MessageHeaderResponseRequestCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/messageheader-response-request";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ALWAYS = 1;
+    ON_ERROR = 2 [(fhir_original_code) = "on_error"];
+    NEVER = 3;
+    ON_SUCCESS = 4 [(fhir_original_code) = "on_success"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
 // Example Message Reasons. These are the set of codes that might be used an
 // updating an encounter using admin-update. See
 // http://hl7.org/fhir/ValueSet/message-reason-encounter
@@ -5319,6 +5404,29 @@ message HumanNameAssemblyOrderCode {
   repeated Extension extension = 3;
 }
 
+// A set of codes for each different representation of a name.
+// See http://hl7.org/fhir/ValueSet/name-v3-representation
+message NameRepresentationUseCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/name-v3-representation";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ABC = 1 [(fhir_original_code) = "ABC"];
+    IDE = 2 [(fhir_original_code) = "IDE"];
+    SYL = 3 [(fhir_original_code) = "SYL"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
 // Identifies the style of unique identifier used to identify a namespace.
 // See http://hl7.org/fhir/ValueSet/namingsystem-identifier-type
 message NamingSystemIdentifierTypeCode {
@@ -5401,6 +5509,42 @@ message NoteTypeCode {
     DISPLAY = 1;
     PRINT = 2;
     PRINTOPER = 3;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// A collection of codes specifying why a valid value is not present.
+// See http://hl7.org/fhir/ValueSet/v3-NullFlavor
+message NullFlavorCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/v3-NullFlavor";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    NI = 1 [(fhir_original_code) = "NI"];
+    INV = 2 [(fhir_original_code) = "INV"];
+    DER = 3 [(fhir_original_code) = "DER"];
+    OTH = 4 [(fhir_original_code) = "OTH"];
+    NINF = 5 [(fhir_original_code) = "NINF"];
+    PINF = 6 [(fhir_original_code) = "PINF"];
+    UNC = 7 [(fhir_original_code) = "UNC"];
+    MSK = 8 [(fhir_original_code) = "MSK"];
+    NA = 9 [(fhir_original_code) = "NA"];
+    UNK = 10 [(fhir_original_code) = "UNK"];
+    ASKU = 11 [(fhir_original_code) = "ASKU"];
+    NAV = 12 [(fhir_original_code) = "NAV"];
+    NASK = 13 [(fhir_original_code) = "NASK"];
+    NAVU = 14 [(fhir_original_code) = "NAVU"];
+    QS = 15 [(fhir_original_code) = "QS"];
+    TRC = 16 [(fhir_original_code) = "TRC"];
+    NP = 17 [(fhir_original_code) = "NP"];
   }
   Value value = 1;
 
@@ -7475,6 +7619,35 @@ message TaskPerformerTypeCode {
     MANAGER = 6;
     ACQUIRER = 7;
     REVIEWER = 8;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// The status indicates the level of maturity of the design and may be used to
+// manage the use of the design See
+// http://hl7.org/fhir/ValueSet/template-status-code
+message TemplateStatusCodeCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/template-status-code";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    DRAFT = 1;
+    PENDING = 2;
+    ACTIVE = 3;
+    REVIEW = 4;
+    CANCELLED = 5;
+    REJECTED = 6;
+    RETIRED = 7;
+    TERMINATED = 8;
   }
   Value value = 1;
 

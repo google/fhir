@@ -448,7 +448,7 @@ field {
   }
 }
 field {
-  name: "interpretation"
+  name: "interpretation_slice"
   number: 44
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE

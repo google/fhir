@@ -49,18 +49,14 @@ fi
 
 source "common.sh"
 PROFILES="observation-genetics"
-EXTENSIONS="extension-elementdefinition-bindingname \
-            extension-elementdefinition-allowedunits \
-            extension-observation-geneticsdnasequencevariantname \
-            extension-patient-clinicaltrial \
-            extension-structuredefinition-explicit-type-name \
-            extension-structuredefinition-regex \
-            extension-timing-daysofcycle"
+# LANG=C ensures ASCII sorting order
+EXTENSIONS=$(LANG=C ls $EXTENSION_PATH/extension-*.json)
+ALL_STU3_STRUCTURE_DEFINITIONS=$EXTENSIONS\ $(ls $INPUT_PATH/*.profile.json)
 
 # generate datatypes.proto
 $PROTO_GENERATOR \
   --emit_proto --output_directory $OUTPUT_PATH \
-  $(for i in $DATATYPES; do echo " --known_types $INPUT_PATH/${i,,}.profile.json "; done) \
+  $(for i in $ALL_STU3_STRUCTURE_DEFINITIONS; do echo " --known_types ${i} "; done) \
   --output_filename datatypes.proto \
   $(for i in $PRIMITIVES $DATATYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 # Some datatypes are manually generated.
@@ -85,9 +81,7 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   --emit_proto --include_contained_resource \
   --include_metadatatypes \
-  $(for i in $EXTENSIONS; do echo " --known_types $EXTENSION_PATH/${i}.json "; done) \
-  $(for i in $DATATYPES; do echo " --known_types $INPUT_PATH/${i,,}.profile.json "; done) \
-  $(for i in $PROFILES; do echo " --known_types $INPUT_PATH/${i}.profile.json "; done) \
+  $(for i in $ALL_STU3_STRUCTURE_DEFINITIONS; do echo " --known_types ${i} "; done) \
   --output_directory $OUTPUT_PATH --output_filename resources.proto \
   $(for i in $RESOURCETYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
@@ -96,19 +90,13 @@ $PROTO_GENERATOR \
   --emit_proto --include_resources \
   --include_metadatatypes \
   --include_extensions \
-  $(for i in $EXTENSIONS; do echo " --known_types $EXTENSION_PATH/${i}.json "; done) \
-  $(for i in $DATATYPES; do echo " --known_types $INPUT_PATH/${i,,}.profile.json "; done) \
-  $(for i in $PROFILES; do echo " --known_types $INPUT_PATH/${i}.profile.json "; done) \
+  $(for i in $ALL_STU3_STRUCTURE_DEFINITIONS; do echo " --known_types ${i} "; done) \
   --output_directory $OUTPUT_PATH --output_filename profiles.proto \
   $(for i in $PROFILES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
 # generate extensions
-# TODO(nickgeorge): have smarter importing logic for profiles so that all
-# extensions don't have to get lumped into a single file.
 $PROTO_GENERATOR \
   --emit_proto --output_directory $OUTPUT_PATH \
-  $(for i in $EXTENSIONS; do echo " --known_types $EXTENSION_PATH/${i}.json "; done) \
-  $(for i in $DATATYPES; do echo " --known_types $INPUT_PATH/${i,,}.profile.json "; done) \
-  $(for i in $PROFILES; do echo " --known_types $INPUT_PATH/${i}.profile.json "; done) \
+  $(for i in $ALL_STU3_STRUCTURE_DEFINITIONS; do echo " --known_types ${i} "; done) \
   --output_filename extensions.proto \
-  $(for i in $EXTENSIONS; do echo "$EXTENSION_PATH/${i,,}.json"; done)
+  $(for i in $EXTENSIONS; do echo "$i"; done)

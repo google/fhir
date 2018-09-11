@@ -204,11 +204,13 @@ public class ProtoGenerator {
     renamedCodeTypes.put("EnrollmentRequestStatusCode", "FinancialResourceStatusCode");
     renamedCodeTypes.put("EnrollmentResponseStatusCode", "FinancialResourceStatusCode");
     renamedCodeTypes.put("ImmunizationStatusCode", "ImmunizationStatusCodesCode");
+    renamedCodeTypes.put("MessageheaderResponseRequestCode", "MessageHeaderResponseRequestCode");
     renamedCodeTypes.put("ParameterStatusCode", "OperationParameterStatusCode");
     renamedCodeTypes.put("ParameterUseCode", "OperationParameterUseCode");
     renamedCodeTypes.put("ParticipantStatusCode", "ParticipationStatusCode");
     renamedCodeTypes.put("PaymentNoticeStatusCode", "FinancialResourceStatusCode");
     renamedCodeTypes.put("PaymentReconciliationStatusCode", "FinancialResourceStatusCode");
+    renamedCodeTypes.put("PostalAddressUseCode", "AddressUseCode");
     renamedCodeTypes.put("ProcedureRequestIntentCode", "RequestIntentCode");
     renamedCodeTypes.put("ProcedureRequestPriorityCode", "RequestPriorityCode");
     renamedCodeTypes.put("ProcedureRequestStatusCode", "RequestStatusCode");
@@ -713,7 +715,7 @@ public class ProtoGenerator {
         String bindingName = getBindingName(element);
 
         if (bindingName != null) {
-          String typeWithBindingName = bindingName + "Code";
+          String typeWithBindingName = toFieldTypeCase(bindingName) + "Code";
           return RENAMED_CODE_TYPES.getOrDefault(typeWithBindingName, typeWithBindingName);
         }
       }
@@ -766,6 +768,7 @@ public class ProtoGenerator {
       repeated = true;
     }
 
+    String jsonFieldNameString = getJsonNameForElement(element);
     if (isTypedExtension(element)) {
       // This is an extension with a type defined by an external profile.
       // If we know about it, we'll inline a field for it.
@@ -777,14 +780,14 @@ public class ProtoGenerator {
         return null;
       }
       String fieldTypeString = knownStructureDefinitions.get(profileUrl);
+      jsonFieldNameString = resolveSliceNameConflicts(jsonFieldNameString, element, elementList);
       options.setExtension(
           Annotations.fhirInlinedExtensionUrl, element.getType(0).getProfile().getValue());
       return buildFieldInternal(
-              getJsonNameForElement(element), fieldTypeString, nextTag, repeated, options.build())
+              jsonFieldNameString, fieldTypeString, nextTag, repeated, options.build())
           .build();
     }
 
-    String jsonFieldNameString = getJsonNameForElement(element);
     if (isInternalExtensionSlice(element)) {
       // This is a internally-defined extension slice that will be inlined as a nested type.
       // Since extensions are sliced on url, the url for the extension matches the slicename.
@@ -795,10 +798,7 @@ public class ProtoGenerator {
       // on the base element (e.g., id or url), or if the slicename/url are in an unexpected casing.
       // If, for any reason, the urlField is not the camelCase version of the lower_underscore
       // field_name, add an annotation with the explicit name.
-      if (RESERVED_FIELD_NAMES.contains(jsonFieldNameString)
-          || sliceNameHasConflict(jsonFieldNameString, element, elementList)) {
-        jsonFieldNameString += "Slice";
-      }
+      jsonFieldNameString = resolveSliceNameConflicts(jsonFieldNameString, element, elementList);
       String url =
           getElementDefinitionById(element.getId().getValue() + ".url", elementList)
               .getFixed()
@@ -848,27 +848,33 @@ public class ProtoGenerator {
 
   // Given a potential slice field name and an element, returns true if that slice name would
   // conflict with the field name of any siblings to that elements.
-  private static boolean sliceNameHasConflict(
-      String sliceName, ElementDefinition element, List<ElementDefinition> elementList) {
+  // TODO(nickgeorge): This only checks against non-slice names.  Theoretically, you could have
+  // two identically-named slices of different base fields.
+  private static String resolveSliceNameConflicts(
+      String jsonFieldName, ElementDefinition element, List<ElementDefinition> elementList) {
+    if (RESERVED_FIELD_NAMES.contains(jsonFieldName)) {
+      return jsonFieldName + "Slice";
+    }
     String elementId = element.getId().getValue();
     int lastDotIndex = elementId.lastIndexOf('.');
     if (lastDotIndex == -1) {
       // This is a profile on a top-level Element. There can't be any conflicts.
-      return false;
+      return jsonFieldName;
     }
     String parentElementId = elementId.substring(0, lastDotIndex);
-    // TODO(nickgeorge): This only checks against non-slice names.  Theoretically, you could have
-    // two identically-named slices of different base fields.
     List<ElementDefinition> elementsWithIdsConflictingWithSliceName =
         getDirectChildren(getElementDefinitionById(parentElementId, elementList), elementList)
             .stream()
             .filter(
                 candidateElement ->
-                    lastIdToken(candidateElement.getId().getValue()).pathpart.equals(sliceName)
+                    toFieldNameCase(lastIdToken(candidateElement.getId().getValue()).pathpart)
+                            .equals(jsonFieldName)
                         && !candidateElement.getBase().getPath().getValue().equals("Extension.url"))
             .collect(Collectors.toList());
 
-    return !elementsWithIdsConflictingWithSliceName.isEmpty();
+    return elementsWithIdsConflictingWithSliceName.isEmpty()
+        ? jsonFieldName
+        : jsonFieldName + "Slice";
   }
 
   /** Add a choice type field to the proto. */
@@ -1097,7 +1103,7 @@ public class ProtoGenerator {
         name = context + name;
       }
     }
-    return name;
+    return toFieldTypeCase(name);
   }
 
   // We generate protos based on the "Snapshot" view of the proto, but these are often

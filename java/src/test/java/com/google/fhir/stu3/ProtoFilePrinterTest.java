@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ public final class ProtoFilePrinterTest {
   private Runfiles runfiles;
 
   /** Read and parse the specified StructureDefinition. */
-  private StructureDefinition readProfile(String relativePath) throws IOException {
+  private StructureDefinition readStructureDefinition(String relativePath) throws IOException {
     File file =
         new File(runfiles.rlocation("com_google_fhir/testdata/stu3/" + relativePath));
     String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
@@ -170,7 +171,7 @@ public final class ProtoFilePrinterTest {
           && !message.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
         String relativePath =
             "structure_definitions/" + message.getName().toLowerCase() + ".profile.json";
-        resourceDefinitions.add(readProfile(relativePath));
+        resourceDefinitions.add(readStructureDefinition(relativePath));
       }
     }
     return resourceDefinitions;
@@ -222,7 +223,7 @@ public final class ProtoFilePrinterTest {
           "structure_definitions/"
               + resource.getMessageType().getName().toLowerCase()
               + ".profile.json";
-      resourceDefinitions.add(readProfile(relativePath));
+      resourceDefinitions.add(readStructureDefinition(relativePath));
     }
     FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(resourceDefinitions);
     descriptor = protoGenerator.addContainedResource(descriptor);
@@ -239,18 +240,19 @@ public final class ProtoFilePrinterTest {
   /** Test generating extensions.proto. */
   @Test
   public void generateElementDefinitionExtensions() throws Exception {
-    String[] extensionNames = {
-      "extension-elementdefinition-bindingname",
-      "extension-elementdefinition-allowedunits",
-      "extension-observation-geneticsdnasequencevariantname",
-      "extension-patient-clinicaltrial",
-      "extension-structuredefinition-explicit-type-name",
-      "extension-structuredefinition-regex",
-      "extension-timing-daysofcycle",
-    };
+    File extensionFolder =
+        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/extensions"));
+    String[] extensionNames =
+        Arrays.stream(extensionFolder.listFiles())
+            .map(file -> file.getName())
+            .filter(name -> name.endsWith(".json"))
+            .sorted()
+            .toArray(String[]::new);
     List<StructureDefinition> extensionDefinitions = new ArrayList<>();
+    System.err.println(extensionNames.length);
     for (String extensionName : extensionNames) {
-      extensionDefinitions.add(readProfile("extensions/" + extensionName + ".json"));
+      System.err.println(extensionName);
+      extensionDefinitions.add(readStructureDefinition("extensions/" + extensionName));
     }
     FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(extensionDefinitions);
     String generated = protoPrinter.print(descriptor);

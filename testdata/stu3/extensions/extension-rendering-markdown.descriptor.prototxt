@@ -1,4 +1,4 @@
-name: "stringMarkdown"
+name: "StringMarkdown"
 field {
   name: "id"
   number: 1
