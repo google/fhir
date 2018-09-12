@@ -28,8 +28,9 @@ import com.google.protobuf.TextFormat;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -123,10 +124,10 @@ public class ProtoGeneratorTest {
     assertThat(descriptor.toProto()).isEqualTo(golden);
   }
 
-  private List<StructureDefinition> getKnownStructureDefinitions() throws IOException {
-    ArrayList<StructureDefinition> knownStructureDefinitions = new ArrayList<>();
+  private Map<StructureDefinition, String> getKnownStructureDefinitions() throws IOException {
+    Map<StructureDefinition, String> knownStructureDefinitions = new HashMap<>();
     for (String filename : KNOWN_STRUCTURE_DEFINITIONS) {
-      knownStructureDefinitions.add(readStructureDefinition(filename));
+      knownStructureDefinitions.put(readStructureDefinition(filename), "google.fhir.stu3.proto");
     }
     return knownStructureDefinitions;
   }
@@ -139,6 +140,8 @@ public class ProtoGeneratorTest {
     protoGenerator =
         new ProtoGenerator(
             "google.fhir.stu3.proto",
+            Optional.of("com.google.fhir.stu3.proto"),
+            Optional.empty(),
             "proto/stu3",
             getKnownStructureDefinitions());
 

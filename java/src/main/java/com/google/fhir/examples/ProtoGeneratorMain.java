@@ -21,6 +21,8 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.google.common.base.Splitter;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.common.io.Files;
 import com.google.fhir.stu3.JsonFormat;
 import com.google.fhir.stu3.ProtoFilePrinter;
@@ -38,6 +40,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * A class that runs ProtoGenerator on the specified inputs, turning FHIR StructureDefinition files
@@ -88,16 +92,26 @@ class ProtoGeneratorMain {
     private String outputFilename = "output.proto";
 
     @Parameter(
-      names = {"--proto_package"},
-      description = "Generated proto package name"
-    )
-    private String protoPackage = "google.fhir.stu3.proto";
+        names = {"--proto_package"},
+        description = "Generated proto package name",
+        required = true)
+    private String protoPackage = null;
 
     @Parameter(
-      names = {"--proto_root"},
-      description = "Generated proto import root path"
-    )
-    private String protoRoot = "proto/stu3";
+        names = {"--java_proto_package"},
+        description = "Generated java proto package name")
+    private String javaProtoPackage = null;
+
+    @Parameter(
+        names = {"--go_proto_package"},
+        description = "Generated go proto package name")
+    private String goProtoPackage = null;
+
+    @Parameter(
+        names = {"--fhir_proto_root"},
+        description = "Generated proto import root path",
+        required = true)
+    private String fhirProtoRoot = null;
 
     @Parameter(
         names = {"--known_types"},
@@ -120,8 +134,42 @@ class ProtoGeneratorMain {
         description = "Includes a dependency on metadatatypes.proto")
     private boolean includeMetadatatypes = false;
 
+    @Parameter(
+        names = {"--additional_import"},
+        description = "Non-core fhir dependencies to add.")
+    private List<String> additionalImports = new ArrayList<>();
+
+    @Parameter(
+        names = {"--add_apache_license"},
+        description = "Adds Apache License to proto files.")
+    private Boolean addApacheLicense = false;
+
     @Parameter(description = "List of input files")
     private List<String> inputFiles = new ArrayList<>();
+
+    /** Returns a map from known StructureDefinition type to the package it is located in. */
+    private Map<String, String> getKnownTypesMap() {
+      Splitter keyValueSplitter = Splitter.on(":");
+      Splitter fileSplitter = Splitter.on(";");
+      // Convert to a multimap from package -> list of files in that package.
+      Multimap<String, String> packages = HashMultimap.create();
+      for (String knownTypesEntry : knownTypes) {
+        if (knownTypesEntry.endsWith(";")) {
+          knownTypesEntry = knownTypesEntry.substring(0, knownTypesEntry.length() - 1);
+        }
+        List<String> keyValuePair = keyValueSplitter.splitToList(knownTypesEntry);
+        if (keyValuePair.size() != 2) {
+          throw new IllegalArgumentException(
+              "Invalid knownTypes Entry ["
+                  + knownTypesEntry
+                  + "].  Should be of the form: [your.package:file_1;file_2;file_3...].");
+        }
+        packages.putAll(keyValuePair.get(0), fileSplitter.split(keyValuePair.get(1)));
+      }
+      // Invert multimap into a map from file -> package it is located in.
+      return packages.entries().stream()
+          .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+    }
   }
 
   ProtoGeneratorMain(PrintWriter writer, ProtoFilePrinter protoPrinter) {
@@ -132,12 +180,15 @@ class ProtoGeneratorMain {
   void run(Args args) throws IOException {
     JsonFormat.Parser jsonParser = JsonFormat.getParser();
 
-    // Read any typed extension structure definitions that should be inlined into the
+    // Read all structure definitions that should be inlined into the
     // output protos.  This will not generate proto definitions for these extensions -
     // that must be done separately.
-    ArrayList<StructureDefinition> knownTypes = new ArrayList<>();
-    for (String filename : args.knownTypes) {
-      knownTypes.add(readStructureDefinition(filename, jsonParser));
+    // Generate a Pair of {StructureDefinition, proto_package} for each.
+    Map<StructureDefinition, String> knownTypes = new HashMap<>();
+    for (Map.Entry<String, String> typePackagePair : args.getKnownTypesMap().entrySet()) {
+      knownTypes.put(
+          readStructureDefinition(typePackagePair.getKey(), jsonParser),
+          typePackagePair.getValue());
     }
 
     // Read the inputs in sequence.
@@ -162,7 +213,13 @@ class ProtoGeneratorMain {
     writer.println("Generating proto descriptors...");
     writer.flush();
     FileDescriptorProto proto;
-    ProtoGenerator generator = new ProtoGenerator(args.protoPackage, args.protoRoot, knownTypes);
+    ProtoGenerator generator =
+        new ProtoGenerator(
+            args.protoPackage,
+            Optional.ofNullable(args.javaProtoPackage),
+            Optional.ofNullable(args.goProtoPackage),
+            args.fhirProtoRoot,
+            knownTypes);
     proto = generator.generateFileDescriptor(definitions);
     if (args.includeContainedResource) {
       proto = generator.addContainedResource(proto);
@@ -172,22 +229,25 @@ class ProtoGeneratorMain {
       proto =
           proto
               .toBuilder()
-              .addDependency(new File(args.protoRoot, "resources.proto").toString())
+              .addDependency(new File(args.fhirProtoRoot, "resources.proto").toString())
               .build();
     }
     if (args.includeExtensions) {
       proto =
           proto
               .toBuilder()
-              .addDependency(new File(args.protoRoot, "extensions.proto").toString())
+              .addDependency(new File(args.fhirProtoRoot, "extensions.proto").toString())
               .build();
     }
     if (args.includeMetadatatypes) {
       proto =
           proto
               .toBuilder()
-              .addDependency(new File(args.protoRoot, "metadatatypes.proto").toString())
+              .addDependency(new File(args.fhirProtoRoot, "metadatatypes.proto").toString())
               .build();
+    }
+    for (String additionalImport : args.additionalImports) {
+      proto = proto.toBuilder().addDependency(new File(additionalImport).toString()).build();
     }
     String protoFileContents = printer.print(proto);
 
@@ -220,8 +280,6 @@ class ProtoGeneratorMain {
 
   private StructureDefinition readStructureDefinition(String filename, JsonFormat.Parser jsonParser)
       throws IOException {
-    writer.println("Reading " + filename + "...");
-
     File file = new File(filename);
     String json = Files.asCharSource(file, UTF_8).read();
     StructureDefinition.Builder builder = StructureDefinition.newBuilder();
@@ -239,10 +297,10 @@ class ProtoGeneratorMain {
       System.err.printf("Invalid usage: %s\n", exception.getMessage());
       System.exit(1);
     }
-
+    ProtoFilePrinter printer =
+        args.addApacheLicense ? new ProtoFilePrinter().withApacheLicense() : new ProtoFilePrinter();
     new ProtoGeneratorMain(
-            new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out, UTF_8))),
-            new ProtoFilePrinter().withApacheLicense())
+            new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out, UTF_8))), printer)
         .run(args);
   }
 }

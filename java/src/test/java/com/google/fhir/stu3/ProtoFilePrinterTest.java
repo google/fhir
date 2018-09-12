@@ -40,8 +40,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -185,8 +188,11 @@ public final class ProtoFilePrinterTest {
     protoGenerator =
         new ProtoGenerator(
             packageName,
+            Optional.of("com.google.fhir.stu3.proto"),
+            Optional.empty(),
             "proto/stu3",
-            getResourcesInFile(Extension.getDescriptor().getFile()));
+            getResourcesInFile(Extension.getDescriptor().getFile()).stream()
+                .collect(Collectors.toMap(Function.identity(), def -> packageName)));
     protoPrinter = new ProtoFilePrinter().withApacheLicense();
   }
 

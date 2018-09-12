@@ -156,10 +156,18 @@ public class ProtoFilePrinter {
     boolean printedField = false;
 
     // Add options.
+    // For fhir options, only fully type the package name if we are not writing to the core FHIR
+    // package.
+    String optionPackage =
+        packageName.equals("." + ProtoGenerator.CORE_FHIR_PACKAGE)
+            ? ""
+            : ProtoGenerator.CORE_FHIR_PACKAGE + ".";
     if (options.hasExtension(Annotations.structureDefinitionKind)) {
       message
           .append(fieldIndent)
-          .append("option (structure_definition_kind) = ")
+          .append("option (")
+          .append(optionPackage)
+          .append("structure_definition_kind) = ")
           .append(options.getExtension(Annotations.structureDefinitionKind))
           .append(";\n");
       printedField = true;
@@ -167,7 +175,9 @@ public class ProtoFilePrinter {
     if (options.hasExtension(Annotations.valueRegex)) {
       message
           .append(fieldIndent)
-          .append("option (value_regex) = \"")
+          .append("option (")
+          .append(optionPackage)
+          .append("value_regex) = \"")
           .append(VALUE_REGEX_ESCAPER.escape(options.getExtension(Annotations.valueRegex)))
           .append("\";\n");
       printedField = true;
@@ -175,7 +185,9 @@ public class ProtoFilePrinter {
     if (options.hasExtension(Annotations.fhirProfileBase)) {
       message
           .append(fieldIndent)
-          .append("option (fhir_profile_base) = \"")
+          .append("option (")
+          .append(optionPackage)
+          .append("fhir_profile_base) = \"")
           .append(options.getExtension(Annotations.fhirProfileBase))
           .append("\";\n");
       printedField = true;
@@ -183,7 +195,9 @@ public class ProtoFilePrinter {
     if (options.hasExtension(Annotations.fhirStructureDefinitionUrl)) {
       message
           .append(fieldIndent)
-          .append("option (fhir_structure_definition_url) = \"")
+          .append("option (")
+          .append(optionPackage)
+          .append("fhir_structure_definition_url) = \"")
           .append(options.getExtension(Annotations.fhirStructureDefinitionUrl))
           .append("\";\n");
       printedField = true;
@@ -212,7 +226,7 @@ public class ProtoFilePrinter {
         message.append(
             maybePrintNestedType(
                 descriptor, field, typePrefix, packageName, printedNestedTypeDefinitions));
-        message.append(printField(field, fullName, fieldIndent));
+        message.append(printField(field, fullName, fieldIndent, optionPackage));
         printedField = true;
       }
     }
@@ -229,14 +243,16 @@ public class ProtoFilePrinter {
       if (oneofOptions.hasExtension(Annotations.oneofValidationRequirement)) {
         message
             .append(oneofIndent)
-            .append("option (oneof_validation_requirement) = ")
+            .append("option (")
+            .append(optionPackage)
+            .append("oneof_validation_requirement) = ")
             .append(oneofOptions.getExtension(Annotations.oneofValidationRequirement).toString())
             .append(";\n");
       }
       // Loop over the elements.
       for (FieldDescriptorProto field : descriptor.getFieldList()) {
         if (field.getOneofIndex() == oneofIndex) {
-          message.append(printField(field, fullName, oneofIndent));
+          message.append(printField(field, fullName, oneofIndent, optionPackage));
         }
       }
       message.append(fieldIndent).append("}\n");
@@ -311,7 +327,8 @@ public class ProtoFilePrinter {
   }
 
   // Build the field.
-  private String printField(FieldDescriptorProto field, String containingType, String indent) {
+  private String printField(
+      FieldDescriptorProto field, String containingType, String indent, String optionPackage) {
     StringBuilder message = new StringBuilder();
 
     // Add the "repeated" keyword, if necessary.
@@ -332,7 +349,13 @@ public class ProtoFilePrinter {
           && typeNameParts.get(numCommon).equals(containingTypeParts.get(numCommon))) {
         numCommon++;
       }
-      message.append(Joiner.on('.').join(typeNameParts.subList(numCommon, typeNameParts.size())));
+      // Since absolute namespaces start with ".", the first token is is empty (and thus common).
+      // If this is the only common token, don't drop anything
+      if (numCommon > 1) {
+        message.append(Joiner.on('.').join(typeNameParts.subList(numCommon, typeNameParts.size())));
+      } else {
+        message.append(field.getTypeName());
+      }
     } else if (field.getType().toString().startsWith("TYPE_")) {
       message.append(field.getType().toString().substring(5).toLowerCase());
     } else {
@@ -347,7 +370,11 @@ public class ProtoFilePrinter {
     if (options.hasExtension(Annotations.isChoiceType)) {
       hasFieldOption =
           addFieldOption(
-              "(is_choice_type)",
+              new StringBuilder()
+                  .append("(")
+                  .append(optionPackage)
+                  .append("is_choice_type)")
+                  .toString(),
               options.getExtension(Annotations.isChoiceType).toString(),
               hasFieldOption,
               message);
@@ -355,7 +382,11 @@ public class ProtoFilePrinter {
     if (options.hasExtension(Annotations.validationRequirement)) {
       hasFieldOption =
           addFieldOption(
-              "(validation_requirement)",
+              new StringBuilder()
+                  .append("(")
+                  .append(optionPackage)
+                  .append("validation_requirement)")
+                  .toString(),
               options.getExtension(Annotations.validationRequirement).toString(),
               hasFieldOption,
               message);
@@ -363,7 +394,11 @@ public class ProtoFilePrinter {
     if (options.hasExtension(Annotations.fhirInlinedExtensionUrl)) {
       hasFieldOption =
           addFieldOption(
-              "(fhir_inlined_extension_url)",
+              new StringBuilder()
+                  .append("(")
+                  .append(optionPackage)
+                  .append("fhir_inlined_extension_url)")
+                  .toString(),
               "\"" + options.getExtension(Annotations.fhirInlinedExtensionUrl) + "\"",
               hasFieldOption,
               message);

@@ -49,14 +49,12 @@ fi
 
 source "common.sh"
 PROFILES="observation-genetics"
-# LANG=C ensures ASCII sorting order
-EXTENSIONS=$(LANG=C ls $EXTENSION_PATH/extension-*.json)
-ALL_STU3_STRUCTURE_DEFINITIONS=$EXTENSIONS\ $(ls $INPUT_PATH/*.profile.json)
 
 # generate datatypes.proto
 $PROTO_GENERATOR \
-  --emit_proto --output_directory $OUTPUT_PATH \
-  $(for i in $ALL_STU3_STRUCTURE_DEFINITIONS; do echo " --known_types ${i} "; done) \
+  $COMMON_FLAGS \
+  --emit_proto \
+  --output_directory $OUTPUT_PATH \
   --output_filename datatypes.proto \
   $(for i in $PRIMITIVES $DATATYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 # Some datatypes are manually generated.
@@ -66,37 +64,46 @@ $PROTO_GENERATOR \
 # * Extension, which has a field order discrepancy between spec and test data.
 # TODO(nickgeorge): generate Extension proto with custom ordering.
 # TODO(sundberg): generate codes.proto
-echo -e "\n//End of auto-generated messages.\n" >> $OUTPUT_PATH/datatypes.proto
-cat $MANUAL_ADDITIONS_ROOT/extension_proto.txt >> $OUTPUT_PATH/datatypes.proto
-cat $MANUAL_ADDITIONS_ROOT/reference_proto.txt >> $OUTPUT_PATH/datatypes.proto
-cat $MANUAL_ADDITIONS_ROOT/codes_proto.txt >> $OUTPUT_PATH/datatypes.proto
+if [ $? -eq 0 ]
+then
+  echo -e "\n//End of auto-generated messages.\n" >> $OUTPUT_PATH/datatypes.proto
+  cat $MANUAL_ADDITIONS_ROOT/extension_proto.txt >> $OUTPUT_PATH/datatypes.proto
+  cat $MANUAL_ADDITIONS_ROOT/reference_proto.txt >> $OUTPUT_PATH/datatypes.proto
+  cat $MANUAL_ADDITIONS_ROOT/codes_proto.txt >> $OUTPUT_PATH/datatypes.proto
+fi
 
 # generate metadatatypes.proto
 $PROTO_GENERATOR \
-  --emit_proto --output_directory $OUTPUT_PATH \
+  $COMMON_FLAGS \
+  --emit_proto \
+  --output_directory $OUTPUT_PATH \
   --output_filename metadatatypes.proto \
   $(for i in $METADATATYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
 # generate resources.proto
 $PROTO_GENERATOR \
-  --emit_proto --include_contained_resource \
+  $COMMON_FLAGS \
+  --output_directory $OUTPUT_PATH \
+  --include_contained_resource \
   --include_metadatatypes \
-  $(for i in $ALL_STU3_STRUCTURE_DEFINITIONS; do echo " --known_types ${i} "; done) \
-  --output_directory $OUTPUT_PATH --output_filename resources.proto \
+  --output_filename resources.proto \
   $(for i in $RESOURCETYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
 # generate profiles.proto
 $PROTO_GENERATOR \
-  --emit_proto --include_resources \
+  $COMMON_FLAGS \
+  --emit_proto \
+  --output_directory $OUTPUT_PATH \
+  --include_resources \
   --include_metadatatypes \
   --include_extensions \
-  $(for i in $ALL_STU3_STRUCTURE_DEFINITIONS; do echo " --known_types ${i} "; done) \
-  --output_directory $OUTPUT_PATH --output_filename profiles.proto \
+  --output_filename profiles.proto \
   $(for i in $PROFILES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
 # generate extensions
 $PROTO_GENERATOR \
-  --emit_proto --output_directory $OUTPUT_PATH \
-  $(for i in $ALL_STU3_STRUCTURE_DEFINITIONS; do echo " --known_types ${i} "; done) \
+  $COMMON_FLAGS \
+  --emit_proto \
+  --output_directory $OUTPUT_PATH \
   --output_filename extensions.proto \
   $(for i in $EXTENSIONS; do echo "$i"; done)
