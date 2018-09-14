@@ -1,7 +1,6 @@
 # Tools for working with FHIR protocol buffers in java.
 package(
     default_visibility = ["//visibility:public"],
-    features = ["-jpl_strict_deps"],
 )
 
 licenses(["notice"])
