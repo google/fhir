@@ -18,8 +18,8 @@ import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
+import com.google.fhir.stu3.google.PrimitiveHasNoValue;
 import com.google.fhir.stu3.proto.Extension;
-import com.google.fhir.stu3.proto.PrimitiveHasNoValue;
 import com.google.protobuf.Message;
 import com.google.protobuf.TextFormat;
 import java.io.File;
@@ -41,8 +41,7 @@ public final class ExtensionWrapperTest {
   /** Read the specifed prototxt file from the testdata directory and parse it. */
   private void mergeText(java.lang.String filename, Message.Builder builder) throws IOException {
     File file =
-        new File(
-            runfiles.rlocation("com_google_fhir/testdata/stu3/extensions/" + filename));
+        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/google/" + filename));
     textParser.merge(Files.asCharSource(file, StandardCharsets.UTF_8).read(), builder);
   }
 

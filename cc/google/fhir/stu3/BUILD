@@ -20,7 +20,7 @@ cc_library(
 cc_test(
     name = "extensions_test",
     srcs = ["extensions_test.cc"],
-    data = ["//testdata/stu3:extensions"],
+    data = ["//testdata/stu3:google"],
     deps = [
         ":extensions",
         ":test_helper",

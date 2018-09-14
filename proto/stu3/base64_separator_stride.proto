@@ -14,25 +14,34 @@
 
 syntax = "proto3";
 
-package google.fhir.stu3.proto;
-
-option java_multiple_files = true;
-option java_package = "com.google.fhir.stu3.proto";
+package google.fhir.stu3.google;
 
 import "proto/stu3/annotations.proto";
 import "proto/stu3/datatypes.proto";
 
-// This is a Google extension described by
-// https://g.co/fhir/StructureDefinition/base64Binary-separatorStride
-// TODO(nickgeorge): autogenerate from Structure Definition
-message Base64SeparatorStride {
-  option (fhir_profile_base) = "Extension";
-  option (fhir_structure_definition_url) =
+option java_multiple_files = true;
+option java_package = "com.google.fhir.stu3.google";
+
+// Auto-generated from StructureDefinition for separator-stride.
+// Base64Binary rendering parameters.
+// See https://g.co/fhir/StructureDefinition/base64Binary-separatorStride
+message Base64BinarySeparatorStride {
+  option (proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (proto.fhir_profile_base) = "Extension";
+  option (proto.fhir_structure_definition_url) =
       "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride";
 
+  // xml:id (or equivalent in JSON)
+  proto.String id = 1;
+
+  // Additional content defined by implementations
+  repeated proto.Extension extension = 2;
+
   // The separator, usually a sequence of spaces.
-  String separator = 1;
+  proto.String separator = 4
+      [(proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // The stride.
-  PositiveInt stride = 2;
+  proto.PositiveInt stride = 5
+      [(proto.validation_requirement) = REQUIRED_BY_FHIR];
 }

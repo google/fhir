@@ -15,8 +15,8 @@
 package com.google.fhir.stu3;
 
 import com.google.common.io.BaseEncoding;
+import com.google.fhir.stu3.google.Base64BinarySeparatorStride;
 import com.google.fhir.stu3.proto.Base64Binary;
-import com.google.fhir.stu3.proto.Base64SeparatorStride;
 import com.google.fhir.stu3.proto.PositiveInt;
 import com.google.fhir.stu3.proto.String;
 import com.google.protobuf.ByteString;
@@ -50,8 +50,8 @@ public class Base64BinaryWrapper extends PrimitiveWrapper<Base64Binary> {
         end++;
       }
       java.lang.String separator = input.substring(stride, end);
-      Base64SeparatorStride strideExtension =
-          Base64SeparatorStride.newBuilder()
+      Base64BinarySeparatorStride strideExtension =
+          Base64BinarySeparatorStride.newBuilder()
               .setSeparator(String.newBuilder().setValue(separator))
               .setStride(PositiveInt.newBuilder().setValue(stride))
               .build();
@@ -68,9 +68,9 @@ public class Base64BinaryWrapper extends PrimitiveWrapper<Base64Binary> {
   @Override
   protected java.lang.String printValue() {
     BaseEncoding encoding = BaseEncoding.base64();
-    List<Base64SeparatorStride> strideExtension =
+    List<Base64BinarySeparatorStride> strideExtension =
         ExtensionWrapper.fromExtensionsIn(getWrapped())
-            .getMatchingExtensions(Base64SeparatorStride.getDefaultInstance());
+            .getMatchingExtensions(Base64BinarySeparatorStride.getDefaultInstance());
     if (!strideExtension.isEmpty()) {
       encoding =
           encoding.withSeparator(
@@ -82,6 +82,6 @@ public class Base64BinaryWrapper extends PrimitiveWrapper<Base64Binary> {
 
   @Override
   protected List<Message> getInternalExtensions() {
-    return Collections.singletonList(Base64SeparatorStride.getDefaultInstance());
+    return Collections.singletonList(Base64BinarySeparatorStride.getDefaultInstance());
   }
 }

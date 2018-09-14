@@ -147,7 +147,7 @@ java_test(
     size = "medium",
     srcs = ["src/test/java/com/google/fhir/stu3/ExtensionWrapperTest.java"],
     data = [
-        "//testdata/stu3:extensions",
+        "//testdata/stu3:google",
     ],
     test_class = "com.google.fhir.stu3.ExtensionWrapperTest",
     deps = [

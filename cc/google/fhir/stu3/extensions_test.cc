@@ -28,16 +28,15 @@ namespace fhir {
 namespace stu3 {
 
 namespace {
+using ::google::fhir::stu3::google::PrimitiveHasNoValue;
 using ::google::fhir::stu3::proto::Extension;
-using ::google::fhir::stu3::proto::PrimitiveHasNoValue;
 using ::google::fhir::testutil::EqualsProto;
 
 template <class T>
 void ReadTestData(const string& type, T* message, Extension* extension) {
-  *message =
-      ReadProto<T>(absl::StrCat("extensions/", type, ".message.prototxt"));
+  *message = ReadProto<T>(absl::StrCat("google/", type, ".message.prototxt"));
   *extension = ReadProto<Extension>(
-      absl::StrCat("extensions/", type, ".extension.prototxt"));
+      absl::StrCat("google/", type, ".extension.prototxt"));
 }
 
 TEST(ExtensionsTest, ParsePrimitiveHasNoValue) {

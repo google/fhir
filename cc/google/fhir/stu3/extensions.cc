@@ -156,16 +156,27 @@ Status ConvertToExtension(const google::protobuf::Message& message,
   extension->mutable_url()->set_value(descriptor->options().GetExtension(
       stu3::proto::fhir_structure_definition_url));
 
+  // Carry over the id field if present.
+  const google::protobuf::FieldDescriptor* id_field =
+      descriptor->field_count() > 1 && descriptor->field(0)->name() == "id"
+          ? descriptor->field(0)
+          : nullptr;
+  const google::protobuf::Reflection* reflection = message.GetReflection();
+  if (id_field != nullptr && reflection->HasField(message, id_field)) {
+    extension->mutable_id()->CopyFrom(
+        reflection->GetMessage(message, id_field));
+  }
+
+  int field_id = id_field == nullptr ? 0 : 1;
+  const auto* field = descriptor->field(field_id);
   // TODO(sundberg): also check that the field is a primitive type.
-  bool is_single_value_extension = descriptor->field_count() == 1 &&
-                                   !descriptor->field(0)->is_repeated() &&
-                                   descriptor->field(0)->cpp_type() ==
-                                       google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE;
-  if (is_single_value_extension) {
-    const google::protobuf::Reflection* reflection = message.GetReflection();
-    if (reflection->HasField(message, descriptor->field(0))) {
-      return AddValueToExtension(
-          reflection->GetMessage(message, descriptor->field(0)), extension);
+  bool is_simple_extension =
+      descriptor->field_count() == field_id + 1 && !field->is_repeated() &&
+      field->cpp_type() == google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE;
+  if (is_simple_extension) {
+    if (reflection->HasField(message, field)) {
+      return AddValueToExtension(reflection->GetMessage(message, field),
+                                 extension);
 
     } else {
       return Status::OK();
@@ -180,19 +191,34 @@ Status ExtensionToMessage(const Extension& extension,
   const google::protobuf::Descriptor* descriptor = message->GetDescriptor();
   const google::protobuf::Reflection* reflection = message->GetReflection();
 
+  std::unordered_map<string, const google::protobuf::FieldDescriptor*> fields_by_url;
+  const google::protobuf::FieldDescriptor* id_field = nullptr;
+  for (int i = 0; i < descriptor->field_count(); i++) {
+    // We need to handle the "id" field separately, since it corresponds to
+    // Extension.id, not the slice "id".
+    const google::protobuf::FieldDescriptor* field = descriptor->field(i);
+    if (field->name() == "id") {
+      id_field = field;
+    } else {
+      fields_by_url[GetInlinedExtensionUrl(field)] = field;
+    }
+  }
+
+  // Copy the id of the extension if present (this is uncommon).
+  if (extension.has_id() && id_field != nullptr) {
+    const google::protobuf::Reflection* message_reflection = message->GetReflection();
+    message_reflection->MutableMessage(message, id_field)
+        ->CopyFrom(extension.id());
+  }
+
   if (extension.value().value_case() != Extension::Value::VALUE_NOT_SET) {
     // This is a simple extension, with only one value.
-    if (descriptor->field_count() != 1 || descriptor->field(0)->is_repeated()) {
+    if (fields_by_url.size() != 1 ||
+        fields_by_url.begin()->second->is_repeated()) {
       return ::tensorflow::errors::InvalidArgument(absl::StrCat(
           descriptor->full_name(), " is not a FHIR extension type"));
     }
-    return ValueToMessage(extension, message, descriptor->field(0));
-  }
-
-  std::unordered_map<string, const google::protobuf::FieldDescriptor*> fields_by_url;
-  for (int i = 0; i < descriptor->field_count(); i++) {
-    const google::protobuf::FieldDescriptor* field = descriptor->field(i);
-    fields_by_url[GetInlinedExtensionUrl(field)] = field;
+    return ValueToMessage(extension, message, fields_by_url.begin()->second);
   }
 
   for (const Extension& inner : extension.extension()) {

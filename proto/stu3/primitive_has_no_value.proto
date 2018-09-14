@@ -14,22 +14,26 @@
 
 syntax = "proto3";
 
-package google.fhir.stu3.proto;
-
-option java_multiple_files = true;
-option java_package = "com.google.fhir.stu3.proto";
+package google.fhir.stu3.google;
 
 import "proto/stu3/annotations.proto";
 import "proto/stu3/datatypes.proto";
 
-// This is a Google extension described by
-// https://g.co/fhir/StructureDefinition/primitiveHasNoValue
-// TODO(nickgeorge): autogenerate from Structure Definition
+option java_multiple_files = true;
+option java_package = "com.google.fhir.stu3.google";
+
+// Auto-generated from StructureDefinition for primitive-has-no-value.
+// Is the primitive missing a value?.
+// See https://g.co/fhir/StructureDefinition/primitiveHasNoValue
 message PrimitiveHasNoValue {
-  option (fhir_profile_base) = "Extension";
-  option (fhir_structure_definition_url) =
+  option (proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (proto.fhir_profile_base) = "Extension";
+  option (proto.fhir_structure_definition_url) =
       "https://g.co/fhir/StructureDefinition/primitiveHasNoValue";
 
-  // The value.
-  Boolean value_boolean = 1;
+  // xml:id (or equivalent in JSON)
+  proto.String id = 1;
+
+  // Value of extension
+  proto.Boolean value_boolean = 3;
 }

@@ -16,6 +16,7 @@ package com.google.fhir.stu3;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableMap;
+import com.google.fhir.stu3.google.PrimitiveHasNoValue;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.Base64Binary;
 import com.google.fhir.stu3.proto.Boolean;
@@ -31,7 +32,6 @@ import com.google.fhir.stu3.proto.Integer;
 import com.google.fhir.stu3.proto.Markdown;
 import com.google.fhir.stu3.proto.Oid;
 import com.google.fhir.stu3.proto.PositiveInt;
-import com.google.fhir.stu3.proto.PrimitiveHasNoValue;
 import com.google.fhir.stu3.proto.ReferenceId;
 import com.google.fhir.stu3.proto.Time;
 import com.google.fhir.stu3.proto.UnsignedInt;

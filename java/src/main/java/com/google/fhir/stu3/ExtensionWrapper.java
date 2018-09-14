@@ -126,7 +126,15 @@ public final class ExtensionWrapper {
                             .getDescriptorForType()
                             .getOptions()
                             .getExtension(Annotations.fhirStructureDefinitionUrl)));
-    List<FieldDescriptor> messageFields = message.getDescriptorForType().getFields();
+    List<FieldDescriptor> messageFields =
+        message.getDescriptorForType().getFields().stream()
+            .filter(field -> !field.getName().equals("extension") && !field.getName().equals("id"))
+            .collect(Collectors.toList());
+    // Copy the id field if present.
+    FieldDescriptor idField = message.getDescriptorForType().findFieldByName("id");
+    if (idField != null && message.hasField(idField)) {
+      extension.setId((com.google.fhir.stu3.proto.String) message.getField(idField));
+    }
     boolean isSingleValueExtension =
         messageFields.size() == 1
             && !messageFields.get(0).isRepeated()
@@ -206,16 +214,22 @@ public final class ExtensionWrapper {
     }
   }
 
-  // TODO(nickgeorge): This should handle the id and extension fields.
+  // TODO(nickgeorge): This should handle the extension fields.
   private static void addExtensionToMessage(Extension extension, Message.Builder builder) {
+    // Copy the id field if present.
+    if (extension.hasId()) {
+      FieldDescriptor idField = builder.getDescriptorForType().findFieldByName("id");
+      // TODO(sundberg): handle copying the id field for all kinds of extensions.
+      if (idField != null) {
+        builder.setField(idField, extension.getId());
+      }
+    }
+
     if (extension.hasValue()) {
       // We only hit this case for simple extensions. The output type had better have just one
       // field other than extension and id, and it had better be of the right type.
       List<FieldDescriptor> fields =
-          builder
-              .getDescriptorForType()
-              .getFields()
-              .stream()
+          builder.getDescriptorForType().getFields().stream()
               .filter(
                   field -> !field.getName().equals("extension") && !field.getName().equals("id"))
               .collect(Collectors.toList());
@@ -262,6 +276,7 @@ public final class ExtensionWrapper {
         }
         Message.Builder subBuilder = builder.newBuilderForField(field);
         if (inner.hasValue()) {
+          // TODO(sundberg): handle ids on inner extensions
           if (inner.getExtensionCount() > 0) {
             throw new IllegalArgumentException(
                 "Extension holds both a value and sub-extensions: " + inner);

@@ -21,14 +21,23 @@ filegroup(
     ]),
 )
 
-# These files contain testdata for generating and parsing extensions.
+# These files contain testdata for generating extensions.
 filegroup(
     name = "extensions",
     srcs = glob([
         "extensions/*.json",
         "extensions/*.descriptor.prototxt",
-        "extensions/*.extension.prototxt",
-        "extensions/*.message.prototxt",
+    ]),
+)
+
+# These files contain google extensions.
+filegroup(
+    name = "google",
+    srcs = glob([
+        "google/*.json",
+        "google/*.descriptor.prototxt",
+        "google/*.extension.prototxt",
+        "google/*.message.prototxt",
     ]),
 )
 

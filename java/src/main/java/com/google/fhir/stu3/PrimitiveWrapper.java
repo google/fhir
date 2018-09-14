@@ -14,10 +14,10 @@
 
 package com.google.fhir.stu3;
 
+import com.google.fhir.stu3.google.PrimitiveHasNoValue;
 import com.google.fhir.stu3.proto.Boolean;
 import com.google.fhir.stu3.proto.Element;
 import com.google.fhir.stu3.proto.Extension;
-import com.google.fhir.stu3.proto.PrimitiveHasNoValue;
 import com.google.gson.JsonPrimitive;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
