@@ -39,6 +39,7 @@ import com.google.fhir.stu3.proto.Uri;
 import com.google.fhir.stu3.proto.Xhtml;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
@@ -823,60 +824,98 @@ public final class JsonFormat {
   public static PrimitiveWrapper parseAndWrap(
       JsonElement json, MessageOrBuilder message, ZoneId defaultTimeZone) {
     Descriptor descriptor = message.getDescriptorForType();
-    String jsonValue;
-    if (json.isJsonNull() || json.isJsonObject()) {
-      // Nulls can appear in repeated fields, and jsonObjects appear when a primitive type has
-      // extensions.
-      jsonValue = null;
-    } else if (json.isJsonPrimitive()
-        && (!"Boolean".equals(descriptor.getName()) || json.getAsJsonPrimitive().isBoolean())) {
-      jsonValue = json.getAsString();
-    } else {
-      // This field is a JsonArray, which is not allowed, or an invalid boolean.
-      throw new IllegalArgumentException("Invalid JsonElement type: " + json);
+    if (json.isJsonArray()) {
+      // JsonArrays are not allowed here
+      throw new IllegalArgumentException("Cannot wrap a JsonArray.");
     }
+    // JSON objects represents extension on a primitive, and are treated as null values.
+    if (json.isJsonObject()) {
+      json = JsonNull.INSTANCE;
+    }
+    String jsonString = json.isJsonNull() ? null : json.getAsJsonPrimitive().getAsString();
 
     if (descriptor.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
-      return new CodeWrapper(jsonValue);
+      return new CodeWrapper(jsonString);
     }
+    // TODO(nickgeorge): Make proper class hierarchy for wrapper input types,
+    // so these can all accept JsonElement in constructor, and do type checking there.
     switch (descriptor.getName()) {
       case "Base64Binary":
-        return new Base64BinaryWrapper(jsonValue);
+        checkIsString(json);
+        return new Base64BinaryWrapper(jsonString);
       case "Boolean":
-        return new BooleanWrapper(jsonValue);
+        checkIsBoolean(json);
+        return new BooleanWrapper(jsonString);
       case "Code":
-        return new CodeWrapper(jsonValue);
+        checkIsString(json);
+        return new CodeWrapper(jsonString);
       case "Date":
-        return new DateWrapper(jsonValue, defaultTimeZone);
+        checkIsString(json);
+        return new DateWrapper(jsonString, defaultTimeZone);
       case "DateTime":
-        return new DateTimeWrapper(jsonValue, defaultTimeZone);
+        checkIsString(json);
+        return new DateTimeWrapper(jsonString, defaultTimeZone);
       case "Decimal":
-        return new DecimalWrapper(jsonValue);
+        checkIsNumber(json);
+        return new DecimalWrapper(jsonString);
       case "Id":
-        return new IdWrapper(jsonValue);
+        checkIsString(json);
+        return new IdWrapper(jsonString);
       case "Instant":
-        return new InstantWrapper(jsonValue);
+        checkIsString(json);
+        return new InstantWrapper(jsonString);
       case "Integer":
-        return new IntegerWrapper(jsonValue);
+        checkIsNumber(json);
+        return new IntegerWrapper(jsonString);
       case "Markdown":
-        return new MarkdownWrapper(jsonValue);
+        checkIsString(json);
+        return new MarkdownWrapper(jsonString);
       case "Oid":
-        return new OidWrapper(jsonValue);
+        checkIsString(json);
+        return new OidWrapper(jsonString);
       case "PositiveInt":
-        return new PositiveIntWrapper(jsonValue);
+        checkIsNumber(json);
+        return new PositiveIntWrapper(jsonString);
       case "String":
-        return new StringWrapper(jsonValue);
+        checkIsString(json);
+        return new StringWrapper(jsonString);
       case "Time":
-        return new TimeWrapper(jsonValue);
+        checkIsString(json);
+        return new TimeWrapper(jsonString);
       case "UnsignedInt":
-        return new UnsignedIntWrapper(jsonValue);
+        checkIsNumber(json);
+        return new UnsignedIntWrapper(jsonString);
       case "Uri":
-        return new UriWrapper(jsonValue);
+        checkIsString(json);
+        return new UriWrapper(jsonString);
       case "Xhtml":
-        return new XhtmlWrapper(jsonValue);
+        checkIsString(json);
+        return new XhtmlWrapper(jsonString);
       default:
         throw new IllegalArgumentException(
             "Unexpected primitive FHIR type: " + descriptor.getName());
     }
   }
+
+  private static void checkIsBoolean(JsonElement json) {
+    if (!(json.isJsonNull() || json.isJsonObject())
+        && !(json.isJsonPrimitive() && json.getAsJsonPrimitive().isBoolean())) {
+      throw new IllegalArgumentException("Invalid JSON element for boolean: " + json);
+    }
+  }
+
+  private static void checkIsNumber(JsonElement json) {
+    if (!(json.isJsonNull() || json.isJsonObject())
+        && !(json.isJsonPrimitive() && json.getAsJsonPrimitive().isNumber())) {
+      throw new IllegalArgumentException("Invalid JSON element for number: " + json);
+    }
+  }
+
+  private static void checkIsString(JsonElement json) {
+    if (!(json.isJsonNull() || json.isJsonObject())
+        && !(json.isJsonPrimitive() && json.getAsJsonPrimitive().isString())) {
+      throw new IllegalArgumentException("Invalid JSON element for string-like: " + json);
+    }
+  }
 }
+
