@@ -26,9 +26,10 @@ JAVA_PROTO_PACKAGE="com.google.fhir.stu3.proto"
 PROTO_ROOT="proto/stu3"
 
 FHIR_KNOWN_TYPES=$PROTO_PACKAGE:$(echo $ALL_STU3_STRUCTURE_DEFINITIONS | tr " " ";")
-COMMON_FLAGS="\
+NO_PACKAGE_FLAGS="\
   --add_apache_license \
   --known_types $FHIR_KNOWN_TYPES \
-  --proto_package "$PROTO_PACKAGE" \
-  --java_proto_package "$JAVA_PROTO_PACKAGE" \
   --fhir_proto_root "$PROTO_ROOT""
+COMMON_FLAGS="$NO_PACKAGE_FLAGS \
+  --proto_package "$PROTO_PACKAGE" \
+  --java_proto_package "$JAVA_PROTO_PACKAGE""

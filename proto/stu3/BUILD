@@ -43,9 +43,8 @@ fhir_proto_library(
 
 fhir_proto_library(
     srcs = [
-        "base64_separator_stride.proto",
         "extensions.proto",
-        "primitive_has_no_value.proto",
+        "google_extensions.proto",
     ],
     proto_deps = [
         ":annotations_proto",

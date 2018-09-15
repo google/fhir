@@ -20,7 +20,7 @@
 #include "google/fhir/stu3/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/primitive_has_no_value.pb.h"
+#include "proto/stu3/google_extensions.pb.h"
 #include "tensorflow/core/lib/core/status.h"
 
 namespace google {

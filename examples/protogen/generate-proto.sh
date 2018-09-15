@@ -48,6 +48,7 @@ then
 fi
 
 source "common.sh"
+GOOGLE_EXTENSIONS="extension-primitive-has-no-value extension-base64binary-separator-stride"
 PROFILES="observation-genetics"
 
 # generate datatypes.proto
@@ -83,6 +84,7 @@ $PROTO_GENERATOR \
 # generate resources.proto
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
+  --emit_proto \
   --output_directory $OUTPUT_PATH \
   --include_contained_resource \
   --include_metadatatypes \
@@ -107,3 +109,13 @@ $PROTO_GENERATOR \
   --output_directory $OUTPUT_PATH \
   --output_filename extensions.proto \
   $(for i in $EXTENSIONS; do echo "$i"; done)
+
+# generate google-specific extensions
+$PROTO_GENERATOR \
+  $NO_PACKAGE_FLAGS \
+  --emit_proto \
+  --proto_package google.fhir.stu3.google \
+  --java_proto_package com.google.fhir.stu3.google \
+  --output_directory $OUTPUT_PATH \
+  --output_filename google_extensions.proto \
+  $(for i in $GOOGLE_EXTENSIONS; do echo "$GOOGLE_EXTENSION_PATH/${i,,}.json"; done)

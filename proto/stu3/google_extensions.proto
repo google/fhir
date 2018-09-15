@@ -26,9 +26,10 @@ option java_package = "com.google.fhir.stu3.google";
 // Is the primitive missing a value?.
 // See https://g.co/fhir/StructureDefinition/primitiveHasNoValue
 message PrimitiveHasNoValue {
-  option (proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (proto.fhir_profile_base) = "Extension";
-  option (proto.fhir_structure_definition_url) =
+  option (.google.fhir.stu3.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) = "Extension";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
       "https://g.co/fhir/StructureDefinition/primitiveHasNoValue";
 
   // xml:id (or equivalent in JSON)
@@ -36,4 +37,29 @@ message PrimitiveHasNoValue {
 
   // Value of extension
   proto.Boolean value_boolean = 3;
+}
+
+// Auto-generated from StructureDefinition for separator-stride.
+// Base64Binary rendering parameters.
+// See https://g.co/fhir/StructureDefinition/base64Binary-separatorStride
+message Base64BinarySeparatorStride {
+  option (.google.fhir.stu3.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) = "Extension";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride";
+
+  // xml:id (or equivalent in JSON)
+  proto.String id = 1;
+
+  // Additional content defined by implementations
+  repeated proto.Extension extension = 2;
+
+  // The separator, usually a sequence of spaces.
+  proto.String separator = 4
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The stride.
+  proto.PositiveInt stride = 5
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }

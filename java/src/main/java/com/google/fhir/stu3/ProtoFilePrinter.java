@@ -161,7 +161,7 @@ public class ProtoFilePrinter {
     String optionPackage =
         packageName.equals("." + ProtoGenerator.CORE_FHIR_PACKAGE)
             ? ""
-            : ProtoGenerator.CORE_FHIR_PACKAGE + ".";
+            : "." + ProtoGenerator.CORE_FHIR_PACKAGE + ".";
     if (options.hasExtension(Annotations.structureDefinitionKind)) {
       message
           .append(fieldIndent)
