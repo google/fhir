@@ -525,6 +525,6 @@ nested_type {
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Family member history for genetics analysis.\nInformation about patient\'s relatives, relevant for patient.\nSee http://hl7.org/fhir/StructureDefinition/familymemberhistory-genetic"
-  [google.fhir.stu3.proto.fhir_profile_base]: "FamilyMemberHistory"
+  [google.fhir.stu3.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory"
   [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/familymemberhistory-genetic"
 }

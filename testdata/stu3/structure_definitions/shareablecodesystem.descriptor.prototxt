@@ -765,6 +765,6 @@ nested_type {
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Shareable CodeSystem.\nA set of codes drawn from one or more code systems.\nSee http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
-  [google.fhir.stu3.proto.fhir_profile_base]: "CodeSystem"
+  [google.fhir.stu3.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/CodeSystem"
   [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
 }

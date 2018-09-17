@@ -65,7 +65,7 @@ TEST(ExtensionsTest, PrintPrimitiveHasNoValue) {
   ReadTestData("primitive_has_no_value", &message, &extension);
 
   Extension output;
-  ASSERT_TRUE(ConvertToExtension(message, &output).ok());
+  TF_CHECK_OK(ConvertToExtension(message, &output));
   EXPECT_THAT(output, EqualsProto(extension));
 }
 
@@ -75,7 +75,7 @@ TEST(ExtensionsTest, PrintPrimitiveHasNoValue_Empty) {
   ReadTestData("empty", &message, &extension);
 
   Extension output;
-  ASSERT_TRUE(ConvertToExtension(message, &output).ok());
+  TF_CHECK_OK(ConvertToExtension(message, &output));
   EXPECT_THAT(output, EqualsProto(extension));
 }
 

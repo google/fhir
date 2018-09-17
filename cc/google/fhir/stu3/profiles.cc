@@ -137,16 +137,15 @@ Status PerformSlicing(const Message& base_resource,
 
 Status ConvertToProfile(const Message& base_resource,
                         Message* profiled_resource) {
-  // TODO(nickgeorge): this should operate on structure definition url,
-  // not name.
-  string profile_base_type =
+  string profile_base_url =
       profiled_resource->GetDescriptor()->options().GetExtension(
           proto::fhir_profile_base);
-  if (profile_base_type != base_resource.GetDescriptor()->name()) {
+  if (profile_base_url != base_resource.GetDescriptor()->options().GetExtension(
+                              proto::fhir_structure_definition_url)) {
     return ::tensorflow::errors::InvalidArgument(
         "Unable to convert ", base_resource.GetDescriptor()->full_name(),
         " to profile ", profiled_resource->GetDescriptor()->full_name(),
-        ".  The profile has an incorrect base type of ", profile_base_type);
+        ".  The profile has an incorrect base of ", profile_base_url);
   }
 
   // Copy over the base_resource message into the profiled_resource container.

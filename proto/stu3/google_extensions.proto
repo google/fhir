@@ -28,7 +28,8 @@ option java_package = "com.google.fhir.stu3.google";
 message PrimitiveHasNoValue {
   option (.google.fhir.stu3.proto.structure_definition_kind) =
       KIND_COMPLEX_TYPE;
-  option (.google.fhir.stu3.proto.fhir_profile_base) = "Extension";
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
       "https://g.co/fhir/StructureDefinition/primitiveHasNoValue";
 
@@ -45,7 +46,8 @@ message PrimitiveHasNoValue {
 message Base64BinarySeparatorStride {
   option (.google.fhir.stu3.proto.structure_definition_kind) =
       KIND_COMPLEX_TYPE;
-  option (.google.fhir.stu3.proto.fhir_profile_base) = "Extension";
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
       "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride";
 

@@ -134,7 +134,8 @@ Status ValueToMessage(const Extension& extension, google::protobuf::Message* mes
 
 Status ValidateExtension(const google::protobuf::Descriptor* descriptor) {
   if (descriptor->options().GetExtension(stu3::proto::fhir_profile_base) !=
-      "Extension") {
+      Extension::descriptor()->options().GetExtension(
+          stu3::proto::fhir_structure_definition_url)) {
     return ::tensorflow::errors::InvalidArgument(
         absl::StrCat(descriptor->full_name(), " is not a FHIR extension type"));
   }

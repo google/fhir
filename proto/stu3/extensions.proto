@@ -28,7 +28,8 @@ option java_package = "com.google.fhir.stu3.proto";
 // See http://hl7.org/fhir/StructureDefinition/11179-de-administrative-status
 message DataElementAdministrativeStatus {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-de-administrative-status";
 
@@ -44,7 +45,8 @@ message DataElementAdministrativeStatus {
 // See http://hl7.org/fhir/StructureDefinition/11179-de-change-description
 message DataElementChangeDescription {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-de-change-description";
 
@@ -61,7 +63,8 @@ message DataElementChangeDescription {
 // http://hl7.org/fhir/StructureDefinition/11179-de-classification-or-context
 message DataElementClassificationOrContext {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-de-classification-or-context";
 
@@ -77,7 +80,8 @@ message DataElementClassificationOrContext {
 // See http://hl7.org/fhir/StructureDefinition/11179-de-contact-address
 message DataElementContactAddress {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-de-contact-address";
 
@@ -93,7 +97,8 @@ message DataElementContactAddress {
 // See http://hl7.org/fhir/StructureDefinition/11179-de-document-reference
 message DataElementDocumentReference {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-de-document-reference";
 
@@ -109,7 +114,8 @@ message DataElementDocumentReference {
 // See http://hl7.org/fhir/StructureDefinition/11179-de-effective-period
 message DataElementEffectivePeriod {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-de-effective-period";
 
@@ -125,7 +131,8 @@ message DataElementEffectivePeriod {
 // See http://hl7.org/fhir/StructureDefinition/11179-de-is-data-element-concept
 message DataElementIsDataElementConcept {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-de-is-data-element-concept";
 
@@ -141,7 +148,8 @@ message DataElementIsDataElementConcept {
 // See http://hl7.org/fhir/StructureDefinition/11179-de-registry-org
 message DataElementRegistryOrg {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-de-registry-org";
 
@@ -157,7 +165,8 @@ message DataElementRegistryOrg {
 // See http://hl7.org/fhir/StructureDefinition/11179-de-submitter-org
 message DataElementSubmitterOrg {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-de-submitter-org";
 
@@ -173,7 +182,8 @@ message DataElementSubmitterOrg {
 // See http://hl7.org/fhir/StructureDefinition/11179-objectClass
 message ElementDefinitionObjectClass {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-objectClass";
 
@@ -189,7 +199,8 @@ message ElementDefinitionObjectClass {
 // See http://hl7.org/fhir/StructureDefinition/11179-objectClassProperty
 message ElementDefinitionObjectClassProperty {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-objectClassProperty";
 
@@ -205,7 +216,8 @@ message ElementDefinitionObjectClassProperty {
 // See http://hl7.org/fhir/StructureDefinition/11179-permitted-value-conceptmap
 message PermittedValueConceptmap {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-permitted-value-conceptmap";
 
@@ -221,7 +233,8 @@ message PermittedValueConceptmap {
 // See http://hl7.org/fhir/StructureDefinition/11179-permitted-value-valueset
 message PermittedValueValueset {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-permitted-value-valueset";
 
@@ -237,7 +250,8 @@ message PermittedValueValueset {
 // See http://hl7.org/fhir/StructureDefinition/allergyintolerance-certainty
 message AllergyIntoleranceCertainty {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/allergyintolerance-certainty";
 
@@ -253,7 +267,8 @@ message AllergyIntoleranceCertainty {
 // See http://hl7.org/fhir/StructureDefinition/allergyintolerance-duration
 message AllergyIntoleranceDuration {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/allergyintolerance-duration";
 
@@ -269,7 +284,8 @@ message AllergyIntoleranceDuration {
 // See http://hl7.org/fhir/StructureDefinition/allergyintolerance-reasonRefuted
 message AllergyIntoleranceReasonRefuted {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/allergyintolerance-reasonRefuted";
 
@@ -285,7 +301,8 @@ message AllergyIntoleranceReasonRefuted {
 // See http://hl7.org/fhir/StructureDefinition/allergyintolerance-resolutionAge
 message AllergyIntoleranceResolutionAge {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/allergyintolerance-resolutionAge";
 
@@ -302,7 +319,8 @@ message AllergyIntoleranceResolutionAge {
 // http://hl7.org/fhir/StructureDefinition/allergyintolerance-substanceExposureRisk
 message AllergyIntoleranceSubstanceExposureRisk {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/allergyintolerance-substanceExposureRisk";
 
@@ -325,7 +343,8 @@ message AllergyIntoleranceSubstanceExposureRisk {
 // See http://hl7.org/fhir/StructureDefinition/auditevent-Accession
 message AuditEventAccession {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-Accession";
 
@@ -341,7 +360,8 @@ message AuditEventAccession {
 // See http://hl7.org/fhir/StructureDefinition/auditevent-Anonymized
 message AuditEventAnonymized {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-Anonymized";
 
@@ -357,7 +377,8 @@ message AuditEventAnonymized {
 // See http://hl7.org/fhir/StructureDefinition/auditevent-Encrypted
 message AuditEventEncrypted {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-Encrypted";
 
@@ -373,7 +394,8 @@ message AuditEventEncrypted {
 // See http://hl7.org/fhir/StructureDefinition/auditevent-Instance
 message AuditEventInstance {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-Instance";
 
@@ -389,7 +411,8 @@ message AuditEventInstance {
 // See http://hl7.org/fhir/StructureDefinition/auditevent-MPPS
 message AuditEventMPPS {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-MPPS";
 
@@ -405,7 +428,8 @@ message AuditEventMPPS {
 // See http://hl7.org/fhir/StructureDefinition/auditevent-NumberOfInstances
 message AuditEventNumberOfInstances {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-NumberOfInstances";
 
@@ -422,7 +446,8 @@ message AuditEventNumberOfInstances {
 // http://hl7.org/fhir/StructureDefinition/auditevent-ParticipantObjectContainsStudy
 message AuditEventParticipantObjectContainsStudy {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-ParticipantObjectContainsStudy";
 
@@ -438,7 +463,8 @@ message AuditEventParticipantObjectContainsStudy {
 // See http://hl7.org/fhir/StructureDefinition/auditevent-SOPClass
 message AuditEventSOPClass {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-SOPClass";
 
@@ -454,7 +480,8 @@ message AuditEventSOPClass {
 // See http://hl7.org/fhir/StructureDefinition/birthPlace
 message PatientBirthPlace {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/birthPlace";
 
@@ -470,7 +497,8 @@ message PatientBirthPlace {
 // See http://hl7.org/fhir/StructureDefinition/body-site-instance
 message BodySiteInstance {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/body-site-instance";
 
@@ -486,7 +514,8 @@ message BodySiteInstance {
 // See http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation
 message CapabilityStatementExpectation {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation";
 
@@ -502,7 +531,8 @@ message CapabilityStatementExpectation {
 // See http://hl7.org/fhir/StructureDefinition/capabilitystatement-prohibited
 message CapabilityStatementProhibited {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/capabilitystatement-prohibited";
 
@@ -519,7 +549,8 @@ message CapabilityStatementProhibited {
 // http://hl7.org/fhir/StructureDefinition/capabilitystatement-search-parameter-combination
 message CapabilityStatementSearchParameterCombination {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/capabilitystatement-search-parameter-combination";
 
@@ -542,7 +573,8 @@ message CapabilityStatementSearchParameterCombination {
 // http://hl7.org/fhir/StructureDefinition/capabilitystatement-supported-system
 message CapabilityStatementSupportedSystem {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/capabilitystatement-supported-system";
 
@@ -558,7 +590,8 @@ message CapabilityStatementSupportedSystem {
 // See http://hl7.org/fhir/StructureDefinition/capabilitystatement-websocket
 message CapabilityStatementWebsocket {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/capabilitystatement-websocket";
 
@@ -574,7 +607,8 @@ message CapabilityStatementWebsocket {
 // See http://hl7.org/fhir/StructureDefinition/careplan-activity-title
 message CarePlanActivityTitle {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/careplan-activity-title";
 
@@ -590,7 +624,8 @@ message CarePlanActivityTitle {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-author
 message CodeSystemAuthor {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-author";
 
@@ -606,7 +641,8 @@ message CodeSystemAuthor {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-comment
 message CodeSystemComment {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-comment";
 
@@ -628,7 +664,8 @@ message CodeSystemComment {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-comments
 message CodeSystemComments {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-comments";
 
@@ -644,7 +681,8 @@ message CodeSystemComments {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-conceptOrder
 message CodeSystemConceptOrder {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-conceptOrder";
 
@@ -660,7 +698,8 @@ message CodeSystemConceptOrder {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-deprecated
 message CodeSystemDeprecated {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-deprecated";
 
@@ -676,7 +715,8 @@ message CodeSystemDeprecated {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-effectiveDate
 message CodeSystemEffectiveDate {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-effectiveDate";
 
@@ -692,7 +732,8 @@ message CodeSystemEffectiveDate {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-expirationDate
 message CodeSystemExpirationDate {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-expirationDate";
 
@@ -708,7 +749,8 @@ message CodeSystemExpirationDate {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-history
 message CodeSystemHistory {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-history";
 
@@ -749,7 +791,8 @@ message CodeSystemHistory {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-keyWord
 message CodeSystemKeyWord {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-keyWord";
 
@@ -765,7 +808,8 @@ message CodeSystemKeyWord {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-label
 message CodeSystemLabel {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-label";
 
@@ -781,7 +825,8 @@ message CodeSystemLabel {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-map
 message CodeSystemMap {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-map";
 
@@ -797,7 +842,8 @@ message CodeSystemMap {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-ordinalValue
 message CodeSystemOrdinalValue {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-ordinalValue";
 
@@ -813,7 +859,8 @@ message CodeSystemOrdinalValue {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-otherName
 message CodeSystemOtherName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-otherName";
 
@@ -835,7 +882,8 @@ message CodeSystemOtherName {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-reference
 message CodeSystemReference {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-reference";
 
@@ -851,7 +899,8 @@ message CodeSystemReference {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-replacedby
 message CodeSystemReplacedby {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-replacedby";
 
@@ -867,7 +916,8 @@ message CodeSystemReplacedby {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-sourceReference
 message CodeSystemSourceReference {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-sourceReference";
 
@@ -883,7 +933,8 @@ message CodeSystemSourceReference {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-subsumes
 message CodeSystemSubsumes {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-subsumes";
 
@@ -899,7 +950,8 @@ message CodeSystemSubsumes {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-trusted-expansion
 message CodeSystemTrustedExpansion {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-trusted-expansion";
 
@@ -915,7 +967,8 @@ message CodeSystemTrustedExpansion {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-usage
 message CodeSystemUsage {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-usage";
 
@@ -937,7 +990,8 @@ message CodeSystemUsage {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-warning
 message CodeSystemWarning {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-warning";
 
@@ -953,7 +1007,8 @@ message CodeSystemWarning {
 // See http://hl7.org/fhir/StructureDefinition/codesystem-workflowStatus
 message CodeSystemWorkflowStatus {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-workflowStatus";
 
@@ -969,7 +1024,8 @@ message CodeSystemWorkflowStatus {
 // See http://hl7.org/fhir/StructureDefinition/coding-sctdescid
 message CodingSctdescid {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/coding-sctdescid";
 
@@ -985,7 +1041,8 @@ message CodingSctdescid {
 // See http://hl7.org/fhir/StructureDefinition/communication-media
 message CommunicationMedia {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/communication-media";
 
@@ -1001,7 +1058,8 @@ message CommunicationMedia {
 // See http://hl7.org/fhir/StructureDefinition/communication-reasonNotPerformed
 message CommunicationReasonNotPerformed {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/communication-reasonNotPerformed";
 
@@ -1017,7 +1075,8 @@ message CommunicationReasonNotPerformed {
 // See http://hl7.org/fhir/StructureDefinition/communicationrequest-definition
 message CommunicationRequestDefinition {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/communicationrequest-definition";
 
@@ -1040,7 +1099,8 @@ message CommunicationRequestDefinition {
 // See http://hl7.org/fhir/StructureDefinition/communicationrequest-orderedBy
 message CommunicationRequestOrderedBy {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/communicationrequest-orderedBy";
 
@@ -1064,7 +1124,8 @@ message CommunicationRequestOrderedBy {
 // http://hl7.org/fhir/StructureDefinition/communicationrequest-reasonRejected
 message CommunicationRequestReasonRejected {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/communicationrequest-reasonRejected";
 
@@ -1081,7 +1142,8 @@ message CommunicationRequestReasonRejected {
 // http://hl7.org/fhir/StructureDefinition/communicationrequest-relevantHistory
 message CommunicationRequestRelevantHistory {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/communicationrequest-relevantHistory";
 
@@ -1098,7 +1160,8 @@ message CommunicationRequestRelevantHistory {
 // http://hl7.org/fhir/StructureDefinition/communicationrequest-supportingInfo
 message CommunicationRequestSupportingInfo {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/communicationrequest-supportingInfo";
 
@@ -1115,7 +1178,8 @@ message CommunicationRequestSupportingInfo {
 // http://hl7.org/fhir/StructureDefinition/composition-clindoc-otherConfidentiality
 message CompositionOtherConfidentiality {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/composition-clindoc-otherConfidentiality";
 
@@ -1131,7 +1195,8 @@ message CompositionOtherConfidentiality {
 // See http://hl7.org/fhir/StructureDefinition/concept-bidirectional
 message ConceptMapBidirectional {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/concept-bidirectional";
 
@@ -1147,7 +1212,8 @@ message ConceptMapBidirectional {
 // See http://hl7.org/fhir/StructureDefinition/condition-basedOn
 message ConditionBasedOn {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-basedOn";
 
@@ -1170,7 +1236,8 @@ message ConditionBasedOn {
 // See http://hl7.org/fhir/StructureDefinition/condition-criticality
 message ConditionCriticality {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-criticality";
 
@@ -1186,7 +1253,8 @@ message ConditionCriticality {
 // See http://hl7.org/fhir/StructureDefinition/condition-definition
 message ConditionDefinition {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-definition";
 
@@ -1202,7 +1270,8 @@ message ConditionDefinition {
 // See http://hl7.org/fhir/StructureDefinition/condition-dueTo
 message ConditionDueTo {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-dueTo";
 
@@ -1226,7 +1295,8 @@ message ConditionDueTo {
 // See http://hl7.org/fhir/StructureDefinition/condition-occurredFollowing
 message ConditionOccurredFollowing {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-occurredFollowing";
 
@@ -1250,7 +1320,8 @@ message ConditionOccurredFollowing {
 // See http://hl7.org/fhir/StructureDefinition/condition-outcome
 message ConditionOutcome {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-outcome";
 
@@ -1266,7 +1337,8 @@ message ConditionOutcome {
 // See http://hl7.org/fhir/StructureDefinition/condition-partOf
 message ConditionPartOf {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-partOf";
 
@@ -1289,7 +1361,8 @@ message ConditionPartOf {
 // See http://hl7.org/fhir/StructureDefinition/condition-ruledOut
 message ConditionRuledOut {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-ruledOut";
 
@@ -1305,7 +1378,8 @@ message ConditionRuledOut {
 // See http://hl7.org/fhir/StructureDefinition/condition-targetBodySite
 message ConditionTargetBodySite {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-targetBodySite";
 
@@ -1321,7 +1395,8 @@ message ConditionTargetBodySite {
 // See http://hl7.org/fhir/StructureDefinition/consent-location
 message ConsentLocation {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/consent-location";
 
@@ -1337,7 +1412,8 @@ message ConsentLocation {
 // See http://hl7.org/fhir/StructureDefinition/consent-NotificationEndpoint
 message ConsentNotificationEndpoint {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/consent-NotificationEndpoint";
 
@@ -1353,7 +1429,8 @@ message ConsentNotificationEndpoint {
 // See http://hl7.org/fhir/StructureDefinition/consent-Witness
 message ConsentWitness {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/consent-Witness";
 
@@ -1376,7 +1453,8 @@ message ConsentWitness {
 // See http://hl7.org/fhir/StructureDefinition/data-absent-reason
 message DataAbsentReason {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/data-absent-reason";
 
@@ -1392,7 +1470,8 @@ message DataAbsentReason {
 // See http://hl7.org/fhir/StructureDefinition/datadictionary
 message StructureDefinitionDatadictionary {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/datadictionary";
 
@@ -1408,7 +1487,8 @@ message StructureDefinitionDatadictionary {
 // See http://hl7.org/fhir/StructureDefinition/device-din
 message DeviceDin {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/device-din";
 
@@ -1424,7 +1504,8 @@ message DeviceDin {
 // See http://hl7.org/fhir/StructureDefinition/device-implant-status
 message DeviceImplantStatus {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/device-implant-status";
 
@@ -1440,7 +1521,8 @@ message DeviceImplantStatus {
 // See http://hl7.org/fhir/StructureDefinition/devicerequest-patientInstruction
 message DeviceRequestPatientInstruction {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/devicerequest-patientInstruction";
 
@@ -1462,7 +1544,8 @@ message DeviceRequestPatientInstruction {
 // See http://hl7.org/fhir/StructureDefinition/devicerequest-reasonRejected
 message DeviceRequestReasonRejected {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/devicerequest-reasonRejected";
 
@@ -1478,7 +1561,8 @@ message DeviceRequestReasonRejected {
 // See http://hl7.org/fhir/StructureDefinition/diagnosticReport-addendumOf
 message DiagnosticReportAddendumOf {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/diagnosticReport-addendumOf";
 
@@ -1494,7 +1578,8 @@ message DiagnosticReportAddendumOf {
 // See http://hl7.org/fhir/StructureDefinition/diagnosticReport-extends
 message DiagnosticReportExtends {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/diagnosticReport-extends";
 
@@ -1510,7 +1595,8 @@ message DiagnosticReportExtends {
 // See http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis
 message DiagnosticReportAnalysis {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis";
 
@@ -1533,7 +1619,8 @@ message DiagnosticReportAnalysis {
 // http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition
 message DiagnosticReportAssessedCondition {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition";
 
@@ -1550,7 +1637,8 @@ message DiagnosticReportAssessedCondition {
 // http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory
 message DiagnosticReportFamilyMemberHistory {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory";
 
@@ -1567,7 +1655,8 @@ message DiagnosticReportFamilyMemberHistory {
 // http://hl7.org/fhir/StructureDefinition/diagnosticReport-locationPerformed
 message DiagnosticReportLocationPerformed {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/diagnosticReport-locationPerformed";
 
@@ -1583,7 +1672,8 @@ message DiagnosticReportLocationPerformed {
 // See http://hl7.org/fhir/StructureDefinition/diagnosticReport-replaces
 message DiagnosticReportReplaces {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/diagnosticReport-replaces";
 
@@ -1599,7 +1689,8 @@ message DiagnosticReportReplaces {
 // See http://hl7.org/fhir/StructureDefinition/diagnosticReport-summaryOf
 message DiagnosticReportSummaryOf {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/diagnosticReport-summaryOf";
 
@@ -1615,7 +1706,8 @@ message DiagnosticReportSummaryOf {
 // See http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits
 message ElementDefinitionAllowedUnits {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits";
 
@@ -1639,7 +1731,8 @@ message ElementDefinitionAllowedUnits {
 // See http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice
 message ElementDefinitionBestpractice {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice";
 
@@ -1663,7 +1756,8 @@ message ElementDefinitionBestpractice {
 // See http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName
 message ElementDefinitionBindingName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName";
 
@@ -1680,7 +1774,8 @@ message ElementDefinitionBindingName {
 // http://hl7.org/fhir/StructureDefinition/elementdefinition-equivalence
 message ElementDefinitionEquivalence {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-equivalence";
 
@@ -1696,7 +1791,8 @@ message ElementDefinitionEquivalence {
 // See http://hl7.org/fhir/StructureDefinition/elementdefinition-identifier
 message ElementDefinitionIdentifier {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-identifier";
 
@@ -1713,7 +1809,8 @@ message ElementDefinitionIdentifier {
 // http://hl7.org/fhir/StructureDefinition/elementdefinition-inheritedExtensibleValueSet
 message ElementDefinitionInheritedExtensibleValueSet {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-inheritedExtensibleValueSet";
 
@@ -1737,7 +1834,8 @@ message ElementDefinitionInheritedExtensibleValueSet {
 // See http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding
 message ElementDefinitionIsCommonBinding {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding";
 
@@ -1753,7 +1851,8 @@ message ElementDefinitionIsCommonBinding {
 // See http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet
 message ElementDefinitionMaxValueSet {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet";
 
@@ -1777,7 +1876,8 @@ message ElementDefinitionMaxValueSet {
 // See http://hl7.org/fhir/StructureDefinition/elementdefinition-minValueSet
 message ElementDefinitionMinValueSet {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-minValueSet";
 
@@ -1801,7 +1901,8 @@ message ElementDefinitionMinValueSet {
 // See http://hl7.org/fhir/StructureDefinition/elementdefinition-namespace
 message Namespace {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-namespace";
 
@@ -1817,7 +1918,8 @@ message Namespace {
 // See http://hl7.org/fhir/StructureDefinition/elementdefinition-question
 message ElementDefinitionQuestion {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-question";
 
@@ -1833,7 +1935,8 @@ message ElementDefinitionQuestion {
 // See http://hl7.org/fhir/StructureDefinition/elementdefinition-selector
 message ElementDefinitionSelector {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-selector";
 
@@ -1849,7 +1952,8 @@ message ElementDefinitionSelector {
 // See http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable
 message ElementDefinitionTranslatable {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable";
 
@@ -1865,7 +1969,8 @@ message ElementDefinitionTranslatable {
 // See http://hl7.org/fhir/StructureDefinition/encounter-associatedEncounter
 message EncounterAssociatedEncounter {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/encounter-associatedEncounter";
 
@@ -1881,7 +1986,8 @@ message EncounterAssociatedEncounter {
 // See http://hl7.org/fhir/StructureDefinition/encounter-modeOfArrival
 message EncounterModeOfArrival {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/encounter-modeOfArrival";
 
@@ -1897,7 +2003,8 @@ message EncounterModeOfArrival {
 // See http://hl7.org/fhir/StructureDefinition/encounter-primaryDiagnosis
 message EncounterPrimaryDiagnosis {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/encounter-primaryDiagnosis";
 
@@ -1913,7 +2020,8 @@ message EncounterPrimaryDiagnosis {
 // See http://hl7.org/fhir/StructureDefinition/encounter-reasonCancelled
 message EncounterReasonCancelled {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/encounter-reasonCancelled";
 
@@ -1929,7 +2037,8 @@ message EncounterReasonCancelled {
 // See http://hl7.org/fhir/StructureDefinition/entryFormat
 message EntryFormat {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/entryFormat";
 
@@ -1945,7 +2054,8 @@ message EntryFormat {
 // See http://hl7.org/fhir/StructureDefinition/event-definition
 message Definition {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/event-definition";
 
@@ -1968,7 +2078,8 @@ message Definition {
 // See http://hl7.org/fhir/StructureDefinition/event-notDone
 message DiagnosticReportNotDone {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/event-notDone";
 
@@ -1984,7 +2095,8 @@ message DiagnosticReportNotDone {
 // See http://hl7.org/fhir/StructureDefinition/event-OnBehalfOf
 message OnBehalfOf {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/event-OnBehalfOf";
 
@@ -2000,7 +2112,8 @@ message OnBehalfOf {
 // See http://hl7.org/fhir/StructureDefinition/event-partOf
 message PartOf {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/event-partOf";
 
@@ -2016,7 +2129,8 @@ message PartOf {
 // See http://hl7.org/fhir/StructureDefinition/event-performerRole
 message ObservationPerformerRole {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/event-performerRole";
 
@@ -2032,7 +2146,8 @@ message ObservationPerformerRole {
 // See http://hl7.org/fhir/StructureDefinition/event-reasonCode
 message ReasonCode {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/event-reasonCode";
 
@@ -2048,7 +2163,8 @@ message ReasonCode {
 // See http://hl7.org/fhir/StructureDefinition/event-reasonReference
 message ReasonReference {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/event-reasonReference";
 
@@ -2072,7 +2188,8 @@ message ReasonReference {
 // http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation
 message FamilyMemberHistoryObservation {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation";
 
@@ -2089,7 +2206,8 @@ message FamilyMemberHistoryObservation {
 // http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-parent
 message FamilyMemberHistoryParent {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-parent";
 
@@ -2112,7 +2230,8 @@ message FamilyMemberHistoryParent {
 // http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-sibling
 message FamilyMemberHistorySibling {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-sibling";
 
@@ -2134,7 +2253,8 @@ message FamilyMemberHistorySibling {
 // See http://hl7.org/fhir/StructureDefinition/familymemberhistory-abatement
 message FamilyMemberHistoryAbatement {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/familymemberhistory-abatement";
 
@@ -2160,7 +2280,8 @@ message FamilyMemberHistoryAbatement {
 // http://hl7.org/fhir/StructureDefinition/familymemberhistory-patient-record
 message FamilyMemberHistoryPatientRecord {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/familymemberhistory-patient-record";
 
@@ -2176,7 +2297,8 @@ message FamilyMemberHistoryPatientRecord {
 // See http://hl7.org/fhir/StructureDefinition/familymemberhistory-severity
 message FamilyMemberHistorySeverity {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/familymemberhistory-severity";
 
@@ -2192,7 +2314,8 @@ message FamilyMemberHistorySeverity {
 // See http://hl7.org/fhir/StructureDefinition/familymemberhistory-type
 message FamilyMemberHistoryType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/familymemberhistory-type";
 
@@ -2208,7 +2331,8 @@ message FamilyMemberHistoryType {
 // See http://hl7.org/fhir/StructureDefinition/flag-detail
 message FlagDetail {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/flag-detail";
 
@@ -2224,7 +2348,8 @@ message FlagDetail {
 // See http://hl7.org/fhir/StructureDefinition/flag-priority
 message FlagPriority {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/flag-priority";
 
@@ -2240,7 +2365,8 @@ message FlagPriority {
 // See http://hl7.org/fhir/StructureDefinition/geolocation
 message AddressGeolocation {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/geolocation";
 
@@ -2262,7 +2388,8 @@ message AddressGeolocation {
 // See http://hl7.org/fhir/StructureDefinition/goal-acceptance
 message GoalAcceptance {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/goal-acceptance";
 
@@ -2301,7 +2428,8 @@ message GoalAcceptance {
 // See http://hl7.org/fhir/StructureDefinition/goal-pertainsToGoal
 message ResourcePertainsToGoal {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/goal-pertainsToGoal";
 
@@ -2317,7 +2445,8 @@ message ResourcePertainsToGoal {
 // See http://hl7.org/fhir/StructureDefinition/goal-reasonRejected
 message GoalReasonRejected {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/goal-reasonRejected";
 
@@ -2333,7 +2462,8 @@ message GoalReasonRejected {
 // See http://hl7.org/fhir/StructureDefinition/goal-relationship
 message GoalRelationship {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/goal-relationship";
 
@@ -2356,7 +2486,8 @@ message GoalRelationship {
 // http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-allele-database
 message DiagnosticReportAlleleDatabase {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-allele-database";
 
@@ -2372,7 +2503,8 @@ message DiagnosticReportAlleleDatabase {
 // See http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-glstring
 message DiagnosticReportGlstring {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-glstring";
 
@@ -2394,7 +2526,8 @@ message DiagnosticReportGlstring {
 // See http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-haploid
 message DiagnosticReportHaploid {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-haploid";
 
@@ -2420,7 +2553,8 @@ message DiagnosticReportHaploid {
 // See http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-method
 message DiagnosticReportMethod {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-method";
 
@@ -2436,7 +2570,8 @@ message DiagnosticReportMethod {
 // See http://hl7.org/fhir/StructureDefinition/http-response-header
 message BundleHttpResponseHeader {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/http-response-header";
 
@@ -2452,7 +2587,8 @@ message BundleHttpResponseHeader {
 // See http://hl7.org/fhir/StructureDefinition/humanname-assembly-order
 message HumanNameAssemblyOrder {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/humanname-assembly-order";
 
@@ -2468,7 +2604,8 @@ message HumanNameAssemblyOrder {
 // See http://hl7.org/fhir/StructureDefinition/humanname-fathers-family
 message HumanNameFathersFamily {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/humanname-fathers-family";
 
@@ -2484,7 +2621,8 @@ message HumanNameFathersFamily {
 // See http://hl7.org/fhir/StructureDefinition/humanname-mothers-family
 message HumanNameMothersFamily {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/humanname-mothers-family";
 
@@ -2500,7 +2638,8 @@ message HumanNameMothersFamily {
 // See http://hl7.org/fhir/StructureDefinition/humanname-own-name
 message HumanNameOwnName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/humanname-own-name";
 
@@ -2516,7 +2655,8 @@ message HumanNameOwnName {
 // See http://hl7.org/fhir/StructureDefinition/humanname-own-prefix
 message HumanNameOwnPrefix {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix";
 
@@ -2532,7 +2672,8 @@ message HumanNameOwnPrefix {
 // See http://hl7.org/fhir/StructureDefinition/humanname-partner-name
 message HumanNamePartnerName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/humanname-partner-name";
 
@@ -2548,7 +2689,8 @@ message HumanNamePartnerName {
 // See http://hl7.org/fhir/StructureDefinition/humanname-partner-prefix
 message HumanNamePartnerPrefix {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/humanname-partner-prefix";
 
@@ -2564,7 +2706,8 @@ message HumanNamePartnerPrefix {
 // See http://hl7.org/fhir/StructureDefinition/identifier-validDate
 message IdentifierValidDate {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/identifier-validDate";
 
@@ -2580,7 +2723,8 @@ message IdentifierValidDate {
 // See http://hl7.org/fhir/StructureDefinition/implementationguide-page
 message ImplementationGuidePage {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/implementationguide-page";
 
@@ -2596,7 +2740,8 @@ message ImplementationGuidePage {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-AD-use
 message AddressAdUse {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-AD-use";
 
@@ -2612,7 +2757,8 @@ message AddressAdUse {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-additionalLocator
 message AddressAdxpAdditionallocator {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-additionalLocator";
 
@@ -2629,7 +2775,8 @@ message AddressAdxpAdditionallocator {
 // http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-buildingNumberSuffix
 message AddressAdxpBuildingnumbersuffix {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-buildingNumberSuffix";
 
@@ -2645,7 +2792,8 @@ message AddressAdxpBuildingnumbersuffix {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-careOf
 message AddressAdxpCareof {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-careOf";
 
@@ -2661,7 +2809,8 @@ message AddressAdxpCareof {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-censusTract
 message AddressAdxpCensustract {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-censusTract";
 
@@ -2677,7 +2826,8 @@ message AddressAdxpCensustract {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-delimiter
 message AddressAdxpDelimiter {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-delimiter";
 
@@ -2693,7 +2843,8 @@ message AddressAdxpDelimiter {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryAddressLine
 message AddressAdxpDeliveryaddressline {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryAddressLine";
 
@@ -2710,7 +2861,8 @@ message AddressAdxpDeliveryaddressline {
 // http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryInstallationArea
 message AddressAdxpDeliveryinstallationarea {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryInstallationArea";
 
@@ -2726,7 +2878,8 @@ message AddressAdxpDeliveryinstallationarea {
 // http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryInstallationQualifier
 message AddressAdxpDeliveryinstallationqualifier {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryInstallationQualifier";
 
@@ -2743,7 +2896,8 @@ message AddressAdxpDeliveryinstallationqualifier {
 // http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryInstallationType
 message AddressAdxpDeliveryinstallationtype {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryInstallationType";
 
@@ -2759,7 +2913,8 @@ message AddressAdxpDeliveryinstallationtype {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryMode
 message AddressAdxpDeliverymode {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryMode";
 
@@ -2776,7 +2931,8 @@ message AddressAdxpDeliverymode {
 // http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryModeIdentifier
 message AddressAdxpDeliverymodeidentifier {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryModeIdentifier";
 
@@ -2792,7 +2948,8 @@ message AddressAdxpDeliverymodeidentifier {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-direction
 message AddressAdxpDirection {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-direction";
 
@@ -2808,7 +2965,8 @@ message AddressAdxpDirection {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-houseNumber
 message AddressAdxpHousenumber {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-houseNumber";
 
@@ -2824,7 +2982,8 @@ message AddressAdxpHousenumber {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-houseNumberNumeric
 message AddressAdxpHousenumbernumeric {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-houseNumberNumeric";
 
@@ -2840,7 +2999,8 @@ message AddressAdxpHousenumbernumeric {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-postBox
 message AddressAdxpPostbox {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-postBox";
 
@@ -2856,7 +3016,8 @@ message AddressAdxpPostbox {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-precinct
 message AddressAdxpPrecinct {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-precinct";
 
@@ -2872,7 +3033,8 @@ message AddressAdxpPrecinct {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetAddressLine
 message AddressAdxpStreetaddressline {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetAddressLine";
 
@@ -2888,7 +3050,8 @@ message AddressAdxpStreetaddressline {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetName
 message AddressAdxpStreetname {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetName";
 
@@ -2904,7 +3067,8 @@ message AddressAdxpStreetname {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetNameBase
 message AddressAdxpStreetnamebase {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetNameBase";
 
@@ -2920,7 +3084,8 @@ message AddressAdxpStreetnamebase {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetNameType
 message AddressAdxpStreetnametype {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetNameType";
 
@@ -2936,7 +3101,8 @@ message AddressAdxpStreetnametype {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-unitID
 message AddressAdxpUnitid {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-unitID";
 
@@ -2952,7 +3118,8 @@ message AddressAdxpUnitid {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-unitType
 message AddressAdxpUnittype {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-unitType";
 
@@ -2968,7 +3135,8 @@ message AddressAdxpUnittype {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-CO-value
 message CodingCoValue {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-CO-value";
 
@@ -2984,7 +3152,8 @@ message CodingCoValue {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-EN-qualifier
 message HumanNameEnQualifier {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-EN-qualifier";
 
@@ -3000,7 +3169,8 @@ message HumanNameEnQualifier {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-EN-representation
 message HumanNameEnRepresentation {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-EN-representation";
 
@@ -3016,7 +3186,8 @@ message HumanNameEnRepresentation {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-nullFlavor
 message AnyNullFlavor {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-nullFlavor";
 
@@ -3032,7 +3203,8 @@ message AnyNullFlavor {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-preferred
 message AnyPreferred {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-preferred";
 
@@ -3048,7 +3220,8 @@ message AnyPreferred {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-SC-coding
 message StringScCoding {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-SC-coding";
 
@@ -3064,7 +3237,8 @@ message StringScCoding {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-TEL-address
 message ContactPointTelAddress {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-TEL-address";
 
@@ -3080,7 +3254,8 @@ message ContactPointTelAddress {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-uncertainty
 message QuantityUncertainty {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-uncertainty";
 
@@ -3096,7 +3271,8 @@ message QuantityUncertainty {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-uncertaintyType
 message QuantityUncertaintyType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-uncertaintyType";
 
@@ -3112,7 +3288,8 @@ message QuantityUncertaintyType {
 // See http://hl7.org/fhir/StructureDefinition/iso21090-verification
 message AnyVerification {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-verification";
 
@@ -3128,7 +3305,8 @@ message AnyVerification {
 // See http://hl7.org/fhir/StructureDefinition/location-alias
 message LocationAlias {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/location-alias";
 
@@ -3144,7 +3322,8 @@ message LocationAlias {
 // See http://hl7.org/fhir/StructureDefinition/location-distance
 message BundleLocationDistance {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/location-distance";
 
@@ -3160,7 +3339,8 @@ message BundleLocationDistance {
 // See http://hl7.org/fhir/StructureDefinition/mapSourcePublisher
 message DataElementMapSourcePublisher {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/mapSourcePublisher";
 
@@ -3176,7 +3356,8 @@ message DataElementMapSourcePublisher {
 // See http://hl7.org/fhir/StructureDefinition/match-grade
 message BundleMatchGrade {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/match-grade";
 
@@ -3192,7 +3373,8 @@ message BundleMatchGrade {
 // See http://hl7.org/fhir/StructureDefinition/maxDecimalPlaces
 message MaxDecimalPlaces {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/maxDecimalPlaces";
 
@@ -3208,7 +3390,8 @@ message MaxDecimalPlaces {
 // See http://hl7.org/fhir/StructureDefinition/maxSize
 message MaxSize {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/maxSize";
 
@@ -3224,7 +3407,8 @@ message MaxSize {
 // See http://hl7.org/fhir/StructureDefinition/maxValue
 message QuestionnaireMaxValue {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/maxValue";
 
@@ -3252,7 +3436,8 @@ message QuestionnaireMaxValue {
 // See http://hl7.org/fhir/StructureDefinition/medication-usualRoute
 message MedicationUsualRoute {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/medication-usualRoute";
 
@@ -3268,7 +3453,8 @@ message MedicationUsualRoute {
 // See http://hl7.org/fhir/StructureDefinition/medicationdispense-validityPeriod
 message MedicationDispenseValidityPeriod {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/medicationdispense-validityPeriod";
 
@@ -3284,7 +3470,8 @@ message MedicationDispenseValidityPeriod {
 // See http://hl7.org/fhir/StructureDefinition/medicationstatement-Prescriber
 message MedicationStatementPrescriber {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/medicationstatement-Prescriber";
 
@@ -3300,7 +3487,8 @@ message MedicationStatementPrescriber {
 // See http://hl7.org/fhir/StructureDefinition/messageheader-response-request
 message MessageHeaderMessageheaderResponseRequest {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/messageheader-response-request";
 
@@ -3316,7 +3504,8 @@ message MessageHeaderMessageheaderResponseRequest {
 // See http://hl7.org/fhir/StructureDefinition/mimeType
 message MimeType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/mimeType";
 
@@ -3332,7 +3521,8 @@ message MimeType {
 // See http://hl7.org/fhir/StructureDefinition/minLength
 message MinLength {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/minLength";
 
@@ -3348,7 +3538,8 @@ message MinLength {
 // See http://hl7.org/fhir/StructureDefinition/minValue
 message QuestionnaireMinValue {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/minValue";
 
@@ -3376,7 +3567,8 @@ message QuestionnaireMinValue {
 // See http://hl7.org/fhir/StructureDefinition/observation-bodyPosition
 message ObservationBodyPosition {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-bodyPosition";
 
@@ -3392,7 +3584,8 @@ message ObservationBodyPosition {
 // See http://hl7.org/fhir/StructureDefinition/observation-delta
 message ObservationDelta {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-delta";
 
@@ -3408,7 +3601,8 @@ message ObservationDelta {
 // See http://hl7.org/fhir/StructureDefinition/observation-eventTiming
 message ObservationEventTiming {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-eventTiming";
 
@@ -3430,7 +3624,8 @@ message ObservationEventTiming {
 // See http://hl7.org/fhir/StructureDefinition/observation-focal-subject
 message ObservationFocalSubject {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-focal-subject";
 
@@ -3446,7 +3641,8 @@ message ObservationFocalSubject {
 // See http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName
 message ObservationAlleleName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName";
 
@@ -3463,7 +3659,8 @@ message ObservationAlleleName {
 // http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicFrequency
 message ObservationAllelicFrequency {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicFrequency";
 
@@ -3481,7 +3678,8 @@ message ObservationAllelicFrequency {
 // http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicState
 message ObservationAllelicState {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicState";
 
@@ -3498,7 +3696,8 @@ message ObservationAllelicState {
 // http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName
 message ObservationAminoAcidChangeName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName";
 
@@ -3515,7 +3714,8 @@ message ObservationAminoAcidChangeName {
 // http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeType
 message ObservationAminoAcidChangeType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeType";
 
@@ -3532,7 +3732,8 @@ message ObservationAminoAcidChangeType {
 // http://hl7.org/fhir/StructureDefinition/observation-geneticsCopyNumberEvent
 message ObservationCopyNumberEvent {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsCopyNumberEvent";
 
@@ -3548,7 +3749,8 @@ message ObservationCopyNumberEvent {
 // See http://hl7.org/fhir/StructureDefinition/observation-geneticsDNARegionName
 message ObservationDNARegionName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNARegionName";
 
@@ -3565,7 +3767,8 @@ message ObservationDNARegionName {
 // http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName
 message ObservationDNASequenceVariantName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName";
 
@@ -3582,7 +3785,8 @@ message ObservationDNASequenceVariantName {
 // http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantType
 message ObservationDNASequenceVariantType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantType";
 
@@ -3598,7 +3802,8 @@ message ObservationDNASequenceVariantType {
 // See http://hl7.org/fhir/StructureDefinition/observation-geneticsDNAVariantId
 message ObservationDNAVariantId {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNAVariantId";
 
@@ -3614,7 +3819,8 @@ message ObservationDNAVariantId {
 // See http://hl7.org/fhir/StructureDefinition/observation-geneticsGene
 message ObservationGene {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene";
 
@@ -3631,7 +3837,8 @@ message ObservationGene {
 // http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass
 message ObservationGenomicSourceClass {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass";
 
@@ -3648,7 +3855,8 @@ message ObservationGenomicSourceClass {
 // http://hl7.org/fhir/StructureDefinition/observation-geneticsInterpretation
 message ObservationInterpretation {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsInterpretation";
 
@@ -3664,7 +3872,8 @@ message ObservationInterpretation {
 // See http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet
 message ObservationPhaseSet {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet";
 
@@ -3680,7 +3889,8 @@ message ObservationPhaseSet {
 // See http://hl7.org/fhir/StructureDefinition/observation-geneticsSequence
 message ObservationSequence {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsSequence";
 
@@ -3696,7 +3906,8 @@ message ObservationSequence {
 // See http://hl7.org/fhir/StructureDefinition/observation-time-offset
 message ObservationTimeOffset {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-time-offset";
 
@@ -3712,7 +3923,8 @@ message ObservationTimeOffset {
 // See http://hl7.org/fhir/StructureDefinition/openEHR-administration
 message AllergyIntoleranceAdministration {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-administration";
 
@@ -3728,7 +3940,8 @@ message AllergyIntoleranceAdministration {
 // See http://hl7.org/fhir/StructureDefinition/openEHR-careplan
 message AllergyIntoleranceCareplan {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-careplan";
 
@@ -3744,7 +3957,8 @@ message AllergyIntoleranceCareplan {
 // See http://hl7.org/fhir/StructureDefinition/openEHR-exposureDate
 message AllergyIntoleranceExposureDate {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-exposureDate";
 
@@ -3760,7 +3974,8 @@ message AllergyIntoleranceExposureDate {
 // See http://hl7.org/fhir/StructureDefinition/openEHR-exposureDescription
 message AllergyIntoleranceExposureDescription {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-exposureDescription";
 
@@ -3776,7 +3991,8 @@ message AllergyIntoleranceExposureDescription {
 // See http://hl7.org/fhir/StructureDefinition/openEHR-exposureDuration
 message AllergyIntoleranceExposureDuration {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-exposureDuration";
 
@@ -3792,7 +4008,8 @@ message AllergyIntoleranceExposureDuration {
 // See http://hl7.org/fhir/StructureDefinition/openEHR-location
 message AllergyIntoleranceLocation {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-location";
 
@@ -3808,7 +4025,8 @@ message AllergyIntoleranceLocation {
 // See http://hl7.org/fhir/StructureDefinition/openEHR-management
 message AllergyIntoleranceManagement {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-management";
 
@@ -3824,7 +4042,8 @@ message AllergyIntoleranceManagement {
 // See http://hl7.org/fhir/StructureDefinition/openEHR-test
 message AllergyIntoleranceTest {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-test";
 
@@ -3847,7 +4066,8 @@ message AllergyIntoleranceTest {
 // See http://hl7.org/fhir/StructureDefinition/operationoutcome-authority
 message OperationOutcomeAuthority {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/operationoutcome-authority";
 
@@ -3863,7 +4083,8 @@ message OperationOutcomeAuthority {
 // See http://hl7.org/fhir/StructureDefinition/operationoutcome-detectedIssue
 message OperationOutcomeDetectedIssue {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/operationoutcome-detectedIssue";
 
@@ -3879,7 +4100,8 @@ message OperationOutcomeDetectedIssue {
 // See http://hl7.org/fhir/StructureDefinition/operationoutcome-issue-source
 message OperationOutcomeIssueSource {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/operationoutcome-issue-source";
 
@@ -3895,7 +4117,8 @@ message OperationOutcomeIssueSource {
 // See http://hl7.org/fhir/StructureDefinition/organization-alias
 message OrganizationAlias {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/organization-alias";
 
@@ -3911,7 +4134,8 @@ message OrganizationAlias {
 // See http://hl7.org/fhir/StructureDefinition/organization-period
 message OrganizationPeriod {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/organization-period";
 
@@ -3927,7 +4151,8 @@ message OrganizationPeriod {
 // See http://hl7.org/fhir/StructureDefinition/organization-preferredContact
 message OrganizationPreferredContact {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/organization-preferredContact";
 
@@ -3943,7 +4168,8 @@ message OrganizationPreferredContact {
 // See http://hl7.org/fhir/StructureDefinition/patient-adoptionInfo
 message PatientAdoptionInfo {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-adoptionInfo";
 
@@ -3959,7 +4185,8 @@ message PatientAdoptionInfo {
 // See http://hl7.org/fhir/StructureDefinition/patient-birthTime
 message PatientBirthTime {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-birthTime";
 
@@ -3975,7 +4202,8 @@ message PatientBirthTime {
 // See http://hl7.org/fhir/StructureDefinition/patient-cadavericDonor
 message PatientCadavericDonor {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-cadavericDonor";
 
@@ -3991,7 +4219,8 @@ message PatientCadavericDonor {
 // See http://hl7.org/fhir/StructureDefinition/patient-citizenship
 message PatientCitizenship {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-citizenship";
 
@@ -4013,7 +4242,8 @@ message PatientCitizenship {
 // See http://hl7.org/fhir/StructureDefinition/patient-clinicalTrial
 message PatientClinicalTrial {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-clinicalTrial";
 
@@ -4041,7 +4271,8 @@ message PatientClinicalTrial {
 // See http://hl7.org/fhir/StructureDefinition/patient-congregation
 message PatientCongregation {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-congregation";
 
@@ -4057,7 +4288,8 @@ message PatientCongregation {
 // See http://hl7.org/fhir/StructureDefinition/patient-disability
 message PatientDisability {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-disability";
 
@@ -4073,7 +4305,8 @@ message PatientDisability {
 // See http://hl7.org/fhir/StructureDefinition/patient-importance
 message PatientImportance {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-importance";
 
@@ -4089,7 +4322,8 @@ message PatientImportance {
 // See http://hl7.org/fhir/StructureDefinition/patient-interpreterRequired
 message PatientInterpreterRequired {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-interpreterRequired";
 
@@ -4105,7 +4339,8 @@ message PatientInterpreterRequired {
 // See http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName
 message PatientMothersMaidenName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName";
 
@@ -4121,7 +4356,8 @@ message PatientMothersMaidenName {
 // See http://hl7.org/fhir/StructureDefinition/patient-nationality
 message PatientNationality {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-nationality";
 
@@ -4143,7 +4379,8 @@ message PatientNationality {
 // See http://hl7.org/fhir/StructureDefinition/patient-religion
 message PatientReligion {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-religion";
 
@@ -4159,7 +4396,8 @@ message PatientReligion {
 // See http://hl7.org/fhir/StructureDefinition/pharmacy-core-doseType
 message DoseType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/pharmacy-core-doseType";
 
@@ -4175,7 +4413,8 @@ message DoseType {
 // See http://hl7.org/fhir/StructureDefinition/pharmacy-core-infuseOver
 message InfuseOver {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/pharmacy-core-infuseOver";
 
@@ -4191,7 +4430,8 @@ message InfuseOver {
 // See http://hl7.org/fhir/StructureDefinition/pharmacy-core-maxDeliveryRate
 message MaxDeliveryRate {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/pharmacy-core-maxDeliveryRate";
 
@@ -4207,7 +4447,8 @@ message MaxDeliveryRate {
 // See http://hl7.org/fhir/StructureDefinition/pharmacy-core-maxDeliveryVolume
 message MaxDeliveryVolume {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/pharmacy-core-maxDeliveryVolume";
 
@@ -4223,7 +4464,8 @@ message MaxDeliveryVolume {
 // See http://hl7.org/fhir/StructureDefinition/pharmacy-core-minDosePerPeriod
 message MinDosePerPeriod {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/pharmacy-core-minDosePerPeriod";
 
@@ -4239,7 +4481,8 @@ message MinDosePerPeriod {
 // See http://hl7.org/fhir/StructureDefinition/pharmacy-core-rateGoal
 message RateGoal {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/pharmacy-core-rateGoal";
 
@@ -4255,7 +4498,8 @@ message RateGoal {
 // See http://hl7.org/fhir/StructureDefinition/pharmacy-core-rateIncrement
 message RateIncrement {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/pharmacy-core-rateIncrement";
 
@@ -4272,7 +4516,8 @@ message RateIncrement {
 // http://hl7.org/fhir/StructureDefinition/pharmacy-core-rateIncrementInterval
 message RateIncrementInterval {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/pharmacy-core-rateIncrementInterval";
 
@@ -4288,7 +4533,8 @@ message RateIncrementInterval {
 // See http://hl7.org/fhir/StructureDefinition/pharmacy-core-refillsRemaining
 message RefillsRemaining {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/pharmacy-core-refillsRemaining";
 
@@ -4304,7 +4550,8 @@ message RefillsRemaining {
 // See http://hl7.org/fhir/StructureDefinition/practitioner-animalSpecies
 message AnimalSpecies {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/practitioner-animalSpecies";
 
@@ -4320,7 +4567,8 @@ message AnimalSpecies {
 // See http://hl7.org/fhir/StructureDefinition/practitioner-classification
 message PractitionerClassification {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/practitioner-classification";
 
@@ -4336,7 +4584,8 @@ message PractitionerClassification {
 // See http://hl7.org/fhir/StructureDefinition/practitionerrole-primaryInd
 message PractitionerRolePrimaryInd {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/practitionerrole-primaryInd";
 
@@ -4352,7 +4601,8 @@ message PractitionerRolePrimaryInd {
 // See http://hl7.org/fhir/StructureDefinition/procedure-approachBodySite
 message ProcedureApproachBodySite {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-approachBodySite";
 
@@ -4368,7 +4618,8 @@ message ProcedureApproachBodySite {
 // See http://hl7.org/fhir/StructureDefinition/procedure-causedBy
 message ProcedureCausedBy {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-causedBy";
 
@@ -4391,7 +4642,8 @@ message ProcedureCausedBy {
 // See http://hl7.org/fhir/StructureDefinition/procedure-incisionDateTime
 message ProcedureIncisionDateTime {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-incisionDateTime";
 
@@ -4407,7 +4659,8 @@ message ProcedureIncisionDateTime {
 // See http://hl7.org/fhir/StructureDefinition/procedure-method
 message ProcedureMethod {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-method";
 
@@ -4423,7 +4676,8 @@ message ProcedureMethod {
 // See http://hl7.org/fhir/StructureDefinition/procedure-progressStatus
 message ProcedureProgressStatus {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-progressStatus";
 
@@ -4439,7 +4693,8 @@ message ProcedureProgressStatus {
 // See http://hl7.org/fhir/StructureDefinition/procedure-schedule
 message ProcedureSchedule {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-schedule";
 
@@ -4455,7 +4710,8 @@ message ProcedureSchedule {
 // See http://hl7.org/fhir/StructureDefinition/procedure-targetBodySite
 message ProcedureTargetBodySite {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-targetBodySite";
 
@@ -4471,7 +4727,8 @@ message ProcedureTargetBodySite {
 // See http://hl7.org/fhir/StructureDefinition/procedurerequest-approachBodySite
 message ProcedureRequestApproachBodySite {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedurerequest-approachBodySite";
 
@@ -4487,7 +4744,8 @@ message ProcedureRequestApproachBodySite {
 // See http://hl7.org/fhir/StructureDefinition/procedurerequest-authorizedBy
 message ProcedureRequestAuthorizedBy {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedurerequest-authorizedBy";
 
@@ -4503,7 +4761,8 @@ message ProcedureRequestAuthorizedBy {
 // See http://hl7.org/fhir/StructureDefinition/procedurerequest-geneticsItem
 message DiagnosticReportItem {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedurerequest-geneticsItem";
 
@@ -4532,7 +4791,8 @@ message DiagnosticReportItem {
 // See http://hl7.org/fhir/StructureDefinition/procedurerequest-precondition
 message ProcedureRequestPrecondition {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedurerequest-precondition";
 
@@ -4549,7 +4809,8 @@ message ProcedureRequestPrecondition {
 // http://hl7.org/fhir/StructureDefinition/procedurerequest-questionnaireRequest
 message ProcedureRequestQuestionnaireRequest {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedurerequest-questionnaireRequest";
 
@@ -4565,7 +4826,8 @@ message ProcedureRequestQuestionnaireRequest {
 // See http://hl7.org/fhir/StructureDefinition/procedurerequest-reasonRefused
 message ProcedureRequestReasonRefused {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedurerequest-reasonRefused";
 
@@ -4581,7 +4843,8 @@ message ProcedureRequestReasonRefused {
 // See http://hl7.org/fhir/StructureDefinition/procedurerequest-reasonRejected
 message ProcedureRequestReasonRejected {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedurerequest-reasonRejected";
 
@@ -4597,7 +4860,8 @@ message ProcedureRequestReasonRejected {
 // See http://hl7.org/fhir/StructureDefinition/procedurerequest-targetBodySite
 message ProcedureRequestTargetBodySite {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedurerequest-targetBodySite";
 
@@ -4613,7 +4877,8 @@ message ProcedureRequestTargetBodySite {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-allowedProfile
 message QuestionnaireAllowedProfile {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-allowedProfile";
 
@@ -4629,7 +4894,8 @@ message QuestionnaireAllowedProfile {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-allowedResource
 message QuestionnaireAllowedResource {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-allowedResource";
 
@@ -4645,7 +4911,8 @@ message QuestionnaireAllowedResource {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-baseType
 message QuestionnaireBaseType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-baseType";
 
@@ -4661,7 +4928,8 @@ message QuestionnaireBaseType {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation
 message QuestionnaireChoiceOrientation {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation";
 
@@ -4677,7 +4945,8 @@ message QuestionnaireChoiceOrientation {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-deMap
 message QuestionnaireDeMap {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-deMap";
 
@@ -4693,7 +4962,8 @@ message QuestionnaireDeMap {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory
 message QuestionnaireDisplayCategory {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory";
 
@@ -4709,7 +4979,8 @@ message QuestionnaireDisplayCategory {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-fhirType
 message QuestionnaireFhirType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-fhirType";
 
@@ -4725,7 +4996,8 @@ message QuestionnaireFhirType {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-hidden
 message QuestionnaireHidden {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden";
 
@@ -4741,7 +5013,8 @@ message QuestionnaireHidden {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl
 message QuestionnaireItemControl {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl";
 
@@ -4757,7 +5030,8 @@ message QuestionnaireItemControl {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-lookupQuestionnaire
 message QuestionnaireLookupQuestionnaire {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-lookupQuestionnaire";
 
@@ -4773,7 +5047,8 @@ message QuestionnaireLookupQuestionnaire {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-maxOccurs
 message QuestionnaireMaxOccurs {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-maxOccurs";
 
@@ -4789,7 +5064,8 @@ message QuestionnaireMaxOccurs {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-minOccurs
 message QuestionnaireMinOccurs {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-minOccurs";
 
@@ -4805,7 +5081,8 @@ message QuestionnaireMinOccurs {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-optionExclusive
 message QuestionnaireOptionExclusive {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-optionExclusive";
 
@@ -4821,7 +5098,8 @@ message QuestionnaireOptionExclusive {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix
 message QuestionnaireOptionPrefix {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix";
 
@@ -4837,7 +5115,8 @@ message QuestionnaireOptionPrefix {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-ordinalValue
 message QuestionnaireOrdinalValue {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-ordinalValue";
 
@@ -4853,7 +5132,8 @@ message QuestionnaireOrdinalValue {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-referenceFilter
 message QuestionnaireReferenceFilter {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-referenceFilter";
 
@@ -4869,7 +5149,8 @@ message QuestionnaireReferenceFilter {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-sourceStructureMap
 message QuestionnaireSourceStructureMap {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-sourceStructureMap";
 
@@ -4886,7 +5167,8 @@ message QuestionnaireSourceStructureMap {
 // http://hl7.org/fhir/StructureDefinition/questionnaire-studyprotocolIdentifier
 message QuestionnaireStudyprotocolIdentifier {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-studyprotocolIdentifier";
 
@@ -4902,7 +5184,8 @@ message QuestionnaireStudyprotocolIdentifier {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-supportLink
 message QuestionnaireSupportLink {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-supportLink";
 
@@ -4918,7 +5201,8 @@ message QuestionnaireSupportLink {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-targetStructureMap
 message QuestionnaireTargetStructureMap {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-targetStructureMap";
 
@@ -4934,7 +5218,8 @@ message QuestionnaireTargetStructureMap {
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-unit
 message QuestionnaireUnit {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-unit";
 
@@ -4951,7 +5236,8 @@ message QuestionnaireUnit {
 // http://hl7.org/fhir/StructureDefinition/questionnaire-usageMode
 message QuestionnaireUsageMode {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-usageMode";
 
@@ -4967,7 +5253,8 @@ message QuestionnaireUsageMode {
 // See http://hl7.org/fhir/StructureDefinition/questionnaireresponse-author
 message QuestionnaireResponseAuthor {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaireresponse-author";
 
@@ -4990,7 +5277,8 @@ message QuestionnaireResponseAuthor {
 // See http://hl7.org/fhir/StructureDefinition/questionnaireresponse-note
 message QuestionnaireResponseNote {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaireresponse-note";
 
@@ -5006,7 +5294,8 @@ message QuestionnaireResponseNote {
 // See http://hl7.org/fhir/StructureDefinition/questionnaireresponse-reason
 message QuestionnaireResponseReason {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaireresponse-reason";
 
@@ -5022,7 +5311,8 @@ message QuestionnaireResponseReason {
 // See http://hl7.org/fhir/StructureDefinition/questionnaireresponse-reviewer
 message QuestionnaireResponseReviewer {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaireresponse-reviewer";
 
@@ -5038,7 +5328,8 @@ message QuestionnaireResponseReviewer {
 // See http://hl7.org/fhir/StructureDefinition/referralrequest-reasonRefused
 message ReferralRequestReasonRefused {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/referralrequest-reasonRefused";
 
@@ -5054,7 +5345,8 @@ message ReferralRequestReasonRefused {
 // See http://hl7.org/fhir/StructureDefinition/regex
 message Regex {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/regex";
 
@@ -5070,7 +5362,8 @@ message Regex {
 // See http://hl7.org/fhir/StructureDefinition/rendered-value
 message RenderedValue {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/rendered-value";
 
@@ -5086,7 +5379,8 @@ message RenderedValue {
 // See http://hl7.org/fhir/StructureDefinition/rendering-markdown
 message StringMarkdown {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/rendering-markdown";
 
@@ -5102,7 +5396,8 @@ message StringMarkdown {
 // See http://hl7.org/fhir/StructureDefinition/rendering-style
 message Style {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/rendering-style";
 
@@ -5118,7 +5413,8 @@ message Style {
 // See http://hl7.org/fhir/StructureDefinition/rendering-styleSensitive
 message StyleSensitive {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/rendering-styleSensitive";
 
@@ -5134,7 +5430,8 @@ message StyleSensitive {
 // See http://hl7.org/fhir/StructureDefinition/rendering-xhtml
 message StringXhtml {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/rendering-xhtml";
 
@@ -5150,7 +5447,8 @@ message StringXhtml {
 // See http://hl7.org/fhir/StructureDefinition/resource-approvalDate
 message ApprovalDate {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/resource-approvalDate";
 
@@ -5166,7 +5464,8 @@ message ApprovalDate {
 // See http://hl7.org/fhir/StructureDefinition/resource-effectivePeriod
 message EffectivePeriod {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/resource-effectivePeriod";
 
@@ -5182,7 +5481,8 @@ message EffectivePeriod {
 // See http://hl7.org/fhir/StructureDefinition/resource-lastReviewDate
 message LastReviewDate {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/resource-lastReviewDate";
 
@@ -5198,7 +5498,8 @@ message LastReviewDate {
 // See http://hl7.org/fhir/StructureDefinition/specimen-collectionPriority
 message SpecimenCollectionPriority {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/specimen-collectionPriority";
 
@@ -5214,7 +5515,8 @@ message SpecimenCollectionPriority {
 // See http://hl7.org/fhir/StructureDefinition/specimen-isDryWeight
 message SpecimenIsDryWeight {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/specimen-isDryWeight";
 
@@ -5230,7 +5532,8 @@ message SpecimenIsDryWeight {
 // See http://hl7.org/fhir/StructureDefinition/specimen-processingTime
 message SpecimenProcessingTime {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/specimen-processingTime";
 
@@ -5254,7 +5557,8 @@ message SpecimenProcessingTime {
 // See http://hl7.org/fhir/StructureDefinition/specimen-sequenceNumber
 message SpecimenSequenceNumber {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/specimen-sequenceNumber";
 
@@ -5270,7 +5574,8 @@ message SpecimenSequenceNumber {
 // See http://hl7.org/fhir/StructureDefinition/specimen-specialHandling
 message SpecimenSpecialHandling {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/specimen-specialHandling";
 
@@ -5286,7 +5591,8 @@ message SpecimenSpecialHandling {
 // See http://hl7.org/fhir/StructureDefinition/structuredefinition-ancestor
 message StructureDefinitionAncestor {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-ancestor";
 
@@ -5302,7 +5608,8 @@ message StructureDefinitionAncestor {
 // See http://hl7.org/fhir/StructureDefinition/structuredefinition-annotation
 message StructureDefinitionAnnotation {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-annotation";
 
@@ -5318,7 +5625,8 @@ message StructureDefinitionAnnotation {
 // See http://hl7.org/fhir/StructureDefinition/structuredefinition-ballot-status
 message BallotStatus {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-ballot-status";
 
@@ -5334,7 +5642,8 @@ message BallotStatus {
 // See http://hl7.org/fhir/StructureDefinition/structuredefinition-category
 message StructureDefinitionCategory {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-category";
 
@@ -5350,7 +5659,8 @@ message StructureDefinitionCategory {
 // See http://hl7.org/fhir/StructureDefinition/structuredefinition-display-hint
 message ElementDefinitionDisplayHint {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-display-hint";
 
@@ -5367,7 +5677,8 @@ message ElementDefinitionDisplayHint {
 // http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name
 message ElementDefinitionExplicitTypeName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name";
 
@@ -5384,7 +5695,8 @@ message ElementDefinitionExplicitTypeName {
 // http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm-no-warnings
 message StructureDefinitionFmmNoWarnings {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm-no-warnings";
 
@@ -5400,7 +5712,8 @@ message StructureDefinitionFmmNoWarnings {
 // See http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm
 message Fmm {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm";
 
@@ -5416,7 +5729,8 @@ message Fmm {
 // See http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type
 message ElementDefinitionJsonType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type";
 
@@ -5432,7 +5746,8 @@ message ElementDefinitionJsonType {
 // See http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type
 message ElementDefinitionRdfType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type";
 
@@ -5448,7 +5763,8 @@ message ElementDefinitionRdfType {
 // See http://hl7.org/fhir/StructureDefinition/structuredefinition-regex
 message ElementDefinitionRegex {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-regex";
 
@@ -5464,7 +5780,8 @@ message ElementDefinitionRegex {
 // See http://hl7.org/fhir/StructureDefinition/structuredefinition-summary
 message StructureDefinitionSummary {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-summary";
 
@@ -5480,7 +5797,8 @@ message StructureDefinitionSummary {
 // See http://hl7.org/fhir/StructureDefinition/structuredefinition-table-name
 message StructureDefinitionTableName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-table-name";
 
@@ -5497,7 +5815,8 @@ message StructureDefinitionTableName {
 // http://hl7.org/fhir/StructureDefinition/structuredefinition-template-status
 message StructureDefinitionTemplateStatus {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-template-status";
 
@@ -5513,7 +5832,8 @@ message StructureDefinitionTemplateStatus {
 // See http://hl7.org/fhir/StructureDefinition/structuredefinition-wg
 message Wg {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg";
 
@@ -5529,7 +5849,8 @@ message Wg {
 // See http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type
 message ElementDefinitionXmlType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type";
 
@@ -5545,7 +5866,8 @@ message ElementDefinitionXmlType {
 // See http://hl7.org/fhir/StructureDefinition/task-candidateList
 message TaskCandidateList {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/task-candidateList";
 
@@ -5568,7 +5890,8 @@ message TaskCandidateList {
 // See http://hl7.org/fhir/StructureDefinition/task-replaces
 message TaskReplaces {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/task-replaces";
 
@@ -5584,7 +5907,8 @@ message TaskReplaces {
 // See http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle
 message DaysOfCycle {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle";
 
@@ -5603,7 +5927,8 @@ message DaysOfCycle {
 // See http://hl7.org/fhir/StructureDefinition/timing-exact
 message TimingExact {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/timing-exact";
 
@@ -5619,7 +5944,8 @@ message TimingExact {
 // See http://hl7.org/fhir/StructureDefinition/translation
 message Translation {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/translation";
 
@@ -5656,7 +5982,8 @@ message Translation {
 // See http://hl7.org/fhir/StructureDefinition/usagecontext-group
 message UsageContextGroup {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/usagecontext-group";
 
@@ -5672,7 +5999,8 @@ message UsageContextGroup {
 // See http://hl7.org/fhir/StructureDefinition/valueset-author
 message ValueSetAuthor {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-author";
 
@@ -5688,7 +6016,8 @@ message ValueSetAuthor {
 // See http://hl7.org/fhir/StructureDefinition/valueset-caseSensitive
 message ValueSetCaseSensitive {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-caseSensitive";
 
@@ -5704,7 +6033,8 @@ message ValueSetCaseSensitive {
 // See http://hl7.org/fhir/StructureDefinition/valueset-comment
 message ValueSetComment {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-comment";
 
@@ -5726,7 +6056,8 @@ message ValueSetComment {
 // See http://hl7.org/fhir/StructureDefinition/valueset-comments
 message ValueSetComments {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-comments";
 
@@ -5742,7 +6073,8 @@ message ValueSetComments {
 // See http://hl7.org/fhir/StructureDefinition/valueset-conceptOrder
 message ValueSetConceptOrder {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-conceptOrder";
 
@@ -5758,7 +6090,8 @@ message ValueSetConceptOrder {
 // See http://hl7.org/fhir/StructureDefinition/valueset-definition
 message ValueSetDefinition {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-definition";
 
@@ -5774,7 +6107,8 @@ message ValueSetDefinition {
 // See http://hl7.org/fhir/StructureDefinition/valueset-effectiveDate
 message ValueSetEffectiveDate {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-effectiveDate";
 
@@ -5790,7 +6124,8 @@ message ValueSetEffectiveDate {
 // See http://hl7.org/fhir/StructureDefinition/valueset-expansionSource
 message ValueSetExpansionSource {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-expansionSource";
 
@@ -5806,7 +6141,8 @@ message ValueSetExpansionSource {
 // See http://hl7.org/fhir/StructureDefinition/valueset-expirationDate
 message ValueSetExpirationDate {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-expirationDate";
 
@@ -5822,7 +6158,8 @@ message ValueSetExpirationDate {
 // See http://hl7.org/fhir/StructureDefinition/valueset-history
 message ValueSetHistory {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-history";
 
@@ -5863,7 +6200,8 @@ message ValueSetHistory {
 // See http://hl7.org/fhir/StructureDefinition/valueset-keyWord
 message ValueSetKeyWord {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-keyWord";
 
@@ -5879,7 +6217,8 @@ message ValueSetKeyWord {
 // See http://hl7.org/fhir/StructureDefinition/valueset-label
 message ValueSetLabel {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-label";
 
@@ -5895,7 +6234,8 @@ message ValueSetLabel {
 // See http://hl7.org/fhir/StructureDefinition/valueset-map
 message ValueSetMap {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-map";
 
@@ -5911,7 +6251,8 @@ message ValueSetMap {
 // See http://hl7.org/fhir/StructureDefinition/valueset-ordinalValue
 message ValueSetOrdinalValue {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-ordinalValue";
 
@@ -5927,7 +6268,8 @@ message ValueSetOrdinalValue {
 // See http://hl7.org/fhir/StructureDefinition/valueset-otherName
 message ValueSetOtherName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-otherName";
 
@@ -5949,7 +6291,8 @@ message ValueSetOtherName {
 // See http://hl7.org/fhir/StructureDefinition/valueset-reference
 message ValueSetReference {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-reference";
 
@@ -5965,7 +6308,8 @@ message ValueSetReference {
 // See http://hl7.org/fhir/StructureDefinition/valueset-sourceReference
 message ValueSetSourceReference {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-sourceReference";
 
@@ -5981,7 +6325,8 @@ message ValueSetSourceReference {
 // See http://hl7.org/fhir/StructureDefinition/valueset-system
 message ValueSetSystem {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-system";
 
@@ -5997,7 +6342,8 @@ message ValueSetSystem {
 // See http://hl7.org/fhir/StructureDefinition/valueset-systemName
 message ValueSetSystemName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-systemName";
 
@@ -6013,7 +6359,8 @@ message ValueSetSystemName {
 // See http://hl7.org/fhir/StructureDefinition/valueset-systemRef
 message ValueSetSystemRef {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-systemRef";
 
@@ -6029,7 +6376,8 @@ message ValueSetSystemRef {
 // See http://hl7.org/fhir/StructureDefinition/valueset-toocostly
 message ValueSetToocostly {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-toocostly";
 
@@ -6045,7 +6393,8 @@ message ValueSetToocostly {
 // See http://hl7.org/fhir/StructureDefinition/valueset-trusted-expansion
 message ValueSetTrustedExpansion {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-trusted-expansion";
 
@@ -6061,7 +6410,8 @@ message ValueSetTrustedExpansion {
 // See http://hl7.org/fhir/StructureDefinition/valueset-unclosed
 message ValueSetUnclosed {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-unclosed";
 
@@ -6077,7 +6427,8 @@ message ValueSetUnclosed {
 // See http://hl7.org/fhir/StructureDefinition/valueset-usage
 message ValueSetUsage {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-usage";
 
@@ -6099,7 +6450,8 @@ message ValueSetUsage {
 // See http://hl7.org/fhir/StructureDefinition/valueset-warning
 message ValueSetWarning {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-warning";
 
@@ -6115,7 +6467,8 @@ message ValueSetWarning {
 // See http://hl7.org/fhir/StructureDefinition/valueset-workflowStatus
 message ValueSetWorkflowStatus {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (fhir_profile_base) = "Extension";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-workflowStatus";
 
