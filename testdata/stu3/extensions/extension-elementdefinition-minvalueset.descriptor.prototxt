@@ -49,6 +49,6 @@ nested_type {
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
   [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for minValueSet.\nMinimum Value Set (what system must support).\nSee http://hl7.org/fhir/StructureDefinition/elementdefinition-minValueSet"
-  [google.fhir.stu3.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Extension"
+  [google.fhir.stu3.proto.fhir_profile_base]: "Extension"
   [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/elementdefinition-minValueSet"
 }

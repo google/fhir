@@ -343,7 +343,7 @@ public class ProtoGenerator {
       builder
           .setName(name)
           .getOptionsBuilder()
-          .setExtension(Annotations.fhirProfileBase, def.getBaseDefinition().getValue());
+          .setExtension(Annotations.fhirProfileBase, def.getType().getValue());
     }
     return builder.build();
   }

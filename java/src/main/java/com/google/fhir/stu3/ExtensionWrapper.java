@@ -96,19 +96,15 @@ public final class ExtensionWrapper {
   private void validateFhirExtension(MessageOrBuilder message) {
     MessageOptions options = message.getDescriptorForType().getOptions();
     // Note that this method checks proto extensions, which are different from FHIR extensions.
-    String baseUrl = options.getExtension(Annotations.fhirProfileBase);
+    String baseType = options.getExtension(Annotations.fhirProfileBase);
     // TODO(nickgeorge): This would reject profiles on profiles on extensions (and so on).
-    // If we want to support that, we'll probably need a "fhir_is_extension" annotation,
-    // or else load the structure definitions and walk back.
-    if (!baseUrl.equals(
-        Extension.getDescriptor()
-            .getOptions()
-            .getExtension(Annotations.fhirStructureDefinitionUrl))) {
+    // If we want to support that, we'll probably need a "fhir_is_extension" annotation.
+    if (!baseType.equals("Extension")) {
       throw new IllegalArgumentException(
           "Message type "
               + message.getDescriptorForType().getFullName()
               + " is not a FHIR extension.  Base Profile: "
-              + baseUrl);
+              + baseType);
     }
     if (!options.hasExtension(Annotations.fhirStructureDefinitionUrl)) {
       throw new IllegalArgumentException(
