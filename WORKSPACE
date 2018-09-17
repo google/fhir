@@ -12,14 +12,14 @@ http_archive(
     ],
 )
 
-# TensorFlow v1.10.0 (2018-04-12), com_google_absl is also provided by
+# TensorFlow v1.11.0 (2018-09-12). com_google_absl is also provided by
 # tensorflow.
 http_archive(
     name = "org_tensorflow",
-    sha256 = "0f02347f4e3993a97f790a795d5257ee5d43e7671979cab2f12c285adf787009",
-    strip_prefix = "tensorflow-1.10.0-rc0",
+    sha256 = "433f673b8d7b89e7f824969453a2bab7c7781e03d53f596575af4628e6718b4e",
+    strip_prefix = "tensorflow-1.11.0-rc0",
     urls = [
-        "https://github.com/tensorflow/tensorflow/archive/v1.10.0-rc0.tar.gz",
+        "https://github.com/tensorflow/tensorflow/archive/v1.11.0-rc0.tar.gz",
     ],
 )
 
