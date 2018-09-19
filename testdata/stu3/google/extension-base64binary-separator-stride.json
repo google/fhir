@@ -16,7 +16,7 @@
       ]
     }
   ],
-  "description": "If true, indicates that the specified primitive type has no value.",
+  "description": "Guidelines for how to break Base64Binary content across lines.",
   "fhirVersion": "3.0.1",
   "kind": "complex-type",
   "abstract": false,
