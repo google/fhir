@@ -862,11 +862,12 @@ public class ProtoGenerator {
 
     if (isChoiceType(element)) {
       options.setExtension(Annotations.isChoiceType, true);
-      // Choice Types are defined locally
-      fieldPackage = packageName;
     }
 
-    if (isContainer(element)) {
+    if (isContainer(element)
+        || isChoiceType(element)
+        || isComplexInternalExtension(element, elementList)) {
+      // Field types that require internally-generated submessages are defined in the local package.
       fieldPackage = packageName;
     }
 
