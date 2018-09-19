@@ -296,7 +296,7 @@ class Parser {
         target->GetReflection()
             ->AddMessage(target.get(),
                          target->GetDescriptor()->FindFieldByName("extension"))
-            ->CopyFrom(*PRIMITIVE_HAS_NO_VALUE_EXTENSION);
+            ->CopyFrom(*GetPrimitiveHasNoValueExtension());
         return std::move(target);
       } else {
         FHIR_RETURN_IF_ERROR(ParseInto(json, default_timezone_, target.get()));

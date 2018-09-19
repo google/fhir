@@ -213,7 +213,7 @@ template <class T>
 bool SpecificWrapper<T>::HasValue() const {
   for (const Extension& extension : GetWrapped().extension()) {
     if (extension.url().value() ==
-            PRIMITIVE_HAS_NO_VALUE_EXTENSION->url().value() &&
+            GetPrimitiveHasNoValueExtension()->url().value() &&
         extension.value().boolean().value()) {
       return false;
     }
@@ -229,7 +229,7 @@ bool SpecificWrapper<Xhtml>::HasValue() const {
 template <class T>
 StatusOr<T> SpecificWrapper<T>::BuildNullValue() {
   T t;
-  *(t.add_extension()) = *PRIMITIVE_HAS_NO_VALUE_EXTENSION;
+  *(t.add_extension()) = *GetPrimitiveHasNoValueExtension();
   return t;
 }
 
@@ -974,8 +974,11 @@ StatusOr<std::unique_ptr<PrimitiveWrapper>> GetWrapper(
 
 }  // namespace
 
-const Extension* const PRIMITIVE_HAS_NO_VALUE_EXTENSION =
-    BuildHasNoValueExtension().ValueOrDie();
+const Extension* const GetPrimitiveHasNoValueExtension() {
+  static const Extension* const extension =
+      BuildHasNoValueExtension().ValueOrDie();
+  return extension;
+}
 
 Status ParseInto(const Json::Value& json, absl::TimeZone tz,
                  ::google::protobuf::Message* target) {

@@ -34,8 +34,8 @@ namespace stu3 {
 
 using std::string;
 
-extern const google::fhir::stu3::proto::Extension* const
-    PRIMITIVE_HAS_NO_VALUE_EXTENSION;
+const google::fhir::stu3::proto::Extension* const
+    GetPrimitiveHasNoValueExtension();
 
 struct JsonPrimitive {
   string value;
