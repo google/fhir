@@ -33,9 +33,55 @@ namespace fhir {
 namespace stu3 {
 
 using ::google::fhir::stu3::proto::ContainedResource;
+using ::google::fhir::stu3::proto::DateTime;
+using ::google::fhir::stu3::proto::Id;
+using ::google::fhir::stu3::proto::Reference;
+using ::google::fhir::stu3::proto::ReferenceId;
 using ::google::protobuf::Message;
 
 using std::string;
+
+namespace {
+
+// This is based on the implementation in protobuf/util/internal/utility.h.
+string ToSnakeCase(absl::string_view input) {
+  bool was_not_underscore = false;  // Initialize to false for case 1 (below)
+  bool was_not_cap = false;
+  string result;
+  result.reserve(input.size() << 1);
+
+  for (size_t i = 0; i < input.size(); ++i) {
+    if (absl::ascii_isupper(input[i])) {
+      // Consider when the current character B is capitalized:
+      // 1) At beginning of input:   "B..." => "b..."
+      //    (e.g. "Biscuit" => "biscuit")
+      // 2) Following a lowercase:   "...aB..." => "...a_b..."
+      //    (e.g. "gBike" => "g_bike")
+      // 3) At the end of input:     "...AB" => "...ab"
+      //    (e.g. "GoogleLAB" => "google_lab")
+      // 4) Followed by a lowercase: "...ABc..." => "...a_bc..."
+      //    (e.g. "GBike" => "g_bike")
+      if (was_not_underscore &&                     //            case 1 out
+          (was_not_cap ||                           // case 2 in, case 3 out
+           (i + 1 < input.size() &&                 //            case 3 out
+            absl::ascii_islower(input[i + 1])))) {  // case 4 in
+        // We add an underscore for case 2 and case 4.
+        result.push_back('_');
+      }
+      result.push_back(absl::ascii_tolower(input[i]));
+      was_not_underscore = true;
+      was_not_cap = false;
+    } else {
+      result.push_back(input[i]);
+      was_not_underscore = input[i] != '_';
+      was_not_cap = true;
+    }
+  }
+  return result;
+}
+
+}  // namespace
+
 StatusOr<string> ExtractCodeBySystem(
     const stu3::proto::CodeableConcept& codeable_concept,
     absl::string_view system_value) {
@@ -109,6 +155,223 @@ StatusOr<ContainedResource> WrapContainedResource(const Message& resource) {
   ContainedResource contained_resource;
   TF_RETURN_IF_ERROR(SetContainedResource(resource, &contained_resource));
   return contained_resource;
+}
+
+bool IsPrimitive(const google::protobuf::Descriptor* descriptor) {
+  return descriptor->options().GetExtension(
+             stu3::proto::structure_definition_kind) ==
+         stu3::proto::StructureDefinitionKindValue::KIND_PRIMITIVE_TYPE;
+}
+
+bool IsResource(const google::protobuf::Descriptor* descriptor) {
+  return descriptor->options().GetExtension(
+             stu3::proto::structure_definition_kind) ==
+         stu3::proto::StructureDefinitionKindValue::KIND_RESOURCE;
+}
+
+bool IsReference(const google::protobuf::Descriptor* descriptor) {
+  return descriptor->options().ExtensionSize(stu3::proto::fhir_reference_type) >
+         0;
+}
+
+bool HasValueset(const google::protobuf::Descriptor* descriptor) {
+  return descriptor->options().HasExtension(stu3::proto::fhir_valueset_url);
+}
+
+bool IsChoiceType(const google::protobuf::FieldDescriptor* field) {
+  return field->options().GetExtension(stu3::proto::is_choice_type);
+}
+
+StatusOr<string> ReferenceProtoToString(const Reference& reference) {
+  if (reference.has_uri()) {
+    return reference.uri().value();
+  } else if (reference.has_fragment()) {
+    return absl::StrCat("#", reference.fragment().value());
+  }
+
+  const google::protobuf::Reflection* reflection = reference.GetReflection();
+  static const google::protobuf::OneofDescriptor* oneof =
+      Reference::descriptor()->FindOneofByName("reference");
+  const google::protobuf::FieldDescriptor* field =
+      reflection->GetOneofFieldDescriptor(reference, oneof);
+  if (field == nullptr) {
+    return ::tensorflow::errors::NotFound("Reference not set");
+  }
+  string prefix;
+  bool start = true;
+  for (const char c : field->name()) {
+    if (start) {
+      start = false;
+      prefix.push_back(c + 'A' - 'a');
+    } else if (c == '_') {
+      start = true;
+    } else {
+      prefix.push_back(c);
+    }
+  }
+  static LazyRE2 re = {"Id$"};
+  RE2::Replace(&prefix, *re, "");
+  const ReferenceId& id =
+      (const ReferenceId&)reflection->GetMessage(reference, field);
+  string reference_string = absl::StrCat(prefix, "/", id.value());
+  if (id.has_history()) {
+    absl::StrAppend(&reference_string, "/_history/", id.history().value());
+  }
+  return reference_string;
+}
+
+Status GetPatient(const Bundle& bundle, const Patient** patient) {
+  bool found = false;
+  for (const auto& entry : bundle.entry()) {
+    if (entry.resource().has_patient()) {
+      if (found) {
+        return ::tensorflow::errors::AlreadyExists(
+            "Found more than one patient in bundle");
+      }
+      *patient = &entry.resource().patient();
+      found = true;
+    }
+  }
+  if (found) {
+    return Status::OK();
+  } else {
+    return ::tensorflow::errors::NotFound("No patient in bundle.");
+  }
+}
+
+StatusOr<const Message*> GetContainedResource(
+    const ContainedResource& contained) {
+  const google::protobuf::Reflection* ref = contained.GetReflection();
+  // Get the resource field corresponding to this resource.
+  const google::protobuf::OneofDescriptor* resource_oneof =
+      contained.GetDescriptor()->FindOneofByName("oneof_resource");
+  const google::protobuf::FieldDescriptor* field =
+      contained.GetReflection()->GetOneofFieldDescriptor(contained,
+                                                         resource_oneof);
+  if (!field) {
+    return ::tensorflow::errors::NotFound("No Bundle Resource found");
+  }
+  return &(ref->GetMessage(contained, field));
+}
+
+absl::Duration GetDurationFromTimelikeElement(const DateTime& datetime) {
+  // TODO(sundberg): handle YEAR and MONTH properly, instead of approximating.
+  switch (datetime.precision()) {
+    case DateTime::YEAR:
+      return absl::Hours(24 * 366);
+    case DateTime::MONTH:
+      return absl::Hours(24 * 31);
+    case DateTime::DAY:
+      return absl::Hours(24);
+    case DateTime::SECOND:
+      return absl::Seconds(1);
+    case DateTime::MILLISECOND:
+      return absl::Milliseconds(1);
+    case DateTime::MICROSECOND:
+      return absl::Microseconds(1);
+    default:
+      LOG(FATAL) << "Unsupported datetime precision: " << datetime.precision();
+  }
+}
+
+StatusOr<string> GetResourceId(const Message& message) {
+  const auto* desc = message.GetDescriptor();
+  if (!absl::StartsWith(desc->full_name(), "google.fhir.stu3")) {
+    return ::tensorflow::errors::InvalidArgument(
+        absl::StrCat("Message is not a STU3 resource: ", desc->full_name()));
+  }
+  const google::protobuf::Reflection* ref = message.GetReflection();
+  const google::protobuf::FieldDescriptor* field = desc->FindFieldByName("id");
+  const Message* entry_message = &message;
+  if (field->is_repeated()) {
+    return ::tensorflow::errors::InvalidArgument(
+        "Unexpected repeated id field");
+  }
+  if (field->cpp_type() != google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
+    return ::tensorflow::errors::InvalidArgument(
+        "No id field found on message");
+  }
+  if (field->message_type()->full_name() != Id::descriptor()->full_name()) {
+    return ::tensorflow::errors::InvalidArgument(absl::StrCat(
+        "id field is not a singular STU3 String: ", desc->full_name()));
+  }
+  const auto* id_message =
+      dynamic_cast<const Id*>(&ref->GetMessage(*entry_message, field));
+  return id_message->value();
+}
+
+StatusOr<Reference> ReferenceStringToProto(const string& input) {
+  static const LazyRE2 kInternalReferenceRegex{
+      "([0-9A-Za-z_]+)/([^/]+)(?:/_history/([A-Za-z0-9.-]{1,64}))?"};
+  string resource_type;
+  string resource_id;
+  string version;
+  if (RE2::FullMatch(input, *kInternalReferenceRegex, &resource_type,
+                     &resource_id, &version)) {
+    const string field_name = absl::StrCat(ToSnakeCase(resource_type), "_id");
+    const google::protobuf::FieldDescriptor* field =
+        Reference::descriptor()->FindFieldByName(field_name);
+    if (field == nullptr) {
+      return ::tensorflow::errors::InvalidArgument(
+          absl::StrCat("Resource type ", resource_type,
+                       " is not valid for a reference (field ", field_name,
+                       " does not exist)."));
+    }
+    Reference reference;
+    ReferenceId* reference_id = dynamic_cast<ReferenceId*>(
+        reference.GetReflection()->MutableMessage(&reference, field));
+    reference_id->set_value(resource_id);
+    if (!version.empty()) {
+      reference_id->mutable_history()->set_value(version);
+    }
+    return reference;
+  }
+
+  static const LazyRE2 kFragmentReferenceRegex{"#.*"};
+  if (RE2::FullMatch(input, *kFragmentReferenceRegex)) {
+    Reference reference;
+    reference.mutable_fragment()->set_value(input.substr(1));
+    return reference;
+  }
+
+  // From https://www.hl7.org/fhir/references.html#literal
+  static LazyRE2 kUrlReference = {
+      "((http|https):\\/\\/"
+      "([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/"
+      ")*)?(Account|ActivityDefinition|AdverseEvent|"
+      "AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|"
+      "Binary|BodySite|Bundle|CapabilityStatement|CarePlan|CareTeam|ChargeItem|"
+      "Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|"
+      "CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|"
+      "Condition|Consent|Contract|Coverage|DataElement|DetectedIssue|Device|"
+      "DeviceComponent|DeviceMetric|DeviceRequest|DeviceUseStatement|"
+      "DiagnosticReport|DocumentManifest|DocumentReference|EligibilityRequest|"
+      "EligibilityResponse|Encounter|Endpoint|EnrollmentRequest|"
+      "EnrollmentResponse|EpisodeOfCare|ExpansionProfile|ExplanationOfBenefit|"
+      "FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|"
+      "HealthcareService|ImagingManifest|ImagingStudy|Immunization|"
+      "ImmunizationRecommendation|ImplementationGuide|Library|Linkage|List|"
+      "Location|Measure|MeasureReport|Media|Medication|"
+      "MedicationAdministration|"
+      "MedicationDispense|MedicationRequest|MedicationStatement|"
+      "MessageDefinition|MessageHeader|NamingSystem|NutritionOrder|Observation|"
+      "OperationDefinition|OperationOutcome|Organization|Patient|PaymentNotice|"
+      "PaymentReconciliation|Person|PlanDefinition|Practitioner|"
+      "PractitionerRole|"
+      "Procedure|ProcedureRequest|ProcessRequest|ProcessResponse|Provenance|"
+      "Questionnaire|QuestionnaireResponse|ReferralRequest|RelatedPerson|"
+      "RequestGroup|ResearchStudy|ResearchSubject|RiskAssessment|Schedule|"
+      "SearchParameter|Sequence|ServiceDefinition|Slot|Specimen|"
+      "StructureDefinition|StructureMap|Subscription|Substance|SupplyDelivery|"
+      "SupplyRequest|Task|TestReport|TestScript|ValueSet|VisionPrescription)\\/"
+      "[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"};
+  if (RE2::FullMatch(input, *kUrlReference)) {
+    Reference reference;
+    reference.mutable_uri()->set_value(input);
+    return reference;
+  }
+  return ::tensorflow::errors::InvalidArgument(
+      absl::StrCat("String \"", input, "\" cannot be parsed as a reference."));
 }
 
 }  // namespace stu3

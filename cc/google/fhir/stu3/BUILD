@@ -207,3 +207,70 @@ cc_test(
         "@protobuf_archive//:protobuf",
     ],
 )
+
+cc_library(
+    name = "json_format",
+    srcs = [
+        "json_parser.cc",
+        "json_printer.cc",
+        "primitive_wrapper.cc",
+        "primitive_wrapper.h",
+    ],
+    hdrs = [
+        "json_format.h",
+        "primitive_wrapper.h",
+    ],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":extensions",
+        ":util",
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
+        "//proto/stu3:annotations_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:extensions_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@com_googlesource_code_re2//:re2",
+        "@jsoncpp_git//:jsoncpp",
+        "@org_tensorflow//tensorflow/core:lib",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "json_format_test",
+    srcs = ["json_format_test.cc"],
+    data = [
+        "//testdata/stu3:examples",
+    ],
+    deps = [
+        ":json_format",
+        ":test_helper",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/stu3:resources_cc_proto",
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest_main",
+        "@jsoncpp_git//:jsoncpp",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "primitive_wrapper_test",
+    srcs = ["primitive_wrapper_test.cc"],
+    data = [
+        "//testdata/stu3:validation",
+    ],
+    deps = [
+        ":json_format",
+        ":test_helper",
+        "//proto/stu3:datatypes_cc_proto",
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest_main",
+        "@org_tensorflow//tensorflow/core:test",
+        "@protobuf_archive//:protobuf",
+    ],
+)

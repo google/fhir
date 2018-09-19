@@ -17,20 +17,32 @@
 #ifndef GOOGLE_FHIR_STU3_UTIL_H_
 #define GOOGLE_FHIR_STU3_UTIL_H_
 
+#include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
+#include "google/protobuf/reflection.h"
+#include "absl/strings/match.h"
+#include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
+#include "absl/strings/strip.h"
 #include "absl/time/time.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
+#include "tensorflow/core/lib/core/errors.h"
+#include "re2/re2.h"
 
 namespace google {
 namespace fhir {
 namespace stu3 {
 
 using std::string;
+
+using ::google::fhir::stu3::proto::Bundle;
 using ::google::fhir::stu3::proto::CodeableConcept;
+using ::google::fhir::stu3::proto::ContainedResource;
+using ::google::fhir::stu3::proto::Patient;
+using ::google::fhir::stu3::proto::Reference;
 
 // Extract code value for a given system code. Return as soon as we find one.
 StatusOr<string> ExtractCodeBySystem(const CodeableConcept& codeable_concept,
@@ -45,6 +57,10 @@ stu3::proto::Meta* MutableMetadataFromResource(R* resource) {
   return resource->mutable_meta();
 }
 
+StatusOr<Reference> ReferenceStringToProto(const string& input);
+// Return the full string representation of a reference.
+StatusOr<string> ReferenceProtoToString(const Reference& reference);
+
 // Builds an absl::Time from a time-like fhir Element.
 // Must have a value_us field.
 template <class T>
@@ -52,14 +68,44 @@ absl::Time GetTimeFromTimelikeElement(const T& timelike) {
   return absl::FromUnixMicros(timelike.value_us());
 }
 
+absl::Duration GetDurationFromTimelikeElement(
+    const stu3::proto::DateTime& datetime);
+
+// Builds a absl::Time from a time-like fhir Element, corresponding to the
+// smallest time greater than this time element. For elements with DAY
+// precision, for example, this will be 86400 seconds past value_us of this
+// field.
+template <class T>
+absl::Time GetUpperBoundFromTimelikeElement(const T& timelike) {
+  return absl::FromUnixMicros(timelike.value_us()) +
+         GetDurationFromTimelikeElement(timelike);
+}
+
 // Populates the resource oneof on ContainedResource with the passed-in
 // resource.
 Status SetContainedResource(const google::protobuf::Message& resource,
                             stu3::proto::ContainedResource* contained);
 
+StatusOr<const google::protobuf::Message*> GetContainedResource(
+    const ContainedResource& contained);
+
 // Returns the input resource, wrapped in a ContainedResource
 StatusOr<stu3::proto::ContainedResource> WrapContainedResource(
     const google::protobuf::Message& resource);
+
+StatusOr<string> GetResourceId(const google::protobuf::Message& message);
+
+Status GetPatient(const Bundle& bundle, const Patient** patient);
+
+bool IsChoiceType(const google::protobuf::FieldDescriptor* field);
+
+bool IsPrimitive(const google::protobuf::Descriptor* descriptor);
+
+bool IsResource(const google::protobuf::Descriptor* descriptor);
+
+bool IsReference(const google::protobuf::Descriptor* descriptor);
+
+bool HasValueset(const google::protobuf::Descriptor* descriptor);
 
 }  // namespace stu3
 }  // namespace fhir

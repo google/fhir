@@ -88,6 +88,15 @@ T ReadProto(const string& filename) {
   return result;
 }
 
+string ReadFile(const string& filename) {
+  string result;
+  TF_CHECK_OK(::tensorflow::ReadFileToString(
+      tensorflow::Env::Default(),
+      "testdata/stu3/" + filename,
+      &result));
+  return result;
+}
+
 }  // namespace stu3
 }  // namespace fhir
 }  // namespace google
