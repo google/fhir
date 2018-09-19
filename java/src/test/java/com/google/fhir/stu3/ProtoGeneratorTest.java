@@ -111,7 +111,14 @@ public class ProtoGeneratorTest {
   }
 
   private void testGeneratedExtension(String extensionFileName) throws IOException {
-    String relativePath = "extensions/" + extensionFileName;
+    testExtension("extensions/" + extensionFileName);
+  }
+
+  private void testGoogleExtension(String extensionFileName) throws IOException {
+    testExtension("google/" + extensionFileName);
+  }
+
+  private void testExtension(String relativePath) throws IOException {
     StructureDefinition resource = readStructureDefinition(relativePath + ".json");
     DescriptorProto generatedProto = protoGenerator.generateProto(resource);
     DescriptorProto golden = readDescriptorProto(relativePath + ".descriptor.prototxt");
@@ -1428,5 +1435,17 @@ public class ProtoGeneratorTest {
   @Test
   public void generateTimingDaysofcycle() throws Exception {
     testGeneratedExtension("extension-timing-daysofcycle");
+  }
+
+  /** Test generating the google-specific extension-primitive-has-no-value extension. */
+  @Test
+  public void generatePrimitiveHasNoValue() throws Exception {
+    testGoogleExtension("extension-primitive-has-no-value");
+  }
+
+  /** Test generating the google-specific extension-separator-stride extension. */
+  @Test
+  public void generateSeparatorStride() throws Exception {
+    testGoogleExtension("extension-base64binary-separator-stride");
   }
 }

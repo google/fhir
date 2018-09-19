@@ -16,6 +16,7 @@
 ROOT_PATH=../..
 INPUT_PATH=$ROOT_PATH/testdata/stu3/structure_definitions
 EXTENSION_PATH=$ROOT_PATH/testdata/stu3/extensions
+GOOGLE_EXTENSION_PATH=$ROOT_PATH/testdata/stu3/extensions
 PROTO_GENERATOR=$ROOT_PATH/bazel-bin/java/ProtoGenerator
 OUTPUT_PATH=.
 MANUAL_ADDITIONS_ROOT=.
@@ -48,7 +49,6 @@ then
 fi
 
 source "common.sh"
-GOOGLE_EXTENSIONS="extension-primitive-has-no-value extension-base64binary-separator-stride"
 PROFILES="observation-genetics"
 
 # generate datatypes.proto
