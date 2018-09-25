@@ -83,29 +83,29 @@ absl::Time GetUpperBoundFromTimelikeElement(const T& timelike) {
 
 // Populates the resource oneof on ContainedResource with the passed-in
 // resource.
-Status SetContainedResource(const google::protobuf::Message& resource,
+Status SetContainedResource(const ::google::protobuf::Message& resource,
                             stu3::proto::ContainedResource* contained);
 
-StatusOr<const google::protobuf::Message*> GetContainedResource(
+StatusOr<const ::google::protobuf::Message*> GetContainedResource(
     const ContainedResource& contained);
 
 // Returns the input resource, wrapped in a ContainedResource
 StatusOr<stu3::proto::ContainedResource> WrapContainedResource(
-    const google::protobuf::Message& resource);
+    const ::google::protobuf::Message& resource);
 
-StatusOr<string> GetResourceId(const google::protobuf::Message& message);
+StatusOr<string> GetResourceId(const ::google::protobuf::Message& message);
 
 Status GetPatient(const Bundle& bundle, const Patient** patient);
 
-bool IsChoiceType(const google::protobuf::FieldDescriptor* field);
+bool IsChoiceType(const ::google::protobuf::FieldDescriptor* field);
 
-bool IsPrimitive(const google::protobuf::Descriptor* descriptor);
+bool IsPrimitive(const ::google::protobuf::Descriptor* descriptor);
 
-bool IsResource(const google::protobuf::Descriptor* descriptor);
+bool IsResource(const ::google::protobuf::Descriptor* descriptor);
 
-bool IsReference(const google::protobuf::Descriptor* descriptor);
+bool IsReference(const ::google::protobuf::Descriptor* descriptor);
 
-bool HasValueset(const google::protobuf::Descriptor* descriptor);
+bool HasValueset(const ::google::protobuf::Descriptor* descriptor);
 
 }  // namespace stu3
 }  // namespace fhir

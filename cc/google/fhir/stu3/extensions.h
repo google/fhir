@@ -38,12 +38,12 @@ namespace stu3 {
 using std::string;
 
 tensorflow::Status ExtensionToMessage(const stu3::proto::Extension& extension,
-                                      google::protobuf::Message* message);
+                                      ::google::protobuf::Message* message);
 
-tensorflow::Status ConvertToExtension(const google::protobuf::Message& message,
+tensorflow::Status ConvertToExtension(const ::google::protobuf::Message& message,
                                       stu3::proto::Extension* extension);
 
-tensorflow::Status ValidateExtension(const google::protobuf::Descriptor* descriptor);
+tensorflow::Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor);
 
 // Extract all matching extensions from a container into a vector, and parse
 // them into protos. Example usage:
@@ -53,7 +53,7 @@ tensorflow::Status ValidateExtension(const google::protobuf::Descriptor* descrip
 template <class C, class T>
 tensorflow::Status GetRepeatedFromExtension(const C& extension_container,
                                             std::vector<T>* result) {
-  const google::protobuf::Descriptor* descriptor = T::descriptor();
+  const ::google::protobuf::Descriptor* descriptor = T::descriptor();
   TF_RETURN_IF_ERROR(ValidateExtension(descriptor));
   const string url = descriptor->options().GetExtension(
       stu3::proto::fhir_structure_definition_url);
@@ -67,10 +67,10 @@ tensorflow::Status GetRepeatedFromExtension(const C& extension_container,
   return tensorflow::Status::OK();
 }
 
-tensorflow::Status ClearTypedExtensions(const google::protobuf::Descriptor* descriptor,
-                                        google::protobuf::Message* message);
+tensorflow::Status ClearTypedExtensions(const ::google::protobuf::Descriptor* descriptor,
+                                        ::google::protobuf::Message* message);
 
-string GetInlinedExtensionUrl(const google::protobuf::FieldDescriptor* field);
+string GetInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* field);
 
 }  // namespace stu3
 }  // namespace fhir

@@ -65,3 +65,32 @@ message Base64BinarySeparatorStride {
   proto.PositiveInt stride = 5
       [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }
+
+// Auto-generated from StructureDefinition for eventTrigger.
+// EventTriggers specify cutoff times for generated TensorFlow examples.
+// See https://g.co/fhir/StructureDefinition/eventTrigger
+message EventTrigger {
+  option (.google.fhir.stu3.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "https://g.co/fhir/StructureDefinition/eventTrigger";
+
+  // xml:id (or equivalent in JSON)
+  proto.String id = 1;
+
+  // Additional content defined by implementations
+  repeated proto.Extension extension = 2;
+
+  // The type of trigger, part of the prediction task definition.
+  proto.Coding type = 4
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Prediction event time, more recent data will be elided.
+  proto.DateTime event_time = 5
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Resource that owns this trigger.
+  proto.Reference source = 6;
+}

@@ -28,6 +28,8 @@ namespace fhir {
 namespace stu3 {
 
 namespace {
+
+using ::google::fhir::stu3::google::EventTrigger;
 using ::google::fhir::stu3::google::PrimitiveHasNoValue;
 using ::google::fhir::stu3::proto::Extension;
 using ::google::fhir::testutil::EqualsProto;
@@ -37,6 +39,26 @@ void ReadTestData(const string& type, T* message, Extension* extension) {
   *message = ReadProto<T>(absl::StrCat("google/", type, ".message.prototxt"));
   *extension = ReadProto<Extension>(
       absl::StrCat("google/", type, ".extension.prototxt"));
+}
+
+TEST(ExtensionsTest, ParseEventTrigger) {
+  EventTrigger message;
+  Extension extension;
+  ReadTestData("trigger", &message, &extension);
+
+  EventTrigger output;
+  ASSERT_TRUE(ExtensionToMessage(extension, &output).ok());
+  EXPECT_THAT(output, EqualsProto(message));
+}
+
+TEST(ExtensionsTest, PrintEventTrigger) {
+  EventTrigger message;
+  Extension extension;
+  ReadTestData("trigger", &message, &extension);
+
+  Extension output;
+  ASSERT_TRUE(ConvertToExtension(message, &output).ok());
+  EXPECT_THAT(output, EqualsProto(extension));
 }
 
 TEST(ExtensionsTest, ParsePrimitiveHasNoValue) {

@@ -18,6 +18,7 @@ import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
+import com.google.fhir.stu3.google.EventTrigger;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;
 import com.google.fhir.stu3.proto.Extension;
 import com.google.protobuf.Message;
@@ -86,5 +87,17 @@ public final class ExtensionWrapperTest {
   public void expandPrimitiveHasNoValue() throws Exception {
     testExpand("primitive_has_no_value", PrimitiveHasNoValue.newBuilder());
     testExpand("empty", PrimitiveHasNoValue.newBuilder());
+  }
+
+  /** Test merging of an Extension into an EventTrigger message. */
+  @Test
+  public void mergeEventTrigger() throws Exception {
+    testMerge("trigger", EventTrigger.getDefaultInstance());
+  }
+
+  /** Test expanding an EventTrigger into an Extension. */
+  @Test
+  public void expandEventTrigger() throws Exception {
+    testExpand("trigger", EventTrigger.newBuilder());
   }
 }

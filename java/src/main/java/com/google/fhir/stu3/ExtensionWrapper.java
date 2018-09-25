@@ -18,7 +18,6 @@ import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.Extension;
 import com.google.fhir.stu3.proto.Uri;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
-import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
@@ -210,10 +209,11 @@ public final class ExtensionWrapper {
     for (Map.Entry<FieldDescriptor, Object> entry : message.getAllFields().entrySet()) {
       if (entry.getKey().isRepeated()) {
         for (Object o : (List) entry.getValue()) {
-          addFieldToExtension(entry.getKey().getName(), (MessageOrBuilder) o, result);
+          addFieldToExtension(entry.getKey().getJsonName(), (MessageOrBuilder) o, result);
         }
       } else {
-        addFieldToExtension(entry.getKey().getName(), (MessageOrBuilder) entry.getValue(), result);
+        addFieldToExtension(
+            entry.getKey().getJsonName(), (MessageOrBuilder) entry.getValue(), result);
       }
     }
   }
@@ -259,10 +259,12 @@ public final class ExtensionWrapper {
           "Invalid extension proto " + builder.getDescriptorForType().getFullName());
 
     } else {
-      Descriptor descriptor = builder.getDescriptorForType();
+      Map<String, FieldDescriptor> fields =
+          builder.getDescriptorForType().getFields().stream()
+              .collect(Collectors.toMap(FieldDescriptor::getJsonName, f -> f));
       for (Extension inner : extension.getExtensionList()) {
         String fieldName = inner.getUrl().getValue();
-        FieldDescriptor field = descriptor.findFieldByName(fieldName);
+        FieldDescriptor field = fields.get(fieldName);
         if (field == null) {
           throw new IllegalArgumentException(
               "Message "

@@ -77,6 +77,7 @@ public class ProtoGeneratorTest {
   private TextFormat.Parser textParser;
   private ExtensionRegistry registry;
   private ProtoGenerator protoGenerator;
+  private ProtoGenerator googleProtoGenerator;
   private Runfiles runfiles;
 
   /** Read the specifed file from the testdata directory into a String. */
@@ -111,16 +112,16 @@ public class ProtoGeneratorTest {
   }
 
   private void testGeneratedExtension(String extensionFileName) throws IOException {
-    testExtension("extensions/" + extensionFileName);
+    testExtension(protoGenerator, "extensions/" + extensionFileName);
   }
 
   private void testGoogleExtension(String extensionFileName) throws IOException {
-    testExtension("google/" + extensionFileName);
+    testExtension(googleProtoGenerator, "google/" + extensionFileName);
   }
 
-  private void testExtension(String relativePath) throws IOException {
+  private void testExtension(ProtoGenerator generator, String relativePath) throws IOException {
     StructureDefinition resource = readStructureDefinition(relativePath + ".json");
-    DescriptorProto generatedProto = protoGenerator.generateProto(resource);
+    DescriptorProto generatedProto = generator.generateProto(resource);
     DescriptorProto golden = readDescriptorProto(relativePath + ".descriptor.prototxt");
     assertThat(generatedProto).isEqualTo(golden);
   }
@@ -148,6 +149,13 @@ public class ProtoGeneratorTest {
         new ProtoGenerator(
             "google.fhir.stu3.proto",
             Optional.of("com.google.fhir.stu3.proto"),
+            Optional.empty(),
+            "proto/stu3",
+            getKnownStructureDefinitions());
+    googleProtoGenerator =
+        new ProtoGenerator(
+            "google.fhir.stu3.google",
+            Optional.of("com.google.fhir.stu3.google"),
             Optional.empty(),
             "proto/stu3",
             getKnownStructureDefinitions());
@@ -1447,5 +1455,11 @@ public class ProtoGeneratorTest {
   @Test
   public void generateSeparatorStride() throws Exception {
     testGoogleExtension("extension-base64binary-separator-stride");
+  }
+
+  /** Test generating the google-specific extension-event-trigger extension. */
+  @Test
+  public void generateEventTrigger() throws Exception {
+    testGoogleExtension("extension-event-trigger");
   }
 }
