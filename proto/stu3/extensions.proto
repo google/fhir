@@ -804,7 +804,7 @@ message CodeSystemKeyWord {
 }
 
 // Auto-generated from StructureDefinition for label.
-// E.g. "(a)", "1.", etc..
+// E.g. "(a)", "1.", etc.
 // See http://hl7.org/fhir/StructureDefinition/codesystem-label
 message CodeSystemLabel {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
@@ -1095,7 +1095,7 @@ message CommunicationRequestDefinition {
 }
 
 // Auto-generated from StructureDefinition for orderedBy.
-// Agent that ordered the communication..
+// Agent that ordered the communication.
 // See http://hl7.org/fhir/StructureDefinition/communicationrequest-orderedBy
 message CommunicationRequestOrderedBy {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
@@ -2183,7 +2183,7 @@ message ReasonReference {
 }
 
 // Auto-generated from StructureDefinition for observation.
-// Genetic markers, ethnicity, etc..
+// Genetic markers, ethnicity, etc.
 // See
 // http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation
 message FamilyMemberHistoryObservation {
@@ -4392,7 +4392,7 @@ message PatientReligion {
 }
 
 // Auto-generated from StructureDefinition for doseType.
-// The type of dose, e.g., loading..
+// The type of dose, e.g., loading.
 // See http://hl7.org/fhir/StructureDefinition/pharmacy-core-doseType
 message DoseType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
@@ -4614,7 +4614,7 @@ message ProcedureApproachBodySite {
 }
 
 // Auto-generated from StructureDefinition for causedBy.
-// Related item that caused this procedure..
+// Related item that caused this procedure.
 // See http://hl7.org/fhir/StructureDefinition/procedure-causedBy
 message ProcedureCausedBy {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
@@ -5009,7 +5009,7 @@ message QuestionnaireHidden {
 }
 
 // Auto-generated from StructureDefinition for itemControl.
-// E.g. Fly-over, Table, Checkbox, Combo-box, Lookup, etc..
+// E.g. Fly-over, Table, Checkbox, Combo-box, Lookup, etc.
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl
 message QuestionnaireItemControl {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
@@ -5094,7 +5094,7 @@ message QuestionnaireOptionExclusive {
 }
 
 // Auto-generated from StructureDefinition for optionPrefix.
-// E.g. "(a)", "1.", etc..
+// E.g. "(a)", "1.", etc.
 // See http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix
 message QuestionnaireOptionPrefix {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
@@ -6213,7 +6213,7 @@ message ValueSetKeyWord {
 }
 
 // Auto-generated from StructureDefinition for label.
-// E.g. "(a)", "1.", etc..
+// E.g. "(a)", "1.", etc.
 // See http://hl7.org/fhir/StructureDefinition/valueset-label
 message ValueSetLabel {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;

@@ -669,8 +669,8 @@
     "element" : [{
       "id" : "Extension",
       "path" : "Extension",
-      "short": "Base64Binary rendering parameters",
-      "definition": "Guidelines for how to break Base64Binary content across lines.",
+      "short": "EventTriggers specify cutoff times for generated TensorFlow examples.",
+      "definition": "EventTriggers specify cutoff times for generated TensorFlow examples.",
       "min" : 0,
       "max" : "1"
     },

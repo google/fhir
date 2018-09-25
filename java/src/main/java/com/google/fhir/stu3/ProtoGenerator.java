@@ -312,7 +312,11 @@ public class ProtoGenerator {
     }
     comment.append(".");
     if (root.hasShort()) {
-      comment.append("\n").append((root.getShort().getValue() + ".").replaceAll("[\\n\\r]", "\n"));
+      String shortString = root.getShort().getValue();
+      if (!shortString.endsWith(".")) {
+        shortString += ".";
+      }
+      comment.append("\n").append(shortString.replaceAll("[\\n\\r]", "\n"));
     }
     comment.append("\nSee ").append(def.getUrl().getValue());
 

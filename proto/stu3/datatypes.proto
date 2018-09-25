@@ -1048,7 +1048,7 @@ message SampledData {
 }
 
 // Auto-generated from StructureDefinition for Signature.
-// A digital Signature - XML DigSig, JWT, Graphical image of signature, etc..
+// A digital Signature - XML DigSig, JWT, Graphical image of signature, etc.
 // See http://hl7.org/fhir/StructureDefinition/Signature
 message Signature {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;

@@ -53,7 +53,7 @@ field {
 }
 options {
   [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for eventTrigger.\nBase64Binary rendering parameters.\nSee https://g.co/fhir/StructureDefinition/eventTrigger"
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for eventTrigger.\nEventTriggers specify cutoff times for generated TensorFlow examples.\nSee https://g.co/fhir/StructureDefinition/eventTrigger"
   [google.fhir.stu3.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Extension"
   [google.fhir.stu3.proto.fhir_structure_definition_url]: "https://g.co/fhir/StructureDefinition/eventTrigger"
 }
