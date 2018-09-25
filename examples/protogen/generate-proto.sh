@@ -98,7 +98,6 @@ $PROTO_GENERATOR \
   --output_directory $OUTPUT_PATH \
   --include_resources \
   --include_metadatatypes \
-  --include_extensions \
   --output_filename profiles.proto \
   $(for i in $PROFILES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
