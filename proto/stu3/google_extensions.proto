@@ -94,3 +94,58 @@ message EventTrigger {
   // Resource that owns this trigger.
   proto.Reference source = 6;
 }
+
+// Auto-generated from StructureDefinition for eventLabel.
+// EventLabels define labels used for TensorFlow model training and evaluation.
+// See https://g.co/fhir/StructureDefinition/eventLabel
+message EventLabel {
+  option (.google.fhir.stu3.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "https://g.co/fhir/StructureDefinition/eventLabel";
+
+  // xml:id (or equivalent in JSON)
+  proto.String id = 1;
+
+  // Additional content defined by implementations
+  repeated proto.Extension extension = 2;
+
+  // The patient associated with this label
+  proto.Reference patient = 4
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The type of label, part of the prediction task definition
+  proto.Coding type = 5
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Time associated with the label event, if available
+  proto.DateTime event_time = 6;
+
+  // Resource that owns this label
+  proto.Reference source = 7;
+
+  // List of labels associated with this event
+  message Label {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Class name in multi-class prediction tasks, e.g. code "780.60" for icd9
+    proto.Coding class_name = 4
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // The value of the label
+    message ClassValue {
+      oneof class_value {
+        proto.Boolean boolean = 1;
+        proto.Decimal decimal = 2;
+        proto.Integer integer = 3;
+        proto.String string_value = 4 [json_name = "string"];
+      }
+    }
+    ClassValue class_value = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Label label = 8;
+}

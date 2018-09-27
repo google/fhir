@@ -18,6 +18,7 @@ import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
+import com.google.fhir.stu3.google.EventLabel;
 import com.google.fhir.stu3.google.EventTrigger;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;
 import com.google.fhir.stu3.proto.Extension;
@@ -99,5 +100,17 @@ public final class ExtensionWrapperTest {
   @Test
   public void expandEventTrigger() throws Exception {
     testExpand("trigger", EventTrigger.newBuilder());
+  }
+
+  /** Test merging of an Extension into an EventLabel message. */
+  @Test
+  public void mergeEventLabel() throws Exception {
+    testMerge("label", EventLabel.getDefaultInstance());
+  }
+
+  /** Test expanding an EventLabel into an Extension. */
+  @Test
+  public void expandEventLabel() throws Exception {
+    testExpand("label", EventLabel.newBuilder());
   }
 }

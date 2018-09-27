@@ -29,6 +29,7 @@ namespace stu3 {
 
 namespace {
 
+using ::google::fhir::stu3::google::EventLabel;
 using ::google::fhir::stu3::google::EventTrigger;
 using ::google::fhir::stu3::google::PrimitiveHasNoValue;
 using ::google::fhir::stu3::proto::Extension;
@@ -55,6 +56,26 @@ TEST(ExtensionsTest, PrintEventTrigger) {
   EventTrigger message;
   Extension extension;
   ReadTestData("trigger", &message, &extension);
+
+  Extension output;
+  ASSERT_TRUE(ConvertToExtension(message, &output).ok());
+  EXPECT_THAT(output, EqualsProto(extension));
+}
+
+TEST(ExtensionsTest, ParseEventLabel) {
+  EventLabel message;
+  Extension extension;
+  ReadTestData("label", &message, &extension);
+
+  EventLabel output;
+  ASSERT_TRUE(ExtensionToMessage(extension, &output).ok());
+  EXPECT_THAT(output, EqualsProto(message));
+}
+
+TEST(ExtensionsTest, PrintEventLabel) {
+  EventLabel message;
+  Extension extension;
+  ReadTestData("label", &message, &extension);
 
   Extension output;
   ASSERT_TRUE(ConvertToExtension(message, &output).ok());

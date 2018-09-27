@@ -16,7 +16,7 @@
       ]
     }
   ],
-  "description": "If true, indicates that the specified primitive type has no value.",
+  "description": "EventTriggers specify cutoff times for generated TensorFlow examples.",
   "fhirVersion": "3.0.1",
   "kind": "complex-type",
   "abstract": false,
@@ -35,7 +35,7 @@
         "short": "EventTriggers specify cutoff times for generated TensorFlow examples.",
         "definition": "EventTriggers specify cutoff times for generated TensorFlow examples.",
         "min": 0,
-        "max": "1",
+        "max": "*",
         "base": {
           "path": "Extension",
           "min": 0,
@@ -672,7 +672,7 @@
       "short": "EventTriggers specify cutoff times for generated TensorFlow examples.",
       "definition": "EventTriggers specify cutoff times for generated TensorFlow examples.",
       "min" : 0,
-      "max" : "1"
+      "max" : "*"
     },
     {
       "id" : "Extension.extension:type",

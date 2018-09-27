@@ -1462,4 +1462,10 @@ public class ProtoGeneratorTest {
   public void generateEventTrigger() throws Exception {
     testGoogleExtension("extension-event-trigger");
   }
+
+  /** Test generating the google-specific extension-event-label extension. */
+  @Test
+  public void generateEventLabel() throws Exception {
+    testGoogleExtension("extension-event-label");
+  }
 }
