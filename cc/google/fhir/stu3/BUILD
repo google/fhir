@@ -8,6 +8,7 @@ cc_library(
     hdrs = ["extensions.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":util",
         "//cc/google/fhir/status",
         "//proto/stu3:annotations_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
@@ -30,6 +31,7 @@ cc_test(
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@org_tensorflow//tensorflow/core:lib",
+        "@org_tensorflow//tensorflow/core:test",
     ],
 )
 

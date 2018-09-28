@@ -102,70 +102,47 @@ nested_type {
     type_name: ".google.fhir.stu3.google.EventLabel.Label.ClassValue"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "The value of the label"
     }
   }
   nested_type {
     name: "ClassValue"
     field {
-      name: "id"
+      name: "boolean"
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.stu3.proto.String"
-      options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
-      }
+      type_name: ".google.fhir.stu3.proto.Boolean"
+      oneof_index: 0
     }
     field {
-      name: "value"
+      name: "decimal"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Decimal"
+      oneof_index: 0
+    }
+    field {
+      name: "integer"
       number: 3
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.stu3.google.EventLabel.Label.ClassValue.Value"
-      options {
-        [google.fhir.stu3.proto.is_choice_type]: true
-        [google.fhir.stu3.proto.field_description]: "Value of extension"
-      }
+      type_name: ".google.fhir.stu3.proto.Integer"
+      oneof_index: 0
     }
-    nested_type {
-      name: "Value"
-      field {
-        name: "boolean"
-        number: 1
-        label: LABEL_OPTIONAL
-        type: TYPE_MESSAGE
-        type_name: ".google.fhir.stu3.proto.Boolean"
-        oneof_index: 0
-      }
-      field {
-        name: "decimal"
-        number: 2
-        label: LABEL_OPTIONAL
-        type: TYPE_MESSAGE
-        type_name: ".google.fhir.stu3.proto.Decimal"
-        oneof_index: 0
-      }
-      field {
-        name: "integer"
-        number: 3
-        label: LABEL_OPTIONAL
-        type: TYPE_MESSAGE
-        type_name: ".google.fhir.stu3.proto.Integer"
-        oneof_index: 0
-      }
-      field {
-        name: "string_value"
-        number: 4
-        label: LABEL_OPTIONAL
-        type: TYPE_MESSAGE
-        type_name: ".google.fhir.stu3.proto.String"
-        oneof_index: 0
-        json_name: "string"
-      }
-      oneof_decl {
-        name: "value"
-      }
+    field {
+      name: "string_value"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      oneof_index: 0
+      json_name: "string"
+    }
+    oneof_decl {
+      name: "class_value"
     }
   }
 }

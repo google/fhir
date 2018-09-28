@@ -144,8 +144,10 @@ message EventLabel {
         proto.String string_value = 4 [json_name = "string"];
       }
     }
-    ClassValue class_value = 5
-        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    ClassValue class_value = 5 [
+      (.google.fhir.stu3.proto.is_choice_type) = true,
+      (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
+    ];
   }
   repeated Label label = 8;
 }

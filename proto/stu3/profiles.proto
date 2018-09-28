@@ -20,6 +20,7 @@ import "proto/stu3/annotations.proto";
 import "proto/stu3/codes.proto";
 import "proto/stu3/datatypes.proto";
 import "proto/stu3/resources.proto";
+import "proto/stu3/extensions.proto";
 import "proto/stu3/metadatatypes.proto";
 
 option java_multiple_files = true;
@@ -320,3 +321,331 @@ message ObservationGenetics {
   ];
 }
 
+// Auto-generated from StructureDefinition for DataElement constraint on
+// ElementDefinition data type. Definition of an element in a resource or
+// extension. See http://hl7.org/fhir/StructureDefinition/elementdefinition-de
+message ElementdefinitionDe {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/ElementDefinition";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/elementdefinition-de";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 2;
+
+  // Path of the element in the hierarchy of elements
+  String path = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Name for this particular element (in a set of slices)
+  String slice_name = 5;
+
+  // Name for element to display with or prompt for element
+  String label = 6;
+
+  // Corresponding codes in terminologies
+  repeated Coding code = 7;
+
+  // Full formal definition as narrative text
+  Markdown definition = 10;
+
+  // Comments about the use of this element
+  Markdown comment = 11;
+
+  // Why this resource has been created
+  Markdown requirements = 12;
+
+  // Other names
+  repeated String alias = 13;
+
+  // Minimum Cardinality
+  UnsignedInt min = 14;
+
+  // Maximum Cardinality (a number or *)
+  String max = 15;
+
+  // Base definition information for tools
+  message Base {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Path that identifies the base element
+    String path = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Min cardinality of the base element
+    UnsignedInt min = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Max cardinality of the base element
+    String max = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  Base base = 16;
+
+  // Data type and Profile for this element
+  message TypeRef {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Data type or Resource (reference to definition)
+    Uri code = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Profile (StructureDefinition) to apply to reference target (or IG)
+    Uri target_profile = 5;
+
+    // either | independent | specific
+    ReferenceVersionRulesCode versioning = 7;
+  }
+  repeated TypeRef type = 18;
+
+  // Specified value if missing from instance
+  message DefaultValue {
+    oneof default_value {
+      Base64Binary base64_binary = 1;
+      Boolean boolean = 2;
+      Code code = 3;
+      Date date = 4;
+      DateTime date_time = 5;
+      Decimal decimal = 6;
+      Id id = 7;
+      Instant instant = 8;
+      Integer integer = 9;
+      Markdown markdown = 10;
+      Oid oid = 11;
+      PositiveInt positive_int = 12;
+      String string_value = 13 [json_name = "string"];
+      Time time = 14;
+      UnsignedInt unsigned_int = 15;
+      Uri uri = 16;
+      Address address = 17;
+      Age age = 18;
+      Annotation annotation = 19;
+      Attachment attachment = 20;
+      CodeableConcept codeable_concept = 21;
+      Coding coding = 22;
+      ContactPoint contact_point = 23;
+      Count count = 24;
+      Distance distance = 25;
+      Duration duration = 26;
+      HumanName human_name = 27;
+      Identifier identifier = 28;
+      Money money = 29;
+      Period period = 30;
+      Quantity quantity = 31;
+      Range range = 32;
+      Ratio ratio = 33;
+      Reference reference = 34;
+      SampledData sampled_data = 35;
+      Signature signature = 36;
+      Timing timing = 37;
+      Meta meta = 38;
+    }
+  }
+  DefaultValue default_value = 19 [(is_choice_type) = true];
+
+  // Implicit meaning when this element is missing
+  Markdown meaning_when_missing = 20;
+
+  // What the order of the elements means
+  String order_meaning = 21;
+
+  // Example value (as defined for type)
+  message Example {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Describes the purpose of this example
+    String label = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Value of Example (one of allowed types)
+    message Value {
+      oneof value {
+        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+        Base64Binary base64_binary = 1;
+        Boolean boolean = 2;
+        Code code = 3;
+        Date date = 4;
+        DateTime date_time = 5;
+        Decimal decimal = 6;
+        Id id = 7;
+        Instant instant = 8;
+        Integer integer = 9;
+        Markdown markdown = 10;
+        Oid oid = 11;
+        PositiveInt positive_int = 12;
+        String string_value = 13 [json_name = "string"];
+        Time time = 14;
+        UnsignedInt unsigned_int = 15;
+        Uri uri = 16;
+        Address address = 17;
+        Age age = 18;
+        Annotation annotation = 19;
+        Attachment attachment = 20;
+        CodeableConcept codeable_concept = 21;
+        Coding coding = 22;
+        ContactPoint contact_point = 23;
+        Count count = 24;
+        Distance distance = 25;
+        Duration duration = 26;
+        HumanName human_name = 27;
+        Identifier identifier = 28;
+        Money money = 29;
+        Period period = 30;
+        Quantity quantity = 31;
+        Range range = 32;
+        Ratio ratio = 33;
+        Reference reference = 34;
+        SampledData sampled_data = 35;
+        Signature signature = 36;
+        Timing timing = 37;
+        Meta meta = 38;
+      }
+    }
+    Value value = 4
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Example example = 24;
+
+  // Minimum Allowed Value (for some types)
+  message MinValue {
+    oneof min_value {
+      Date date = 1;
+      DateTime date_time = 2;
+      Instant instant = 3;
+      Time time = 4;
+      Decimal decimal = 5;
+      Integer integer = 6;
+      PositiveInt positive_int = 7;
+      UnsignedInt unsigned_int = 8;
+      Quantity quantity = 9;
+    }
+  }
+  MinValue min_value = 25 [(is_choice_type) = true];
+
+  // Maximum Allowed Value (for some types)
+  message MaxValue {
+    oneof max_value {
+      Date date = 1;
+      DateTime date_time = 2;
+      Instant instant = 3;
+      Time time = 4;
+      Decimal decimal = 5;
+      Integer integer = 6;
+      PositiveInt positive_int = 7;
+      UnsignedInt unsigned_int = 8;
+      Quantity quantity = 9;
+    }
+  }
+  MaxValue max_value = 26 [(is_choice_type) = true];
+
+  // Max length for strings
+  Integer max_length = 27;
+
+  // Reference to invariant about presence
+  repeated Id condition = 28;
+
+  // Condition that must evaluate to true
+  message Constraint {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Target of 'condition' reference above
+    Id key = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Why this constraint is necessary or appropriate
+    String requirements = 4;
+
+    // error | warning
+    ConstraintSeverityCode severity = 5
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Human description of constraint
+    String human = 6 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // FHIRPath expression of constraint
+    String expression = 7 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // XPath expression of constraint
+    String xpath = 8;
+
+    // Reference to original source of constraint
+    Uri source = 9;
+  }
+  repeated Constraint constraint = 29;
+
+  // If the element must supported
+  Boolean must_support = 30;
+
+  // ValueSet details if this is coded
+  message ElementDefinitionBinding {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // required | extensible | preferred | example
+    BindingStrengthCode strength = 3
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Human explanation of the value set
+    String description = 4;
+
+    // Source of value set
+    message ValueSet {
+      oneof value_set {
+        Uri uri = 1;
+        Reference reference = 2;
+      }
+    }
+    ValueSet value_set = 5 [(is_choice_type) = true];
+  }
+  ElementDefinitionBinding binding = 33;
+
+  // Map element to another set of definitions
+  message Mapping {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Reference to mapping declaration
+    Id identity = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Computable language of mapping
+    MimeTypeCode language = 4;
+
+    // Details of the mapping
+    String map = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Comments about the mapping or its use
+    String comment = 6;
+  }
+  repeated Mapping mapping = 34;
+
+  // Extension
+  repeated String question = 35 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/elementdefinition-question"
+  ];
+
+  // Extension
+  ElementDefinitionAllowedUnits.Value allowed_units = 36 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits"
+  ];
+}

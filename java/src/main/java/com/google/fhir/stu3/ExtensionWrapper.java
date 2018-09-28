@@ -18,7 +18,9 @@ import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.Extension;
 import com.google.fhir.stu3.proto.Uri;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
+import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Descriptors.OneofDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import java.util.ArrayList;
@@ -145,7 +147,10 @@ public final class ExtensionWrapper {
             && AnnotationUtils.isPrimitiveType(messageFields.get(0).getMessageType());
     if (isSingleValueExtension) {
       if (message.hasField(messageFields.get(0))) {
-        addValueToExtension((MessageOrBuilder) message.getField(messageFields.get(0)), extension);
+        addValueToExtension(
+            (MessageOrBuilder) message.getField(messageFields.get(0)),
+            extension,
+            AnnotationUtils.isChoiceType(messageFields.get(0)));
       }
     } else {
       addMessageToExtension(message, extension);
@@ -182,38 +187,72 @@ public final class ExtensionWrapper {
 
   // Internal implementation details from here on.
 
-  private static final List<FieldDescriptor> EXTENSION_VALUE_FIELDS =
-      Extension.Value.getDescriptor().getOneofs().get(0).getFields();
+  private static FieldDescriptor checkIsMessage(FieldDescriptor field) {
+    if (field.getType() != FieldDescriptor.Type.MESSAGE) {
+      throw new IllegalArgumentException(
+          "Encountered unexpected proto primitive: "
+              + field.getFullName()
+              + ".  Should be FHIR type.");
+    }
+    return field;
+  }
 
-  private static void addValueToExtension(MessageOrBuilder value, Extension.Builder result) {
-    // TODO(sundberg): use a map
-    for (FieldDescriptor field : EXTENSION_VALUE_FIELDS) {
-      if (field.getMessageType().equals(value.getDescriptorForType())) {
-        result.setValue(Extension.Value.newBuilder().setField(field, value).build());
-        return;
+  private static final Map<Descriptor, FieldDescriptor> EXTENSION_VALUE_FIELDS_BY_TYPE =
+      Extension.Value.getDescriptor().getOneofs().get(0).getFields().stream()
+          .collect(Collectors.toMap(FieldDescriptor::getMessageType, f -> f));
+
+  private static void addValueToExtension(
+      MessageOrBuilder value, Extension.Builder result, boolean isChoiceType) {
+    Descriptor valueDescriptor = value.getDescriptorForType();
+    if (isChoiceType) {
+      List<OneofDescriptor> oneofs = valueDescriptor.getOneofs();
+      if (oneofs.isEmpty()) {
+        throw new IllegalArgumentException(
+            "Choice type is missing a oneof: " + valueDescriptor.getFullName());
       }
+      FieldDescriptor valueField = value.getOneofFieldDescriptor(oneofs.get(0));
+      if (valueField == null) {
+        throw new IllegalArgumentException(
+            "Choice type has no value set: " + valueDescriptor.getFullName());
+      }
+      checkIsMessage(valueField);
+      addValueToExtension((Message) value.getField(valueField), result, false);
+      return;
+    }
+    FieldDescriptor valueFieldForType = EXTENSION_VALUE_FIELDS_BY_TYPE.get(valueDescriptor);
+    if (valueFieldForType != null) {
+      result.setValue(Extension.Value.newBuilder().setField(valueFieldForType, value).build());
+      return;
     }
     // Fall back to adding the value as a message.
     addMessageToExtension(value, result);
   }
 
   private static void addFieldToExtension(
-      String fieldName, MessageOrBuilder fieldValue, Extension.Builder result) {
+      String fieldName,
+      MessageOrBuilder fieldValue,
+      Extension.Builder result,
+      boolean isChoiceType) {
     Extension.Builder subBuilder = Extension.newBuilder();
     subBuilder.setUrl(Uri.newBuilder().setValue(fieldName));
-    addValueToExtension(fieldValue, subBuilder);
+    addValueToExtension(fieldValue, subBuilder, isChoiceType);
     result.addExtension(subBuilder);
   }
 
   private static void addMessageToExtension(MessageOrBuilder message, Extension.Builder result) {
     for (Map.Entry<FieldDescriptor, Object> entry : message.getAllFields().entrySet()) {
+      FieldDescriptor field = checkIsMessage(entry.getKey());
+      boolean isChoiceType = AnnotationUtils.isChoiceType(field);
       if (entry.getKey().isRepeated()) {
         for (Object o : (List) entry.getValue()) {
-          addFieldToExtension(entry.getKey().getJsonName(), (MessageOrBuilder) o, result);
+          addFieldToExtension(field.getJsonName(), (MessageOrBuilder) o, result, isChoiceType);
         }
       } else {
         addFieldToExtension(
-            entry.getKey().getJsonName(), (MessageOrBuilder) entry.getValue(), result);
+            entry.getKey().getJsonName(),
+            (MessageOrBuilder) entry.getValue(),
+            result,
+            isChoiceType);
       }
     }
   }
@@ -230,29 +269,37 @@ public final class ExtensionWrapper {
     }
 
     if (extension.hasValue()) {
+      FieldDescriptor extensionValueField =
+          checkIsMessage(
+              extension
+                  .getValue()
+                  .getOneofFieldDescriptor(Extension.Value.getDescriptor().getOneofs().get(0)));
       // We only hit this case for simple extensions. The output type had better have just one
       // field other than extension and id, and it had better be of the right type.
-      List<FieldDescriptor> fields =
+      List<FieldDescriptor> messageFields =
           builder.getDescriptorForType().getFields().stream()
               .filter(
                   field -> !field.getName().equals("extension") && !field.getName().equals("id"))
               .collect(Collectors.toList());
-      if (fields.size() == 1 && fields.get(0).getType() == FieldDescriptor.Type.MESSAGE) {
-        FieldDescriptor targetField = fields.get(0);
-        for (Map.Entry<FieldDescriptor, Object> entry :
-            extension.getValue().getAllFields().entrySet()) {
-          if (entry.getKey().getContainingOneof() != null) {
-            if (entry.getKey().getMessageType().equals(targetField.getMessageType())) {
-              builder.setField(targetField, entry.getValue());
-              return;
-            } else {
-              throw new IllegalArgumentException(
-                  "Unable to find field of type "
-                      + entry.getKey().getMessageType().getName()
-                      + " in "
-                      + builder.getDescriptorForType().getFullName());
-            }
-          }
+      if (messageFields.size() == 1) {
+        FieldDescriptor targetField = checkIsMessage(messageFields.get(0));
+        Message.Builder targetFieldBuilder = builder.newBuilderForField(targetField);
+        if (AnnotationUtils.isChoiceType(targetField)) {
+          addValueToChoiceType(extension.getValue(), targetFieldBuilder);
+          setOrAddField(builder, targetField, targetFieldBuilder.build());
+          return;
+        } else if (extensionValueField
+            .getMessageType()
+            .getFullName()
+            .equals(targetField.getMessageType().getFullName())) {
+          setOrAddField(builder, targetField, extension.getValue().getField(extensionValueField));
+          return;
+        } else {
+          throw new IllegalArgumentException(
+              "Unable to find field of type "
+                  + extensionValueField.getMessageType().getName()
+                  + " in "
+                  + builder.getDescriptorForType().getFullName());
         }
       }
       throw new IllegalArgumentException(
@@ -287,24 +334,48 @@ public final class ExtensionWrapper {
             throw new IllegalArgumentException(
                 "Extension holds both a value and sub-extensions: " + inner);
           }
-          addValueToMessage(inner.getValue(), subBuilder);
+          if (AnnotationUtils.isChoiceType(field)) {
+            addValueToChoiceType(inner.getValue(), subBuilder);
+          } else {
+            addValueToMessage(inner.getValue(), subBuilder);
+          }
         } else {
           addExtensionToMessage(inner, subBuilder);
         }
-        if (field.isRepeated()) {
-          builder.addRepeatedField(field, subBuilder.build());
-        } else {
-          builder.setField(field, subBuilder.build());
-        }
+        setOrAddField(builder, field, subBuilder.build());
+      }
+    }
+  }
+
+  private static void addValueToChoiceType(
+      Extension.Value value, Message.Builder choiceTypeBuilder) {
+    Descriptor choiceDescriptor = choiceTypeBuilder.getDescriptorForType();
+    FieldDescriptor extensionValueField =
+        checkIsMessage(
+            value.getOneofFieldDescriptor(Extension.Value.getDescriptor().getOneofs().get(0)));
+    for (FieldDescriptor choiceField : choiceDescriptor.getFields()) {
+      checkIsMessage(choiceField);
+      if (extensionValueField
+          .getMessageType()
+          .getFullName()
+          .equals(choiceField.getMessageType().getFullName())) {
+        addValueToMessage(value, choiceTypeBuilder.getFieldBuilder(choiceField));
       }
     }
   }
 
   private static void addValueToMessage(Extension.Value value, Message.Builder builder) {
-    for (Map.Entry<FieldDescriptor, Object> field : value.getAllFields().entrySet()) {
-      if (field.getKey().getContainingOneof() != null) {
-        builder.mergeFrom((Message) field.getValue());
-      }
+    FieldDescriptor valueField =
+        checkIsMessage(
+            value.getOneofFieldDescriptor(Extension.Value.getDescriptor().getOneofs().get(0)));
+    builder.mergeFrom((Message) value.getField(valueField));
+  }
+
+  private static void setOrAddField(Message.Builder builder, FieldDescriptor field, Object value) {
+    if (field.isRepeated()) {
+      builder.addRepeatedField(field, value);
+    } else {
+      builder.setField(field, value);
     }
   }
 }

@@ -200,7 +200,8 @@ public class ProtoGenerator {
       }
       mutableStructureDefinitionTypes.put(
           url,
-          isSimpleExtensionDefinition(def)
+          isSimpleInternalExtension(
+                  def.getSnapshot().getElement(0), def.getSnapshot().getElementList())
               ? getSimpleExtensionDefinitionType(def)
               : getTypeName(def));
       mutableStructureDefinitionPackages.put(url, protoPackage);
@@ -271,7 +272,7 @@ public class ProtoGenerator {
     if (STRUCTURE_DEFINITION_RENAMINGS.containsKey(def.getUrl().getValue())) {
       return STRUCTURE_DEFINITION_RENAMINGS.get(def.getUrl().getValue());
     }
-    return isTypedExtensionDefinition(def)
+    return isExtensionProfile(def)
         ? getProfileTypeName(def)
         : toFieldTypeCase(def.getId().getValue());
   }
@@ -511,7 +512,10 @@ public class ProtoGenerator {
     if (field != null) {
       builder.addField(field);
       if (isChoiceType(element)) {
-        addChoiceType(element, field, builder);
+        builder.addNestedType(makeChoiceType(element, field));
+      } else if (isChoiceTypeExtension(element, elementList)) {
+        builder.addNestedType(
+            makeChoiceType(getExtensionValueElement(element, elementList), field));
       }
 
       // If this is a container type, or a complex internal extension, define the inner message.
@@ -629,16 +633,6 @@ public class ProtoGenerator {
     return type.equals("BackboneElement") || type.equals("Element");
   }
 
-  /** Returns true if this is an extension slice that is NOT defined by an external profile. */
-  private static boolean isInternalExtensionSlice(ElementDefinition element) {
-    if (element.getTypeCount() != 1) {
-      return false;
-    }
-    String type = element.getType(0).getCode().getValue();
-    IdToken idToken = lastIdToken(element.getId().getValue());
-    return type.equals("Extension") && idToken.slicename != null && !isTypedExtension(element);
-  }
-
   /**
    * Does this element have a single, well-defined type? For example: string, Patient or
    * Observation.ReferenceRange, as opposed to one of a set of types, most commonly encoded in field
@@ -669,7 +663,7 @@ public class ProtoGenerator {
         && element.getType(0).hasProfile();
   }
 
-  private static boolean isTypedExtensionDefinition(StructureDefinition def) {
+  private static boolean isExtensionProfile(StructureDefinition def) {
     return def.getType().getValue().equals("Extension")
         && def.getDerivation().getValue() == TypeDerivationRuleCode.Value.CONSTRAINT;
   }
@@ -740,7 +734,7 @@ public class ProtoGenerator {
     if (isContainer(element) || element.hasContentReference() || isChoiceType(element)) {
       // Get the type for this container, possibly from a named reference to another element.
       return getContainerType(element, elementList);
-    } else if (isInternalExtensionSlice(element)) {
+    } else if (isExtensionBackboneElement(element)) {
       return getInternalExtensionType(element, elementList);
     } else if (element.getType(0).getCode().getValue().equals("Reference")) {
       return USE_TYPED_REFERENCES ? getTypedReferenceName(element.getTypeList()) : "Reference";
@@ -843,8 +837,9 @@ public class ProtoGenerator {
     }
 
     String fieldPackage = CORE_FHIR_PACKAGE;
-    if (isInternalExtensionSlice(element)) {
-      // This is a internally-defined extension slice that will be inlined as a nested type.
+    if (isExtensionBackboneElement(element)) {
+      // This is a internally-defined extension slice that will be inlined as a nested type for
+      // complex extensions, or as a primitive type simple extensions.
       // Since extensions are sliced on url, the url for the extension matches the slicename.
       // Since the field name is the slice name wherever possible, annotating the field with the
       // inlined extension url is usually redundant.
@@ -864,12 +859,13 @@ public class ProtoGenerator {
       }
     }
 
-    if (isChoiceType(element)) {
+    if (isChoiceType(element) || isChoiceTypeExtension(element, elementList)) {
       options.setExtension(Annotations.isChoiceType, true);
     }
 
     if (isContainer(element)
         || isChoiceType(element)
+        || isChoiceTypeExtension(element, elementList)
         || isComplexInternalExtension(element, elementList)) {
       // Field types that require internally-generated submessages are defined in the local package.
       fieldPackage = packageName;
@@ -941,13 +937,11 @@ public class ProtoGenerator {
   }
 
   /** Add a choice type field to the proto. */
-  private void addChoiceType(
-      ElementDefinition element, FieldDescriptorProto field, DescriptorProto.Builder builder) {
-
+  private DescriptorProto makeChoiceType(ElementDefinition element, FieldDescriptorProto field) {
     List<String> typeNameParts = Splitter.on('.').splitToList(field.getTypeName());
-    DescriptorProto.Builder nested =
-        builder.addNestedTypeBuilder().setName(typeNameParts.get(typeNameParts.size() - 1));
-    OneofDescriptorProto.Builder oneof = nested.addOneofDeclBuilder().setName(field.getName());
+    DescriptorProto.Builder choiceType =
+        DescriptorProto.newBuilder().setName(typeNameParts.get(typeNameParts.size() - 1));
+    OneofDescriptorProto.Builder oneof = choiceType.addOneofDeclBuilder().setName(field.getName());
     // Add validation requirements as necessary.
     if (element.getMin().getValue() == 1) {
       oneof
@@ -987,8 +981,9 @@ public class ProtoGenerator {
         fieldBuilder.setJsonName(fieldBuilder.getName());
         fieldBuilder.setName(fieldBuilder.getName() + "_value");
       }
-      nested.addField(fieldBuilder);
+      choiceType.addField(fieldBuilder);
     }
+    return choiceType.build();
   }
 
   private FieldDescriptorProto.Builder buildFieldInternal(
@@ -1111,41 +1106,95 @@ public class ProtoGenerator {
     return "Reference";
   }
 
-  // If an extension consists of a single primitive type, returns that type as a string.
-  // Otherwise, returns null.
-  private static String getSimpleExtensionDefinitionType(StructureDefinition def) {
-    if (!isTypedExtensionDefinition(def)) {
-      return null;
+  private static boolean isExtensionBackboneElement(ElementDefinition element) {
+    // An element is an extension element if either
+    // A) it is a root element with id "Extension" and is a derivation from a base element or
+    // B) it is a slice on an extension that is not defined by an external profile.
+    return (element.getId().getValue().equals("Extension") && element.hasBase())
+        || (element.getBase().getPath().getValue().endsWith(".extension")
+            && lastIdToken(element.getId().getValue()).slicename != null
+            && !element.getType(0).hasProfile());
+  }
+
+  // Returns the value type of a simple extension as a string.
+  private String getSimpleExtensionDefinitionType(StructureDefinition def) {
+    if (!isExtensionProfile(def)) {
+      throw new IllegalArgumentException(
+          "StructureDefinition is not an extension profile: " + def.getId().getValue());
     }
-    return getSimpleInternalExtensionType(
-        def.getSnapshot().getElement(0), def.getSnapshot().getElementList());
+    ElementDefinition element = def.getSnapshot().getElement(0);
+    List<ElementDefinition> elementList = def.getSnapshot().getElementList();
+    if (isSingleTypedExtensionDefinition(def)) {
+      return getSimpleInternalExtensionType(element, elementList);
+    }
+    if (isChoiceTypeExtension(element, elementList)) {
+      return getTypeName(def) + ".Value";
+    }
+    throw new IllegalArgumentException(
+        "StructureDefinition is not a simple extension: " + def.getId().getValue());
+  }
+
+  private static ElementDefinition getExtensionValueElement(
+      ElementDefinition element, List<ElementDefinition> elementList) {
+    for (ElementDefinition child : getDirectChildren(element, elementList)) {
+      if (child.getBase().getPath().getValue().equals("Extension.value[x]")) {
+        return child;
+      }
+    }
+    throw new IllegalArgumentException(
+        "Element " + element.getId().getValue() + " has no value element");
   }
 
   private static String getSimpleInternalExtensionType(
       ElementDefinition element, List<ElementDefinition> elementList) {
-    for (ElementDefinition child : getDirectChildren(element, elementList)) {
-      if (child.getBase().getPath().getValue().equals("Extension.value[x]")) {
-        if (child.getTypeCount() != 1) {
-          return null;
-        }
-        return toFieldTypeCase(child.getType(0).getCode().getValue());
-      }
+    ElementDefinition valueElement = getExtensionValueElement(element, elementList);
+
+    if (valueElement.getMax().getValue().equals("0")) {
+      // There is no value element, this is a complex extension
+      return null;
     }
-    return null;
+    if (getDistinctTypeCount(valueElement) == 1) {
+      // This is a primitive extension with a single type
+      return toFieldTypeCase(valueElement.getType(0).getCode().getValue());
+    }
+    // This is a choice-type extension that will be inlined as a message.
+    return getContainerType(element, elementList);
   }
 
+  private static long getDistinctTypeCount(ElementDefinition element) {
+    // Don't do fancier logic if fast logic is sufficient.
+    if (element.getTypeCount() < 2 || USE_TYPED_REFERENCES) {
+      return element.getTypeCount();
+    }
+    return element.getTypeList().stream().map(type -> type.getCode()).distinct().count();
+  }
+
+  private static boolean isChoiceTypeExtension(
+      ElementDefinition element, List<ElementDefinition> elementList) {
+    if (!isExtensionBackboneElement(element)) {
+      return false;
+    }
+    ElementDefinition valueElement = getExtensionValueElement(element, elementList);
+    return !valueElement.getMax().getValue().equals("0") && getDistinctTypeCount(valueElement) > 1;
+  }
+
+  // TODO(nickgeorge): Clean up some of the terminology - 'internal' is misleading here.
   private static boolean isSimpleInternalExtension(
       ElementDefinition element, List<ElementDefinition> elementList) {
-    return getSimpleInternalExtensionType(element, elementList) != null;
+    return isExtensionBackboneElement(element)
+        && !getExtensionValueElement(element, elementList).getMax().getValue().equals("0");
   }
 
   private static boolean isComplexInternalExtension(
       ElementDefinition element, List<ElementDefinition> elementList) {
-    return isInternalExtensionSlice(element) && !isSimpleInternalExtension(element, elementList);
+    return isExtensionBackboneElement(element) && !isSimpleInternalExtension(element, elementList);
   }
 
-  private static boolean isSimpleExtensionDefinition(StructureDefinition def) {
-    return getSimpleExtensionDefinitionType(def) != null;
+  private static boolean isSingleTypedExtensionDefinition(StructureDefinition def) {
+    ElementDefinition element = def.getSnapshot().getElement(0);
+    List<ElementDefinition> elementList = def.getSnapshot().getElementList();
+    return isSimpleInternalExtension(element, elementList)
+        && getDistinctTypeCount(getExtensionValueElement(element, elementList)) == 1;
   }
 
   /**

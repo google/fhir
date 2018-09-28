@@ -2400,21 +2400,7 @@ message GoalAcceptance {
   repeated Extension extension = 2;
 
   // Individual whose acceptance is reflected
-  message Individual {
-    // xml:id (or equivalent in JSON)
-    String id = 1;
-
-    // Value of extension
-    message Value {
-      oneof value {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-        Reference reference = 1;
-      }
-    }
-    Value value = 3
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
-  }
-  Individual individual = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference individual = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // agree | disagree | pending
   Code status = 5;
@@ -5960,21 +5946,14 @@ message Translation {
 
   // Content in other Language
   message Content {
-    // xml:id (or equivalent in JSON)
-    String id = 1;
-
-    // Value of extension
-    message Value {
-      oneof value {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
-        String string_value = 1 [json_name = "string"];
-        Markdown markdown = 2;
-      }
+    oneof content {
+      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
+      String string_value = 1 [json_name = "string"];
+      Markdown markdown = 2;
     }
-    Value value = 3
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Content content = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Content content = 5
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for group.

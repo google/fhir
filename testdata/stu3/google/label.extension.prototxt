@@ -37,8 +37,8 @@ extension {
       code { value: "B" }
     } }
   }
-#  extension {
-#    url { value: "classValue" }
-#    value { integer { value: 5 } }
-#  }
+  extension {
+    url { value: "classValue" }
+    value { integer { value: 5 } }
+  }
 }

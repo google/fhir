@@ -49,7 +49,7 @@ then
 fi
 
 source "common.sh"
-PROFILES="observation-genetics"
+PROFILES="observation-genetics elementdefinition-de"
 
 # generate datatypes.proto
 $PROTO_GENERATOR \
@@ -96,6 +96,7 @@ $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --emit_proto \
   --output_directory $OUTPUT_PATH \
+  --include_extensions\
   --include_resources \
   --include_metadatatypes \
   --output_filename profiles.proto \

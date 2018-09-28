@@ -18,6 +18,7 @@ import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.Annotations.StructureDefinitionKindValue;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
+import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.MessageOrBuilder;
 
 /** Helper methods for dealing with FHIR protocol buffer annotations. */
@@ -49,6 +50,10 @@ public final class AnnotationUtils {
     return descriptor.getOptions().hasExtension(Annotations.structureDefinitionKind)
         && descriptor.getOptions().getExtension(Annotations.structureDefinitionKind)
             == StructureDefinitionKindValue.KIND_PRIMITIVE_TYPE;
+  }
+
+  public static boolean isChoiceType(FieldDescriptor field) {
+    return field.getOptions().getExtension(Annotations.isChoiceType);
   }
 
   public static boolean isReference(MessageOrBuilder message) {

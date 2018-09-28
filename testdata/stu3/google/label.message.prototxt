@@ -21,5 +21,5 @@ label {
     system { value: "urn:test:model:class" }
     code { value: "B" }
   }
-#  class_value { integer { value: 5  } }
+  class_value { integer { value: 5  } }
 }

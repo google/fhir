@@ -22,6 +22,7 @@
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "tensorflow/core/lib/core/status.h"
+#include "tensorflow/core/lib/core/status_test_util.h"
 
 namespace google {
 namespace fhir {
@@ -48,7 +49,7 @@ TEST(ExtensionsTest, ParseEventTrigger) {
   ReadTestData("trigger", &message, &extension);
 
   EventTrigger output;
-  ASSERT_TRUE(ExtensionToMessage(extension, &output).ok());
+  TF_ASSERT_OK(ExtensionToMessage(extension, &output));
   EXPECT_THAT(output, EqualsProto(message));
 }
 
@@ -58,7 +59,7 @@ TEST(ExtensionsTest, PrintEventTrigger) {
   ReadTestData("trigger", &message, &extension);
 
   Extension output;
-  ASSERT_TRUE(ConvertToExtension(message, &output).ok());
+  TF_ASSERT_OK(ConvertToExtension(message, &output));
   EXPECT_THAT(output, EqualsProto(extension));
 }
 
@@ -68,7 +69,7 @@ TEST(ExtensionsTest, ParseEventLabel) {
   ReadTestData("label", &message, &extension);
 
   EventLabel output;
-  ASSERT_TRUE(ExtensionToMessage(extension, &output).ok());
+  TF_ASSERT_OK(ExtensionToMessage(extension, &output));
   EXPECT_THAT(output, EqualsProto(message));
 }
 
@@ -78,7 +79,7 @@ TEST(ExtensionsTest, PrintEventLabel) {
   ReadTestData("label", &message, &extension);
 
   Extension output;
-  ASSERT_TRUE(ConvertToExtension(message, &output).ok());
+  TF_ASSERT_OK(ConvertToExtension(message, &output));
   EXPECT_THAT(output, EqualsProto(extension));
 }
 
@@ -88,7 +89,7 @@ TEST(ExtensionsTest, ParsePrimitiveHasNoValue) {
   ReadTestData("primitive_has_no_value", &message, &extension);
 
   PrimitiveHasNoValue output;
-  ASSERT_TRUE(ExtensionToMessage(extension, &output).ok());
+  TF_ASSERT_OK(ExtensionToMessage(extension, &output));
   EXPECT_THAT(output, EqualsProto(message));
 }
 
@@ -98,7 +99,7 @@ TEST(ExtensionsTest, ParsePrimitiveHasNoValue_Empty) {
   ReadTestData("empty", &message, &extension);
 
   PrimitiveHasNoValue output;
-  ASSERT_TRUE(ExtensionToMessage(extension, &output).ok());
+  TF_ASSERT_OK(ExtensionToMessage(extension, &output));
   EXPECT_THAT(output, EqualsProto(message));
 }
 
@@ -108,7 +109,7 @@ TEST(ExtensionsTest, PrintPrimitiveHasNoValue) {
   ReadTestData("primitive_has_no_value", &message, &extension);
 
   Extension output;
-  TF_CHECK_OK(ConvertToExtension(message, &output));
+  TF_ASSERT_OK(ConvertToExtension(message, &output));
   EXPECT_THAT(output, EqualsProto(extension));
 }
 
@@ -118,7 +119,7 @@ TEST(ExtensionsTest, PrintPrimitiveHasNoValue_Empty) {
   ReadTestData("empty", &message, &extension);
 
   Extension output;
-  TF_CHECK_OK(ConvertToExtension(message, &output));
+  TF_ASSERT_OK(ConvertToExtension(message, &output));
   EXPECT_THAT(output, EqualsProto(extension));
 }
 

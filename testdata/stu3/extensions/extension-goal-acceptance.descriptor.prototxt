@@ -24,7 +24,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.GoalAcceptance.Individual"
+  type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Individual whose acceptance is reflected"
@@ -48,48 +48,6 @@ field {
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
     [google.fhir.stu3.proto.field_description]: "Priority of goal for individual"
-  }
-}
-nested_type {
-  name: "Individual"
-  field {
-    name: "id"
-    number: 1
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
-    options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
-    }
-  }
-  field {
-    name: "value"
-    number: 3
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.GoalAcceptance.Individual.Value"
-    options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.is_choice_type]: true
-      [google.fhir.stu3.proto.field_description]: "Value of extension"
-    }
-  }
-  nested_type {
-    name: "Value"
-    field {
-      name: "reference"
-      number: 1
-      label: LABEL_OPTIONAL
-      type: TYPE_MESSAGE
-      type_name: ".google.fhir.stu3.proto.Reference"
-      oneof_index: 0
-    }
-    oneof_decl {
-      name: "value"
-      options {
-        [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
-      }
-    }
   }
 }
 options {
