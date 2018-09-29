@@ -16,6 +16,9 @@ package com.google.fhir.examples;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.bigquery.model.TableSchema;
+import com.google.fhir.stu3.BigQuerySchema;
 import com.google.fhir.stu3.JsonFormat.Parser;
 import com.google.fhir.stu3.ResourceUtils;
 import com.google.fhir.stu3.proto.ContainedResource;
@@ -24,7 +27,9 @@ import com.google.protobuf.util.JsonFormat;
 import com.google.protobuf.util.JsonFormat.Printer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -43,6 +48,7 @@ public class ConvertNdJsonForBigQueryMain {
     JsonParserArgs args = new JsonParserArgs(argv);
     Parser fhirParser = Parser.newBuilder().withDefaultTimeZone(args.getDefaultTimezone()).build();
     Printer protoPrinter = JsonFormat.printer().omittingInsignificantWhitespace();
+    GsonFactory gsonFactory = new GsonFactory();
 
     // Process the input files one by one, and count the number of processed resources.
     Map<String, Integer> counts = new HashMap<>();
@@ -50,12 +56,18 @@ public class ConvertNdJsonForBigQueryMain {
       System.out.println("Processing " + entry.input + "...");
       BufferedReader input = Files.newBufferedReader(Paths.get(entry.input.toString()), UTF_8);
       BufferedWriter output = Files.newBufferedWriter(Paths.get(entry.output.toString()), UTF_8);
+      TableSchema schema = null;
       for (String line = input.readLine(); line != null; line = input.readLine()) {
         // We parse as a ContainedResource, because we don't know what type of resource this is.
         ContainedResource.Builder builder = ContainedResource.newBuilder();
         fhirParser.merge(line, builder);
         // Extract and print the (one) parsed resource.
         Message parsed = ResourceUtils.getContainedResource(builder.build());
+        if (schema == null) {
+          // Generate a schema for this file. Note that we do this purely based on the type, which
+          // could potentially cause issues with extensions.
+          schema = BigQuerySchema.fromMessage(parsed);
+        }
         protoPrinter.appendTo(parsed, output);
         output.newLine();
         // Count the number of parsed resources.
@@ -64,6 +76,13 @@ public class ConvertNdJsonForBigQueryMain {
         counts.put(resourceType, count + 1);
       }
       output.close();
+      if (schema != null) {
+        String filename = Paths.get(entry.output.toString() + ".schema.json").toString();
+        System.out.println("Writing schema to " + filename + "...");
+        File file = new File(filename);
+        com.google.common.io.Files.asCharSink(file, StandardCharsets.UTF_8)
+            .write(gsonFactory.toPrettyString(schema.getFields()));
+      }
     }
     System.out.println(
         "Processed "

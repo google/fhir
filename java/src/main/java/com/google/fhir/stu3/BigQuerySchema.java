@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** A simple class to infer a BigQuery schema from protocol buffer messages. */
-final class BigQuerySchema {
+public final class BigQuerySchema {
 
   /* Generate a schema for a specific FieldDescriptor, with an optional message instance. */
   private static TableFieldSchema fromFieldDescriptor(
