@@ -13,5 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-bazel build //...
-../../bazel-bin/java/SplitBundle synthea/output/fhir/*.json
+if [[ $# -eq 0 ]] ; then
+    echo 'Missing argument: scratch directory'
+    exit 1
+fi
+bazel build //java:SplitBundle
+SPLIT_BUNDLE=$(pwd)/../../bazel-bin/java/SplitBundle
+
+cd $1
+$SPLIT_BUNDLE synthea/output/fhir/*.json
+

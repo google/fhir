@@ -64,8 +64,8 @@ public class ConvertNdJsonForBigQueryMain {
         // Extract and print the (one) parsed resource.
         Message parsed = ResourceUtils.getContainedResource(builder.build());
         if (schema == null) {
-          // Generate a schema for this file. Note that we do this purely based on the type, which
-          // could potentially cause issues with extensions.
+          // Generate a schema for this file. Note that we do this purely based on a single message,
+          // which could potentially cause issues with extensions.
           schema = BigQuerySchema.fromMessage(parsed);
         }
         protoPrinter.appendTo(parsed, output);
@@ -79,8 +79,7 @@ public class ConvertNdJsonForBigQueryMain {
       if (schema != null) {
         String filename = Paths.get(entry.output.toString() + ".schema.json").toString();
         System.out.println("Writing schema to " + filename + "...");
-        File file = new File(filename);
-        com.google.common.io.Files.asCharSink(file, StandardCharsets.UTF_8)
+        com.google.common.io.Files.asCharSink(new File(filename), StandardCharsets.UTF_8)
             .write(gsonFactory.toPrettyString(schema.getFields()));
       }
     }

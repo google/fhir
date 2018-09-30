@@ -13,10 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+if [[ $# -eq 0 ]] ; then
+    echo 'Missing argument: scratch directory'
+    exit 1
+fi
+
 # Note: requires Cloud Bigquery SDK, see https://cloud.google.com/bigquery/quickstart-command-line
 bq mk synthea
 
-for i in AllergyIntolerance Basic CarePlan Claim Condition DiagnosticReport Encounter Goal Immunization MedicationRequest Observation Organization Patient Procedure; do
-  echo "uploading $i"
-  bq load --source_format=NEWLINE_DELIMITED_JSON --autodetect --ignore_unknown_values synthea.$i $i.ndjson
+for i in $(basename -a -s.ndjson /tmp/fhir/*.ndjson); do
+  echo "Uploading $i..."
+  bq load --source_format=NEWLINE_DELIMITED_JSON --schema=$1/$i.schema.json synthea.$i $1/$i.ndjson
 done

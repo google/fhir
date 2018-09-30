@@ -13,6 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+if [[ $# -eq 0 ]] ; then
+    echo 'Missing argument: scratch directory'
+    exit 1
+fi
+
+mkdir -p $1
+cd $1
+
 # build synthea according to https://github.com/synthetichealth/synthea
 git clone https://github.com/synthetichealth/synthea.git
 cd synthea

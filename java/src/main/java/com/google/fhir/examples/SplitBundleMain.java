@@ -16,13 +16,18 @@ package com.google.fhir.examples;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.bigquery.model.TableSchema;
+import com.google.fhir.stu3.BigQuerySchema;
 import com.google.fhir.stu3.JsonFormat.Parser;
 import com.google.fhir.stu3.ResourceUtils;
 import com.google.fhir.stu3.proto.Bundle;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat.Printer;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -43,6 +48,8 @@ public class SplitBundleMain {
     Map<String, Integer> counts = new HashMap<>();
     // We create one file per output resource type.
     Map<String, BufferedWriter> output = new HashMap<>();
+    // We create one schema per output resource type.
+    Map<String, TableSchema> schema = new HashMap<>();
     for (String file : args) {
       System.out.println("Processing " + file + "...");
       String input = new String(Files.readAllBytes(Paths.get(file)), UTF_8);
@@ -69,6 +76,11 @@ public class SplitBundleMain {
           output.put(
               resourceType, Files.newBufferedWriter(Paths.get(resourceType + ".ndjson"), UTF_8));
         }
+        if (!schema.containsKey(resourceType)) {
+          // Generate a schema for this type. Note that we do this purely based on a single message,
+          // which could potentially cause issues with extensions.
+          schema.put(resourceType, BigQuerySchema.fromMessage(resource));
+        }
         BufferedWriter resourceOutput = output.get(resourceType);
         protoPrinter.appendTo(resource, resourceOutput);
         resourceOutput.newLine();
@@ -76,6 +88,13 @@ public class SplitBundleMain {
     }
     for (BufferedWriter writer : output.values()) {
       writer.close();
+    }
+    // Write the schemas to disk.
+    GsonFactory gsonFactory = new GsonFactory();
+    for (String resourceType : schema.keySet()) {
+      String filename = Paths.get(resourceType + ".schema.json").toString();
+      com.google.common.io.Files.asCharSink(new File(filename), StandardCharsets.UTF_8)
+          .write(gsonFactory.toPrettyString(schema.get(resourceType).getFields()));
     }
     System.out.println("Processed " + args.length + " input files. Total number of resources:");
     for (Map.Entry<String, Integer> count : counts.entrySet()) {
