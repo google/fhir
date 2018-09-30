@@ -42,7 +42,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class BigQuerySchemaTest {
 
-  private static final Boolean GENERATE_GOLDEN = false;
+  private static final Boolean GENERATE_GOLDEN = true;
   private static final String GOLDEN_OUTPUT_DIRECTORY = "/tmp";
 
   private JsonFormat.Parser jsonParser;
@@ -115,8 +115,8 @@ public final class BigQuerySchemaTest {
             .setFields(
                 ImmutableList.of(
                     new TableFieldSchema()
-                        .setName("value_us")
-                        .setType("TIMESTAMP")
+                        .setName("valueUs")
+                        .setType("INT64")
                         .setMode("NULLABLE"),
                     new TableFieldSchema()
                         .setName("timezone")

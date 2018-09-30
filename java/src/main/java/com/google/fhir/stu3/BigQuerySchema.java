@@ -16,7 +16,6 @@ package com.google.fhir.stu3;
 
 import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableSchema;
-import com.google.common.base.CaseFormat;
 import com.google.fhir.stu3.proto.ContainedResource;
 import com.google.fhir.stu3.proto.Extension;
 import com.google.fhir.stu3.proto.Identifier;
@@ -32,8 +31,8 @@ public final class BigQuerySchema {
   /* Generate a schema for a specific FieldDescriptor, with an optional message instance. */
   private static TableFieldSchema fromFieldDescriptor(
       FieldDescriptor descriptor, MessageOrBuilder instance) {
-    String fieldName =
-        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, descriptor.getJsonName());
+    // We directly use the jsonName of the field when generating the schema.
+    String fieldName = descriptor.getJsonName();
     TableFieldSchema field =
         new TableFieldSchema()
             .setName(fieldName)
@@ -129,10 +128,10 @@ public final class BigQuerySchema {
   }
 
   private static String schemaTypeForField(FieldDescriptor field) {
-    // If this is a timelike value field, mark it as timestamp. Note that this is always in UTC,
+    // If this is a timelike value field, mark as int64. Note that this is always microsends in UTC,
     // independent of the timezone of the data.
     if (field.getName().equals("value_us")) {
-      return "TIMESTAMP";
+      return "INT64";
     }
     switch (field.getType()) {
       case BOOL:
