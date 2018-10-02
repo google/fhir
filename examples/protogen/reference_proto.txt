@@ -12,6 +12,8 @@ message Reference {
 
   // Literal reference, Relative, internal or absolute URL
   oneof reference {
+    option (fhir_oneof_is_optional) = true;
+
     // Absolute URIs are untyped.
     String uri = 3 [json_name = "reference"];
 

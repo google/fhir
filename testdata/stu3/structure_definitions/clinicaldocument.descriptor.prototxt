@@ -375,9 +375,6 @@ nested_type {
     }
     oneof_decl {
       name: "target"
-      options {
-        [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
-      }
     }
   }
 }

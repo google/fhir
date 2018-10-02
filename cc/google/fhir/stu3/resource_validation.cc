@@ -68,16 +68,14 @@ bool HasMissingRequiredField(const google::protobuf::Message& message, string* n
       }
     }
   }
-  // Also verify that required oneof fields are present.
+  // Also verify that oneof fields are set.
+  // Note that optional choice-types should have the containing message unset -
+  // if the containing message is set, it should have a value set as well.
   for (int i = 0; i < descriptor->oneof_decl_count(); i++) {
     const google::protobuf::OneofDescriptor* oneof = descriptor->oneof_decl(i);
-    if (oneof->options().HasExtension(
-            stu3::proto::oneof_validation_requirement) &&
-        oneof->options().GetExtension(
-            stu3::proto::oneof_validation_requirement) ==
-            stu3::proto::REQUIRED_BY_FHIR &&
-        !reflection->HasOneof(message, oneof)) {
-      *name = oneof->name();
+    if (!reflection->HasOneof(message, oneof) &&
+        !oneof->options().GetExtension(stu3::proto::fhir_oneof_is_optional)) {
+      *name = absl::StrCat(oneof->name(), "_oneof");
       return true;
     }
   }

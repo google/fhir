@@ -90,6 +90,9 @@ extend google.protobuf.FieldOptions {
 }
 
 extend google.protobuf.OneofOptions {
-  // Is this field required?
-  Requirement oneof_validation_requirement = 181563459;
+  // Whether or not this oneof is optional
+  // If absent, oneofs are assumed to be REQUIRED if their containing message is
+  // set. The most common case of oneofs is choice types, where the requirements
+  // should be applied to the containing message.
+  bool fhir_oneof_is_optional = 214472422;
 }

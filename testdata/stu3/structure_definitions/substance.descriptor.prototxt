@@ -287,9 +287,6 @@ nested_type {
     }
     oneof_decl {
       name: "substance"
-      options {
-        [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
-      }
     }
   }
 }

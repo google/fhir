@@ -29,7 +29,6 @@ import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileOptions;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
-import com.google.protobuf.DescriptorProtos.OneofOptions;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -239,16 +238,6 @@ public class ProtoFilePrinter {
           .append("oneof ")
           .append(descriptor.getOneofDecl(oneofIndex).getName())
           .append(" {\n");
-      OneofOptions oneofOptions = descriptor.getOneofDecl(oneofIndex).getOptions();
-      if (oneofOptions.hasExtension(Annotations.oneofValidationRequirement)) {
-        message
-            .append(oneofIndent)
-            .append("option (")
-            .append(optionPackage)
-            .append("oneof_validation_requirement) = ")
-            .append(oneofOptions.getExtension(Annotations.oneofValidationRequirement).toString())
-            .append(";\n");
-      }
       // Loop over the elements.
       for (FieldDescriptorProto field : descriptor.getFieldList()) {
         if (field.getOneofIndex() == oneofIndex) {

@@ -933,9 +933,6 @@ nested_type {
     }
     oneof_decl {
       name: "diagnosis"
-      options {
-        [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
-      }
     }
   }
 }
@@ -1024,9 +1021,6 @@ nested_type {
     }
     oneof_decl {
       name: "procedure"
-      options {
-        [google.fhir.stu3.proto.oneof_validation_requirement]: REQUIRED_BY_FHIR
-      }
     }
   }
 }

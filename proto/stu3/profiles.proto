@@ -470,7 +470,6 @@ message ElementdefinitionDe {
     // Value of Example (one of allowed types)
     message Value {
       oneof value {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         Base64Binary base64_binary = 1;
         Boolean boolean = 2;
         Code code = 3;

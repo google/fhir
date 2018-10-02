@@ -1070,7 +1070,6 @@ message Signature {
   // Who signed
   message Who {
     oneof who {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
       Uri uri = 1;
       Reference reference = 2;
     }
@@ -1283,6 +1282,8 @@ message Reference {
 
   // Literal reference, Relative, internal or absolute URL
   oneof reference {
+    option (fhir_oneof_is_optional) = true;
+
     // Absolute URIs are untyped.
     String uri = 3 [json_name = "reference"];
 

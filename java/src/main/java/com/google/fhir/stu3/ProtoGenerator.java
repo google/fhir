@@ -936,19 +936,12 @@ public class ProtoGenerator {
         : jsonFieldName + "Slice";
   }
 
-  /** Add a choice type field to the proto. */
+  /** Add a choice type container message to the proto. */
   private DescriptorProto makeChoiceType(ElementDefinition element, FieldDescriptorProto field) {
     List<String> typeNameParts = Splitter.on('.').splitToList(field.getTypeName());
     DescriptorProto.Builder choiceType =
         DescriptorProto.newBuilder().setName(typeNameParts.get(typeNameParts.size() - 1));
     OneofDescriptorProto.Builder oneof = choiceType.addOneofDeclBuilder().setName(field.getName());
-    // Add validation requirements as necessary.
-    if (element.getMin().getValue() == 1) {
-      oneof
-          .getOptionsBuilder()
-          .setExtension(
-              Annotations.oneofValidationRequirement, Annotations.Requirement.REQUIRED_BY_FHIR);
-    }
 
     int nextTag = 1;
     // Group types.
@@ -966,7 +959,7 @@ public class ProtoGenerator {
       String fieldName = t.getCode().getValue();
       // TODO(nickgeorge):  This assumes all types in a oneof are core FHIR types.  In order to
       // support custom types, we'll need to load the structure definition for the type and check
-      // agains knownStructureDefinitionPackages
+      // against knownStructureDefinitionPackages
       FieldDescriptorProto.Builder fieldBuilder =
           buildFieldInternal(
                   fieldName,

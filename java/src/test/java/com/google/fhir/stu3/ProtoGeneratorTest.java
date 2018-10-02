@@ -164,7 +164,7 @@ public class ProtoGeneratorTest {
     registry.add(Annotations.structureDefinitionKind);
     registry.add(Annotations.validationRequirement);
     registry.add(Annotations.isChoiceType);
-    registry.add(Annotations.oneofValidationRequirement);
+    registry.add(Annotations.fhirOneofIsOptional);
     registry.add(Annotations.fieldDescription);
     registry.add(Annotations.messageDescription);
     registry.add(Annotations.fhirExtensionUrl);

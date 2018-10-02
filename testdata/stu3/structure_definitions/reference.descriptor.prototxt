@@ -986,4 +986,7 @@ options {
 }
 oneof_decl {
   name: "reference"
+  options {
+    [google.fhir.stu3.proto.fhir_oneof_is_optional]: true
+  }
 }

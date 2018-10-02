@@ -2327,7 +2327,6 @@ message Claim {
     // Patient's diagnosis
     message DiagnosisType {
       oneof diagnosis {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         CodeableConcept codeable_concept = 1;
         Reference reference = 2;
       }
@@ -2363,7 +2362,6 @@ message Claim {
     // Patient's list of procedures performed
     message ProcedureType {
       oneof procedure {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         CodeableConcept codeable_concept = 1;
         Reference reference = 2;
       }
@@ -3093,7 +3091,6 @@ message ClinicalImpression {
     // What was found
     message Item {
       oneof item {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         CodeableConcept codeable_concept = 1;
         Reference reference = 2;
       }
@@ -3330,7 +3327,6 @@ message CodeSystem {
       // Value of the property for this concept
       message Value {
         oneof value {
-          option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
           Code code = 1;
           Coding coding = 2;
           String string_value = 3 [json_name = "string"];
@@ -3454,7 +3450,6 @@ message Communication {
     // Message part content
     message Content {
       oneof content {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         String string_value = 1 [json_name = "string"];
         Attachment attachment = 2;
         Reference reference = 3;
@@ -3553,7 +3548,6 @@ message CommunicationRequest {
     // Message part content
     message Content {
       oneof content {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         String string_value = 1 [json_name = "string"];
         Attachment attachment = 2;
         Reference reference = 3;
@@ -3814,7 +3808,6 @@ message Composition {
     // Target of the relationship
     message Target {
       oneof target {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         Identifier identifier = 1;
         Reference reference = 2;
       }
@@ -4753,7 +4746,6 @@ message Contract {
     // Easily comprehended representation of this Contract
     message Content {
       oneof content {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         Attachment attachment = 1;
         Reference reference = 2;
       }
@@ -4777,7 +4769,6 @@ message Contract {
     // Contract Legal Text
     message Content {
       oneof content {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         Attachment attachment = 1;
         Reference reference = 2;
       }
@@ -4801,7 +4792,6 @@ message Contract {
     // Computable Contract Rules
     message Content {
       oneof content {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         Attachment attachment = 1;
         Reference reference = 2;
       }
@@ -5474,7 +5464,6 @@ message DeviceRequest {
   // Device requested
   message Code {
     oneof code {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
       Reference reference = 1;
       CodeableConcept codeable_concept = 2;
     }
@@ -5817,7 +5806,6 @@ message DocumentManifest {
     // Contents of this set of documents
     message P {
       oneof p {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         Attachment attachment = 1;
         Reference reference = 2;
       }
@@ -7242,7 +7230,6 @@ message ExplanationOfBenefit {
     // Patient's diagnosis
     message DiagnosisType {
       oneof diagnosis {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         CodeableConcept codeable_concept = 1;
         Reference reference = 2;
       }
@@ -7278,7 +7265,6 @@ message ExplanationOfBenefit {
     // Patient's list of procedures performed
     message ProcedureType {
       oneof procedure {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         CodeableConcept codeable_concept = 1;
         Reference reference = 2;
       }
@@ -8324,7 +8310,6 @@ message Group {
     // Value held by characteristic
     message Value {
       oneof value {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         CodeableConcept codeable_concept = 1;
         Boolean boolean = 2;
         Quantity quantity = 3;
@@ -9299,7 +9284,6 @@ message ImplementationGuide {
       // Location of the resource
       message Source {
         oneof source {
-          option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
           Uri uri = 1;
           Reference reference = 2;
         }
@@ -10305,7 +10289,6 @@ message Medication {
     // The product contained
     message Item {
       oneof item {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         CodeableConcept codeable_concept = 1;
         Reference reference = 2;
       }
@@ -10349,7 +10332,6 @@ message Medication {
       // The item in the package
       message Item {
         oneof item {
-          option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
           CodeableConcept codeable_concept = 1;
           Reference reference = 2;
         }
@@ -10440,7 +10422,6 @@ message MedicationAdministration {
   // What was administered
   message Medication {
     oneof medication {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
       CodeableConcept codeable_concept = 1;
       Reference reference = 2;
     }
@@ -10460,7 +10441,6 @@ message MedicationAdministration {
   // Start and end time of administration
   message Effective {
     oneof effective {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
       DateTime date_time = 1;
       Period period = 2;
     }
@@ -10597,7 +10577,6 @@ message MedicationDispense {
   // What medication was supplied
   message Medication {
     oneof medication {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
       CodeableConcept codeable_concept = 1;
       Reference reference = 2;
     }
@@ -10770,7 +10749,6 @@ message MedicationRequest {
   // Medication to be taken
   message Medication {
     oneof medication {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
       CodeableConcept codeable_concept = 1;
       Reference reference = 2;
     }
@@ -10936,7 +10914,6 @@ message MedicationStatement {
   // What medication was taken
   message Medication {
     oneof medication {
-      option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
       CodeableConcept codeable_concept = 1;
       Reference reference = 2;
     }
@@ -11936,7 +11913,6 @@ message OperationDefinition {
       // Source of value set
       message ValueSet {
         oneof value_set {
-          option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
           Uri uri = 1;
           Reference reference = 2;
         }
@@ -13761,7 +13737,6 @@ message Provenance {
     // Who participated
     message Who {
       oneof who {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         Uri uri = 1;
         Reference reference = 2;
       }
@@ -13801,7 +13776,6 @@ message Provenance {
     // Identity of entity
     message What {
       oneof what {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         Uri uri = 1;
         Reference reference = 2;
         Identifier identifier = 3;
@@ -14009,7 +13983,6 @@ message Questionnaire {
       // Answer value
       message Value {
         oneof value {
-          option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
           Integer integer = 1;
           Date date = 2;
           Time time = 3;
@@ -16124,7 +16097,6 @@ message StructureMap {
           // Parameter value - variable or literal
           message Value {
             oneof value {
-              option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
               Id id = 1;
               String string_value = 2 [json_name = "string"];
               Boolean boolean = 3;
@@ -16339,7 +16311,6 @@ message Substance {
     // A component of the substance
     message SubstanceType {
       oneof substance {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         CodeableConcept codeable_concept = 1;
         Reference reference = 2;
       }
@@ -16731,7 +16702,6 @@ message Task {
     // Content to use in performing the task
     message Value {
       oneof value {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         Base64Binary base64_binary = 1;
         Boolean boolean = 2;
         Code code = 3;
@@ -16794,7 +16764,6 @@ message Task {
     // Result of output
     message Value {
       oneof value {
-        option (oneof_validation_requirement) = REQUIRED_BY_FHIR;
         Base64Binary base64_binary = 1;
         Boolean boolean = 2;
         Code code = 3;
