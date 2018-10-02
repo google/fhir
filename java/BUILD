@@ -182,6 +182,7 @@ java_test(
     size = "medium",
     srcs = ["src/test/java/com/google/fhir/stu3/JsonFormatTest.java"],
     data = [
+        "//testdata/stu3:bigquery",
         "//testdata/stu3:examples",
     ],
     test_class = "com.google.fhir.stu3.JsonFormatTest",

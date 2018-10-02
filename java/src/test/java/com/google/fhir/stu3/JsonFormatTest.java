@@ -164,25 +164,23 @@ public class JsonFormatTest {
 
   /** Read the specifed json file from the testdata directory as a String. */
   private String loadJson(String filename) throws IOException {
-    File file =
-        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/examples/" + filename));
+    File file = new File(runfiles.rlocation("com_google_fhir/testdata/stu3/" + filename));
     return Files.asCharSource(file, StandardCharsets.UTF_8).read();
   }
 
   /** Read the specifed prototxt file from the testdata directory and parse it. */
   private void mergeText(String filename, Message.Builder builder) throws IOException {
-    File file =
-        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/examples/" + filename));
+    File file = new File(runfiles.rlocation("com_google_fhir/testdata/stu3/" + filename));
     textParser.merge(Files.asCharSource(file, StandardCharsets.UTF_8).read(), builder);
   }
 
   private void testParse(String name, Builder builder) throws IOException {
     // Parse the json version of the input.
     Builder jsonBuilder = builder.clone();
-    jsonParser.merge(loadJson(name + ".json"), jsonBuilder);
+    jsonParser.merge(loadJson("examples/" + name + ".json"), jsonBuilder);
     // Parse the proto text version of the input.
     Builder textBuilder = builder.clone();
-    mergeText(name + ".prototxt", textBuilder);
+    mergeText("examples/" + name + ".prototxt", textBuilder);
 
     assertThat(jsonBuilder.build().toString()).isEqualTo(textBuilder.build().toString());
   }
@@ -219,12 +217,23 @@ public class JsonFormatTest {
   private void testPrint(String name, Builder builder) throws IOException {
     // Parse the proto text version of the input.
     Builder textBuilder = builder.clone();
-    mergeText(name + ".prototxt", textBuilder);
+    mergeText("examples/" + name + ".prototxt", textBuilder);
     // Load the json version of the input as a String.
-    String jsonGolden = loadJson(name + ".json");
+    String jsonGolden = loadJson("examples/" + name + ".json");
     // Print the proto as json and compare.
     String jsonTest = jsonPrinter.print(textBuilder);
     assertThat(jsonTest).isEqualTo(jsonGolden);
+  }
+
+  private void testConvertForAnalytics(String name, Builder builder) throws IOException {
+    // Parse the json version of the input.
+    Builder jsonBuilder = builder.clone();
+    jsonParser.merge(loadJson("examples/" + name + ".json"), jsonBuilder);
+    // Load the analytics version of the input as a String.
+    String analyticsGolden = loadJson("bigquery/" + name + ".json");
+    // Print and compare.
+    String analyticsTest = jsonPrinter.forAnalytics().print(jsonBuilder);
+    assertThat(analyticsTest.trim()).isEqualTo(analyticsGolden.trim());
   }
 
   @Before
@@ -248,11 +257,20 @@ public class JsonFormatTest {
    */
   @Test
   public void printEdgeCases() throws Exception {
-    String jsonGolden = loadJson("json-edge-cases.json");
+    String jsonGolden = loadJson("examples/json-edge-cases.json");
     Patient.Builder patient = Patient.newBuilder();
-    mergeText("json-edge-cases.prototxt", patient);
+    mergeText("examples/json-edge-cases.prototxt", patient);
     String jsonTest = jsonPrinter.print(patient);
     assertThat(canonicalizeJson(jsonTest)).isEqualTo(canonicalizeJson(jsonGolden));
+  }
+
+  /** Test the analytics output format. */
+  @Test
+  public void convertForAnalytics() throws Exception {
+    testConvertForAnalytics("composition-example", Composition.newBuilder());
+    testConvertForAnalytics("encounter-example-home", Encounter.newBuilder());
+    testConvertForAnalytics("observation-example-genetics-1", Observation.newBuilder());
+    testConvertForAnalytics("patient-example", Patient.newBuilder());
   }
 
   /* Resource tests start here. */

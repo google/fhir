@@ -8,7 +8,7 @@ licenses(["notice"])
 filegroup(
     name = "bigquery",
     srcs = glob([
-        "bigquery/*.schema.json",
+        "bigquery/*.json",
     ]),
 )
 

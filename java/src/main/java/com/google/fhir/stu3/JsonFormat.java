@@ -26,6 +26,7 @@ import com.google.fhir.stu3.proto.Date;
 import com.google.fhir.stu3.proto.DateTime;
 import com.google.fhir.stu3.proto.Decimal;
 import com.google.fhir.stu3.proto.Element;
+import com.google.fhir.stu3.proto.Extension;
 import com.google.fhir.stu3.proto.Id;
 import com.google.fhir.stu3.proto.Instant;
 import com.google.fhir.stu3.proto.Integer;
@@ -83,17 +84,20 @@ public final class JsonFormat {
    * system default.
    */
   public static Printer getPrinter() {
-    return new Printer(false /*omittingInsignificantWhitespace*/, ZoneId.systemDefault());
+    return new Printer(false /*omittingInsignificantWhitespace*/, ZoneId.systemDefault(), false);
   }
 
   /** A Printer converts protobuf message to JSON format. */
   public static class Printer {
     private final boolean omittingInsignificantWhitespace;
     private final ZoneId defaultTimeZone;
+    private final boolean forAnalytics;
 
-    private Printer(boolean omittingInsignificantWhitespace, ZoneId defaultTimeZone) {
+    private Printer(
+        boolean omittingInsignificantWhitespace, ZoneId defaultTimeZone, boolean forAnalytics) {
       this.omittingInsignificantWhitespace = omittingInsignificantWhitespace;
       this.defaultTimeZone = defaultTimeZone;
+      this.forAnalytics = forAnalytics;
     }
 
     /**
@@ -114,7 +118,7 @@ public final class JsonFormat {
      * current {@link Printer}.
      */
     public Printer omittingInsignificantWhitespace() {
-      return new Printer(true, defaultTimeZone);
+      return new Printer(true, defaultTimeZone, forAnalytics);
     }
 
     /*
@@ -124,7 +128,16 @@ public final class JsonFormat {
      * standard, currently always in the form of a time offset.
      */
     public Printer withDefaultTimeZone(ZoneId defaultTimeZone) {
-      return new Printer(omittingInsignificantWhitespace, defaultTimeZone);
+      return new Printer(omittingInsignificantWhitespace, defaultTimeZone, forAnalytics);
+    }
+
+    /*
+     * Create a new {@link Printer} which formats the output in a manner suitable for SQL queries.
+     * This follows the in-progress analytics spec defined at
+     * https://github.com/rbrush/sql-on-fhir/blob/master/sql-on-fhir.md
+     */
+    public Printer forAnalytics() {
+      return new Printer(omittingInsignificantWhitespace, defaultTimeZone, true);
     }
 
     /**
@@ -133,7 +146,8 @@ public final class JsonFormat {
      * @throws IOException if writing to the output fails.
      */
     public void appendTo(MessageOrBuilder message, Appendable output) throws IOException {
-      new PrinterImpl(output, omittingInsignificantWhitespace, defaultTimeZone).print(message);
+      new PrinterImpl(output, omittingInsignificantWhitespace, defaultTimeZone, forAnalytics)
+          .print(message);
     }
 
     /** Converts a protobuf message to JSON format. */
@@ -243,9 +257,13 @@ public final class JsonFormat {
     private final CharSequence blankOrSpace;
     private final CharSequence blankOrNewLine;
     private final ZoneId defaultTimeZone;
+    private final boolean forAnalytics;
 
     PrinterImpl(
-        Appendable jsonOutput, boolean omittingInsignificantWhitespace, ZoneId defaultTimeZone) {
+        Appendable jsonOutput,
+        boolean omittingInsignificantWhitespace,
+        ZoneId defaultTimeZone,
+        boolean forAnalytics) {
       // json format related properties, determined by printerType
       if (omittingInsignificantWhitespace) {
         this.generator = new CompactTextGenerator(jsonOutput);
@@ -257,6 +275,7 @@ public final class JsonFormat {
         this.blankOrNewLine = "\n";
       }
       this.defaultTimeZone = defaultTimeZone;
+      this.forAnalytics = forAnalytics;
     }
 
     void print(MessageOrBuilder message) throws IOException {
@@ -289,6 +308,15 @@ public final class JsonFormat {
             }
           };
       printers.put(ContainedResource.getDescriptor().getFullName(), containedResourcesPrinter);
+      // Special-case extensions for analytics use.
+      WellKnownTypePrinter extensionPrinter =
+          new WellKnownTypePrinter() {
+            @Override
+            public void print(PrinterImpl printer, MessageOrBuilder message) throws IOException {
+              printer.printExtension((Extension) message);
+            }
+          };
+      printers.put(Extension.getDescriptor().getFullName(), extensionPrinter);
 
       return printers;
     }
@@ -296,14 +324,35 @@ public final class JsonFormat {
     /** Prints a contained resource field. */
     private void printContainedResource(ContainedResource message) throws IOException {
       for (Map.Entry<FieldDescriptor, Object> field : message.getAllFields().entrySet()) {
-        print((Message) field.getValue());
+        if (forAnalytics) {
+          /* We print only the type of the contained resource here. */
+          generator.print(
+              "\""
+                  + ((Message) field.getValue())
+                      .getDescriptorForType()
+                      .getOptions()
+                      .getExtension(Annotations.fhirStructureDefinitionUrl)
+                  + "\"");
+        } else {
+          /* Print the entire contained resource. */
+          print((Message) field.getValue());
+        }
+      }
+    }
+
+    /** Prints an extension field. */
+    private void printExtension(Extension extension) throws IOException {
+      if (forAnalytics) {
+        generator.print("\"" + extension.getUrl().getValue() + "\"");
+      } else {
+        printMessage(extension);
       }
     }
 
     /** Prints a reference field. */
     private void printReference(MessageOrBuilder reference) throws IOException {
       FieldDescriptor uri = reference.getDescriptorForType().findFieldByName("uri");
-      if (reference.hasField(uri)) {
+      if (reference.hasField(uri) || forAnalytics) {
         printMessage(reference);
       } else {
         // Restore the Uri field.
@@ -368,7 +417,7 @@ public final class JsonFormat {
       for (Map.Entry<FieldDescriptor, Object> field : message.getAllFields().entrySet()) {
         printedField = maybeStartMessage(printedField);
         String name = field.getKey().getJsonName();
-        if (field.getKey().getOptions().getExtension(Annotations.isChoiceType)) {
+        if (field.getKey().getOptions().getExtension(Annotations.isChoiceType) && !forAnalytics) {
           printChoiceField(field.getKey(), field.getValue());
         } else if (isPrimitiveType(field.getKey())) {
           printPrimitiveField(name, field.getKey(), field.getValue());
@@ -434,11 +483,15 @@ public final class JsonFormat {
           generator.outdent();
           generator.print("]");
         }
-        if (hasExtension) {
+        if (hasExtension && !forAnalytics) {
           printedElement = maybePrintFieldSeparator(printedElement);
           generator.print("\"_" + name + "\":" + blankOrSpace);
           printRepeatedMessage(elements);
         }
+      } else if (forAnalytics
+          && ((Message) value).getDescriptorForType().equals(ReferenceId.getDescriptor())) {
+        generator.print(
+            "\"" + name + "\":" + blankOrSpace + "\"" + ((ReferenceId) value).getValue() + "\"");
       } else {
         Message message = (Message) value;
         PrimitiveWrapper wrapper = primitiveWrapperOf(message, defaultTimeZone);
@@ -447,7 +500,7 @@ public final class JsonFormat {
           printedElement = true;
         }
         Element element = wrapper.getElement();
-        if (element != null) {
+        if (element != null && !forAnalytics) {
           printedElement = maybePrintFieldSeparator(printedElement);
           generator.print("\"_" + name + "\":" + blankOrSpace);
           print(element);
@@ -918,4 +971,3 @@ public final class JsonFormat {
     }
   }
 }
-
