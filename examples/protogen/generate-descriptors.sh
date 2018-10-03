@@ -13,11 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ROOT_PATH=../..
-INPUT_PATH=$ROOT_PATH/testdata/stu3/structure_definitions
-EXTENSION_PATH=$ROOT_PATH/testdata/stu3/extensions
-GOOGLE_EXTENSION_PATH=$ROOT_PATH/testdata/stu3/extensions
-PROTO_GENERATOR=$ROOT_PATH/bazel-bin/java/ProtoGenerator
 OUTPUT_PATH=$INPUT_PATH
 
 while getopts ":io:" opt; do
@@ -71,6 +66,6 @@ $PROTO_GENERATOR \
   --proto_package google.fhir.stu3.google \
   --java_proto_package com.google.fhir.stu3.google \
   --output_directory $GOOGLE_EXTENSION_PATH \
-  $(for i in $GOOGLE_EXTENSIONS; do echo "$GOOGLE_EXTENSION_PATH/${i,,}.json"; done)
+  $(for i in $GOOGLE_EXTENSIONS; do echo $i; done)
 
 

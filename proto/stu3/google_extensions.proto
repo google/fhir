@@ -22,24 +22,6 @@ import "proto/stu3/datatypes.proto";
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.google";
 
-// Auto-generated from StructureDefinition for primitive-has-no-value.
-// Is the primitive missing a value?.
-// See https://g.co/fhir/StructureDefinition/primitiveHasNoValue
-message PrimitiveHasNoValue {
-  option (.google.fhir.stu3.proto.structure_definition_kind) =
-      KIND_COMPLEX_TYPE;
-  option (.google.fhir.stu3.proto.fhir_profile_base) =
-      "http://hl7.org/fhir/StructureDefinition/Extension";
-  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
-      "https://g.co/fhir/StructureDefinition/primitiveHasNoValue";
-
-  // xml:id (or equivalent in JSON)
-  proto.String id = 1;
-
-  // Value of extension
-  proto.Boolean value_boolean = 3;
-}
-
 // Auto-generated from StructureDefinition for separator-stride.
 // Base64Binary rendering parameters.
 // See https://g.co/fhir/StructureDefinition/base64Binary-separatorStride
@@ -64,35 +46,6 @@ message Base64BinarySeparatorStride {
   // The stride.
   proto.PositiveInt stride = 5
       [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
-}
-
-// Auto-generated from StructureDefinition for eventTrigger.
-// EventTriggers specify cutoff times for generated TensorFlow examples.
-// See https://g.co/fhir/StructureDefinition/eventTrigger
-message EventTrigger {
-  option (.google.fhir.stu3.proto.structure_definition_kind) =
-      KIND_COMPLEX_TYPE;
-  option (.google.fhir.stu3.proto.fhir_profile_base) =
-      "http://hl7.org/fhir/StructureDefinition/Extension";
-  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
-      "https://g.co/fhir/StructureDefinition/eventTrigger";
-
-  // xml:id (or equivalent in JSON)
-  proto.String id = 1;
-
-  // Additional content defined by implementations
-  repeated proto.Extension extension = 2;
-
-  // The type of trigger, part of the prediction task definition.
-  proto.Coding type = 4
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-  // Prediction event time, more recent data will be elided.
-  proto.DateTime event_time = 5
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-  // Resource that owns this trigger.
-  proto.Reference source = 6;
 }
 
 // Auto-generated from StructureDefinition for eventLabel.
@@ -150,4 +103,51 @@ message EventLabel {
     ];
   }
   repeated Label label = 8;
+}
+
+// Auto-generated from StructureDefinition for eventTrigger.
+// EventTriggers specify cutoff times for generated TensorFlow examples.
+// See https://g.co/fhir/StructureDefinition/eventTrigger
+message EventTrigger {
+  option (.google.fhir.stu3.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "https://g.co/fhir/StructureDefinition/eventTrigger";
+
+  // xml:id (or equivalent in JSON)
+  proto.String id = 1;
+
+  // Additional content defined by implementations
+  repeated proto.Extension extension = 2;
+
+  // The type of trigger, part of the prediction task definition.
+  proto.Coding type = 4
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Prediction event time, more recent data will be elided.
+  proto.DateTime event_time = 5
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Resource that owns this trigger.
+  proto.Reference source = 6;
+}
+
+// Auto-generated from StructureDefinition for primitive-has-no-value.
+// Is the primitive missing a value?.
+// See https://g.co/fhir/StructureDefinition/primitiveHasNoValue
+message PrimitiveHasNoValue {
+  option (.google.fhir.stu3.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "https://g.co/fhir/StructureDefinition/primitiveHasNoValue";
+
+  // xml:id (or equivalent in JSON)
+  proto.String id = 1;
+
+  // Value of extension
+  proto.Boolean value_boolean = 3;
 }
