@@ -5,5 +5,6 @@ licenses(["notice"])
 exports_files(
     [
         "*.bzl",
+        "requirements.txt",
     ],
 )

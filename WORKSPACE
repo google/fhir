@@ -23,6 +23,26 @@ http_archive(
     ],
 )
 
+git_repository(
+    name="io_bazel_rules_python",
+    remote="https://github.com/bazelbuild/rules_python.git",
+    commit="b25495c47eb7446729a2ed6b1643f573afa47d99", # April 6, 2018
+)
+
+load("@io_bazel_rules_python//python:pip.bzl", "pip_repositories")
+
+pip_repositories()
+
+load("@io_bazel_rules_python//python:pip.bzl", "pip_import")
+
+pip_import(
+    name="fhir_bazel_pip_dependencies",
+    requirements="//bazel:requirements.txt",
+)
+
+load("@fhir_bazel_pip_dependencies//:requirements.bzl", "pip_install")
+pip_install()
+
 load("@org_tensorflow//tensorflow:workspace.bzl", "tf_workspace")
 tf_workspace("", "@org_tensorflow")
 
