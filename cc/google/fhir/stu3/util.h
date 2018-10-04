@@ -107,6 +107,18 @@ bool IsReference(const ::google::protobuf::Descriptor* descriptor);
 
 bool HasValueset(const ::google::protobuf::Descriptor* descriptor);
 
+// Returns a reference, e.g. "Encounter/1234" for a FHIR resource.
+string GetReferenceToResource(const ::google::protobuf::Message& message);
+
+// Extract the value of a Decimal field as a double.
+Status GetDecimalValue(const stu3::proto::Decimal& decimal, double* value);
+
+// Extracts and returns the FHIR metadata from a resource
+template <typename R>
+const stu3::proto::Meta& GetMetadataFromResource(const R& resource) {
+  return resource.meta();
+}
+
 }  // namespace stu3
 }  // namespace fhir
 }  // namespace google

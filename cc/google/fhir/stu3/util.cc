@@ -374,6 +374,19 @@ StatusOr<Reference> ReferenceStringToProto(const string& input) {
       absl::StrCat("String \"", input, "\" cannot be parsed as a reference."));
 }
 
+string GetReferenceToResource(const Message& message) {
+  return absl::StrCat(message.GetDescriptor()->name(), "/",
+                      GetResourceId(message).ValueOrDie());
+}
+
+Status GetDecimalValue(const stu3::proto::Decimal& decimal, double* value) {
+  if (!absl::SimpleAtod(decimal.value(), value)) {
+    return ::tensorflow::errors::InvalidArgument(
+        absl::StrCat("Invalid decimal: '", decimal.value(), "'"));
+  }
+  return Status::OK();
+}
+
 }  // namespace stu3
 }  // namespace fhir
 }  // namespace google

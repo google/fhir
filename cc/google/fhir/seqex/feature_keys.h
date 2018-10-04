@@ -27,6 +27,7 @@ extern const char kLabelEncounterIdFeatureKey[];
 extern const char kLabelTimestampFeatureKey[];
 extern const char kPatientIdFeatureKey[];
 extern const char kResourceIdFeatureKey[];
+extern const char kSequenceLengthFeatureKey[];
 
 }  // namespace seqex
 }  // namespace fhir

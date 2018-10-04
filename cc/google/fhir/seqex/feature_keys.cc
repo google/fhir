@@ -24,6 +24,7 @@ const char kLabelEncounterIdFeatureKey[] = "currentEncounterId";
 const char kLabelTimestampFeatureKey[] = "timestamp";
 const char kPatientIdFeatureKey[] = "patientId";
 const char kResourceIdFeatureKey[] = "resourceId";
+const char kSequenceLengthFeatureKey[] = "sequenceLength";
 
 }  // namespace seqex
 }  // namespace fhir

@@ -3,6 +3,54 @@ licenses(["notice"])
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
+    name = "bundle_to_seqex_converter",
+    srcs = ["bundle_to_seqex_converter.cc"],
+    hdrs = ["bundle_to_seqex_converter.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":example_key",
+        ":feature_keys",
+        ":resource_to_example",
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
+        "//cc/google/fhir/stu3:bundle_to_versioned_resources_converter",
+        "//cc/google/fhir/stu3:util",
+        "//cc/google/fhir/systems",
+        "//proto/stu3:annotations_cc_proto",
+        "//proto/stu3:codes_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:extensions_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "//proto/stu3:version_config_cc_proto",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@org_tensorflow//tensorflow/core:lib",
+        "@org_tensorflow//tensorflow/core:protos_all_cc",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "bundle_to_seqex_converter_test",
+    srcs = ["bundle_to_seqex_converter_test.cc"],
+    data = [
+        "//proto/stu3:version_config.textproto",
+    ],
+    deps = [
+        ":bundle_to_seqex_converter",
+        ":example_key",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/stu3:extensions_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest_main",
+        "@org_tensorflow//tensorflow/core:lib",
+        "@org_tensorflow//tensorflow/core:protos_all_cc",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_library(
     name = "example_key",
     srcs = ["example_key.cc"],
     hdrs = ["example_key.h"],
