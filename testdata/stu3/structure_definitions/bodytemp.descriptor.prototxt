@@ -104,7 +104,7 @@ field {
   number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.StatusCode"
+  type_name: ".google.fhir.stu3.proto.ObservationStatusCode"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "registered | preliminary | final | amended +"

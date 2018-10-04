@@ -44,7 +44,6 @@ then
 fi
 
 source "common.sh"
-PROFILES="observation-genetics elementdefinition-de"
 
 # generate datatypes.proto
 $PROTO_GENERATOR \

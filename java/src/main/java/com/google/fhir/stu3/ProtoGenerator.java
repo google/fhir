@@ -253,6 +253,7 @@ public class ProtoGenerator {
     renamedCodeTypes.put("ReferredDocumentStatusCode", "CompositionStatusCode");
     renamedCodeTypes.put("RiskAssessmentStatusCode", "ObservationStatusCode");
     renamedCodeTypes.put("SectionModeCode", "ListModeCode");
+    renamedCodeTypes.put("StatusCode", "ObservationStatusCode");
     renamedCodeTypes.put("TaskIntentCode", "RequestIntentCode");
     renamedCodeTypes.put("TaskPriorityCode", "RequestPriorityCode");
     renamedCodeTypes.put("VisionStatusCode", "FinancialResourceStatusCode");

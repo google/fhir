@@ -26,15 +26,15 @@ import "proto/stu3/metadatatypes.proto";
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.proto";
 
-// Auto-generated from StructureDefinition for Observation-genetics.
-// Measurements and simple assertions.
-// See http://hl7.org/fhir/StructureDefinition/observation-genetics
-message ObservationGenetics {
+// Auto-generated from StructureDefinition for Vital Signs Profile.
+// FHIR Body Mass Index (BMI) Profile.
+// See http://hl7.org/fhir/StructureDefinition/bmi
+message Bmi {
   option (structure_definition_kind) = KIND_RESOURCE;
   option (fhir_profile_base) =
-      "http://hl7.org/fhir/StructureDefinition/Observation";
+      "http://hl7.org/fhir/StructureDefinition/vitalsigns";
   option (fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/observation-genetics";
+      "http://hl7.org/fhir/StructureDefinition/bmi";
 
   // Logical id of this artifact
   Id id = 1;
@@ -54,7 +54,7 @@ message ObservationGenetics {
   // Contained, inline Resources
   repeated ContainedResource contained = 6;
 
-  // Extension
+  // Additional Content defined by implementations
   repeated Extension extension = 7;
 
   // Extensions that cannot be ignored
@@ -71,25 +71,27 @@ message ObservationGenetics {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated CodeableConcept category = 12;
+  repeated CodeableConcept category = 12
+      [(validation_requirement) = REQUIRED_BY_FHIR];
 
-  // Type of observation (code / type)
+  // Body Mass Index (BMI)
   CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14;
+  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Healthcare event during which this observation is made
   Reference context = 15;
 
-  // Clinically relevant time/time-period for observation
+  // Often just a dateTime for Vital Signs
   message Effective {
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16 [(is_choice_type) = true];
+  Effective effective = 16
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -97,23 +99,8 @@ message ObservationGenetics {
   // Who is responsible for the observation
   repeated Reference performer = 18;
 
-  // Actual result
-  message Value {
-    oneof value {
-      Quantity quantity = 1;
-      CodeableConcept codeable_concept = 2;
-      String string_value = 3 [json_name = "string"];
-      Boolean boolean = 4;
-      Range range = 5;
-      Ratio ratio = 6;
-      SampledData sampled_data = 7;
-      Attachment attachment = 8;
-      Time time = 9;
-      DateTime date_time = 10;
-      Period period = 11;
-    }
-  }
-  Value value = 19 [(is_choice_type) = true];
+  // Vital Sign Value recorded with UCUM
+  Quantity value_quantity = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -167,7 +154,7 @@ message ObservationGenetics {
   }
   repeated ReferenceRange reference_range = 27;
 
-  // Resource related to this observation
+  // Used when reporting vital signs panel components
   message Related {
     // xml:id (or equivalent in JSON)
     String id = 1;
@@ -180,12 +167,1076 @@ message ObservationGenetics {
 
     // has-member | derived-from | sequel-to | replaces | qualified-by |
     // interfered-by
-    ObservationRelationshipTypeCode type = 4;
+    ObservationRelationshipTypeCode type = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Resource that is related to this one
     Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Related related = 28;
+
+  // Used when reporting systolic and diastolic blood pressure.
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Vital Sign Value recorded with UCUM
+    Quantity value_quantity = 5;
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for Vital Signs Profile.
+// FHIR Body Height Profile.
+// See http://hl7.org/fhir/StructureDefinition/bodyheight
+message Bodyheight {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/bodyheight";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Body Height
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Often just a dateTime for Vital Signs
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Vital Sign Value recorded with UCUM
+  Quantity value_quantity = 19;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Used when reporting vital signs panel components
+  message Related {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    ObservationRelationshipTypeCode type = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Resource that is related to this one
+    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28;
+
+  // Used when reporting systolic and diastolic blood pressure.
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Vital Sign Value recorded with UCUM
+    Quantity value_quantity = 5;
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for Vital Signs Profile.
+// FHIR Body Length Profile.
+// See http://hl7.org/fhir/StructureDefinition/bodylength
+message Bodylength {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/bodylength";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Body Length
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Often just a dateTime for Vital Signs
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Vital Sign Value recorded with UCUM
+  Quantity value_quantity = 19;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Used when reporting vital signs panel components
+  message Related {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    ObservationRelationshipTypeCode type = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Resource that is related to this one
+    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28;
+
+  // Used when reporting systolic and diastolic blood pressure.
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Vital Sign Value recorded with UCUM
+    Quantity value_quantity = 5;
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for Vital Signs Profile.
+// FHIR Body Temperature Profile.
+// See http://hl7.org/fhir/StructureDefinition/bodytemp
+message Bodytemp {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/bodytemp";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Body Temperature
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Often just a dateTime for Vital Signs
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Vital Sign Value recorded with UCUM
+  Quantity value_quantity = 19;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Used when reporting vital signs panel components
+  message Related {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    ObservationRelationshipTypeCode type = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Resource that is related to this one
+    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28;
+
+  // Used when reporting systolic and diastolic blood pressure.
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Vital Sign Value recorded with UCUM
+    Quantity value_quantity = 5;
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for Vital Signs Profile.
+// FHIR Body Weight Profile.
+// See http://hl7.org/fhir/StructureDefinition/bodyweight
+message Bodyweight {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/bodyweight";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Body Weight
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Often just a dateTime for Vital Signs
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Vital Sign Value recorded with UCUM
+  Quantity value_quantity = 19;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Used when reporting vital signs panel components
+  message Related {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    ObservationRelationshipTypeCode type = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Resource that is related to this one
+    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28;
+
+  // Used when reporting systolic and diastolic blood pressure.
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Vital Sign Value recorded with UCUM
+    Quantity value_quantity = 5;
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for Vital Signs Profile.
+// FHIR Blood Pressure Profile.
+// See http://hl7.org/fhir/StructureDefinition/bp
+message Bp {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/bp";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Blood Pressure
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Often just a dateTime for Vital Signs
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Used when reporting vital signs panel components
+  message Related {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    ObservationRelationshipTypeCode type = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Resource that is related to this one
+    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28;
+
+  // Used when reporting systolic and diastolic blood pressure.
+  message Component {}
+  repeated Component component = 29;
+
+  // Used when reporting systolic and diastolic blood pressure.
+  message SystolicBP {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Vital Sign Value recorded with UCUM
+    Quantity value_quantity = 5;
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated SystolicBP systolic_b_p = 30;
+
+  // Used when reporting systolic and diastolic blood pressure.
+  message DiastolicBP {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Vital Sign Value recorded with UCUM
+    Quantity value_quantity = 5;
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated DiastolicBP diastolic_b_p = 31;
+}
+
+// Auto-generated from StructureDefinition for Example Lipid Profile.
+// Measurements and simple assertions.
+// See http://hl7.org/fhir/StructureDefinition/cholesterol
+message Cholesterol {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cholesterol";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12;
+
+  // Cholesterol
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14;
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Clinically relevant time/time-period for observation
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16 [(is_choice_type) = true];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Cholesterol value
+  Quantity value_quantity = 19;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // + | ++ | +++ | - | -- | ---
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // A fixed quantity (no comparator)
+    SimpleQuantity high = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  ReferenceRange reference_range = 27
+      [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Component results
   message Component {
@@ -228,96 +1279,511 @@ message ObservationGenetics {
     repeated ReferenceRange reference_range = 8;
   }
   repeated Component component = 29;
+}
 
-  // DNA sequence variant
-  CodeableConcept d_n_a_sequence_variant_name = 30 [
+// Auto-generated from StructureDefinition for Clinical Document Profile for
+// Composition. A set of resources composed into a single coherent clinical
+// statement with clinical attestation. See
+// http://hl7.org/fhir/StructureDefinition/clinicaldocument
+message Clinicaldocument {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Composition";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/clinicaldocument";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Logical identifier of composition (version-independent)
+  Identifier identifier = 9;
+
+  // preliminary | final | amended | entered-in-error
+  CompositionStatusCode status = 10
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Kind of composition (LOINC if possible)
+  CodeableConcept type = 11 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Categorization of Composition
+  CodeableConcept class_value = 12 [json_name = "class"];
+
+  // Who and/or what the composition is about
+  Reference subject = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Context of the Composition
+  Reference encounter = 14;
+
+  // Composition editing time
+  DateTime date = 15 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what authored the composition
+  repeated Reference author = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Human Readable name/title
+  String title = 17 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // As defined by affinity domain
+  ConfidentialityClassificationCode confidentiality = 18;
+
+  // Attests to accuracy of composition
+  message Attester {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // personal | professional | legal | official
+    repeated CompositionAttestationModeCode mode = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // When the composition was attested
+    DateTime time = 5;
+
+    // Who attested the composition
+    Reference party = 6;
+  }
+  repeated Attester attester = 19;
+
+  // Organization which maintains the composition
+  Reference custodian = 20;
+
+  // Relationships to other compositions/documents
+  message RelatesTo {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // replaces | transforms | signs | appends
+    DocumentRelationshipTypeCode code = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Target of the relationship
+    message Target {
+      oneof target {
+        Identifier identifier = 1;
+        Reference reference = 2;
+      }
+    }
+    Target target = 5
+        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated RelatesTo relates_to = 21;
+
+  // The clinical service(s) being documented
+  message Event {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Code(s) that apply to the event being documented
+    repeated CodeableConcept code = 4;
+
+    // The period covered by the documentation
+    Period period = 5;
+
+    // The event(s) being documented
+    repeated Reference detail = 6;
+  }
+  repeated Event event = 22;
+
+  // Composition is broken into sections
+  message Section {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Label for section (e.g. for ToC)
+    String title = 4;
+
+    // Classification of section (recommended)
+    CodeableConcept code = 5;
+
+    // Text summary of the section, for human interpretation
+    Narrative text = 6;
+
+    // working | snapshot | changes
+    ListModeCode mode = 7;
+
+    // Order of section entries
+    CodeableConcept ordered_by = 8;
+
+    // A reference to data that supports this section
+    repeated Reference entry = 9;
+
+    // Why the section is empty
+    CodeableConcept empty_reason = 10;
+
+    // Nested Section
+    repeated Section section = 11;
+  }
+  repeated Section section = 23;
+}
+
+// Auto-generated from StructureDefinition for Device Metric Observation
+// Profile. Measurements and simple assertions. See
+// http://hl7.org/fhir/StructureDefinition/devicemetricobservation
+message Devicemetricobservation {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/devicemetricobservation";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12;
+
+  // Type of observation (code / type)
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Clinically relevant time/time-period for observation
+  DateTime effective_date_time = 16
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Actual result
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+      CodeableConcept codeable_concept = 2;
+      String string_value = 3 [json_name = "string"];
+      Range range = 4;
+      Ratio ratio = 5;
+      SampledData sampled_data = 6;
+      Attachment attachment = 7;
+      Time time = 8;
+      DateTime date_time = 9;
+      Period period = 10;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
+
+  // High, low, normal, etc.
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // (Measurement) Device
+  Reference device = 26 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  ReferenceRange reference_range = 27;
+
+  // Resource related to this observation
+  message Related {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    ObservationRelationshipTypeCode type = 4;
+
+    // Resource that is related to this one
+    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  Related related = 28;
+
+  // Component results
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Actual component result
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+        CodeableConcept codeable_concept = 2;
+        String string_value = 3 [json_name = "string"];
+        Range range = 4;
+        Ratio ratio = 5;
+        SampledData sampled_data = 6;
+        Attachment attachment = 7;
+        Time time = 8;
+        DateTime date_time = 9;
+        Period period = 10;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for DiagnosticReport-Genetics.
+// A Diagnostic report - a combination of request information, atomic results,
+// images, interpretation, as well as formatted reports. See
+// http://hl7.org/fhir/StructureDefinition/diagnosticreport-genetics
+message DiagnosticreportGenetics {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/DiagnosticReport";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/diagnosticreport-genetics";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Extension
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business identifier for report
+  repeated Identifier identifier = 9;
+
+  // What was requested
+  repeated Reference based_on = 10;
+
+  // registered | partial | preliminary | final +
+  DiagnosticReportStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Service category
+  CodeableConcept category = 12;
+
+  // Name/Code for this diagnostic report
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The subject of the report - usually, but not always, the patient
+  Reference subject = 14;
+
+  // Health care event when test ordered
+  Reference context = 15;
+
+  // Clinically relevant time/time-period for report
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16 [(is_choice_type) = true];
+
+  // DateTime this version was released
+  Instant issued = 17;
+
+  // Participants in producing the report
+  message Performer {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of performer
+    CodeableConcept role = 4;
+
+    // Practitioner or Organization  participant
+    Reference actor = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Performer performer = 18;
+
+  // Specimens this report is based on
+  repeated Reference specimen = 19;
+
+  // Observations - simple, or complex nested groups
+  repeated Reference result = 20;
+
+  // Reference to full details of imaging associated with the diagnostic report
+  repeated Reference imaging_study = 21;
+
+  // Key images associated with this report
+  message Image {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Comment about the image (e.g. explanation)
+    String comment = 4;
+
+    // Reference to the image source
+    Reference link = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Image image = 22;
+
+  // Clinical Interpretation of test results
+  String conclusion = 23;
+
+  // Entire report as issued
+  repeated Attachment presented_form = 25;
+
+  // AssessedCondition
+  repeated Reference assessed_condition = 26 [
     (fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName"
+        "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition"
   ];
 
-  // DNA sequence variant ID
-  CodeableConcept d_n_a_variant_id = 31 [
+  // FamilyHistory
+  repeated Reference family_member_history = 27 [
     (fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNAVariantId"
+        "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory"
   ];
 
-  // DNA sequence variant type
-  CodeableConcept d_n_a_sequence_variant_type = 32 [
+  // Analysis
+  repeated DiagnosticReportAnalysis analysis = 28 [
     (fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantType"
-  ];
-
-  // Amino acid change
-  CodeableConcept amino_acid_change_name = 33 [
-    (fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName"
-  ];
-
-  // Amino Acid Change Type
-  CodeableConcept amino_acid_change_type = 34 [
-    (fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeType"
-  ];
-
-  // HGNC gene symbol
-  CodeableConcept gene_symbol = 35
-      [(fhir_inlined_extension_url) =
-           "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"];
-
-  // DNA region name
-  String d_n_a_region_name = 36 [
-    (fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNARegionName"
-  ];
-
-  // Name of allele
-  CodeableConcept allele_name = 37 [
-    (fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName"
-  ];
-
-  // The level of occurrence of a single DNA sequence variant within a set of
-  // chromosomes: Heteroplasmic / Homoplasmic / Homozygous / Heterozygous /
-  // Hemizygous
-  CodeableConcept allelic_state = 38 [
-    (fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicState"
-  ];
-
-  // Allele frequency
-  Decimal allelic_frequency = 39 [
-    (fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicFrequency"
-  ];
-
-  // Copy number variation
-  CodeableConcept copy_number_event = 40 [
-    (fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsCopyNumberEvent"
-  ];
-
-  // Genomic source class
-  CodeableConcept genomic_source_class = 41 [
-    (fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
-  ];
-
-  // Phase set identifier (UUID/OID)
-  Uri phase_set = 42 [
-    (fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet"
-  ];
-
-  // Sequence
-  repeated Reference sequence = 43 [
-    (fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsSequence"
-  ];
-
-  // Clinical interpretations for variant
-  Reference interpretation_slice = 44 [
-    (fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsInterpretation"
+        "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis"
   ];
 }
 
@@ -647,4 +2113,3028 @@ message ElementdefinitionDe {
     (fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits"
   ];
+}
+
+// Auto-generated from StructureDefinition for Family member history for
+// genetics analysis. Information about patient's relatives, relevant for
+// patient. See
+// http://hl7.org/fhir/StructureDefinition/familymemberhistory-genetic
+message FamilymemberhistoryGenetic {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/familymemberhistory-genetic";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Extension
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // External Id(s) for this record
+  repeated Identifier identifier = 9;
+
+  // Instantiates protocol or definition
+  repeated Reference definition = 10;
+
+  // partial | completed | entered-in-error | health-unknown
+  FamilyHistoryStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The taking of a family member's history did not occur
+  Boolean not_done = 12;
+
+  // subject-unknown | withheld | unable-to-obtain | deferred
+  CodeableConcept not_done_reason = 13;
+
+  // Patient history is about
+  Reference patient = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // When history was captured/updated
+  DateTime date = 15;
+
+  // The family member described
+  String name = 16;
+
+  // Relationship to the subject
+  CodeableConcept relationship = 17
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // male | female | other | unknown
+  AdministrativeGenderCode gender = 18;
+
+  // (approximate) date of birth
+  message Born {
+    oneof born {
+      Period period = 1;
+      Date date = 2;
+      String string_value = 3 [json_name = "string"];
+    }
+  }
+  Born born = 19 [(is_choice_type) = true];
+
+  // (approximate) age
+  message AgeType {
+    oneof age {
+      Age age_value = 1 [json_name = "age"];
+      Range range = 2;
+      String string_value = 3 [json_name = "string"];
+    }
+  }
+  AgeType age = 20 [(is_choice_type) = true];
+
+  // Age is estimated?
+  Boolean estimated_age = 21;
+
+  // Dead? How old/when?
+  message Deceased {
+    oneof deceased {
+      Boolean boolean = 1;
+      Age age = 2;
+      Range range = 3;
+      Date date = 4;
+      String string_value = 5 [json_name = "string"];
+    }
+  }
+  Deceased deceased = 22 [(is_choice_type) = true];
+
+  // Why was family member history performed?
+  repeated CodeableConcept reason_code = 23;
+
+  // Why was family member history performed?
+  repeated Reference reason_reference = 24;
+
+  // General note about related person
+  repeated Annotation note = 25;
+
+  // Condition that the related person had
+  message Condition {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Condition suffered by relation
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // deceased | permanent disability | etc.
+    CodeableConcept outcome = 5;
+
+    // When condition first manifested
+    message Onset {
+      oneof onset {
+        Age age = 1;
+        Range range = 2;
+        Period period = 3;
+        String string_value = 4 [json_name = "string"];
+      }
+    }
+    Onset onset = 6 [(is_choice_type) = true];
+
+    // Extra information about condition
+    Annotation note = 7;
+  }
+  repeated Condition condition = 26;
+
+  // Extension
+  repeated FamilyMemberHistoryParent parent = 27 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-parent"
+  ];
+
+  // Extension
+  repeated FamilyMemberHistorySibling sibling = 28 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-sibling"
+  ];
+
+  // Extension
+  repeated Reference observation = 29 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation"
+  ];
+}
+
+// Auto-generated from StructureDefinition for Example Lipid Profile.
+// HDL Cholesterol Result.
+// See http://hl7.org/fhir/StructureDefinition/hdlcholesterol
+message Hdlcholesterol {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/hdlcholesterol";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12;
+
+  // HDL Cholesterol
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14;
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Clinically relevant time/time-period for observation
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16 [(is_choice_type) = true];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // HDL Cholesterol value
+  Quantity value_quantity = 19;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // + | ++ | +++ | - | -- | ---
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // A fixed quantity (no comparator)
+    SimpleQuantity low = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  ReferenceRange reference_range = 27
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Component results
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Actual component result
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+        CodeableConcept codeable_concept = 2;
+        String string_value = 3 [json_name = "string"];
+        Range range = 4;
+        Ratio ratio = 5;
+        SampledData sampled_data = 6;
+        Attachment attachment = 7;
+        Time time = 8;
+        DateTime date_time = 9;
+        Period period = 10;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for Vital Signs Profile.
+// FHIR Head Circumference Profile.
+// See http://hl7.org/fhir/StructureDefinition/headcircum
+message Headcircum {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/headcircum";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Head Circumference
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Often just a dateTime for Vital Signs
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Vital Sign Value recorded with UCUM
+  Quantity value_quantity = 19;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Used when reporting vital signs panel components
+  message Related {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    ObservationRelationshipTypeCode type = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Resource that is related to this one
+    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28;
+
+  // Used when reporting systolic and diastolic blood pressure.
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Vital Sign Value recorded with UCUM
+    Quantity value_quantity = 5;
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for Vital Signs Profile.
+// FHIR Heart Rate Profile.
+// See http://hl7.org/fhir/StructureDefinition/heartrate
+message Heartrate {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/heartrate";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Heart Rate
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Often just a dateTime for Vital Signs
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Vital Sign Value recorded with UCUM
+  Quantity value_quantity = 19;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Used when reporting vital signs panel components
+  message Related {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    ObservationRelationshipTypeCode type = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Resource that is related to this one
+    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28;
+
+  // Used when reporting systolic and diastolic blood pressure.
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Vital Sign Value recorded with UCUM
+    Quantity value_quantity = 5;
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for Profile for HLA Genotyping
+// Results. A Diagnostic report - a combination of request information, atomic
+// results, images, interpretation, as well as formatted reports. See
+// http://hl7.org/fhir/StructureDefinition/hlaresult
+message Hlaresult {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/DiagnosticReport";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/hlaresult";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Extension
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business identifier for report
+  repeated Identifier identifier = 9;
+
+  // What was requested
+  repeated Reference based_on = 10;
+
+  // registered | partial | preliminary | final +
+  DiagnosticReportStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Service category
+  CodeableConcept category = 12;
+
+  // Name/Code for this diagnostic report
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The subject of the report - usually, but not always, the patient
+  Reference subject = 14;
+
+  // Health care event when test ordered
+  Reference context = 15;
+
+  // Clinically relevant time/time-period for report
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16 [(is_choice_type) = true];
+
+  // DateTime this version was released
+  Instant issued = 17;
+
+  // Participants in producing the report
+  message Performer {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of performer
+    CodeableConcept role = 4;
+
+    // Practitioner or Organization  participant
+    Reference actor = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Performer performer = 18;
+
+  // Specimens this report is based on
+  repeated Reference specimen = 19;
+
+  // Observations - simple, or complex nested groups
+  repeated Reference result = 20;
+
+  // Reference to full details of imaging associated with the diagnostic report
+  repeated Reference imaging_study = 21;
+
+  // Key images associated with this report
+  message Image {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Comment about the image (e.g. explanation)
+    String comment = 4;
+
+    // Reference to the image source
+    Reference link = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Image image = 22;
+
+  // Clinical Interpretation of test results
+  String conclusion = 23;
+
+  // Codes for the conclusion
+  repeated CodeableConcept coded_diagnosis = 24;
+
+  // Entire report as issued
+  repeated Attachment presented_form = 25;
+
+  // Allele Database
+  CodeableConcept allele_database = 26 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-allele-database"
+  ];
+
+  // Glstring
+  DiagnosticReportGlstring glstring = 27 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-glstring"
+  ];
+
+  // Haploid
+  repeated DiagnosticReportHaploid haploid = 28 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-haploid"
+  ];
+
+  // The platform, methodology and software applied at the time of the
+  // genotyping
+  CodeableConcept method = 29 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-method"
+  ];
+}
+
+// Auto-generated from StructureDefinition for Example Lipid Profile.
+// LDL Cholesterol Result.
+// See http://hl7.org/fhir/StructureDefinition/ldlcholesterol
+message Ldlcholesterol {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ldlcholesterol";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12;
+
+  // LDL Cholesterol -measured or calculated per code
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14;
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Clinically relevant time/time-period for observation
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16 [(is_choice_type) = true];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // LDL Cholesterol value
+  Quantity value_quantity = 19;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // + | ++ | +++ | - | -- | ---
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // A fixed quantity (no comparator)
+    SimpleQuantity high = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  ReferenceRange reference_range = 27
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Component results
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Actual component result
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+        CodeableConcept codeable_concept = 2;
+        String string_value = 3 [json_name = "string"];
+        Range range = 4;
+        Ratio ratio = 5;
+        SampledData sampled_data = 6;
+        Attachment attachment = 7;
+        Time time = 8;
+        DateTime date_time = 9;
+        Period period = 10;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for Example Lipid Profile.
+// Lipid Lab Report.
+// See http://hl7.org/fhir/StructureDefinition/lipidprofile
+message Lipidprofile {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/DiagnosticReport";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/lipidprofile";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business identifier for report
+  repeated Identifier identifier = 9;
+
+  // What was requested
+  repeated Reference based_on = 10;
+
+  // registered | partial | preliminary | final +
+  DiagnosticReportStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Service category
+  CodeableConcept category = 12;
+
+  // LOINC Code for Lipid Panel with LDL
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The subject of the report - usually, but not always, the patient
+  Reference subject = 14;
+
+  // Health care event when test ordered
+  Reference context = 15;
+
+  // Clinically relevant time/time-period for report
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16 [(is_choice_type) = true];
+
+  // DateTime this version was released
+  Instant issued = 17;
+
+  // Participants in producing the report
+  message Performer {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of performer
+    CodeableConcept role = 4;
+
+    // Practitioner or Organization  participant
+    Reference actor = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Performer performer = 18;
+
+  // Specimens this report is based on
+  repeated Reference specimen = 19;
+
+  // Observations - simple, or complex nested groups
+  Reference result = 20;
+
+  // Reference to full details of imaging associated with the diagnostic report
+  repeated Reference imaging_study = 21;
+
+  // Key images associated with this report
+  message Image {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Comment about the image (e.g. explanation)
+    String comment = 4;
+
+    // Reference to the image source
+    Reference link = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Image image = 22;
+
+  // Clinical Interpretation of Lipid Panel
+  String conclusion = 23;
+
+  // Entire report as issued
+  repeated Attachment presented_form = 25;
+
+  // Cholesterol Result
+  Reference cholesterol = 26 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Triglyceride Result
+  Reference triglyceride = 27 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // HDL Cholesterol Result
+  Reference h_d_l_cholesterol = 28
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // LDL Cholesterol result, if reported
+  Reference l_d_l_cholesterol = 29;
+}
+
+// Auto-generated from StructureDefinition for MetadataResource.
+// Common Ancestor declaration for definitional resources.
+// See http://hl7.org/fhir/StructureDefinition/MetadataResource
+message MetadataResource {
+  option (structure_definition_kind) = KIND_LOGICAL;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MetadataResource";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Logical URI to reference this metadata resource (globally unique)
+  Uri url = 9;
+
+  // Business version of the metadata resource
+  String version = 10;
+
+  // Name for this metadata resource (computer friendly)
+  String name = 11;
+
+  // Name for this metadata resource (human friendly)
+  String title = 12;
+
+  // draft | active | retired | unknown
+  PublicationStatusCode status = 13
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 14;
+
+  // Date this was last changed
+  DateTime date = 15;
+
+  // Name of the publisher (organization or individual)
+  String publisher = 16;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 17;
+
+  // Context the content is intended to support
+  repeated UsageContext use_context = 18;
+
+  // Intended jurisdiction for metadata resource (if applicable)
+  repeated CodeableConcept jurisdiction = 19;
+
+  // Natural language description of the metadata resource
+  Markdown description = 20;
+}
+
+// Auto-generated from StructureDefinition for Observation-genetics.
+// Measurements and simple assertions.
+// See http://hl7.org/fhir/StructureDefinition/observation-genetics
+message ObservationGenetics {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/observation-genetics";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Extension
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12;
+
+  // Type of observation (code / type)
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14;
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Clinically relevant time/time-period for observation
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16 [(is_choice_type) = true];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Actual result
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+      CodeableConcept codeable_concept = 2;
+      String string_value = 3 [json_name = "string"];
+      Boolean boolean = 4;
+      Range range = 5;
+      Ratio ratio = 6;
+      SampledData sampled_data = 7;
+      Attachment attachment = 8;
+      Time time = 9;
+      DateTime date_time = 10;
+      Period period = 11;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Resource related to this observation
+  message Related {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    ObservationRelationshipTypeCode type = 4;
+
+    // Resource that is related to this one
+    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28;
+
+  // Component results
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Actual component result
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+        CodeableConcept codeable_concept = 2;
+        String string_value = 3 [json_name = "string"];
+        Range range = 4;
+        Ratio ratio = 5;
+        SampledData sampled_data = 6;
+        Attachment attachment = 7;
+        Time time = 8;
+        DateTime date_time = 9;
+        Period period = 10;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+
+  // DNA sequence variant
+  CodeableConcept d_n_a_sequence_variant_name = 30 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName"
+  ];
+
+  // DNA sequence variant ID
+  CodeableConcept d_n_a_variant_id = 31 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNAVariantId"
+  ];
+
+  // DNA sequence variant type
+  CodeableConcept d_n_a_sequence_variant_type = 32 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantType"
+  ];
+
+  // Amino acid change
+  CodeableConcept amino_acid_change_name = 33 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName"
+  ];
+
+  // Amino Acid Change Type
+  CodeableConcept amino_acid_change_type = 34 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeType"
+  ];
+
+  // HGNC gene symbol
+  CodeableConcept gene_symbol = 35
+      [(fhir_inlined_extension_url) =
+           "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"];
+
+  // DNA region name
+  String d_n_a_region_name = 36 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNARegionName"
+  ];
+
+  // Name of allele
+  CodeableConcept allele_name = 37 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName"
+  ];
+
+  // The level of occurrence of a single DNA sequence variant within a set of
+  // chromosomes: Heteroplasmic / Homoplasmic / Homozygous / Heterozygous /
+  // Hemizygous
+  CodeableConcept allelic_state = 38 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicState"
+  ];
+
+  // Allele frequency
+  Decimal allelic_frequency = 39 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicFrequency"
+  ];
+
+  // Copy number variation
+  CodeableConcept copy_number_event = 40 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsCopyNumberEvent"
+  ];
+
+  // Genomic source class
+  CodeableConcept genomic_source_class = 41 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
+  ];
+
+  // Phase set identifier (UUID/OID)
+  Uri phase_set = 42 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet"
+  ];
+
+  // Sequence
+  repeated Reference sequence = 43 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsSequence"
+  ];
+
+  // Clinical interpretations for variant
+  Reference interpretation_slice = 44 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsInterpretation"
+  ];
+}
+
+// Auto-generated from StructureDefinition for Vital Signs Profile.
+// FHIR Oxygen Saturation Profile.
+// See http://hl7.org/fhir/StructureDefinition/oxygensat
+message Oxygensat {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/oxygensat";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Oxygen Saturation
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Often just a dateTime for Vital Signs
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Vital Sign Value recorded with UCUM
+  Quantity value_quantity = 19;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Used when reporting vital signs panel components
+  message Related {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    ObservationRelationshipTypeCode type = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Resource that is related to this one
+    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28;
+
+  // Used when reporting systolic and diastolic blood pressure.
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Vital Sign Value recorded with UCUM
+    Quantity value_quantity = 5;
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for ProcedureRequest-Genetics.
+// A request for a procedure or diagnostic to be performed.
+// See http://hl7.org/fhir/StructureDefinition/procedurerequest-genetics
+message ProcedurerequestGenetics {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/ProcedureRequest";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/procedurerequest-genetics";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Extension
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Identifiers assigned to this order
+  repeated Identifier identifier = 9;
+
+  // Protocol or definition
+  repeated Reference definition = 10;
+
+  // What request fulfills
+  repeated Reference based_on = 11;
+
+  // What request replaces
+  repeated Reference replaces = 12;
+
+  // Composite Request ID
+  Identifier requisition = 13;
+
+  // draft | active | suspended | completed | entered-in-error | cancelled
+  RequestStatusCode status = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // proposal | plan | order +
+  RequestIntentCode intent = 15 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // routine | urgent | asap | stat
+  RequestPriorityCode priority = 16;
+
+  // True if procedure should not be performed
+  Boolean do_not_perform = 17;
+
+  // Classification of procedure
+  repeated CodeableConcept category = 18;
+
+  // What is being requested/ordered
+  CodeableConcept code = 19 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Individual the service is ordered for
+  Reference subject = 20 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Encounter or Episode during which request was created
+  Reference context = 21;
+
+  // When procedure should occur
+  message Occurrence {
+    oneof occurrence {
+      DateTime date_time = 1;
+      Period period = 2;
+      Timing timing = 3;
+    }
+  }
+  Occurrence occurrence = 22 [(is_choice_type) = true];
+
+  // Preconditions for procedure or diagnostic
+  message AsNeeded {
+    oneof as_needed {
+      Boolean boolean = 1;
+      CodeableConcept codeable_concept = 2;
+    }
+  }
+  AsNeeded as_needed = 23 [(is_choice_type) = true];
+
+  // Date request signed
+  DateTime authored_on = 24;
+
+  // Who/what is requesting procedure or diagnostic
+  message Requester {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Individual making the request
+    Reference agent = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Organization agent is acting for
+    Reference on_behalf_of = 5;
+  }
+  Requester requester = 25;
+
+  // Performer role
+  CodeableConcept performer_type = 26;
+
+  // Requested perfomer
+  Reference performer = 27;
+
+  // Explanation/Justification for test
+  repeated CodeableConcept reason_code = 28;
+
+  // Explanation/Justification for test
+  repeated Reference reason_reference = 29;
+
+  // Additional clinical information
+  repeated Reference supporting_info = 30;
+
+  // Procedure Samples
+  repeated Reference specimen = 31;
+
+  // Location on Body
+  repeated CodeableConcept body_site = 32;
+
+  // Comments
+  repeated Annotation note = 33;
+
+  // Request provenance
+  repeated Reference relevant_history = 34;
+
+  // The items the orderer requested
+  repeated DiagnosticReportItem item = 35 [
+    (fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/procedurerequest-geneticsItem"
+  ];
+}
+
+// Auto-generated from StructureDefinition for Vital Signs Profile.
+// FHIR Respiratory Rate Profile.
+// See http://hl7.org/fhir/StructureDefinition/resprate
+message Resprate {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/resprate";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Respiratory Rate
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Often just a dateTime for Vital Signs
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Vital Sign Value recorded with UCUM
+  Quantity value_quantity = 19;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Used when reporting vital signs panel components
+  message Related {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    ObservationRelationshipTypeCode type = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Resource that is related to this one
+    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28;
+
+  // Used when reporting systolic and diastolic blood pressure.
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Vital Sign Value recorded with UCUM
+    Quantity value_quantity = 5;
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for Shareable CodeSystem.
+// A set of codes drawn from one or more code systems.
+// See http://hl7.org/fhir/StructureDefinition/shareablecodesystem
+message Shareablecodesystem {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/CodeSystem";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/shareablecodesystem";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Logical URI to reference this code system (globally unique) (Coding.system)
+  Uri url = 9 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Additional identifier for the code system
+  Identifier identifier = 10;
+
+  // Business version of the code system (Coding.version)
+  String version = 11 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Name for this code system (computer friendly)
+  String name = 12 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Name for this code system (human friendly)
+  String title = 13;
+
+  // draft | active | retired | unknown
+  PublicationStatusCode status = 14
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 15 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Date this was last changed
+  DateTime date = 16;
+
+  // Name of the publisher (organization or individual)
+  String publisher = 17 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 18;
+
+  // Natural language description of the code system
+  Markdown description = 19 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Context the content is intended to support
+  repeated UsageContext use_context = 20;
+
+  // Intended jurisdiction for code system (if applicable)
+  repeated CodeableConcept jurisdiction = 21;
+
+  // Why this code system is defined
+  Markdown purpose = 22;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 23;
+
+  // If code comparison is case sensitive
+  Boolean case_sensitive = 24 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Canonical URL for value set with entire code system
+  Uri value_set = 25;
+
+  // grouped-by | is-a | part-of | classified-with
+  CodeSystemHierarchyMeaningCode hierarchy_meaning = 26;
+
+  // If code system defines a post-composition grammar
+  Boolean compositional = 27;
+
+  // If definitions are not stable
+  Boolean version_needed = 28;
+
+  // not-present | example | fragment | complete
+  CodeSystemContentModeCode content = 29
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Total concepts in the code system
+  UnsignedInt count = 30;
+
+  // Filter that can be used in a value set
+  message Filter {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Code that identifies the filter
+    Code code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // How or why the filter is used
+    String description = 5;
+
+    // Operators that can be used with filter
+    repeated FilterOperatorCode operator = 6
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // What to use for the value
+    String value = 7 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Filter filter = 31;
+
+  // Additional information supplied about each concept
+  message Property {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Identifies the property on the concepts, and when referred to in
+    // operations
+    Code code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Formal identifier for the property
+    Uri uri = 5;
+
+    // Why the property is defined, and/or what it conveys
+    String description = 6;
+
+    // code | Coding | string | integer | boolean | dateTime
+    PropertyTypeCode type = 7 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Property property = 32;
+
+  // Concepts in the code system
+  message ConceptDefinition {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Code that identifies concept
+    Code code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Text to display to the user
+    String display = 5;
+
+    // Formal definition
+    String definition = 6;
+
+    // Additional representations for the concept
+    message Designation {
+      // xml:id (or equivalent in JSON)
+      String id = 1;
+
+      // Additional Content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored
+      repeated Extension modifier_extension = 3;
+
+      // Human language of the designation
+      LanguageCode language = 4;
+
+      // Details how this designation would be used
+      Coding use = 5;
+
+      // The text value for this designation
+      String value = 6 [(validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated Designation designation = 7;
+
+    // Property value for the concept
+    message ConceptProperty {
+      // xml:id (or equivalent in JSON)
+      String id = 1;
+
+      // Additional Content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored
+      repeated Extension modifier_extension = 3;
+
+      // Reference to CodeSystem.property.code
+      Code code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Value of the property for this concept
+      message Value {
+        oneof value {
+          Code code = 1;
+          Coding coding = 2;
+          String string_value = 3 [json_name = "string"];
+          Integer integer = 4;
+          Boolean boolean = 5;
+          DateTime date_time = 6;
+        }
+      }
+      Value value = 5 [
+        (is_choice_type) = true,
+        (validation_requirement) = REQUIRED_BY_FHIR
+      ];
+    }
+    repeated ConceptProperty property = 8;
+
+    // Child Concepts (is-a/contains/categorizes)
+    repeated ConceptDefinition concept = 9;
+  }
+  repeated ConceptDefinition concept = 33
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+}
+
+// Auto-generated from StructureDefinition for Shareable ValueSet.
+// A set of codes drawn from one or more code systems.
+// See http://hl7.org/fhir/StructureDefinition/shareablevalueset
+message Shareablevalueset {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/ValueSet";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/shareablevalueset";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Logical URI to reference this value set (globally unique)
+  Uri url = 9 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Additional identifier for the value set
+  repeated Identifier identifier = 10;
+
+  // Business version of the value set
+  String version = 11 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Name for this value set (computer friendly)
+  String name = 12 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Name for this value set (human friendly)
+  String title = 13;
+
+  // draft | active | retired | unknown
+  PublicationStatusCode status = 14
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 15 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Date this was last changed
+  DateTime date = 16;
+
+  // Name of the publisher (organization or individual)
+  String publisher = 17 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 18;
+
+  // Natural language description of the value set
+  Markdown description = 19 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Context the content is intended to support
+  repeated UsageContext use_context = 20;
+
+  // Intended jurisdiction for value set (if applicable)
+  repeated CodeableConcept jurisdiction = 21;
+
+  // Indicates whether or not any change to the content logical definition may
+  // occur
+  Boolean immutable = 22;
+
+  // Why this value set is defined
+  Markdown purpose = 23;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 24;
+
+  // Whether this is intended to be used with an extensible binding
+  Boolean extensible = 25;
+
+  // Definition of the content of the value set (CLD)
+  message Compose {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Fixed date for version-less references (transitive)
+    Date locked_date = 4;
+
+    // Whether inactive codes are in the value set
+    Boolean inactive = 5;
+
+    // Include one or more codes from a code system or other value set(s)
+    message ConceptSet {
+      // xml:id (or equivalent in JSON)
+      String id = 1;
+
+      // Additional Content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored
+      repeated Extension modifier_extension = 3;
+
+      // The system the codes come from
+      Uri system = 4;
+
+      // Specific version of the code system referred to
+      String version = 5;
+
+      // A concept defined in the system
+      message ConceptReference {
+        // xml:id (or equivalent in JSON)
+        String id = 1;
+
+        // Additional Content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored
+        repeated Extension modifier_extension = 3;
+
+        // Code or expression from system
+        Code code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+        // Text to display for this code for this value set in this valueset
+        String display = 5;
+
+        // Additional representations for this concept
+        message Designation {
+          // xml:id (or equivalent in JSON)
+          String id = 1;
+
+          // Additional Content defined by implementations
+          repeated Extension extension = 2;
+
+          // Extensions that cannot be ignored
+          repeated Extension modifier_extension = 3;
+
+          // Human language of the designation
+          LanguageCode language = 4;
+
+          // Details how this designation would be used
+          Coding use = 5;
+
+          // The text value for this designation
+          String value = 6 [(validation_requirement) = REQUIRED_BY_FHIR];
+        }
+        repeated Designation designation = 6;
+      }
+      repeated ConceptReference concept = 6;
+
+      // Select codes/concepts by their properties (including relationships)
+      message Filter {
+        // xml:id (or equivalent in JSON)
+        String id = 1;
+
+        // Additional Content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored
+        repeated Extension modifier_extension = 3;
+
+        // A property defined by the code system
+        Code property = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+        // = | is-a | descendent-of | is-not-a | regex | in | not-in |
+        // generalizes | exists
+        FilterOperatorCode op = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+        // Code from the system, or regex criteria, or boolean value for exists
+        Code value = 6 [(validation_requirement) = REQUIRED_BY_FHIR];
+      }
+      repeated Filter filter = 7;
+
+      // Select only contents included in this value set
+      repeated Uri value_set = 8;
+    }
+    repeated ConceptSet include = 6
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Explicitly exclude codes from a code system or other value sets
+    repeated ConceptSet exclude = 7;
+  }
+  Compose compose = 26;
+
+  // Used when the value set is "expanded"
+  message Expansion {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Uniquely identifies this expansion
+    Uri identifier = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Time ValueSet expansion happened
+    DateTime timestamp = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Total number of codes in the expansion
+    Integer total = 6;
+
+    // Offset at which this resource starts
+    Integer offset = 7;
+
+    // Parameter that controlled the expansion process
+    message Parameter {
+      // xml:id (or equivalent in JSON)
+      String id = 1;
+
+      // Additional Content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored
+      repeated Extension modifier_extension = 3;
+
+      // Name as assigned by the server
+      String name = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Value of the named parameter
+      message Value {
+        oneof value {
+          String string_value = 1 [json_name = "string"];
+          Boolean boolean = 2;
+          Integer integer = 3;
+          Decimal decimal = 4;
+          Uri uri = 5;
+          Code code = 6;
+        }
+      }
+      Value value = 5 [(is_choice_type) = true];
+    }
+    repeated Parameter parameter = 8;
+
+    // Codes in the value set
+    message Contains {
+      // xml:id (or equivalent in JSON)
+      String id = 1;
+
+      // Additional Content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored
+      repeated Extension modifier_extension = 3;
+
+      // System value for the code
+      Uri system = 4;
+
+      // If user cannot select this entry
+      Boolean abstract = 5;
+
+      // If concept is inactive in the code system
+      Boolean inactive = 6;
+
+      // Version in which this code/display is defined
+      String version = 7;
+
+      // Code - if blank, this is not a selectable code
+      Code code = 8;
+
+      // User display for the concept
+      String display = 9;
+
+      // Additional representations for this item
+      repeated Compose.ConceptSet.ConceptReference.Designation designation = 10;
+
+      // Codes contained under this entry
+      repeated Contains contains = 11;
+    }
+    repeated Contains contains = 9;
+  }
+  Expansion expansion = 27;
+}
+
+// Auto-generated from StructureDefinition for Example Lipid Profile.
+// Triglyceride Result.
+// See http://hl7.org/fhir/StructureDefinition/triglyceride
+message Triglyceride {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/triglyceride";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12;
+
+  // Triglyceride
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14;
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Clinically relevant time/time-period for observation
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16 [(is_choice_type) = true];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Triglyceride value
+  Quantity value_quantity = 19;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // + | ++ | +++ | - | -- | ---
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  ReferenceRange reference_range = 27
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Component results
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Actual component result
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+        CodeableConcept codeable_concept = 2;
+        String string_value = 3 [json_name = "string"];
+        Range range = 4;
+        Ratio ratio = 5;
+        SampledData sampled_data = 6;
+        Attachment attachment = 7;
+        Time time = 8;
+        DateTime date_time = 9;
+        Period period = 10;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for Vital Signs Profile.
+// FHIR Vital Signs Profile.
+// See http://hl7.org/fhir/StructureDefinition/vitalsigns
+message Vitalsigns {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Coded Responses from C-CDA Vital Sign Results
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Often just a dateTime for Vital Signs
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Vital Sign Value recorded with UCUM
+  Quantity value_quantity = 19;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Used when reporting vital signs panel components
+  message Related {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    ObservationRelationshipTypeCode type = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Resource that is related to this one
+    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28;
+
+  // Used when reporting systolic and diastolic blood pressure.
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Vital Sign Value recorded with UCUM
+    Quantity value_quantity = 5;
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for Vital Signs Profile.
+// FHIR Vital Signs Panel Profile.
+// See http://hl7.org/fhir/StructureDefinition/vitalspanel
+message Vitalspanel {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/vitalspanel";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  ObservationStatusCode status = 11
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 12
+      [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Vital Signs Panel
+  CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Healthcare event during which this observation is made
+  Reference context = 15;
+
+  // Often just a dateTime for Vital Signs
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  Effective effective = 16
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Date/Time this was made available
+  Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 18;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  CodeableConcept interpretation = 21;
+
+  // Comments about result
+  String comment = 22;
+
+  // Observed body part
+  CodeableConcept body_site = 23;
+
+  // How it was done
+  CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  Reference specimen = 25;
+
+  // (Measurement) Device
+  Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Used when reporting vital signs panel components
+  message Related {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    ObservationRelationshipTypeCode type = 4
+        [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Resource that is related to this one
+    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Used when reporting systolic and diastolic blood pressure.
+  message Component {
+    // xml:id (or equivalent in JSON)
+    String id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Vital Sign Value recorded with UCUM
+    Quantity value_quantity = 5;
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
 }
