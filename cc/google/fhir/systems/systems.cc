@@ -58,6 +58,9 @@ string ToShortSystemName(const string& system) {
   if (system == kCpt) {
     return "cpt";
   }
+  if (system == kNdc) {
+    return "ndc";
+  }
   if (system == kRxNorm) {
     return "rxnorm";
   }

@@ -44,6 +44,7 @@ const char kLoinc[] = "http://loinc.org";
 const char kUnitsOfMeasure[] = "http://unitsofmeasure.org";
 const char kCpt[] = "http://www.ama-assn.org/go/cpt";
 const char kRxNorm[] = "http://www.nlm.nih.gov/research/umls/rxnorm";
+const char kNdc[] = "http://hl7.org/fhir/sid/ndc";
 
 // Format ICD9 Diagnosis code according to
 // http://www.icd9data.com/2015/Volume1/default.htm.

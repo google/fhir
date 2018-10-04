@@ -170,6 +170,8 @@ Status GetPreferredCode(const CodeableConcept& concept, string* result) {
     *result = absl::StrCat("icd10:" + code);
   } else if (ExtractCodeBySystem(concept, systems::kCpt, &code).ok()) {
     *result = absl::StrCat("cpt:" + code);
+  } else if (ExtractCodeBySystem(concept, systems::kNdc, &code).ok()) {
+    *result = absl::StrCat("ndc:" + code);
 
   } else if (ExtractCodeBySystem(concept, systems::kDischargeDisposition, &code)
                  .ok()) {
