@@ -753,9 +753,8 @@
         ]
       },
       {
-        "id": "FamilyMemberHistory.relationship:relationship",
+        "id": "FamilyMemberHistory.relationship",
         "path": "FamilyMemberHistory.relationship",
-        "sliceName": "Relationship",
         "short": "Relationship to the subject",
         "definition": "The type of relationship this person has to the patient (father, mother, brother etc.).",
         "min": 1,
@@ -793,9 +792,8 @@
         ]
       },
       {
-        "id": "FamilyMemberHistory.gender:gender",
+        "id": "FamilyMemberHistory.gender",
         "path": "FamilyMemberHistory.gender",
-        "sliceName": "Gender",
         "short": "male | female | other | unknown",
         "definition": "Administrative Gender - the gender that the relative is considered to have for administration and record keeping purposes.",
         "requirements": "Not all relationship codes imply gender and the relative's gender can be relevant for risk assessments.",
@@ -832,9 +830,8 @@
         }
       },
       {
-        "id": "FamilyMemberHistory.born[x]:bornage",
+        "id": "FamilyMemberHistory.born[x]",
         "path": "FamilyMemberHistory.born[x]",
-        "sliceName": "BornAge",
         "short": "(approximate) date of birth",
         "definition": "The actual or approximate date of birth of the relative.",
         "requirements": "Allows calculation of the relative's age.",
@@ -868,9 +865,8 @@
         ]
       },
       {
-        "id": "FamilyMemberHistory.age[x]:age",
+        "id": "FamilyMemberHistory.age[x]",
         "path": "FamilyMemberHistory.age[x]",
-        "sliceName": "Age",
         "short": "(approximate) age",
         "definition": "The age of the relative at the time the family member history is recorded.",
         "comment": "use estimatedAge to indicate whether the age is actual or not.",
@@ -932,9 +928,8 @@
         "isSummary": true
       },
       {
-        "id": "FamilyMemberHistory.deceased[x]:deceasedage",
+        "id": "FamilyMemberHistory.deceased[x]",
         "path": "FamilyMemberHistory.deceased[x]",
-        "sliceName": "DeceasedAge",
         "short": "Dead? How old/when?",
         "definition": "Deceased flag or the actual or approximate age of the relative at the time of death for the family member history record.",
         "min": 0,
@@ -1080,9 +1075,8 @@
         ]
       },
       {
-        "id": "FamilyMemberHistory.condition:condition",
+        "id": "FamilyMemberHistory.condition",
         "path": "FamilyMemberHistory.condition",
-        "sliceName": "Condition",
         "short": "Condition that the related person had",
         "definition": "The significant Conditions (or condition) that the family member had. This is a repeating section to allow a system to represent more than one condition per resource, though there is nothing stopping multiple resources - one per condition.",
         "comment": "If none of the conditions listed have an outcome of \"death\" specified, that indicates that none of the specified conditions are known to have been the primary cause of death.",
@@ -1117,7 +1111,7 @@
         ]
       },
       {
-        "id": "FamilyMemberHistory.condition:condition.id",
+        "id": "FamilyMemberHistory.condition.id",
         "path": "FamilyMemberHistory.condition.id",
         "representation": [
           "xmlAttr"
@@ -1144,7 +1138,7 @@
         ]
       },
       {
-        "id": "FamilyMemberHistory.condition:condition.extension",
+        "id": "FamilyMemberHistory.condition.extension",
         "path": "FamilyMemberHistory.condition.extension",
         "short": "Additional Content defined by implementations",
         "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
@@ -1173,7 +1167,7 @@
         ]
       },
       {
-        "id": "FamilyMemberHistory.condition:condition.modifierExtension",
+        "id": "FamilyMemberHistory.condition.modifierExtension",
         "path": "FamilyMemberHistory.condition.modifierExtension",
         "short": "Extensions that cannot be ignored",
         "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.",
@@ -1205,7 +1199,7 @@
         ]
       },
       {
-        "id": "FamilyMemberHistory.condition:condition.code",
+        "id": "FamilyMemberHistory.condition.code",
         "path": "FamilyMemberHistory.condition.code",
         "short": "Condition suffered by relation",
         "definition": "The actual condition specified. Could be a coded condition (like MI or Diabetes) or a less specific string like 'cancer' depending on how much is known about the condition and the capabilities of the creating system.",
@@ -1243,7 +1237,7 @@
         ]
       },
       {
-        "id": "FamilyMemberHistory.condition:condition.outcome",
+        "id": "FamilyMemberHistory.condition.outcome",
         "path": "FamilyMemberHistory.condition.outcome",
         "short": "deceased | permanent disability | etc.",
         "definition": "Indicates what happened as a result of this condition.  If the condition resulted in death, deceased date is captured on the relation.",
@@ -1281,7 +1275,7 @@
         ]
       },
       {
-        "id": "FamilyMemberHistory.condition:condition.onset[x]",
+        "id": "FamilyMemberHistory.condition.onset[x]",
         "path": "FamilyMemberHistory.condition.onset[x]",
         "short": "When condition first manifested",
         "definition": "Either the age of onset, range of approximate age or descriptive string can be recorded.  For conditions with multiple occurrences, this describes the first known occurrence.",
@@ -1316,7 +1310,7 @@
         ]
       },
       {
-        "id": "FamilyMemberHistory.condition:condition.note",
+        "id": "FamilyMemberHistory.condition.note",
         "path": "FamilyMemberHistory.condition.note",
         "short": "Extra information about condition",
         "definition": "An area where general notes can be placed about this specific condition.",
@@ -1392,9 +1386,8 @@
         "mustSupport": true
       },
       {
-        "id": "FamilyMemberHistory.relationship:relationship",
+        "id": "FamilyMemberHistory.relationship",
         "path": "FamilyMemberHistory.relationship",
-        "sliceName": "Relationship",
         "min": 1,
         "max": "1",
         "type": [
@@ -1405,9 +1398,8 @@
         "mustSupport": true
       },
       {
-        "id": "FamilyMemberHistory.gender:gender",
+        "id": "FamilyMemberHistory.gender",
         "path": "FamilyMemberHistory.gender",
-        "sliceName": "Gender",
         "min": 0,
         "max": "1",
         "type": [
@@ -1435,9 +1427,8 @@
         }
       },
       {
-        "id": "FamilyMemberHistory.born[x]:bornage",
+        "id": "FamilyMemberHistory.born[x]",
         "path": "FamilyMemberHistory.born[x]",
-        "sliceName": "BornAge",
         "min": 0,
         "max": "1",
         "type": [
@@ -1454,9 +1445,8 @@
         "mustSupport": true
       },
       {
-        "id": "FamilyMemberHistory.age[x]:age",
+        "id": "FamilyMemberHistory.age[x]",
         "path": "FamilyMemberHistory.age[x]",
-        "sliceName": "Age",
         "min": 0,
         "max": "1",
         "type": [
@@ -1473,9 +1463,8 @@
         "mustSupport": true
       },
       {
-        "id": "FamilyMemberHistory.deceased[x]:deceasedage",
+        "id": "FamilyMemberHistory.deceased[x]",
         "path": "FamilyMemberHistory.deceased[x]",
-        "sliceName": "DeceasedAge",
         "min": 0,
         "max": "1",
         "type": [
@@ -1498,15 +1487,14 @@
         "mustSupport": true
       },
       {
-        "id": "FamilyMemberHistory.condition:condition",
+        "id": "FamilyMemberHistory.condition",
         "path": "FamilyMemberHistory.condition",
-        "sliceName": "Condition",
         "min": 0,
         "max": "*",
         "mustSupport": true
       },
       {
-        "id": "FamilyMemberHistory.condition:condition.code",
+        "id": "FamilyMemberHistory.condition.code",
         "path": "FamilyMemberHistory.condition.code",
         "min": 1,
         "max": "1",
@@ -1518,7 +1506,7 @@
         "mustSupport": true
       },
       {
-        "id": "FamilyMemberHistory.condition:condition.outcome",
+        "id": "FamilyMemberHistory.condition.outcome",
         "path": "FamilyMemberHistory.condition.outcome",
         "min": 0,
         "max": "1",
@@ -1530,7 +1518,7 @@
         "mustSupport": true
       },
       {
-        "id": "FamilyMemberHistory.condition:condition.onset[x]",
+        "id": "FamilyMemberHistory.condition.onset[x]",
         "path": "FamilyMemberHistory.condition.onset[x]",
         "min": 0,
         "max": "1",
@@ -1551,7 +1539,7 @@
         "mustSupport": true
       },
       {
-        "id": "FamilyMemberHistory.condition:condition.note",
+        "id": "FamilyMemberHistory.condition.note",
         "path": "FamilyMemberHistory.condition.note",
         "min": 0,
         "max": "1",
