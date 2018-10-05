@@ -1,0 +1,61 @@
+
+// Specializations of Coding that make it nicer to have slices within
+// CodeableConcepts.
+// TODO(nickgeorge): generate in ProtoGenerator from profiles on Coding.
+
+// Specialization of Coding that drops the system field.
+// Fields that use this message must be annotated with
+// fhir_inlined_coding_system.
+message CodingWithFixedSystem {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Coding";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 2;
+
+  reserved 3; // system omitted.
+
+  // Version of the system - if relevant
+  String version = 4;
+
+  // Symbol in syntax defined by the system
+  Code code = 5;
+
+  // Representation defined by the system
+  String display = 6;
+
+  // If this coding was chosen directly by the user
+  Boolean user_selected = 7;
+}
+
+// Specialization of Coding that drops the system and code fields.
+// Fields that use this message must be annotated with
+// fhir_inlined_coding_system and fhir_inlined_coding_code.
+message CodingWithFixedCode {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Coding";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 2;
+
+  reserved 3; // system omitted.
+
+  // Version of the system - if relevant
+  String version = 4;
+
+  reserved 5; //code omitted.
+
+  // Representation defined by the system
+  String display = 6;
+
+  // If this coding was chosen directly by the user
+  Boolean user_selected = 7;
+}

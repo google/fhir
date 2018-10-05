@@ -392,6 +392,22 @@ public class ProtoFilePrinter {
               hasFieldOption,
               message);
     }
+    if (options.hasExtension(Annotations.fhirInlinedCodingSystem)) {
+      hasFieldOption =
+          addFieldOption(
+              "(fhir_inlined_coding_system)",
+              "\"" + options.getExtension(Annotations.fhirInlinedCodingSystem) + "\"",
+              hasFieldOption,
+              message);
+    }
+    if (options.hasExtension(Annotations.fhirInlinedCodingCode)) {
+      hasFieldOption =
+          addFieldOption(
+              "(fhir_inlined_coding_code)",
+              "\"" + options.getExtension(Annotations.fhirInlinedCodingCode) + "\"",
+              hasFieldOption,
+              message);
+    }
     if (field.hasJsonName()) {
       hasFieldOption =
           addFieldOption("json_name", "\"" + field.getJsonName() + "\"", hasFieldOption, message);

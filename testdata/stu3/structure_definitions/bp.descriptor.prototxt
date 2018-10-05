@@ -126,7 +126,7 @@ field {
   number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  type_name: ".google.fhir.stu3.proto.Bp.CodeableConceptForCode"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Blood Pressure"
@@ -303,6 +303,64 @@ field {
   type_name: ".google.fhir.stu3.proto.Bp.DiastolicBP"
   options {
     [google.fhir.stu3.proto.field_description]: "Used when reporting systolic and diastolic blood pressure."
+  }
+}
+nested_type {
+  name: "CodeableConceptForCode"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Extension"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "coding"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Coding"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Code defined by a terminology system"
+    }
+  }
+  field {
+    name: "text"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.String"
+    options {
+      [google.fhir.stu3.proto.field_description]: "Plain text representation of the concept"
+    }
+  }
+  field {
+    name: "b_p_code"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: "google.fhir.stu3.proto.CodingWithFixedCode"
+    options {
+      [google.fhir.stu3.proto.fhir_inlined_coding_system]: "http://loinc.org"
+      [google.fhir.stu3.proto.fhir_inlined_coding_code]: "85354-9"
+    }
+  }
+  options {
+    [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for CodeableConcept.\nConcept - reference to a terminology or just  text.\nSee http://hl7.org/fhir/StructureDefinition/CodeableConcept"
+    [google.fhir.stu3.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/CodeableConcept"
   }
 }
 nested_type {
@@ -515,7 +573,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    type_name: ".google.fhir.stu3.proto.Bp.SystolicBP.CodeableConceptForCode"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Type of component observation (code / type)"
@@ -559,6 +617,64 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Bp.ReferenceRange"
     options {
       [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation of component result"
+    }
+  }
+  nested_type {
+    name: "CodeableConceptForCode"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "coding"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Coding"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Code defined by a terminology system"
+      }
+    }
+    field {
+      name: "text"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Plain text representation of the concept"
+      }
+    }
+    field {
+      name: "s_b_p_code"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: "google.fhir.stu3.proto.CodingWithFixedCode"
+      options {
+        [google.fhir.stu3.proto.fhir_inlined_coding_system]: "http://loinc.org"
+        [google.fhir.stu3.proto.fhir_inlined_coding_code]: "8480-6"
+      }
+    }
+    options {
+      [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for CodeableConcept.\nConcept - reference to a terminology or just  text.\nSee http://hl7.org/fhir/StructureDefinition/CodeableConcept"
+      [google.fhir.stu3.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/CodeableConcept"
     }
   }
 }
@@ -599,7 +715,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    type_name: ".google.fhir.stu3.proto.Bp.DiastolicBP.CodeableConceptForCode"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Type of component observation (code / type)"
@@ -643,6 +759,64 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Bp.ReferenceRange"
     options {
       [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation of component result"
+    }
+  }
+  nested_type {
+    name: "CodeableConceptForCode"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Extension"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "coding"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Coding"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Code defined by a terminology system"
+      }
+    }
+    field {
+      name: "text"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.String"
+      options {
+        [google.fhir.stu3.proto.field_description]: "Plain text representation of the concept"
+      }
+    }
+    field {
+      name: "d_b_p_code"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: "google.fhir.stu3.proto.CodingWithFixedCode"
+      options {
+        [google.fhir.stu3.proto.fhir_inlined_coding_system]: "http://loinc.org"
+        [google.fhir.stu3.proto.fhir_inlined_coding_code]: "8462-4"
+      }
+    }
+    options {
+      [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for CodeableConcept.\nConcept - reference to a terminology or just  text.\nSee http://hl7.org/fhir/StructureDefinition/CodeableConcept"
+      [google.fhir.stu3.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/CodeableConcept"
     }
   }
 }

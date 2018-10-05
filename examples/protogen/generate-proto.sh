@@ -63,6 +63,7 @@ if [ $? -eq 0 ]
 then
   echo -e "\n//End of auto-generated messages.\n" >> $OUTPUT_PATH/datatypes.proto
   cat $MANUAL_ADDITIONS_ROOT/extension_proto.txt >> $OUTPUT_PATH/datatypes.proto
+  cat $MANUAL_ADDITIONS_ROOT/fixed_coding_proto.txt >> $OUTPUT_PATH/datatypes.proto
   cat $MANUAL_ADDITIONS_ROOT/reference_proto.txt >> $OUTPUT_PATH/datatypes.proto
   cat $MANUAL_ADDITIONS_ROOT/codes_proto.txt >> $OUTPUT_PATH/datatypes.proto
 fi

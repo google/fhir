@@ -165,7 +165,8 @@ public final class ProtoFilePrinterTest {
   }
 
   private static final ImmutableSet<String> TYPES_TO_IGNORE =
-      ImmutableSet.of("Extension", "Reference", "ReferenceId");
+      ImmutableSet.of(
+          "Extension", "Reference", "ReferenceId", "CodingWithFixedCode", "CodingWithFixedSystem");
 
   private List<StructureDefinition> getResourcesInFile(FileDescriptor compiled) throws IOException {
     List<StructureDefinition> resourceDefinitions = new ArrayList<>();

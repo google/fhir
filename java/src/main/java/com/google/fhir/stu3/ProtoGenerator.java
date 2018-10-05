@@ -24,6 +24,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.MoreCollectors;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.BindingStrengthCode;
+import com.google.fhir.stu3.proto.CodeableConcept;
+import com.google.fhir.stu3.proto.CodingWithFixedCode;
+import com.google.fhir.stu3.proto.CodingWithFixedSystem;
 import com.google.fhir.stu3.proto.ContainedResource;
 import com.google.fhir.stu3.proto.ElementDefinition;
 import com.google.fhir.stu3.proto.ElementDefinitionBindingName;
@@ -124,6 +127,8 @@ public class ProtoGenerator {
   // are defined on.
   private final ImmutableMap<String, String> knownStructureDefinitionPackages;
 
+  private final ImmutableMap<String, StructureDefinition> knownStructureDefinitions;
+
   // The package to write new protos to.
   // When regenerating proto files defined by the fhir spec like Decimal or Patient, this will equal
   // the static constant CORE_FHIR_PACKAGE.
@@ -190,6 +195,7 @@ public class ProtoGenerator {
 
     Map<String, String> mutableStructureDefinitionTypes = new HashMap<>();
     Map<String, String> mutableStructureDefinitionPackages = new HashMap<>();
+    Map<String, StructureDefinition> mutableStructureDefinitions = new HashMap<>();
     for (Map.Entry<StructureDefinition, String> knownType : knownTypes.entrySet()) {
       StructureDefinition def = knownType.getKey();
       String protoPackage = knownType.getValue();
@@ -205,9 +211,11 @@ public class ProtoGenerator {
               ? getSimpleExtensionDefinitionType(def)
               : getTypeName(def));
       mutableStructureDefinitionPackages.put(url, protoPackage);
+      mutableStructureDefinitions.put(url, def);
     }
     this.knownStructureDefinitionTypes = ImmutableMap.copyOf(mutableStructureDefinitionTypes);
     this.knownStructureDefinitionPackages = ImmutableMap.copyOf(mutableStructureDefinitionPackages);
+    this.knownStructureDefinitions = ImmutableMap.copyOf(mutableStructureDefinitions);
   }
 
   private static ImmutableMap<String, String> getRenamedCodeTypes() {
@@ -252,6 +260,7 @@ public class ProtoGenerator {
     renamedCodeTypes.put("ReferralPriorityCode", "RequestPriorityCode");
     renamedCodeTypes.put("ReferredDocumentStatusCode", "CompositionStatusCode");
     renamedCodeTypes.put("RiskAssessmentStatusCode", "ObservationStatusCode");
+    renamedCodeTypes.put("StatusCode", "ObservationStatusCode");
     renamedCodeTypes.put("SectionModeCode", "ListModeCode");
     renamedCodeTypes.put("StatusCode", "ObservationStatusCode");
     renamedCodeTypes.put("TaskIntentCode", "RequestIntentCode");
@@ -520,29 +529,118 @@ public class ProtoGenerator {
       }
 
       // If this is a container type, or a complex internal extension, define the inner message.
+      // If this is a CodeableConcept, check for fixed coding slices.  Normally we don't add a
+      // message for CodeableConcept because it's defined as a datatype, but if there are slices
+      // on it we need to generate a custom version.
       if (isContainer(element) || isComplexInternalExtension(element, elementList)) {
         builder.addNestedType(generateMessage(element, elementList, DescriptorProto.newBuilder()));
+      } else if (element.getTypeCount() == 1
+          && element.getType(0).getCode().getValue().equals("CodeableConcept")) {
+        List<ElementDefinition> codingSlices =
+            getDirectChildren(element, elementList).stream()
+                .filter(candidateElement -> candidateElement.hasSliceName())
+                .collect(Collectors.toList());
+        if (!codingSlices.isEmpty()) {
+          builder.addNestedType(addProfiledCodeableConcept(element, elementList, codingSlices));
+        }
       }
     }
+    // TODO(nickgeorge): for null fields, emit an "empty" field that just has a comment about the
+    // dropped field, to make it more obvious why numbers are skipped
+  }
+
+  private DescriptorProto addProfiledCodeableConcept(
+      ElementDefinition element,
+      List<ElementDefinition> elementList,
+      List<ElementDefinition> codingSlices) {
+    String codeableConceptStructDefUrl =
+        CodeableConcept.getDescriptor()
+            .getOptions()
+            .getExtension(Annotations.fhirStructureDefinitionUrl);
+    StructureDefinition codeableConceptDefinition =
+        knownStructureDefinitions.get(codeableConceptStructDefUrl);
+    String fieldType = getFieldType(element, elementList);
+    DescriptorProto.Builder codeableConceptBuilder =
+        generateProto(codeableConceptDefinition).toBuilder();
+    codeableConceptBuilder.setName(fieldType.substring(fieldType.lastIndexOf(".") + 1));
+    codeableConceptBuilder
+        .getOptionsBuilder()
+        .clearExtension(Annotations.structureDefinitionKind)
+        .clearExtension(Annotations.fhirStructureDefinitionUrl)
+        .setExtension(Annotations.fhirProfileBase, codeableConceptStructDefUrl);
+
+    for (ElementDefinition codingSlice : codingSlices) {
+      String fixedSystem = null;
+      ElementDefinition codeDefinition = null;
+      for (ElementDefinition codingField : getDirectChildren(codingSlice, elementList)) {
+        String basePath = codingField.getBase().getPath().getValue();
+        if (basePath.equals("Coding.system")) {
+          fixedSystem = codingField.getFixed().getUri().getValue();
+        }
+        if (basePath.equals("Coding.code")) {
+          codeDefinition = codingField;
+        }
+      }
+      if (fixedSystem == null || codeDefinition == null) {
+        System.out.println(
+            "Warning: Coding slicing not handled because it does not have both a fixed system and a"
+                + " code slice:\n"
+                + codingSlice.getId());
+      }
+
+      if (codeDefinition.getFixed().hasCode()) {
+        FieldDescriptorProto.Builder codingField =
+            FieldDescriptorProto.newBuilder()
+                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                .setTypeName(CodingWithFixedCode.getDescriptor().getFullName())
+                .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
+                .setLabel(getFieldSize(element))
+                .setNumber(codeableConceptBuilder.getFieldCount() + 1);
+        codingField
+            .getOptionsBuilder()
+            .setExtension(Annotations.fhirInlinedCodingSystem, fixedSystem)
+            .setExtension(
+                Annotations.fhirInlinedCodingCode, codeDefinition.getFixed().getCode().getValue());
+        codeableConceptBuilder.addField(codingField);
+      } else {
+        FieldDescriptorProto.Builder codingField =
+            FieldDescriptorProto.newBuilder()
+                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                .setTypeName(getFieldType(codeDefinition, elementList))
+                .setName(CodingWithFixedSystem.getDescriptor().getFullName())
+                .setLabel(getFieldSize(element))
+                .setNumber(codeableConceptBuilder.getFieldCount() + 1);
+        codingField
+            .getOptionsBuilder()
+            .setExtension(Annotations.fhirInlinedCodingSystem, fixedSystem);
+        codeableConceptBuilder.addField(codingField);
+      }
+    }
+
+    return codeableConceptBuilder.build();
   }
 
   private static List<ElementDefinition> getDirectChildren(
       ElementDefinition element, List<ElementDefinition> elementList) {
     List<String> messagePathParts = Splitter.on('.').splitToList(element.getId().getValue());
-    return elementList
-        .stream()
+    return getDescendants(element, elementList).stream()
         .filter(
             candidateElement -> {
               List<String> parts =
                   Splitter.on('.').splitToList(candidateElement.getId().getValue());
               // To be a direct child, the id should start with the parent id, and add a single
               // additional token.
-              return candidateElement
-                      .getId()
-                      .getValue()
-                      .startsWith(element.getId().getValue() + ".")
-                  && parts.size() == messagePathParts.size() + 1;
+              return parts.size() == messagePathParts.size() + 1;
             })
+        .collect(Collectors.toList());
+  }
+
+  private static List<ElementDefinition> getDescendants(
+      ElementDefinition element, List<ElementDefinition> elementList) {
+    // The id of descendants should start with the parent id + at least one more token.
+    String parentIdPrefix = element.getId().getValue() + ".";
+    return elementList.stream()
+        .filter(candidateElement -> candidateElement.getId().getValue().startsWith(parentIdPrefix))
         .collect(Collectors.toList());
   }
 
@@ -658,7 +756,7 @@ public class ProtoGenerator {
   }
 
   /** Returns true if this ElementDefinition is an extension with a profile. */
-  private static boolean isTypedExtension(ElementDefinition element) {
+  private static boolean isExternalExtension(ElementDefinition element) {
     return element.getTypeCount() == 1
         && element.getType(0).getCode().getValue().equals("Extension")
         && element.getType(0).hasProfile();
@@ -746,14 +844,29 @@ public class ProtoGenerator {
       }
       // Note: this is the "fhir type", e.g., Resource, BackboneElement, boolean,
       // not the field type name.
-      ElementDefinition.TypeRef fhirType = Iterables.getOnlyElement(element.getTypeList());
+      String normalizedFhirTypeName =
+          normalizeType(Iterables.getOnlyElement(element.getTypeList()));
 
-      if (fhirType.getCode().getValue().equals("Resource")) {
+      if (descendantsHaveSlices(element, elementList)) {
+        // This is not a backbone element, but it has children that have slices.  This means we
+        // cannot use the "stock" FHIR datatype here.
+        // A common example of this is CodeableConcepts.  These are not themselves sliced, but the
+        // repeated coding field on CodeableConcept can be.
+        // This means we have to generate a nested CodeableConcept message that has these additional
+        // fields.
+        String containerType = getContainerType(element, elementList);
+        int lastDotIndex = containerType.lastIndexOf(".");
+        return containerType.substring(0, lastDotIndex + 1)
+            + normalizedFhirTypeName
+            + "For"
+            + containerType.substring(lastDotIndex + 1);
+      }
+
+      if (normalizedFhirTypeName.equals("Resource")) {
         // We represent "Resource" FHIR types as "ContainedResource"
         return "ContainedResource";
       }
 
-      String normalizedFhirTypeName = normalizeType(fhirType);
       if (normalizedFhirTypeName.equals("Code")) {
         // If this is a code, check for a binding name and handle it here.
         String bindingName = getBindingName(element);
@@ -786,6 +899,12 @@ public class ProtoGenerator {
   /** Build a single field for the proto. */
   private FieldDescriptorProto buildField(
       ElementDefinition element, List<ElementDefinition> elementList, int nextTag) {
+    FieldDescriptorProto.Label fieldSize = getFieldSize(element);
+    if (fieldSize == null) {
+      // This field has a max size of zero.  Do not emit a field.
+      return null;
+    }
+
     FieldOptions.Builder options = FieldOptions.newBuilder();
 
     // Add a short description of the field.
@@ -800,20 +919,9 @@ public class ProtoGenerator {
     } else if (element.getMin().getValue() != 0) {
       System.out.println("Unexpected minimum field count: " + element.getMin().getValue());
     }
-
-    // Is this field repeated?
-    boolean repeated;
-    if (element.getMax().getValue().equals("0")) {
-      // This field doesn't actually exist.
-      return null;
-    } else if (element.getMax().getValue().equals("1")) {
-      repeated = false;
-    } else {
-      repeated = true;
-    }
-
     String jsonFieldNameString = getJsonNameForElement(element);
-    if (isTypedExtension(element)) {
+
+    if (isExternalExtension(element)) {
       // This is an extension with a type defined by an external profile.
       // If we know about it, we'll inline a field for it.
       // Otherwise, we'll return null here, which means it'll get ignored
@@ -832,7 +940,7 @@ public class ProtoGenerator {
               fieldTypeString,
               knownStructureDefinitionPackages.get(profileUrl),
               nextTag,
-              repeated,
+              fieldSize,
               options.build())
           .build();
     }
@@ -877,9 +985,19 @@ public class ProtoGenerator {
             getFieldType(element, elementList),
             fieldPackage,
             nextTag,
-            repeated,
+            fieldSize,
             options.build())
         .build();
+  }
+
+  private FieldDescriptorProto.Label getFieldSize(ElementDefinition element) {
+    if (element.getMax().getValue().equals("0")) {
+      // This field doesn't actually exist.
+      return null;
+    }
+    return element.getMax().getValue().equals("1")
+        ? FieldDescriptorProto.Label.LABEL_OPTIONAL
+        : FieldDescriptorProto.Label.LABEL_REPEATED;
   }
 
   /**
@@ -904,6 +1022,12 @@ public class ProtoGenerator {
               + element.getSliceName());
     }
     return toJsonCase(sliceName);
+  }
+
+  private static boolean descendantsHaveSlices(
+      ElementDefinition element, List<ElementDefinition> elementList) {
+    return getDescendants(element, elementList).stream()
+        .anyMatch(candidate -> candidate.hasSliceName());
   }
 
   // Given a potential slice field name and an element, returns true if that slice name would
@@ -967,7 +1091,7 @@ public class ProtoGenerator {
                   fieldType,
                   CORE_FHIR_PACKAGE,
                   nextTag++,
-                  false,
+                  FieldDescriptorProto.Label.LABEL_OPTIONAL,
                   FieldOptions.getDefaultInstance())
               .setOneofIndex(0);
       // TODO(sundberg): change the oneof name to avoid this.
@@ -985,17 +1109,13 @@ public class ProtoGenerator {
       String fieldType,
       String fieldPackage,
       int tag,
-      boolean repeated,
+      FieldDescriptorProto.Label size,
       FieldOptions options) {
     FieldDescriptorProto.Builder builder =
         FieldDescriptorProto.newBuilder()
             .setNumber(tag)
             .setType(FieldDescriptorProto.Type.TYPE_MESSAGE);
-    if (repeated) {
-      builder.setLabel(FieldDescriptorProto.Label.LABEL_REPEATED);
-    } else {
-      builder.setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL);
-    }
+    builder.setLabel(size);
 
     List<String> fieldTypeParts = new ArrayList<>();
     for (String part : Splitter.on('.').split(fieldType)) {

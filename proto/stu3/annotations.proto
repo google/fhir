@@ -84,9 +84,39 @@ extend google.protobuf.FieldOptions {
   // A brief description of the intended use of this field.
   string field_description = 190357977;
 
-  // If this field is an inlined fhir extension, this is the
-  // extension identifier.
+  // If this field has slices on it, this indicates the subfield to slice it by
+  // (slicing.discriminator.path in the structure definition).
+  string fhir_slice_by = 211855060;
+
+  // This field is a slice of another field with this name.
+  string fhir_slice_of = 211842556;
+
+  // If this field is a slice, this is the value of the field indicated by the
+  // fhir_slice_by_field on the main field that should be placed in this slice.
+  string fhir_slice_value = 211855323;
+
+  // Indicates the url for an extension slice.
+  // This is a special case of the fhir_slice_value annotation that implies:
+  // * fhir_slice_by = "url"  on the extension field
+  // * fhir_slice_of = "extension" on this field
+  // This has the additional behavior of inlining simple extensions (i.e.,
+  // extensions with a value, rather than sub-extensions) as the value
+  // itself.
   string fhir_inlined_extension_url = 206340037;
+
+  // Indicates the system for a coding slice within a codeable concept.
+  // This is a special case of the fhir_slice_value annotation that implies:
+  // * fhir_slice_by = "code"  on the coding field
+  // * fhir_slice_of = "coding" on this field
+  // This has the additional behavior of inlining the code directly, instead
+  // of a coding with fixed system.
+  string fhir_inlined_coding_system = 211854975;
+
+  // Indicates the code for a coding slice within a codeable concept.
+  // This should only be used on fields that have fhir_inlined_coding_system
+  // set.  In addition to the implications of fhir_inlined_coding_system,
+  // this also sets a fixed code.
+  string fhir_inlined_coding_code = 212122564;
 }
 
 extend google.protobuf.OneofOptions {

@@ -70,6 +70,7 @@ public class ProtoGeneratorTest {
           "extensions/extension-observation-geneticsphaseset.json",
           "extensions/extension-observation-geneticssequence.json",
           "extensions/extension-procedurerequest-geneticsitem.json",
+          "structure_definitions/codeableconcept.profile.json",
           "structure_definitions/money.profile.json",
           "structure_definitions/simplequantity.profile.json");
 
@@ -167,13 +168,14 @@ public class ProtoGeneratorTest {
     registry.add(Annotations.fhirOneofIsOptional);
     registry.add(Annotations.fieldDescription);
     registry.add(Annotations.messageDescription);
-    registry.add(Annotations.fhirExtensionUrl);
     registry.add(Annotations.fhirReferenceType);
     registry.add(Annotations.fhirStructureDefinitionUrl);
     registry.add(Annotations.valueRegex);
     registry.add(Annotations.fhirProfileBase);
     registry.add(Annotations.fhirStructureDefinitionUrl);
     registry.add(Annotations.fhirInlinedExtensionUrl);
+    registry.add(Annotations.fhirInlinedCodingCode);
+    registry.add(Annotations.fhirInlinedCodingSystem);
   }
 
   // Test the primitive FHIR data types individually. */
