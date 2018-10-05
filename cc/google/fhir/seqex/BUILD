@@ -51,6 +51,38 @@ cc_test(
 )
 
 cc_library(
+    name = "bundle_to_seqex_util",
+    srcs = ["bundle_to_seqex_util.cc"],
+    hdrs = ["bundle_to_seqex_util.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "//cc/google/fhir/seqex:bundle_to_seqex_converter",
+        "//cc/google/fhir/status:statusor",
+        "//cc/google/fhir/stu3:extensions",
+        "//cc/google/fhir/stu3:util",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:extensions_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "@com_google_absl//absl/time",
+        "@org_tensorflow//tensorflow/core:lib",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "bundle_to_seqex_util_test",
+    srcs = ["bundle_to_seqex_util_test.cc"],
+    deps = [
+        ":bundle_to_seqex_util",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:extensions_cc_proto",
+        "@com_google_googletest//:gtest_main",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_library(
     name = "example_key",
     srcs = ["example_key.cc"],
     hdrs = ["example_key.h"],

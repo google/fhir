@@ -387,6 +387,28 @@ Status GetDecimalValue(const stu3::proto::Decimal& decimal, double* value) {
   return Status::OK();
 }
 
+Status GetResourceFromBundleEntry(const Bundle::Entry& entry,
+                                  const Message** result) {
+  auto got_value = GetContainedResource(entry.resource());
+  TF_RETURN_IF_ERROR(got_value.status());
+  *result = got_value.ValueOrDie();
+  return Status::OK();
+}
+
+StatusOr<const google::protobuf::RepeatedFieldRef<stu3::proto::Extension>>
+GetResourceExtensionsFromBundleEntry(const Bundle::Entry& entry) {
+  const Message* resource;
+  TF_RETURN_IF_ERROR(GetResourceFromBundleEntry(entry, &resource));
+  const google::protobuf::Reflection* ref = resource->GetReflection();
+  // Get the bundle field corresponding to this resource.
+  const google::protobuf::FieldDescriptor* field =
+      resource->GetDescriptor()->FindFieldByName("extension");
+  if (field == nullptr) {
+    return ::tensorflow::errors::NotFound("No extension field.");
+  }
+  return ref->GetRepeatedFieldRef<stu3::proto::Extension>(*resource, field);
+}
+
 }  // namespace stu3
 }  // namespace fhir
 }  // namespace google

@@ -41,6 +41,7 @@ using std::string;
 using ::google::fhir::stu3::proto::Bundle;
 using ::google::fhir::stu3::proto::CodeableConcept;
 using ::google::fhir::stu3::proto::ContainedResource;
+using ::google::fhir::stu3::proto::Extension;
 using ::google::fhir::stu3::proto::Patient;
 using ::google::fhir::stu3::proto::Reference;
 
@@ -118,6 +119,15 @@ template <typename R>
 const stu3::proto::Meta& GetMetadataFromResource(const R& resource) {
   return resource.meta();
 }
+
+// Extracts and returns the FHIR resource from a bundle entry.
+Status GetResourceFromBundleEntry(const Bundle::Entry& entry,
+                                  const ::google::protobuf::Message** result);
+
+// Extracts and returns the FHIR extension list from the resource field in
+// a bundle entry.
+StatusOr<const ::google::protobuf::RepeatedFieldRef<Extension>>
+GetResourceExtensionsFromBundleEntry(const Bundle::Entry& entry);
 
 }  // namespace stu3
 }  // namespace fhir

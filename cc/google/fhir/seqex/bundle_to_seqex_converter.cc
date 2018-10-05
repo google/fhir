@@ -79,31 +79,6 @@ namespace {
 
 // From http://hl7.org/fhir/v3/ActCode
 const char kClassInpatient[] = "IMP";
-
-bool EncounterIsFinished(const Encounter& encounter) {
-  return encounter.period().has_start() && encounter.period().has_end() &&
-         encounter.status().value() == EncounterStatusCode::FINISHED;
-}
-
-bool EncounterIsValidHospitalization(const Encounter& encounter) {
-  return EncounterIsFinished(encounter) &&
-         encounter.class_value().system().value() == systems::kEncounterClass &&
-         encounter.class_value().code().value() == kClassInpatient;
-}
-
-const std::vector<const Encounter*> InpatientEncounters(const Bundle& bundle) {
-  std::vector<const Encounter*> result;
-  for (const auto& entry : bundle.entry()) {
-    if (entry.resource().has_encounter()) {
-      const Encounter* encounter = &entry.resource().encounter();
-      if (EncounterIsValidHospitalization(*encounter)) {
-        CHECK(encounter->period().has_end()) << encounter->DebugString();
-        result.push_back(encounter);
-      }
-    }
-  }
-  return result;
-}
 bool FeaturePrefixMatch(const string& feature,
                         const std::set<string>& prefix_set) {
   string name = feature;
