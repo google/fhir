@@ -125,7 +125,12 @@ message Bmi {
   repeated Reference performer = 18;
 
   // Vital Sign Value recorded with UCUM
-  Quantity value_quantity = 19;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -215,7 +220,12 @@ message Bmi {
     CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Vital Sign Value recorded with UCUM
-    Quantity value_quantity = 5;
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -328,7 +338,12 @@ message Bodyheight {
   repeated Reference performer = 18;
 
   // Vital Sign Value recorded with UCUM
-  Quantity value_quantity = 19;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -418,7 +433,12 @@ message Bodyheight {
     CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Vital Sign Value recorded with UCUM
-    Quantity value_quantity = 5;
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -531,7 +551,12 @@ message Bodylength {
   repeated Reference performer = 18;
 
   // Vital Sign Value recorded with UCUM
-  Quantity value_quantity = 19;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -621,7 +646,12 @@ message Bodylength {
     CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Vital Sign Value recorded with UCUM
-    Quantity value_quantity = 5;
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -734,7 +764,12 @@ message Bodytemp {
   repeated Reference performer = 18;
 
   // Vital Sign Value recorded with UCUM
-  Quantity value_quantity = 19;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -824,7 +859,12 @@ message Bodytemp {
     CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Vital Sign Value recorded with UCUM
-    Quantity value_quantity = 5;
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -937,7 +977,12 @@ message Bodyweight {
   repeated Reference performer = 18;
 
   // Vital Sign Value recorded with UCUM
-  Quantity value_quantity = 19;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -1027,7 +1072,12 @@ message Bodyweight {
     CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Vital Sign Value recorded with UCUM
-    Quantity value_quantity = 5;
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -1256,7 +1306,12 @@ message Bp {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Vital Sign Value recorded with UCUM
-    Quantity value_quantity = 5;
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -1309,7 +1364,12 @@ message Bp {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Vital Sign Value recorded with UCUM
-    Quantity value_quantity = 5;
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -1395,7 +1455,12 @@ message Cholesterol {
   repeated Reference performer = 18;
 
   // Cholesterol value
-  Quantity value_quantity = 19;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -1714,8 +1779,13 @@ message Devicemetricobservation {
   Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Clinically relevant time/time-period for observation
-  DateTime effective_date_time = 16
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  message Effective {
+    oneof effective {
+      DateTime date_time = 1;
+    }
+  }
+  Effective effective = 16
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who is responsible for the observation
   repeated Reference performer = 18;
@@ -1726,13 +1796,13 @@ message Devicemetricobservation {
       Quantity quantity = 1;
       CodeableConcept codeable_concept = 2;
       String string_value = 3 [json_name = "string"];
-      Range range = 4;
-      Ratio ratio = 5;
-      SampledData sampled_data = 6;
-      Attachment attachment = 7;
-      Time time = 8;
-      DateTime date_time = 9;
-      Period period = 10;
+      Range range = 5;
+      Ratio ratio = 6;
+      SampledData sampled_data = 7;
+      Attachment attachment = 8;
+      Time time = 9;
+      DateTime date_time = 10;
+      Period period = 11;
     }
   }
   Value value = 19 [(is_choice_type) = true];
@@ -2393,14 +2463,14 @@ message FamilymemberhistoryGenetic {
   Born born = 19 [(is_choice_type) = true];
 
   // (approximate) age
-  message AgeType {
+  message Age {
     oneof age {
       Age age_value = 1 [json_name = "age"];
       Range range = 2;
       String string_value = 3 [json_name = "string"];
     }
   }
-  AgeType age = 20 [(is_choice_type) = true];
+  Age age = 20 [(is_choice_type) = true];
 
   // Age is estimated?
   Boolean estimated_age = 21;
@@ -2550,7 +2620,12 @@ message Hdlcholesterol {
   repeated Reference performer = 18;
 
   // HDL Cholesterol value
-  Quantity value_quantity = 19;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -2735,7 +2810,12 @@ message Headcircum {
   repeated Reference performer = 18;
 
   // Vital Sign Value recorded with UCUM
-  Quantity value_quantity = 19;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -2825,7 +2905,12 @@ message Headcircum {
     CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Vital Sign Value recorded with UCUM
-    Quantity value_quantity = 5;
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -2938,7 +3023,12 @@ message Heartrate {
   repeated Reference performer = 18;
 
   // Vital Sign Value recorded with UCUM
-  Quantity value_quantity = 19;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -3028,7 +3118,12 @@ message Heartrate {
     CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Vital Sign Value recorded with UCUM
-    Quantity value_quantity = 5;
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -3265,7 +3360,12 @@ message Ldlcholesterol {
   repeated Reference performer = 18;
 
   // LDL Cholesterol value
-  Quantity value_quantity = 19;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -3950,7 +4050,12 @@ message Oxygensat {
   repeated Reference performer = 18;
 
   // Vital Sign Value recorded with UCUM
-  Quantity value_quantity = 19;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -4040,7 +4145,12 @@ message Oxygensat {
     CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Vital Sign Value recorded with UCUM
-    Quantity value_quantity = 5;
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -4301,7 +4411,12 @@ message Resprate {
   repeated Reference performer = 18;
 
   // Vital Sign Value recorded with UCUM
-  Quantity value_quantity = 19;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -4391,7 +4506,12 @@ message Resprate {
     CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Vital Sign Value recorded with UCUM
-    Quantity value_quantity = 5;
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -5000,7 +5120,12 @@ message Triglyceride {
   repeated Reference performer = 18;
 
   // Triglyceride value
-  Quantity value_quantity = 19;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -5160,7 +5285,12 @@ message Vitalsigns {
   repeated Reference performer = 18;
 
   // Vital Sign Value recorded with UCUM
-  Quantity value_quantity = 19;
+  message Value {
+    oneof value {
+      Quantity quantity = 1;
+    }
+  }
+  Value value = 19 [(is_choice_type) = true];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -5250,7 +5380,12 @@ message Vitalsigns {
     CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Vital Sign Value recorded with UCUM
-    Quantity value_quantity = 5;
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -5450,7 +5585,12 @@ message Vitalspanel {
     CodeableConcept code = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Vital Sign Value recorded with UCUM
-    Quantity value_quantity = 5;
+    message Value {
+      oneof value {
+        Quantity quantity = 1;
+      }
+    }
+    Value value = 5 [(is_choice_type) = true];
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;

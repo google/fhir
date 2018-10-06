@@ -33,18 +33,19 @@ import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.FileDescriptor;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,6 +60,8 @@ public final class ProtoFilePrinterTest {
   private ProtoFilePrinter protoPrinter;
   private Runfiles runfiles;
 
+  private static Map<StructureDefinition, String> knownStructDefs = null;
+
   /** Read and parse the specified StructureDefinition. */
   private StructureDefinition readStructureDefinition(String relativePath) throws IOException {
     File file =
@@ -67,6 +70,32 @@ public final class ProtoFilePrinterTest {
     StructureDefinition.Builder builder = StructureDefinition.newBuilder();
     jsonParser.merge(json, builder);
     return builder.build();
+  }
+
+  public Map<StructureDefinition, String> getKnownStructDefs() throws IOException {
+    if (knownStructDefs != null) {
+      return knownStructDefs;
+    }
+    // Note: consentdirective is malformed.
+    FilenameFilter jsonFilter =
+        (dir, name) -> name.endsWith(".json") && !name.endsWith("consentdirective.profile.json");
+    List<File> structDefs = new ArrayList<>();
+    Collections.addAll(
+        structDefs,
+        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/structure_definitions"))
+            .listFiles(jsonFilter));
+    Collections.addAll(
+        structDefs,
+        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/extensions"))
+            .listFiles(jsonFilter));
+    knownStructDefs = new HashMap<>();
+    for (File file : structDefs) {
+      String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
+      StructureDefinition.Builder builder = StructureDefinition.newBuilder();
+      jsonParser.merge(json, builder);
+      knownStructDefs.put(builder.build(), "google.fhir.stu3.proto");
+    }
+    return knownStructDefs;
   }
 
   /**
@@ -192,8 +221,7 @@ public final class ProtoFilePrinterTest {
             Optional.of("com.google.fhir.stu3.proto"),
             Optional.empty(),
             "proto/stu3",
-            getResourcesInFile(Extension.getDescriptor().getFile()).stream()
-                .collect(Collectors.toMap(Function.identity(), def -> packageName)));
+            getKnownStructDefs());
     protoPrinter = new ProtoFilePrinter().withApacheLicense();
   }
 
@@ -256,9 +284,7 @@ public final class ProtoFilePrinterTest {
             .sorted()
             .toArray(String[]::new);
     List<StructureDefinition> extensionDefinitions = new ArrayList<>();
-    System.err.println(extensionNames.length);
     for (String extensionName : extensionNames) {
-      System.err.println(extensionName);
       extensionDefinitions.add(readStructureDefinition("extensions/" + extensionName));
     }
     FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(extensionDefinitions);

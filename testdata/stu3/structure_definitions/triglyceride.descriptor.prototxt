@@ -183,12 +183,13 @@ field {
   }
 }
 field {
-  name: "value_quantity"
+  name: "value"
   number: 19
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Quantity"
+  type_name: ".google.fhir.stu3.proto.Triglyceride.Value"
   options {
+    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Triglyceride value"
   }
 }
@@ -303,6 +304,20 @@ nested_type {
   }
   oneof_decl {
     name: "effective"
+  }
+}
+nested_type {
+  name: "Value"
+  field {
+    name: "quantity"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Quantity"
+    oneof_index: 0
+  }
+  oneof_decl {
+    name: "value"
   }
 }
 nested_type {

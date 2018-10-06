@@ -143,13 +143,14 @@ field {
   }
 }
 field {
-  name: "effective_date_time"
+  name: "effective"
   number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.DateTime"
+  type_name: ".google.fhir.stu3.proto.Devicemetricobservation.Effective"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Clinically relevant time/time-period for observation"
   }
 }
@@ -256,6 +257,20 @@ field {
   }
 }
 nested_type {
+  name: "Effective"
+  field {
+    name: "date_time"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.DateTime"
+    oneof_index: 0
+  }
+  oneof_decl {
+    name: "effective"
+  }
+}
+nested_type {
   name: "Value"
   field {
     name: "quantity"
@@ -284,7 +299,7 @@ nested_type {
   }
   field {
     name: "range"
-    number: 4
+    number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Range"
@@ -292,7 +307,7 @@ nested_type {
   }
   field {
     name: "ratio"
-    number: 5
+    number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Ratio"
@@ -300,7 +315,7 @@ nested_type {
   }
   field {
     name: "sampled_data"
-    number: 6
+    number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SampledData"
@@ -308,7 +323,7 @@ nested_type {
   }
   field {
     name: "attachment"
-    number: 7
+    number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Attachment"
@@ -316,7 +331,7 @@ nested_type {
   }
   field {
     name: "time"
-    number: 8
+    number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Time"
@@ -324,7 +339,7 @@ nested_type {
   }
   field {
     name: "date_time"
-    number: 9
+    number: 10
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.DateTime"
@@ -332,7 +347,7 @@ nested_type {
   }
   field {
     name: "period"
-    number: 10
+    number: 11
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Period"

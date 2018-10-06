@@ -580,12 +580,13 @@ nested_type {
     }
   }
   field {
-    name: "value_quantity"
+    name: "value"
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.Bp.SystolicBP.Value"
     options {
+      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Vital Sign Value recorded with UCUM"
     }
   }
@@ -677,6 +678,20 @@ nested_type {
       [google.fhir.stu3.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/CodeableConcept"
     }
   }
+  nested_type {
+    name: "Value"
+    field {
+      name: "quantity"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Quantity"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "value"
+    }
+  }
 }
 nested_type {
   name: "DiastolicBP"
@@ -722,12 +737,13 @@ nested_type {
     }
   }
   field {
-    name: "value_quantity"
+    name: "value"
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Quantity"
+    type_name: ".google.fhir.stu3.proto.Bp.DiastolicBP.Value"
     options {
+      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Vital Sign Value recorded with UCUM"
     }
   }
@@ -817,6 +833,20 @@ nested_type {
     options {
       [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for CodeableConcept.\nConcept - reference to a terminology or just  text.\nSee http://hl7.org/fhir/StructureDefinition/CodeableConcept"
       [google.fhir.stu3.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/CodeableConcept"
+    }
+  }
+  nested_type {
+    name: "Value"
+    field {
+      name: "quantity"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.stu3.proto.Quantity"
+      oneof_index: 0
+    }
+    oneof_decl {
+      name: "value"
     }
   }
 }
