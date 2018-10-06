@@ -14,7 +14,8 @@
 # limitations under the License.
 """Client for FHIR bulk-data protocol.
 
-See https://github.com/smart-on-fhir/fhir-bulk-data-docs for details on this API.
+See https://github.com/smart-on-fhir/fhir-bulk-data-docs for details on this
+API.
 Possible bulkdata servers to read from:
  * https://bulk-data.smarthealthit.org
  * https://test.fhir.org/r3
@@ -32,9 +33,7 @@ from absl import flags
 import requests
 
 FLAGS = flags.FLAGS
-flags.DEFINE_string("server", ("https://fhir-open.stagingcerner.com/r4/"
-                               "a758f80e-aa74-4118-80aa-98cc75846c76/"),
-                    "URL of FHIR server")
+flags.DEFINE_string("server", None, "URL of FHIR server")
 flags.DEFINE_string("group_id", None, "Group ID. If none, fetch all patients")
 flags.DEFINE_string("epic_client_id", None, "Client ID for Epic servers")
 flags.DEFINE_boolean("debug", False, "Print debug info")

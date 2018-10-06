@@ -15,6 +15,7 @@
 
 
 if [[ $# -eq 0 ]] ; then
-    echo 'Usage: bazel run bulkload -- --help'
+    echo 'Missing argument: server url'
+    exit 1
 fi
 bazel run bulkload -- --server $1
