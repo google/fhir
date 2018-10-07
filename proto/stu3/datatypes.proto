@@ -1287,7 +1287,7 @@ message CodingWithFixedSystem {
   // Additional Content defined by implementations
   repeated Extension extension = 2;
 
-  // Field 3: system omitted.
+  reserved 3;  // system omitted.
 
   // Version of the system - if relevant
   String version = 4;
@@ -1316,12 +1316,12 @@ message CodingWithFixedCode {
   // Additional Content defined by implementations
   repeated Extension extension = 2;
 
-  // Field 3: system omitted.
+  reserved 3;  // system omitted.
 
   // Version of the system - if relevant
   String version = 4;
 
-  // Field 5: code omitted.
+  reserved 5;  // code omitted.
 
   // Representation defined by the system
   String display = 6;
