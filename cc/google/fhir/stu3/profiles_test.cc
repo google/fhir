@@ -19,6 +19,7 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/ascii.h"
 #include "google/fhir/stu3/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/datatypes.pb.h"
@@ -45,12 +46,27 @@ void TestProfile(const string& filename) {
   }
   EXPECT_THAT(
       profiled,
-      EqualsProto(ReadProto<P>(absl::StrCat(filename, "-profiled.prototxt"))));
+      EqualsProto(ReadProto<P>(
+          absl::StrCat(
+              filename,
+              "-profiled-",
+              absl::AsciiStrToLower(P::descriptor()->name()),
+              ".prototxt"))));
 }
 
 TEST(ProfilesTest, SimpleExtensions) {
   TestProfile<proto::Observation, proto::ObservationGenetics>(
       "examples/observation-example-genetics-1");
+}
+
+TEST(ProfilesTest, FixedCoding) {
+  TestProfile<proto::Observation, proto::Bodyheight>(
+      "examples/observation-example-body-height");
+}
+
+TEST(ProfilesTest, VitalSigns) {
+  TestProfile<proto::Observation, proto::Vitalsigns>(
+      "examples/observation-example-body-height");
 }
 
 }  // namespace

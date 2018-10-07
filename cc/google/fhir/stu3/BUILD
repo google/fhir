@@ -42,6 +42,7 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":extensions",
+        ":resource_validation",
         "//cc/google/fhir/status",
         "//proto/stu3:annotations_cc_proto",
         "//proto/stu3:datatypes_cc_proto",

@@ -24,6 +24,7 @@
 #include "absl/strings/str_cat.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/stu3/extensions.h"
+#include "google/fhir/stu3/resource_validation.h"
 #include "proto/stu3/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
@@ -35,50 +36,55 @@ namespace fhir {
 namespace stu3 {
 
 using std::string;
+using ::google::fhir::stu3::proto::CodeableConcept;
+using ::google::fhir::stu3::proto::Coding;
+using ::google::fhir::stu3::proto::CodingWithFixedCode;
+using ::google::fhir::stu3::proto::CodingWithFixedSystem;
 using ::google::fhir::stu3::proto::Extension;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
+using ::google::protobuf::FieldOptions;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
+using ::google::protobuf::RepeatedPtrField;
+using ::tensorflow::errors::InvalidArgument;
 
 namespace {
 
-// Finds any extensions on base_resource that correspond to inlined fields on
-// profiled_resource, and fills the inlined fields with the extension.
-Status PerformSlicing(const Message& base_resource,
-                      Message* profiled_resource) {
-  const Descriptor* profiled_descriptor = profiled_resource->GetDescriptor();
-  const Descriptor* base_descriptor = base_resource.GetDescriptor();
-  const Reflection* profiled_reflection = profiled_resource->GetReflection();
-  const Reflection* base_reflection = base_resource.GetReflection();
+const string GetCodeableConceptUrl() {
+  static const string url =
+      CodeableConcept::descriptor()->options().GetExtension(
+          stu3::proto::fhir_structure_definition_url);
+  return url;
+}
 
-  // Clear the extensions from the profiled_resource message, and then process
-  // all the extensions in the base_resource message into the profiled_resource
-  // message, either as profiled_resource extensions where possible, or else raw
-  // extensions.
-  profiled_reflection->ClearField(
-      profiled_resource, profiled_descriptor->FindFieldByName("extension"));
+// Finds any extensions that can be slotted into slices, and moves them.
+Status PerformExtensionSlicing(Message* message) {
+  const Descriptor* descriptor = message->GetDescriptor();
+  const Reflection* reflection = message->GetReflection();
+
+  const FieldDescriptor* extension_field =
+      descriptor->FindFieldByName("extension");
+  if (!extension_field) {
+    // Nothing to slice
+    return Status::OK();
+  }
 
   std::unordered_map<string, const FieldDescriptor*> extension_map;
-  for (int i = 0; i < profiled_descriptor->field_count(); i++) {
-    const FieldDescriptor* field = profiled_descriptor->field(i);
+  for (int i = 0; i < descriptor->field_count(); i++) {
+    const FieldDescriptor* field = descriptor->field(i);
     if (field->options().HasExtension(proto::fhir_inlined_extension_url)) {
       extension_map[field->options().GetExtension(
           proto::fhir_inlined_extension_url)] = field;
     }
   }
-  const FieldDescriptor* base_extension_field =
-      base_descriptor->FindFieldByName("extension");
-  const FieldDescriptor* profiled_extension_field =
-      profiled_descriptor->FindFieldByName("extension");
-  for (int i = 0;
-       i < base_reflection->FieldSize(base_resource, base_extension_field);
-       i++) {
-    const Extension& raw_extension =
-        dynamic_cast<const Extension&>(base_reflection->GetRepeatedMessage(
-            base_resource, base_extension_field, i));
-    const auto extension_entry_iter =
-        extension_map.find(raw_extension.url().value());
+
+  RepeatedPtrField<Message>* extensions =
+      reflection->MutableRepeatedPtrField<Message>(message, extension_field);
+  for (auto iter = extensions->begin(); iter != extensions->end();) {
+    Extension& raw_extension = dynamic_cast<Extension&>(*iter);
+    const string& url = raw_extension.url().value();
+    const auto extension_entry_iter = extension_map.find(url);
     if (extension_entry_iter != extension_map.end()) {
       // This extension can be sliced into an inlined field.
       const FieldDescriptor* inlined_field = extension_entry_iter->second;
@@ -93,77 +99,216 @@ Status PerformSlicing(const Message& base_resource,
             value.GetReflection()->GetOneofFieldDescriptor(
                 value, value.GetDescriptor()->FindOneofByName("value"));
         if (value_field == nullptr) {
-          return ::tensorflow::errors::InvalidArgument(
-              absl::StrCat("Invalid extension: ",
-                           "neither value nor extensions set on extension ",
-                           raw_extension.url().value()));
+          return InvalidArgument(
+              absl::StrCat("Invalid extension: neither value nor extensions "
+                           "set on extension ",
+                           url));
         }
         if (destination_type != value_field->message_type()) {
-          return ::tensorflow::errors::InvalidArgument(
-              "Profiled extension slice is incorrect type: ",
-              raw_extension.url().value(), "should be ",
+          return InvalidArgument(
+              "Profiled extension slice is incorrect type: ", url, "should be ",
               destination_type->full_name(), "but is ",
               value_field->message_type()->full_name());
         }
-        Message* typed_extension = inlined_field->is_repeated()
-                                       ? profiled_reflection->AddMessage(
-                                             profiled_resource, inlined_field)
-                                       : profiled_reflection->MutableMessage(
-                                             profiled_resource, inlined_field);
+        Message* typed_extension =
+            inlined_field->is_repeated()
+                ? reflection->AddMessage(message, inlined_field)
+                : reflection->MutableMessage(message, inlined_field);
         typed_extension->CopyFrom(
             value.GetReflection()->GetMessage(value, value_field));
       } else {
         // This is a complex extension
-        Message* typed_extension = inlined_field->is_repeated()
-                                       ? profiled_reflection->AddMessage(
-                                             profiled_resource, inlined_field)
-                                       : profiled_reflection->MutableMessage(
-                                             profiled_resource, inlined_field);
+        Message* typed_extension =
+            inlined_field->is_repeated()
+                ? reflection->AddMessage(message, inlined_field)
+                : reflection->MutableMessage(message, inlined_field);
         TF_RETURN_IF_ERROR(ExtensionToMessage(raw_extension, typed_extension));
       }
+      // Finally, remove the original from the unsliced extension field.
+      iter = extensions->erase(iter);
     } else {
       // There is no inlined field for this extension
-      profiled_reflection
-          ->AddMessage(profiled_resource, profiled_extension_field)
-          ->CopyFrom(raw_extension);
+      iter++;
     }
   }
-  // TODO(nickgeorge): add value-based slicing (e.g., codeable concept)
-  // TODO(nickgeorge): Perform slicing on submessages.
+  return Status::OK();
+}
+
+Status SliceCodingsInCodeableConcept(Message* codeable_concept_like) {
+  const Descriptor* descriptor = codeable_concept_like->GetDescriptor();
+  const Reflection* reflection = codeable_concept_like->GetReflection();
+
+  // For fixed system slices, map from System -> CodingWithFixedSystem slice
+  std::unordered_map<string, const FieldDescriptor*> fixed_systems;
+  // For fixed code slices, map from System -> {code, CodingWithFixedCode slice}
+  std::unordered_map<string, std::tuple<string, const FieldDescriptor*>>
+      fixed_codes;
+  for (int i = 0; i < descriptor->field_count(); i++) {
+    const FieldDescriptor* field = descriptor->field(i);
+    const FieldOptions& field_options = field->options();
+    if (field_options.HasExtension(proto::fhir_inlined_coding_system)) {
+      if (field->is_repeated()) {
+        return InvalidArgument("Unexpected repeated coding slice: ",
+                               field->full_name());
+      }
+      const string& fixed_system =
+          field_options.GetExtension(proto::fhir_inlined_coding_system);
+      if (field_options.HasExtension(proto::fhir_inlined_coding_code)) {
+        fixed_codes[fixed_system] = std::make_tuple(
+            field_options.GetExtension(proto::fhir_inlined_coding_code), field);
+      } else {
+        fixed_systems[fixed_system] = field;
+      }
+    }
+  }
+
+  const FieldDescriptor* coding_field = descriptor->FindFieldByName("coding");
+  if (!coding_field || !coding_field->is_repeated() ||
+      coding_field->message_type()->full_name() !=
+          Coding::descriptor()->full_name()) {
+    return InvalidArgument(
+        "Cannot slice CodeableConcept-like: ", descriptor->full_name(),
+        ".  No repeated coding field found.");
+  }
+
+  RepeatedPtrField<Message>* codings =
+      reflection->MutableRepeatedPtrField<Message>(codeable_concept_like,
+                                                   coding_field);
+  for (auto iter = codings->begin(); iter != codings->end();) {
+    Coding& coding = dynamic_cast<Coding&>(*iter);
+    const string& system = coding.system().value();
+    auto fixed_systems_iter = fixed_systems.find(system);
+    auto fixed_code_iter = fixed_codes.find(system);
+    if (fixed_systems_iter != fixed_systems.end()) {
+      const FieldDescriptor* field = fixed_systems_iter->second;
+      CodingWithFixedSystem* sliced_coding = dynamic_cast<CodingWithFixedSystem*>(
+          reflection->MutableMessage(codeable_concept_like, field));
+      coding.clear_system();
+      if (!sliced_coding->ParseFromString(coding.SerializeAsString())) {
+        return InvalidArgument(
+            "Unable to parse Coding as CodingWithFixedSystem: ",
+            coding.DebugString());
+      }
+      iter = codings->erase(iter);
+    } else if (fixed_code_iter != fixed_codes.end()) {
+      const std::tuple<const string, const FieldDescriptor*> code_field_tuple =
+          fixed_code_iter->second;
+      const string& code = std::get<0>(code_field_tuple);
+      const FieldDescriptor* field = std::get<1>(code_field_tuple);
+      if (coding.code().value() != code) {
+        return InvalidArgument("Invalid fixed code slice on ",
+                               field->full_name(), ": Expected code ", code,
+                               " for system ", system,
+                               ".  Found: ", coding.code().value());
+      }
+      CodingWithFixedCode* sliced_coding = dynamic_cast<CodingWithFixedCode*>(
+          reflection->MutableMessage(codeable_concept_like, field));
+      coding.clear_system();
+      coding.clear_code();
+      if (!sliced_coding->ParseFromString(coding.SerializeAsString())) {
+        return InvalidArgument(
+            "Unable to parse Coding as CodingWithFixedCode: ",
+            coding.DebugString());
+      }
+      iter = codings->erase(iter);
+    } else {
+      iter++;
+    }
+  }
+  return Status::OK();
+}
+
+Status PerformCodeableConceptSlicing(Message* message) {
+  const Descriptor* descriptor = message->GetDescriptor();
+  const Reflection* reflection = message->GetReflection();
+
+  for (int i = 0; i < descriptor->field_count(); i++) {
+    const FieldDescriptor* field = descriptor->field(i);
+    const Descriptor* field_type = field->message_type();
+    if (!field_type) {
+      return InvalidArgument("Encountered unexpected primitive field: ",
+                             field->full_name());
+    }
+    if (field_type->options().HasExtension(proto::fhir_profile_base) &&
+        field_type->options().GetExtension(proto::fhir_profile_base) ==
+            GetCodeableConceptUrl()) {
+      if (field->is_repeated()) {
+        return InvalidArgument("Unexpected repeated CodeableConcept: ",
+                               field->full_name());
+      }
+      if (reflection->HasField(*message, field)) {
+        FHIR_RETURN_IF_ERROR(SliceCodingsInCodeableConcept(
+            reflection->MutableMessage(message, field)));
+      }
+    }
+  }
+  return Status::OK();
+}
+
+Status PerformSlicing(Message* message) {
+  FHIR_RETURN_IF_ERROR(PerformExtensionSlicing(message));
+  FHIR_RETURN_IF_ERROR(PerformCodeableConceptSlicing(message));
+  // TODO(nickgeorge): Perform generic slicing
+
+  // There are two kinds of subfields that could potentially have slices:
+  // 1) "Backbone" i.e. nested types defined on this message
+  // 2) Types that are themselves profiles
+  const Descriptor* descriptor = message->GetDescriptor();
+  const Reflection* reflection = message->GetReflection();
+  for (int i = 0; i < descriptor->field_count(); i++) {
+    const FieldDescriptor* field = descriptor->field(i);
+    const Descriptor* field_type = field->message_type();
+    if (!field_type) {
+      return InvalidArgument("Encountered unexpected primitive type on field: ",
+                             field->full_name());
+    }
+    const bool is_nested_type =
+        field_type->full_name().rfind(descriptor->full_name(), 0) == 0;
+    const bool is_profile =
+        field_type->options().HasExtension(proto::fhir_profile_base);
+    if (is_nested_type || is_profile) {
+      if (field->is_repeated()) {
+        for (int i = 0; i < reflection->FieldSize(*message, field); i++) {
+          FHIR_RETURN_IF_ERROR(
+              PerformSlicing(message->GetReflection()->MutableRepeatedMessage(
+                  message, field, i)));
+        }
+      } else if (reflection->HasField(*message, field)) {
+        FHIR_RETURN_IF_ERROR(PerformSlicing(
+            message->GetReflection()->MutableMessage(message, field)));
+      }
+    }
+  }
   return Status::OK();
 }
 
 }  // namespace
 
-Status ConvertToProfile(const Message& base_resource,
-                        Message* profiled_resource) {
-  string profile_base_url =
-      profiled_resource->GetDescriptor()->options().GetExtension(
-          proto::fhir_profile_base);
-  if (profile_base_url != base_resource.GetDescriptor()->options().GetExtension(
-                              proto::fhir_structure_definition_url)) {
-    return ::tensorflow::errors::InvalidArgument(
-        "Unable to convert ", base_resource.GetDescriptor()->full_name(),
-        " to profile ", profiled_resource->GetDescriptor()->full_name(),
-        ".  The profile has an incorrect base of ", profile_base_url);
-  }
+Status ConvertToProfile(const Message& base_message,
+                        Message* profiled_message) {
+  const Descriptor* base_descriptor = base_message.GetDescriptor();
+  const Descriptor* profiled_descriptor = profiled_message->GetDescriptor();
 
-  // Copy over the base_resource message into the profiled_resource container.
+  // Copy over the base_message message into the profiled_message container.
   // We can't use CopyFrom because the messages are technically different,
-  // but since all the fields from the base_resource have matching fields
-  // in profiled_resource, we can serialize the base_resource message to bytes,
-  // and then deserialise it into the profiled_resource container.
-  if (!profiled_resource->ParseFromString(base_resource.SerializeAsString())) {
-    return ::tensorflow::errors::InvalidArgument(
-        "Unable to convert ", base_resource.GetDescriptor()->full_name(),
-        " to ", profiled_resource->GetDescriptor()->full_name(),
+  // but since all the fields from the base_message have matching fields
+  // in profiled_message, we can serialize the base_message message to bytes,
+  // and then deserialise it into the profiled_message container.
+  // TODO(nickgeorge): check to see how this handles fields that were removed
+  // in the proto.  We should return an InvalidArgument.
+  if (!profiled_message->ParseFromString(base_message.SerializeAsString())) {
+    // TODO(nickgeorge): walk up the parent-tree to see if this was a valid
+    // request to begin with.  This is non-trivial though, because we only have
+    // base by URL, and no way to go from URL to proto in order to get the next
+    // level of parent.
+    return InvalidArgument(
+        "Unable to convert ", base_descriptor->full_name(), " to ",
+        profiled_descriptor->full_name(),
         ".  They are not binary compatible.  This could mean the profile ",
         "applies constraints that the resource does not meet.");
   }
-
-  FHIR_RETURN_IF_ERROR(PerformSlicing(base_resource, profiled_resource));
-
-  return Status::OK();
+  FHIR_RETURN_IF_ERROR(PerformSlicing(profiled_message));
+  return ValidateResource(*profiled_message);
 }
 
 }  // namespace stu3

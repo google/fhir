@@ -26,8 +26,8 @@ namespace stu3 {
 
 using std::string;
 
-Status ConvertToProfile(const google::protobuf::Message& base_resource,
-                        google::protobuf::Message* profiled);
+Status ConvertToProfile(const google::protobuf::Message& base_message,
+                        google::protobuf::Message* profiled_message);
 
 // TODO(nickgeorge): add ConvertToUnprofiled
 
