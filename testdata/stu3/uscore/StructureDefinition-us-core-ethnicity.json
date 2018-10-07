@@ -55,7 +55,7 @@
   "snapshot": {
     "element": [
       {
-        "id": "Extension:ethnicity",
+        "id": "Extension",
         "path": "Extension",
         "short": "US Core ethnicity Extension",
         "definition": "Concepts classifying the person into a named category of humans sharing common history, traits, geographical origin or nationality.  The ethnicity codes used to represent these concepts are based upon the [CDC ethnicity and Ethnicity Code Set Version 1.0](http://www.cdc.gov/phin/resources/vocabulary/index.html) which includes over 900 concepts for representing race and ethnicity of which 43 reference ethnicity.  The ethnicity concepts are grouped by and pre-mapped to the 2 OMB ethnicity categories: - Hispanic or Latino - Not Hispanic or Latino.",
@@ -90,7 +90,7 @@
         "isModifier": false
       },
       {
-        "id": "Extension:ethnicity.id",
+        "id": "Extension.id",
         "path": "Extension.id",
         "representation": [
           "xmlAttr"
@@ -117,7 +117,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension",
+        "id": "Extension.extension",
         "path": "Extension.extension",
         "slicing": {
           "id": "2",
@@ -146,7 +146,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:ombcategory",
+        "id": "Extension.extension:ombcategory",
         "path": "Extension.extension",
         "sliceName": "ombCategory",
         "short": "Hispanic or Latino|Not Hispanic or Latino",
@@ -173,7 +173,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:ombcategory.id",
+        "id": "Extension.extension:ombcategory.id",
         "path": "Extension.extension.id",
         "representation": [
           "xmlAttr"
@@ -200,7 +200,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:ombcategory.extension",
+        "id": "Extension.extension:ombcategory.extension",
         "path": "Extension.extension.extension",
         "short": "Additional Content defined by implementations",
         "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
@@ -229,7 +229,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:ombcategory.url",
+        "id": "Extension.extension:ombcategory.url",
         "path": "Extension.extension.url",
         "representation": [
           "xmlAttr"
@@ -258,7 +258,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:ombcategory.valueCoding",
+        "id": "Extension.extension:ombcategory.valueCoding",
         "path": "Extension.extension.valueCoding",
         "short": "Value of extension",
         "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
@@ -289,7 +289,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:detailed",
+        "id": "Extension.extension:detailed",
         "path": "Extension.extension",
         "sliceName": "detailed",
         "short": "Extended ethnicity codes",
@@ -315,7 +315,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:detailed.id",
+        "id": "Extension.extension:detailed.id",
         "path": "Extension.extension.id",
         "representation": [
           "xmlAttr"
@@ -342,7 +342,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:detailed.extension",
+        "id": "Extension.extension:detailed.extension",
         "path": "Extension.extension.extension",
         "short": "Additional Content defined by implementations",
         "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
@@ -371,7 +371,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:detailed.url",
+        "id": "Extension.extension:detailed.url",
         "path": "Extension.extension.url",
         "representation": [
           "xmlAttr"
@@ -400,7 +400,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:detailed.valueCoding",
+        "id": "Extension.extension:detailed.valueCoding",
         "path": "Extension.extension.valueCoding",
         "short": "Value of extension",
         "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
@@ -431,7 +431,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:text",
+        "id": "Extension.extension:text",
         "path": "Extension.extension",
         "sliceName": "text",
         "short": "ethnicity Text",
@@ -452,7 +452,7 @@
         "isModifier": false
       },
       {
-        "id": "Extension:ethnicity.extension:text.id",
+        "id": "Extension.extension:text.id",
         "path": "Extension.extension.id",
         "representation": [
           "xmlAttr"
@@ -479,7 +479,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:text.extension",
+        "id": "Extension.extension:text.extension",
         "path": "Extension.extension.extension",
         "short": "Additional Content defined by implementations",
         "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
@@ -508,7 +508,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:text.url",
+        "id": "Extension.extension:text.url",
         "path": "Extension.extension.url",
         "representation": [
           "xmlAttr"
@@ -537,7 +537,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:text.valueString",
+        "id": "Extension.extension:text.valueString",
         "path": "Extension.extension.valueString",
         "short": "Value of extension",
         "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
@@ -561,7 +561,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.url",
+        "id": "Extension.url",
         "path": "Extension.url",
         "representation": [
           "xmlAttr"
@@ -590,7 +590,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.value[x]",
+        "id": "Extension.value[x]",
         "path": "Extension.value[x]",
         "short": "Value of extension",
         "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
@@ -729,7 +729,7 @@
   "differential": {
     "element": [
       {
-        "id": "Extension:ethnicity",
+        "id": "Extension",
         "path": "Extension",
         "short": "US Core ethnicity Extension",
         "definition": "Concepts classifying the person into a named category of humans sharing common history, traits, geographical origin or nationality.  The ethnicity codes used to represent these concepts are based upon the [CDC ethnicity and Ethnicity Code Set Version 1.0](http://www.cdc.gov/phin/resources/vocabulary/index.html) which includes over 900 concepts for representing race and ethnicity of which 43 reference ethnicity.  The ethnicity concepts are grouped by and pre-mapped to the 2 OMB ethnicity categories: - Hispanic or Latino - Not Hispanic or Latino.",
@@ -738,7 +738,7 @@
         "isModifier": false
       },
       {
-        "id": "Extension:ethnicity.extension:ombcategory",
+        "id": "Extension.extension:ombcategory",
         "path": "Extension.extension",
         "sliceName": "ombCategory",
         "short": "Hispanic or Latino|Not Hispanic or Latino",
@@ -760,7 +760,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:ombcategory.url",
+        "id": "Extension.extension:ombcategory.url",
         "path": "Extension.extension.url",
         "min": 1,
         "max": "1",
@@ -772,7 +772,7 @@
         "fixedUri": "ombCategory"
       },
       {
-        "id": "Extension:ethnicity.extension:ombcategory.valueCoding",
+        "id": "Extension.extension:ombcategory.valueCoding",
         "path": "Extension.extension.valueCoding",
         "min": 1,
         "max": "1",
@@ -790,7 +790,7 @@
         }
       },
       {
-        "id": "Extension:ethnicity.extension:detailed",
+        "id": "Extension.extension:detailed",
         "path": "Extension.extension",
         "sliceName": "detailed",
         "short": "Extended ethnicity codes",
@@ -811,7 +811,7 @@
         ]
       },
       {
-        "id": "Extension:ethnicity.extension:detailed.url",
+        "id": "Extension.extension:detailed.url",
         "path": "Extension.extension.url",
         "min": 1,
         "max": "1",
@@ -823,7 +823,7 @@
         "fixedUri": "detailed"
       },
       {
-        "id": "Extension:ethnicity.extension:detailed.valueCoding",
+        "id": "Extension.extension:detailed.valueCoding",
         "path": "Extension.extension.valueCoding",
         "min": 1,
         "max": "1",
@@ -841,7 +841,7 @@
         }
       },
       {
-        "id": "Extension:ethnicity.extension:text",
+        "id": "Extension.extension:text",
         "path": "Extension.extension",
         "sliceName": "text",
         "short": "ethnicity Text",
