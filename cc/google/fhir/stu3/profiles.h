@@ -29,7 +29,7 @@ using std::string;
 Status ConvertToProfile(const google::protobuf::Message& base_message,
                         google::protobuf::Message* profiled_message);
 
-// TODO(nickgeorge): add ConvertToUnprofiled
+// TODO: add ConvertToUnprofiled
 
 }  // namespace stu3
 }  // namespace fhir

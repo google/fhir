@@ -383,7 +383,7 @@ void SplitResource(const R& resource, const Bundle& bundle,
 
   // Strip out all fields with overrides, to get the "base" version.
   // This is the version that goes in at the "default" time.
-  // TODO(nickgeorge): This operates under the assumption that the default time
+  // TODO: This operates under the assumption that the default time
   // is the _earliest_ available time.  To safeguard against leaks, it should be
   // the _latest_ available time.  In that case, the "default" time version will
   // just be the original proto.
@@ -479,7 +479,7 @@ void SplitResource(const R& resource, const Bundle& bundle,
       }
     }
     DateTime override_time = override_map_entry.first;
-    // TODO(nickgeorge): Once we've switched the version config to use latest
+    // TODO: Once we've switched the version config to use latest
     // timestamp as default, enforce that here by failing on any override time
     // greater than the default (accounting for precision).
     StampWrapAndAdd(versioned_resources, override_map_entry.first, version++,
@@ -517,7 +517,7 @@ void SplitPatient(Patient patient, const Bundle& bundle,
   patient.clear_deceased();
   if (patient.has_birth_date()) {
     // Add initial version at time of birth
-    // TODO(nickgeorge): Since Birth Date is (maximum) day-level precision,
+    // TODO: Since Birth Date is (maximum) day-level precision,
     // set back a single unit of precision to guarantee it is the first entry
     // into the system. Otherwise, e.g., for a patient with birthdate of DAY
     // precision, the v0 patient will be added at the end of the day, which
@@ -565,7 +565,7 @@ std::vector<ContainedResource> BundleToVersionedResources(
       // encounter in the system.
       // If the patient died, but there is no death timestamp, we need to reach
       // into the last encounter for the time to use.
-      // TODO(nickgeorge): if this turns out to be a more common pattern,
+      // TODO: if this turns out to be a more common pattern,
       // we could have a way to encode this logic into the config proto as a
       // new kind of override.
       SplitPatient(resource.patient(), bundle, config, &versioned_resources,

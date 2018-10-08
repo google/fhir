@@ -98,7 +98,7 @@ public final class ExtensionWrapper {
     MessageOptions options = message.getDescriptorForType().getOptions();
     // Note that this method checks proto extensions, which are different from FHIR extensions.
     String baseUrl = options.getExtension(Annotations.fhirProfileBase);
-    // TODO(nickgeorge): This would reject profiles on profiles on extensions (and so on).
+    // TODO: This would reject profiles on profiles on extensions (and so on).
     // If we want to support that, we'll probably need a "fhir_is_extension" annotation,
     // or else load the structure definitions and walk back.
     if (!baseUrl.equals(
@@ -257,12 +257,12 @@ public final class ExtensionWrapper {
     }
   }
 
-  // TODO(nickgeorge): This should handle the extension fields.
+  // TODO: This should handle the extension fields.
   private static void addExtensionToMessage(Extension extension, Message.Builder builder) {
     // Copy the id field if present.
     if (extension.hasId()) {
       FieldDescriptor idField = builder.getDescriptorForType().findFieldByName("id");
-      // TODO(sundberg): handle copying the id field for all kinds of extensions.
+      // TODO: handle copying the id field for all kinds of extensions.
       if (idField != null) {
         builder.setField(idField, extension.getId());
       }
@@ -329,7 +329,7 @@ public final class ExtensionWrapper {
         }
         Message.Builder subBuilder = builder.newBuilderForField(field);
         if (inner.hasValue()) {
-          // TODO(sundberg): handle ids on inner extensions
+          // TODO: handle ids on inner extensions
           if (inner.getExtensionCount() > 0) {
             throw new IllegalArgumentException(
                 "Extension holds both a value and sub-extensions: " + inner);

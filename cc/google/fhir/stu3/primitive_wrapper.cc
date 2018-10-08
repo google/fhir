@@ -258,7 +258,7 @@ class StringInputWrapper : public SpecificWrapper<T> {
  protected:
   virtual Status ParseString(const string& string) = 0;
 
-  // TODO(sundberg): Use the regex compiled into the protos
+  // TODO: Use the regex compiled into the protos
   static Status ValidateString(const string& input, const LazyRE2& pattern) {
     return (RE2::FullMatch(input, *pattern))
                ? Status::OK()
@@ -770,7 +770,7 @@ class DecimalWrapper : public StringInputWrapper<Decimal> {
   Status ParseString(const string& json_string) override {
     static LazyRE2 PATTERN{"[-\\+]?(0|[1-9][0-9]*)(\\.[0-9]+)?"};
     FHIR_RETURN_IF_ERROR(ValidateString(json_string, PATTERN));
-    // TODO(nickgeorge): range check
+    // TODO: range check
     this->GetWrapped().set_value(json_string);
     return Status::OK();
   }

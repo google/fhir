@@ -23,7 +23,7 @@ option java_package = "com.google.fhir.stu3.proto";
 
 import "google/protobuf/descriptor.proto";
 
-// TODO(sundberg): Unify with StructureDefinitionKindCode
+// TODO: Unify with StructureDefinitionKindCode
 enum StructureDefinitionKindValue {
   KIND_UNKNOWN = 0;
   KIND_PRIMITIVE_TYPE = 1;

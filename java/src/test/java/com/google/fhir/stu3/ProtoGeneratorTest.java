@@ -1255,7 +1255,7 @@ public class ProtoGeneratorTest {
 
   /** Test generating the consentdirective profile. */
   // Note: consentdirective is malformed.
-  // TODO(nickgeorge): reenable.
+  // TODO: reenable.
   // @Test
   // public void generateConsentdirective() throws Exception {
   //   testGeneratedProto("consentdirective");

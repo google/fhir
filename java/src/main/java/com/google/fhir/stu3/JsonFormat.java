@@ -890,7 +890,7 @@ public final class JsonFormat {
     if (descriptor.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
       return new CodeWrapper(jsonString);
     }
-    // TODO(nickgeorge): Make proper class hierarchy for wrapper input types,
+    // TODO: Make proper class hierarchy for wrapper input types,
     // so these can all accept JsonElement in constructor, and do type checking there.
     switch (descriptor.getName()) {
       case "Base64Binary":

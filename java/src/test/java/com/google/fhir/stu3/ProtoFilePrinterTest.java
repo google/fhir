@@ -225,7 +225,7 @@ public final class ProtoFilePrinterTest {
     protoPrinter = new ProtoFilePrinter().withApacheLicense();
   }
 
-  // TODO(sundberg): Test the FHIR code types.
+  // TODO: Test the FHIR code types.
 
   /** Test generating datatypes.proto. */
   @Test

@@ -118,7 +118,7 @@ class ProtoGeneratorMain {
         description = "List of known StructureDefinitions, for inlining types.")
     private List<String> knownTypes = new ArrayList<>();
 
-    // TODO(nickgeorge): figure out a smarter way to handle dependencies
+    // TODO: figure out a smarter way to handle dependencies
     @Parameter(
         names = {"--include_resources"},
         description = "Includes a dependency on resources.proto")
@@ -195,7 +195,7 @@ class ProtoGeneratorMain {
     ArrayList<StructureDefinition> definitions = new ArrayList<>();
     for (String filename : args.inputFiles) {
       StructureDefinition definition = readStructureDefinition(filename, jsonParser);
-      // TODO(nickgeorge): We could skip over simple extensions here (since they'll get inlined as
+      // TODO: We could skip over simple extensions here (since they'll get inlined as
       // primitives, but that would break usages of things like ExtensionWrapper.fromExtensionsIn.
       // Think about this a bit more.
       definitions.add(definition);
@@ -224,7 +224,7 @@ class ProtoGeneratorMain {
     if (args.includeContainedResource) {
       proto = generator.addContainedResource(proto);
     }
-    // TODO(nickgeorge): deduce these automatically
+    // TODO: deduce these automatically
     if (args.includeResources) {
       proto =
           proto

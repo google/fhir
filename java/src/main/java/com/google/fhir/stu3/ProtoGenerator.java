@@ -66,7 +66,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /** A class which turns FHIR StructureDefinitions into protocol messages. */
-// TODO(nickgeorge): Move a bunch of the public static methods into ProtoGeneratorUtils.
+// TODO: Move a bunch of the public static methods into ProtoGeneratorUtils.
 public class ProtoGenerator {
 
   // This is the core package containing types defined by FHIR in the STU3 spec.
@@ -215,7 +215,7 @@ public class ProtoGenerator {
     this.goPackageName = goPackageName;
     this.fhirProtoRootPath = fhirProtoRootPath;
 
-    // TODO(nickgeorge): Do this with ValueSet resources once we have them
+    // TODO: Do this with ValueSet resources once we have them
     this.valueSetTypesByCodeReference =
         new ImmutableMap.Builder<String, Descriptor>()
             .putAll(loadCodeTypesFromFile(AbstractTypeCode.getDescriptor().getFile()))
@@ -593,7 +593,7 @@ public class ProtoGenerator {
         }
       }
     }
-    // TODO(nickgeorge): for null fields, emit an "empty" field that just has a comment about the
+    // TODO: for null fields, emit an "empty" field that just has a comment about the
     // dropped field, to make it more obvious why numbers are skipped
   }
 
@@ -621,7 +621,7 @@ public class ProtoGenerator {
               .filter(type -> uniqueTypes.add(type.getCode().getValue()))
               .map(type -> baseChoiceType.getField(baseTypesToIndex.get(type.getCode().getValue())))
               .collect(Collectors.toList());
-      // TODO(nickgeorge): If a choice type is a slice of another choice type (not a pure
+      // TODO: If a choice type is a slice of another choice type (not a pure
       // constraint, but actual slice) we'll need to update the name and type name as well.
       return Optional.of(
           baseChoiceType.toBuilder().clearField().addAllField(matchingFields).build());
@@ -964,7 +964,7 @@ public class ProtoGenerator {
           if (valueSetTypesByCodeReference.containsKey(valueSetUrl)) {
             return valueSetTypesByCodeReference.get(valueSetUrl).getName();
           }
-          // TODO(nickgeorge): Throw an error in strict mode.
+          // TODO: Throw an error in strict mode.
           System.out.println(
               "Unhandled ValueSet reference on " + element.getId().getValue() + ": " + valueSetUrl);
         }
@@ -1020,7 +1020,7 @@ public class ProtoGenerator {
       StructureDefinitionData profileData = structDefDataByUrl.get(profileUrl);
       if (profileData == null) {
         // Unrecognized url.
-        // TODO(nickgeorge): add a lenient mode that just ignores this extension.
+        // TODO: add a lenient mode that just ignores this extension.
         throw new IllegalArgumentException("Encountered unknown extension url: " + profileUrl);
       }
       jsonFieldNameString = resolveSliceNameConflicts(jsonFieldNameString, element, elementList);
@@ -1039,7 +1039,7 @@ public class ProtoGenerator {
 
     Optional<ElementDefinition> choiceTypeBase = getChoiceTypeBase(element);
     if (choiceTypeBase.isPresent()) {
-      // TODO(nickgeorge): remove this once choice type is moved to message definition
+      // TODO: remove this once choice type is moved to message definition
       options.setExtension(Annotations.isChoiceType, true);
 
       ElementDefinition choiceTypeBaseElement = choiceTypeBase.get();
@@ -1077,7 +1077,7 @@ public class ProtoGenerator {
       }
     }
 
-    // TODO(nickgeorge): remove this once choice type is moved to message definition
+    // TODO: remove this once choice type is moved to message definition
     if (isChoiceType(element) || isChoiceTypeExtension(element, elementList)) {
       options.setExtension(Annotations.isChoiceType, true);
     }
@@ -1120,7 +1120,7 @@ public class ProtoGenerator {
       return true;
     }
     // It could still be a content reference to a local type.
-    // TODO(nickgeorge): more sophisticated logic.  This wouldn't handle references to fields in
+    // TODO: more sophisticated logic.  This wouldn't handle references to fields in
     // other elements in a non-core package
     if (!element.hasContentReference()) {
       return false;
@@ -1135,7 +1135,7 @@ public class ProtoGenerator {
    * Otherwise, uses the last token's pathpart. Logs a warning if the slice name in the id token
    * does not match the SliceName field.
    */
-  // TODO(nickgeorge): Handle reslices. Could be as easy as adding it to the end of SliceName.
+  // TODO: Handle reslices. Could be as easy as adding it to the end of SliceName.
   private String getJsonNameForElement(ElementDefinition element) {
     IdToken lastToken = lastIdToken(element.getId().getValue());
     if (lastToken.slicename == null) {
@@ -1143,7 +1143,7 @@ public class ProtoGenerator {
     }
     String sliceName = element.getSliceName().getValue();
     if (!lastToken.slicename.equals(sliceName.toLowerCase())) {
-      // TODO(nickgeorge): pull this into a common validator that runs ealier.
+      // TODO: pull this into a common validator that runs ealier.
       logDiscrepancies(
           "Warning: Inconsistent slice name for element with id "
               + element.getId().getValue()
@@ -1161,7 +1161,7 @@ public class ProtoGenerator {
 
   // Given a potential slice field name and an element, returns true if that slice name would
   // conflict with the field name of any siblings to that elements.
-  // TODO(nickgeorge): This only checks against non-slice names.  Theoretically, you could have
+  // TODO: This only checks against non-slice names.  Theoretically, you could have
   // two identically-named slices of different base fields.
   private static String resolveSliceNameConflicts(
       String jsonFieldName, ElementDefinition element, List<ElementDefinition> elementList) {
@@ -1190,7 +1190,7 @@ public class ProtoGenerator {
         : jsonFieldName + "Slice";
   }
 
-  // TODO(nickgeorge): memoize
+  // TODO: memoize
   private Optional<ElementDefinition> getChoiceTypeBase(ElementDefinition element) {
     if (!element.hasBase()) {
       return Optional.empty();
@@ -1238,7 +1238,7 @@ public class ProtoGenerator {
     for (ElementDefinition.TypeRef t : types) {
       String fieldType = normalizeType(t);
       String fieldName = t.getCode().getValue();
-      // TODO(nickgeorge):  This assumes all types in a oneof are core FHIR types.  In order to
+      // TODO:  This assumes all types in a oneof are core FHIR types.  In order to
       // support custom types, we'll need to load the structure definition for the type and check
       // against knownStructureDefinitionPackages
       FieldDescriptorProto.Builder fieldBuilder =
@@ -1250,7 +1250,7 @@ public class ProtoGenerator {
                   FieldDescriptorProto.Label.LABEL_OPTIONAL,
                   FieldOptions.getDefaultInstance())
               .setOneofIndex(0);
-      // TODO(sundberg): change the oneof name to avoid this.
+      // TODO: change the oneof name to avoid this.
       if (fieldBuilder.getName().equals(oneof.getName())) {
         fieldBuilder.setJsonName(fieldBuilder.getName());
         fieldBuilder.setName(fieldBuilder.getName() + "_value");
@@ -1325,7 +1325,7 @@ public class ProtoGenerator {
   private static String toFieldNameCase(String fieldName) {
     // Make sure the field name is snake case, as required by the proto style guide.
     String normalizedFieldName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName);
-    // TODO(nickgeorge): add more normalization here if necessary.  I think this is enough for now.
+    // TODO: add more normalization here if necessary.  I think this is enough for now.
     return normalizedFieldName;
   }
 
@@ -1459,7 +1459,7 @@ public class ProtoGenerator {
     return !valueElement.getMax().getValue().equals("0") && getDistinctTypeCount(valueElement) > 1;
   }
 
-  // TODO(nickgeorge): Clean up some of the terminology - 'internal' is misleading here.
+  // TODO: Clean up some of the terminology - 'internal' is misleading here.
   private static boolean isSimpleInternalExtension(
       ElementDefinition element, List<ElementDefinition> elementList) {
     return isExtensionBackboneElement(element)

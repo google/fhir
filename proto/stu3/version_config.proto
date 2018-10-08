@@ -9,7 +9,7 @@ message ResourceConfig {
   // have occurred at the timestamp in this field.
   repeated string default_timestamp_fields = 1;
 
-  // TODO(nickgeorge): Add mechanisim for specifying when contained resources
+  // TODO: Add mechanisim for specifying when contained resources
   // should be added in to a versioned resource.
 
   message TimestampOverride {

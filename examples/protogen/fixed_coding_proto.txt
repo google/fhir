@@ -1,7 +1,7 @@
 
 // Specializations of Coding that make it nicer to have slices within
 // CodeableConcepts.
-// TODO(nickgeorge): generate in ProtoGenerator from profiles on Coding.
+// TODO: generate in ProtoGenerator from profiles on Coding.
 
 // Specialization of Coding that drops the system field.
 // Fields that use this message must be annotated with

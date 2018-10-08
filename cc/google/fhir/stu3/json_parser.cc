@@ -67,7 +67,7 @@ using ::tensorflow::errors::InvalidArgument;
 // Since FHIR represents extensions to primitives as separate JSON fields,
 // prepended by underscore, we add that as a separate mapping to the primitive
 // field.
-// TODO(nickgeorge): memoize
+// TODO: memoize
 std::unordered_map<string, const FieldDescriptor*> GetFieldMap(
     const Descriptor* descriptor) {
   std::unordered_map<string, const FieldDescriptor*> field_map;
@@ -372,7 +372,7 @@ Status MergeJsonFhirStringIntoProto(const string& raw_json, Message* target,
 
   FHIR_ASSIGN_OR_RETURN(Json::Value value, ParseJsonValue(mutable_raw_json));
 
-  // TODO(nickgeorge): Decide if we want to support value-only JSON
+  // TODO: Decide if we want to support value-only JSON
   if (IsPrimitive(target->GetDescriptor())) {
     if (target->GetDescriptor()->full_name() ==
             proto::Decimal::descriptor()->full_name() &&

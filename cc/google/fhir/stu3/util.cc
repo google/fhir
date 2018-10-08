@@ -255,7 +255,7 @@ StatusOr<const Message*> GetContainedResource(
 }
 
 absl::Duration GetDurationFromTimelikeElement(const DateTime& datetime) {
-  // TODO(sundberg): handle YEAR and MONTH properly, instead of approximating.
+  // TODO: handle YEAR and MONTH properly, instead of approximating.
   switch (datetime.precision()) {
     case DateTime::YEAR:
       return absl::Hours(24 * 366);

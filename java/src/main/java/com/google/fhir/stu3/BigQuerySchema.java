@@ -50,7 +50,7 @@ public final class BigQuerySchema {
           TableSchema schema = new TableSchema();
           for (Object child : (List) instance.getField(descriptor)) {
             TableSchema oneSchema = fromMessage((MessageOrBuilder) child);
-            // TODO(sundberg): implement mergeTableSchema properly, it currently uses a simple
+            // TODO: implement mergeTableSchema properly, it currently uses a simple
             // heuristic.
             schema = mergeTableSchema(schema, oneSchema);
           }
@@ -119,7 +119,7 @@ public final class BigQuerySchema {
   }
 
   private static TableSchema mergeTableSchema(TableSchema first, TableSchema second) {
-    // TODO(sundberg): implement properly
+    // TODO: implement properly
     if (first.toString().length() > second.toString().length()) {
       return first;
     } else {

@@ -243,7 +243,7 @@ void AddBaggingFeatures(absl::Time event_time,
       ->add_value(encounter_id);
 }
 
-// TODO(sundberg): StatusOr<Reference>
+// TODO: StatusOr<Reference>
 bool GetReferenceId(const google::protobuf::Message& message, const string& field_name,
                     ReferenceId* reference_id) {
   const google::protobuf::Reflection* reflection = message.GetReflection();
@@ -332,7 +332,7 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
                     .ok());
           floats.mutable_float_list()->add_value(value);
         }
-        CHECK(!label.class_value().has_boolean());  // TODO(gafm): implement
+        CHECK(!label.class_value().has_boolean());  // TODO: implement
         label_value_types++;
       }
       CHECK_LE(label_value_types, 1);
@@ -425,7 +425,7 @@ bool BundleToSeqexConverter::Begin(const string& patient_id,
                                    const std::vector<TriggerLabelsPair>& labels,
                                    std::map<string, int>* counter_stats) {
   std::map<struct ExampleKey, ::tensorflow::Features> label_map;
-  // TODO(zhangyi): Fail gracefully.
+  // TODO: Fail gracefully.
   CHECK(BuildLabelsFromTriggerLabelPair(patient_id, labels, &label_map).ok());
   return Begin(patient_id, bundle, label_map, counter_stats);
 }
@@ -434,7 +434,7 @@ bool BundleToSeqexConverter::Next() {
   // We emit multiple examples per bundle, one per label. Examples with
   // timestamps before or at the label timestamp may be included in the sample
   // sequence; we keep the most recent --max_sequence_length ones.
-  // TODO(sundberg): be more principled in which events are ok to use
+  // TODO: be more principled in which events are ok to use
   // and which are not.
   if (!init_done_) {
     if (generate_sequence_label_) {
@@ -594,7 +594,7 @@ void BundleToSeqexConverter::BundleToExamples(
   }
 
   if (generate_sequence_label_) {
-    // TODO(gafm): Either delete or fix seconds_until_label.
+    // TODO: Either delete or fix seconds_until_label.
     for (auto entry : label_map_) {
       tensorflow::Example example;
       *example.mutable_features() = entry.second;

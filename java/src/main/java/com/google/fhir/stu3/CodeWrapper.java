@@ -115,7 +115,7 @@ public class CodeWrapper extends PrimitiveWrapper<Code> {
       throw new IllegalArgumentException("Invalid target message: " + descriptor.getFullName());
     }
 
-    // TODO(sundberg): improve strictness of this parsing step.
+    // TODO: improve strictness of this parsing step.
     EnumValueDescriptor enumValue =
         valueField
             .getEnumType()

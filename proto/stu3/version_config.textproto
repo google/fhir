@@ -35,7 +35,7 @@ resource_config {
       # Encounter.service_provider is medical service.
       resource_field: "Encounter.serviceProvider"
       # Encounter.location is list of rooms.
-      # TODO(nickgeorge) point Encounter.location[] to Encounter.location[].start
+      # TODO point Encounter.location[] to Encounter.location[].start
       resource_field: "Encounter.location"
     }
   }

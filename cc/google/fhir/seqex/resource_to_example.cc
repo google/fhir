@@ -389,7 +389,7 @@ void MessageToExample(const google::protobuf::Message& message, const string& pr
                    field->message_type()->full_name() ==
                        Id::descriptor()->full_name()) {
           // We don't emit identifiers.
-          // TODO(sundberg): are there situations where we should?
+          // TODO: are there situations where we should?
         } else if (field->message_type()->full_name() ==
                        Reference::descriptor()->full_name() ||
                    field->message_type()->options().ExtensionSize(
@@ -400,7 +400,7 @@ void MessageToExample(const google::protobuf::Message& message, const string& pr
         } else {
           // We currently flatten repeated submessages. That could potentially
           // be problematic.
-          // TODO(sundberg): figure out something better to do here.
+          // TODO: figure out something better to do here.
           MessageToExample(child, name, example, enable_attribution);
         }
       } else {

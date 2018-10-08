@@ -248,7 +248,7 @@ Status PerformCodeableConceptSlicing(Message* message) {
 Status PerformSlicing(Message* message) {
   FHIR_RETURN_IF_ERROR(PerformExtensionSlicing(message));
   FHIR_RETURN_IF_ERROR(PerformCodeableConceptSlicing(message));
-  // TODO(nickgeorge): Perform generic slicing
+  // TODO: Perform generic slicing
 
   // There are two kinds of subfields that could potentially have slices:
   // 1) "Backbone" i.e. nested types defined on this message
@@ -294,10 +294,10 @@ Status ConvertToProfile(const Message& base_message,
   // but since all the fields from the base_message have matching fields
   // in profiled_message, we can serialize the base_message message to bytes,
   // and then deserialise it into the profiled_message container.
-  // TODO(nickgeorge): check to see how this handles fields that were removed
+  // TODO: check to see how this handles fields that were removed
   // in the proto.  We should return an InvalidArgument.
   if (!profiled_message->ParseFromString(base_message.SerializeAsString())) {
-    // TODO(nickgeorge): walk up the parent-tree to see if this was a valid
+    // TODO: walk up the parent-tree to see if this was a valid
     // request to begin with.  This is non-trivial though, because we only have
     // base by URL, and no way to go from URL to proto in order to get the next
     // level of parent.

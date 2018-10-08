@@ -5,7 +5,7 @@ package(
 
 licenses(["notice"])
 
-# TODO(nickgeorge): remove dependency on uscore once we have json
+# TODO: remove dependency on uscore once we have json
 # definitions of codes.
 java_library(
     name = "stu3",
