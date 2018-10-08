@@ -35,7 +35,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Code"
+  type_name: ".google.fhir.stu3.proto.GoalAcceptanceStatusCode"
   options {
     [google.fhir.stu3.proto.field_description]: "agree | disagree | pending"
   }

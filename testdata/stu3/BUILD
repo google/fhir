@@ -41,6 +41,14 @@ filegroup(
     ]),
 )
 
+# These files contain us core codes.
+filegroup(
+    name = "uscore",
+    srcs = glob([
+        "uscore/*.json",
+    ]),
+)
+
 # These files contain StructureDefinitions used to generate the protos.
 filegroup(
     name = "structure_definitions",

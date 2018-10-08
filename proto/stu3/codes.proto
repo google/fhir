@@ -2578,9 +2578,14 @@ message FHIRDefinedTypeCode {
 
 // Either a resource or a data type, extended to allow arbitrary other codes
 // representing FHIR resources. See http://hl7.org/fhir/ValueSet/defined-types
+// Due to
+// https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_item_id=15559
+// there are two value sets with valueset url:
+// http://hl7.org/fhir/ValueSet/defined-types.
+// Fragment added here to disambiguate.
 message FHIRDefinedTypeExtCode {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/defined-types";
+  option (fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/defined-types#ext";
 
   // Primitive value for code
   string value = 1;

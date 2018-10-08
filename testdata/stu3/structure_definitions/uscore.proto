@@ -1,0 +1,2768 @@
+//    Copyright 2018 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.stu3.uscore;
+
+import "proto/stu3/annotations.proto";
+import "proto/stu3/codes.proto";
+import "proto/stu3/datatypes.proto";
+import "proto/stu3/resources.proto";
+import "proto/stu3/metadatatypes.proto";
+import "proto/stu3/uscore_codes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.stu3.uscore";
+
+// Auto-generated from StructureDefinition for US  Core AllergyIntolerance
+// Profile. US Core Allergies Profile. See
+// http://hl7.org/fhir/us/core/StructureDefinition/us-core-allergyintolerance
+message UsCoreAllergyintolerance {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/AllergyIntolerance";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-allergyintolerance";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // External ids for this item
+  repeated proto.Identifier identifier = 9;
+
+  // active | inactive | resolved
+  proto.AllergyIntoleranceClinicalStatusCode clinical_status = 10;
+
+  // unconfirmed | confirmed | refuted | entered-in-error
+  proto.AllergyIntoleranceVerificationStatusCode verification_status = 11
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // allergy | intolerance - Underlying mechanism (if known)
+  proto.AllergyIntoleranceTypeCode type = 12;
+
+  // food | medication | environment | biologic
+  repeated proto.AllergyIntoleranceCategoryCode category = 13;
+
+  // low | high | unable-to-assess
+  proto.AllergyIntoleranceCriticalityCode criticality = 14;
+
+  // Code that identifies the allergy or intolerance
+  proto.CodeableConcept code = 15
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who the sensitivity is for
+  proto.Reference patient = 16
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // When allergy or intolerance was identified
+  message Onset {
+    oneof onset {
+      proto.DateTime date_time = 1;
+      proto.Age age = 2;
+      proto.Period period = 3;
+      proto.Range range = 4;
+      proto.String string_value = 5 [json_name = "string"];
+    }
+  }
+  Onset onset = 17 [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+  // Date record was believed accurate
+  proto.DateTime asserted_date = 18;
+
+  // Who recorded the sensitivity
+  proto.Reference recorder = 19;
+
+  // Source of the information about the allergy
+  proto.Reference asserter = 20;
+
+  // Date(/time) of last known occurrence of a reaction
+  proto.DateTime last_occurrence = 21;
+
+  // Additional text not captured in other fields
+  repeated proto.Annotation note = 22;
+
+  // Adverse Reaction Events linked to exposure to substance
+  message Reaction {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Specific substance or pharmaceutical product considered to be responsible
+    // for event
+    proto.CodeableConcept substance = 4;
+
+    // Clinical symptoms/signs associated with the Event
+    repeated proto.CodeableConcept manifestation = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Description of the event as a whole
+    proto.String description = 6;
+
+    // Date(/time) when manifestations showed
+    proto.DateTime onset = 7;
+
+    // mild | moderate | severe (of event as a whole)
+    proto.AllergyIntoleranceSeverityCode severity = 8;
+
+    // How the subject was exposed to the substance
+    proto.CodeableConcept exposure_route = 9;
+
+    // Text about event not captured in other fields
+    repeated proto.Annotation note = 10;
+  }
+  repeated Reaction reaction = 23;
+}
+
+// Auto-generated from StructureDefinition for US Core Birth Sex Extension.
+// Extension.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+message PatientUSCoreBirthSexExtension {
+  option (.google.fhir.stu3.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex";
+
+  // xml:id (or equivalent in JSON)
+  proto.String id = 1;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 2;
+
+  // Value of extension
+  UsCoreBirthSexCode value_code = 3;
+}
+
+// Auto-generated from StructureDefinition for US Core CarePlan Profile.
+// US Core CarePlan Profile.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-careplan
+message UsCoreCareplan {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/CarePlan";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-careplan";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // External Ids for this plan
+  repeated proto.Identifier identifier = 9;
+
+  // Protocol or definition
+  repeated proto.Reference definition = 10;
+
+  // Fulfills care plan
+  repeated proto.Reference based_on = 11;
+
+  // CarePlan replaced by this CarePlan
+  repeated proto.Reference replaces = 12;
+
+  // Part of referenced CarePlan
+  repeated proto.Reference part_of = 13;
+
+  // draft | active | suspended | completed | entered-in-error | cancelled |
+  // unknown
+  proto.CarePlanStatusCode status = 14
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // proposal | plan | order | option
+  proto.CarePlanIntentCode intent = 15
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Type of plan
+  repeated proto.CodeableConcept category = 16
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Human-friendly name for the CarePlan
+  proto.String title = 17;
+
+  // Summary of nature of plan
+  proto.String description = 18;
+
+  // Who care plan is for
+  proto.Reference subject = 19
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Created in context of
+  proto.Reference context = 20;
+
+  // Time period plan covers
+  proto.Period period = 21;
+
+  // Who is responsible for contents of the plan
+  repeated proto.Reference author = 22;
+
+  // Who's involved in plan?
+  repeated proto.Reference care_team = 23;
+
+  // Health issues this plan addresses
+  repeated proto.Reference addresses = 24;
+
+  // Information considered as part of plan
+  repeated proto.Reference supporting_info = 25;
+
+  // Desired outcome of plan
+  repeated proto.Reference goal = 26;
+
+  // Action to occur as part of plan
+  message Activity {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Results of the activity
+    repeated proto.CodeableConcept outcome_codeable_concept = 4;
+
+    // Appointment, Encounter, Procedure, etc.
+    repeated proto.Reference outcome_reference = 5;
+
+    // Comments about the activity status/progress
+    repeated proto.Annotation progress = 6;
+
+    // Activity details defined in specific resource
+    proto.Reference reference = 7;
+
+    // In-line definition of activity
+    message Detail {
+      // xml:id (or equivalent in JSON)
+      proto.String id = 1;
+
+      // Additional Content defined by implementations
+      repeated proto.Extension extension = 2;
+
+      // Extensions that cannot be ignored
+      repeated proto.Extension modifier_extension = 3;
+
+      // diet | drug | encounter | observation | procedure | supply | other
+      proto.CodeableConcept category = 4;
+
+      // Protocol or definition
+      proto.Reference definition = 5;
+
+      // Detail type of activity
+      proto.CodeableConcept code = 6;
+
+      // Why activity should be done or why activity was prohibited
+      repeated proto.CodeableConcept reason_code = 7;
+
+      // Condition triggering need for activity
+      repeated proto.Reference reason_reference = 8;
+
+      // Goals this activity relates to
+      repeated proto.Reference goal = 9;
+
+      // not-started | scheduled | in-progress | on-hold | completed | cancelled
+      // | unknown
+      proto.CarePlanActivityStatusCode status = 10
+          [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Reason for current status
+      proto.String status_reason = 11;
+
+      // Do NOT do
+      proto.Boolean prohibited = 12;
+
+      // When activity is to occur
+      message Scheduled {
+        oneof scheduled {
+          proto.Timing timing = 1;
+          proto.Period period = 2;
+          proto.String string_value = 3 [json_name = "string"];
+        }
+      }
+      Scheduled scheduled = 13
+          [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+      // Where it should happen
+      proto.Reference location = 14;
+
+      // Who will be responsible?
+      repeated proto.Reference performer = 15;
+
+      // What is to be administered/supplied
+      message Product {
+        oneof product {
+          proto.CodeableConcept codeable_concept = 1;
+          proto.Reference reference = 2;
+        }
+      }
+      Product product = 16 [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+      // How to consume/day?
+      proto.SimpleQuantity daily_amount = 17;
+
+      // How much to administer/supply/consume
+      proto.SimpleQuantity quantity = 18;
+
+      // Extra info describing activity to perform
+      proto.String description = 19;
+    }
+    Detail detail = 8;
+  }
+  repeated Activity activity = 27;
+
+  // Comments about the plan
+  repeated proto.Annotation note = 28;
+}
+
+// Auto-generated from StructureDefinition for US  Core CareTeam Profile.
+// US Core CareTeam Profile.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-careteam
+message UsCoreCareteam {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/CareTeam";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-careteam";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // External Ids for this team
+  repeated proto.Identifier identifier = 9;
+
+  // proposed | active | suspended | inactive | entered-in-error
+  proto.CareTeamStatusCode status = 10
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Type of team
+  repeated proto.CodeableConcept category = 11;
+
+  // Name of the team, such as crisis assessment team
+  proto.String name = 12;
+
+  // Who care team is for
+  proto.Reference subject = 13
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Encounter or episode associated with CareTeam
+  proto.Reference context = 14;
+
+  // Time period team covers
+  proto.Period period = 15;
+
+  // Members of the team
+  message Participant {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Type of involvement
+    proto.CodeableConcept role = 4
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Who is involved
+    proto.Reference member = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Organization of the practitioner
+    proto.Reference on_behalf_of = 6;
+
+    // Time period of participant
+    proto.Period period = 7;
+  }
+  repeated Participant participant = 16
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Why the care team exists
+  repeated proto.CodeableConcept reason_code = 17;
+
+  // Why the care team exists
+  repeated proto.Reference reason_reference = 18;
+
+  // Organization responsible for the care team
+  repeated proto.Reference managing_organization = 19;
+
+  // Comments made about the CareTeam
+  repeated proto.Annotation note = 20;
+}
+
+// Auto-generated from StructureDefinition for US  Core Condition (a.k.a
+// Problem) Profile. US Core Condition Profile. See
+// http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition
+message UsCoreCondition {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Condition";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // External Ids for this condition
+  repeated proto.Identifier identifier = 9;
+
+  // active | recurrence | inactive | remission | resolved
+  proto.ConditionClinicalStatusCodesCode clinical_status = 10;
+
+  // provisional | differential | confirmed | refuted | entered-in-error |
+  // unknown
+  proto.ConditionVerificationStatusCode verification_status = 11
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // problem-list-item | encounter-diagnosis
+  repeated proto.CodeableConcept category = 12
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Subjective severity of condition
+  proto.CodeableConcept severity = 13;
+
+  // Identification of the condition, problem or diagnosis
+  proto.CodeableConcept code = 14
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Anatomical location, if relevant
+  repeated proto.CodeableConcept body_site = 15;
+
+  // Who has the condition?
+  proto.Reference subject = 16
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Encounter or episode when condition first asserted
+  proto.Reference context = 17;
+
+  // Estimated or actual date,  date-time, or age
+  message Onset {
+    oneof onset {
+      proto.DateTime date_time = 1;
+      proto.Age age = 2;
+      proto.Period period = 3;
+      proto.Range range = 4;
+      proto.String string_value = 5 [json_name = "string"];
+    }
+  }
+  Onset onset = 18 [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+  // If/when in resolution/remission
+  message Abatement {
+    oneof abatement {
+      proto.DateTime date_time = 1;
+      proto.Age age = 2;
+      proto.Boolean boolean = 3;
+      proto.Period period = 4;
+      proto.Range range = 5;
+      proto.String string_value = 6 [json_name = "string"];
+    }
+  }
+  Abatement abatement = 19 [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+  // Date record was believed accurate
+  proto.DateTime asserted_date = 20;
+
+  // Person who asserts this condition
+  proto.Reference asserter = 21;
+
+  // Stage/grade, usually assessed formally
+  message Stage {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Simple summary (disease specific)
+    proto.CodeableConcept summary = 4;
+
+    // Formal record of assessment
+    repeated proto.Reference assessment = 5;
+  }
+  Stage stage = 22;
+
+  // Supporting evidence
+  message Evidence {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Manifestation/symptom
+    repeated proto.CodeableConcept code = 4;
+
+    // Supporting information found elsewhere
+    repeated proto.Reference detail = 5;
+  }
+  repeated Evidence evidence = 23;
+
+  // Additional information about the Condition
+  repeated proto.Annotation note = 24;
+}
+
+// Auto-generated from StructureDefinition for US  Core Device Profile.
+// US Core Implanted Device Profile.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-device
+message UsCoreDevice {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Device";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-device";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // Instance identifier
+  repeated proto.Identifier identifier = 9;
+
+  // Unique Device Identifier (UDI) Barcode string
+  message Udi {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Mandatory fixed portion of UDI
+    proto.String device_identifier = 4;
+
+    // Device Name as appears on UDI label
+    proto.String name = 5;
+
+    // Regional UDI authority
+    proto.Uri jurisdiction = 6;
+
+    // UDI Human Readable Barcode String
+    proto.String carrier_h_r_f = 7;
+
+    // UDI Machine Readable Barcode String
+    proto.Base64Binary carrier_a_i_d_c = 8;
+
+    // UDI Issuing Organization
+    proto.Uri issuer = 9;
+
+    // barcode | rfid | manual +
+    proto.UDIEntryTypeCode entry_type = 10;
+  }
+  Udi udi = 10
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // active | inactive | entered-in-error | unknown
+  proto.FHIRDeviceStatusCode status = 11;
+
+  // What kind of device this is
+  proto.CodeableConcept type = 12
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Lot number of manufacture
+  proto.String lot_number = 13;
+
+  // Name of device manufacturer
+  proto.String manufacturer = 14;
+
+  // Date when the device was made
+  proto.DateTime manufacture_date = 15;
+
+  // Date and time of expiry of this device (if applicable)
+  proto.DateTime expiration_date = 16;
+
+  // Model id assigned by the manufacturer
+  proto.String model = 17;
+
+  // Version number (i.e. software)
+  proto.String version = 18;
+
+  // Patient to whom Device is affixed
+  proto.Reference patient = 19
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Organization responsible for device
+  proto.Reference owner = 20;
+
+  // Details for human/organization for support
+  repeated proto.ContactPoint contact = 21;
+
+  // Where the resource is found
+  proto.Reference location = 22;
+
+  // Network address to contact device
+  proto.Uri url = 23;
+
+  // Device notes and comments
+  repeated proto.Annotation note = 24;
+
+  // Safety Characteristics of Device
+  repeated proto.CodeableConcept safety = 25;
+}
+
+// Auto-generated from StructureDefinition for US  Core DiagnosticReport
+// Profile. US Core Diagnostic Report Profile. See
+// http://hl7.org/fhir/us/core/StructureDefinition/us-core-diagnosticreport
+message UsCoreDiagnosticreport {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/DiagnosticReport";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-diagnosticreport";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // Business identifier for report
+  repeated proto.Identifier identifier = 9;
+
+  // What was requested
+  repeated proto.Reference based_on = 10;
+
+  // registered | partial | preliminary | final +
+  proto.DiagnosticReportStatusCode status = 11
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Service category
+  proto.CodeableConcept category = 12
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // US Core Laboratory Report Order Code
+  proto.CodeableConcept code = 13
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The subject of the report - usually, but not always, the patient
+  proto.Reference subject = 14
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Health care event when test ordered
+  proto.Reference context = 15;
+
+  // Specimen Collection Datetime or Period
+  message Effective {
+    oneof effective {
+      proto.DateTime date_time = 1;
+      proto.Period period = 2;
+    }
+  }
+  Effective effective = 16 [
+    (.google.fhir.stu3.proto.is_choice_type) = true,
+    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
+  ];
+
+  // DateTime this version was released
+  proto.Instant issued = 17
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Participants in producing the report
+  message Performer {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Type of performer
+    proto.CodeableConcept role = 4;
+
+    // Practitioner or Organization  participant
+    proto.Reference actor = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Performer performer = 18;
+
+  // Specimens this report is based on
+  repeated proto.Reference specimen = 19;
+
+  // Observations - simple, or complex nested groups
+  repeated proto.Reference result = 20;
+
+  // Reference to full details of imaging associated with the diagnostic report
+  repeated proto.Reference imaging_study = 21;
+
+  // Key images associated with this report
+  message Image {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Comment about the image (e.g. explanation)
+    proto.String comment = 4;
+
+    // Reference to the image source
+    proto.Reference link = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Image image = 22;
+
+  // Clinical Interpretation of test results
+  proto.String conclusion = 23;
+
+  // Codes for the conclusion
+  repeated proto.CodeableConcept coded_diagnosis = 24;
+
+  // Entire report as issued
+  repeated proto.Attachment presented_form = 25;
+}
+
+// Auto-generated from StructureDefinition for UsCoreDirect.
+// Email is a "direct" email.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-direct
+message ContactPointUsCoreDirect {
+  option (.google.fhir.stu3.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-direct";
+
+  // xml:id (or equivalent in JSON)
+  proto.String id = 1;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 2;
+
+  // Value of extension
+  proto.Boolean value_boolean = 3;
+}
+
+// Auto-generated from StructureDefinition for US Core ethnicity Extension.
+// US Core ethnicity Extension.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+message PatientUSCoreEthnicityExtension {
+  option (.google.fhir.stu3.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity";
+
+  // xml:id (or equivalent in JSON)
+  proto.String id = 1;
+
+  // Extension
+  repeated proto.Extension extension = 2;
+
+  // Hispanic or Latino|Not Hispanic or Latino
+  proto.Coding omb_category = 4;
+
+  // Extended ethnicity codes
+  repeated proto.Coding detailed = 5;
+
+  // ethnicity Text
+  proto.String text = 6
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+}
+
+// Auto-generated from StructureDefinition for US  Core Goal Profile.
+// US Core Goal Profile.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-goal
+message UsCoreGoal {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Goal";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-goal";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // External Ids for this goal
+  repeated proto.Identifier identifier = 9;
+
+  // proposed | accepted | planned | in-progress | on-target | ahead-of-target |
+  // behind-target | sustaining | achieved | on-hold | cancelled |
+  // entered-in-error | rejected
+  proto.GoalStatusCode status = 10
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // E.g. Treatment, dietary, behavioral, etc.
+  repeated proto.CodeableConcept category = 11;
+
+  // high-priority | medium-priority | low-priority
+  proto.CodeableConcept priority = 12;
+
+  // Code or text describing goal
+  proto.CodeableConcept description = 13
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who this goal is intended for
+  proto.Reference subject = 14
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // When goal pursuit begins
+  message Start {
+    oneof start {
+      proto.Date date = 1;
+      proto.CodeableConcept codeable_concept = 2;
+    }
+  }
+  Start start = 15 [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+  // Target outcome for the goal
+  message Target {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // The parameter whose value is being tracked
+    proto.CodeableConcept measure = 4;
+
+    // The target value to be achieved
+    message Detail {
+      oneof detail {
+        proto.Quantity quantity = 1;
+        proto.Range range = 2;
+        proto.CodeableConcept codeable_concept = 3;
+      }
+    }
+    Detail detail = 5 [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+    // Reach goal on or before
+    message Due {
+      oneof due {
+        proto.Date date = 1;
+        proto.Duration duration = 2;
+      }
+    }
+    Due due = 6 [(.google.fhir.stu3.proto.is_choice_type) = true];
+  }
+  Target target = 16;
+
+  // When goal status took effect
+  proto.Date status_date = 17;
+
+  // Reason for current status
+  proto.String status_reason = 18;
+
+  // Who's responsible for creating Goal?
+  proto.Reference expressed_by = 19;
+
+  // Issues addressed by this goal
+  repeated proto.Reference addresses = 20;
+
+  // Comments about the goal
+  repeated proto.Annotation note = 21;
+
+  // What result was achieved regarding the goal?
+  repeated proto.CodeableConcept outcome_code = 22;
+
+  // Observation that resulted from goal
+  repeated proto.Reference outcome_reference = 23;
+}
+
+// Auto-generated from StructureDefinition for US  Core Immunization Profile.
+// US Core Immunization Profile.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-immunization
+message UsCoreImmunization {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Immunization";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-immunization";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // Business identifier
+  repeated proto.Identifier identifier = 9;
+
+  // completed | entered-in-error
+  proto.ImmunizationStatusCodesCode status = 10
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Flag for whether immunization was given
+  proto.Boolean not_given = 11
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Vaccine Product Type (bind to CVX)
+  proto.CodeableConcept vaccine_code = 12
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who was immunized
+  proto.Reference patient = 13
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Encounter administered as part of
+  proto.Reference encounter = 14;
+
+  // Vaccination administration date
+  proto.DateTime date = 15
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Indicates context the data was recorded in
+  proto.Boolean primary_source = 16
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Indicates the source of a secondarily reported record
+  proto.CodeableConcept report_origin = 17;
+
+  // Where vaccination occurred
+  proto.Reference location = 18;
+
+  // Vaccine manufacturer
+  proto.Reference manufacturer = 19;
+
+  // Vaccine lot number
+  proto.String lot_number = 20;
+
+  // Vaccine expiration date
+  proto.Date expiration_date = 21;
+
+  // Body site vaccine  was administered
+  proto.CodeableConcept site = 22;
+
+  // How vaccine entered body
+  proto.CodeableConcept route = 23;
+
+  // Amount of vaccine administered
+  proto.SimpleQuantity dose_quantity = 24;
+
+  // Who performed event
+  message Practitioner {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // What type of performance was done
+    proto.CodeableConcept role = 4;
+
+    // Individual who was performing
+    proto.Reference actor = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Practitioner practitioner = 25;
+
+  // Vaccination notes
+  repeated proto.Annotation note = 26;
+
+  // Administration/non-administration reasons
+  message Explanation {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Why immunization occurred
+    repeated proto.CodeableConcept reason = 4;
+
+    // Why immunization did not occur
+    repeated proto.CodeableConcept reason_not_given = 5;
+  }
+  Explanation explanation = 27;
+
+  // Details of a reaction that follows immunization
+  message Reaction {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // When reaction started
+    proto.DateTime date = 4;
+
+    // Additional information on reaction
+    proto.Reference detail = 5;
+
+    // Indicates self-reported reaction
+    proto.Boolean reported = 6;
+  }
+  repeated Reaction reaction = 28;
+
+  // What protocol was followed
+  message VaccinationProtocol {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Dose number within series
+    proto.PositiveInt dose_sequence = 4;
+
+    // Details of vaccine protocol
+    proto.String description = 5;
+
+    // Who is responsible for protocol
+    proto.Reference authority = 6;
+
+    // Name of vaccine series
+    proto.String series = 7;
+
+    // Recommended number of doses for immunity
+    proto.PositiveInt series_doses = 8;
+
+    // Disease immunized against
+    repeated proto.CodeableConcept target_disease = 9
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Indicates if dose counts towards immunity
+    proto.CodeableConcept dose_status = 10
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Why dose does (not) count
+    proto.CodeableConcept dose_status_reason = 11;
+  }
+  repeated VaccinationProtocol vaccination_protocol = 29;
+}
+
+// Auto-generated from StructureDefinition for US  Core Location Profile.
+// US Core Location Profile.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-location
+message UsCoreLocation {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Location";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-location";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // Unique code or number identifying the location to its users
+  repeated proto.Identifier identifier = 9;
+
+  // active | suspended | inactive
+  proto.LocationStatusCode status = 10;
+
+  // The Operational status of the location (typically only for a bed/room)
+  proto.Coding operational_status = 11;
+
+  // Name of the location as used by humans
+  proto.String name = 12
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // A list of alternate names that the location is known as, or was known as in
+  // the past
+  repeated proto.String alias = 13;
+
+  // Additional details about the location that could be displayed as further
+  // information to identify the location beyond its name
+  proto.String description = 14;
+
+  // instance | kind
+  proto.LocationModeCode mode = 15;
+
+  // Type of function performed
+  proto.CodeableConcept type = 16;
+
+  // Contact details of the location
+  repeated proto.ContactPoint telecom = 17;
+
+  // Physical location
+  proto.Address address = 18;
+
+  // Physical form of the location
+  proto.CodeableConcept physical_type = 19;
+
+  // The absolute geographic location
+  message Position {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Longitude with WGS84 datum
+    proto.Decimal longitude = 4
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Latitude with WGS84 datum
+    proto.Decimal latitude = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Altitude with WGS84 datum
+    proto.Decimal altitude = 6;
+  }
+  Position position = 20;
+
+  // Organization responsible for provisioning and upkeep
+  proto.Reference managing_organization = 21;
+
+  // Another Location this one is physically part of
+  proto.Reference part_of = 22;
+
+  // Technical endpoints providing access to services operated for the location
+  repeated proto.Reference endpoint = 23;
+}
+
+// Auto-generated from StructureDefinition for US  Core Medication Profile.
+// US Core Medication Profile.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-medication
+message UsCoreMedication {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Medication";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medication";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // Codes that identify this medication
+  proto.CodeableConcept code = 9
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // active | inactive | entered-in-error
+  proto.MedicationStatusCode status = 10;
+
+  // True if a brand
+  proto.Boolean is_brand = 11;
+
+  // True if medication does not require a prescription
+  proto.Boolean is_over_the_counter = 12;
+
+  // Manufacturer of the item
+  proto.Reference manufacturer = 13;
+
+  // powder | tablets | capsule +
+  proto.CodeableConcept form = 14;
+
+  // Active or inactive ingredient
+  message Ingredient {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // The product contained
+    message Item {
+      oneof item {
+        proto.CodeableConcept codeable_concept = 1;
+        proto.Reference reference = 2;
+      }
+    }
+    Item item = 4 [
+      (.google.fhir.stu3.proto.is_choice_type) = true,
+      (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
+    ];
+
+    // Active ingredient indicator
+    proto.Boolean is_active = 5;
+
+    // Quantity of ingredient present
+    proto.Ratio amount = 6;
+  }
+  repeated Ingredient ingredient = 15;
+
+  // Details about packaged medications
+  message Package {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // E.g. box, vial, blister-pack
+    proto.CodeableConcept container = 4;
+
+    // What is  in the package
+    message Content {
+      // xml:id (or equivalent in JSON)
+      proto.String id = 1;
+
+      // Additional Content defined by implementations
+      repeated proto.Extension extension = 2;
+
+      // Extensions that cannot be ignored
+      repeated proto.Extension modifier_extension = 3;
+
+      // The item in the package
+      message Item {
+        oneof item {
+          proto.CodeableConcept codeable_concept = 1;
+          proto.Reference reference = 2;
+        }
+      }
+      Item item = 4 [
+        (.google.fhir.stu3.proto.is_choice_type) = true,
+        (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
+      ];
+
+      // Quantity present in the package
+      proto.SimpleQuantity amount = 5;
+    }
+    repeated Content content = 5;
+
+    // Identifies a single production run
+    message Batch {
+      // xml:id (or equivalent in JSON)
+      proto.String id = 1;
+
+      // Additional Content defined by implementations
+      repeated proto.Extension extension = 2;
+
+      // Extensions that cannot be ignored
+      repeated proto.Extension modifier_extension = 3;
+
+      // Identifier assigned to batch
+      proto.String lot_number = 4;
+
+      // When batch will expire
+      proto.DateTime expiration_date = 5;
+    }
+    repeated Batch batch = 6;
+  }
+  Package package_value = 16 [json_name = "package"];
+
+  // Picture of the medication
+  repeated proto.Attachment image = 17;
+}
+
+// Auto-generated from StructureDefinition for US  Core MedicationRequest
+// Profile. US Core Medication Request Profile. See
+// http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest
+message UsCoreMedicationrequest {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/MedicationRequest";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // External ids for this request
+  repeated proto.Identifier identifier = 9;
+
+  // Protocol or definition
+  repeated proto.Reference definition = 10;
+
+  // What request fulfills
+  repeated proto.Reference based_on = 11;
+
+  // Composite request this is part of
+  proto.Identifier group_identifier = 12;
+
+  // active | on-hold | cancelled | completed | entered-in-error | stopped |
+  // draft | unknown
+  proto.MedicationRequestStatusCode status = 13
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // proposal | plan | order | instance-order
+  proto.MedicationRequestIntentCode intent = 14
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Type of medication usage
+  proto.CodeableConcept category = 15;
+
+  // routine | urgent | stat | asap
+  proto.MedicationRequestPriorityCode priority = 16;
+
+  // Medication to be taken
+  message Medication {
+    oneof medication {
+      proto.CodeableConcept codeable_concept = 1;
+      proto.Reference reference = 2;
+    }
+  }
+  Medication medication = 17 [
+    (.google.fhir.stu3.proto.is_choice_type) = true,
+    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
+  ];
+
+  // Who or group medication request is for
+  proto.Reference subject = 18
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Created during encounter/admission/stay
+  proto.Reference context = 19;
+
+  // Information to support ordering of the medication
+  repeated proto.Reference supporting_information = 20;
+
+  // When request was initially authored
+  proto.DateTime authored_on = 21
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who/What requested the Request
+  message Requester {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Who ordered the initial medication(s)
+    proto.Reference agent = 4
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Organization agent is acting for
+    proto.Reference on_behalf_of = 5;
+  }
+  Requester requester = 22
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Person who entered the request
+  proto.Reference recorder = 23;
+
+  // Reason or indication for writing the prescription
+  repeated proto.CodeableConcept reason_code = 24;
+
+  // Condition or Observation that supports why the prescription is being
+  // written
+  repeated proto.Reference reason_reference = 25;
+
+  // Information about the prescription
+  repeated proto.Annotation note = 26;
+
+  // How the medication should be taken
+  repeated proto.Dosage dosage_instruction = 27;
+
+  // Medication supply authorization
+  message DispenseRequest {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Time period supply is authorized for
+    proto.Period validity_period = 4;
+
+    // Number of refills authorized
+    proto.PositiveInt number_of_repeats_allowed = 5;
+
+    // Amount of medication to supply per dispense
+    proto.SimpleQuantity quantity = 6;
+
+    // Number of days supply per dispense
+    proto.Duration expected_supply_duration = 7;
+
+    // Intended dispenser
+    proto.Reference performer = 8;
+  }
+  DispenseRequest dispense_request = 28;
+
+  // Any restrictions on medication substitution
+  message Substitution {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Whether substitution is allowed or not
+    proto.Boolean allowed = 4
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Why should (not) substitution be made
+    proto.CodeableConcept reason = 5;
+  }
+  Substitution substitution = 29;
+
+  // An order/prescription that is being replaced
+  proto.Reference prior_prescription = 30;
+
+  // Clinical Issue with action
+  repeated proto.Reference detected_issue = 31;
+
+  // A list of events of interest in the lifecycle
+  repeated proto.Reference event_history = 32;
+}
+
+// Auto-generated from StructureDefinition for US  Core MedicationStatement
+// Profile. US Core Medication Statement Profile. See
+// http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationstatement
+message UsCoreMedicationstatement {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/MedicationStatement";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationstatement";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // External identifier
+  repeated proto.Identifier identifier = 9;
+
+  // Fulfils plan, proposal or order
+  repeated proto.Reference based_on = 10;
+
+  // Part of referenced event
+  repeated proto.Reference part_of = 11;
+
+  // Encounter / Episode associated with MedicationStatement
+  proto.Reference context = 12;
+
+  // active | completed | entered-in-error | intended | stopped | on-hold
+  proto.MedicationStatementStatusCode status = 13
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Type of medication usage
+  proto.CodeableConcept category = 14;
+
+  // What medication was taken
+  message Medication {
+    oneof medication {
+      proto.CodeableConcept codeable_concept = 1;
+      proto.Reference reference = 2;
+    }
+  }
+  Medication medication = 15 [
+    (.google.fhir.stu3.proto.is_choice_type) = true,
+    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
+  ];
+
+  // The date/time or interval when the medication was taken
+  message Effective {
+    oneof effective {
+      proto.DateTime date_time = 1;
+      proto.Period period = 2;
+    }
+  }
+  Effective effective = 16 [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+  // When the statement was asserted?
+  proto.DateTime date_asserted = 17
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Person or organization that provided the information about the taking of
+  // this medication
+  proto.Reference information_source = 18;
+
+  // Who is/was taking  the medication
+  proto.Reference subject = 19
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Additional supporting information
+  repeated proto.Reference derived_from = 20;
+
+  // y | n | unk | na
+  proto.MedicationStatementTakenCode taken = 21
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // True if asserting medication was not given
+  repeated proto.CodeableConcept reason_not_taken = 22;
+
+  // Reason for why the medication is being/was taken
+  repeated proto.CodeableConcept reason_code = 23;
+
+  // Condition or observation that supports why the medication is being/was
+  // taken
+  repeated proto.Reference reason_reference = 24;
+
+  // Further information about the statement
+  repeated proto.Annotation note = 25;
+
+  // Details of how medication is/was taken or should be taken
+  repeated proto.Dosage dosage = 26;
+}
+
+// Auto-generated from StructureDefinition for US  Core Results Profile.
+// US Core Result Observation.
+// See
+// http://hl7.org/fhir/us/core/StructureDefinition/us-core-observationresults
+message UsCoreObservationresults {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observationresults";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated proto.Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated proto.Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  proto.ObservationStatusCode status = 11
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated proto.CodeableConcept category = 12
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Laboratory Test Name
+  proto.CodeableConcept code = 13
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  proto.Reference subject = 14
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Healthcare event during which this observation is made
+  proto.Reference context = 15;
+
+  // Clinically relevant time/time-period for observation
+  message Effective {
+    oneof effective {
+      proto.DateTime date_time = 1;
+      proto.Period period = 2;
+    }
+  }
+  Effective effective = 16 [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+  // Date/Time this was made available
+  proto.Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated proto.Reference performer = 18;
+
+  // Result Value
+  message Value {
+    oneof value {
+      proto.Quantity quantity = 1;
+      proto.CodeableConcept codeable_concept = 2;
+      proto.String string_value = 3 [json_name = "string"];
+      proto.Boolean boolean = 4;
+      proto.Range range = 5;
+      proto.Ratio ratio = 6;
+      proto.SampledData sampled_data = 7;
+      proto.Attachment attachment = 8;
+      proto.Time time = 9;
+      proto.DateTime date_time = 10;
+      proto.Period period = 11;
+    }
+  }
+  Value value = 19 [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+  // Why the result is missing
+  proto.CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  proto.CodeableConcept interpretation = 21;
+
+  // Comments about result
+  proto.String comment = 22;
+
+  // Observed body part
+  proto.CodeableConcept body_site = 23;
+
+  // How it was done
+  proto.CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  proto.Reference specimen = 25;
+
+  // (Measurement) Device
+  proto.Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    proto.SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    proto.SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    proto.CodeableConcept type = 6;
+
+    // Reference range population
+    repeated proto.CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    proto.Range age = 8;
+
+    // Text based reference range in an observation
+    proto.String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Resource related to this observation
+  message Related {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    proto.ObservationRelationshipTypeCode type = 4;
+
+    // Resource that is related to this one
+    proto.Reference target = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28;
+
+  // Component results
+  message Component {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    proto.CodeableConcept code = 4
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Actual component result
+    message Value {
+      oneof value {
+        proto.Quantity quantity = 1;
+        proto.CodeableConcept codeable_concept = 2;
+        proto.String string_value = 3 [json_name = "string"];
+        proto.Range range = 4;
+        proto.Ratio ratio = 5;
+        proto.SampledData sampled_data = 6;
+        proto.Attachment attachment = 7;
+        proto.Time time = 8;
+        proto.DateTime date_time = 9;
+        proto.Period period = 10;
+      }
+    }
+    Value value = 5 [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+    // Why the component result is missing
+    proto.CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    proto.CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}
+
+// Auto-generated from StructureDefinition for US Core Organization Profile.
+// US Core Organization Profile.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-organization
+message UsCoreOrganization {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Organization";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-organization";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // Identifies this organization  across multiple systems
+  repeated proto.Identifier identifier = 9
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Whether the organization's record is still in active use
+  proto.Boolean active = 10
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Kind of organization
+  repeated proto.CodeableConcept type = 11;
+
+  // Name used for the organization
+  proto.String name = 12
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // A list of alternate names that the organization is known as, or was known
+  // as in the past
+  repeated proto.String alias = 13;
+
+  // A contact detail for the organization
+  repeated proto.ContactPoint telecom = 14
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // An address for the organization
+  repeated proto.Address address = 15
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The organization of which this organization forms a part
+  proto.Reference part_of = 16;
+
+  // Contact for the organization for a certain purpose
+  message Contact {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // The type of contact
+    proto.CodeableConcept purpose = 4;
+
+    // A name associated with the contact
+    proto.HumanName name = 5;
+
+    // Contact details (telephone, email, etc.)  for a contact
+    repeated proto.ContactPoint telecom = 6;
+
+    // Visiting or postal addresses for the contact
+    proto.Address address = 7;
+  }
+  repeated Contact contact = 17;
+
+  // Technical endpoints providing access to services operated for the
+  // organization
+  repeated proto.Reference endpoint = 18;
+}
+
+// Auto-generated from StructureDefinition for US Core Patient Profile.
+// US Core Patient Profile.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient
+message UsCorePatient {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Patient";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Extension
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // An identifier for this patient
+  repeated proto.Identifier identifier = 9
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Whether this patient's record is in active use
+  proto.Boolean active = 10;
+
+  // A name associated with the patient
+  repeated proto.HumanName name = 11
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // A contact detail for the individual
+  repeated proto.ContactPoint telecom = 12;
+
+  // male | female | other | unknown
+  proto.AdministrativeGenderCode gender = 13
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The date of birth for the individual
+  proto.Date birth_date = 14;
+
+  // Indicates if the individual is deceased or not
+  message Deceased {
+    oneof deceased {
+      proto.Boolean boolean = 1;
+      proto.DateTime date_time = 2;
+    }
+  }
+  Deceased deceased = 15 [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+  // Addresses for the individual
+  repeated proto.Address address = 16;
+
+  // Marital (civil) status of a patient
+  proto.CodeableConcept marital_status = 17;
+
+  // Whether patient is part of a multiple birth
+  message MultipleBirth {
+    oneof multiple_birth {
+      proto.Boolean boolean = 1;
+      proto.Integer integer = 2;
+    }
+  }
+  MultipleBirth multiple_birth = 18
+      [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+  // Image of the patient
+  repeated proto.Attachment photo = 19;
+
+  // A contact party (e.g. guardian, partner, friend) for the patient
+  message Contact {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // The kind of relationship
+    repeated proto.CodeableConcept relationship = 4;
+
+    // A name associated with the contact person
+    proto.HumanName name = 5;
+
+    // A contact detail for the person
+    repeated proto.ContactPoint telecom = 6;
+
+    // Address for the contact person
+    proto.Address address = 7;
+
+    // male | female | other | unknown
+    proto.AdministrativeGenderCode gender = 8;
+
+    // Organization that is associated with the contact
+    proto.Reference organization = 9;
+
+    // The period during which this contact person or organization is valid to
+    // be contacted relating to this patient
+    proto.Period period = 10;
+  }
+  repeated Contact contact = 20;
+
+  // A list of Languages which may be used to communicate with the patient about
+  // his or her health
+  message Communication {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // The language which can be used to communicate with the patient about his
+    // or her health
+    proto.CodeableConcept language = 4
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Language preference indicator
+    proto.Boolean preferred = 5;
+  }
+  repeated Communication communication = 22;
+
+  // Patient's nominated primary care provider
+  repeated proto.Reference general_practitioner = 23;
+
+  // Organization that is the custodian of the patient record
+  proto.Reference managing_organization = 24;
+
+  // Link to another patient resource that concerns the same actual person
+  message Link {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // The other patient or related person resource that the link refers to
+    proto.Reference other = 4
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // replaced-by | replaces | refer | seealso - type of link
+    proto.LinkTypeCode type = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Link link = 25;
+
+  // Extension
+  PatientUSCoreRaceExtension race = 26
+      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+           "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"];
+
+  // Extension
+  PatientUSCoreEthnicityExtension ethnicity = 27
+      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+           "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"];
+
+  // Extension
+  proto.UsCoreBirthSexCode birthsex = 28
+      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+           "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"];
+}
+
+// Auto-generated from StructureDefinition for US  Core Practitioner Profile.
+// US Core Practitioner.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner
+message UsCorePractitioner {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Practitioner";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // A identifier for the person as this agent
+  repeated proto.Identifier identifier = 9
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Whether this practitioner's record is in active use
+  proto.Boolean active = 10;
+
+  // The name(s) associated with the practitioner
+  proto.HumanName name = 11
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // A contact detail for the practitioner (that apply to all roles)
+  repeated proto.ContactPoint telecom = 12;
+
+  // Address(es) of the practitioner that are not role specific (typically home
+  // address)
+  repeated proto.Address address = 13;
+
+  // male | female | other | unknown
+  proto.AdministrativeGenderCode gender = 14;
+
+  // The date  on which the practitioner was born
+  proto.Date birth_date = 15;
+
+  // Image of the person
+  repeated proto.Attachment photo = 16;
+
+  // Qualifications obtained by training and certification
+  message Qualification {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // An identifier for this qualification for the practitioner
+    repeated proto.Identifier identifier = 4;
+
+    // Coded representation of the qualification
+    proto.CodeableConcept code = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Period during which the qualification is valid
+    proto.Period period = 6;
+
+    // Organization that regulates and issues the qualification
+    proto.Reference issuer = 7;
+  }
+  repeated Qualification qualification = 17;
+
+  // A language the practitioner is able to use in patient communication
+  repeated proto.CodeableConcept communication = 18;
+}
+
+// Auto-generated from StructureDefinition for US  Core Procedure Profile.
+// US Core Procedure Profile.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-procedure
+message UsCoreProcedure {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Procedure";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-procedure";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // External Identifiers for this procedure
+  repeated proto.Identifier identifier = 9;
+
+  // Instantiates protocol or definition
+  repeated proto.Reference definition = 10;
+
+  // A request for this procedure
+  repeated proto.Reference based_on = 11;
+
+  // Part of referenced event
+  repeated proto.Reference part_of = 12;
+
+  // preparation | in-progress | suspended | aborted | completed |
+  // entered-in-error | unknown
+  proto.EventStatusCode status = 13
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // True if procedure was not performed as scheduled
+  proto.Boolean not_done = 14;
+
+  // Reason procedure was not performed
+  proto.CodeableConcept not_done_reason = 15;
+
+  // Classification of the procedure
+  proto.CodeableConcept category = 16;
+
+  // SNOMED-CT | ICD-10 | CPT-4
+  proto.CodeableConcept code = 17
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who the procedure was performed on
+  proto.Reference subject = 18
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Encounter or episode associated with the procedure
+  proto.Reference context = 19;
+
+  // Date/Period the procedure was performed
+  message Performed {
+    oneof performed {
+      proto.DateTime date_time = 1;
+      proto.Period period = 2;
+    }
+  }
+  Performed performed = 20 [
+    (.google.fhir.stu3.proto.is_choice_type) = true,
+    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
+  ];
+
+  // The people who performed the procedure
+  message Performer {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // The role the actor was in
+    proto.CodeableConcept role = 4;
+
+    // The reference to the practitioner
+    proto.Reference actor = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Organization the device or practitioner was acting for
+    proto.Reference on_behalf_of = 6;
+  }
+  repeated Performer performer = 21;
+
+  // Where the procedure happened
+  proto.Reference location = 22;
+
+  // Coded reason procedure performed
+  repeated proto.CodeableConcept reason_code = 23;
+
+  // Condition that is the reason the procedure performed
+  repeated proto.Reference reason_reference = 24;
+
+  // Target body sites
+  repeated proto.CodeableConcept body_site = 25;
+
+  // The result of procedure
+  proto.CodeableConcept outcome = 26;
+
+  // Any report resulting from the procedure
+  repeated proto.Reference report = 27;
+
+  // Complication following the procedure
+  repeated proto.CodeableConcept complication = 28;
+
+  // A condition that is a result of the procedure
+  repeated proto.Reference complication_detail = 29;
+
+  // Instructions for follow up
+  repeated proto.CodeableConcept follow_up = 30;
+
+  // Additional information about the procedure
+  repeated proto.Annotation note = 31;
+
+  // Device changed in procedure
+  message FocalDevice {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Kind of change to device
+    proto.CodeableConcept action = 4;
+
+    // Device that was changed
+    proto.Reference manipulated = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated FocalDevice focal_device = 32;
+
+  // Items used during procedure
+  repeated proto.Reference used_reference = 33;
+
+  // Coded items used during the procedure
+  repeated proto.CodeableConcept used_code = 34;
+}
+
+// Auto-generated from StructureDefinition for Profile-resource association
+// extension. Resource that this profile is based on. See
+// http://hl7.org/fhir/us/core/StructureDefinition/us-core-profile-link
+message CapabilityStatementProfileResourceAssociationExtension {
+  option (.google.fhir.stu3.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-profile-link";
+
+  // xml:id (or equivalent in JSON)
+  proto.String id = 1;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 2;
+
+  // Value of extension
+  proto.ResourceTypeCode value_code = 3;
+}
+
+// Auto-generated from StructureDefinition for US Core Race Extension.
+// US Core Race Extension.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+message PatientUSCoreRaceExtension {
+  option (.google.fhir.stu3.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race";
+
+  // xml:id (or equivalent in JSON)
+  proto.String id = 1;
+
+  // Extension
+  repeated proto.Extension extension = 2;
+
+  // American Indian or Alaska Native|Asian|Black or African American|Native
+  // Hawaiian or Other Pacific Islander|White
+  repeated proto.Coding omb_category = 4;
+
+  // Extended race codes
+  repeated proto.Coding detailed = 5;
+
+  // Race Text
+  proto.String text = 6
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+}
+
+// Auto-generated from StructureDefinition for US  Core Smoking Status Profile.
+// US Core Smoking Status Observation Profile.
+// See http://hl7.org/fhir/us/core/StructureDefinition/us-core-smokingstatus
+message UsCoreSmokingstatus {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-smokingstatus";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated proto.Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated proto.Reference based_on = 10;
+
+  // registered | preliminary | final | amended +
+  proto.ObservationStatusCode status = 11
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated proto.CodeableConcept category = 12;
+
+  // Smoking Status: LOINC 72166-2  = Tobacco smoking status NHIS
+  proto.CodeableConcept code = 13
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  proto.Reference subject = 14
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Healthcare event during which this observation is made
+  proto.Reference context = 15;
+
+  // Clinically relevant time/time-period for observation
+  message Effective {
+    oneof effective {
+      proto.DateTime date_time = 1;
+      proto.Period period = 2;
+    }
+  }
+  Effective effective = 16 [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+  // Date/Time this was made available
+  proto.Instant issued = 17
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who is responsible for the observation
+  repeated proto.Reference performer = 18;
+
+  // Coded Responses from Smoking Status Value Set
+  message Value {
+    oneof value {
+      proto.CodeableConcept codeable_concept = 2;
+    }
+  }
+  Value value = 19 [
+    (.google.fhir.stu3.proto.is_choice_type) = true,
+    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
+  ];
+
+  // Why the result is missing
+  proto.CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  proto.CodeableConcept interpretation = 21;
+
+  // Comments about result
+  proto.String comment = 22;
+
+  // Observed body part
+  proto.CodeableConcept body_site = 23;
+
+  // How it was done
+  proto.CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  proto.Reference specimen = 25;
+
+  // (Measurement) Device
+  proto.Reference device = 26;
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    proto.SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    proto.SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    proto.CodeableConcept type = 6;
+
+    // Reference range population
+    repeated proto.CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    proto.Range age = 8;
+
+    // Text based reference range in an observation
+    proto.String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Resource related to this observation
+  message Related {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    proto.ObservationRelationshipTypeCode type = 4;
+
+    // Resource that is related to this one
+    proto.Reference target = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Related related = 28;
+
+  // Component results
+  message Component {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    proto.CodeableConcept code = 4
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Actual component result
+    message Value {
+      oneof value {
+        proto.Quantity quantity = 1;
+        proto.CodeableConcept codeable_concept = 2;
+        proto.String string_value = 3 [json_name = "string"];
+        proto.Range range = 4;
+        proto.Ratio ratio = 5;
+        proto.SampledData sampled_data = 6;
+        proto.Attachment attachment = 7;
+        proto.Time time = 8;
+        proto.DateTime date_time = 9;
+        proto.Period period = 10;
+      }
+    }
+    Value value = 5 [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+    // Why the component result is missing
+    proto.CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    proto.CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 29;
+}

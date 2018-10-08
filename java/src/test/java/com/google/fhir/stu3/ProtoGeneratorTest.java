@@ -25,13 +25,9 @@ import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.TextFormat;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.Before;
@@ -104,29 +100,32 @@ public class ProtoGeneratorTest {
     assertThat(descriptor.toProto()).isEqualTo(golden);
   }
 
+  private void addPackage(
+      Map<StructureDefinition, String> knownStructDefs, String dir, String protoPackage)
+      throws IOException {
+    // NOTE: consentdirective is omitted because it is malformed.  See:
+    // https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_item_id=19263
+    for (File file :
+        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/" + dir))
+            .listFiles(
+                (listDir, name) ->
+                    name.endsWith(".json") && !name.endsWith("consentdirective.profile.json"))) {
+      String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
+      StructureDefinition.Builder builder = StructureDefinition.newBuilder();
+      jsonParser.merge(json, builder);
+      knownStructDefs.put(builder.build(), protoPackage);
+    }
+  }
+
   public Map<StructureDefinition, String> getKnownStructDefs() throws IOException {
     if (knownStructDefs != null) {
       return knownStructDefs;
     }
-    // Note: consentdirective is malformed.
-    FilenameFilter jsonFilter =
-        (dir, name) -> name.endsWith(".json") && !name.endsWith("consentdirective.profile.json");
-    List<File> structDefs = new ArrayList<>();
-    Collections.addAll(
-        structDefs,
-        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/structure_definitions"))
-            .listFiles(jsonFilter));
-    Collections.addAll(
-        structDefs,
-        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/extensions"))
-            .listFiles(jsonFilter));
     knownStructDefs = new HashMap<>();
-    for (File file : structDefs) {
-      String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
-      StructureDefinition.Builder builder = StructureDefinition.newBuilder();
-      jsonParser.merge(json, builder);
-      knownStructDefs.put(builder.build(), "google.fhir.stu3.proto");
-    }
+    addPackage(knownStructDefs, "structure_definitions", "google.fhir.stu3.proto");
+    addPackage(knownStructDefs, "extensions", "google.fhir.stu3.proto");
+    addPackage(knownStructDefs, "google", "google.fhir.stu3.google");
+    addPackage(knownStructDefs, "uscore", "google.fhir.stu3.uscore");
     return knownStructDefs;
   }
 

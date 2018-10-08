@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.MoreCollectors;
+import com.google.fhir.stu3.proto.AbstractTypeCode;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.BindingStrengthCode;
 import com.google.fhir.stu3.proto.CodeableConcept;
@@ -36,6 +37,7 @@ import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.fhir.stu3.proto.StructureDefinitionKindCode;
 import com.google.fhir.stu3.proto.TypeDerivationRuleCode;
 import com.google.fhir.stu3.proto.Uri;
+import com.google.fhir.stu3.uscore.UsCoreBirthSexCode;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
@@ -47,6 +49,7 @@ import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Descriptors.FileDescriptor;
 import com.google.protobuf.Message;
 import java.io.File;
 import java.util.ArrayList;
@@ -123,6 +126,8 @@ public class ProtoGenerator {
   private final ImmutableMap<String, StructureDefinitionData> structDefDataByUrl;
   // Mapping from urls for StructureDefinition to data about that StructureDefinition.
   private final ImmutableMap<String, StructureDefinitionData> structDefDataById;
+  // Mapping from ValueSet url to Descriptor for the message type it should be inlined as.
+  private final ImmutableMap<String, Descriptor> valueSetTypesByCodeReference;
 
   // The package to write new protos to.
   // When regenerating proto files defined by the fhir spec like Decimal or Patient, this will equal
@@ -141,6 +146,16 @@ public class ProtoGenerator {
       this.structDef = structDef;
       this.inlineType = inlineType;
       this.protoPackage = protoPackage;
+    }
+  }
+
+  private static class QualifiedType {
+    final String type;
+    final String packageName;
+
+    QualifiedType(String type, String packageName) {
+      this.type = type;
+      this.packageName = packageName;
     }
   }
 
@@ -200,6 +215,13 @@ public class ProtoGenerator {
     this.goPackageName = goPackageName;
     this.fhirProtoRootPath = fhirProtoRootPath;
 
+    // TODO(nickgeorge): Do this with ValueSet resources once we have them
+    this.valueSetTypesByCodeReference =
+        new ImmutableMap.Builder<String, Descriptor>()
+            .putAll(loadCodeTypesFromFile(AbstractTypeCode.getDescriptor().getFile()))
+            .putAll(loadCodeTypesFromFile(UsCoreBirthSexCode.getDescriptor().getFile()))
+            .build();
+
     Map<String, StructureDefinitionData> mutableStructDefDataByUrl = new HashMap<>();
     Map<String, StructureDefinitionData> mutableStructDefDataById = new HashMap<>();
     for (Map.Entry<StructureDefinition, String> knownType : knownTypes.entrySet()) {
@@ -210,18 +232,34 @@ public class ProtoGenerator {
         throw new IllegalArgumentException(
             "Invalid FHIR structure definition: " + def.getId().getValue() + " has no url");
       }
-      String inlineType =
+      boolean isSimpleInternalExtension =
           isSimpleInternalExtension(
-                  def.getSnapshot().getElement(0), def.getSnapshot().getElementList())
-              ? getSimpleExtensionDefinitionType(def)
-              : getTypeName(def);
+              def.getSnapshot().getElement(0), def.getSnapshot().getElementList());
+      String inlineType;
+      String structDefPackage;
+      if (isSimpleInternalExtension) {
+        QualifiedType qualifiedType = getSimpleExtensionDefinitionType(def);
+        inlineType = qualifiedType.type;
+        structDefPackage = qualifiedType.packageName;
+      } else {
+        inlineType = getTypeName(def);
+        structDefPackage = protoPackage;
+      }
+
       StructureDefinitionData structDefData =
-          new StructureDefinitionData(def, inlineType, protoPackage);
+          new StructureDefinitionData(def, inlineType, structDefPackage);
       mutableStructDefDataByUrl.put(def.getUrl().getValue(), structDefData);
       mutableStructDefDataById.put(def.getId().getValue(), structDefData);
     }
     this.structDefDataByUrl = ImmutableMap.copyOf(mutableStructDefDataByUrl);
     this.structDefDataById = ImmutableMap.copyOf(mutableStructDefDataById);
+  }
+
+  private static Map<String, Descriptor> loadCodeTypesFromFile(FileDescriptor file) {
+    return file.getMessageTypes().stream()
+        .collect(
+            Collectors.toMap(
+                d -> d.getOptions().getExtension(Annotations.fhirValuesetUrl), d -> d));
   }
 
   private static ImmutableMap<String, String> getRenamedCodeTypes() {
@@ -303,7 +341,13 @@ public class ProtoGenerator {
 
     // Make sure the package the proto declared in is the same as it will be generated in.
     StructureDefinitionData structDefData = structDefDataByUrl.get(def.getUrl().getValue());
-    if (structDefData != null && !structDefData.protoPackage.equals(packageName)) {
+    if (structDefData == null) {
+      throw new IllegalArgumentException(
+          "No StructureDefinition data found for: " + def.getUrl().getValue());
+    }
+    if (!(structDefData.protoPackage.equals(packageName)
+        || (isSingleTypedExtensionDefinition(structDefData.structDef)
+            && structDefData.protoPackage.equals(CORE_FHIR_PACKAGE)))) {
       throw new IllegalArgumentException(
           "Inconsistent package name for "
               + def.getUrl().getValue()
@@ -563,11 +607,18 @@ public class ProtoGenerator {
       List<ElementDefinition.TypeRef> baseTypes = choiceTypeBase.get().getTypeList();
       Map<String, Integer> baseTypesToIndex = new HashMap<>();
       for (int i = 0; i < baseTypes.size(); i++) {
-        baseTypesToIndex.put(baseTypes.get(i).getCode().getValue(), i);
+        String code = baseTypes.get(i).getCode().getValue();
+        // Only add each code type once.  This is only relevant for references, which can appear
+        // multiple times.
+        if (!baseTypesToIndex.containsKey(code)) {
+          baseTypesToIndex.put(code, i);
+        }
       }
       DescriptorProto baseChoiceType = makeChoiceType(choiceTypeBase.get(), field);
+      final Set<String> uniqueTypes = new HashSet<>();
       List<FieldDescriptorProto> matchingFields =
           element.getTypeList().stream()
+              .filter(type -> uniqueTypes.add(type.getCode().getValue()))
               .map(type -> baseChoiceType.getField(baseTypesToIndex.get(type.getCode().getValue())))
               .collect(Collectors.toList());
       // TODO(nickgeorge): If a choice type is a slice of another choice type (not a pure
@@ -907,6 +958,16 @@ public class ProtoGenerator {
           String typeWithBindingName = toFieldTypeCase(bindingName) + "Code";
           return RENAMED_CODE_TYPES.getOrDefault(typeWithBindingName, typeWithBindingName);
         }
+
+        String valueSetUrl = element.getBinding().getValueSet().getReference().getUri().getValue();
+        if (!valueSetUrl.isEmpty()) {
+          if (valueSetTypesByCodeReference.containsKey(valueSetUrl)) {
+            return valueSetTypesByCodeReference.get(valueSetUrl).getName();
+          }
+          // TODO(nickgeorge): Throw an error in strict mode.
+          System.out.println(
+              "Unhandled ValueSet reference on " + element.getId().getValue() + ": " + valueSetUrl);
+        }
       }
       return normalizedFhirTypeName;
     }
@@ -922,8 +983,7 @@ public class ProtoGenerator {
     }
     if (element.getBinding().getStrength().getValue().equals(BindingStrengthCode.Value.REQUIRED)
         && bindingName == null) {
-      System.out.println(
-          "Required binding found, but category is unknown: " + element.getBinding());
+      logDiscrepancies("Required binding found, but category is unknown: " + element.getBinding());
     }
     return bindingName;
   }
@@ -956,13 +1016,12 @@ public class ProtoGenerator {
     if (isExternalExtension(element)) {
       // This is an extension with a type defined by an external profile.
       // If we know about it, we'll inline a field for it.
-      // Otherwise, we'll return null here, which means it'll get ignored
       String profileUrl = element.getType(0).getProfile().getValue();
       StructureDefinitionData profileData = structDefDataByUrl.get(profileUrl);
       if (profileData == null) {
-        // We don't know about this extension.
-        // Return null, indicating that we shouldn't generate a proto field for this extension.
-        return null;
+        // Unrecognized url.
+        // TODO(nickgeorge): add a lenient mode that just ignores this extension.
+        throw new IllegalArgumentException("Encountered unknown extension url: " + profileUrl);
       }
       jsonFieldNameString = resolveSliceNameConflicts(jsonFieldNameString, element, elementList);
       options.setExtension(
@@ -1023,12 +1082,14 @@ public class ProtoGenerator {
       options.setExtension(Annotations.isChoiceType, true);
     }
 
-    if (isContainer(element)
-        || isChoiceType(element)
-        || isChoiceTypeExtension(element, elementList)
-        || isComplexInternalExtension(element, elementList)) {
+    if (isLocalType(element, elementList)) {
       // Field types that require internally-generated submessages are defined in the local package.
       fieldPackage = packageName;
+    }
+
+    String valueSetUrl = element.getBinding().getValueSet().getReference().getUri().getValue();
+    if (!valueSetUrl.isEmpty() && valueSetTypesByCodeReference.containsKey(valueSetUrl)) {
+      fieldPackage = valueSetTypesByCodeReference.get(valueSetUrl).getFile().getPackage();
     }
 
     return buildFieldInternal(
@@ -1051,6 +1112,23 @@ public class ProtoGenerator {
         : FieldDescriptorProto.Label.LABEL_REPEATED;
   }
 
+  private boolean isLocalType(ElementDefinition element, List<ElementDefinition> elementList) {
+    if (isContainer(element)
+        || isChoiceType(element)
+        || isChoiceTypeExtension(element, elementList)
+        || isComplexInternalExtension(element, elementList)) {
+      return true;
+    }
+    // It could still be a content reference to a local type.
+    // TODO(nickgeorge): more sophisticated logic.  This wouldn't handle references to fields in
+    // other elements in a non-core package
+    if (!element.hasContentReference()) {
+      return false;
+    }
+    String rootType = Splitter.on(".").limit(2).splitToList(element.getId().getValue()).get(0);
+    return element.getContentReference().getValue().startsWith("#" + rootType);
+  }
+
   /**
    * Returns the field name that should be used for an element, in jsonCase. If element is a slice,
    * uses that slice name. Since the id token slice name is all-lowercase, uses the SliceName field.
@@ -1066,7 +1144,7 @@ public class ProtoGenerator {
     String sliceName = element.getSliceName().getValue();
     if (!lastToken.slicename.equals(sliceName.toLowerCase())) {
       // TODO(nickgeorge): pull this into a common validator that runs ealier.
-      System.out.println(
+      logDiscrepancies(
           "Warning: Inconsistent slice name for element with id "
               + element.getId().getValue()
               + " and slicename "
@@ -1197,7 +1275,7 @@ public class ProtoGenerator {
 
     List<String> fieldTypeParts = new ArrayList<>();
     for (String part : Splitter.on('.').split(fieldType)) {
-      fieldTypeParts.add(toFieldTypeCase(part));
+      fieldTypeParts.add(part);
     }
     builder.setTypeName("." + fieldPackage + "." + Joiner.on('.').join(fieldTypeParts));
 
@@ -1309,8 +1387,8 @@ public class ProtoGenerator {
             && !element.getType(0).hasProfile());
   }
 
-  // Returns the value type of a simple extension as a string.
-  private String getSimpleExtensionDefinitionType(StructureDefinition def) {
+  // Returns the QualifiedType (type + package) of a simple extension as a string.
+  private QualifiedType getSimpleExtensionDefinitionType(StructureDefinition def) {
     if (!isExtensionProfile(def)) {
       throw new IllegalArgumentException(
           "StructureDefinition is not an extension profile: " + def.getId().getValue());
@@ -1321,7 +1399,7 @@ public class ProtoGenerator {
       return getSimpleInternalExtensionType(element, elementList);
     }
     if (isChoiceTypeExtension(element, elementList)) {
-      return getTypeName(def) + ".Value";
+      return new QualifiedType(getTypeName(def) + ".Value", packageName);
     }
     throw new IllegalArgumentException(
         "StructureDefinition is not a simple extension: " + def.getId().getValue());
@@ -1338,7 +1416,7 @@ public class ProtoGenerator {
         "Element " + element.getId().getValue() + " has no value element");
   }
 
-  private String getSimpleInternalExtensionType(
+  private QualifiedType getSimpleInternalExtensionType(
       ElementDefinition element, List<ElementDefinition> elementList) {
     ElementDefinition valueElement = getExtensionValueElement(element, elementList);
 
@@ -1348,10 +1426,20 @@ public class ProtoGenerator {
     }
     if (getDistinctTypeCount(valueElement) == 1) {
       // This is a primitive extension with a single type
-      return toFieldTypeCase(valueElement.getType(0).getCode().getValue());
+      String rawType = valueElement.getType(0).getCode().getValue();
+
+      if (rawType.equals("code") && valueElement.getBinding().getValueSet().hasReference()) {
+        String valueSetUrl =
+            valueElement.getBinding().getValueSet().getReference().getUri().getValue();
+        Descriptor valueSetType = valueSetTypesByCodeReference.get(valueSetUrl);
+        if (valueSetType != null) {
+          return new QualifiedType(valueSetType.getName(), valueSetType.getFile().getPackage());
+        }
+      }
+      return new QualifiedType(toFieldTypeCase(rawType), CORE_FHIR_PACKAGE);
     }
     // This is a choice-type extension that will be inlined as a message.
-    return getContainerType(element, elementList);
+    return new QualifiedType(getContainerType(element, elementList), packageName);
   }
 
   private static long getDistinctTypeCount(ElementDefinition element) {
@@ -1392,13 +1480,13 @@ public class ProtoGenerator {
 
   /**
    * Returns the type that should be used for an internal extension. If this is a simple internal
-   * extension, uses the appropriate primitive type. If this is a complex interanl extension, treats
+   * extension, uses the appropriate primitive type. If this is a complex internal extension, treats
    * the element like a backbone container.
    */
   private String getInternalExtensionType(
       ElementDefinition element, List<ElementDefinition> elementList) {
     return isSimpleInternalExtension(element, elementList)
-        ? getSimpleInternalExtensionType(element, elementList)
+        ? getSimpleInternalExtensionType(element, elementList).type
         : getContainerType(element, elementList);
   }
 

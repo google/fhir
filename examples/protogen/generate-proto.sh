@@ -109,8 +109,21 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   $NO_PACKAGE_FLAGS \
   --emit_proto \
-  --proto_package google.fhir.stu3.google \
-  --java_proto_package com.google.fhir.stu3.google \
+  --proto_package $GOOGLE_PROTO_PACKAGE \
+  --java_proto_package $GOOGLE_JAVA_PROTO_PACKAGE \
   --output_directory $OUTPUT_PATH \
   --output_filename google_extensions.proto \
   $(for i in $GOOGLE_EXTENSIONS; do echo "$i"; done)
+
+# generate US Core package
+$PROTO_GENERATOR \
+  $NO_PACKAGE_FLAGS \
+  --emit_proto \
+  --proto_package $US_CORE_PROTO_PACKAGE \
+  --java_proto_package $US_CORE_JAVA_PROTO_PACKAGE \
+  --include_resources \
+  --include_metadatatypes \
+  --additional_import "$FHIR_PROTO_ROOT/uscore_codes.proto" \
+  --output_directory $OUTPUT_PATH \
+  --output_filename uscore.proto \
+  $(for i in $US_CORE_PROFILES; do echo "$i"; done)

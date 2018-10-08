@@ -1,0 +1,46 @@
+//    Copyright 2018 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.stu3.uscore;
+
+import "proto/stu3/annotations.proto";
+import "proto/stu3/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.stu3.uscore";
+
+// A type defined by US Core for Birthsex
+// http://hl7.org/fhir/us/core/ValueSet/us-core-birthsex
+message UsCoreBirthSexCode {
+  option (proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/us/core/ValueSet/us-core-birthsex";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    FEMALE = 1 [(proto.fhir_original_code) = "F"];
+    MALE = 2 [(proto.fhir_original_code) = "M"];
+    UNKNOWN = 3 [(proto.fhir_original_code) = "UNK"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  proto.String id = 2;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 3;
+}

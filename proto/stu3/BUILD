@@ -84,6 +84,33 @@ fhir_proto_library(
 
 fhir_proto_library(
     srcs = [
+        "uscore.proto",
+    ],
+    proto_deps = [
+        ":annotations_proto",
+        ":codes_proto",
+        ":datatypes_proto",
+        ":extensions_proto",
+        ":metadatatypes_proto",
+        ":resources_proto",
+        ":uscore_codes_proto",
+    ],
+    proto_library_prefix = "uscore",
+)
+
+fhir_proto_library(
+    srcs = [
+        "uscore_codes.proto",
+    ],
+    proto_deps = [
+        ":annotations_proto",
+        ":datatypes_proto",
+    ],
+    proto_library_prefix = "uscore_codes",
+)
+
+fhir_proto_library(
+    srcs = [
         "version_config.proto",
     ],
     proto_library_prefix = "version_config",

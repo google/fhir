@@ -2388,7 +2388,7 @@ message GoalAcceptance {
   Reference individual = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // agree | disagree | pending
-  Code status = 5;
+  GoalAcceptanceStatusCode status = 5;
 
   // Priority of goal for individual
   CodeableConcept priority = 6;

@@ -5,6 +5,8 @@ package(
 
 licenses(["notice"])
 
+# TODO(nickgeorge): remove dependency on uscore once we have json
+# definitions of codes.
 java_library(
     name = "stu3",
     srcs = glob(["src/main/java/com/google/fhir/stu3/*.java"]),
@@ -17,6 +19,7 @@ java_library(
         "//proto/stu3:extensions_java_proto",
         "//proto/stu3:metadatatypes_java_proto",
         "//proto/stu3:resources_java_proto",
+        "//proto/stu3:uscore_codes_java_proto",
         "@com_google_apis_google_api_services_bigquery//jar",
         "@com_google_http_client_google_http_client//jar",
         "@com_google_protobuf//:protobuf_java",
@@ -231,6 +234,7 @@ java_test(
         "//testdata/stu3:extensions",
         "//testdata/stu3:google",
         "//testdata/stu3:structure_definitions",
+        "//testdata/stu3:uscore",
     ],
     test_class = "com.google.fhir.stu3.ProtoGeneratorTest",
     deps = [
