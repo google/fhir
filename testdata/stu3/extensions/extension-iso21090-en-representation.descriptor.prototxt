@@ -1,4 +1,4 @@
-name: "HumanNameEnRepresentation"
+name: "HumanNameENRepresentation"
 field {
   name: "id"
   number: 1

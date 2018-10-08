@@ -1,4 +1,4 @@
-name: "CodingCoValue"
+name: "CodingCOValue"
 field {
   name: "id"
   number: 1

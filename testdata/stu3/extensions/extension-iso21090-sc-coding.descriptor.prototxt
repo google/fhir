@@ -1,4 +1,4 @@
-name: "StringScCoding"
+name: "StringSCCoding"
 field {
   name: "id"
   number: 1

@@ -1,4 +1,4 @@
-name: "AddressAdxpHousenumber"
+name: "AddressADXPHouseNumber"
 field {
   name: "id"
   number: 1

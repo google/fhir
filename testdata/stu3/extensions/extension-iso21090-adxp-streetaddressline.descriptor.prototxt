@@ -1,4 +1,4 @@
-name: "AddressAdxpStreetaddressline"
+name: "AddressADXPStreetAddressLine"
 field {
   name: "id"
   number: 1

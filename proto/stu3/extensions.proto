@@ -2709,7 +2709,7 @@ message ImplementationGuidePage {
 // Auto-generated from StructureDefinition for AD-use.
 // BAD | CONF | HP | HV | DIR | PUB | PHYS | PST.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-AD-use
-message AddressAdUse {
+message AddressADUse {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2726,7 +2726,7 @@ message AddressAdUse {
 // Auto-generated from StructureDefinition for ADXP-additionalLocator.
 // additionalLocator.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-additionalLocator
-message AddressAdxpAdditionallocator {
+message AddressADXPAdditionalLocator {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2744,7 +2744,7 @@ message AddressAdxpAdditionallocator {
 // buildingNumberSuffix.
 // See
 // http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-buildingNumberSuffix
-message AddressAdxpBuildingnumbersuffix {
+message AddressADXPBuildingNumberSuffix {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2761,7 +2761,7 @@ message AddressAdxpBuildingnumbersuffix {
 // Auto-generated from StructureDefinition for ADXP-careOf.
 // careOf.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-careOf
-message AddressAdxpCareof {
+message AddressADXPCareOf {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2778,7 +2778,7 @@ message AddressAdxpCareof {
 // Auto-generated from StructureDefinition for ADXP-censusTract.
 // censusTract.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-censusTract
-message AddressAdxpCensustract {
+message AddressADXPCensusTract {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2795,7 +2795,7 @@ message AddressAdxpCensustract {
 // Auto-generated from StructureDefinition for ADXP-delimiter.
 // delimiter.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-delimiter
-message AddressAdxpDelimiter {
+message AddressADXPDelimiter {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2812,7 +2812,7 @@ message AddressAdxpDelimiter {
 // Auto-generated from StructureDefinition for ADXP-deliveryAddressLine.
 // deliveryAddressLine.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryAddressLine
-message AddressAdxpDeliveryaddressline {
+message AddressADXPDeliveryAddressLine {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2830,7 +2830,7 @@ message AddressAdxpDeliveryaddressline {
 // deliveryInstallationArea.
 // See
 // http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryInstallationArea
-message AddressAdxpDeliveryinstallationarea {
+message AddressADXPDeliveryInstallationArea {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2847,7 +2847,7 @@ message AddressAdxpDeliveryinstallationarea {
 // Auto-generated from StructureDefinition for
 // ADXP-deliveryInstallationQualifier. deliveryInstallationQualifier. See
 // http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryInstallationQualifier
-message AddressAdxpDeliveryinstallationqualifier {
+message AddressADXPDeliveryInstallationQualifier {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2865,7 +2865,7 @@ message AddressAdxpDeliveryinstallationqualifier {
 // deliveryInstallationType.
 // See
 // http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryInstallationType
-message AddressAdxpDeliveryinstallationtype {
+message AddressADXPDeliveryInstallationType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2882,7 +2882,7 @@ message AddressAdxpDeliveryinstallationtype {
 // Auto-generated from StructureDefinition for ADXP-deliveryMode.
 // deliveryMode.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryMode
-message AddressAdxpDeliverymode {
+message AddressADXPDeliveryMode {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2900,7 +2900,7 @@ message AddressAdxpDeliverymode {
 // deliveryModeIdentifier.
 // See
 // http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryModeIdentifier
-message AddressAdxpDeliverymodeidentifier {
+message AddressADXPDeliveryModeIdentifier {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2917,7 +2917,7 @@ message AddressAdxpDeliverymodeidentifier {
 // Auto-generated from StructureDefinition for ADXP-direction.
 // direction.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-direction
-message AddressAdxpDirection {
+message AddressADXPDirection {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2934,7 +2934,7 @@ message AddressAdxpDirection {
 // Auto-generated from StructureDefinition for ADXP-houseNumber.
 // houseNumber.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-houseNumber
-message AddressAdxpHousenumber {
+message AddressADXPHouseNumber {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2951,7 +2951,7 @@ message AddressAdxpHousenumber {
 // Auto-generated from StructureDefinition for ADXP-houseNumberNumeric.
 // houseNumberNumeric.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-houseNumberNumeric
-message AddressAdxpHousenumbernumeric {
+message AddressADXPHouseNumberNumeric {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2968,7 +2968,7 @@ message AddressAdxpHousenumbernumeric {
 // Auto-generated from StructureDefinition for ADXP-postBox.
 // postBox.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-postBox
-message AddressAdxpPostbox {
+message AddressADXPPostBox {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -2985,7 +2985,7 @@ message AddressAdxpPostbox {
 // Auto-generated from StructureDefinition for ADXP-precinct.
 // precinct.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-precinct
-message AddressAdxpPrecinct {
+message AddressADXPPrecinct {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -3002,7 +3002,7 @@ message AddressAdxpPrecinct {
 // Auto-generated from StructureDefinition for ADXP-streetAddressLine.
 // streetAddressLine.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetAddressLine
-message AddressAdxpStreetaddressline {
+message AddressADXPStreetAddressLine {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -3019,7 +3019,7 @@ message AddressAdxpStreetaddressline {
 // Auto-generated from StructureDefinition for ADXP-streetName.
 // streetName.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetName
-message AddressAdxpStreetname {
+message AddressADXPStreetName {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -3036,7 +3036,7 @@ message AddressAdxpStreetname {
 // Auto-generated from StructureDefinition for ADXP-streetNameBase.
 // streetNameBase.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetNameBase
-message AddressAdxpStreetnamebase {
+message AddressADXPStreetNameBase {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -3053,7 +3053,7 @@ message AddressAdxpStreetnamebase {
 // Auto-generated from StructureDefinition for ADXP-streetNameType.
 // streetNameType.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetNameType
-message AddressAdxpStreetnametype {
+message AddressADXPStreetNameType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -3070,7 +3070,7 @@ message AddressAdxpStreetnametype {
 // Auto-generated from StructureDefinition for ADXP-unitID.
 // unitID.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-unitID
-message AddressAdxpUnitid {
+message AddressADXPUnitID {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -3087,7 +3087,7 @@ message AddressAdxpUnitid {
 // Auto-generated from StructureDefinition for ADXP-unitType.
 // unitType.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-unitType
-message AddressAdxpUnittype {
+message AddressADXPUnitType {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -3104,7 +3104,7 @@ message AddressAdxpUnittype {
 // Auto-generated from StructureDefinition for CO-value.
 // Numerical value associated with the code.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-CO-value
-message CodingCoValue {
+message CodingCOValue {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -3121,7 +3121,7 @@ message CodingCoValue {
 // Auto-generated from StructureDefinition for EN-qualifier.
 // LS | AC | NB | PR | HON | BR | AD | SP | MID | CL | IN | VV.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-EN-qualifier
-message HumanNameEnQualifier {
+message HumanNameENQualifier {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -3138,7 +3138,7 @@ message HumanNameEnQualifier {
 // Auto-generated from StructureDefinition for EN-representation.
 // ABC | IDE | SYL.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-EN-representation
-message HumanNameEnRepresentation {
+message HumanNameENRepresentation {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -3189,7 +3189,7 @@ message AnyPreferred {
 // Auto-generated from StructureDefinition for SC-coding.
 // code for string.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-SC-coding
-message StringScCoding {
+message StringSCCoding {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -3206,7 +3206,7 @@ message StringScCoding {
 // Auto-generated from StructureDefinition for TEL-address.
 // RFC 3966 compliant telephone or fax number.
 // See http://hl7.org/fhir/StructureDefinition/iso21090-TEL-address
-message ContactPointTelAddress {
+message ContactPointTELAddress {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";

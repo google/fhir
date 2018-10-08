@@ -1,4 +1,4 @@
-name: "AddressAdxpPostbox"
+name: "AddressADXPPostBox"
 field {
   name: "id"
   number: 1

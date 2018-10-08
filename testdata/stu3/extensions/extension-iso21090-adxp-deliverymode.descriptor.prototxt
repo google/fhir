@@ -1,4 +1,4 @@
-name: "AddressAdxpDeliverymode"
+name: "AddressADXPDeliveryMode"
 field {
   name: "id"
   number: 1

@@ -58,6 +58,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /** A class which turns FHIR StructureDefinitions into protocol messages. */
@@ -1223,22 +1225,23 @@ public class ProtoGenerator {
     }
   }
 
-  // Converts a FHIR id strings to correct casing for FieldTypes.
-  // This converts from lowerCamel to UpperCamel stripped of invalid characters.
+  private static final Pattern WORD_BREAK_PATTERN = Pattern.compile("[-_ ]([A-Za-z])");
+
+  // Converts a FHIR id strings to UpperCamelCasing for FieldTypes using a regex pattern that
+  // considers hyphen, underscore and space to be word breaks.
   private static String toFieldTypeCase(String type) {
     String normalizedType = type;
     if (Character.isLowerCase(type.charAt(0))) {
-      normalizedType = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, type);
+      normalizedType = type.substring(0, 1).toUpperCase() + type.substring(1);
     }
-    if (type.contains("-")) {
-      normalizedType = CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, type);
+    Matcher matcher = WORD_BREAK_PATTERN.matcher(normalizedType);
+    StringBuffer typeBuilder = new StringBuffer();
+    boolean foundMatch = false;
+    while (matcher.find()) {
+      foundMatch = true;
+      matcher.appendReplacement(typeBuilder, matcher.group(1).toUpperCase());
     }
-    if (type.contains("_")) {
-      normalizedType = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, type);
-    }
-    // Remove any invalid characters from the name.
-    normalizedType = normalizedType.replaceAll("[ ]", "");
-    return normalizedType;
+    return foundMatch ? matcher.appendTail(typeBuilder).toString() : normalizedType;
   }
 
   private static String toFieldNameCase(String fieldName) {

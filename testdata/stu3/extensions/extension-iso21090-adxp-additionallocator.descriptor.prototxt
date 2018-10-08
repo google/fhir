@@ -1,4 +1,4 @@
-name: "AddressAdxpAdditionallocator"
+name: "AddressADXPAdditionalLocator"
 field {
   name: "id"
   number: 1

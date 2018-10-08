@@ -1,4 +1,4 @@
-name: "AddressAdxpDelimiter"
+name: "AddressADXPDelimiter"
 field {
   name: "id"
   number: 1

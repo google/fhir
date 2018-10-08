@@ -1,4 +1,4 @@
-name: "HumanNameEnQualifier"
+name: "HumanNameENQualifier"
 field {
   name: "id"
   number: 1

@@ -1,4 +1,4 @@
-name: "ContactPointTelAddress"
+name: "ContactPointTELAddress"
 field {
   name: "id"
   number: 1

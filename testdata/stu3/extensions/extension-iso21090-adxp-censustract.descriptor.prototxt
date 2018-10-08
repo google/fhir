@@ -1,4 +1,4 @@
-name: "AddressAdxpCensustract"
+name: "AddressADXPCensusTract"
 field {
   name: "id"
   number: 1
