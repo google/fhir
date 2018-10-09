@@ -87,6 +87,23 @@ public final class DateWrapperTest {
   }
 
   @Test
+  public void parseYearMonthDayWithOffset() {
+    Date parsed = new DateWrapper("1970-01-01", ZoneOffset.UTC).getWrapped();
+    Date expected =
+        Date.newBuilder().setValueUs(0).setPrecision(Date.Precision.DAY).setTimezone("Z").build();
+    assertThat(parsed).isEqualTo(expected);
+
+    parsed = new DateWrapper("1970-01-01", ZoneId.of("-05:00")).getWrapped();
+    expected =
+        Date.newBuilder()
+            .setValueUs(18000000000L)
+            .setPrecision(Date.Precision.DAY)
+            .setTimezone("-05:00")
+            .build();
+    assertThat(parsed).isEqualTo(expected);
+  }
+
+  @Test
   public void printYear() {
     Date input =
         Date.newBuilder()
