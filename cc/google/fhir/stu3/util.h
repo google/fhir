@@ -72,6 +72,8 @@ absl::Time GetTimeFromTimelikeElement(const T& timelike) {
 absl::Duration GetDurationFromTimelikeElement(
     const stu3::proto::DateTime& datetime);
 
+Status GetTimezone(const string& timezone_str, absl::TimeZone* tz);
+
 // Builds a absl::Time from a time-like fhir Element, corresponding to the
 // smallest time greater than this time element. For elements with DAY
 // precision, for example, this will be 86400 seconds past value_us of this

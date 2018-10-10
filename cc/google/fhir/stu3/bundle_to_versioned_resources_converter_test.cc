@@ -1355,6 +1355,44 @@ TEST(BundleToVersionedResourcesConverterTest, MultipleDefaultTimestamps) {
   AssertCounter(counter_stats, "num-medication_administration-split-to-1", 2);
 }
 
+TEST(BundleToVersionedResourcesConverterTest, TimeZoneWithFixedOffset) {
+  Bundle input;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
+    entry {
+      resource {
+        claim {
+          language { value: "Klingon" }
+          created {
+            value_us: 1519880400000000
+            precision: YEAR
+            timezone: "-05:00"
+          }
+        }
+      }
+    })proto", &input));
+
+  ContainedResource claim_v1;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
+    claim {
+      language { value: "Klingon" }
+      created { value_us: 1519880400000000 precision: YEAR timezone: "-05:00" }
+      meta {
+        version_id { value: "0" }
+        last_updated {
+          value_us: 1546318799000000
+          precision: SECOND
+          timezone: "-05:00"
+        }
+      }
+    })proto", &claim_v1));
+
+  std::map<string, int> counter_stats;
+  ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
+              UnorderedElementsAre(EqualsProto(claim_v1)));
+  AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
+  AssertCounter(counter_stats, "num-claim-split-to-1", 1);
+}
+
 }  // namespace stu3
 }  // namespace fhir
 }  // namespace google

@@ -175,7 +175,7 @@ void StampWrapAndAdd(std::vector<ContainedResource>* versioned_resources,
   } else {
     last_updated->set_precision(Instant::SECOND);
     absl::TimeZone tz;
-    CHECK(absl::LoadTimeZone(timelike.timezone(), &tz))
+    TF_CHECK_OK(GetTimezone(timelike.timezone(), &tz))
         << "No Timezone on timelike: " << timelike.DebugString();
     const string precision_string = T::Precision_Name(timelike.precision());
     const auto& breakdown = GetTimeFromTimelikeElement(timelike).In(tz);

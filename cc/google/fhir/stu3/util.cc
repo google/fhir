@@ -19,7 +19,9 @@
 
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/reflection.h"
+#include "absl/strings/numbers.h"
 #include "absl/strings/str_cat.h"
+#include "absl/time/time.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/systems/systems.h"
@@ -27,6 +29,7 @@
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
+#include "re2/re2.h"
 
 namespace google {
 namespace fhir {
@@ -272,6 +275,41 @@ absl::Duration GetDurationFromTimelikeElement(const DateTime& datetime) {
     default:
       LOG(FATAL) << "Unsupported datetime precision: " << datetime.precision();
   }
+}
+
+Status GetTimezone(const string& timezone_str, absl::TimeZone* tz) {
+  // Try loading the timezone first.
+  if (absl::LoadTimeZone(timezone_str, tz)) {
+    return Status::OK();
+  }
+  static const LazyRE2 kFixedTimezoneRegex{"([+-])(\\d\\d):(\\d\\d)"};
+  string sign;
+  string hour_str;
+  string minute_str;
+  if (RE2::FullMatch(timezone_str, *kFixedTimezoneRegex, &sign, &hour_str,
+                     &minute_str)) {
+    int hour = 0;
+    int minute = 0;
+    int seconds_offset = 0;
+    if (!absl::SimpleAtoi(hour_str, &hour) || hour > 14) {
+      return ::tensorflow::errors::InvalidArgument(
+          absl::StrCat("Invalid timezone format: ", timezone_str));
+    }
+    seconds_offset += hour * 60 * 60;
+    if (!absl::SimpleAtoi(minute_str, &minute) || minute > 59) {
+      return ::tensorflow::errors::InvalidArgument(
+          absl::StrCat("Invalid timezone format: ", timezone_str));
+    }
+    seconds_offset += minute * 60;
+    if (sign == "-") {
+      seconds_offset = -seconds_offset;
+    }
+    *tz = absl::FixedTimeZone(seconds_offset);
+    return Status::OK();
+  }
+
+  return ::tensorflow::errors::InvalidArgument(
+      absl::StrCat("Invalid timezone format: ", timezone_str));
 }
 
 StatusOr<string> GetResourceId(const Message& message) {

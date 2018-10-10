@@ -63,6 +63,23 @@ TEST(GetTimeFromTimelikeElement, Date) {
             0L);
 }
 
+TEST(GetTimezone, TimeZoneStr) {
+  absl::TimeZone tz;
+
+  // Valid cases.
+  ASSERT_TRUE(GetTimezone("-06:00", &tz).ok());
+  ASSERT_EQ(tz.name(), "Fixed/UTC-06:00:00");
+  ASSERT_TRUE(GetTimezone("+06:00", &tz).ok());
+  ASSERT_EQ(tz.name(), "Fixed/UTC+06:00:00");
+  ASSERT_TRUE(GetTimezone("-06:30", &tz).ok());
+  ASSERT_EQ(tz.name(), "Fixed/UTC-06:30:00");
+
+  // Error cases.
+  ASSERT_FALSE(GetTimezone("06:30", &tz).ok());
+  ASSERT_FALSE(GetTimezone("-15:30", &tz).ok());
+  ASSERT_FALSE(GetTimezone("-14:60", &tz).ok());
+}
+
 TEST(WrapContainedResource, Valid) {
   Encounter encounter;
   encounter.mutable_id()->set_value("47");
