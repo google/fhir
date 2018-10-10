@@ -32,6 +32,8 @@
 #include "absl/strings/escaping.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/string_view.h"
+#include "absl/strings/strip.h"
 #include "absl/time/time.h"
 #include "google/fhir/stu3/extensions.h"
 #include "google/fhir/stu3/util.h"
@@ -357,7 +359,24 @@ class TimeTypeWrapper : public StringInputWrapper<T> {
       absl::Time time;
       if (absl::ParseTime(format.second, json_string, default_time_zone_, &time,
                           &err)) {
-        return SetValue(time, default_time_zone_.name(), format.first);
+        string timezone_name = default_time_zone_.name();
+
+        // Clean up the fixed timezone string that is returned from the
+        // absl::Timezone library.
+        if (absl::StartsWith(timezone_name, "Fixed/UTC")) {
+          // TODO: Evaluate whether we want to keep the seconds offset.
+          static const LazyRE2 kFixedTimezoneRegex{
+              "Fixed\\/UTC([+-]\\d\\d:\\d\\d):\\d\\d"};
+          string fixed_timezone_name;
+          if (RE2::FullMatch(timezone_name, *kFixedTimezoneRegex,
+                             &fixed_timezone_name)) {
+            timezone_name = fixed_timezone_name;
+          } else {
+            return InvalidArgument("Invalid fixed timezone format: ",
+                                   timezone_name);
+          }
+        }
+        return SetValue(time, timezone_name, format.first);
       }
     }
     return InvalidArgument("Invalid ", T::descriptor()->full_name(), ": ",
