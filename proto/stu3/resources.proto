@@ -18168,7 +18168,7 @@ message ContainedResource {
     Endpoint endpoint = 42;
     EnrollmentRequest enrollment_request = 43;
     EnrollmentResponse enrollment_response = 44;
-    EpisodeOfCare episode_ofcare = 45;
+    EpisodeOfCare episode_of_care = 45;
     ExpansionProfile expansion_profile = 46;
     ExplanationOfBenefit explanation_of_benefit = 47;
     FamilyMemberHistory family_member_history = 48;
