@@ -247,6 +247,7 @@ cc_test(
     name = "json_format_test",
     srcs = ["json_format_test.cc"],
     data = [
+        "//testdata/stu3:bigquery",
         "//testdata/stu3:examples",
     ],
     deps = [

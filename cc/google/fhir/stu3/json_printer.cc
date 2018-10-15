@@ -20,6 +20,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/strings/str_cat.h"
@@ -28,6 +29,7 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/primitive_wrapper.h"
 #include "google/fhir/stu3/util.h"
+#include "proto/stu3/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
 #include "include/json/json.h"
@@ -46,6 +48,7 @@ using ::google::fhir::stu3::IsReference;
 using ::google::fhir::stu3::ReferenceProtoToString;
 using ::google::fhir::stu3::proto::ContainedResource;
 using ::google::fhir::stu3::proto::Reference;
+using ::google::fhir::stu3::proto::ReferenceId;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
@@ -63,15 +66,12 @@ std::unordered_set<string>* BuildResourceTypesSet() {
 
 class Printer {
  public:
-  explicit Printer(absl::TimeZone default_timezone)
-      : default_timezone_(default_timezone),
-        indent_size_(0),
-        add_newlines_(false) {}
-
-  Printer(absl::TimeZone default_timezone, int indent_size, bool add_newlines)
+  Printer(absl::TimeZone default_timezone, int indent_size, bool add_newlines,
+          bool for_analytics)
       : default_timezone_(default_timezone),
         indent_size_(indent_size),
-        add_newlines_(add_newlines) {}
+        add_newlines_(add_newlines),
+        for_analytics_(for_analytics) {}
 
   StatusOr<string> WriteMessage(const google::protobuf::Message& message) {
     output_.clear();
@@ -108,7 +108,7 @@ class Printer {
   }
 
   Status PrintNonPrimitive(const google::protobuf::Message& proto) {
-    if (IsReference(proto.GetDescriptor())) {
+    if (IsReference(proto.GetDescriptor()) && !for_analytics_) {
       FHIR_ASSIGN_OR_RETURN(
           const Reference& reference,
           StandardizeReference(dynamic_cast<const Reference&>(proto)));
@@ -130,9 +130,25 @@ class Printer {
     if (descriptor->full_name() ==
         ContainedResource::descriptor()->full_name()) {
       for (const FieldDescriptor* field : set_fields) {
-        FHIR_RETURN_IF_ERROR(
-            PrintNonPrimitive(reflection->GetMessage(proto, field)));
+        const Message& field_value = reflection->GetMessage(proto, field);
+        if (for_analytics_) {
+          // Only print resource url if in analytic mode.
+          absl::StrAppend(&output_, "\"",
+                          field_value.GetDescriptor()->options().GetExtension(
+                              stu3::proto::fhir_structure_definition_url),
+                          "\"");
+        } else {
+          FHIR_RETURN_IF_ERROR(PrintNonPrimitive(field_value));
+        }
       }
+      return Status::OK();
+    }
+
+    if (for_analytics_ &&
+        descriptor->full_name() == Extension::descriptor()->full_name()) {
+      // Only print extension url when in analytic mode.
+      absl::StrAppend(&output_, "\"",
+                      dynamic_cast<const Extension&>(proto).url().value(), "\"");
       return Status::OK();
     }
 
@@ -145,7 +161,9 @@ class Printer {
     }
     for (size_t i = 0; i < set_fields.size(); i++) {
       const FieldDescriptor* field = set_fields[i];
-      if (IsChoiceType(field)) {
+      // We don't unroll choice types when in analytic mode, so that we can
+      // look up the choice type in a single query.
+      if (IsChoiceType(field) && !for_analytics_) {
         FHIR_RETURN_IF_ERROR(PrintChoiceTypeField(
             reflection->GetMessage(proto, field), field->json_name()));
       } else {
@@ -208,6 +226,15 @@ class Printer {
 
   Status PrintPrimitiveField(const google::protobuf::Message& proto,
                              const string& field_name) {
+    if (for_analytics_ && proto.GetDescriptor()->full_name() ==
+                              ReferenceId::descriptor()->full_name()) {
+      // In analytic mode, print the raw reference id rather than slicing into
+      // type subfields, to make it easier to query.
+      PrintFieldPreamble(field_name);
+      absl::StrAppend(&output_, "\"",
+                      dynamic_cast<const ReferenceId&>(proto).value(), "\"");
+      return Status::OK();
+    }
     FHIR_ASSIGN_OR_RETURN(const JsonPrimitive json_primitive,
                           WrapPrimitiveProto(proto, default_timezone_));
 
@@ -215,7 +242,7 @@ class Printer {
       PrintFieldPreamble(field_name);
       output_ += json_primitive.value;
     }
-    if (json_primitive.element) {
+    if (json_primitive.element && !for_analytics_) {
       if (json_primitive.is_non_null()) {
         output_ += ",";
         AddNewline();
@@ -352,6 +379,7 @@ class Printer {
   const absl::TimeZone default_timezone_;
   const int indent_size_;
   const bool add_newlines_;
+  const bool for_analytics_;
 
   string output_;
   int current_indent_;
@@ -361,13 +389,25 @@ class Printer {
 
 StatusOr<string> PrettyPrintFhirToJsonString(
     const google::protobuf::Message& fhir_proto, const absl::TimeZone default_timezone) {
-  Printer printer{default_timezone, 2, true};
+  Printer printer{default_timezone, 2, true, false};
   return printer.WriteMessage(fhir_proto);
 }
 
 StatusOr<string> PrintFhirToJsonString(const google::protobuf::Message& fhir_proto,
                                        const absl::TimeZone default_timezone) {
-  Printer printer{default_timezone};
+  Printer printer{default_timezone, 0, false, false};
+  return printer.WriteMessage(fhir_proto);
+}
+
+StatusOr<string> PrintFhirToJsonStringForAnalytics(
+    const google::protobuf::Message& fhir_proto, const absl::TimeZone default_timezone) {
+  Printer printer{default_timezone, 0, false, true};
+  return printer.WriteMessage(fhir_proto);
+}
+
+StatusOr<string> PrettyPrintFhirToJsonStringForAnalytics(
+    const google::protobuf::Message& fhir_proto, const absl::TimeZone default_timezone) {
+  Printer printer{default_timezone, 2, true, true};
   return printer.WriteMessage(fhir_proto);
 }
 

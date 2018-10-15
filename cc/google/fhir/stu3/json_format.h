@@ -55,6 +55,12 @@ template <typename R>
 ::google::fhir::StatusOr<string> PrintFhirToJsonString(
     const google::protobuf::Message& fhir_proto, const absl::TimeZone default_timezone);
 
+::google::fhir::StatusOr<string> PrintFhirToJsonStringForAnalytics(
+    const google::protobuf::Message& fhir_proto, const absl::TimeZone default_timezone);
+
+::google::fhir::StatusOr<string> PrettyPrintFhirToJsonStringForAnalytics(
+    const google::protobuf::Message& fhir_proto, const absl::TimeZone default_timezone);
+
 }  // namespace stu3
 }  // namespace fhir
 }  // namespace google

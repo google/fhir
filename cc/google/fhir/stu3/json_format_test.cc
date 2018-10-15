@@ -39,11 +39,6 @@ using google::fhir::stu3::proto::Condition;
 
 static const char* const kTimeZoneString = "Australia/Sydney";
 
-/** Read the specifed json file from the testdata directory as a String. */
-string LoadJson(const string& filename) {
-  return ReadFile(absl::StrCat("examples/", filename));
-}
-
 template <typename R>
 R LoadProto(const string& filename) {
   return ReadProto<R>(absl::StrCat("examples/", filename));
@@ -51,7 +46,7 @@ R LoadProto(const string& filename) {
 
 template <typename R>
 void TestParse(const string& name) {
-  string json = LoadJson(name + ".json");
+  string json = ReadFile(absl::StrCat("examples/", name + ".json"));
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
   R from_json = JsonFhirStringToProto<R>(json, tz).ValueOrDie();
@@ -76,12 +71,29 @@ void TestPrint(const string& name) {
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
   string from_proto = PrettyPrintFhirToJsonString(proto, tz).ValueOrDie();
-  string from_json = LoadJson(name + ".json");
+  string from_json = ReadFile(absl::StrCat("examples/", name + ".json"));
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
     // This assert will fail, but we get terrible diff messages comparing
     // JsonCPP, so fall back to string diffs.
     ASSERT_EQ(from_proto, from_json);
+  }
+}
+
+template <typename R>
+void TestPrintForAnalytics(const string& name) {
+  const R proto = LoadProto<R>(name + ".prototxt");
+  absl::TimeZone tz;
+  absl::LoadTimeZone(kTimeZoneString, &tz);
+  auto result = PrettyPrintFhirToJsonStringForAnalytics(proto, tz);
+  ASSERT_TRUE(result.ok()) << result.status();
+  string from_proto = result.ValueOrDie();
+  string from_json = ReadFile(absl::StrCat("bigquery/", name + ".json"));
+
+  if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
+    // This assert will fail, but we get terrible diff messages comparing
+    // JsonCPP, so fall back to string diffs.
+    ASSERT_EQ(from_json, from_proto);
   }
 }
 
@@ -93,6 +105,13 @@ TEST(JsonFormatTest, EdgeCasesParse) { TestParse<Patient>("json-edge-cases"); }
 /** Test printing of FHIR edge cases. */
 TEST(JsonFormatTest, EdgeCasesPrint) {
   TestPrint<Patient>("json-edge-cases");
+}
+
+TEST(JsonFormatTest, PrintForAnalytics) {
+  TestPrintForAnalytics<Composition>("composition-example");
+  TestPrintForAnalytics<Encounter>("encounter-example-home");
+  TestPrintForAnalytics<Observation>("observation-example-genetics-1");
+  TestPrintForAnalytics<Patient>("patient-example");
 }
 
 /* Resource tests start here. */
