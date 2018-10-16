@@ -29,6 +29,9 @@ using std::string;
 Status ConvertToProfile(const google::protobuf::Message& base_message,
                         google::protobuf::Message* profiled_message);
 
+Status ConvertToProfileLenient(const google::protobuf::Message& base_message,
+                               google::protobuf::Message* profiled_message);
+
 // TODO: add ConvertToUnprofiled
 
 }  // namespace stu3

@@ -286,6 +286,12 @@ Status PerformSlicing(Message* message) {
 
 Status ConvertToProfile(const Message& base_message,
                         Message* profiled_message) {
+  FHIR_RETURN_IF_ERROR(ConvertToProfileLenient(base_message, profiled_message));
+  return ValidateResource(*profiled_message);
+}
+
+Status ConvertToProfileLenient(const Message& base_message,
+                               Message* profiled_message) {
   const Descriptor* base_descriptor = base_message.GetDescriptor();
   const Descriptor* profiled_descriptor = profiled_message->GetDescriptor();
 
@@ -307,8 +313,7 @@ Status ConvertToProfile(const Message& base_message,
         ".  They are not binary compatible.  This could mean the profile ",
         "applies constraints that the resource does not meet.");
   }
-  FHIR_RETURN_IF_ERROR(PerformSlicing(profiled_message));
-  return ValidateResource(*profiled_message);
+  return PerformSlicing(profiled_message);
 }
 
 }  // namespace stu3
