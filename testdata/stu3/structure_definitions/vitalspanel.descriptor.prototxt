@@ -340,7 +340,6 @@ nested_type {
     }
   }
   options {
-    [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for CodeableConcept.\nConcept - reference to a terminology or just  text.\nSee http://hl7.org/fhir/StructureDefinition/CodeableConcept"
     [google.fhir.stu3.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/CodeableConcept"
   }
 }

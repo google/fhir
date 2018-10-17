@@ -644,7 +644,11 @@ public class ProtoGenerator {
         structDefDataByUrl.get(codeableConceptStructDefUrl).structDef;
     String fieldType = getFieldType(element, elementList);
     DescriptorProto.Builder codeableConceptBuilder =
-        generateProto(codeableConceptDefinition).toBuilder();
+        generateMessage(
+                codeableConceptDefinition.getSnapshot().getElementList().get(0),
+                codeableConceptDefinition.getSnapshot().getElementList(),
+                DescriptorProto.newBuilder())
+            .toBuilder();
     codeableConceptBuilder.setName(fieldType.substring(fieldType.lastIndexOf(".") + 1));
     codeableConceptBuilder
         .getOptionsBuilder()

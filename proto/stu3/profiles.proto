@@ -75,9 +75,6 @@ message Bmi {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Body Mass Index (BMI)
-  // Auto-generated from StructureDefinition for CodeableConcept.
-  // Concept - reference to a terminology or just  text.
-  // See http://hl7.org/fhir/StructureDefinition/CodeableConcept
   message CodeableConceptForCode {
     option (fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
@@ -288,9 +285,6 @@ message Bodyheight {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Body Height
-  // Auto-generated from StructureDefinition for CodeableConcept.
-  // Concept - reference to a terminology or just  text.
-  // See http://hl7.org/fhir/StructureDefinition/CodeableConcept
   message CodeableConceptForCode {
     option (fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
@@ -501,9 +495,6 @@ message Bodylength {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Body Length
-  // Auto-generated from StructureDefinition for CodeableConcept.
-  // Concept - reference to a terminology or just  text.
-  // See http://hl7.org/fhir/StructureDefinition/CodeableConcept
   message CodeableConceptForCode {
     option (fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
@@ -714,9 +705,6 @@ message Bodytemp {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Body Temperature
-  // Auto-generated from StructureDefinition for CodeableConcept.
-  // Concept - reference to a terminology or just  text.
-  // See http://hl7.org/fhir/StructureDefinition/CodeableConcept
   message CodeableConceptForCode {
     option (fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
@@ -927,9 +915,6 @@ message Bodyweight {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Body Weight
-  // Auto-generated from StructureDefinition for CodeableConcept.
-  // Concept - reference to a terminology or just  text.
-  // See http://hl7.org/fhir/StructureDefinition/CodeableConcept
   message CodeableConceptForCode {
     option (fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
@@ -1140,9 +1125,6 @@ message Bp {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Blood Pressure
-  // Auto-generated from StructureDefinition for CodeableConcept.
-  // Concept - reference to a terminology or just  text.
-  // See http://hl7.org/fhir/StructureDefinition/CodeableConcept
   message CodeableConceptForCode {
     option (fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
@@ -1278,9 +1260,6 @@ message Bp {
     repeated Extension modifier_extension = 3;
 
     // Type of component observation (code / type)
-    // Auto-generated from StructureDefinition for CodeableConcept.
-    // Concept - reference to a terminology or just  text.
-    // See http://hl7.org/fhir/StructureDefinition/CodeableConcept
     message CodeableConceptForCode {
       option (fhir_profile_base) =
           "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
@@ -1336,9 +1315,6 @@ message Bp {
     repeated Extension modifier_extension = 3;
 
     // Type of component observation (code / type)
-    // Auto-generated from StructureDefinition for CodeableConcept.
-    // Concept - reference to a terminology or just  text.
-    // See http://hl7.org/fhir/StructureDefinition/CodeableConcept
     message CodeableConceptForCode {
       option (fhir_profile_base) =
           "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
@@ -2760,9 +2736,6 @@ message Headcircum {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Head Circumference
-  // Auto-generated from StructureDefinition for CodeableConcept.
-  // Concept - reference to a terminology or just  text.
-  // See http://hl7.org/fhir/StructureDefinition/CodeableConcept
   message CodeableConceptForCode {
     option (fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
@@ -2973,9 +2946,6 @@ message Heartrate {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Heart Rate
-  // Auto-generated from StructureDefinition for CodeableConcept.
-  // Concept - reference to a terminology or just  text.
-  // See http://hl7.org/fhir/StructureDefinition/CodeableConcept
   message CodeableConceptForCode {
     option (fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
@@ -4000,9 +3970,6 @@ message Oxygensat {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Oxygen Saturation
-  // Auto-generated from StructureDefinition for CodeableConcept.
-  // Concept - reference to a terminology or just  text.
-  // See http://hl7.org/fhir/StructureDefinition/CodeableConcept
   message CodeableConceptForCode {
     option (fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
@@ -4361,9 +4328,6 @@ message Resprate {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Respiratory Rate
-  // Auto-generated from StructureDefinition for CodeableConcept.
-  // Concept - reference to a terminology or just  text.
-  // See http://hl7.org/fhir/StructureDefinition/CodeableConcept
   message CodeableConceptForCode {
     option (fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
@@ -5448,9 +5412,6 @@ message Vitalspanel {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Vital Signs Panel
-  // Auto-generated from StructureDefinition for CodeableConcept.
-  // Concept - reference to a terminology or just  text.
-  // See http://hl7.org/fhir/StructureDefinition/CodeableConcept
   message CodeableConceptForCode {
     option (fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
