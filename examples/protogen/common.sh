@@ -28,10 +28,8 @@ RESOURCETYPES="Account ActivityDefinition AdverseEvent AllergyIntolerance Appoin
 PROFILES="Bmi Bodyheight Bodylength Bodytemp Bodyweight Bp Cholesterol Clinicaldocument Devicemetricobservation Diagnosticreport-genetics Elementdefinition-de Familymemberhistory-genetic Hdlcholesterol Headcircum Heartrate Hlaresult Ldlcholesterol Lipidprofile MetadataResource Observation-genetics Oxygensat Procedurerequest-genetics Resprate Shareablecodesystem Shareablevalueset Triglyceride Vitalsigns Vitalspanel"
 # LANG=C ensures ASCII sorting order
 EXTENSIONS=$(LANG=C ls $EXTENSION_PATH/extension-*.json)
-EXTENSIONS=$(LANG=C ls $EXTENSION_PATH/extension-*.json)
 GOOGLE_EXTENSIONS=$(LANG=C ls $GOOGLE_EXTENSION_PATH/extension-*.json)
 US_CORE_PROFILES=$(LANG=C ls $US_CORE_PATH/*.json)
-ALL_STU3_STRUCTURE_DEFINITIONS=$EXTENSIONS\ $(ls $INPUT_PATH/*.profile.json)
 
 FHIR_PROTO_PACKAGE="google.fhir.stu3.proto"
 FHIR_JAVA_PROTO_PACKAGE="com.google.fhir.stu3.proto"
@@ -43,15 +41,12 @@ GOOGLE_JAVA_PROTO_PACKAGE="com.google.fhir.stu3.google"
 US_CORE_PROTO_PACKAGE="google.fhir.stu3.uscore"
 US_CORE_JAVA_PROTO_PACKAGE="com.google.fhir.stu3.uscore"
 
-FHIR_KNOWN_TYPES=$FHIR_PROTO_PACKAGE:$(echo $ALL_STU3_STRUCTURE_DEFINITIONS | tr " " ";")
-GOOGLE_KNOWN_TYPES=$GOOGLE_PROTO_PACKAGE:$(echo $GOOGLE_EXTENSIONS | tr " " ";")
-US_CORE_KNOWN_TYPES=$US_CORE_PROTO_PACKAGE:$(echo $US_CORE_PROFILES | tr " " ";")
-
 NO_PACKAGE_FLAGS="\
   --add_apache_license \
-  --known_types $FHIR_KNOWN_TYPES \
-  --known_types $GOOGLE_KNOWN_TYPES \
-  --known_types $US_CORE_KNOWN_TYPES \
+  --struct_def_dep_pkg $INPUT_PATH:$FHIR_PROTO_PACKAGE \
+  --struct_def_dep_pkg $EXTENSION_PATH:$FHIR_PROTO_PACKAGE \
+  --struct_def_dep_pkg $GOOGLE_EXTENSION_PATH:$GOOGLE_PROTO_PACKAGE \
+  --struct_def_dep_pkg $US_CORE_PATH:$US_CORE_PROTO_PACKAGE \
   --fhir_proto_root "$FHIR_PROTO_ROOT""
 COMMON_FLAGS="$NO_PACKAGE_FLAGS \
   --proto_package "$FHIR_PROTO_PACKAGE" \

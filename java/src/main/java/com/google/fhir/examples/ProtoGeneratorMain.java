@@ -21,10 +21,8 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.google.common.base.Splitter;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import com.google.common.io.Files;
-import com.google.fhir.stu3.JsonFormat;
+import com.google.fhir.stu3.FileUtils;
 import com.google.fhir.stu3.ProtoFilePrinter;
 import com.google.fhir.stu3.ProtoGenerator;
 import com.google.fhir.stu3.proto.StructureDefinition;
@@ -41,7 +39,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * A class that runs ProtoGenerator on the specified inputs, turning FHIR StructureDefinition files
@@ -114,9 +111,11 @@ class ProtoGeneratorMain {
     private String fhirProtoRoot = null;
 
     @Parameter(
-        names = {"--known_types"},
-        description = "List of known StructureDefinitions, for inlining types.")
-    private List<String> knownTypes = new ArrayList<>();
+        names = {"--struct_def_dep_pkg"},
+        description =
+            "For StructureDefinitions that are dependencies of the types being "
+                + "generated, this is a colon-delimited tuple of directory:protopackage.")
+    private List<String> structDefDepPkgList = new ArrayList<>();
 
     // TODO: figure out a smarter way to handle dependencies
     @Parameter(
@@ -147,28 +146,25 @@ class ProtoGeneratorMain {
     @Parameter(description = "List of input files")
     private List<String> inputFiles = new ArrayList<>();
 
-    /** Returns a map from known StructureDefinition type to the package it is located in. */
-    private Map<String, String> getKnownTypesMap() {
+    /**
+     * For StructureDefinitions that are dependencies of the input StructureDefinitions, returns a
+     * map from directory of StructureDefinitions to the proto package they were (previously)
+     * generated in.
+     */
+    private Map<String, String> getDependencyPackagesMap() {
       Splitter keyValueSplitter = Splitter.on(":");
-      Splitter fileSplitter = Splitter.on(";");
-      // Convert to a multimap from package -> list of files in that package.
-      Multimap<String, String> packages = HashMultimap.create();
-      for (String knownTypesEntry : knownTypes) {
-        if (knownTypesEntry.endsWith(";")) {
-          knownTypesEntry = knownTypesEntry.substring(0, knownTypesEntry.length() - 1);
-        }
-        List<String> keyValuePair = keyValueSplitter.splitToList(knownTypesEntry);
+      Map<String, String> packages = new HashMap<>();
+      for (String structDefDepPkg : structDefDepPkgList) {
+        List<String> keyValuePair = keyValueSplitter.splitToList(structDefDepPkg);
         if (keyValuePair.size() != 2) {
           throw new IllegalArgumentException(
-              "Invalid knownTypes Entry ["
-                  + knownTypesEntry
-                  + "].  Should be of the form: [your.package:file_1;file_2;file_3...].");
+              "Invalid struct_def_dep_pkg entry ["
+                  + structDefDepPkg
+                  + "].  Should be of the form: your/directory:proto.package.name");
         }
-        packages.putAll(keyValuePair.get(0), fileSplitter.split(keyValuePair.get(1)));
+        packages.put(keyValuePair.get(0), keyValuePair.get(1));
       }
-      // Invert multimap into a map from file -> package it is located in.
-      return packages.entries().stream()
-          .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+      return packages;
     }
   }
 
@@ -178,23 +174,22 @@ class ProtoGeneratorMain {
   }
 
   void run(Args args) throws IOException {
-    JsonFormat.Parser jsonParser = JsonFormat.getParser();
-
     // Read all structure definitions that should be inlined into the
     // output protos.  This will not generate proto definitions for these extensions -
     // that must be done separately.
     // Generate a Pair of {StructureDefinition, proto_package} for each.
     Map<StructureDefinition, String> knownTypes = new HashMap<>();
-    for (Map.Entry<String, String> typePackagePair : args.getKnownTypesMap().entrySet()) {
-      knownTypes.put(
-          readStructureDefinition(typePackagePair.getKey(), jsonParser),
-          typePackagePair.getValue());
+    for (Map.Entry<String, String> dirPackagePair : args.getDependencyPackagesMap().entrySet()) {
+      for (StructureDefinition structDef :
+          FileUtils.loadStructureDefinitionsInDir(dirPackagePair.getKey())) {
+        knownTypes.put(structDef, dirPackagePair.getValue());
+      }
     }
 
     // Read the inputs in sequence.
     ArrayList<StructureDefinition> definitions = new ArrayList<>();
     for (String filename : args.inputFiles) {
-      StructureDefinition definition = readStructureDefinition(filename, jsonParser);
+      StructureDefinition definition = FileUtils.loadStructureDefinition(filename);
       // TODO: We could skip over simple extensions here (since they'll get inlined as
       // primitives, but that would break usages of things like ExtensionWrapper.fromExtensionsIn.
       // Think about this a bit more.
@@ -276,15 +271,6 @@ class ProtoGeneratorMain {
         Files.asCharSink(outputFile, UTF_8).write(TextFormat.printToString(descriptor));
       }
     }
-  }
-
-  private StructureDefinition readStructureDefinition(String filename, JsonFormat.Parser jsonParser)
-      throws IOException {
-    File file = new File(filename);
-    String json = Files.asCharSource(file, UTF_8).read();
-    StructureDefinition.Builder builder = StructureDefinition.newBuilder();
-    jsonParser.merge(json, builder);
-    return builder.build();
   }
 
   public static void main(String[] argv) throws IOException {
