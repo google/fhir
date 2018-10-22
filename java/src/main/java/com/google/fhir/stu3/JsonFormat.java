@@ -793,6 +793,8 @@ public final class JsonFormat {
       return ResourceUtils.splitIfRelativeReference(builder);
     }
 
+    // Supress lack of compile-time type safety because of proto newBuilderForType
+    @SuppressWarnings("unchecked")
     private Message parseFieldValue(
         FieldDescriptor field, JsonElement json, Message.Builder builder) {
       // Everything at the fhir-spec level should be a Message.
@@ -808,7 +810,11 @@ public final class JsonFormat {
           // Special-case primitive type extensions
           mergeMessage((JsonObject) json, subBuilder);
         }
-        return parseAndWrap(json, subBuilder, defaultTimeZone).copyInto(subBuilder).build();
+        try {
+          return parseAndWrap(json, subBuilder, defaultTimeZone).copyInto(subBuilder).build();
+        } catch (IllegalArgumentException e) {
+          throw new IllegalArgumentException("Error parsing field: " + field.getFullName(), e);
+        }
       } else if (AnnotationUtils.isReference(field.getMessageType())) {
         // We split relative references into components using a special parser.
         return parseReference((JsonObject) json, subBuilder);
