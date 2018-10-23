@@ -570,31 +570,48 @@ public class ProtoGenerator {
     // should be added.
     FieldDescriptorProto field = buildField(element, elementList, tag);
     if (field != null) {
+      Optional<DescriptorProto> optionalNestedType =
+          buildNestedTypeIfNeeded(element, elementList, field);
+      if (optionalNestedType.isPresent()) {
+        builder.addNestedType(optionalNestedType.get());
+        // The nested type is defined in the local package, so replace the CORE_FHIR_PACKAGE
+        // with the local packageName in the field type.
+        field =
+            field
+                .toBuilder()
+                .setTypeName(field.getTypeName().replace(CORE_FHIR_PACKAGE, packageName))
+                .build();
+      }
       builder.addField(field);
-      Optional<DescriptorProto> choiceType = getChoiceTypeIfRequired(element, elementList, field);
-      if (choiceType.isPresent()) {
-        builder.addNestedType(choiceType.get());
-      }
-
-      // If this is a container type, or a complex internal extension, define the inner message.
-      // If this is a CodeableConcept, check for fixed coding slices.  Normally we don't add a
-      // message for CodeableConcept because it's defined as a datatype, but if there are slices
-      // on it we need to generate a custom version.
-      if (isContainer(element) || isComplexInternalExtension(element, elementList)) {
-        builder.addNestedType(generateMessage(element, elementList, DescriptorProto.newBuilder()));
-      } else if (element.getTypeCount() == 1
-          && element.getType(0).getCode().getValue().equals("CodeableConcept")) {
-        List<ElementDefinition> codingSlices =
-            getDirectChildren(element, elementList).stream()
-                .filter(candidateElement -> candidateElement.hasSliceName())
-                .collect(Collectors.toList());
-        if (!codingSlices.isEmpty()) {
-          builder.addNestedType(addProfiledCodeableConcept(element, elementList, codingSlices));
-        }
-      }
     }
     // TODO: for null fields, emit an "empty" field that just has a comment about the
     // dropped field, to make it more obvious why numbers are skipped
+  }
+
+  private Optional<DescriptorProto> buildNestedTypeIfNeeded(
+      ElementDefinition element, List<ElementDefinition> elementList, FieldDescriptorProto field) {
+    Optional<DescriptorProto> choiceType = getChoiceTypeIfRequired(element, elementList, field);
+    if (choiceType.isPresent()) {
+      return Optional.of(choiceType.get());
+    }
+
+    // If this is a container type, or a complex internal extension, define the inner message.
+    // If this is a CodeableConcept, check for fixed coding slices.  Normally we don't add a
+    // message for CodeableConcept because it's defined as a datatype, but if there are slices
+    // on it we need to generate a custom version.
+    if (isContainer(element) || isComplexInternalExtension(element, elementList)) {
+      return Optional.of(generateMessage(element, elementList, DescriptorProto.newBuilder()));
+    } else if (element.getTypeCount() == 1
+        && element.getType(0).getCode().getValue().equals("CodeableConcept")) {
+      List<ElementDefinition> codingSlices =
+          getDirectChildren(element, elementList).stream()
+              .filter(candidateElement -> candidateElement.hasSliceName())
+              .collect(Collectors.toList());
+      if (!codingSlices.isEmpty()) {
+        return Optional.of(addProfiledCodeableConcept(element, elementList, codingSlices));
+      }
+    }
+    return Optional.empty();
   }
 
   private Optional<DescriptorProto> getChoiceTypeIfRequired(
@@ -693,8 +710,8 @@ public class ProtoGenerator {
         FieldDescriptorProto.Builder codingField =
             FieldDescriptorProto.newBuilder()
                 .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-                .setTypeName(getFieldType(codeDefinition, elementList))
-                .setName(CodingWithFixedSystem.getDescriptor().getFullName())
+                .setTypeName(CodingWithFixedSystem.getDescriptor().getFullName())
+                .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
                 .setLabel(getFieldSize(element))
                 .setNumber(codeableConceptBuilder.getFieldCount() + 1);
         codingField
@@ -1086,8 +1103,10 @@ public class ProtoGenerator {
       options.setExtension(Annotations.isChoiceType, true);
     }
 
-    if (isLocalType(element, elementList)) {
-      // Field types that require internally-generated submessages are defined in the local package.
+    if (isLocalContentReference(element)) {
+      // Fields that reference local types should have local package.
+      // Note that this does NOT handle locally generated nested types - those require the package
+      // in the field to be updated when we generate the nested type.
       fieldPackage = packageName;
     }
 
@@ -1116,14 +1135,7 @@ public class ProtoGenerator {
         : FieldDescriptorProto.Label.LABEL_REPEATED;
   }
 
-  private boolean isLocalType(ElementDefinition element, List<ElementDefinition> elementList) {
-    if (isContainer(element)
-        || isChoiceType(element)
-        || isChoiceTypeExtension(element, elementList)
-        || isComplexInternalExtension(element, elementList)) {
-      return true;
-    }
-    // It could still be a content reference to a local type.
+  private boolean isLocalContentReference(ElementDefinition element) {
     // TODO: more sophisticated logic.  This wouldn't handle references to fields in
     // other elements in a non-core package
     if (!element.hasContentReference()) {
