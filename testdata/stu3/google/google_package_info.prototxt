@@ -1,0 +1,2 @@
+proto_package: "google.fhir.stu3.google"
+java_proto_package: "com.google.fhir.stu3.google"

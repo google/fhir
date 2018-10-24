@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.MoreCollectors;
+import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.stu3.proto.AbstractTypeCode;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.BindingStrengthCode;
@@ -130,11 +131,7 @@ public class ProtoGenerator {
   private final ImmutableMap<String, Descriptor> valueSetTypesByCodeReference;
 
   // The package to write new protos to.
-  // When regenerating proto files defined by the fhir spec like Decimal or Patient, this will equal
-  // the static constant CORE_FHIR_PACKAGE.
-  private final String packageName;
-  private final Optional<String> javaPackageName;
-  private final Optional<String> goPackageName;
+  private final PackageInfo packageInfo;
   private final String fhirProtoRootPath;
 
   private static class StructureDefinitionData {
@@ -205,14 +202,10 @@ public class ProtoGenerator {
   }
 
   public ProtoGenerator(
-      String packageName,
-      Optional<String> javaPackageName,
-      Optional<String> goPackageName,
+      PackageInfo packageInfo,
       String fhirProtoRootPath,
       Map<StructureDefinition, String> knownTypes) {
-    this.packageName = packageName;
-    this.javaPackageName = javaPackageName;
-    this.goPackageName = goPackageName;
+    this.packageInfo = packageInfo;
     this.fhirProtoRootPath = fhirProtoRootPath;
 
     // TODO: Do this with ValueSet resources once we have them
@@ -345,7 +338,7 @@ public class ProtoGenerator {
       throw new IllegalArgumentException(
           "No StructureDefinition data found for: " + def.getUrl().getValue());
     }
-    if (!(structDefData.protoPackage.equals(packageName)
+    if (!(structDefData.protoPackage.equals(packageInfo.getProtoPackage())
         || (isSingleTypedExtensionDefinition(structDefData.structDef)
             && structDefData.protoPackage.equals(CORE_FHIR_PACKAGE)))) {
       throw new IllegalArgumentException(
@@ -354,7 +347,7 @@ public class ProtoGenerator {
               + ".  Registered in --known_types in "
               + structDefData.protoPackage
               + " but being generated in "
-              + packageName);
+              + packageInfo.getProtoPackage());
     }
 
     List<ElementDefinition> elementList = def.getSnapshot().getElementList();
@@ -420,13 +413,13 @@ public class ProtoGenerator {
   /** Generate a .proto file descriptor from a list of StructureDefinitions. */
   public FileDescriptorProto generateFileDescriptor(List<StructureDefinition> defs) {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
-    builder.setPackage(packageName).setSyntax("proto3");
+    builder.setPackage(packageInfo.getProtoPackage()).setSyntax("proto3");
     FileOptions.Builder options = FileOptions.newBuilder();
-    if (javaPackageName.isPresent()) {
-      options.setJavaPackage(javaPackageName.get()).setJavaMultipleFiles(true);
+    if (!packageInfo.getJavaProtoPackage().isEmpty()) {
+      options.setJavaPackage(packageInfo.getJavaProtoPackage()).setJavaMultipleFiles(true);
     }
-    if (goPackageName.isPresent()) {
-      options.setGoPackage(goPackageName.get());
+    if (!packageInfo.getGoProtoPackage().isEmpty()) {
+      options.setGoPackage(packageInfo.getGoProtoPackage());
     }
     builder.setOptions(options);
     boolean hasPrimitiveType = false;
@@ -579,7 +572,8 @@ public class ProtoGenerator {
         field =
             field
                 .toBuilder()
-                .setTypeName(field.getTypeName().replace(CORE_FHIR_PACKAGE, packageName))
+                .setTypeName(
+                    field.getTypeName().replace(CORE_FHIR_PACKAGE, packageInfo.getProtoPackage()))
                 .build();
       }
       builder.addField(field);
@@ -807,7 +801,12 @@ public class ProtoGenerator {
                 .setName("precision")
                 .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
                 .setType(FieldDescriptorProto.Type.TYPE_ENUM)
-                .setTypeName("." + packageName + "." + toFieldTypeCase(defId) + ".Precision")
+                .setTypeName(
+                    "."
+                        + packageInfo.getProtoPackage()
+                        + "."
+                        + toFieldTypeCase(defId)
+                        + ".Precision")
                 .setNumber(builder.getFieldCount() + 1));
       } else {
         // Handle non-time-like types.
@@ -1071,7 +1070,12 @@ public class ProtoGenerator {
               + toFieldTypeCase(jsonName);
 
       return buildFieldInternal(
-              jsonName, containerType, packageName, nextTag, fieldSize, options.build())
+              jsonName,
+              containerType,
+              packageInfo.getProtoPackage(),
+              nextTag,
+              fieldSize,
+              options.build())
           .build();
     }
 
@@ -1107,7 +1111,7 @@ public class ProtoGenerator {
       // Fields that reference local types should have local package.
       // Note that this does NOT handle locally generated nested types - those require the package
       // in the field to be updated when we generate the nested type.
-      fieldPackage = packageName;
+      fieldPackage = packageInfo.getProtoPackage();
     }
 
     String valueSetUrl = element.getBinding().getValueSet().getReference().getUri().getValue();
@@ -1415,7 +1419,7 @@ public class ProtoGenerator {
       return getSimpleInternalExtensionType(element, elementList);
     }
     if (isChoiceTypeExtension(element, elementList)) {
-      return new QualifiedType(getTypeName(def) + ".Value", packageName);
+      return new QualifiedType(getTypeName(def) + ".Value", packageInfo.getProtoPackage());
     }
     throw new IllegalArgumentException(
         "StructureDefinition is not a simple extension: " + def.getId().getValue());
@@ -1455,7 +1459,7 @@ public class ProtoGenerator {
       return new QualifiedType(toFieldTypeCase(rawType), CORE_FHIR_PACKAGE);
     }
     // This is a choice-type extension that will be inlined as a message.
-    return new QualifiedType(getContainerType(element, elementList), packageName);
+    return new QualifiedType(getContainerType(element, elementList), packageInfo.getProtoPackage());
   }
 
   private static long getDistinctTypeCount(ElementDefinition element) {

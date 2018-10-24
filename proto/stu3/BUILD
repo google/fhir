@@ -116,6 +116,13 @@ fhir_proto_library(
     proto_library_prefix = "version_config",
 )
 
+fhir_proto_library(
+    srcs = [
+        "profile_config.proto",
+    ],
+    proto_library_prefix = "profile_config",
+)
+
 # We also make the .proto files readable for testing.
 filegroup(
     name = "testdata",

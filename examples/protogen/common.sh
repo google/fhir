@@ -30,24 +30,18 @@ PROFILES="Bmi Bodyheight Bodylength Bodytemp Bodyweight Bp Cholesterol Clinicald
 EXTENSIONS=$(LANG=C ls $EXTENSION_PATH/extension-*.json)
 GOOGLE_EXTENSIONS=$(LANG=C ls $GOOGLE_EXTENSION_PATH/extension-*.json)
 US_CORE_PROFILES=$(LANG=C ls $US_CORE_PATH/*.json)
-
-FHIR_PROTO_PACKAGE="google.fhir.stu3.proto"
-FHIR_JAVA_PROTO_PACKAGE="com.google.fhir.stu3.proto"
 FHIR_PROTO_ROOT="proto/stu3"
 
-GOOGLE_PROTO_PACKAGE="google.fhir.stu3.google"
-GOOGLE_JAVA_PROTO_PACKAGE="com.google.fhir.stu3.google"
-
-US_CORE_PROTO_PACKAGE="google.fhir.stu3.uscore"
-US_CORE_JAVA_PROTO_PACKAGE="com.google.fhir.stu3.uscore"
+FHIR_PACKAGE_INFO="$INPUT_PATH/../fhir_package_info.prototxt"
+GOOGLE_PACKAGE_INFO="$GOOGLE_EXTENSION_PATH/google_package_info.prototxt"
+US_CORE_PACKAGE_INFO="$US_CORE_PATH/uscore_package_info.prototxt"
 
 NO_PACKAGE_FLAGS="\
   --add_apache_license \
-  --struct_def_dep_pkg $INPUT_PATH:$FHIR_PROTO_PACKAGE \
-  --struct_def_dep_pkg $EXTENSION_PATH:$FHIR_PROTO_PACKAGE \
-  --struct_def_dep_pkg $GOOGLE_EXTENSION_PATH:$GOOGLE_PROTO_PACKAGE \
-  --struct_def_dep_pkg $US_CORE_PATH:$US_CORE_PROTO_PACKAGE \
-  --fhir_proto_root "$FHIR_PROTO_ROOT""
+  --struct_def_dep_pkg $INPUT_PATH:$FHIR_PACKAGE_INFO \
+  --struct_def_dep_pkg $EXTENSION_PATH:$FHIR_PACKAGE_INFO \
+  --struct_def_dep_pkg $GOOGLE_EXTENSION_PATH:$GOOGLE_PACKAGE_INFO \
+  --struct_def_dep_pkg $US_CORE_PATH:$US_CORE_PACKAGE_INFO \
+  --fhir_proto_root $FHIR_PROTO_ROOT"
 COMMON_FLAGS="$NO_PACKAGE_FLAGS \
-  --proto_package "$FHIR_PROTO_PACKAGE" \
-  --java_proto_package "$FHIR_JAVA_PROTO_PACKAGE""
+  --package_info $FHIR_PACKAGE_INFO"

@@ -22,9 +22,11 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.google.common.base.Splitter;
 import com.google.common.io.Files;
+import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.stu3.FileUtils;
 import com.google.fhir.stu3.ProtoFilePrinter;
 import com.google.fhir.stu3.ProtoGenerator;
+import com.google.fhir.stu3.proto.Bundle;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
@@ -38,7 +40,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * A class that runs ProtoGenerator on the specified inputs, turning FHIR StructureDefinition files
@@ -89,20 +90,10 @@ class ProtoGeneratorMain {
     private String outputFilename = "output.proto";
 
     @Parameter(
-        names = {"--proto_package"},
-        description = "Generated proto package name",
+        names = {"--package_info"},
+        description = "Prototxt containing google.fhir.proto.PackageInfo",
         required = true)
-    private String protoPackage = null;
-
-    @Parameter(
-        names = {"--java_proto_package"},
-        description = "Generated java proto package name")
-    private String javaProtoPackage = null;
-
-    @Parameter(
-        names = {"--go_proto_package"},
-        description = "Generated go proto package name")
-    private String goProtoPackage = null;
+    private String packageInfo = null;
 
     @Parameter(
         names = {"--fhir_proto_root"},
@@ -114,10 +105,12 @@ class ProtoGeneratorMain {
         names = {"--struct_def_dep_pkg"},
         description =
             "For StructureDefinitions that are dependencies of the types being "
-                + "generated, this is a colon-delimited tuple of directory:protopackage.")
+                + "generated, this is a colon-delimited tuple of target:PackageInfo. "
+                + "The target can be either a directory or a zip archive, and the PackageInfo "
+                + "should be a path to a prototxt file containing a google.fhir.proto.PackageInfo "
+                + "proto.")
     private List<String> structDefDepPkgList = new ArrayList<>();
 
-    // TODO: figure out a smarter way to handle dependencies
     @Parameter(
         names = {"--include_resources"},
         description = "Includes a dependency on resources.proto")
@@ -143,7 +136,12 @@ class ProtoGeneratorMain {
         description = "Adds Apache License to proto files.")
     private Boolean addApacheLicense = false;
 
-    @Parameter(description = "List of input files")
+    @Parameter(
+        names = {"--input_bundle"},
+        description = "Input Bundle of StructureDefinitions")
+    private String inputBundleFile = null;
+
+    @Parameter(description = "List of input StructureDefinitions")
     private List<String> inputFiles = new ArrayList<>();
 
     /**
@@ -180,10 +178,26 @@ class ProtoGeneratorMain {
     // Generate a Pair of {StructureDefinition, proto_package} for each.
     Map<StructureDefinition, String> knownTypes = new HashMap<>();
     for (Map.Entry<String, String> dirPackagePair : args.getDependencyPackagesMap().entrySet()) {
-      for (StructureDefinition structDef :
-          FileUtils.loadStructureDefinitionsInDir(dirPackagePair.getKey())) {
-        knownTypes.put(structDef, dirPackagePair.getValue());
+      List<StructureDefinition> structDefs =
+          new File(dirPackagePair.getKey()).isDirectory()
+              ? FileUtils.loadStructureDefinitionsInDir(dirPackagePair.getKey())
+              : FileUtils.loadStructureDefinitionsInZip(dirPackagePair.getKey());
+      PackageInfo depPackageInfo =
+          FileUtils.mergeText(new File(dirPackagePair.getValue()), PackageInfo.newBuilder())
+              .build();
+      if (depPackageInfo.getProtoPackage().isEmpty()) {
+        throw new IllegalArgumentException(
+            "PackageInfo has no proto_package: " + dirPackagePair.getValue());
       }
+      for (StructureDefinition structDef : structDefs) {
+        knownTypes.put(structDef, depPackageInfo.getProtoPackage());
+      }
+    }
+
+    PackageInfo packageInfo =
+        FileUtils.mergeText(new File(args.packageInfo), PackageInfo.newBuilder()).build();
+    if (packageInfo.getProtoPackage().isEmpty()) {
+      throw new IllegalArgumentException("package_info must contain at least a proto_package.");
     }
 
     // Read the inputs in sequence.
@@ -202,19 +216,28 @@ class ProtoGeneratorMain {
       // e.g., my-oddly_namedFile from foo/bar/my-oddly_namedFile.profile.json
       String fileBaseName = Splitter.on('.').splitToList(new File(filename).getName()).get(0);
       typeToSourceFileBaseName.put(ProtoGenerator.getTypeName(definition), fileBaseName);
+
+      // Add in anything currently being generated as a known type.
+      knownTypes.put(definition, packageInfo.getProtoPackage());
+    }
+
+    if (args.inputBundleFile != null) {
+      Bundle bundle = (Bundle) FileUtils.loadFhir(args.inputBundleFile, Bundle.newBuilder());
+      for (Bundle.Entry entry : bundle.getEntryList()) {
+        StructureDefinition structDef = entry.getResource().getStructureDefinition();
+        definitions.add(structDef);
+        typeToSourceFileBaseName.put(
+            ProtoGenerator.getTypeName(structDef), structDef.getId().getValue());
+        knownTypes.put(structDef, packageInfo.getProtoPackage());
+      }
     }
 
     // Generate the proto file.
     writer.println("Generating proto descriptors...");
     writer.flush();
     FileDescriptorProto proto;
-    ProtoGenerator generator =
-        new ProtoGenerator(
-            args.protoPackage,
-            Optional.ofNullable(args.javaProtoPackage),
-            Optional.ofNullable(args.goProtoPackage),
-            args.fhirProtoRoot,
-            knownTypes);
+
+    ProtoGenerator generator = new ProtoGenerator(packageInfo, args.fhirProtoRoot, knownTypes);
     proto = generator.generateFileDescriptor(definitions);
     if (args.includeContainedResource) {
       proto = generator.addContainedResource(proto);

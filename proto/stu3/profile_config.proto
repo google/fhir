@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package google.fhir.proto;
+option java_package = "com.google.fhir.proto";
+option java_multiple_files = true;
+
+// TODO: Consolidate proto/profile generation code in a separate
+// location.
+
+message PackageInfo {
+  // Base url to use for all profiles defined here.
+  // e.g., g.co/fhir/profiles
+  string base_url = 1;
+
+  string proto_package = 2;
+  string java_proto_package = 3;
+  string go_proto_package = 4;
+
+  string publisher = 5;
+  string fhir_version = 6;
+  string telcom_url = 7;
+}

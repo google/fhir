@@ -14,15 +14,23 @@
 
 package com.google.fhir.stu3;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 import com.google.fhir.stu3.proto.StructureDefinition;
+import com.google.protobuf.Message;
+import com.google.protobuf.TextFormat;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /** Utilities related to loading FHIR data from files. */
 public final class FileUtils {
@@ -35,10 +43,7 @@ public final class FileUtils {
   }
 
   public static StructureDefinition loadStructureDefinition(File file) throws IOException {
-    String structDefString = Files.toString(file, StandardCharsets.UTF_8);
-    StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
-    JsonFormat.Parser.newBuilder().build().merge(structDefString, structDefBuilder);
-    return structDefBuilder.build();
+    return (StructureDefinition) loadFhir(file, StructureDefinition.newBuilder());
   }
 
   public static List<StructureDefinition> loadStructureDefinitionsInDir(String dir)
@@ -54,5 +59,37 @@ public final class FileUtils {
       structDefs.add(loadStructureDefinition(file));
     }
     return structDefs;
+  }
+
+  public static List<StructureDefinition> loadStructureDefinitionsInZip(String zip)
+      throws IOException {
+    JsonFormat.Parser parser = JsonFormat.Parser.newBuilder().build();
+    List<StructureDefinition> structDefs = new ArrayList<>();
+    ZipFile zipFile = new ZipFile(new File(zip));
+    Enumeration<? extends ZipEntry> entries = zipFile.entries();
+    while (entries.hasMoreElements()) {
+      String json =
+          new String(ByteStreams.toByteArray(zipFile.getInputStream(entries.nextElement())), UTF_8);
+      StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
+      parser.merge(json, structDefBuilder);
+      structDefs.add(structDefBuilder.build());
+    }
+    return structDefs;
+  }
+
+  public static Message loadFhir(String filename, Message.Builder builder) throws IOException {
+    return loadFhir(new File(filename), builder);
+  }
+
+  public static Message loadFhir(File file, Message.Builder builder) throws IOException {
+    String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
+    JsonFormat.Parser.newBuilder().build().merge(json, builder);
+    return builder.build();
+  }
+
+  /** Read the specifed prototxt file and parse it. */
+  public static <T extends Message.Builder> T mergeText(File file, T builder) throws IOException {
+    TextFormat.getParser().merge(Files.asCharSource(file, StandardCharsets.UTF_8).read(), builder);
+    return builder;
   }
 }

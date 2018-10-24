@@ -23,6 +23,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
+import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.ContactDetail;
 import com.google.fhir.stu3.proto.ContainedResource;
@@ -43,7 +44,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import org.junit.Before;
@@ -217,9 +217,10 @@ public final class ProtoFilePrinterTest {
     runfiles = Runfiles.create();
     protoGenerator =
         new ProtoGenerator(
-            packageName,
-            Optional.of("com.google.fhir.stu3.proto"),
-            Optional.empty(),
+            PackageInfo.newBuilder()
+                .setProtoPackage(packageName)
+                .setJavaProtoPackage("com.google.fhir.stu3.proto")
+                .build(),
             "proto/stu3",
             getKnownStructDefs());
     protoPrinter = new ProtoFilePrinter().withApacheLicense();

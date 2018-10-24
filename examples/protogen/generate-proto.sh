@@ -109,8 +109,7 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   $NO_PACKAGE_FLAGS \
   --emit_proto \
-  --proto_package $GOOGLE_PROTO_PACKAGE \
-  --java_proto_package $GOOGLE_JAVA_PROTO_PACKAGE \
+  --package_info $GOOGLE_PACKAGE_INFO \
   --output_directory $OUTPUT_PATH \
   --output_filename google_extensions.proto \
   $(for i in $GOOGLE_EXTENSIONS; do echo "$i"; done)
@@ -119,8 +118,7 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   $NO_PACKAGE_FLAGS \
   --emit_proto \
-  --proto_package $US_CORE_PROTO_PACKAGE \
-  --java_proto_package $US_CORE_JAVA_PROTO_PACKAGE \
+  --package_info $US_CORE_PACKAGE_INFO \
   --include_resources \
   --include_metadatatypes \
   --additional_import "$FHIR_PROTO_ROOT/uscore_codes.proto" \

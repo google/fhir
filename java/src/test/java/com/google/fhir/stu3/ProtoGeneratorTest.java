@@ -18,6 +18,7 @@ import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
+import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
@@ -29,7 +30,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -136,16 +136,18 @@ public class ProtoGeneratorTest {
     runfiles = Runfiles.create();
     protoGenerator =
         new ProtoGenerator(
-            "google.fhir.stu3.proto",
-            Optional.of("com.google.fhir.stu3.proto"),
-            Optional.empty(),
+            PackageInfo.newBuilder()
+                .setProtoPackage("google.fhir.stu3.proto")
+                .setJavaProtoPackage("com.google.fhir.stu3.proto")
+                .build(),
             "proto/stu3",
             getKnownStructDefs());
     googleProtoGenerator =
         new ProtoGenerator(
-            "google.fhir.stu3.google",
-            Optional.of("com.google.fhir.stu3.google"),
-            Optional.empty(),
+            PackageInfo.newBuilder()
+                .setProtoPackage("google.fhir.stu3.google")
+                .setJavaProtoPackage("com.google.fhir.stu3.google")
+                .build(),
             "proto/stu3",
             getKnownStructDefs());
 

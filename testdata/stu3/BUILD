@@ -4,6 +4,8 @@ package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
 
+exports_files(["fhir_package_info.prototxt"])
+
 # These files are used to help test bigquery integration.
 filegroup(
     name = "bigquery",
@@ -21,12 +23,12 @@ filegroup(
     ]),
 )
 
-# These files contain testdata for generating extensions.
+# These files contain testdata for generating protos.
 filegroup(
-    name = "extensions",
+    name = "descriptors",
     srcs = glob([
-        "extensions/*.json",
         "extensions/*.descriptor.prototxt",
+        "structure_definitions/*.descriptor.prototxt",
     ]),
 )
 
@@ -54,7 +56,7 @@ filegroup(
     name = "structure_definitions",
     srcs = glob([
         "structure_definitions/*.profile.json",
-        "structure_definitions/*.descriptor.prototxt",
+        "extensions/*.json",
     ]),
 )
 

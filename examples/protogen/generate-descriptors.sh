@@ -62,8 +62,7 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   $NO_PACKAGE_FLAGS \
   --emit_descriptors \
-  --proto_package google.fhir.stu3.google \
-  --java_proto_package com.google.fhir.stu3.google \
+  --package_info $GOOGLE_PACKAGE_INFO \
   --output_directory $GOOGLE_EXTENSION_PATH \
   $(for i in $GOOGLE_EXTENSIONS; do echo $i; done)
 
@@ -71,8 +70,7 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   $NO_PACKAGE_FLAGS \
   --emit_descriptors \
-  --proto_package $US_CORE_PROTO_PACKAGE \
-  --java_proto_package $US_CORE_JAVA_PROTO_PACKAGE \
+  --package_info $US_CORE_PACKAGE_INFO \
   --output_directory $US_CORE_PATH \
   $(for i in $US_CORE_PROFILES; do echo "$i"; done)
 
