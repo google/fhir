@@ -105,7 +105,7 @@ class ProtoGeneratorMain {
         names = {"--struct_def_dep_pkg"},
         description =
             "For StructureDefinitions that are dependencies of the types being "
-                + "generated, this is a colon-delimited tuple of target:PackageInfo. "
+                + "generated, this is a pipe-delimited tuple of target|PackageInfo. "
                 + "The target can be either a directory or a zip archive, and the PackageInfo "
                 + "should be a path to a prototxt file containing a google.fhir.proto.PackageInfo "
                 + "proto.")
@@ -150,7 +150,7 @@ class ProtoGeneratorMain {
      * generated in.
      */
     private Map<String, String> getDependencyPackagesMap() {
-      Splitter keyValueSplitter = Splitter.on(":");
+      Splitter keyValueSplitter = Splitter.on("|");
       Map<String, String> packages = new HashMap<>();
       for (String structDefDepPkg : structDefDepPkgList) {
         List<String> keyValuePair = keyValueSplitter.splitToList(structDefDepPkg);
@@ -158,7 +158,7 @@ class ProtoGeneratorMain {
           throw new IllegalArgumentException(
               "Invalid struct_def_dep_pkg entry ["
                   + structDefDepPkg
-                  + "].  Should be of the form: your/directory:proto.package.name");
+                  + "].  Should be of the form: your/directory|proto.package.name");
         }
         packages.put(keyValuePair.get(0), keyValuePair.get(1));
       }

@@ -38,10 +38,10 @@ US_CORE_PACKAGE_INFO="$US_CORE_PATH/uscore_package_info.prototxt"
 
 NO_PACKAGE_FLAGS="\
   --add_apache_license \
-  --struct_def_dep_pkg $INPUT_PATH:$FHIR_PACKAGE_INFO \
-  --struct_def_dep_pkg $EXTENSION_PATH:$FHIR_PACKAGE_INFO \
-  --struct_def_dep_pkg $GOOGLE_EXTENSION_PATH:$GOOGLE_PACKAGE_INFO \
-  --struct_def_dep_pkg $US_CORE_PATH:$US_CORE_PACKAGE_INFO \
+  --struct_def_dep_pkg $INPUT_PATH|$FHIR_PACKAGE_INFO \
+  --struct_def_dep_pkg $EXTENSION_PATH|$FHIR_PACKAGE_INFO \
+  --struct_def_dep_pkg $GOOGLE_EXTENSION_PATH|$GOOGLE_PACKAGE_INFO \
+  --struct_def_dep_pkg $US_CORE_PATH|$US_CORE_PACKAGE_INFO \
   --fhir_proto_root $FHIR_PROTO_ROOT"
 COMMON_FLAGS="$NO_PACKAGE_FLAGS \
   --package_info $FHIR_PACKAGE_INFO"
