@@ -359,11 +359,7 @@ public class ProtoFilePrinter {
     if (options.hasExtension(Annotations.isChoiceType)) {
       hasFieldOption =
           addFieldOption(
-              new StringBuilder()
-                  .append("(")
-                  .append(optionPackage)
-                  .append("is_choice_type)")
-                  .toString(),
+              "(" + optionPackage + "is_choice_type)",
               options.getExtension(Annotations.isChoiceType).toString(),
               hasFieldOption,
               message);
@@ -371,11 +367,7 @@ public class ProtoFilePrinter {
     if (options.hasExtension(Annotations.validationRequirement)) {
       hasFieldOption =
           addFieldOption(
-              new StringBuilder()
-                  .append("(")
-                  .append(optionPackage)
-                  .append("validation_requirement)")
-                  .toString(),
+              "(" + optionPackage + "validation_requirement)",
               options.getExtension(Annotations.validationRequirement).toString(),
               hasFieldOption,
               message);
@@ -383,11 +375,7 @@ public class ProtoFilePrinter {
     if (options.hasExtension(Annotations.fhirInlinedExtensionUrl)) {
       hasFieldOption =
           addFieldOption(
-              new StringBuilder()
-                  .append("(")
-                  .append(optionPackage)
-                  .append("fhir_inlined_extension_url)")
-                  .toString(),
+              "(" + optionPackage + "fhir_inlined_extension_url)",
               "\"" + options.getExtension(Annotations.fhirInlinedExtensionUrl) + "\"",
               hasFieldOption,
               message);
@@ -395,7 +383,7 @@ public class ProtoFilePrinter {
     if (options.hasExtension(Annotations.fhirInlinedCodingSystem)) {
       hasFieldOption =
           addFieldOption(
-              "(fhir_inlined_coding_system)",
+              "(" + optionPackage + "fhir_inlined_coding_system)",
               "\"" + options.getExtension(Annotations.fhirInlinedCodingSystem) + "\"",
               hasFieldOption,
               message);
@@ -403,7 +391,7 @@ public class ProtoFilePrinter {
     if (options.hasExtension(Annotations.fhirInlinedCodingCode)) {
       hasFieldOption =
           addFieldOption(
-              "(fhir_inlined_coding_code)",
+              "(" + optionPackage + "fhir_inlined_coding_code)",
               "\"" + options.getExtension(Annotations.fhirInlinedCodingCode) + "\"",
               hasFieldOption,
               message);
