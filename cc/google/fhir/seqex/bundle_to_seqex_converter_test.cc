@@ -1188,7 +1188,7 @@ TEST_F(BundleToSeqexConverterTest, JoinMedication) {
               {{"Patient/14:0-3@1420102800", seqex}});
 }
 
-TEST_F(BundleToSeqexConverterTest, EmptyDeceasedClass) {
+TEST_F(BundleToSeqexConverterTest, EmptyLabel) {
   EventTrigger trigger;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     event_time {
@@ -1199,7 +1199,6 @@ TEST_F(BundleToSeqexConverterTest, EmptyDeceasedClass) {
   )proto", &trigger));
   std::vector<google::fhir::seqex::TriggerLabelsPair> trigger_labels_pair(
       {{trigger, {}}});
-  // With event_label_extension "deceased" but without any event associated.
   Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
