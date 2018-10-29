@@ -47,7 +47,7 @@ filegroup(
 
 # These files contain StructureDefinitions used to generate the protos.
 filegroup(
-    name = "structure_definitions",
+    name = "fhir_structure_definitions",
     srcs = glob([
         "structure_definitions/*.profile.json",
         "extensions/*.json",
@@ -55,7 +55,7 @@ filegroup(
 )
 
 zip_file(
-    name = "structure_definitions.zip",
+    name = "fhir_structure_definitions.zip",
     srcs = glob([
         "structure_definitions/*.profile.json",
         "extensions/*.json",

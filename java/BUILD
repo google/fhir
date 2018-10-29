@@ -210,7 +210,7 @@ java_test(
     data = [
         "//proto/stu3:testdata",
         "//testdata/stu3:descriptors",
-        "//testdata/stu3:structure_definitions",
+        "//testdata/stu3:fhir_structure_definitions",
     ],
     test_class = "com.google.fhir.stu3.ProtoFilePrinterTest",
     deps = [
@@ -235,9 +235,9 @@ java_test(
     srcs = ["src/test/java/com/google/fhir/stu3/ProtoGeneratorTest.java"],
     data = [
         "//testdata/stu3:descriptors",
+        "//testdata/stu3:fhir_structure_definitions",
         "//testdata/stu3:google",
-        "//testdata/stu3:structure_definitions",
-        "//testdata/stu3/uscore:structure_definitions",
+        "//testdata/stu3/uscore:uscore_structure_definitions",
     ],
     test_class = "com.google.fhir.stu3.ProtoGeneratorTest",
     deps = [

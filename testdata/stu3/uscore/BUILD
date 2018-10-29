@@ -10,12 +10,12 @@ exports_files(["uscore_package_info.prototxt"])
 
 # These files contain us core codes.
 filegroup(
-    name = "structure_definitions",
+    name = "uscore_structure_definitions",
     srcs = glob(["*.json"]),
 )
 
 zip_file(
-    name = "structure_definitions.zip",
+    name = "uscore_structure_definitions.zip",
     srcs = glob([
         "*.json",
     ]),
