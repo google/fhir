@@ -280,6 +280,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Reference of the validation profile"
+    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
   }
 }
 field {
@@ -660,6 +661,7 @@ nested_type {
       options {
         [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.stu3.proto.field_description]: "Required Capability Statement"
+        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/CapabilityStatement"
       }
     }
   }
@@ -724,6 +726,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Reference of the resource"
+      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
     }
   }
 }
@@ -882,6 +885,7 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Assert rule resource reference"
+      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
     }
   }
   field {
@@ -990,6 +994,7 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Assert ruleset resource reference"
+      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
     }
   }
   field {

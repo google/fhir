@@ -396,6 +396,16 @@ public class ProtoFilePrinter {
               hasFieldOption,
               message);
     }
+    for (int i = 0; i < options.getExtensionCount(Annotations.validReferenceType); i++) {
+      String type = options.getExtension(Annotations.validReferenceType, i);
+      hasFieldOption =
+          addFieldOption(
+              "(" + optionPackage + "valid_reference_type)",
+              "\"" + type + "\"",
+              hasFieldOption,
+              message);
+    }
+
     if (field.hasJsonName()) {
       hasFieldOption =
           addFieldOption("json_name", "\"" + field.getJsonName() + "\"", hasFieldOption, message);

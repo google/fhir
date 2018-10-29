@@ -608,6 +608,7 @@ public class ProtoGenerator {
     return Optional.empty();
   }
 
+  // Generates the nested type descriptor proto for a choice type if required.
   private Optional<DescriptorProto> getChoiceTypeIfRequired(
       ElementDefinition element, List<ElementDefinition> elementList, FieldDescriptorProto field) {
     if (isChoiceTypeExtension(element, elementList)) {
@@ -1103,7 +1104,8 @@ public class ProtoGenerator {
     }
 
     // TODO: remove this once choice type is moved to message definition
-    if (isChoiceType(element) || isChoiceTypeExtension(element, elementList)) {
+    boolean isChoiceType = isChoiceType(element) || isChoiceTypeExtension(element, elementList);
+    if (isChoiceType) {
       options.setExtension(Annotations.isChoiceType, true);
     }
 
@@ -1117,6 +1119,18 @@ public class ProtoGenerator {
     String valueSetUrl = element.getBinding().getValueSet().getReference().getUri().getValue();
     if (!valueSetUrl.isEmpty() && valueSetTypesByCodeReference.containsKey(valueSetUrl)) {
       fieldPackage = valueSetTypesByCodeReference.get(valueSetUrl).getFile().getPackage();
+    }
+
+    // Add typed reference options
+    if (!isChoiceType
+        && element.getTypeCount() > 0
+        && element.getType(0).getCode().getValue().equals("Reference")) {
+      for (ElementDefinition.TypeRef type : element.getTypeList()) {
+        String referenceType = type.getTargetProfile().getValue();
+        if (!referenceType.isEmpty()) {
+          options.addExtension(Annotations.validReferenceType, referenceType);
+        }
+      }
     }
 
     return buildFieldInternal(
@@ -1247,11 +1261,19 @@ public class ProtoGenerator {
     int nextTag = 1;
     // Group types.
     List<ElementDefinition.TypeRef> types = new ArrayList<>();
+    List<String> referenceTypes = new ArrayList<>();
     Set<String> foundTypes = new HashSet<>();
     for (ElementDefinition.TypeRef type : element.getTypeList()) {
       if (!foundTypes.contains(type.getCode().getValue())) {
         types.add(type);
         foundTypes.add(type.getCode().getValue());
+      }
+
+      if (type.getCode().getValue().equals("Reference")) {
+        String referenceType = type.getTargetProfile().getValue();
+        if (!referenceType.isEmpty()) {
+          referenceTypes.add(referenceType);
+        }
       }
     }
 
@@ -1261,6 +1283,12 @@ public class ProtoGenerator {
       // TODO:  This assumes all types in a oneof are core FHIR types.  In order to
       // support custom types, we'll need to load the structure definition for the type and check
       // against knownStructureDefinitionPackages
+      FieldOptions.Builder options = FieldOptions.newBuilder();
+      if (fieldName.equals("Reference")) {
+        for (String referenceType : referenceTypes) {
+          options.addExtension(Annotations.validReferenceType, referenceType);
+        }
+      }
       FieldDescriptorProto.Builder fieldBuilder =
           buildFieldInternal(
                   fieldName,
@@ -1268,7 +1296,7 @@ public class ProtoGenerator {
                   CORE_FHIR_PACKAGE,
                   nextTag++,
                   FieldDescriptorProto.Label.LABEL_OPTIONAL,
-                  FieldOptions.getDefaultInstance())
+                  options.build())
               .setOneofIndex(0);
       // TODO: change the oneof name to avoid this.
       if (fieldBuilder.getName().equals(oneof.getName())) {

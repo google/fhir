@@ -120,6 +120,7 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "What measure was evaluated"
+    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Measure"
   }
 }
 field {
@@ -130,6 +131,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "What patient the report is for"
+    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
   }
 }
 field {
@@ -150,6 +152,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Who is reporting the data"
+    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
   }
 }
 field {
@@ -181,6 +184,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "What data was evaluated to produce the measure score"
+    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Bundle"
   }
 }
 nested_type {
@@ -326,6 +330,7 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
         [google.fhir.stu3.proto.field_description]: "For patient-list reports, the patients in this population"
+        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/List"
       }
     }
   }
@@ -514,6 +519,7 @@ nested_type {
           type_name: ".google.fhir.stu3.proto.Reference"
           options {
             [google.fhir.stu3.proto.field_description]: "For patient-list reports, the patients in this population"
+            [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/List"
           }
         }
       }

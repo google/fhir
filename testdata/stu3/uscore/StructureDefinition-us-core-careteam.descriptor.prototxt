@@ -129,6 +129,7 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Who care team is for"
+    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
   }
 }
 field {
@@ -139,6 +140,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Encounter or episode associated with CareTeam"
+    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Encounter"
+    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
   }
 }
 field {
@@ -180,6 +183,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Why the care team exists"
+    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Condition"
   }
 }
 field {
@@ -190,6 +194,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Organization responsible for the care team"
+    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
   }
 }
 field {
@@ -254,6 +259,10 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Who is involved"
+      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner"
+      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-organization"
+      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
     }
   }
   field {
@@ -264,6 +273,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Organization of the practitioner"
+      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
     }
   }
   field {

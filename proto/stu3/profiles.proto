@@ -64,7 +64,21 @@ message Bmi {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -100,10 +114,18 @@ message Bmi {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 14 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Often just a dateTime for Vital Signs
   message Effective {
@@ -119,7 +141,15 @@ message Bmi {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Vital Sign Value recorded with UCUM
   message Value {
@@ -145,10 +175,16 @@ message Bmi {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -198,7 +234,11 @@ message Bmi {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Resource that is related to this one
-    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference target = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+    ];
   }
   repeated Related related = 28;
 
@@ -274,7 +314,21 @@ message Bodyheight {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -310,10 +364,18 @@ message Bodyheight {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 14 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Often just a dateTime for Vital Signs
   message Effective {
@@ -329,7 +391,15 @@ message Bodyheight {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Vital Sign Value recorded with UCUM
   message Value {
@@ -355,10 +425,16 @@ message Bodyheight {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -408,7 +484,11 @@ message Bodyheight {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Resource that is related to this one
-    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference target = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+    ];
   }
   repeated Related related = 28;
 
@@ -484,7 +564,21 @@ message Bodylength {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -520,10 +614,18 @@ message Bodylength {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 14 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Often just a dateTime for Vital Signs
   message Effective {
@@ -539,7 +641,15 @@ message Bodylength {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Vital Sign Value recorded with UCUM
   message Value {
@@ -565,10 +675,16 @@ message Bodylength {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -618,7 +734,11 @@ message Bodylength {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Resource that is related to this one
-    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference target = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+    ];
   }
   repeated Related related = 28;
 
@@ -694,7 +814,21 @@ message Bodytemp {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -730,10 +864,18 @@ message Bodytemp {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 14 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Often just a dateTime for Vital Signs
   message Effective {
@@ -749,7 +891,15 @@ message Bodytemp {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Vital Sign Value recorded with UCUM
   message Value {
@@ -775,10 +925,16 @@ message Bodytemp {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -828,7 +984,11 @@ message Bodytemp {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Resource that is related to this one
-    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference target = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+    ];
   }
   repeated Related related = 28;
 
@@ -904,7 +1064,21 @@ message Bodyweight {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -940,10 +1114,18 @@ message Bodyweight {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 14 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Often just a dateTime for Vital Signs
   message Effective {
@@ -959,7 +1141,15 @@ message Bodyweight {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Vital Sign Value recorded with UCUM
   message Value {
@@ -985,10 +1175,16 @@ message Bodyweight {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -1038,7 +1234,11 @@ message Bodyweight {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Resource that is related to this one
-    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference target = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+    ];
   }
   repeated Related related = 28;
 
@@ -1114,7 +1314,21 @@ message Bp {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -1150,10 +1364,18 @@ message Bp {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 14 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Often just a dateTime for Vital Signs
   message Effective {
@@ -1169,7 +1391,15 @@ message Bp {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -1187,10 +1417,16 @@ message Bp {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -1240,7 +1476,11 @@ message Bp {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Resource that is related to this one
-    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference target = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+    ];
   }
   repeated Related related = 28;
 
@@ -1397,7 +1637,21 @@ message Cholesterol {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -1410,10 +1664,20 @@ message Cholesterol {
   CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14;
+  Reference subject = 14 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Group",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Location"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Clinically relevant time/time-period for observation
   message Effective {
@@ -1428,7 +1692,15 @@ message Cholesterol {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Cholesterol value
   message Value {
@@ -1454,10 +1726,16 @@ message Cholesterol {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -1571,16 +1849,34 @@ message Clinicaldocument {
   CodeableConcept class_value = 12 [json_name = "class"];
 
   // Who and/or what the composition is about
-  Reference subject = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 13 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Group",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Location"
+  ];
 
   // Context of the Composition
-  Reference encounter = 14;
+  Reference encounter = 14
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Encounter"];
 
   // Composition editing time
   DateTime date = 15 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what authored the composition
-  repeated Reference author = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated Reference author = 16 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Human Readable name/title
   String title = 17 [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -1607,12 +1903,21 @@ message Clinicaldocument {
     DateTime time = 5;
 
     // Who attested the composition
-    Reference party = 6;
+    Reference party = 6 [
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Patient",
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Practitioner",
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Organization"
+    ];
   }
   repeated Attester attester = 19;
 
   // Organization which maintains the composition
-  Reference custodian = 20;
+  Reference custodian = 20
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Organization"];
 
   // Relationships to other compositions/documents
   message RelatesTo {
@@ -1633,7 +1938,9 @@ message Clinicaldocument {
     message Target {
       oneof target {
         Identifier identifier = 1;
-        Reference reference = 2;
+        Reference reference = 2
+            [(valid_reference_type) =
+                 "http://hl7.org/fhir/StructureDefinition/Composition"];
       }
     }
     Target target = 5
@@ -1659,7 +1966,9 @@ message Clinicaldocument {
     Period period = 5;
 
     // The event(s) being documented
-    repeated Reference detail = 6;
+    repeated Reference detail = 6
+        [(valid_reference_type) =
+             "http://hl7.org/fhir/StructureDefinition/Resource"];
   }
   repeated Event event = 22;
 
@@ -1690,7 +1999,9 @@ message Clinicaldocument {
     CodeableConcept ordered_by = 8;
 
     // A reference to data that supports this section
-    repeated Reference entry = 9;
+    repeated Reference entry = 9
+        [(valid_reference_type) =
+             "http://hl7.org/fhir/StructureDefinition/Resource"];
 
     // Why the section is empty
     CodeableConcept empty_reason = 10;
@@ -1739,7 +2050,21 @@ message Devicemetricobservation {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -1752,7 +2077,11 @@ message Devicemetricobservation {
   CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 14 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device"
+  ];
 
   // Clinically relevant time/time-period for observation
   message Effective {
@@ -1764,7 +2093,15 @@ message Devicemetricobservation {
       [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Actual result
   message Value {
@@ -1796,7 +2133,11 @@ message Devicemetricobservation {
   CodeableConcept method = 24;
 
   // (Measurement) Device
-  Reference device = 26 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference device = 26 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -1845,7 +2186,11 @@ message Devicemetricobservation {
     ObservationRelationshipTypeCode type = 4;
 
     // Resource that is related to this one
-    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference target = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Observation"
+    ];
   }
   Related related = 28;
 
@@ -1931,7 +2276,19 @@ message DiagnosticreportGenetics {
   repeated Identifier identifier = 9;
 
   // What was requested
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | partial | preliminary | final +
   DiagnosticReportStatusCode status = 11
@@ -1944,10 +2301,20 @@ message DiagnosticreportGenetics {
   CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // The subject of the report - usually, but not always, the patient
-  Reference subject = 14;
+  Reference subject = 14 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Group",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Location"
+  ];
 
   // Health care event when test ordered
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Clinically relevant time/time-period for report
   message Effective {
@@ -1976,18 +2343,33 @@ message DiagnosticreportGenetics {
     CodeableConcept role = 4;
 
     // Practitioner or Organization  participant
-    Reference actor = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference actor = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Practitioner",
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Organization"
+    ];
   }
   repeated Performer performer = 18;
 
   // Specimens this report is based on
-  repeated Reference specimen = 19;
+  repeated Reference specimen = 19
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // Observations - simple, or complex nested groups
-  repeated Reference result = 20;
+  repeated Reference result = 20
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Observation"];
 
   // Reference to full details of imaging associated with the diagnostic report
-  repeated Reference imaging_study = 21;
+  repeated Reference imaging_study = 21 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImagingStudy",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImagingManifest"
+  ];
 
   // Key images associated with this report
   message Image {
@@ -2004,7 +2386,10 @@ message DiagnosticreportGenetics {
     String comment = 4;
 
     // Reference to the image source
-    Reference link = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference link = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Media"
+    ];
   }
   repeated Image image = 22;
 
@@ -2319,7 +2704,9 @@ message ElementdefinitionDe {
     message ValueSet {
       oneof value_set {
         Uri uri = 1;
-        Reference reference = 2;
+        Reference reference = 2
+            [(valid_reference_type) =
+                 "http://hl7.org/fhir/StructureDefinition/ValueSet"];
       }
     }
     ValueSet value_set = 5 [(is_choice_type) = true];
@@ -2400,7 +2787,12 @@ message FamilymemberhistoryGenetic {
   repeated Identifier identifier = 9;
 
   // Instantiates protocol or definition
-  repeated Reference definition = 10;
+  repeated Reference definition = 10 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/PlanDefinition",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Questionnaire"
+  ];
 
   // partial | completed | entered-in-error | health-unknown
   FamilyHistoryStatusCode status = 11
@@ -2413,7 +2805,10 @@ message FamilymemberhistoryGenetic {
   CodeableConcept not_done_reason = 13;
 
   // Patient history is about
-  Reference patient = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference patient = 14 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient"
+  ];
 
   // When history was captured/updated
   DateTime date = 15;
@@ -2467,7 +2862,16 @@ message FamilymemberhistoryGenetic {
   repeated CodeableConcept reason_code = 23;
 
   // Why was family member history performed?
-  repeated Reference reason_reference = 24;
+  repeated Reference reason_reference = 24 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Condition",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Observation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/AllergyIntolerance",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse"
+  ];
 
   // General note about related person
   repeated Annotation note = 25;
@@ -2562,7 +2966,21 @@ message Hdlcholesterol {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -2575,10 +2993,20 @@ message Hdlcholesterol {
   CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14;
+  Reference subject = 14 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Group",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Location"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Clinically relevant time/time-period for observation
   message Effective {
@@ -2593,7 +3021,15 @@ message Hdlcholesterol {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // HDL Cholesterol value
   message Value {
@@ -2619,10 +3055,16 @@ message Hdlcholesterol {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -2725,7 +3167,21 @@ message Headcircum {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -2761,10 +3217,18 @@ message Headcircum {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 14 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Often just a dateTime for Vital Signs
   message Effective {
@@ -2780,7 +3244,15 @@ message Headcircum {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Vital Sign Value recorded with UCUM
   message Value {
@@ -2806,10 +3278,16 @@ message Headcircum {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -2859,7 +3337,11 @@ message Headcircum {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Resource that is related to this one
-    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference target = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+    ];
   }
   repeated Related related = 28;
 
@@ -2935,7 +3417,21 @@ message Heartrate {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -2971,10 +3467,18 @@ message Heartrate {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 14 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Often just a dateTime for Vital Signs
   message Effective {
@@ -2990,7 +3494,15 @@ message Heartrate {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Vital Sign Value recorded with UCUM
   message Value {
@@ -3016,10 +3528,16 @@ message Heartrate {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -3069,7 +3587,11 @@ message Heartrate {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Resource that is related to this one
-    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference target = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+    ];
   }
   repeated Related related = 28;
 
@@ -3146,7 +3668,19 @@ message Hlaresult {
   repeated Identifier identifier = 9;
 
   // What was requested
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | partial | preliminary | final +
   DiagnosticReportStatusCode status = 11
@@ -3159,10 +3693,20 @@ message Hlaresult {
   CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // The subject of the report - usually, but not always, the patient
-  Reference subject = 14;
+  Reference subject = 14 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Group",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Location"
+  ];
 
   // Health care event when test ordered
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Clinically relevant time/time-period for report
   message Effective {
@@ -3191,18 +3735,33 @@ message Hlaresult {
     CodeableConcept role = 4;
 
     // Practitioner or Organization  participant
-    Reference actor = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference actor = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Practitioner",
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Organization"
+    ];
   }
   repeated Performer performer = 18;
 
   // Specimens this report is based on
-  repeated Reference specimen = 19;
+  repeated Reference specimen = 19
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // Observations - simple, or complex nested groups
-  repeated Reference result = 20;
+  repeated Reference result = 20
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Observation"];
 
   // Reference to full details of imaging associated with the diagnostic report
-  repeated Reference imaging_study = 21;
+  repeated Reference imaging_study = 21 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImagingStudy",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImagingManifest"
+  ];
 
   // Key images associated with this report
   message Image {
@@ -3219,7 +3778,10 @@ message Hlaresult {
     String comment = 4;
 
     // Reference to the image source
-    Reference link = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference link = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Media"
+    ];
   }
   repeated Image image = 22;
 
@@ -3296,7 +3858,21 @@ message Ldlcholesterol {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -3309,10 +3885,20 @@ message Ldlcholesterol {
   CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14;
+  Reference subject = 14 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Group",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Location"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Clinically relevant time/time-period for observation
   message Effective {
@@ -3327,7 +3913,15 @@ message Ldlcholesterol {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // LDL Cholesterol value
   message Value {
@@ -3353,10 +3947,16 @@ message Ldlcholesterol {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -3459,7 +4059,19 @@ message Lipidprofile {
   repeated Identifier identifier = 9;
 
   // What was requested
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | partial | preliminary | final +
   DiagnosticReportStatusCode status = 11
@@ -3472,10 +4084,20 @@ message Lipidprofile {
   CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // The subject of the report - usually, but not always, the patient
-  Reference subject = 14;
+  Reference subject = 14 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Group",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Location"
+  ];
 
   // Health care event when test ordered
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Clinically relevant time/time-period for report
   message Effective {
@@ -3504,18 +4126,33 @@ message Lipidprofile {
     CodeableConcept role = 4;
 
     // Practitioner or Organization  participant
-    Reference actor = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference actor = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Practitioner",
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Organization"
+    ];
   }
   repeated Performer performer = 18;
 
   // Specimens this report is based on
-  repeated Reference specimen = 19;
+  repeated Reference specimen = 19
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // Observations - simple, or complex nested groups
-  Reference result = 20;
+  Reference result = 20
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Observation"];
 
   // Reference to full details of imaging associated with the diagnostic report
-  repeated Reference imaging_study = 21;
+  repeated Reference imaging_study = 21 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImagingStudy",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImagingManifest"
+  ];
 
   // Key images associated with this report
   message Image {
@@ -3532,7 +4169,10 @@ message Lipidprofile {
     String comment = 4;
 
     // Reference to the image source
-    Reference link = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference link = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Media"
+    ];
   }
   repeated Image image = 22;
 
@@ -3543,17 +4183,30 @@ message Lipidprofile {
   repeated Attachment presented_form = 25;
 
   // Cholesterol Result
-  Reference cholesterol = 26 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference cholesterol = 26 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/cholesterol"
+  ];
 
   // Triglyceride Result
-  Reference triglyceride = 27 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference triglyceride = 27 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/triglyceride"
+  ];
 
   // HDL Cholesterol Result
-  Reference h_d_l_cholesterol = 28
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference h_d_l_cholesterol = 28 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/hdlcholesterol"
+  ];
 
   // LDL Cholesterol result, if reported
-  Reference l_d_l_cholesterol = 29;
+  Reference l_d_l_cholesterol = 29
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/ldlcholesterol"];
 }
 
 // Auto-generated from StructureDefinition for MetadataResource.
@@ -3664,7 +4317,21 @@ message ObservationGenetics {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -3677,10 +4344,20 @@ message ObservationGenetics {
   CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14;
+  Reference subject = 14 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Group",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Location"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Clinically relevant time/time-period for observation
   message Effective {
@@ -3695,7 +4372,15 @@ message ObservationGenetics {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Actual result
   message Value {
@@ -3731,10 +4416,16 @@ message ObservationGenetics {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -3783,7 +4474,15 @@ message ObservationGenetics {
     ObservationRelationshipTypeCode type = 4;
 
     // Resource that is related to this one
-    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference target = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Observation",
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse",
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Sequence"
+    ];
   }
   repeated Related related = 28;
 
@@ -3959,7 +4658,21 @@ message Oxygensat {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -3995,10 +4708,18 @@ message Oxygensat {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 14 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Often just a dateTime for Vital Signs
   message Effective {
@@ -4014,7 +4735,15 @@ message Oxygensat {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Vital Sign Value recorded with UCUM
   message Value {
@@ -4040,10 +4769,16 @@ message Oxygensat {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -4093,7 +4828,11 @@ message Oxygensat {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Resource that is related to this one
-    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference target = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+    ];
   }
   repeated Related related = 28;
 
@@ -4169,13 +4908,22 @@ message ProcedurerequestGenetics {
   repeated Identifier identifier = 9;
 
   // Protocol or definition
-  repeated Reference definition = 10;
+  repeated Reference definition = 10 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ActivityDefinition",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/PlanDefinition"
+  ];
 
   // What request fulfills
-  repeated Reference based_on = 11;
+  repeated Reference based_on = 11
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Resource"];
 
   // What request replaces
-  repeated Reference replaces = 12;
+  repeated Reference replaces = 12
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Resource"];
 
   // Composite Request ID
   Identifier requisition = 13;
@@ -4199,10 +4947,21 @@ message ProcedurerequestGenetics {
   CodeableConcept code = 19 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Individual the service is ordered for
-  Reference subject = 20 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 20 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Group",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Location",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device"
+  ];
 
   // Encounter or Episode during which request was created
-  Reference context = 21;
+  Reference context = 21 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // When procedure should occur
   message Occurrence {
@@ -4238,10 +4997,19 @@ message ProcedurerequestGenetics {
     repeated Extension modifier_extension = 3;
 
     // Individual making the request
-    Reference agent = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference agent = 4 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Practitioner",
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Organization"
+    ];
 
     // Organization agent is acting for
-    Reference on_behalf_of = 5;
+    Reference on_behalf_of = 5
+        [(valid_reference_type) =
+             "http://hl7.org/fhir/StructureDefinition/Organization"];
   }
   Requester requester = 25;
 
@@ -4249,19 +5017,39 @@ message ProcedurerequestGenetics {
   CodeableConcept performer_type = 26;
 
   // Requested perfomer
-  Reference performer = 27;
+  Reference performer = 27 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/HealthcareService"
+  ];
 
   // Explanation/Justification for test
   repeated CodeableConcept reason_code = 28;
 
   // Explanation/Justification for test
-  repeated Reference reason_reference = 29;
+  repeated Reference reason_reference = 29 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Condition",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Observation"
+  ];
 
   // Additional clinical information
-  repeated Reference supporting_info = 30;
+  repeated Reference supporting_info = 30
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Resource"];
 
   // Procedure Samples
-  repeated Reference specimen = 31;
+  repeated Reference specimen = 31
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // Location on Body
   repeated CodeableConcept body_site = 32;
@@ -4270,7 +5058,9 @@ message ProcedurerequestGenetics {
   repeated Annotation note = 33;
 
   // Request provenance
-  repeated Reference relevant_history = 34;
+  repeated Reference relevant_history = 34
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Provenance"];
 
   // The items the orderer requested
   repeated DiagnosticReportItem item = 35 [
@@ -4317,7 +5107,21 @@ message Resprate {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -4353,10 +5157,18 @@ message Resprate {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 14 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Often just a dateTime for Vital Signs
   message Effective {
@@ -4372,7 +5184,15 @@ message Resprate {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Vital Sign Value recorded with UCUM
   message Value {
@@ -4398,10 +5218,16 @@ message Resprate {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -4451,7 +5277,11 @@ message Resprate {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Resource that is related to this one
-    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference target = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+    ];
   }
   repeated Related related = 28;
 
@@ -5050,7 +5880,21 @@ message Triglyceride {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -5063,10 +5907,20 @@ message Triglyceride {
   CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14;
+  Reference subject = 14 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Group",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Location"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Clinically relevant time/time-period for observation
   message Effective {
@@ -5081,7 +5935,15 @@ message Triglyceride {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Triglyceride value
   message Value {
@@ -5107,10 +5969,16 @@ message Triglyceride {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -5213,7 +6081,21 @@ message Vitalsigns {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -5227,10 +6109,18 @@ message Vitalsigns {
   CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 14 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Often just a dateTime for Vital Signs
   message Effective {
@@ -5246,7 +6136,15 @@ message Vitalsigns {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Vital Sign Value recorded with UCUM
   message Value {
@@ -5272,10 +6170,16 @@ message Vitalsigns {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -5325,7 +6229,11 @@ message Vitalsigns {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Resource that is related to this one
-    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference target = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+    ];
   }
   repeated Related related = 28;
 
@@ -5401,7 +6309,21 @@ message Vitalspanel {
   repeated Identifier identifier = 9;
 
   // Fulfills plan, proposal or order
-  repeated Reference based_on = 10;
+  repeated Reference based_on = 10 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
 
   // registered | preliminary | final | amended +
   ObservationStatusCode status = 11
@@ -5437,10 +6359,18 @@ message Vitalspanel {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
-  Reference subject = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Reference subject = 14 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient"
+  ];
 
   // Healthcare event during which this observation is made
-  Reference context = 15;
+  Reference context = 15 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
 
   // Often just a dateTime for Vital Signs
   message Effective {
@@ -5456,7 +6386,15 @@ message Vitalspanel {
   Instant issued = 17;
 
   // Who is responsible for the observation
-  repeated Reference performer = 18;
+  repeated Reference performer = 18 [
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Patient",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -5474,10 +6412,16 @@ message Vitalspanel {
   CodeableConcept method = 24;
 
   // Specimen used for this observation
-  Reference specimen = 25;
+  Reference specimen = 25
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
 
   // (Measurement) Device
-  Reference device = 26;
+  Reference device = 26 [
+    (valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Device",
+    (valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
 
   // Provides guide for interpretation
   message ReferenceRange {
@@ -5527,7 +6471,11 @@ message Vitalspanel {
         [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Resource that is related to this one
-    Reference target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    Reference target = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+    ];
   }
   repeated Related related = 28 [(validation_requirement) = REQUIRED_BY_FHIR];
 

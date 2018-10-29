@@ -166,6 +166,7 @@ public class ProtoGeneratorTest {
     registry.add(Annotations.fhirInlinedExtensionUrl);
     registry.add(Annotations.fhirInlinedCodingCode);
     registry.add(Annotations.fhirInlinedCodingSystem);
+    registry.add(Annotations.validReferenceType);
   }
 
   // Test the primitive FHIR data types individually. */

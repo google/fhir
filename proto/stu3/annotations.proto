@@ -117,6 +117,9 @@ extend google.protobuf.FieldOptions {
   // set.  In addition to the implications of fhir_inlined_coding_system,
   // this also sets a fixed code.
   string fhir_inlined_coding_code = 212122564;
+
+  // Indicates which resource types can be valid references.
+  repeated string valid_reference_type = 218884094;
 }
 
 extend google.protobuf.OneofOptions {

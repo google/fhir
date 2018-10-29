@@ -490,7 +490,14 @@ message Annotation {
   // Individual responsible for the annotation
   message Author {
     oneof author {
-      Reference reference = 1;
+      Reference reference = 1 [
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Patient",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+      ];
       String string_value = 2 [json_name = "string"];
     }
   }
@@ -855,7 +862,9 @@ message Identifier {
   Period period = 7;
 
   // Organization that issued id (may be just text)
-  Reference assigner = 8;
+  Reference assigner = 8
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Organization"];
 }
 
 // Auto-generated from StructureDefinition for Meta.
@@ -1071,7 +1080,18 @@ message Signature {
   message Who {
     oneof who {
       Uri uri = 1;
-      Reference reference = 2;
+      Reference reference = 2 [
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Patient",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Device",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Organization"
+      ];
     }
   }
   Who who = 5
@@ -1081,7 +1101,18 @@ message Signature {
   message OnBehalfOf {
     oneof on_behalf_of {
       Uri uri = 1;
-      Reference reference = 2;
+      Reference reference = 2 [
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Patient",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Device",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Organization"
+      ];
     }
   }
   OnBehalfOf on_behalf_of = 6 [(is_choice_type) = true];

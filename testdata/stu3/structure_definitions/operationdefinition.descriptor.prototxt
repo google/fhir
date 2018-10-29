@@ -251,6 +251,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Marks this as a profile of the base"
+    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/OperationDefinition"
   }
 }
 field {
@@ -430,6 +431,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Profile on the type"
+      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/StructureDefinition"
     }
   }
   field {
@@ -523,6 +525,9 @@ nested_type {
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Reference"
+        options {
+          [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ValueSet"
+        }
         oneof_index: 0
       }
       oneof_decl {

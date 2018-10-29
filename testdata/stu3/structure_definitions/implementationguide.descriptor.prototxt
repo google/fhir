@@ -475,6 +475,7 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
         [google.fhir.stu3.proto.field_description]: "Resource this is an example of (if applicable)"
+        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/StructureDefinition"
       }
     }
     nested_type {
@@ -493,6 +494,9 @@ nested_type {
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Reference"
+        options {
+          [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+        }
         oneof_index: 0
       }
       oneof_decl {
@@ -553,6 +557,7 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Profile that all resources must conform to"
+      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/StructureDefinition"
     }
   }
 }

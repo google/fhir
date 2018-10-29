@@ -323,6 +323,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Profiles for use cases supported"
+    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/StructureDefinition"
   }
 }
 field {
@@ -763,6 +764,7 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
         [google.fhir.stu3.proto.field_description]: "Base System profile for all uses of resource"
+        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/StructureDefinition"
       }
     }
     field {
@@ -1132,6 +1134,7 @@ nested_type {
       options {
         [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.stu3.proto.field_description]: "The defined operation/query"
+        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/OperationDefinition"
       }
     }
   }
@@ -1325,6 +1328,7 @@ nested_type {
       options {
         [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.stu3.proto.field_description]: "Message supported by this system"
+        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/MessageDefinition"
       }
     }
   }
@@ -1412,6 +1416,7 @@ nested_type {
       options {
         [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.stu3.proto.field_description]: "Profile that describes the request"
+        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/StructureDefinition"
       }
     }
     field {
@@ -1423,6 +1428,7 @@ nested_type {
       options {
         [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.stu3.proto.field_description]: "Profile that describes the response"
+        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/StructureDefinition"
       }
     }
     field {
@@ -1499,6 +1505,7 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Constraint on a resource used in the document"
+      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/StructureDefinition"
     }
   }
 }

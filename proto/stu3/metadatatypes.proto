@@ -125,7 +125,9 @@ message DataRequirement {
     message ValueSet {
       oneof value_set {
         String string_value = 1 [json_name = "string"];
-        Reference reference = 2;
+        Reference reference = 2
+            [(valid_reference_type) =
+                 "http://hl7.org/fhir/StructureDefinition/ValueSet"];
       }
     }
     ValueSet value_set = 4 [(is_choice_type) = true];
@@ -611,7 +613,9 @@ message ElementDefinition {
     message ValueSet {
       oneof value_set {
         Uri uri = 1;
-        Reference reference = 2;
+        Reference reference = 2
+            [(valid_reference_type) =
+                 "http://hl7.org/fhir/StructureDefinition/ValueSet"];
       }
     }
     ValueSet value_set = 5 [(is_choice_type) = true];
@@ -696,7 +700,9 @@ message ParameterDefinition {
   FHIRAllTypesCode type = 8 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // What profile the value is expected to be
-  Reference profile = 9;
+  Reference profile = 9
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/StructureDefinition"];
 }
 
 // Auto-generated from StructureDefinition for RelatedArtifact.
@@ -731,7 +737,9 @@ message RelatedArtifact {
   Attachment document = 7;
 
   // What resource is being referenced
-  Reference resource = 8;
+  Reference resource = 8
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Resource"];
 }
 
 // Auto-generated from StructureDefinition for Resource, last updated
@@ -780,7 +788,9 @@ message TriggerDefinition {
   message EventTiming {
     oneof event_timing {
       Timing timing = 1;
-      Reference reference = 2;
+      Reference reference = 2
+          [(valid_reference_type) =
+               "http://hl7.org/fhir/StructureDefinition/Schedule"];
       Date date = 3;
       DateTime date_time = 4;
     }
