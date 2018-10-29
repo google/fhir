@@ -2,6 +2,8 @@
 
 package(default_visibility = ["//visibility:public"])
 
+load("//bazel:protogen.bzl", "zip_file")
+
 licenses(["notice"])
 
 exports_files(["fhir_package_info.prototxt"])
@@ -43,17 +45,17 @@ filegroup(
     ]),
 )
 
-# These files contain us core codes.
-filegroup(
-    name = "uscore",
-    srcs = glob([
-        "uscore/*.json",
-    ]),
-)
-
 # These files contain StructureDefinitions used to generate the protos.
 filegroup(
     name = "structure_definitions",
+    srcs = glob([
+        "structure_definitions/*.profile.json",
+        "extensions/*.json",
+    ]),
+)
+
+zip_file(
+    name = "structure_definitions.zip",
     srcs = glob([
         "structure_definitions/*.profile.json",
         "extensions/*.json",

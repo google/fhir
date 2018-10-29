@@ -237,7 +237,7 @@ java_test(
         "//testdata/stu3:descriptors",
         "//testdata/stu3:google",
         "//testdata/stu3:structure_definitions",
-        "//testdata/stu3:uscore",
+        "//testdata/stu3/uscore:structure_definitions",
     ],
     test_class = "com.google.fhir.stu3.ProtoGeneratorTest",
     deps = [

@@ -18,6 +18,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
+import com.google.fhir.stu3.proto.Bundle;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.protobuf.Message;
 import com.google.protobuf.TextFormat;
@@ -70,9 +71,26 @@ public final class FileUtils {
     while (entries.hasMoreElements()) {
       String json =
           new String(ByteStreams.toByteArray(zipFile.getInputStream(entries.nextElement())), UTF_8);
-      StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
-      parser.merge(json, structDefBuilder);
-      structDefs.add(structDefBuilder.build());
+      try {
+        StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
+        parser.merge(json, structDefBuilder);
+        structDefs.add(structDefBuilder.build());
+      } catch (IllegalArgumentException e) {
+        // Couldn't parse as structure definitions.  Check if it's a bundle of structure definitions
+        Bundle.Builder bundleBuilder = Bundle.newBuilder();
+        parser.merge(json, bundleBuilder);
+        for (Bundle.Entry entry : bundleBuilder.getEntryList()) {
+          if (!entry.getResource().hasStructureDefinition()) {
+            throw new IllegalArgumentException(
+                "Zip "
+                    + zip
+                    + " must be a zip of either"
+                    + "structure definitions, or bundles of structure definitions.",
+                e);
+          }
+          structDefs.add(entry.getResource().getStructureDefinition());
+        }
+      }
     }
     return structDefs;
   }
