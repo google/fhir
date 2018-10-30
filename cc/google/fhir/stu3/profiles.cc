@@ -187,7 +187,7 @@ Status SliceCodingsInCodeableConcept(Message* codeable_concept_like) {
       if (!sliced_coding->ParseFromString(coding.SerializeAsString())) {
         return InvalidArgument(
             "Unable to parse Coding as CodingWithFixedSystem: ",
-            coding.DebugString());
+            field->full_name());
       }
       iter = codings->erase(iter);
     } else if (fixed_code_iter != fixed_codes.end()) {
@@ -208,7 +208,7 @@ Status SliceCodingsInCodeableConcept(Message* codeable_concept_like) {
       if (!sliced_coding->ParseFromString(coding.SerializeAsString())) {
         return InvalidArgument(
             "Unable to parse Coding as CodingWithFixedCode: ",
-            coding.DebugString());
+            field->full_name());
       }
       iter = codings->erase(iter);
     } else {
