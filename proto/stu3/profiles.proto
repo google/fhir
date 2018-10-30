@@ -105,7 +105,7 @@ message Bmi {
     // Plain text representation of the concept
     String text = 4;
 
-    google.fhir.stu3.proto.CodingWithFixedCode b_m_i_code = 5 [
+    repeated google.fhir.stu3.proto.CodingWithFixedCode b_m_i_code = 5 [
       (fhir_inlined_coding_system) = "http://loinc.org",
       (fhir_inlined_coding_code) = "39156-5"
     ];
@@ -355,7 +355,7 @@ message Bodyheight {
     // Plain text representation of the concept
     String text = 4;
 
-    google.fhir.stu3.proto.CodingWithFixedCode body_height_code = 5 [
+    repeated google.fhir.stu3.proto.CodingWithFixedCode body_height_code = 5 [
       (fhir_inlined_coding_system) = "http://loinc.org",
       (fhir_inlined_coding_code) = "8302-2"
     ];
@@ -605,7 +605,7 @@ message Bodylength {
     // Plain text representation of the concept
     String text = 4;
 
-    google.fhir.stu3.proto.CodingWithFixedCode body_length_code = 5 [
+    repeated google.fhir.stu3.proto.CodingWithFixedCode body_length_code = 5 [
       (fhir_inlined_coding_system) = "http://loinc.org",
       (fhir_inlined_coding_code) = "8306-3"
     ];
@@ -855,7 +855,7 @@ message Bodytemp {
     // Plain text representation of the concept
     String text = 4;
 
-    google.fhir.stu3.proto.CodingWithFixedCode body_temp_code = 5 [
+    repeated google.fhir.stu3.proto.CodingWithFixedCode body_temp_code = 5 [
       (fhir_inlined_coding_system) = "http://loinc.org",
       (fhir_inlined_coding_code) = "8310-5"
     ];
@@ -1105,7 +1105,7 @@ message Bodyweight {
     // Plain text representation of the concept
     String text = 4;
 
-    google.fhir.stu3.proto.CodingWithFixedCode body_weight_code = 5 [
+    repeated google.fhir.stu3.proto.CodingWithFixedCode body_weight_code = 5 [
       (fhir_inlined_coding_system) = "http://loinc.org",
       (fhir_inlined_coding_code) = "29463-7"
     ];
@@ -1355,7 +1355,7 @@ message Bp {
     // Plain text representation of the concept
     String text = 4;
 
-    google.fhir.stu3.proto.CodingWithFixedCode b_p_code = 5 [
+    repeated google.fhir.stu3.proto.CodingWithFixedCode b_p_code = 5 [
       (fhir_inlined_coding_system) = "http://loinc.org",
       (fhir_inlined_coding_code) = "85354-9"
     ];
@@ -1516,7 +1516,7 @@ message Bp {
       // Plain text representation of the concept
       String text = 4;
 
-      google.fhir.stu3.proto.CodingWithFixedCode s_b_p_code = 5 [
+      repeated google.fhir.stu3.proto.CodingWithFixedCode s_b_p_code = 5 [
         (fhir_inlined_coding_system) = "http://loinc.org",
         (fhir_inlined_coding_code) = "8480-6"
       ];
@@ -1571,7 +1571,7 @@ message Bp {
       // Plain text representation of the concept
       String text = 4;
 
-      google.fhir.stu3.proto.CodingWithFixedCode d_b_p_code = 5 [
+      repeated google.fhir.stu3.proto.CodingWithFixedCode d_b_p_code = 5 [
         (fhir_inlined_coding_system) = "http://loinc.org",
         (fhir_inlined_coding_code) = "8462-4"
       ];
@@ -3208,7 +3208,7 @@ message Headcircum {
     // Plain text representation of the concept
     String text = 4;
 
-    google.fhir.stu3.proto.CodingWithFixedCode head_circum_code = 5 [
+    repeated google.fhir.stu3.proto.CodingWithFixedCode head_circum_code = 5 [
       (fhir_inlined_coding_system) = "http://loinc.org",
       (fhir_inlined_coding_code) = "8287-5"
     ];
@@ -3458,7 +3458,7 @@ message Heartrate {
     // Plain text representation of the concept
     String text = 4;
 
-    google.fhir.stu3.proto.CodingWithFixedCode heart_rate_code = 5 [
+    repeated google.fhir.stu3.proto.CodingWithFixedCode heart_rate_code = 5 [
       (fhir_inlined_coding_system) = "http://loinc.org",
       (fhir_inlined_coding_code) = "8867-4"
     ];
@@ -4699,7 +4699,7 @@ message Oxygensat {
     // Plain text representation of the concept
     String text = 4;
 
-    google.fhir.stu3.proto.CodingWithFixedCode oxygen_sat_code = 5 [
+    repeated google.fhir.stu3.proto.CodingWithFixedCode oxygen_sat_code = 5 [
       (fhir_inlined_coding_system) = "http://loinc.org",
       (fhir_inlined_coding_code) = "59408-5"
     ];
@@ -5148,7 +5148,7 @@ message Resprate {
     // Plain text representation of the concept
     String text = 4;
 
-    google.fhir.stu3.proto.CodingWithFixedCode resp_rate_code = 5 [
+    repeated google.fhir.stu3.proto.CodingWithFixedCode resp_rate_code = 5 [
       (fhir_inlined_coding_system) = "http://loinc.org",
       (fhir_inlined_coding_code) = "9279-1"
     ];
@@ -6350,7 +6350,7 @@ message Vitalspanel {
     // Plain text representation of the concept
     String text = 4;
 
-    google.fhir.stu3.proto.CodingWithFixedCode body_weight_code = 5 [
+    repeated google.fhir.stu3.proto.CodingWithFixedCode body_weight_code = 5 [
       (fhir_inlined_coding_system) = "http://loinc.org",
       (fhir_inlined_coding_code) = "85353-1"
     ];

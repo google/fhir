@@ -358,7 +358,7 @@ nested_type {
   field {
     name: "resp_rate_code"
     number: 5
-    label: LABEL_OPTIONAL
+    label: LABEL_REPEATED
     type: TYPE_MESSAGE
     type_name: "google.fhir.stu3.proto.CodingWithFixedCode"
     options {

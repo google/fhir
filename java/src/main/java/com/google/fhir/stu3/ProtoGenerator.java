@@ -693,7 +693,7 @@ public class ProtoGenerator {
                 .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
                 .setTypeName(CodingWithFixedCode.getDescriptor().getFullName())
                 .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
-                .setLabel(getFieldSize(element))
+                .setLabel(getFieldSize(codingSlice))
                 .setNumber(codeableConceptBuilder.getFieldCount() + 1);
         codingField
             .getOptionsBuilder()
@@ -707,7 +707,7 @@ public class ProtoGenerator {
                 .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
                 .setTypeName(CodingWithFixedSystem.getDescriptor().getFullName())
                 .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
-                .setLabel(getFieldSize(element))
+                .setLabel(getFieldSize(codingSlice))
                 .setNumber(codeableConceptBuilder.getFieldCount() + 1);
         codingField
             .getOptionsBuilder()

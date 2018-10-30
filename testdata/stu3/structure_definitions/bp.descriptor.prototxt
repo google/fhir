@@ -367,7 +367,7 @@ nested_type {
   field {
     name: "b_p_code"
     number: 5
-    label: LABEL_OPTIONAL
+    label: LABEL_REPEATED
     type: TYPE_MESSAGE
     type_name: "google.fhir.stu3.proto.CodingWithFixedCode"
     options {
@@ -682,7 +682,7 @@ nested_type {
     field {
       name: "s_b_p_code"
       number: 5
-      label: LABEL_OPTIONAL
+      label: LABEL_REPEATED
       type: TYPE_MESSAGE
       type_name: "google.fhir.stu3.proto.CodingWithFixedCode"
       options {
@@ -838,7 +838,7 @@ nested_type {
     field {
       name: "d_b_p_code"
       number: 5
-      label: LABEL_OPTIONAL
+      label: LABEL_REPEATED
       type: TYPE_MESSAGE
       type_name: "google.fhir.stu3.proto.CodingWithFixedCode"
       options {
