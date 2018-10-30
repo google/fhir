@@ -135,6 +135,14 @@ string StripIndex(const string& field_path) {
   return field_path.substr(0, field_path.find_last_of('['));
 }
 
+Message* MutableOrAddMessage(Message* message,
+                             const google::protobuf::FieldDescriptor* field) {
+  if (field->is_repeated()) {
+    return message->GetReflection()->AddMessage(message, field);
+  }
+  return message->GetReflection()->MutableMessage(message, field);
+}
+
 StatusOr<const bool> HasSubmessageByPath(const Message& message,
                                          const string& field_path) {
   const Status& status = GetSubmessageByPath(message, field_path).status();

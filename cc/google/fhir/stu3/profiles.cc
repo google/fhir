@@ -24,6 +24,7 @@
 #include "absl/strings/str_cat.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/stu3/extensions.h"
+#include "google/fhir/stu3/proto_util.h"
 #include "google/fhir/stu3/resource_validation.h"
 #include "proto/stu3/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
@@ -147,10 +148,6 @@ Status SliceCodingsInCodeableConcept(Message* codeable_concept_like) {
     const FieldDescriptor* field = descriptor->field(i);
     const FieldOptions& field_options = field->options();
     if (field_options.HasExtension(proto::fhir_inlined_coding_system)) {
-      if (field->is_repeated()) {
-        return InvalidArgument("Unexpected repeated coding slice: ",
-                               field->full_name());
-      }
       const string& fixed_system =
           field_options.GetExtension(proto::fhir_inlined_coding_system);
       if (field_options.HasExtension(proto::fhir_inlined_coding_code)) {
@@ -182,7 +179,7 @@ Status SliceCodingsInCodeableConcept(Message* codeable_concept_like) {
     if (fixed_systems_iter != fixed_systems.end()) {
       const FieldDescriptor* field = fixed_systems_iter->second;
       CodingWithFixedSystem* sliced_coding = dynamic_cast<CodingWithFixedSystem*>(
-          reflection->MutableMessage(codeable_concept_like, field));
+          MutableOrAddMessage(codeable_concept_like, field));
       coding.clear_system();
       if (!sliced_coding->ParseFromString(coding.SerializeAsString())) {
         return InvalidArgument(
@@ -202,7 +199,7 @@ Status SliceCodingsInCodeableConcept(Message* codeable_concept_like) {
                                ".  Found: ", coding.code().value());
       }
       CodingWithFixedCode* sliced_coding = dynamic_cast<CodingWithFixedCode*>(
-          reflection->MutableMessage(codeable_concept_like, field));
+          MutableOrAddMessage(codeable_concept_like, field));
       coding.clear_system();
       coding.clear_code();
       if (!sliced_coding->ParseFromString(coding.SerializeAsString())) {
@@ -233,12 +230,15 @@ Status PerformCodeableConceptSlicing(Message* message) {
         field_type->options().GetExtension(proto::fhir_profile_base) ==
             GetCodeableConceptUrl()) {
       if (field->is_repeated()) {
-        return InvalidArgument("Unexpected repeated CodeableConcept: ",
-                               field->full_name());
-      }
-      if (reflection->HasField(*message, field)) {
-        FHIR_RETURN_IF_ERROR(SliceCodingsInCodeableConcept(
-            reflection->MutableMessage(message, field)));
+        for (int i = 0; i < reflection->FieldSize(*message, field); i++) {
+          FHIR_RETURN_IF_ERROR(SliceCodingsInCodeableConcept(
+              reflection->MutableRepeatedMessage(message, field, i)));
+        }
+      } else {
+        if (reflection->HasField(*message, field)) {
+          FHIR_RETURN_IF_ERROR(SliceCodingsInCodeableConcept(
+              reflection->MutableMessage(message, field)));
+        }
       }
     }
   }

@@ -88,6 +88,12 @@ StatusOr<const T*> GetSubmessageByPathAndCheckType(
   return dynamic_cast<const T*>(submessage);
 }
 
+// Convenience method for adding a message to a field.
+// If the field is singular, returns the mutable message.
+// If the field is repeated, returns a newly added message.
+google::protobuf::Message* MutableOrAddMessage(google::protobuf::Message* message,
+                                     const google::protobuf::FieldDescriptor* field);
+
 // Returns true if the field specified by field_path is set on a message,
 // false if the field is unset, and InvalidArgument if the field_path doesn't
 // resolve to a field, or the field is an unindexed repeated.
