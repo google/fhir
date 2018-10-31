@@ -5,6 +5,7 @@ licenses(["notice"])
 exports_files(
     [
         "*.bzl",
+        "cython.BUILD",
         "requirements.txt",
     ],
 )
