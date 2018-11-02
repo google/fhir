@@ -82,7 +82,6 @@ $PROTO_GENERATOR \
   --emit_proto \
   --output_directory $OUTPUT_PATH \
   --include_contained_resource \
-  --include_metadatatypes \
   --output_filename resources.proto \
   $(for i in $RESOURCETYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
@@ -91,9 +90,6 @@ $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --emit_proto \
   --output_directory $OUTPUT_PATH \
-  --include_extensions\
-  --include_resources \
-  --include_metadatatypes \
   --output_filename profiles.proto \
   $(for i in $PROFILES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
@@ -119,8 +115,6 @@ $PROTO_GENERATOR \
   $NO_PACKAGE_FLAGS \
   --emit_proto \
   --package_info $US_CORE_PACKAGE_INFO \
-  --include_resources \
-  --include_metadatatypes \
   --additional_import "$FHIR_PROTO_ROOT/uscore_codes.proto" \
   --output_directory $OUTPUT_PATH \
   --output_filename uscore.proto \

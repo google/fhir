@@ -19,8 +19,8 @@ package google.fhir.stu3.uscore;
 import "proto/stu3/annotations.proto";
 import "proto/stu3/codes.proto";
 import "proto/stu3/datatypes.proto";
-import "proto/stu3/resources.proto";
 import "proto/stu3/metadatatypes.proto";
+import "proto/stu3/resources.proto";
 import "proto/stu3/uscore_codes.proto";
 
 option java_multiple_files = true;

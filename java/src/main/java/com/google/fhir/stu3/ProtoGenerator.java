@@ -30,6 +30,7 @@ import com.google.fhir.stu3.proto.CodeableConcept;
 import com.google.fhir.stu3.proto.CodingWithFixedCode;
 import com.google.fhir.stu3.proto.CodingWithFixedSystem;
 import com.google.fhir.stu3.proto.ContainedResource;
+import com.google.fhir.stu3.proto.Decimal;
 import com.google.fhir.stu3.proto.ElementDefinition;
 import com.google.fhir.stu3.proto.ElementDefinitionBindingName;
 import com.google.fhir.stu3.proto.ElementDefinitionExplicitTypeName;
@@ -45,6 +46,7 @@ import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
+import com.google.protobuf.DescriptorProtos.FileDescriptorProtoOrBuilder;
 import com.google.protobuf.DescriptorProtos.FileOptions;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
@@ -129,6 +131,27 @@ public class ProtoGenerator {
   private final ImmutableMap<String, StructureDefinitionData> structDefDataById;
   // Mapping from ValueSet url to Descriptor for the message type it should be inlined as.
   private final ImmutableMap<String, Descriptor> valueSetTypesByCodeReference;
+
+  private final ImmutableMap<String, Set<String>> coreTypeDefinitionsByFile =
+      new ImmutableMap.Builder<String, Set<String>>()
+          .put("datatypes.proto", getTypesDefinedInFile(Decimal.getDescriptor().getFile()))
+          .put(
+              "resources.proto",
+              getTypesDefinedInFile(StructureDefinition.getDescriptor().getFile()))
+          .put(
+              "metadatatypes.proto",
+              getTypesDefinedInFile(ElementDefinition.getDescriptor().getFile()))
+          .put(
+              "extensions.proto",
+              getTypesDefinedInFile(ElementDefinitionBindingName.getDescriptor().getFile()))
+          .put("codes.proto", getTypesDefinedInFile(AbstractTypeCode.getDescriptor().getFile()))
+          .build();
+
+  private static Set<String> getTypesDefinedInFile(FileDescriptor file) {
+    return file.getMessageTypes().stream()
+        .map(desc -> desc.getFullName())
+        .collect(Collectors.toSet());
+  }
 
   // The package to write new protos to.
   private final PackageInfo packageInfo;
@@ -422,39 +445,52 @@ public class ProtoGenerator {
       options.setGoPackage(packageInfo.getGoProtoPackage());
     }
     builder.setOptions(options);
-    boolean hasPrimitiveType = false;
-    boolean hasCodeType = false;
     for (StructureDefinition def : defs) {
       DescriptorProto proto = generateProto(def);
-      if (AnnotationUtils.isPrimitiveType(proto)) {
-        hasPrimitiveType = true;
-      }
-      if (usesCodeType(proto)) {
-        hasCodeType = true;
-      }
       builder.addMessageType(proto);
     }
     // Add imports. Annotations is always needed; datatypes is needed unless we are building them.
     builder.addDependency(new File(fhirProtoRootPath, "annotations.proto").toString());
-    if (hasCodeType && !hasPrimitiveType) {
-      builder.addDependency(new File(fhirProtoRootPath, "codes.proto").toString());
+    // Add the remaining FHIR dependencies if the file uses a type from the FHIR dep, but does not
+    // define a type from that dep.
+    for (Map.Entry<String, Set<String>> entry : coreTypeDefinitionsByFile.entrySet()) {
+      String filename = entry.getKey();
+      Set<String> types = entry.getValue();
+      if (needsDep(builder, types)) {
+        builder.addDependency(new File(fhirProtoRootPath, filename).toString());
+      }
     }
-    if (!hasPrimitiveType) {
-      builder.addDependency(new File(fhirProtoRootPath, "datatypes.proto").toString());
-    }
+
     return builder.build();
   }
 
-  private boolean usesCodeType(DescriptorProto proto) {
-    for (FieldDescriptorProto field : proto.getFieldList()) {
-      if (field.getType() == FieldDescriptorProto.Type.TYPE_MESSAGE
-          && field.getTypeName().endsWith("Code")) {
+  // Returns true if the file proto uses a type from a set of types, but does not define it.
+  private boolean needsDep(FileDescriptorProtoOrBuilder fileProto, Set<String> types) {
+    for (DescriptorProto descriptor : fileProto.getMessageTypeList()) {
+      if (types.contains(CORE_FHIR_PACKAGE + "." + descriptor.getName())) {
+        // This file defines a type from the set.  It can't depend on itself.
+        return false;
+      }
+    }
+    for (DescriptorProto proto : fileProto.getMessageTypeList()) {
+      if (usesTypeFromSet(proto, types)) {
         return true;
       }
     }
-    for (DescriptorProto nested : proto.getNestedTypeList()) {
-      if (usesCodeType(nested)) {
+    return false;
+  }
+
+  // Returns true if the file proto uses a type from a set of types.
+  private boolean usesTypeFromSet(DescriptorProto proto, Set<String> types) {
+    for (FieldDescriptorProto field : proto.getFieldList()) {
+      // Drop leading dot before checking field type.
+      if (!field.getTypeName().isEmpty() && types.contains(field.getTypeName().substring(1))) {
         return true;
+      }
+      for (DescriptorProto nested : proto.getNestedTypeList()) {
+        if (usesTypeFromSet(nested, types)) {
+          return true;
+        }
       }
     }
     return false;

@@ -112,21 +112,6 @@ class ProtoGeneratorMain {
     private List<String> structDefDepPkgList = new ArrayList<>();
 
     @Parameter(
-        names = {"--include_resources"},
-        description = "Includes a dependency on resources.proto")
-    private boolean includeResources = false;
-
-    @Parameter(
-        names = {"--include_extensions"},
-        description = "Includes a dependency on extensions.proto")
-    private boolean includeExtensions = false;
-
-    @Parameter(
-        names = {"--include_metadatatypes"},
-        description = "Includes a dependency on metadatatypes.proto")
-    private boolean includeMetadatatypes = false;
-
-    @Parameter(
         names = {"--additional_import"},
         description = "Non-core fhir dependencies to add.")
     private List<String> additionalImports = new ArrayList<>();
@@ -241,28 +226,6 @@ class ProtoGeneratorMain {
     proto = generator.generateFileDescriptor(definitions);
     if (args.includeContainedResource) {
       proto = generator.addContainedResource(proto);
-    }
-    // TODO: deduce these automatically
-    if (args.includeResources) {
-      proto =
-          proto
-              .toBuilder()
-              .addDependency(new File(args.fhirProtoRoot, "resources.proto").toString())
-              .build();
-    }
-    if (args.includeExtensions) {
-      proto =
-          proto
-              .toBuilder()
-              .addDependency(new File(args.fhirProtoRoot, "extensions.proto").toString())
-              .build();
-    }
-    if (args.includeMetadatatypes) {
-      proto =
-          proto
-              .toBuilder()
-              .addDependency(new File(args.fhirProtoRoot, "metadatatypes.proto").toString())
-              .build();
     }
     for (String additionalImport : args.additionalImports) {
       proto = proto.toBuilder().addDependency(new File(additionalImport).toString()).build();

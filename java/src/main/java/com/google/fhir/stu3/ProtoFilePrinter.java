@@ -100,10 +100,10 @@ public class ProtoFilePrinter {
   }
 
   private String printImports(FileDescriptorProto fileDescriptor) {
-    StringBuilder imports = new StringBuilder();
-    for (String dependency : fileDescriptor.getDependencyList()) {
-      imports.append("import \"").append(dependency).append("\";\n");
-    }
+    final StringBuilder imports = new StringBuilder();
+    fileDescriptor.getDependencyList().stream()
+        .sorted()
+        .forEach(dependency -> imports.append("import \"").append(dependency).append("\";\n"));
     return imports.toString();
   }
 

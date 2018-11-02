@@ -263,11 +263,6 @@ public final class ProtoFilePrinterTest {
     }
     FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(resourceDefinitions);
     descriptor = protoGenerator.addContainedResource(descriptor);
-    descriptor =
-        descriptor
-            .toBuilder()
-            .addDependency("proto/stu3/metadatatypes.proto")
-            .build();
     String generated = protoPrinter.print(descriptor);
     String golden = readGolden("resources");
     assertEqualsIgnoreClangFormat(golden, generated);
