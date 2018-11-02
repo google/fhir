@@ -6015,6 +6015,34 @@ message PlanDefinitionTypeCode {
   repeated Extension extension = 3;
 }
 
+// The type of PostalAddressUse
+// See http://hl7.org/fhir/ValueSet/postal-address-use
+message PostalAddressUseTypeCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/postal-address-use";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    BAD_ADDRESS = 1 [(fhir_original_code) = "BAD"];
+    CONFIDENTIAL_ADDRESS = 2 [(fhir_original_code) = "CONF"];
+    PRIMARY_HOME = 3 [(fhir_original_code) = "HP"];
+    VACATION_HOME = 4 [(fhir_original_code) = "HV"];
+    DIRECT = 5 [(fhir_original_code) = "DIR"];
+    PUBLIC = 6 [(fhir_original_code) = "PUB"];
+    PHYSICAL_VISIT_ADDRESS = 7 [(fhir_original_code) = "PHYS"];
+    POSTAL_ADDRESS = 8 [(fhir_original_code) = "PST"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
 // This example value set defines a set of codes that can be used to indicate
 // the role of a Practitioner. See
 // http://hl7.org/fhir/ValueSet/practitioner-role

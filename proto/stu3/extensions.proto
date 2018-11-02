@@ -1613,7 +1613,7 @@ message DeviceRequestPatientInstruction {
   repeated Extension extension = 2;
 
   // Language
-  Code lang = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+  LanguageCode lang = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Text
   String content = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -2852,7 +2852,7 @@ message AddressADUse {
   String id = 1;
 
   // Value of extension
-  AddressUseCode value_code = 3;
+  PostalAddressUseTypeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for ADXP-additionalLocator.
@@ -6135,7 +6135,7 @@ message Translation {
   repeated Extension extension = 2;
 
   // Code for Language
-  Code lang = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+  LanguageCode lang = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Content in other Language
   message Content {

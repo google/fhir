@@ -1187,7 +1187,7 @@
           "strength": "extensible",
           "description": "Either a resource or a data type, including logical model types",
           "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/defined-types"
+            "reference": "http://hl7.org/fhir/ValueSet/defined-types#ext"
           }
         }
       },
@@ -2308,7 +2308,7 @@
           "strength": "extensible",
           "description": "Either a resource or a data type, including logical model types",
           "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/defined-types"
+            "reference": "http://hl7.org/fhir/ValueSet/defined-types#ext"
           }
         }
       },

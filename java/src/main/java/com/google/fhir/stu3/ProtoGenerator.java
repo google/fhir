@@ -24,8 +24,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.MoreCollectors;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.stu3.proto.AbstractTypeCode;
+import com.google.fhir.stu3.proto.AddressTypeCode;
 import com.google.fhir.stu3.proto.Annotations;
-import com.google.fhir.stu3.proto.BindingStrengthCode;
 import com.google.fhir.stu3.proto.CodeableConcept;
 import com.google.fhir.stu3.proto.CodingWithFixedCode;
 import com.google.fhir.stu3.proto.CodingWithFixedSystem;
@@ -88,9 +88,6 @@ public class ProtoGenerator {
           "time", ImmutableList.of("SECOND", "MILLISECOND", "MICROSECOND"));
   private static final ImmutableSet<String> TYPES_WITH_TIMEZONE =
       ImmutableSet.of("date", "dateTime", "instant");
-
-  // For various reasons, we rename certain codes.
-  private static final ImmutableMap<String, String> RENAMED_CODE_TYPES = getRenamedCodeTypes();
 
   // Certain field names are reserved symbols in various languages.
   private static final ImmutableSet<String> RESERVED_FIELD_NAMES =
@@ -235,6 +232,7 @@ public class ProtoGenerator {
     this.valueSetTypesByCodeReference =
         new ImmutableMap.Builder<String, Descriptor>()
             .putAll(loadCodeTypesFromFile(AbstractTypeCode.getDescriptor().getFile()))
+            .putAll(loadCodeTypesFromFile(AddressTypeCode.getDescriptor().getFile()))
             .putAll(loadCodeTypesFromFile(UsCoreBirthSexCode.getDescriptor().getFile()))
             .build();
 
@@ -273,60 +271,10 @@ public class ProtoGenerator {
 
   private static Map<String, Descriptor> loadCodeTypesFromFile(FileDescriptor file) {
     return file.getMessageTypes().stream()
+        .filter(d -> d.getOptions().hasExtension(Annotations.fhirValuesetUrl))
         .collect(
             Collectors.toMap(
                 d -> d.getOptions().getExtension(Annotations.fhirValuesetUrl), d -> d));
-  }
-
-  private static ImmutableMap<String, String> getRenamedCodeTypes() {
-    Map<String, String> renamedCodeTypes = new HashMap<>();
-    renamedCodeTypes.put("ActivityDefinitionKindCode", "ResourceTypeCode");
-    renamedCodeTypes.put("ActivityParticipantTypeCode", "ActionParticipantTypeCode");
-    renamedCodeTypes.put("ClaimResponseStatusCode", "FinancialResourceStatusCode");
-    renamedCodeTypes.put("ClaimStatusCode", "FinancialResourceStatusCode");
-    renamedCodeTypes.put("CommunicationRequestStatusCode", "RequestStatusCode");
-    renamedCodeTypes.put("CommunicationPriorityCode", "RequestPriorityCode");
-    renamedCodeTypes.put("CommunicationStatusCode", "EventStatusCode");
-    renamedCodeTypes.put("CompartmentCodeCode", "CompartmentTypeCode");
-    renamedCodeTypes.put("ConditionClinicalStatusCode", "ConditionClinicalStatusCodesCode");
-    renamedCodeTypes.put("ContractStatusCode", "ContractResourceStatusCode");
-    renamedCodeTypes.put("CoverageStatusCode", "FinancialResourceStatusCode");
-    renamedCodeTypes.put("DayOfWeekCode", "DaysOfWeekCode");
-    renamedCodeTypes.put("DetectedIssueStatusCode", "ObservationStatusCode");
-    renamedCodeTypes.put("DeviceRequestStatusCode", "RequestStatusCode");
-    renamedCodeTypes.put("DocumentConfidentialityCode", "ConfidentialityClassificationCode");
-    renamedCodeTypes.put("EligibilityRequestStatusCode", "FinancialResourceStatusCode");
-    renamedCodeTypes.put("EligibilityResponseStatusCode", "FinancialResourceStatusCode");
-    renamedCodeTypes.put("EnrollmentRequestStatusCode", "FinancialResourceStatusCode");
-    renamedCodeTypes.put("EnrollmentResponseStatusCode", "FinancialResourceStatusCode");
-    renamedCodeTypes.put("ImmunizationStatusCode", "ImmunizationStatusCodesCode");
-    renamedCodeTypes.put("MessageheaderResponseRequestCode", "MessageHeaderResponseRequestCode");
-    renamedCodeTypes.put("ParameterStatusCode", "OperationParameterStatusCode");
-    renamedCodeTypes.put("ParameterUseCode", "OperationParameterUseCode");
-    renamedCodeTypes.put("ParticipantStatusCode", "ParticipationStatusCode");
-    renamedCodeTypes.put("PaymentNoticeStatusCode", "FinancialResourceStatusCode");
-    renamedCodeTypes.put("PaymentReconciliationStatusCode", "FinancialResourceStatusCode");
-    renamedCodeTypes.put("PostalAddressUseCode", "AddressUseCode");
-    renamedCodeTypes.put("ProcedureRequestIntentCode", "RequestIntentCode");
-    renamedCodeTypes.put("ProcedureRequestPriorityCode", "RequestPriorityCode");
-    renamedCodeTypes.put("ProcedureRequestStatusCode", "RequestStatusCode");
-    renamedCodeTypes.put("ProcedureStatusCode", "EventStatusCode");
-    renamedCodeTypes.put("ProcessRequestStatusCode", "FinancialResourceStatusCode");
-    renamedCodeTypes.put("ProcessResponseStatusCode", "FinancialResourceStatusCode");
-    renamedCodeTypes.put("ReferralRequestIntentCode", "RequestIntentCode");
-    renamedCodeTypes.put("ReferralRequestPriorityCode", "RequestPriorityCode");
-    renamedCodeTypes.put("ReferralRequestStatusCode", "RequestStatusCode");
-    renamedCodeTypes.put("ReferralCategoryCode", "RequestIntentCode");
-    renamedCodeTypes.put("ReferralPriorityCode", "RequestPriorityCode");
-    renamedCodeTypes.put("ReferredDocumentStatusCode", "CompositionStatusCode");
-    renamedCodeTypes.put("RiskAssessmentStatusCode", "ObservationStatusCode");
-    renamedCodeTypes.put("StatusCode", "ObservationStatusCode");
-    renamedCodeTypes.put("SectionModeCode", "ListModeCode");
-    renamedCodeTypes.put("StatusCode", "ObservationStatusCode");
-    renamedCodeTypes.put("TaskIntentCode", "RequestIntentCode");
-    renamedCodeTypes.put("TaskPriorityCode", "RequestPriorityCode");
-    renamedCodeTypes.put("VisionStatusCode", "FinancialResourceStatusCode");
-    return ImmutableMap.copyOf(renamedCodeTypes);
   }
 
   // Map from StructureDefinition url to explicit renaming for the type that should be generated.
@@ -1008,41 +956,28 @@ public class ProtoGenerator {
       }
 
       if (normalizedFhirTypeName.equals("Code")) {
-        // If this is a code, check for a binding name and handle it here.
-        String bindingName = getBindingName(element);
-
-        if (bindingName != null) {
-          String typeWithBindingName = toFieldTypeCase(bindingName) + "Code";
-          return RENAMED_CODE_TYPES.getOrDefault(typeWithBindingName, typeWithBindingName);
-        }
-
-        String valueSetUrl = element.getBinding().getValueSet().getReference().getUri().getValue();
-        if (!valueSetUrl.isEmpty()) {
-          if (valueSetTypesByCodeReference.containsKey(valueSetUrl)) {
-            return valueSetTypesByCodeReference.get(valueSetUrl).getName();
-          }
-          // TODO: Throw an error in strict mode.
-          System.out.println(
-              "Unhandled ValueSet reference on " + element.getId().getValue() + ": " + valueSetUrl);
+        Optional<Descriptor> valueSetType = getBindingValueSetType(element);
+        if (valueSetType.isPresent()) {
+          return valueSetType.get().getName();
         }
       }
       return normalizedFhirTypeName;
     }
   }
 
-  private String getBindingName(ElementDefinition element) {
-    String bindingName = null;
-    List<ElementDefinitionBindingName> bindingNames =
-        ExtensionWrapper.fromExtensionsIn(element.getBinding())
-            .getMatchingExtensions(ElementDefinitionBindingName.getDefaultInstance());
-    if (bindingNames.size() == 1) {
-      bindingName = bindingNames.get(0).getValueString().getValue();
+  private Optional<Descriptor> getBindingValueSetType(ElementDefinition element) {
+    String url = element.getBinding().getValueSet().getReference().getUri().getValue();
+    if (url.isEmpty()) {
+      url = element.getBinding().getValueSet().getUri().getValue();
     }
-    if (element.getBinding().getStrength().getValue().equals(BindingStrengthCode.Value.REQUIRED)
-        && bindingName == null) {
-      logDiscrepancies("Required binding found, but category is unknown: " + element.getBinding());
+    if (url.isEmpty()) {
+      return Optional.empty();
     }
-    return bindingName;
+    if (valueSetTypesByCodeReference.containsKey(url)) {
+      return Optional.of(valueSetTypesByCodeReference.get(url));
+    }
+    // TODO: Throw an error in strict mode.
+    return Optional.empty();
   }
 
   /** Build a single field for the proto. */
@@ -1152,9 +1087,10 @@ public class ProtoGenerator {
       fieldPackage = packageInfo.getProtoPackage();
     }
 
-    String valueSetUrl = element.getBinding().getValueSet().getReference().getUri().getValue();
-    if (!valueSetUrl.isEmpty() && valueSetTypesByCodeReference.containsKey(valueSetUrl)) {
-      fieldPackage = valueSetTypesByCodeReference.get(valueSetUrl).getFile().getPackage();
+    String fieldType = getFieldType(element, elementList);
+    Optional<Descriptor> valueSetType = getBindingValueSetType(element);
+    if (valueSetType.isPresent()) {
+      fieldPackage = valueSetType.get().getFile().getPackage();
     }
 
     // Add typed reference options
@@ -1170,12 +1106,7 @@ public class ProtoGenerator {
     }
 
     return buildFieldInternal(
-            jsonFieldNameString,
-            getFieldType(element, elementList),
-            fieldPackage,
-            nextTag,
-            fieldSize,
-            options.build())
+            jsonFieldNameString, fieldType, fieldPackage, nextTag, fieldSize, options.build())
         .build();
   }
 
@@ -1512,12 +1443,11 @@ public class ProtoGenerator {
       // This is a primitive extension with a single type
       String rawType = valueElement.getType(0).getCode().getValue();
 
-      if (rawType.equals("code") && valueElement.getBinding().getValueSet().hasReference()) {
-        String valueSetUrl =
-            valueElement.getBinding().getValueSet().getReference().getUri().getValue();
-        Descriptor valueSetType = valueSetTypesByCodeReference.get(valueSetUrl);
-        if (valueSetType != null) {
-          return new QualifiedType(valueSetType.getName(), valueSetType.getFile().getPackage());
+      if (rawType.equals("code")) {
+        Optional<Descriptor> valueSetType = getBindingValueSetType(valueElement);
+        if (valueSetType.isPresent()) {
+          return new QualifiedType(
+              valueSetType.get().getName(), valueSetType.get().getFile().getPackage());
         }
       }
       return new QualifiedType(toFieldTypeCase(rawType), CORE_FHIR_PACKAGE);

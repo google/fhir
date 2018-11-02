@@ -185,11 +185,30 @@ message IdentifierUseCode {
   repeated Extension extension = 3;
 }
 
-// This value set includes common codes from BCP-47
-// (http://tools.ietf.org/html/bcp47) See http://hl7.org/fhir/ValueSet/languages
-message LanguageCode {
+// This value set includes all possible codes from BCP-47
+// (http://tools.ietf.org/html/bcp47)
+// See http://hl7.org/fhir/ValueSet/all-languages
+message AllLanguageCode {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
   option (fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/all-languages";
+
+  // Primitive value for code
+  string value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// This value set includes common codes from BCP-47
+// (http://tools.ietf.org/html/bcp47)
+// See http://hl7.org/fhir/ValueSet/languages
+// Note: For historical reasons, this does not use an enum to represent value.
+message LanguageCode {
+  option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/languages";
 
   // Primitive value for code
   string value = 1;
