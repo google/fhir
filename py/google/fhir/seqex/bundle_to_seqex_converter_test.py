@@ -93,12 +93,8 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
             } }
           }
         }
-        dispense_request {
-          validity_period {
-            start {
-              value_us: 1420095600000000 # "2015-01-01T07:00:00+00:00"
-            }
-          }
+        authored_on {
+          value_us: 1420095600000000 # "2015-01-01T07:00:00+00:00"
         }
         medication { reference {
           medication_id { value: "med" }
@@ -138,7 +134,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
             value { feature { int64_list { value: 1420095600 } } }
           }
           feature_list {
-            key: "MedicationRequest.dispenseRequest.validityPeriod.start"
+            key: "MedicationRequest.authoredOn"
             value { feature { int64_list { value: 1420095600 } } }
           }
           feature_list {

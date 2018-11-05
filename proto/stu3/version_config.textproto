@@ -50,7 +50,7 @@ resource_config {
 resource_config {
   key: "MedicationRequest"
   value {
-    default_timestamp_fields: "MedicationRequest.dispenseRequest.validityPeriod.start"
+    default_timestamp_fields: "MedicationRequest.authoredOn"
   }
 }
 resource_config {

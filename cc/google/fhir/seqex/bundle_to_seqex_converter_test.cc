@@ -1049,12 +1049,8 @@ TEST_F(BundleToSeqexConverterTest, JoinMedication) {
         medication_request {
           id { value: "1" }
           subject { patient_id { value: "14" } }
-          dispense_request {
-            validity_period {
-              start {
-                value_us: 1420102700000000  # "2015-01-01T07:00:00+00:00"
-              }
-            }
+          authored_on {
+            value_us: 1420102700000000  # "2015-01-01T07:00:00+00:00"
           }
           medication { reference { medication_id { value: "med" } } }
           contained {
@@ -1151,7 +1147,7 @@ TEST_F(BundleToSeqexConverterTest, JoinMedication) {
         }
       }
       feature_list {
-        key: "MedicationRequest.dispenseRequest.validityPeriod.start"
+        key: "MedicationRequest.authoredOn"
         value {
           feature { int64_list {} }
           feature { int64_list { value: 1420102700 } }
@@ -1234,8 +1230,8 @@ TEST_F(BundleToSeqexConverterTest, EmptyLabel) {
         medication_request {
           id { value: "1" }
           subject { patient_id { value: "14" } }
-          dispense_request {
-            validity_period { start { value_us: 1420100000000000 } }
+          authored_on {
+            value_us: 1420100000000000
           }
           medication { reference { medication_id { value: "med" } } }
           contained {
@@ -1331,7 +1327,7 @@ TEST_F(BundleToSeqexConverterTest, EmptyLabel) {
         }
       }
       feature_list {
-        key: "MedicationRequest.dispenseRequest.validityPeriod.start"
+        key: "MedicationRequest.authoredOn"
         value {
           feature { int64_list {} }
           feature { int64_list { value: 1420100000 } }
