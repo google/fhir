@@ -1,0 +1,82 @@
+#
+# Copyright 2018 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""Generate label proto from FHIR Bundle.
+"""
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
+from absl import app
+from absl import flags
+from absl import logging
+import apache_beam as beam
+from proto.stu3 import google_extensions_pb2
+from proto.stu3 import resources_pb2
+from py.google.fhir.labels import encounter
+from py.google.fhir.labels import label
+
+
+flags.DEFINE_string('output_path', '', 'The output file path')
+flags.DEFINE_string('input_path', '', 'The input file path')
+
+FLAGS = flags.FLAGS
+
+
+@beam.typehints.with_input_types(resources_pb2.Bundle)
+@beam.typehints.with_output_types(google_extensions_pb2.EventLabel)
+class LengthOfStayRangeLabelAt24HoursFn(beam.DoFn):
+  """Converts Bundle into length of stay range at 24 hours label.
+
+    Cohort: inpatient encounter that is longer than 24 hours
+    Trigger point: 24 hours after admission
+    Label: multi-label for length of stay ranges, see label.py for detail
+  """
+
+  def process(self, bundle):
+    """Iterate through bundle and yield label.
+
+    Args:
+      bundle: input stu3.Bundle proto
+    Yields:
+      stu3.EventLabel proto.
+    """
+    patient = encounter.GetPatient(bundle)
+    if patient is not None:
+      # Cohort: inpatient encounter > 24 hours.
+      for enc in encounter.Inpatient24HrEncounters(bundle):
+        for one_label in label.LengthOfStayRangeAt24Hours(patient, enc):
+          yield one_label
+
+
+def main(argv):
+  del argv
+  p = beam.Pipeline()
+  assert FLAGS.input_path
+  assert FLAGS.output_path
+  bundles = p | 'read' >> beam.io.ReadFromTFRecord(
+      FLAGS.input_path, coder=beam.coders.ProtoCoder(resources_pb2.Bundle))
+  labels = bundles | 'BundleToLabel' >> beam.ParDo(
+      LengthOfStayRangeLabelAt24HoursFn())
+  _ = labels | beam.io.WriteToTFRecord(
+      FLAGS.output_path,
+      coder=beam.coders.ProtoCoder(google_extensions_pb2.EventLabel))
+
+  result = p.run()
+  logging.info('Job result: %s', result)
+
+
+if __name__ == '__main__':
+  app.run(main)

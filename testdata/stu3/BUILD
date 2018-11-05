@@ -70,3 +70,10 @@ filegroup(
         "validation/*.invalid.ndjson",
     ]),
 )
+
+filegroup(
+    name = "labels",
+    srcs = glob([
+        "labels/*",
+    ]),
+)
