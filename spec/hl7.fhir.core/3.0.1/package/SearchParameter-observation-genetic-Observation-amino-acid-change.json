@@ -1,0 +1,1 @@
+{"base":["Observation"],"code":"amino-acid-change","description":"HGVS Protein Change","experimental":true,"id":"observation-genetic-Observation-amino-acid-change","name":"amino-acid-change","resourceType":"SearchParameter","status":"draft","type":"string","url":"http://hl7.org/fhir/SearchParameter/observation-genetic-Observation-amino-acid-change","xpathUsage":"normal"}

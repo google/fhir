@@ -1,0 +1,56 @@
+{
+  "resourceType": "Provenance",
+  "id": "example-biocompute-object",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-biocompute-object</p><p><b>target</b>: <a href=\"http://hl7.org/fhir/STU3/sequence-example.html\">Sequence/example</a></p><p><b>period</b>: 2017-6-6 --&gt; (ongoing)</p><p><b>recorded</b>: 2016-6-9 8:12:14</p><p><b>reason</b>: antiviral resistance detection (Details: [not stated] code null = 'null', stated as\n         'antiviral resistance detection')</p><h3>Agents</h3><table><tr><td>-</td><td><b>Role</b></td><td><b>Who[x]</b></td></tr><tr><td>*</td><td>Author (Details: http://hl7.org/fhir/provenance-participant-role code author = 'Author',\n             stated as 'null')</td><td><a href=\"http://hl7.org/fhir/STU3/practitioner-example.html\">Practitioner/example</a></td></tr></table><h3>Entities</h3><table><tr><td>-</td><td><b>Role</b></td><td><b>Reference</b></td></tr><tr><td>*</td><td>source</td><td><a href=\"https://hive.biochemistry.gwu.edu/cgi-bin/prd/htscsrs/servlet.cgi?pageid=bcoexample_1\">Biocompute example</a></td></tr></table></div>"
+  },
+  "target": [
+    {
+      "reference": "Sequence/example"
+    }
+  ],
+  "period": {
+    "start": "2017-06-06"
+  },
+  "recorded": "2016-06-09T08:12:14+10:00",
+  "reason": [
+    {
+      "display": "antiviral resistance detection"
+    }
+  ],
+  "agent": [
+    {
+      "role": [
+        {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/v3/ParticipationType",
+              "code": "AUT"
+            }
+          ]
+        }
+      ],
+      "whoReference": {
+        "reference": "Practitioner/example"
+      }
+    }
+  ],
+  "entity": [
+    {
+      "role": "source",
+      "whatIdentifier": {
+        "type": {
+          "coding": [
+            {
+              "system": "https://hive.biochemistry.gwu.edu",
+              "code": "biocompute",
+              "display": "obj.1001"
+            }
+          ]
+        },
+        "value": "https://hive.biochemistry.gwu.edu/cgi-bin/prd/htscsrs/servlet.cgi?pageid=bcoexample_1"
+      }
+    }
+  ]
+}

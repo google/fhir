@@ -1,0 +1,24 @@
+{
+  "resourceType": "OperationOutcome",
+  "id": "break-the-glass",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Additional information may be available using the Break-The-Glass Protocol</p>\n    </div>"
+  },
+  "issue": [
+    {
+      "severity": "information",
+      "code": "suppressed",
+      "details": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v3/ActReason",
+            "code": "ETREAT",
+            "display": "Emergency Treatment"
+          }
+        ],
+        "text": "Additional information may be available using the Break-The-Glass Protocol"
+      }
+    }
+  ]
+}

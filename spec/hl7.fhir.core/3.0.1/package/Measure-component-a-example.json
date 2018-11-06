@@ -1,0 +1,56 @@
+{
+  "resourceType": "Measure",
+  "id": "component-a-example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Screening for Alcohol Misuse\n    <p>This measure example is used to illustrate how a composite measure can be constructured. This measure is one component of the composite measure.</p></div>"
+  },
+  "title": "Screening for Alcohol Misuse",
+  "status": "draft",
+  "scoring": {
+    "coding": [
+      {
+        "code": "proportion"
+      }
+    ]
+  },
+  "group": [
+    {
+      "identifier": {
+        "value": "Main"
+      },
+      "population": [
+        {
+          "code": {
+            "coding": [
+              {
+                "code": "initial-population"
+              }
+            ]
+          },
+          "criteria": "Initial Population"
+        },
+        {
+          "code": {
+            "coding": [
+              {
+                "code": "denominator"
+              }
+            ]
+          },
+          "criteria": "Denominator"
+        },
+        {
+          "code": {
+            "coding": [
+              {
+                "code": "numerator"
+              }
+            ]
+          },
+          "criteria": "Numerator"
+        }
+      ]
+    }
+  ]
+}

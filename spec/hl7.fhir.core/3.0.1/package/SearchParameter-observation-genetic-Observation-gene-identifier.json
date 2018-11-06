@@ -1,0 +1,1 @@
+{"base":["Observation"],"code":"gene-identifier","description":"HGNC gene symbol and identifier","experimental":true,"id":"observation-genetic-Observation-gene-identifier","name":"gene-identifier","resourceType":"SearchParameter","status":"draft","type":"token","url":"http://hl7.org/fhir/SearchParameter/observation-genetic-Observation-gene-identifier","xpathUsage":"normal"}

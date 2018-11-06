@@ -1,0 +1,1 @@
+{"resourceType":"SearchParameter","id":"condition-daf-Condition-age","url":"http://hl7.org/fhir/SearchParameter/condition-daf-Condition-age","name":"age","code":"age","base":"Condition","type":"number","description":"Search based on Condition onsetAge","xpathUsage":"normal"}

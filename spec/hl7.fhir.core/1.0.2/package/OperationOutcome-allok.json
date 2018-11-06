@@ -1,0 +1,1 @@
+{"id":"allok","issue":[{"code":"informational","details":{"text":"All OK"},"severity":"information"}],"resourceType":"OperationOutcome","text":{"div":"<div>\n      <p>All OK</p>\n    </div>","status":"additional"}}

@@ -1,0 +1,41 @@
+{
+  "resourceType": "Observation",
+  "id": "vomiting",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: vomiting</p><p><b>status</b>: final</p><p><b>category</b>: Signs and Symptoms <span>(Details )</span></p><p><b>code</b>: Vomiting [Minimum Data Set] <span>(Details : {LOINC code '45708-5' = 'Vomiting [Minimum Data Set]', given as 'Vomiting [Minimum Data Set]'}; {SNOMED CT code '249497008' = 'Vomiting symptom', given as 'Vomiting symptom (finding)'})</span></p><p><b>subject</b>: <a>Patient/infant</a></p><p><b>effective</b>: 18/05/2016 10:33:22 PM</p><p><b>value</b>: Absent (qualifier value) <span>(Details : {SNOMED CT code '2667000' = 'Absent', given as 'Absent (qualifier value)'})</span></p></div>"
+  },
+  "status": "final",
+  "category": [
+    {
+      "text": "Signs and Symptoms"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "45708-5",
+        "display": "Vomiting [Minimum Data Set]"
+      },
+      {
+        "system": "http://snomed.info/sct",
+        "code": "249497008",
+        "display": "Vomiting symptom (finding)"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/infant"
+  },
+  "effectiveDateTime": "2016-05-18T22:33:22Z",
+  "valueCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "2667000",
+        "display": "Absent (qualifier value)"
+      }
+    ]
+  }
+}

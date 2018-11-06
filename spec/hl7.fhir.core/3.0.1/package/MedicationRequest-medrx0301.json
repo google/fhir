@@ -1,0 +1,238 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx0301",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medrx0301</p><p><b>contained</b>: , </p><p><b>identifier</b>: 12345689 (OFFICIAL)</p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>category</b>: Inpatient <span>(Details : {http://hl7.org/fhir/medication-request-category code 'inpatient' = 'Inpatient', given as 'Inpatient'})</span></p><p><b>medication</b>: id: med0310; Oral Form Oxycodone (product) <span>(Details : {SNOMED CT code '430127000' = 'Oral form oxycodone', given as 'Oral Form Oxycodone (product)'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>context</b>: <a>encounter who leads to this prescription</a></p><p><b>supportingInformation</b>: <a>Procedure/biopsy</a></p><p><b>authoredOn</b>: 15/01/2015</p><h3>Requesters</h3><table><tr><td>-</td><td><b>Agent</b></td><td><b>OnBehalfOf</b></td></tr><tr><td>*</td><td><a>Patrick Pump</a></td><td><a>Organization/f002</a></td></tr></table><p><b>reasonCode</b>: Rib Pain (finding) <span>(Details : {SNOMED CT code '297217002' = 'Rib pain', given as 'Rib Pain (finding)'})</span></p><p><b>note</b>: Patient told to take with food</p><p><b>dosageInstruction</b>: </p><h3>DispenseRequests</h3><table><tr><td>-</td><td><b>ValidityPeriod</b></td><td><b>NumberOfRepeatsAllowed</b></td><td><b>Quantity</b></td><td><b>ExpectedSupplyDuration</b></td></tr><tr><td>*</td><td>15/01/2015 --&gt; 15/01/2016</td><td>1</td><td>30 TAB<span> (Details: http://hl7.org/fhir/v3/orderableDrugForm code TAB = 'Tablet')</span></td><td>10 days<span> (Details: UCUM code d = 'd')</span></td></tr></table><h3>Substitutions</h3><table><tr><td>-</td><td><b>Allowed</b></td><td><b>Reason</b></td></tr><tr><td>*</td><td>true</td><td>formulary policy <span>(Details : {http://hl7.org/fhir/v3/ActReason code 'FP' = 'formulary policy', given as 'formulary policy'})</span></td></tr></table><p><b>detectedIssue</b>: <a>DetectedIssue/allergy</a></p><p><b>eventHistory</b>: Author's Signature. Generated Summary: id: signature; recorded: 01/02/2017 5:23:07 PM; </p></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Medication",
+      "id": "med0310",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "430127000",
+            "display": "Oral Form Oxycodone (product)"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Provenance",
+      "id": "signature",
+      "target": [
+        {
+          "reference": "ProcedureRequest/physiotherapy"
+        }
+      ],
+      "recorded": "2017-02-01T17:23:07Z",
+      "agent": [
+        {
+          "role": [
+            {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/v3/ParticipationType",
+                  "code": "AUT"
+                }
+              ]
+            }
+          ],
+          "whoReference": {
+            "reference": "Practitioner/example",
+            "display": "Dr Adam Careful"
+          }
+        }
+      ],
+      "signature": [
+        {
+          "type": [
+            {
+              "system": "urn:iso-astm:E1762-95:2013",
+              "code": "1.2.840.10065.1.12.1.1",
+              "display": "Author's Signature"
+            }
+          ],
+          "when": "2017-02-01T17:23:07Z",
+          "whoReference": {
+            "reference": "Practitioner/example",
+            "display": "Dr Adam Careful"
+          },
+          "contentType": "application/signature+xml",
+          "blob": "dGhpcyBibG9iIGlzIHNuaXBwZWQ="
+        }
+      ]
+    }
+  ],
+  "identifier": [
+    {
+      "use": "official",
+      "system": "http://www.bmc.nl/portal/prescriptions",
+      "value": "12345689"
+    }
+  ],
+  "status": "active",
+  "intent": "order",
+  "category": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/medication-request-category",
+        "code": "inpatient",
+        "display": "Inpatient"
+      }
+    ]
+  },
+  "medicationReference": {
+    "reference": "#med0310"
+  },
+  "subject": {
+    "reference": "Patient/pat1",
+    "display": "Donald Duck"
+  },
+  "context": {
+    "reference": "Encounter/f001",
+    "display": "encounter who leads to this prescription"
+  },
+  "supportingInformation": [
+    {
+      "reference": "Procedure/biopsy"
+    }
+  ],
+  "authoredOn": "2015-01-15",
+  "requester": {
+    "agent": {
+      "reference": "Practitioner/f007",
+      "display": "Patrick Pump"
+    },
+    "onBehalfOf": {
+      "reference": "Organization/f002"
+    }
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "297217002",
+          "display": "Rib Pain (finding)"
+        }
+      ]
+    }
+  ],
+  "note": [
+    {
+      "text": "Patient told to take with food"
+    }
+  ],
+  "dosageInstruction": [
+    {
+      "sequence": 1,
+      "text": "one to two tablets every 4-6 hours as needed for rib pain",
+      "additionalInstruction": [
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "418914006",
+              "display": "Warning. May cause drowsiness. If affected do not drive or operate machinery. Avoid alcoholic drink (qualifier value)"
+            }
+          ]
+        }
+      ],
+      "patientInstruction": "Take one to two tablets every four to six hours as needed for rib pain",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 4,
+          "periodMax": 6,
+          "periodUnit": "h"
+        }
+      },
+      "asNeededCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "297217002",
+            "display": "Rib Pain (finding)"
+          }
+        ]
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "26643006",
+            "display": "Oral Route"
+          }
+        ]
+      },
+      "method": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "421521009",
+            "display": "Swallow - dosing instruction imperative (qualifier value)"
+          }
+        ]
+      },
+      "doseRange": {
+        "low": {
+          "value": 1,
+          "unit": "TAB",
+          "system": "http://hl7.org/fhir/v3/orderableDrugForm",
+          "code": "TAB"
+        },
+        "high": {
+          "value": 2,
+          "unit": "TAB",
+          "system": "http://hl7.org/fhir/v3/orderableDrugForm",
+          "code": "TAB"
+        }
+      }
+    }
+  ],
+  "dispenseRequest": {
+    "validityPeriod": {
+      "start": "2015-01-15",
+      "end": "2016-01-15"
+    },
+    "numberOfRepeatsAllowed": 1,
+    "quantity": {
+      "value": 30,
+      "unit": "TAB",
+      "system": "http://hl7.org/fhir/v3/orderableDrugForm",
+      "code": "TAB"
+    },
+    "expectedSupplyDuration": {
+      "value": 10,
+      "unit": "days",
+      "system": "http://unitsofmeasure.org",
+      "code": "d"
+    }
+  },
+  "substitution": {
+    "allowed": true,
+    "reason": {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/v3/ActReason",
+          "code": "FP",
+          "display": "formulary policy"
+        }
+      ]
+    }
+  },
+  "detectedIssue": [
+    {
+      "reference": "DetectedIssue/allergy"
+    }
+  ],
+  "eventHistory": [
+    {
+      "reference": "#signature",
+      "display": "Author's Signature"
+    }
+  ]
+}

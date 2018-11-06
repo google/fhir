@@ -1,0 +1,48 @@
+{
+  "resourceType": "Observation",
+  "id": "example-genetics-brcapat",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-genetics-brcapat</p><p><b>status</b>: final</p><p><b>code</b>: BRCA1+BRCA2 gene mutations tested for in Blood or Tissue by Molecular genetics method Nominal <span>(Details : {LOINC code '59041-4' = 'BRCA1+BRCA2 gene mutations tested for in Blood or Tissue by Molecular genetics method Nominal', given as 'BRCA1+BRCA2 gene mutations tested for in Blood or Tissue by Molecular genetics method Nominal'})</span></p><p><b>subject</b>: <a>Patient1 with Breast Cancer FamilyHistory</a></p></div>"
+  },
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "https://www.ncbi.nlm.nih.gov/nuccore",
+            "code": "KX470182.1",
+            "display": "BRCA"
+          }
+        ]
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://browser.ihtsdotools.org/",
+            "code": "413581001",
+            "display": "Unknown racial group"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "59041-4",
+        "display": "BRCA1+BRCA2 gene mutations tested for in Blood or Tissue by Molecular genetics method Nominal"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/brcapat",
+    "display": "Patient1 with Breast Cancer FamilyHistory"
+  }
+}

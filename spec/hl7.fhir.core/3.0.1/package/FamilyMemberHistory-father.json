@@ -1,0 +1,60 @@
+{
+  "resourceType": "FamilyMemberHistory",
+  "id": "father",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Father died of a heart attack aged 74</div>"
+  },
+  "identifier": [
+    {
+      "value": "12345"
+    }
+  ],
+  "definition": [
+    {
+      "display": "Family Member History Questionnaire"
+    }
+  ],
+  "status": "completed",
+  "notDone": false,
+  "patient": {
+    "reference": "Patient/example",
+    "display": "Peter Patient"
+  },
+  "date": "2011-03-18",
+  "relationship": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v3/RoleCode",
+        "code": "FTH",
+        "display": "father"
+      }
+    ]
+  },
+  "gender": "male",
+  "condition": [
+    {
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "315619001",
+            "display": "Myocardial Infarction"
+          }
+        ],
+        "text": "Heart Attack"
+      },
+      "onsetAge": {
+        "value": 74,
+        "unit": "yr",
+        "system": "http://unitsofmeasure.org",
+        "code": "a"
+      },
+      "note": [
+        {
+          "text": "Was fishing at the time. At least he went doing someting he loved."
+        }
+      ]
+    }
+  ]
+}

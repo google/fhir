@@ -1,0 +1,80 @@
+{
+  "resourceType": "MedicationAdministration",
+  "id": "medadmin0303",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medadmin0303</p><p><b>contained</b>: </p><p><b>status</b>: entered-in-error</p><p><b>medication</b>: id: med0303; Zosyn (piperacillin/tazobactam) 4.5gm injection <span>(Details : {http://hl7.org/fhir/sid/ndc code '0206-8862-02' = '0206-8862-02', given as 'Zosyn (piperacillin/tazobactam) 4.5gm injection'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>context</b>: <a>encounter who leads to this prescription</a></p><p><b>effective</b>: 15/01/2015 4:30:00 AM --&gt; 15/01/2015 2:30:00 PM</p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Patrick Pump</a></td></tr></table><p><b>prescription</b>: <a>MedicationRequest/medrx0319</a></p><h3>Dosages</h3><table><tr><td>-</td><td><b>Text</b></td><td><b>Route</b></td><td><b>Dose</b></td><td><b>Rate[x]</b></td></tr><tr><td>*</td><td>4.5 grams in D5W 250 ml. IV every 6 hours. Infuse over 30 min at 8L/min </td><td>Intravenous route (qualifier value) <span>(Details : {SNOMED CT code '47625008' = 'Intravenous route', given as 'Intravenous route (qualifier value)'})</span></td><td>4.5 g<span> (Details: UCUM code g = 'g')</span></td><td>8 ml<span> (Details: UCUM code ml = 'ml')</span>/1 min<span> (Details: UCUM code min = 'min')</span></td></tr></table></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Medication",
+      "id": "med0303",
+      "code": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/sid/ndc",
+            "code": "0206-8862-02",
+            "display": "Zosyn (piperacillin/tazobactam) 4.5gm injection"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "entered-in-error",
+  "medicationReference": {
+    "reference": "#med0303"
+  },
+  "subject": {
+    "reference": "Patient/pat1",
+    "display": "Donald Duck"
+  },
+  "context": {
+    "reference": "Encounter/f001",
+    "display": "encounter who leads to this prescription"
+  },
+  "effectivePeriod": {
+    "start": "2015-01-15T04:30:00+01:00",
+    "end": "2015-01-15T14:30:00+01:00"
+  },
+  "performer": [
+    {
+      "actor": {
+        "reference": "Practitioner/f007",
+        "display": "Patrick Pump"
+      }
+    }
+  ],
+  "prescription": {
+    "reference": "MedicationRequest/medrx0319"
+  },
+  "dosage": {
+    "text": "4.5 grams in D5W 250 ml. IV every 6 hours. Infuse over 30 min at 8L/min ",
+    "route": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "47625008",
+          "display": "Intravenous route (qualifier value)"
+        }
+      ]
+    },
+    "dose": {
+      "value": 4.5,
+      "unit": "g",
+      "system": "http://unitsofmeasure.org",
+      "code": "g"
+    },
+    "rateRatio": {
+      "numerator": {
+        "value": 8,
+        "system": "http://unitsofmeasure.org",
+        "code": "ml"
+      },
+      "denominator": {
+        "value": 1,
+        "system": "http://unitsofmeasure.org",
+        "code": "min"
+      }
+    }
+  }
+}

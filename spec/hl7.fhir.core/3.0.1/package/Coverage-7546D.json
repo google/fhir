@@ -1,0 +1,63 @@
+{
+  "resourceType": "Coverage",
+  "id": "7546D",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the coverage</div>"
+  },
+  "identifier": [
+    {
+      "system": "http://xyz.com/codes/identifier",
+      "value": "AB98761"
+    }
+  ],
+  "status": "active",
+  "type": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v3/ActCode",
+        "code": "EHCPOL",
+        "display": "extended healthcare"
+      }
+    ]
+  },
+  "subscriber": {
+    "reference": "Patient/5"
+  },
+  "subscriberId": "AB9876",
+  "beneficiary": {
+    "reference": "Patient/5"
+  },
+  "relationship": {
+    "coding": [
+      {
+        "code": "self"
+      }
+    ]
+  },
+  "period": {
+    "start": "2011-03-17",
+    "end": "2012-03-17"
+  },
+  "payor": [
+    {
+      "reference": "Organization/2"
+    }
+  ],
+  "grouping": {
+    "group": "WESTAIR",
+    "groupDisplay": "Western Airlines",
+    "plan": "WESTAIR",
+    "planDisplay": "Western Airlines",
+    "subPlan": "D15C9",
+    "subPlanDisplay": "Platinum"
+  },
+  "dependent": "1",
+  "order": 2,
+  "network": "5",
+  "contract": [
+    {
+      "reference": "Contract/563818"
+    }
+  ]
+}

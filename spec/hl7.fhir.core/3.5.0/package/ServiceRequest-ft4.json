@@ -1,0 +1,27 @@
+{
+  "resourceType": "ServiceRequest",
+  "id": "ft4",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: ft4</p><p><b>status</b>: active</p><p><b>intent</b>: reflex-order</p><p><b>code</b>: Free T4 <span>(Details : {LOINC code '3024-7' = 'Thyroxine (T4) free [Mass/volume] in Serum or Plasma', given as 'Thyroxine (T4) free [Mass/​volume] in Serum or Plasma'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>occurrence</b>: 27/08/2015 9:33:27 AM</p><p><b>requester</b>: <a>Practitioner/example</a></p></div>"
+  },
+  "status": "active",
+  "intent": "reflex-order",
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "3024-7",
+        "display": "Thyroxine (T4) free [Mass/​volume] in Serum or Plasma"
+      }
+    ],
+    "text": "Free T4"
+  },
+  "subject": {
+    "reference": "Patient/pat2"
+  },
+  "occurrenceDateTime": "2015-08-27T09:33:27+07:00",
+  "requester": {
+    "reference": "Practitioner/example"
+  }
+}

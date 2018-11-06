@@ -1,0 +1,170 @@
+{
+  "resourceType": "ExplanationOfBenefit",
+  "id": "EB3500",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the ExplanationOfBenefit</div>"
+  },
+  "identifier": [
+    {
+      "system": "http://www.BenefitsInc.com/fhir/explanationofbenefit",
+      "value": "987654321"
+    }
+  ],
+  "status": "active",
+  "type": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/ex-claimtype",
+        "code": "oral"
+      }
+    ]
+  },
+  "patient": {
+    "reference": "Patient/pat1"
+  },
+  "created": "2014-08-16",
+  "enterer": {
+    "reference": "Practitioner/1"
+  },
+  "provider": {
+    "reference": "Practitioner/1"
+  },
+  "organization": {
+    "reference": "Organization/2"
+  },
+  "facility": {
+    "reference": "Location/1"
+  },
+  "claim": {
+    "reference": "Claim/100150"
+  },
+  "claimResponse": {
+    "reference": "ClaimResponse/R3500"
+  },
+  "outcome": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/remittance-outcome",
+        "code": "complete"
+      }
+    ]
+  },
+  "disposition": "Claim settled as per contract.",
+  "payee": {
+    "type": {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/payeetype",
+          "code": "provider"
+        }
+      ]
+    },
+    "resourceType": {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/resource-type-link",
+          "code": "organization"
+        }
+      ]
+    },
+    "party": {
+      "reference": "Organization/2"
+    }
+  },
+  "careTeam": [
+    {
+      "sequence": 1,
+      "provider": {
+        "reference": "Practitioner/example"
+      }
+    }
+  ],
+  "insurance": {
+    "coverage": {
+      "reference": "Coverage/9876B1"
+    }
+  },
+  "item": [
+    {
+      "sequence": 1,
+      "careTeamLinkId": [
+        1
+      ],
+      "service": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/service-uscls",
+            "code": "1200"
+          }
+        ]
+      },
+      "servicedDate": "2014-08-16",
+      "unitPrice": {
+        "value": 135.57,
+        "system": "urn:iso:std:iso:4217",
+        "code": "USD"
+      },
+      "net": {
+        "value": 135.57,
+        "system": "urn:iso:std:iso:4217",
+        "code": "USD"
+      },
+      "encounter": [
+        {
+          "reference": "Encounter/example"
+        }
+      ],
+      "adjudication": [
+        {
+          "category": {
+            "coding": [
+              {
+                "code": "eligible"
+              }
+            ]
+          },
+          "amount": {
+            "value": 120.00,
+            "system": "urn:iso:std:iso:4217",
+            "code": "USD"
+          }
+        },
+        {
+          "category": {
+            "coding": [
+              {
+                "code": "eligpercent"
+              }
+            ]
+          },
+          "value": 0.80
+        },
+        {
+          "category": {
+            "coding": [
+              {
+                "code": "benefit"
+              }
+            ]
+          },
+          "amount": {
+            "value": 96.00,
+            "system": "urn:iso:std:iso:4217",
+            "code": "USD"
+          }
+        }
+      ]
+    }
+  ],
+  "totalCost": {
+    "value": 135.57,
+    "system": "urn:iso:std:iso:4217",
+    "code": "USD"
+  },
+  "totalBenefit": {
+    "value": 96.00,
+    "system": "urn:iso:std:iso:4217",
+    "code": "USD"
+  }
+}

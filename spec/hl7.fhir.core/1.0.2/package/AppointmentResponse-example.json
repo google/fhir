@@ -1,0 +1,1 @@
+{"actor":{"display":"Peter James Chalmers","reference":"Patient/example"},"appointment":{"display":"Brian MRI results discussion","reference":"Appointment/example"},"id":"example","participantStatus":"accepted","resourceType":"AppointmentResponse","text":{"div":"<div>Accept Brian MRI results discussion</div>","status":"generated"}}

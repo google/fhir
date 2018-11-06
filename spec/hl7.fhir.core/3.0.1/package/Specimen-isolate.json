@@ -1,0 +1,88 @@
+{
+  "resourceType": "Specimen",
+  "id": "isolate",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: isolate</p><p><b>contained</b>: </p><p><b>accessionIdentifier</b>: X352356-ISO1</p><p><b>status</b>: available</p><p><b>type</b>: Bacterial isolate specimen <span>(Details : {SNOMED CT code '429951000124103' = 'Bacterial isolate specimen (specimen)', given as 'Bacterial isolate specimen'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>receivedTime</b>: 18/08/2015 7:03:00 AM</p><p><b>parent</b>: id: stool; X352356; status: unavailable; Stool specimen <span>(Details : {SNOMED CT code '119339001' = 'Stool specimen', given as 'Stool specimen'})</span>; ????; receivedTime: 16/08/2015 7:03:00 AM</p><h3>Collections</h3><table><tr><td>-</td><td><b>Collector</b></td><td><b>Collected[x]</b></td><td><b>Method</b></td></tr><tr><td>*</td><td><a>Practitioner/f202</a></td><td>16/08/2015 7:03:00 AM</td><td>Plates, Blood Agar <span>(Details : {http://hl7.org/fhir/v2/0488 code 'BAP' = 'Plates, Blood Agar)</span></td></tr></table><p><b>note</b>: Patient dropped off specimen</p></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Specimen",
+      "id": "stool",
+      "accessionIdentifier": {
+        "system": "http://lab.acme.org/specimens/2015",
+        "value": "X352356"
+      },
+      "status": "unavailable",
+      "type": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "119339001",
+            "display": "Stool specimen"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/example"
+      },
+      "receivedTime": "2015-08-16T07:03:00Z",
+      "collection": {
+        "collector": {
+          "display": "Patient"
+        },
+        "collectedDateTime": "2011-08-16T06:15:00Z",
+        "method": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/v2/0488",
+              "code": "LNV"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "accessionIdentifier": {
+    "system": "http://lab.acme.org/specimens/2011",
+    "value": "X352356-ISO1"
+  },
+  "status": "available",
+  "type": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "429951000124103",
+        "display": "Bacterial isolate specimen"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "receivedTime": "2015-08-18T07:03:00Z",
+  "parent": [
+    {
+      "reference": "#stool"
+    }
+  ],
+  "collection": {
+    "collector": {
+      "reference": "Practitioner/f202"
+    },
+    "collectedDateTime": "2015-08-16T07:03:00Z",
+    "method": {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/v2/0488",
+          "code": "BAP"
+        }
+      ]
+    }
+  },
+  "note": [
+    {
+      "text": "Patient dropped off specimen"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "resourceType": "Observation",
+  "id": "example-phenotype",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-phenotype</p><p><b>status</b>: final</p><p><b>code</b>: CYP2C9 gene product metabolic activity interpretation <span>(Details : {LOINC code '79716-7' = 'CYP2C9 gene product metabolic activity interpretation in Blood or Tissue Qualitative by CPIC', given as 'CYP2C9 gene product metabolic activity interpretation'})</span></p><p><b>subject</b>: <a>J*********** C***********</a></p><p><b>issued</b>: 03/04/2013 3:30:10 PM</p><p><b>value</b>: Normal metabolizer <span>(Details : {LOINC code 'LA25391-6' = 'Normal metabolizer', given as 'Normal metabolizer'})</span></p><p><b>specimen</b>: <a>Molecular Specimen ID: MLD45-Z4-1234</a></p><h3>Relateds</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Target</b></td></tr><tr><td>*</td><td>derived-from</td><td><a>Observation/example-diplotype1</a></td></tr></table></div>"
+  },
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://www.genenames.org",
+            "code": "2623",
+            "display": "CYP2C9"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "79716-7",
+        "display": "CYP2C9 gene product metabolic activity interpretation"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/727127",
+    "display": "J*********** C***********"
+  },
+  "issued": "2013-04-03T15:30:10+01:00",
+  "valueCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "LA25391-6",
+        "display": "Normal metabolizer"
+      }
+    ]
+  },
+  "specimen": {
+    "reference": "Specimen/genetics-example1-somatic",
+    "display": "Molecular Specimen ID: MLD45-Z4-1234"
+  },
+  "related": [
+    {
+      "type": "derived-from",
+      "target": {
+        "reference": "Observation/example-diplotype1"
+      }
+    }
+  ]
+}

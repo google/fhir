@@ -1,0 +1,93 @@
+{
+  "resourceType": "Consent",
+  "id": "consent-example-signature",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: consent-example-signature</p><p><b>identifier</b>: 494e0c7a-a69e-4fb4-9d02-6aae747790d7</p><p><b>status</b>: active</p><p><b>category</b>: HIPAA Authorization <span>(Details : {http://hl7.org/fhir/consentcategorycodes code 'HIPAA-Auth' = 'HIPAA Authorization)</span></p><p><b>patient</b>: <a>Patient/72</a></p><p><b>period</b>: 10/10/2015 --&gt; 10/10/2016</p><p><b>dateTime</b>: 26/05/2016 12:41:10 AM</p><p><b>consentingParty</b>: <a>Patient/72</a></p><h3>Actors</h3><table><tr><td>-</td><td><b>Role</b></td><td><b>Reference</b></td></tr><tr><td>*</td><td>primary information recipient <span>(Details : {http://hl7.org/fhir/v3/ParticipationType code 'PRCP' = 'primary information recipient)</span></td><td><a>Practitioner/13</a></td></tr></table><p><b>organization</b>: <a>Organization/example</a></p><p><b>policyRule</b>: <a>http://hl7.org/fhir/ConsentPolicy/opt-in</a></p><blockquote><p><b>except</b></p><p><b>type</b>: permit</p><h3>Actors</h3><table><tr><td>-</td><td><b>Role</b></td><td><b>Reference</b></td></tr><tr><td>*</td><td>author (originator) <span>(Details : {http://hl7.org/fhir/v3/ParticipationType code 'AUT' = 'author (originator))</span></td><td><a>Practitioner/xcda-author</a></td></tr></table><p><b>class</b>: application/hl7-cda+xml (Details: urn:ietf:bcp:13 code application/hl7-cda+xml = 'application/hl7-cda+xml', stated as 'null')</p><p><b>code</b>: Summary of episode note (Details: LOINC code 34133-9 = 'Summary of episode note', stated as 'null'), Discharge summary (Details: LOINC code 18842-5 = 'Discharge summary', stated as 'null')</p></blockquote></div>"
+  },
+  "identifier": {
+    "system": "urn:oid:2.16.840.1.113883.3.72.5.9.1",
+    "value": "494e0c7a-a69e-4fb4-9d02-6aae747790d7"
+  },
+  "status": "active",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/consentcategorycodes",
+          "code": "HIPAA-Auth"
+        }
+      ]
+    }
+  ],
+  "patient": {
+    "reference": "Patient/72"
+  },
+  "period": {
+    "start": "2015-10-10",
+    "end": "2016-10-10"
+  },
+  "dateTime": "2016-05-26T00:41:10-04:00",
+  "consentingParty": [
+    {
+      "reference": "Patient/72"
+    }
+  ],
+  "actor": [
+    {
+      "role": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v3/ParticipationType",
+            "code": "PRCP"
+          }
+        ]
+      },
+      "reference": {
+        "reference": "Practitioner/13"
+      }
+    }
+  ],
+  "organization": [
+    {
+      "reference": "Organization/example"
+    }
+  ],
+  "policyRule": "http://hl7.org/fhir/ConsentPolicy/opt-in",
+  "except": [
+    {
+      "type": "permit",
+      "actor": [
+        {
+          "role": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/v3/ParticipationType",
+                "code": "AUT"
+              }
+            ]
+          },
+          "reference": {
+            "reference": "Practitioner/xcda-author"
+          }
+        }
+      ],
+      "class": [
+        {
+          "system": "urn:ietf:bcp:13",
+          "code": "application/hl7-cda+xml"
+        }
+      ],
+      "code": [
+        {
+          "system": "http://loinc.org",
+          "code": "34133-9"
+        },
+        {
+          "system": "http://loinc.org",
+          "code": "18842-5"
+        }
+      ]
+    }
+  ]
+}

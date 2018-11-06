@@ -1,0 +1,205 @@
+{
+  "resourceType": "MedicationDispense",
+  "id": "meddisp0306",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: meddisp0306</p><p><b>contained</b>: </p><p><b>status</b>: in-progress</p><p><b>medication</b>: Alemtuzumab 10mg/ml (Lemtrada). Generated Summary: id: med0303; Alemtuzumab 10mg/ml (Lemtrada) <span>(Details : {RxNorm code '1594660' = '1594660', given as 'Alemtuzumab 10mg/ml (Lemtrada)'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td><td><b>OnBehalfOf</b></td></tr><tr><td>*</td><td><a>Practitioner/f006</a></td><td><a>Organization/2.16.840.1.113883.19.5</a></td></tr></table><p><b>authorizingPrescription</b>: <a>MedicationRequest/medrx0317</a></p><p><b>type</b>: Daily Fill <span>(Details : {http://hl7.org/fhir/v3/ActCode code 'DF' = 'Daily Fill', given as 'Daily Fill'})</span></p><p><b>quantity</b>: 5 415818006<span> (Details: SNOMED CT code 415818006 = 'Vial')</span></p><p><b>daysSupply</b>: 7 Day<span> (Details: UCUM code d = 'd')</span></p><p><b>whenPrepared</b>: 15/01/2015 10:20:00 AM</p><p><b>dosageInstruction</b>: , , </p></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Medication",
+      "id": "med0303",
+      "code": {
+        "coding": [
+          {
+            "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+            "code": "1594660",
+            "display": "Alemtuzumab 10mg/ml (Lemtrada)"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "in-progress",
+  "medicationReference": {
+    "reference": "#med0303",
+    "display": "Alemtuzumab 10mg/ml (Lemtrada)"
+  },
+  "subject": {
+    "reference": "Patient/pat1",
+    "display": "Donald Duck"
+  },
+  "performer": [
+    {
+      "actor": {
+        "reference": "Practitioner/f006"
+      },
+      "onBehalfOf": {
+        "reference": "Organization/2.16.840.1.113883.19.5"
+      }
+    }
+  ],
+  "authorizingPrescription": [
+    {
+      "reference": "MedicationRequest/medrx0317"
+    }
+  ],
+  "type": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v3/ActCode",
+        "code": "DF",
+        "display": "Daily Fill"
+      }
+    ]
+  },
+  "quantity": {
+    "value": 5,
+    "system": "http://snomed.info/sct",
+    "code": "415818006"
+  },
+  "daysSupply": {
+    "value": 7,
+    "unit": "Day",
+    "system": "http://unitsofmeasure.org",
+    "code": "d"
+  },
+  "whenPrepared": "2015-01-15T10:20:00Z",
+  "dosageInstruction": [
+    {
+      "sequence": 1,
+      "text": "Rapid daily-dose escalation, until tolerated, from 3 mg/d, and then 10 mg/d, to the recommended maintenance dose of 30 mg IV over 120 min, 3 times per wk on alternate days for up to 12 wk",
+      "additionalInstruction": [
+        {
+          "text": "Rapidly increase dose until tolerated"
+        },
+        {
+          "text": "Administer on alternate days"
+        }
+      ],
+      "timing": {
+        "repeat": {
+          "duration": 12,
+          "durationUnit": "wk",
+          "frequency": 3,
+          "period": 1,
+          "periodUnit": "wk"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "47625008",
+            "display": "Intravenous route (qualifier value)"
+          }
+        ]
+      },
+      "method": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "422145002",
+            "display": "Inject - dosing instruction imperative (qualifier value)"
+          }
+        ]
+      },
+      "doseQuantity": {
+        "value": 3,
+        "unit": "mg",
+        "system": "http://unitsofmeasure.org",
+        "code": "mg"
+      }
+    },
+    {
+      "sequence": 2,
+      "text": "Rapid daily-dose escalation, until tolerated, from 3 mg/d, and then 10 mg/d, to the recommended maintenance dose of 30 mg IV over 120 min, 3 times per wk on alternate days for up to 12 wk",
+      "additionalInstruction": [
+        {
+          "text": "Rapidly increase dose until tolerated"
+        },
+        {
+          "text": "Administer on alternate days"
+        }
+      ],
+      "timing": {
+        "repeat": {
+          "duration": 12,
+          "durationUnit": "wk",
+          "frequency": 3,
+          "period": 1,
+          "periodUnit": "wk"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "47625008",
+            "display": "Intravenous route (qualifier value)"
+          }
+        ]
+      },
+      "method": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "422145002",
+            "display": "Inject - dosing instruction imperative (qualifier value)"
+          }
+        ]
+      },
+      "doseQuantity": {
+        "value": 10,
+        "unit": "mg",
+        "system": "http://unitsofmeasure.org",
+        "code": "mg"
+      }
+    },
+    {
+      "sequence": 3,
+      "text": "Rapid daily-dose escalation, until tolerated, from 3 mg/d, and then 10 mg/d, to the recommended maintenance dose of 30 mg IV over 120 min, 3 times per wk on alternate days for up to 12 wk",
+      "additionalInstruction": [
+        {
+          "text": "Rapidly increase dose until tolerated"
+        },
+        {
+          "text": "Administer on alternate days"
+        }
+      ],
+      "timing": {
+        "repeat": {
+          "duration": 12,
+          "durationUnit": "wk",
+          "frequency": 3,
+          "period": 1,
+          "periodUnit": "wk"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "47625008",
+            "display": "Intravenous route (qualifier value)"
+          }
+        ]
+      },
+      "method": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "422145002",
+            "display": "Inject - dosing instruction imperative (qualifier value)"
+          }
+        ]
+      },
+      "doseQuantity": {
+        "value": 30,
+        "unit": "mg",
+        "system": "http://unitsofmeasure.org",
+        "code": "mg"
+      }
+    }
+  ]
+}

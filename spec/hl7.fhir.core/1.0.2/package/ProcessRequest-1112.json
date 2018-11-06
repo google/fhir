@@ -1,0 +1,1 @@
+{"action":"poll","created":"2014-08-16","id":"1112","identifier":[{"system":"http://happyvalley.com/processrequest","value":"112"}],"include":["Reconciliation"],"organization":{"reference":"Organization/1"},"resourceType":"ProcessRequest","text":{"div":"<div>A human-readable rendering of the Poll ProcessRequest</div>","status":"generated"}}

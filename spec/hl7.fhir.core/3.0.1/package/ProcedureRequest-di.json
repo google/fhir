@@ -1,0 +1,34 @@
+{
+  "resourceType": "ProcedureRequest",
+  "id": "di",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: di</p><p><b>status</b>: active</p><p><b>intent</b>: original-order</p><p><b>code</b>: Chest CT <span>(Details : {LOINC code '24627-2' = 'Chest CT)</span></p><p><b>subject</b>: <a>Patient/dicom</a></p><p><b>occurrence</b>: 08/05/2013 9:33:27 AM</p><h3>Requesters</h3><table><tr><td>-</td><td><b>Agent</b></td></tr><tr><td>*</td><td><a>Dr. Adam Careful</a></td></tr></table><p><b>reasonCode</b>: Check for metastatic disease <span>(Details )</span></p></div>"
+  },
+  "status": "active",
+  "intent": "original-order",
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "24627-2"
+      }
+    ],
+    "text": "Chest CT"
+  },
+  "subject": {
+    "reference": "Patient/dicom"
+  },
+  "occurrenceDateTime": "2013-05-08T09:33:27+07:00",
+  "requester": {
+    "agent": {
+      "reference": "Practitioner/example",
+      "display": "Dr. Adam Careful"
+    }
+  },
+  "reasonCode": [
+    {
+      "text": "Check for metastatic disease"
+    }
+  ]
+}

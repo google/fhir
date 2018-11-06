@@ -1,0 +1,93 @@
+{
+  "resourceType": "MedicationAdministration",
+  "id": "medadmin0305",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medadmin0305</p><p><b>contained</b>: </p><p><b>instantiates</b>: <a>http://www.bccancer.bc.ca/chemotherapy-protocols-site/Documents/Lymphoma-Myeloma/ULYBRENTUX%20Protocol_1Jun2017.pdf</a></p><p><b>status</b>: completed</p><p><b>medication</b>: id: med0306; Adcetris <span>(Details : {http://hl7.org/fhir/sid/ndc code '51144-050-01' = '51144-050-01', given as 'Adcetris'})</span>; Lyophilized powder for injectable solution (qualifier value)  <span>(Details : {SNOMED CT code '421637006' = 'Lyophilised powder for injectable solution', given as 'Lyophilized powder for injectable solution (qualifier value) '})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>context</b>: <a>encounter who leads to this prescription</a></p><p><b>effective</b>: 15/01/2015 4:30:00 AM --&gt; 15/01/2015 2:30:00 PM</p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Patrick Pump</a></td></tr></table><p><b>request</b>: <a>MedicationRequest/medrx0316</a></p><h3>Dosages</h3><table><tr><td>-</td><td><b>Text</b></td><td><b>Route</b></td><td><b>Dose</b></td><td><b>Rate[x]</b></td></tr><tr><td>*</td><td>1.8 mg/kg IV infusion over 30 minutes</td><td>Intravenous <span>(Details : {SNOMED CT code '255560000' = 'Intravenous', given as 'Intravenous'})</span></td><td>1.8 mg/kg<span> (Details: UCUM code mg/kg = 'mg/kg')</span></td><td>20 min<span> (Details: UCUM code min = 'min')</span></td></tr></table></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Medication",
+      "id": "med0306",
+      "code": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/sid/ndc",
+            "code": "51144-050-01",
+            "display": "Adcetris"
+          }
+        ]
+      },
+      "manufacturer": {
+        "reference": "Organization/mmanu"
+      },
+      "form": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "421637006",
+            "display": "Lyophilized powder for injectable solution (qualifier value) "
+          }
+        ]
+      },
+      "batch": {
+        "lotNumber": "12345",
+        "expirationDate": "2019-10-31"
+      }
+    }
+  ],
+  "instantiates": [
+    "http://www.bccancer.bc.ca/chemotherapy-protocols-site/Documents/Lymphoma-Myeloma/ULYBRENTUX%20Protocol_1Jun2017.pdf"
+  ],
+  "status": "completed",
+  "medicationReference": {
+    "reference": "#med0306"
+  },
+  "subject": {
+    "reference": "Patient/pat1",
+    "display": "Donald Duck"
+  },
+  "context": {
+    "reference": "Encounter/f001",
+    "display": "encounter who leads to this prescription"
+  },
+  "effectivePeriod": {
+    "start": "2015-01-15T04:30:00+01:00",
+    "end": "2015-01-15T14:30:00+01:00"
+  },
+  "performer": [
+    {
+      "actor": {
+        "reference": "Practitioner/f007",
+        "display": "Patrick Pump"
+      }
+    }
+  ],
+  "request": {
+    "reference": "MedicationRequest/medrx0316"
+  },
+  "dosage": {
+    "text": "1.8 mg/kg IV infusion over 30 minutes",
+    "route": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "255560000",
+          "display": "Intravenous"
+        }
+      ]
+    },
+    "dose": {
+      "value": 1.8,
+      "unit": "mg/kg",
+      "system": "http://unitsofmeasure.org",
+      "code": "mg/kg"
+    },
+    "rateQuantity": {
+      "value": 20,
+      "unit": "min",
+      "system": "http://unitsofmeasure.org",
+      "code": "min"
+    }
+  }
+}

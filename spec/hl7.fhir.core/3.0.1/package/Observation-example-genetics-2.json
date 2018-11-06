@@ -1,0 +1,88 @@
+{
+  "resourceType": "Observation",
+  "id": "example-genetics-2",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-genetics-2</p><p><b>status</b>: final</p><p><b>code</b>: Genetic analysis master panel--This is the parent OBR for the panel holding all of the associated observations that can be reported with a molecular genetics analysis result. <span>(Details : {LOINC code '55233-1' = 'Genetic analysis master panel - Blood or Tissue by Molecular genetics method', given as 'Genetic analysis master panel--This is the parent OBR for the panel holding all of the associated observations that can be reported with a molecular genetics analysis result.'})</span></p><p><b>subject</b>: <a>Molecular Lab Patient ID: HOSP-23456</a></p><p><b>issued</b>: 03/04/2013 3:30:10 PM</p><p><b>performer</b>: <a>Molecular Diagnostics Laboratory</a></p><p><b>value</b>: Positive <span>(Details : {SNOMED CT code '10828004' = 'Positive', given as 'Positive'})</span></p><h3>Relateds</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Target</b></td></tr><tr><td>*</td><td>derived-from</td><td><a>Observation/example-genetics-1</a></td></tr></table><blockquote><p><b>component</b></p><p><b>code</b>: Genetic disease assessed <span>(Details : {LOINC code '51967-8' = 'Genetic disease assessed [Identifier] in Blood or Tissue by Molecular genetics method', given as 'Genetic disease assessed'})</span></p><p><b>value</b>: Lung cancer <span>(Details : {SNOMED CT code '363358000' = 'Malignant tumor of lung', given as 'Malignant tumor of lung (disorder)'})</span></p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: Genetic disease sequence variation interpretation <span>(Details : {LOINC code '53037-8' = 'Genetic disease sequence variation interpretation [interpretation] in Blood or Tissue by Molecular genetics method', given as 'Genetic disease sequence variation interpretation'})</span></p><p><b>value</b>: Pathogenic <span>(Details : {[not stated] code 'LA6669-1' = 'LA6669-1', given as 'Pathogenic'})</span></p></blockquote></div>"
+  },
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "55233-1",
+        "display": "Genetic analysis master panel--This is the parent OBR for the panel holding all of the associated observations that can be reported with a molecular genetics analysis result."
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Molecular Lab Patient ID: HOSP-23456"
+  },
+  "issued": "2013-04-03T15:30:10+01:00",
+  "performer": [
+    {
+      "reference": "Practitioner/example",
+      "display": "Molecular Diagnostics Laboratory"
+    }
+  ],
+  "valueCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "10828004",
+        "display": "Positive"
+      }
+    ]
+  },
+  "related": [
+    {
+      "type": "derived-from",
+      "target": {
+        "reference": "Observation/example-genetics-1"
+      }
+    }
+  ],
+  "component": [
+    {
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "51967-8",
+            "display": "Genetic disease assessed"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "363358000",
+            "display": "Malignant tumor of lung (disorder)"
+          }
+        ],
+        "text": "Lung cancer"
+      }
+    },
+    {
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "53037-8",
+            "display": "Genetic disease sequence variation interpretation"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "LA6669-1",
+            "display": "Pathogenic"
+          }
+        ]
+      }
+    }
+  ]
+}

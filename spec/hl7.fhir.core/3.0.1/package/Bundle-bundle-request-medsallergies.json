@@ -1,0 +1,37 @@
+{
+  "resourceType": "Bundle",
+  "id": "bundle-request-medsallergies",
+  "type": "batch",
+  "entry": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "/Patient/example"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/MedicationStatement?patient=example&_list=$current-medications"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/AllergyIntolernce?patient=example&_list=$current-allergies"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/Condition?patient=example&_list=$current-problems"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/MedicationStatement?patient=example&notgiven:not=true"
+      }
+    }
+  ]
+}

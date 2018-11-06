@@ -1,0 +1,1 @@
+{"resourceType":"ImplementationGuide","id":"fhir","url":"http://hl7.org/fhir/ImplementationGuide/fhir","version":"3.0.1","publisher":"HL7 Inc","contact":[{"telecom":[{"system":"url","value":"http://hl7.org/fhir"}]}],"description":"FHIR Core package - the NPM package that contains all the definitions for the base FHIR specification","fhirVersion":"3.0.1"}

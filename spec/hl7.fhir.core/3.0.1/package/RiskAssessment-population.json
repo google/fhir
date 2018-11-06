@@ -1,0 +1,9 @@
+{
+  "resourceType": "RiskAssessment",
+  "id": "population",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Todo - e.g. probable number of infections in a given region over a time period for a given disease based on vaccination rates and other factors</p>\n    </div>"
+  },
+  "status": "final"
+}

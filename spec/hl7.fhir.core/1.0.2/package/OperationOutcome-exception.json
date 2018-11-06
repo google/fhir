@@ -1,0 +1,1 @@
+{"id":"exception","issue":[{"code":"exception","details":{"text":"SQL Link Communication Error (dbx = 34234)"},"severity":"error"}],"resourceType":"OperationOutcome","text":{"div":"<div>\n      <p>SQL Link Communication Error (dbx = 34234)</p>\n    </div>","status":"additional"}}

@@ -1,0 +1,56 @@
+{
+  "resourceType": "Provenance",
+  "id": "example-cwl",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: cwl-example</p><p><b>target</b>: <a href=\"http://hl7.org/fhir/STU3/sequence-example-pgx-1.html\">Sequence/example-pgx-1</a></p><p><b>period</b>: Nov 30, 2016 --&gt; (ongoing)</p><p><b>recorded</b>: Dec 1, 2016 8:12:14 AM</p><p><b>reason</b>: profiling Short Tandem Repeats (STRs) from high throughput sequencing data. (Details:\n         [not stated] code null = 'null', stated as 'profiling Short Tandem Repeats (STRs) from\n         high throughput sequencing data.')</p><h3>Agents</h3><table><tr><td>-</td><td><b>Role</b></td><td><b>Who[x]</b></td></tr><tr><td>*</td><td>Author (Details: http://hl7.org/fhir/provenance-participant-role code author = 'Author',\n             stated as 'null')</td><td><a href=\"http://hl7.org/fhir/STU3/patient-example.html\">Patient/example</a></td></tr></table><h3>Entities</h3><table><tr><td>-</td><td><b>Role</b></td><td><b>Reference</b></td></tr><tr><td>*</td><td>source</td><td><a href=\"https://github.com/common-workflow-language/workflows/blob/master/workflows/lobSTR/lobSTR-workflow.cwl\">CWL example</a></td></tr></table></div>"
+  },
+  "target": [
+    {
+      "reference": "Sequence/example-pgx-1"
+    }
+  ],
+  "period": {
+    "start": "2016-11-30"
+  },
+  "recorded": "2016-12-01T08:12:14+10:00",
+  "reason": [
+    {
+      "display": "profiling Short Tandem Repeats (STRs) from high throughput sequencing data."
+    }
+  ],
+  "agent": [
+    {
+      "role": [
+        {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/v3/ParticipationType",
+              "code": "AUT"
+            }
+          ]
+        }
+      ],
+      "whoReference": {
+        "reference": "Patient/example"
+      }
+    }
+  ],
+  "entity": [
+    {
+      "role": "source",
+      "whatIdentifier": {
+        "type": {
+          "coding": [
+            {
+              "system": "https://github.com/common-workflow-language/workflows",
+              "code": "CWL",
+              "display": "lobSTR"
+            }
+          ]
+        },
+        "value": "https://github.com/common-workflow-language/workflows/blob/master/workflows/lobSTR/lobSTR-workflow.cwl"
+      }
+    }
+  ]
+}

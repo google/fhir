@@ -1,0 +1,50 @@
+{
+  "resourceType": "PlanDefinition",
+  "id": "chlamydia-screening-intervention",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Id: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">PlanDefinition/chlamydia-screening-intervention</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Identifier: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <b>value: </b>\n                  <span>ChlamydiaScreening_CDS_UsingCommon</span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Title: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">Chalmydia Screening CDS Example Using Common</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Status: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">draft</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Description: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">Chlamydia Screening CDS Example Using Common</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Topic: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <span>\n                     <b>text: </b>\n                     <span>Chlamydia Screening</span>\n                  </span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Library: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <b>reference: </b>\n                  <span>Library/example</span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <h2>Actions</h2>\n         <p style=\"width: 100%;\" class=\"hierarchy\">\n            <span>\n               <b>Step: </b>\n               <br/>\n               <span style=\"padding-left: 25px;\">\n                  <b>title: </b>\n                  <span>Patient has not had chlamydia screening within the recommended timeframe...</span>\n                  <br/>\n               </span>\n               <span style=\"padding-left: 25px;\">\n                  <b>condition: </b>\n                  <br/>\n                  <span style=\"padding-left: 50px;\">\n                     <b>type: </b>\n                     <span>applicability</span>\n                  </span>\n                  <br/>\n                  <span style=\"padding-left: 50px;\">\n                     <b>expression: </b>\n                     <span>NoScreening</span>\n                  </span>\n               </span>\n            </span>\n         </p>\n      </div>"
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "value": "ChlamydiaScreening_CDS_UsingCommon"
+    }
+  ],
+  "version": "2.0.0",
+  "title": "Chalmydia Screening CDS Example Using Common",
+  "status": "draft",
+  "date": "2015-07-22",
+  "description": "Chlamydia Screening CDS Example Using Common",
+  "topic": [
+    {
+      "text": "Chlamydia Screening"
+    }
+  ],
+  "library": [
+    "Library/example"
+  ],
+  "action": [
+    {
+      "title": "Patient has not had chlamydia screening within the recommended timeframe...",
+      "condition": [
+        {
+          "kind": "applicability",
+          "expression": {
+            "language": "text/cql",
+            "expression": "NoScreening"
+          }
+        }
+      ],
+      "dynamicValue": [
+        {
+          "path": "$this",
+          "expression": {
+            "language": "text/cql",
+            "expression": "ChlamydiaScreeningRequest"
+          }
+        }
+      ]
+    }
+  ]
+}

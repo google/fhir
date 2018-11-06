@@ -1,0 +1,1 @@
+{"code":{"coding":[{"code":"323418000","display":"Fix me up","system":"http://snomed.info/sct"}]},"id":"example","resourceType":"ProcedureRequest","subject":{"reference":"Patient/example"},"text":{"div":"<div>To be added</div>","status":"generated"}}

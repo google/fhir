@@ -1,0 +1,222 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx0321",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medrx0321</p><p><b>contained</b>: </p><p><b>identifier</b>: 12345689 (OFFICIAL)</p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>medication</b>: Novolog 100u/ml. Generated Summary: id: med0307; Novolog 100u/ml <span>(Details : {http://hl7.org/fhir/sid/ndc code '0169-7501-11' = '0169-7501-11', given as 'Novolog 100u/ml'})</span>; isBrand; Injection solution (qualifier value) <span>(Details : {SNOMED CT code '385219001' = 'Injection solution', given as 'Injection solution (qualifier value)'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>authoredOn</b>: 15/01/2015</p><h3>Requesters</h3><table><tr><td>-</td><td><b>Agent</b></td><td><b>OnBehalfOf</b></td></tr><tr><td>*</td><td><a>Patrick Pump</a></td><td><a>Organization/f002</a></td></tr></table><p><b>reasonCode</b>: Diabetes mellitus type 2 (disorder) <span>(Details : {SNOMED CT code '44054006' = 'Diabetes mellitus type II', given as 'Diabetes mellitus type 2 (disorder)'})</span></p><p><b>note</b>: Check blood sugar levels before taking insulin</p><p><b>dosageInstruction</b>: , , </p><h3>DispenseRequests</h3><table><tr><td>-</td><td><b>ValidityPeriod</b></td><td><b>NumberOfRepeatsAllowed</b></td><td><b>Quantity</b></td><td><b>ExpectedSupplyDuration</b></td></tr><tr><td>*</td><td>15/01/2015 --&gt; 15/01/2016</td><td>3</td><td>10 ml<span> (Details: UCUM code ml = 'ml')</span></td><td>30 days<span> (Details: UCUM code d = 'd')</span></td></tr></table></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Medication",
+      "id": "med0307",
+      "code": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/sid/ndc",
+            "code": "0169-7501-11",
+            "display": "Novolog 100u/ml"
+          }
+        ]
+      },
+      "isBrand": true,
+      "form": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "385219001",
+            "display": "Injection solution (qualifier value)"
+          }
+        ]
+      },
+      "ingredient": [
+        {
+          "itemCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "325072002",
+                "display": "Insulin Aspart (substance)"
+              }
+            ]
+          },
+          "amount": {
+            "numerator": {
+              "value": 100,
+              "system": "http://unitsofmeasure.org",
+              "code": "U"
+            },
+            "denominator": {
+              "value": 1,
+              "system": "http://unitsofmeasure.org",
+              "code": "mL"
+            }
+          }
+        }
+      ],
+      "package": {
+        "container": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "415818006",
+              "display": "Vial"
+            }
+          ]
+        },
+        "content": [
+          {
+            "itemCodeableConcept": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "325072002",
+                  "display": "Insulin Aspart (substance)"
+                }
+              ]
+            },
+            "amount": {
+              "value": 10,
+              "system": "http://unitsofmeasure.org",
+              "code": "mL"
+            }
+          }
+        ],
+        "batch": [
+          {
+            "lotNumber": "12345",
+            "expirationDate": "2019-10-31"
+          }
+        ]
+      }
+    }
+  ],
+  "identifier": [
+    {
+      "use": "official",
+      "system": "http://www.bmc.nl/portal/prescriptions",
+      "value": "12345689"
+    }
+  ],
+  "status": "active",
+  "intent": "order",
+  "medicationReference": {
+    "reference": "#med0307",
+    "display": "Novolog 100u/ml"
+  },
+  "subject": {
+    "reference": "Patient/pat1",
+    "display": "Donald Duck"
+  },
+  "authoredOn": "2015-01-15",
+  "requester": {
+    "agent": {
+      "reference": "Practitioner/f007",
+      "display": "Patrick Pump"
+    },
+    "onBehalfOf": {
+      "reference": "Organization/f002"
+    }
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "44054006",
+          "display": "Diabetes mellitus type 2 (disorder)"
+        }
+      ]
+    }
+  ],
+  "note": [
+    {
+      "text": "Check blood sugar levels before taking insulin"
+    }
+  ],
+  "dosageInstruction": [
+    {
+      "sequence": 2,
+      "text": "inject 10 units subcut 10 minutes before breakfast",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "d",
+          "when": [
+            "ACM"
+          ],
+          "offset": 10
+        }
+      },
+      "doseQuantity": {
+        "value": 10,
+        "unit": "U",
+        "system": "http://unitsofmeasure.org",
+        "code": "U"
+      }
+    },
+    {
+      "sequence": 2,
+      "text": "15 units before lunch",
+      "additionalInstruction": [
+        {
+          "text": "Before Lunch"
+        }
+      ],
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "doseQuantity": {
+        "value": 15,
+        "unit": "U",
+        "system": "http://unitsofmeasure.org",
+        "code": "U"
+      }
+    },
+    {
+      "sequence": 1,
+      "text": "20 units before dinner",
+      "additionalInstruction": [
+        {
+          "text": "Before Dinner"
+        }
+      ],
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "doseQuantity": {
+        "value": 20,
+        "unit": "U",
+        "system": "http://unitsofmeasure.org",
+        "code": "U"
+      }
+    }
+  ],
+  "dispenseRequest": {
+    "validityPeriod": {
+      "start": "2015-01-15",
+      "end": "2016-01-15"
+    },
+    "numberOfRepeatsAllowed": 3,
+    "quantity": {
+      "value": 10,
+      "unit": "ml",
+      "system": "http://unitsofmeasure.org",
+      "code": "ml"
+    },
+    "expectedSupplyDuration": {
+      "value": 30,
+      "unit": "days",
+      "system": "http://unitsofmeasure.org",
+      "code": "d"
+    }
+  }
+}

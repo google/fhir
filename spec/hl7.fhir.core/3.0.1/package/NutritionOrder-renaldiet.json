@@ -1,0 +1,140 @@
+{
+  "resourceType": "NutritionOrder",
+  "id": "renaldiet",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: renaldiet</p><p><b>identifier</b>: 123</p><p><b>status</b>: active</p><p><b>patient</b>: <a>Peter Chalmers</a></p><p><b>encounter</b>: <a>Inpatient</a></p><p><b>dateTime</b>: 17/09/2014</p><p><b>orderer</b>: <a>Dr Adam Careful</a></p><p><b>allergyIntolerance</b>: <a>Cashew Nuts</a></p><p><b>foodPreferenceModifier</b>: Dairy Free <span>(Details : {http://hl7.org/fhir/diet code 'dairy-free' = 'Dairy Free)</span></p><p><b>excludeFoodModifier</b>: Cashew Nut <span>(Details : {SNOMED CT code '227493005' = 'Cashew nuts', given as 'Cashew Nut'})</span></p><blockquote><p><b>oralDiet</b></p><p><b>type</b>: Renal Diet <span>(Details : {SNOMED CT code '33489005' = 'Renal disease diet', given as 'Renal diet'}; {http://goodhealthhospital.org/diet-type-codes code '1050' = '1050', given as 'Renal'})</span></p><p><b>schedule</b>: Starting 10/02/2015, Do 3 per 1 days</p><blockquote><p><b>nutrient</b></p><p><b>modifier</b>: Sodium <span>(Details : {SNOMED CT code '39972003' = 'Sodium', given as 'Sodium'})</span></p><p><b>amount</b>: 2 grams<span> (Details: UCUM code g = 'g')</span></p></blockquote><blockquote><p><b>nutrient</b></p><p><b>modifier</b>: Phosphorus <span>(Details : {SNOMED CT code '30820000' = 'Phosphorus', given as 'Phosphorus'})</span></p><p><b>amount</b>: 1000 milligrams<span> (Details: UCUM code mg = 'mg')</span></p></blockquote><blockquote><p><b>nutrient</b></p><p><b>modifier</b>: Potassium <span>(Details : {SNOMED CT code '88480006' = 'Potassium', given as 'Potassium'})</span></p><p><b>amount</b>: 2 grams<span> (Details: UCUM code g = 'g')</span></p></blockquote></blockquote></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://goodhealthhospital.org/nutrition-requests",
+      "value": "123"
+    }
+  ],
+  "status": "active",
+  "patient": {
+    "reference": "Patient/example",
+    "display": "Peter Chalmers"
+  },
+  "encounter": {
+    "reference": "Encounter/example",
+    "display": "Inpatient"
+  },
+  "dateTime": "2014-09-17",
+  "orderer": {
+    "reference": "Practitioner/example",
+    "display": "Dr Adam Careful"
+  },
+  "allergyIntolerance": [
+    {
+      "reference": "AllergyIntolerance/example",
+      "display": "Cashew Nuts"
+    }
+  ],
+  "foodPreferenceModifier": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/diet",
+          "code": "dairy-free"
+        }
+      ]
+    }
+  ],
+  "excludeFoodModifier": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "version": "20140730",
+          "code": "227493005",
+          "display": "Cashew Nut"
+        }
+      ]
+    }
+  ],
+  "oralDiet": {
+    "type": [
+      {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "33489005",
+            "display": "Renal diet"
+          },
+          {
+            "system": "http://goodhealthhospital.org/diet-type-codes",
+            "code": "1050",
+            "display": "Renal"
+          }
+        ],
+        "text": "Renal Diet"
+      }
+    ],
+    "schedule": [
+      {
+        "repeat": {
+          "boundsPeriod": {
+            "start": "2015-02-10"
+          },
+          "frequency": 3,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      }
+    ],
+    "nutrient": [
+      {
+        "modifier": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "39972003",
+              "display": "Sodium"
+            }
+          ]
+        },
+        "amount": {
+          "value": 2,
+          "unit": "grams",
+          "system": "http://unitsofmeasure.org",
+          "code": "g"
+        }
+      },
+      {
+        "modifier": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "30820000",
+              "display": "Phosphorus"
+            }
+          ]
+        },
+        "amount": {
+          "value": 1000,
+          "unit": "milligrams",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg"
+        }
+      },
+      {
+        "modifier": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "88480006",
+              "display": "Potassium"
+            }
+          ]
+        },
+        "amount": {
+          "value": 2,
+          "unit": "grams",
+          "system": "http://unitsofmeasure.org",
+          "code": "g"
+        }
+      }
+    ]
+  }
+}

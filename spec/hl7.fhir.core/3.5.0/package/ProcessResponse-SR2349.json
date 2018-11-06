@@ -1,0 +1,54 @@
+{
+  "resourceType": "ProcessResponse",
+  "id": "SR2349",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the ProcessResponse</div>"
+  },
+  "identifier": [
+    {
+      "system": "http://www.BenefitsInc.com/fhir/processresponse",
+      "value": "ER987634"
+    }
+  ],
+  "status": "active",
+  "created": "2014-07-14",
+  "organization": {
+    "reference": "Organization/2"
+  },
+  "request": {
+    "reference": "http://happyvalley.com/fhir/claim/12204"
+  },
+  "outcome": "error",
+  "disposition": "Referred to claim not found on system.",
+  "requestProvider": {
+    "identifier": {
+      "system": "http://npid.org/providerid",
+      "value": "AZ43258"
+    }
+  },
+  "form": {
+    "coding": [
+      {
+        "system": "http://ncforms.org/formid",
+        "code": "PRRESP/2016/01"
+      }
+    ]
+  },
+  "processNote": [
+    {
+      "type": "print",
+      "text": "Please check the submitted payor identification and local claim number."
+    }
+  ],
+  "error": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/adjudication-error",
+          "code": "a001"
+        }
+      ]
+    }
+  ]
+}

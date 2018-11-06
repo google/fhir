@@ -1,0 +1,42 @@
+{
+  "resourceType": "ServiceDefinition",
+  "id": "infobutton",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Id: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">ServiceDefinition/infobutton</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Identifier: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <b>value: </b>\n                  <span>infobutton</span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Title: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">InfoButton Module</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Status: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">draft</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Description: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">The InfoButton specification defines a mechanism for retrieving relevant clinical context based a particular set of search criteria..</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Topic: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-right: 25px;\">\n                  <span style=\"padding-left: 25px;\">\n                     <b>text: </b>\n                     <span>InfoButton Module</span>\n                     <br/>\n                  </span>\n               </td>\n            </tr>\n         </table>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Topic: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-right: 25px;\">\n                  <span style=\"padding-left: 25px;\">\n                     <b>text: </b>\n                     <span>InfoButton</span>\n                     <br/>\n                  </span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Data Requirements: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <div>\n                     <p style=\"margin-top: 5px;\">\n                        <b>type: </b>\n                        <span>Patient</span>\n                     </p>\n                     <p style=\"margin-top: 5px;\">\n                        <b>must support: </b>\n                        <span>gender</span>\n                     </p>\n                     <p style=\"margin-top: 5px;\">\n                        <b>must support: </b>\n                        <span>birthDate</span>\n                     </p>\n                  </div>\n               </td>\n            </tr>\n         </table>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Data Requirements: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <div>\n                     <p style=\"margin-top: 5px;\">\n                        <b>type: </b>\n                        <span>Condition</span>\n                     </p>\n                  </div>\n               </td>\n            </tr>\n         </table>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Data Requirements: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <div>\n                     <p style=\"margin-top: 5px;\">\n                        <b>type: </b>\n                        <span>MedicationStatement</span>\n                     </p>\n                  </div>\n               </td>\n            </tr>\n         </table>\n      </div>"
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "value": "infobutton"
+    }
+  ],
+  "version": "1.0.0",
+  "title": "InfoButton Module",
+  "status": "draft",
+  "date": "2016-07-05",
+  "description": "The InfoButton specification defines a mechanism for retrieving relevant clinical context based a particular set of search criteria..",
+  "topic": [
+    {
+      "text": "InfoButton Module"
+    },
+    {
+      "text": "InfoButton"
+    }
+  ],
+  "dataRequirement": [
+    {
+      "type": "Patient",
+      "mustSupport": [
+        "gender",
+        "birthDate"
+      ]
+    },
+    {
+      "type": "Condition"
+    },
+    {
+      "type": "MedicationStatement"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+{"base":"Observation","code":"condition-gene","description":"HGNC gene symbol and assessed condition context","id":"observation-genetics-cg-prf-1a-Observation-condition-gene","name":"condition-gene","resourceType":"SearchParameter","type":"string","url":"http://hl7.org/fhir/SearchParameter/observation-genetics-cg-prf-1a-Observation-condition-gene","xpathUsage":"normal"}

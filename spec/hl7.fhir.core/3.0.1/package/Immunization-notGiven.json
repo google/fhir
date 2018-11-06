@@ -1,0 +1,37 @@
+{
+  "resourceType": "Immunization",
+  "id": "notGiven",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: notGiven</p><p><b>status</b>: completed</p><p><b>notGiven</b>: true</p><p><b>vaccineCode</b>: DTP <span>(Details : {http://hl7.org/fhir/sid/cvx code '01' = 'DTP', given as 'DTP'})</span></p><p><b>patient</b>: <a>Patient/example</a></p><p><b>date</b>: 10/01/2013</p><p><b>primarySource</b>: true</p><h3>Explanations</h3><table><tr><td>-</td><td><b>ReasonNotGiven</b></td></tr><tr><td>*</td><td>medical precaution <span>(Details : {http://hl7.org/fhir/v3/ActReason code 'MEDPREC' = 'medical precaution', given as 'medical precaution'})</span></td></tr></table></div>"
+  },
+  "status": "completed",
+  "notGiven": true,
+  "vaccineCode": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/sid/cvx",
+        "code": "01",
+        "display": "DTP"
+      }
+    ]
+  },
+  "patient": {
+    "reference": "Patient/example"
+  },
+  "date": "2013-01-10",
+  "primarySource": true,
+  "explanation": {
+    "reasonNotGiven": [
+      {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v3/ActReason",
+            "code": "MEDPREC",
+            "display": "medical precaution"
+          }
+        ]
+      }
+    ]
+  }
+}

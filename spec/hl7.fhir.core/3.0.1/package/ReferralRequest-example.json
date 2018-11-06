@@ -1,0 +1,94 @@
+{
+  "resourceType": "ReferralRequest",
+  "id": "example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Referral to Dr Dave for Beverly weaver to have grommets inserted in her r) ear</div>"
+  },
+  "identifier": [
+    {
+      "system": "http://orionhealth.com/fhir/apps/referralids",
+      "value": "ret4421"
+    }
+  ],
+  "definition": [
+    {
+      "display": "Protocol for insertion of tympanic ventilation tube"
+    }
+  ],
+  "basedOn": [
+    {
+      "display": "ProcedureRequest for Myringotomy and insertion of tympanic ventilation tube"
+    }
+  ],
+  "replaces": [
+    {
+      "display": "prior ReferralRequest"
+    }
+  ],
+  "groupIdentifier": {
+    "value": "1234"
+  },
+  "status": "active",
+  "intent": "order",
+  "type": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "103696004",
+        "display": "Patient referral to specialist"
+      }
+    ]
+  },
+  "priority": "routine",
+  "serviceRequested": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "172676009",
+          "display": "Myringotomy and insertion of tympanic ventilation tube"
+        }
+      ],
+      "text": "Insertion of grommets"
+    }
+  ],
+  "subject": {
+    "reference": "https://fhir.orionhealth.com/blaze/fhir/Patient/77662",
+    "display": "Beverly Weaver"
+  },
+  "context": {
+    "display": "Beverly Waver's encounter on 2014-02-14"
+  },
+  "occurrencePeriod": {
+    "end": "2014-03-14"
+  },
+  "authoredOn": "2014-02-14",
+  "requester": {
+    "agent": {
+      "reference": "https://fhir.orionhealth.com/blaze/fhir/Practitioner/77272",
+      "display": "Serena Shrink"
+    }
+  },
+  "specialty": {
+    "coding": [
+      {
+        "system": "http://orionhealth.com/fhir/apps/specialties",
+        "code": "ent",
+        "display": "ENT"
+      }
+    ]
+  },
+  "recipient": [
+    {
+      "reference": "https://fhir.orionhealth.com/blaze/fhir/Practitioner/76597",
+      "display": "Dr Dave"
+    }
+  ],
+  "reasonCode": [
+    {
+      "text": "For consideration of Grommets"
+    }
+  ],
+  "description": "In the past 2 years Beverly has had 6 instances of r) sided Otitis media. She is     falling behind her peers at school, and displaying some learning difficulties."
+}

@@ -1,0 +1,14 @@
+{
+  "name": "hl7.fhir.core",
+  "version": "1.0.2",
+  "license": "CC0-1.0",
+  "canonical": "http://hl7.org/fhir",
+  "title": "FHIR Core package",
+  "description": "FHIR Core package - the NPM package that contains all the definitions for the base FHIR specification",
+  "dependencies": {
+    "hl7.fhir.core": "1.0.2"
+  },
+  "author": "HL7 Inc",
+  "url": "http://hl7.org/fhir/DSTU2",
+  "tools-version" : 3
+}

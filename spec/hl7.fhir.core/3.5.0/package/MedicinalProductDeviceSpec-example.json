@@ -1,0 +1,136 @@
+{
+  "resourceType": "MedicinalProductDeviceSpec",
+  "id": "example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>identifier</b>: Device.DeviceIdentifier.extension</p><p><b>type</b>: {Device.DeviceType} <span>(Details : {http://ema.europa.eu/example/deviceType code '{Device.DeviceType}' = '{Device.DeviceType})</span></p><p><b>tradeName</b>: Device Trade Name</p><p><b>quantity</b>: 2 1</p><p><b>listingNumber</b>: Device.DeviceListingNumber</p><p><b>modelNumber</b>: Device.ModelNumber</p><p><b>sterilityIndicator</b>: {Device.SterilityIndicator} <span>(Details : {http://ema.europa.eu/example/deviceSterilityIndicator code '{Device.SterilityIndicator}' = '{Device.SterilityIndicator})</span></p><p><b>sterilisationRequirement</b>: {Device.SterilisationRequirementIndicator} <span>(Details : {http://ema.europa.eu/example/deviceSterilisationRequirementIndicator code '{Device.SterilisationRequirementIndicator}' = '{Device.SterilisationRequirementIndicator})</span></p><p><b>usage</b>: {Device.DeviceUsage} <span>(Details : {http://ema.europa.eu/example/deviceUsage code '{Device.DeviceUsage}' = '{Device.DeviceUsage})</span></p><p><b>nomenclature</b>: {DeviceNomenclature.NomenclatureValue} <span>(Details : {http://ema.europa.eu/example/deviceNomenclatureNomenclature code '{DeviceNomenclature.NomenclatureValue}' = '{DeviceNomenclature.NomenclatureValue})</span></p><p><b>physicalCharacteristics</b>: </p><p><b>Exception generating Narrative: Unknown type ProdCharacteristic</b></p></div>"
+  },
+  "identifier": {
+    "system": "http://ema.europa.eu/example/DeviceDeviceIdentifierRoot",
+    "value": "Device.DeviceIdentifier.extension"
+  },
+  "type": {
+    "coding": [
+      {
+        "system": "http://ema.europa.eu/example/deviceType",
+        "code": "{Device.DeviceType}"
+      }
+    ]
+  },
+  "tradeName": "Device Trade Name",
+  "quantity": {
+    "value": 2,
+    "unit": "1"
+  },
+  "listingNumber": "Device.DeviceListingNumber",
+  "modelNumber": "Device.ModelNumber",
+  "sterilityIndicator": {
+    "coding": [
+      {
+        "system": "http://ema.europa.eu/example/deviceSterilityIndicator",
+        "code": "{Device.SterilityIndicator}"
+      }
+    ]
+  },
+  "sterilisationRequirement": {
+    "coding": [
+      {
+        "system": "http://ema.europa.eu/example/deviceSterilisationRequirementIndicator",
+        "code": "{Device.SterilisationRequirementIndicator}"
+      }
+    ]
+  },
+  "usage": {
+    "coding": [
+      {
+        "system": "http://ema.europa.eu/example/deviceUsage",
+        "code": "{Device.DeviceUsage}"
+      }
+    ]
+  },
+  "nomenclature": [
+    {
+      "coding": [
+        {
+          "system": "http://ema.europa.eu/example/deviceNomenclatureNomenclature",
+          "code": "{DeviceNomenclature.NomenclatureValue}"
+        }
+      ]
+    }
+  ],
+  "physicalCharacteristics": {
+    "height": {
+      "value": 99,
+      "unit": "mm"
+    },
+    "width": {
+      "value": 100,
+      "unit": "mm"
+    },
+    "depth": {
+      "value": 10,
+      "unit": "mm"
+    },
+    "weight": {
+      "value": 100,
+      "unit": "g"
+    },
+    "nominalVolume": {
+      "value": 100,
+      "unit": "cm3"
+    },
+    "externalDiameter": {
+      "value": 100,
+      "unit": "mm"
+    },
+    "shape": "{PhysicalCharacteristic.Shape}",
+    "color": [
+      "{PhysicalCharacteristic.Colour}"
+    ],
+    "imprint": [
+      "{PhysicalCharacteristic.Imprint}"
+    ],
+    "scoring": {
+      "coding": [
+        {
+          "system": "http://ema.europa.eu/example/physicalCharacteristicScoring",
+          "code": "{PhysicalCharacteristic.Scoring}"
+        }
+      ]
+    }
+  },
+  "batchIdentifier": [
+    {
+      "value": "Device-BatchNumber",
+      "period": {
+        "end": "2020-02-02"
+      }
+    }
+  ],
+  "material": [
+    {
+      "substance": {
+        "coding": [
+          {
+            "system": "http://ema.europa.eu/example/deviceMaterial",
+            "code": "{Device.Material}"
+          }
+        ]
+      },
+      "alternate": true,
+      "allergenicIndicator": false
+    },
+    {
+      "substance": {
+        "coding": [
+          {
+            "system": "http://ema.europa.eu/example/deviceMaterial",
+            "code": "{Device.Material}"
+          }
+        ]
+      },
+      "alternate": false,
+      "allergenicIndicator": true
+    }
+  ]
+}

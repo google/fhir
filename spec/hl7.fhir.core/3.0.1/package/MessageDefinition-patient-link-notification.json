@@ -1,0 +1,97 @@
+{
+  "resourceType": "MessageDefinition",
+  "id": "patient-link-notification",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Link Patients Notification</div>"
+  },
+  "url": "http://hl7.org/fhir/MessageDefinition/patient-link-notification",
+  "identifier": {
+    "system": "urn:ietf:rfc:3986",
+    "value": "urn:oid:1.3.6.1.4.1.21367.2005.3.7.9878"
+  },
+  "version": "1",
+  "name": "PATIENT-LINK-NOTIFICATION",
+  "title": "Link Patients Notification",
+  "status": "draft",
+  "experimental": true,
+  "date": "2017-02-03",
+  "publisher": "Health Level Seven, Int'l",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://hl7.org"
+        }
+      ]
+    }
+  ],
+  "description": "Notification of two patient records that represent the same individual that require an established linkage.",
+  "useContext": [
+    {
+      "code": {
+        "system": "http://hl7.org/fhir/usage-context-type",
+        "code": "focus"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/variant-state",
+            "code": "positive"
+          }
+        ]
+      }
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "US",
+          "display": "United States of America (the)"
+        }
+      ]
+    }
+  ],
+  "purpose": "Notifies recipient systems that two patients have been 'linked' - meaning they represent the same individual",
+  "copyright": "� HL7.org 2011+",
+  "base": {
+    "reference": "MessageDefinition/example"
+  },
+  "parent": [
+    {
+      "reference": "ActivityDefinition/example"
+    }
+  ],
+  "replaces": [
+    {
+      "reference": "MessageDefinition/example"
+    }
+  ],
+  "event": {
+    "system": "http://hl7.org/fhir/message-events",
+    "code": "patient-link"
+  },
+  "category": "Notification",
+  "focus": [
+    {
+      "code": "Patient",
+      "profile": {
+        "reference": "StructureDefinition/example"
+      },
+      "min": 2,
+      "max": "2"
+    }
+  ],
+  "responseRequired": false,
+  "allowedResponse": [
+    {
+      "message": {
+        "reference": "MessageDefinition/patient-link-response"
+      },
+      "situation": "Optional response message that may provide additional information"
+    }
+  ]
+}

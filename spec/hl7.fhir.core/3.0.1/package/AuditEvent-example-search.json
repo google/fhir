@@ -1,0 +1,83 @@
+{
+  "resourceType": "AuditEvent",
+  "id": "example-search",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-search</p><p><b>type</b>: Restful Operation (Details: http://hl7.org/fhir/audit-event-type code rest = 'RESTful Operation', stated as 'Restful Operation')</p><p><b>subtype</b>: search (Details: http://hl7.org/fhir/restful-interaction code search = 'search', stated as 'search')</p><p><b>action</b>: E</p><p><b>recorded</b>: 22/08/2015 11:42:24 PM</p><p><b>outcome</b>: 0</p><blockquote><p><b>agent</b></p><p><b>userId</b>: 95</p><p><b>altId</b>: 601847123</p><p><b>name</b>: Grahame Grieve</p><p><b>requestor</b>: true</p></blockquote><blockquote><p><b>agent</b></p><p><b>role</b>: Source Role ID <span>(Details : {DICOM code '110153' = 'Source Role ID', given as 'Source Role ID'})</span></p><p><b>userId</b>: 2.16.840.1.113883.4.2|2.16.840.1.113883.4.2</p><p><b>altId</b>: 6580</p><p><b>requestor</b>: false</p><h3>Networks</h3><table><tr><td>-</td><td><b>Address</b></td><td><b>Type</b></td></tr><tr><td>*</td><td>Workstation1.ehr.familyclinic.com</td><td>1</td></tr></table></blockquote><h3>Sources</h3><table><tr><td>-</td><td><b>Site</b></td><td><b>Identifier</b></td><td><b>Type</b></td></tr><tr><td>*</td><td>Cloud</td><td>hl7connect.healthintersections.com.au</td><td>Web Server (Details: http://hl7.org/fhir/security-source-type code 3 = 'Web Server', stated as 'Web Server')</td></tr></table><h3>Entities</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Role</b></td><td><b>Query</b></td></tr><tr><td>*</td><td>System Object (Details: http://hl7.org/fhir/object-type code 2 = '2', stated as 'System Object')</td><td>Query (Details: http://hl7.org/fhir/object-role code 24 = 'Query', stated as 'Query')</td><td>aHR0cDovL2ZoaXItZGV2LmhlYWx0aGludGVyc2VjdGlvbnMuY29tLmF1L29wZW4vRW5jb3VudGVyP3BhcnRpY2lwYW50PTEz</td></tr></table></div>"
+  },
+  "type": {
+    "system": "http://hl7.org/fhir/audit-event-type",
+    "code": "rest",
+    "display": "Restful Operation"
+  },
+  "subtype": [
+    {
+      "system": "http://hl7.org/fhir/restful-interaction",
+      "code": "search",
+      "display": "search"
+    }
+  ],
+  "action": "E",
+  "recorded": "2015-08-22T23:42:24Z",
+  "outcome": "0",
+  "agent": [
+    {
+      "userId": {
+        "value": "95"
+      },
+      "altId": "601847123",
+      "name": "Grahame Grieve",
+      "requestor": true
+    },
+    {
+      "role": [
+        {
+          "coding": [
+            {
+              "system": "http://dicom.nema.org/resources/ontology/DCM",
+              "code": "110153",
+              "display": "Source Role ID"
+            }
+          ]
+        }
+      ],
+      "userId": {
+        "value": "2.16.840.1.113883.4.2|2.16.840.1.113883.4.2"
+      },
+      "altId": "6580",
+      "requestor": false,
+      "network": {
+        "address": "Workstation1.ehr.familyclinic.com",
+        "type": "1"
+      }
+    }
+  ],
+  "source": {
+    "site": "Cloud",
+    "identifier": {
+      "value": "hl7connect.healthintersections.com.au"
+    },
+    "type": [
+      {
+        "system": "http://hl7.org/fhir/security-source-type",
+        "code": "3",
+        "display": "Web Server"
+      }
+    ]
+  },
+  "entity": [
+    {
+      "type": {
+        "system": "http://hl7.org/fhir/object-type",
+        "code": "2",
+        "display": "System Object"
+      },
+      "role": {
+        "system": "http://hl7.org/fhir/object-role",
+        "code": "24",
+        "display": "Query"
+      },
+      "query": "aHR0cDovL2ZoaXItZGV2LmhlYWx0aGludGVyc2VjdGlvbnMuY29tLmF1L29wZW4vRW5jb3VudGVyP3BhcnRpY2lwYW50PTEz"
+    }
+  ]
+}

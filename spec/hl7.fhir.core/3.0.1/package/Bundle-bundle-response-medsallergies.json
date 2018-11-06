@@ -1,0 +1,5 @@
+{
+  "resourceType": "Bundle",
+  "id": "bundle-response-medsallergies",
+  "type": "batch-response"
+}

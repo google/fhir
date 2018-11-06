@@ -1,0 +1,1 @@
+{"created":"2014-08-16","id":"52345","identifier":[{"system":"http://happyvalley.com/elegibilityrequest","value":"52345"}],"organization":{"reference":"Organization/2"},"resourceType":"EligibilityRequest","text":{"div":"<div>A human-readable rendering of the EligibilityRequest</div>","status":"generated"}}

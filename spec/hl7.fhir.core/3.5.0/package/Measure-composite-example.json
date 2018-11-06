@@ -1,0 +1,34 @@
+{
+  "resourceType": "Measure",
+  "id": "composite-example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Behavioral Assessment Composite Measure\n    <p>This measure example is used to illustrate how a composite measure can be constructured. This measure is a composite measure of the Screening for Alcohol Misuse and Screening for Depression measures.</p></div>"
+  },
+  "title": "Behavioral Assessment Composite Measure",
+  "status": "draft",
+  "relatedArtifact": [
+    {
+      "type": "composed-of",
+      "resource": "Measure/component-a-example"
+    },
+    {
+      "type": "composed-of",
+      "resource": "Measure/component-b-example"
+    }
+  ],
+  "scoring": {
+    "coding": [
+      {
+        "code": "proportion"
+      }
+    ]
+  },
+  "compositeScoring": {
+    "coding": [
+      {
+        "code": "opportunity"
+      }
+    ]
+  }
+}

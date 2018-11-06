@@ -1,0 +1,103 @@
+{
+  "resourceType": "NutritionOrder",
+  "id": "pureeddiet-simple",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: pureeddiet-simple</p><p><b>identifier</b>: 123</p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>patient</b>: <a>Peter Chalmers</a></p><p><b>dateTime</b>: 17/09/2014</p><p><b>orderer</b>: <a>Dr Adam Careful</a></p><blockquote><p><b>oralDiet</b></p><p><b>type</b>: Pureed diet <span>(Details : {SNOMED CT code '226211001' = 'Pureed diet', given as 'Pureed diet'}; {http://goodhealthhospital.org/diet-type-codes code '1010' = '1010', given as 'Pureed diet'})</span></p><p><b>schedule</b>: Starting 10/02/2015, Do 3 per 1 days</p><h3>Textures</h3><table><tr><td>-</td><td><b>Modifier</b></td></tr><tr><td>*</td><td>Pureed <span>(Details : {SNOMED CT code '228055009' = 'Liquidized food', given as 'Liquidized food'})</span></td></tr></table><p><b>fluidConsistencyType</b>: Nectar thick liquids <span>(Details : {SNOMED CT code '439021000124105' = 'Dietary liquid consistency - nectar thick liquid (regime/therapy)', given as 'Dietary liquid consistency - nectar thick liquid'})</span></p></blockquote><h3>Supplements</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>ProductName</b></td><td><b>Instruction</b></td></tr><tr><td>*</td><td>Adult high energy pudding <span>(Details : {SNOMED CT code '442971000124100' = 'Adult high energy formula (product)', given as 'Adult high energy formula'}; {http://goodhealthhospital.org/supplement-type-codes code '1040' = '1040', given as 'Adult high energy pudding'})</span></td><td>Ensure Pudding 4 oz container</td><td>Ensure Pudding at breakfast, lunch, supper</td></tr></table></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://goodhealthhospital.org/nutrition-requests",
+      "value": "123"
+    }
+  ],
+  "status": "active",
+  "intent": "order",
+  "patient": {
+    "reference": "Patient/example",
+    "display": "Peter Chalmers"
+  },
+  "dateTime": "2014-09-17",
+  "orderer": {
+    "reference": "Practitioner/example",
+    "display": "Dr Adam Careful"
+  },
+  "oralDiet": {
+    "type": [
+      {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "226211001",
+            "display": "Pureed diet"
+          },
+          {
+            "system": "http://goodhealthhospital.org/diet-type-codes",
+            "code": "1010",
+            "display": "Pureed diet"
+          }
+        ],
+        "text": "Pureed diet"
+      }
+    ],
+    "schedule": [
+      {
+        "repeat": {
+          "boundsPeriod": {
+            "start": "2015-02-10"
+          },
+          "frequency": 3,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      }
+    ],
+    "texture": [
+      {
+        "modifier": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "228055009",
+              "display": "Liquidized food"
+            }
+          ],
+          "text": "Pureed"
+        }
+      }
+    ],
+    "fluidConsistencyType": [
+      {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "439021000124105",
+            "display": "Dietary liquid consistency - nectar thick liquid"
+          }
+        ],
+        "text": "Nectar thick liquids"
+      }
+    ]
+  },
+  "supplement": [
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "442971000124100",
+            "display": "Adult high energy formula"
+          },
+          {
+            "system": "http://goodhealthhospital.org/supplement-type-codes",
+            "code": "1040",
+            "display": "Adult high energy pudding"
+          }
+        ],
+        "text": "Adult high energy pudding"
+      },
+      "productName": "Ensure Pudding 4 oz container",
+      "instruction": "Ensure Pudding at breakfast, lunch, supper"
+    }
+  ]
+}

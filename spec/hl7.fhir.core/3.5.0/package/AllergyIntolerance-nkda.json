@@ -1,0 +1,27 @@
+{
+  "resourceType": "AllergyIntolerance",
+  "id": "nkda",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>No Known Drug Allergy</p>\n      <p>recordedDate:2015-08-06</p>\n    </div>"
+  },
+  "clinicalStatus": "active",
+  "verificationStatus": "confirmed",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "409137002",
+        "display": "No Known Drug Allergy (situation)"
+      }
+    ],
+    "text": "NKDA"
+  },
+  "patient": {
+    "reference": "Patient/mom"
+  },
+  "recordedDate": "2015-08-06T15:37:31-06:00",
+  "recorder": {
+    "reference": "Practitioner/example"
+  }
+}

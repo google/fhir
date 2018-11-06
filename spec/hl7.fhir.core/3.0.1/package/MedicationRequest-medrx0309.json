@@ -1,0 +1,85 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx0309",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medrx0309</p><p><b>contained</b>: </p><p><b>identifier</b>: 12345689 (OFFICIAL)</p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>medication</b>: id: med0321; Capecitabine (product) <span>(Details : {SNOMED CT code '108761006' = 'Capecitabine', given as 'Capecitabine (product)'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>context</b>: <a>encounter who leads to this prescription</a></p><p><b>authoredOn</b>: 15/01/2015</p><h3>Requesters</h3><table><tr><td>-</td><td><b>Agent</b></td><td><b>OnBehalfOf</b></td></tr><tr><td>*</td><td><a>Patrick Pump</a></td><td><a>Organization/f002</a></td></tr></table><p><b>dosageInstruction</b>: </p></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Medication",
+      "id": "med0321",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "108761006",
+            "display": "Capecitabine (product)"
+          }
+        ]
+      }
+    }
+  ],
+  "identifier": [
+    {
+      "use": "official",
+      "system": "http://www.bmc.nl/portal/prescriptions",
+      "value": "12345689"
+    }
+  ],
+  "status": "active",
+  "intent": "order",
+  "medicationReference": {
+    "reference": "#med0321"
+  },
+  "subject": {
+    "reference": "Patient/pat1",
+    "display": "Donald Duck"
+  },
+  "context": {
+    "reference": "Encounter/f001",
+    "display": "encounter who leads to this prescription"
+  },
+  "authoredOn": "2015-01-15",
+  "requester": {
+    "agent": {
+      "reference": "Practitioner/f007",
+      "display": "Patrick Pump"
+    },
+    "onBehalfOf": {
+      "reference": "Organization/f002"
+    }
+  },
+  "dosageInstruction": [
+    {
+      "sequence": 1,
+      "text": "1000 mg/m2 orally twice daily from days 1-14 of cycle",
+      "timing": {
+        "repeat": {
+          "boundsPeriod": {
+            "start": "2016-01-22",
+            "end": "2016-02-04"
+          },
+          "frequency": 1,
+          "period": 2,
+          "periodUnit": "d"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "26643006",
+            "display": "Oral Route"
+          }
+        ]
+      },
+      "doseQuantity": {
+        "value": 1000,
+        "unit": "mg/m2",
+        "system": "http://unitsofmeasure.org",
+        "code": "mg/m2"
+      }
+    }
+  ]
+}

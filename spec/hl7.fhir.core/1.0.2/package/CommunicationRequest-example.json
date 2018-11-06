@@ -1,0 +1,1 @@
+{"id":"example","resourceType":"CommunicationRequest","subject":{"reference":"Patient/example"},"text":{"div":"<div>To be filled out at a later time</div>","status":"generated"}}

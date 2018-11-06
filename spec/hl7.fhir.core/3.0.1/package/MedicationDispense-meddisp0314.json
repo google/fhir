@@ -1,0 +1,155 @@
+{
+  "resourceType": "MedicationDispense",
+  "id": "meddisp0314",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: meddisp0314</p><p><b>contained</b>: </p><p><b>status</b>: completed</p><p><b>medication</b>: id: med0313; Lorazepam 2mg/ml Injectable Solution (Ativan) <span>(Details : {RxNorm code '206819' = '206819', given as 'Lorazepam 2mg/ml Injectable Solution (Ativan)'})</span>; isBrand; Injection solution (qualifier value) <span>(Details : {SNOMED CT code '385219001' = 'Injection solution', given as 'Injection solution (qualifier value)'})</span></p><p><b>subject</b>: <a>Donald Duck </a></p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td><td><b>OnBehalfOf</b></td></tr><tr><td>*</td><td><a>Practitioner/f006</a></td><td><a>Organization/2.16.840.1.113883.19.5</a></td></tr></table><p><b>authorizingPrescription</b>: <a>MedicationRequest/medrx0315</a></p><p><b>type</b>: Trial Fill <span>(Details : {http://hl7.org/fhir/v3/ActCode code 'TF' = 'Trial Fill', given as 'Trial Fill'})</span></p><p><b>quantity</b>: 1 415818005<span> (Details: SNOMED CT code 415818005 = '415818005')</span></p><p><b>daysSupply</b>: 1 Day<span> (Details: UCUM code d = 'd')</span></p><p><b>whenPrepared</b>: 25/06/2015 7:13:00 AM</p><p><b>whenHandedOver</b>: 26/06/2015 7:13:00 AM</p><p><b>dosageInstruction</b>: </p></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Medication",
+      "id": "med0313",
+      "code": {
+        "coding": [
+          {
+            "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+            "code": "206819",
+            "display": "Lorazepam 2mg/ml Injectable Solution (Ativan)"
+          }
+        ]
+      },
+      "isBrand": true,
+      "form": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "385219001",
+            "display": "Injection solution (qualifier value)"
+          }
+        ]
+      },
+      "ingredient": [
+        {
+          "itemCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "387106007",
+                "display": "Lorazepam (substance)"
+              }
+            ]
+          },
+          "amount": {
+            "numerator": {
+              "value": 2,
+              "system": "http://unitsofmeasure.org",
+              "code": "mg"
+            },
+            "denominator": {
+              "value": 1,
+              "system": "http://unitsofmeasure.org",
+              "code": "mL"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "status": "completed",
+  "medicationReference": {
+    "reference": "#med0313"
+  },
+  "subject": {
+    "reference": "Patient/pat1",
+    "display": "Donald Duck "
+  },
+  "performer": [
+    {
+      "actor": {
+        "reference": "Practitioner/f006"
+      },
+      "onBehalfOf": {
+        "reference": "Organization/2.16.840.1.113883.19.5"
+      }
+    }
+  ],
+  "authorizingPrescription": [
+    {
+      "reference": "MedicationRequest/medrx0315"
+    }
+  ],
+  "type": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v3/ActCode",
+        "code": "TF",
+        "display": "Trial Fill"
+      }
+    ]
+  },
+  "quantity": {
+    "value": 1,
+    "system": "http://snomed.info/sct",
+    "code": "415818005"
+  },
+  "daysSupply": {
+    "value": 1,
+    "unit": "Day",
+    "system": "http://unitsofmeasure.org",
+    "code": "d"
+  },
+  "whenPrepared": "2015-06-25T07:13:00+05:00",
+  "whenHandedOver": "2015-06-26T07:13:00+05:00",
+  "dosageInstruction": [
+    {
+      "sequence": 1,
+      "text": "7mg IV over 2-5 minutes every 15 minutes as needed",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 15,
+          "periodUnit": "min"
+        }
+      },
+      "asNeededBoolean": true,
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "255560000",
+            "display": "Intravenous"
+          }
+        ]
+      },
+      "method": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "420620005",
+            "display": "Push - dosing instruction imperative (qualifier value)"
+          }
+        ]
+      },
+      "doseQuantity": {
+        "value": 7,
+        "unit": "mg",
+        "system": "http://unitsofmeasure.org",
+        "code": "mg"
+      },
+      "rateRange": {
+        "low": {
+          "value": 2,
+          "unit": "min",
+          "system": "http://unitsofmeasure.org",
+          "code": "min"
+        },
+        "high": {
+          "value": 5,
+          "unit": "min",
+          "system": "http://unitsofmeasure.org",
+          "code": "min"
+        }
+      }
+    }
+  ]
+}

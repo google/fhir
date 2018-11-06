@@ -1,0 +1,1 @@
+{"base":"Patient","code":"city","description":"Return records where one of the patient addresses matches on city.","id":"patient-extensions-Patient-city","name":"city","resourceType":"SearchParameter","type":"string","url":"http://hl7.org/fhir/SearchParameter/patient-extensions-Patient-city","xpath":"f:Patient/f:address/f:city","xpathUsage":"normal"}

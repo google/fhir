@@ -1,0 +1,1 @@
+{"code":"keyword","id":"valueset-extensions-ValueSet-keyword","name":"keyword","resourceType":"SearchParameter","type":"string","url":"http://hl7.org/fhir/SearchParameter/valueset-extensions-ValueSet-keyword","xpath":"f:ValueSet/f:extension[@url='http://hl7.org/fhir/StructureDefinition/valueset-keyWord']","xpathUsage":"normal"}

@@ -1,0 +1,1 @@
+{"date":"2012-12-28T13:10:56+11:00","fulfillment":[{"reference":"DiagnosticReport/101"}],"id":"example","orderStatus":"completed","request":{"reference":"Order/example"},"resourceType":"OrderResponse","text":{"div":"<div>Lab Report completed at 13:10 28-Dec 2012</div>","status":"generated"},"who":{"reference":"Organization/1832473e-2fe0-452d-abe9-3cdb9879522f"}}

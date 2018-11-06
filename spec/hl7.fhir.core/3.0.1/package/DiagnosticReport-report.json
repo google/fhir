@@ -1,0 +1,349 @@
+{
+  "resourceType": "DiagnosticReport",
+  "id": "report",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: report</p><p><b>contained</b>: , , , , , , , , , , , , </p><p><b>status</b>: final</p><p><b>code</b>: comprehensive bone marrow report <span>(Details )</span></p><p><b>subject</b>: <a>Everywoman, Eve A, MRN: 123456789</a></p><p><b>effective</b>: 02/01/2015 1:20:10 PM</p><p><b>issued</b>: 06/01/2015 1:20:10 PM</p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Molecular Diagnostic Laboratory</a></td></tr></table><p><b>specimen</b>: <a>Bone marrow ID: MLD45-Z4-1234</a></p><p><b>result</b>: </p><ul><li>id: o1; status: final; Leukocytes [#/volume] in Blood <span>(Details : {LOINC code '26464-8' = 'Leukocytes [#/volume] in Blood', given as 'Leukocytes [#/volume] in Blood'})</span>; 31.9 K/ul</li><li>id: o2; status: final; Hematocrit [Volume Fraction] of Blood <span>(Details : {LOINC code '20570-8' = 'Hematocrit [Volume Fraction] of Blood', given as 'Hematocrit [Volume Fraction] of Blood'})</span>; 27 %</li><li>id: o3; status: final; Platelets [#/volume] in Blood <span>(Details : {LOINC code '26515-7' = 'Platelets [#/volume] in Blood', given as 'Platelets [#/volume] in Blood'})</span>; 84 K/ul</li><li>id: o4; status: final; NPM1 gene mutations found [Identifier] in Bone marrow by Molecular genetics method Nominal <span>(Details : {LOINC code '75034-9' = 'NPM1 gene mutations found [Identifier] in Bone marrow by Molecular genetics method Nominal', given as 'NPM1 gene mutations found [Identifier] in Bone marrow by Molecular genetics method Nominal'})</span>; Positive <span>(Details : {SNOMED CT code '10828004' = 'Positive', given as 'Positive'})</span></li><li>id: o5; status: final; FLT3 gene mutation analysis in Bone marrow by Molecular genetics method Narrative <span>(Details : {LOINC code '54447-8' = 'FLT3 gene mutation analysis in Bone marrow by Molecular genetics method Narrative', given as 'FLT3 gene mutation analysis in Bone marrow by Molecular genetics method Narrative'})</span>; Negative <span>(Details : {SNOMED CT code '260385009' = 'Negative', given as 'Negative'})</span></li><li>id: o6; status: final; KIT gene mutation analysis in Bone marrow by Molecular genetics method Narrative <span>(Details : {LOINC code '55201-8' = 'KIT gene mutation analysis in Blood or Tissue by Molecular genetics method Narrative', given as 'KIT gene mutation analysis in Bone marrow by Molecular genetics method Narrative'})</span>; Negative <span>(Details : {SNOMED CT code '260385009' = 'Negative', given as 'Negative'})</span></li><li>id: o7; status: final; Myeloblasts [#/volume] in Blood <span>(Details : {LOINC code '30444-4' = 'Myeloblasts [#/volume] in Blood', given as 'Myeloblasts [#/volume] in Blood'})</span>; Positive <span>(Details : {SNOMED CT code '10828004' = 'Positive', given as 'Positive'})</span></li><li>id: o8; status: final; CD4 Ag [Presence] in Tissue by Immune stain <span>(Details : {LOINC code '47016-1' = 'CD4 Ag [Presence] in Tissue by Immune stain', given as 'CD4 Ag [Presence] in Tissue by Immune stain'})</span>; Positive <span>(Details : {SNOMED CT code '10828004' = 'Positive', given as 'Positive'})</span></li><li>id: o9; status: final; CD13 Ag [Presence] in Tissue by Immune stain <span>(Details : {LOINC code '49464-1' = 'CD13 Ag [Presence] in Tissue by Immune stain', given as 'CD13 Ag [Presence] in Tissue by Immune stain'})</span>; Positive <span>(Details : {SNOMED CT code '10828004' = 'Positive', given as 'Positive'})</span></li><li>id: o10; status: final; CD2 Ag [Presence] in Tissue by Immune stain <span>(Details : {LOINC code '49466-6' = 'CD2 Ag [Presence] in Tissue by Immune stain', given as 'CD2 Ag [Presence] in Tissue by Immune stain'})</span>; Negative <span>(Details : {SNOMED CT code '260385009' = 'Negative', given as 'Negative'})</span></li><li>id: o11; status: final; Karyotype [Identifier] in Bone marrow Nominal <span>(Details : {LOINC code '33893-9' = 'Karyotype [Identifier] in Bone marrow Nominal', given as 'Karyotype [Identifier] in Bone marrow Nominal'})</span>; 46,XX[20] <span>(Details )</span></li><li>id: o12; status: final; MDS-associated genetic abnormalities <span>(Details )</span>; Negative <span>(Details : {SNOMED CT code '260385009' = 'Negative', given as 'Negative'})</span></li><li>id: o13; status: final; AML-associated genetic abnormalities <span>(Details )</span>; Negative <span>(Details : {SNOMED CT code '260385009' = 'Negative', given as 'Negative'})</span></li></ul></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Observation",
+      "id": "o1",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "26464-8",
+            "display": "Leukocytes [#/volume] in Blood"
+          }
+        ]
+      },
+      "valueQuantity": {
+        "value": 31.9,
+        "unit": "K/ul"
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o2",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "20570-8",
+            "display": "Hematocrit [Volume Fraction] of Blood"
+          }
+        ]
+      },
+      "valueQuantity": {
+        "value": 27,
+        "unit": "%"
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o3",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "26515-7",
+            "display": "Platelets [#/volume] in Blood"
+          }
+        ]
+      },
+      "valueQuantity": {
+        "value": 84,
+        "unit": "K/ul"
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o4",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "75034-9",
+            "display": "NPM1 gene mutations found [Identifier] in Bone marrow by Molecular genetics method Nominal"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "10828004",
+            "display": "Positive"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o5",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "54447-8",
+            "display": "FLT3 gene mutation analysis in Bone marrow by Molecular genetics method Narrative"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "260385009",
+            "display": "Negative"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o6",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "55201-8",
+            "display": "KIT gene mutation analysis in Bone marrow by Molecular genetics method Narrative"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "260385009",
+            "display": "Negative"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o7",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "30444-4",
+            "display": "Myeloblasts [#/volume] in Blood"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "10828004",
+            "display": "Positive"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o8",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "47016-1",
+            "display": "CD4 Ag [Presence] in Tissue by Immune stain"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "10828004",
+            "display": "Positive"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o9",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "49464-1",
+            "display": "CD13 Ag [Presence] in Tissue by Immune stain"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "10828004",
+            "display": "Positive"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o10",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "49466-6",
+            "display": "CD2 Ag [Presence] in Tissue by Immune stain"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "260385009",
+            "display": "Negative"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o11",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "33893-9",
+            "display": "Karyotype [Identifier] in Bone marrow Nominal"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "text": "46,XX[20]"
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o12",
+      "status": "final",
+      "code": {
+        "text": "MDS-associated genetic abnormalities"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "260385009",
+            "display": "Negative"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o13",
+      "status": "final",
+      "code": {
+        "text": "AML-associated genetic abnormalities"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "260385009",
+            "display": "Negative"
+          }
+        ]
+      }
+    }
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition",
+      "valueReference": {
+        "reference": "c1"
+      }
+    }
+  ],
+  "status": "final",
+  "code": {
+    "text": "comprehensive bone marrow report"
+  },
+  "subject": {
+    "reference": "Patient/genetics-example1",
+    "display": "Everywoman, Eve A, MRN: 123456789"
+  },
+  "effectiveDateTime": "2015-01-02T13:20:10+01:00",
+  "issued": "2015-01-06T13:20:10+01:00",
+  "performer": [
+    {
+      "actor": {
+        "reference": "Practitioner/genetics-example1",
+        "display": "Molecular Diagnostic Laboratory"
+      }
+    }
+  ],
+  "specimen": [
+    {
+      "reference": "Specimen/genetics-example1",
+      "display": "Bone marrow ID: MLD45-Z4-1234"
+    }
+  ],
+  "result": [
+    {
+      "reference": "#o1"
+    },
+    {
+      "reference": "#o2"
+    },
+    {
+      "reference": "#o3"
+    },
+    {
+      "reference": "#o4"
+    },
+    {
+      "reference": "#o5"
+    },
+    {
+      "reference": "#o6"
+    },
+    {
+      "reference": "#o7"
+    },
+    {
+      "reference": "#o8"
+    },
+    {
+      "reference": "#o9"
+    },
+    {
+      "reference": "#o10"
+    },
+    {
+      "reference": "#o11"
+    },
+    {
+      "reference": "#o12"
+    },
+    {
+      "reference": "#o13"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+{"device":{"reference":"Device/example"},"id":"example","resourceType":"DeviceUseStatement","subject":{"reference":"Patient/example"},"text":{"div":"<div>To be filled out at a later time</div>","status":"generated"}}

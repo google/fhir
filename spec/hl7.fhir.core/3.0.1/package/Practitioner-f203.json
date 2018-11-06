@@ -1,0 +1,53 @@
+{
+  "resourceType": "Practitioner",
+  "id": "f203",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f203</p><p><b>identifier</b>: UZI-nummer = 12345678903 (OFFICIAL), BIG-nummer = 12345678903 (OFFICIAL)</p><p><b>active</b>: true</p><p><b>name</b>: Juri van Gelder(OFFICIAL)</p><p><b>telecom</b>: ph: +31715269111(WORK)</p><p><b>address</b>: Walvisbaai 3 Den helder 2333ZA NLD (WORK)</p><p><b>gender</b>: male</p><p><b>birthDate</b>: 20/04/1983</p></div>"
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "type": {
+        "text": "UZI-nummer"
+      },
+      "system": "urn:oid:2.16.528.1.1007.3.1",
+      "value": "12345678903"
+    },
+    {
+      "use": "official",
+      "type": {
+        "text": "BIG-nummer"
+      },
+      "system": "https://www.bigregister.nl/",
+      "value": "12345678903"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "text": "Juri van Gelder"
+    }
+  ],
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "+31715269111",
+      "use": "work"
+    }
+  ],
+  "address": [
+    {
+      "use": "work",
+      "line": [
+        "Walvisbaai 3"
+      ],
+      "city": "Den helder",
+      "postalCode": "2333ZA",
+      "country": "NLD"
+    }
+  ],
+  "gender": "male",
+  "birthDate": "1983-04-20"
+}

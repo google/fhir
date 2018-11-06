@@ -1,0 +1,172 @@
+{
+  "resourceType": "MedicationDispense",
+  "id": "meddisp0301",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: meddisp0301</p><p><b>contained</b>: , </p><p><b>status</b>: in-progress</p><p><b>medication</b>: Vancomycin Hydrochloride. Generated Summary: id: med0301; Vancomycin Hydrochloride (VANCOMYCIN HYDROCHLORIDE) <span>(Details : {http://hl7.org/fhir/sid/ndc code '0069-2587-10' = '0069-2587-10', given as 'Vancomycin Hydrochloride (VANCOMYCIN HYDROCHLORIDE)'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>supportingInformation</b>: <a>Condition/f203</a></p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td><td><b>OnBehalfOf</b></td></tr><tr><td>*</td><td><a>Practitioner/f006</a></td><td><a>Organization/2.16.840.1.113883.19.5</a></td></tr></table><p><b>authorizingPrescription</b>: <a>MedicationRequest/medrx0318</a></p><p><b>type</b>: Emergency Supply <span>(Details : {http://hl7.org/fhir/v3/ActCode code 'EM' = 'Emergency Supply', given as 'Emergency Supply'})</span></p><p><b>quantity</b>: 12 Vial<span> (Details: http://hl7.org/fhir/v3/orderableDrugForm code Vial = 'Vial')</span></p><p><b>daysSupply</b>: 3 Day<span> (Details: UCUM code d = 'd')</span></p><p><b>whenPrepared</b>: 15/01/2015 10:20:00 AM</p><p><b>destination</b>: <a>Location/ph</a></p><p><b>receiver</b>: <a>Donald Duck</a></p><p><b>dosageInstruction</b>: </p><p><b>eventHistory</b>: Author's Signature. Generated Summary: id: signature; recorded: 01/02/2017 5:23:07 PM; </p></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Medication",
+      "id": "med0301",
+      "code": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/sid/ndc",
+            "code": "0069-2587-10",
+            "display": "Vancomycin Hydrochloride (VANCOMYCIN HYDROCHLORIDE)"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Provenance",
+      "id": "signature",
+      "target": [
+        {
+          "reference": "ProcedureRequest/physiotherapy"
+        }
+      ],
+      "recorded": "2017-02-01T17:23:07Z",
+      "agent": [
+        {
+          "role": [
+            {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/v3/ParticipationType",
+                  "code": "AUT"
+                }
+              ]
+            }
+          ],
+          "whoReference": {
+            "reference": "Practitioner/example",
+            "display": "Dr Adam Careful"
+          }
+        }
+      ],
+      "signature": [
+        {
+          "type": [
+            {
+              "system": "urn:iso-astm:E1762-95:2013",
+              "code": "1.2.840.10065.1.12.1.1",
+              "display": "Author's Signature"
+            }
+          ],
+          "when": "2017-02-01T17:23:07Z",
+          "whoReference": {
+            "reference": "Practitioner/example",
+            "display": "Dr Adam Careful"
+          },
+          "contentType": "application/signature+xml",
+          "blob": "dGhpcyBibG9iIGlzIHNuaXBwZWQ="
+        }
+      ]
+    }
+  ],
+  "status": "in-progress",
+  "medicationReference": {
+    "reference": "#med0301",
+    "display": "Vancomycin Hydrochloride"
+  },
+  "subject": {
+    "reference": "Patient/pat1",
+    "display": "Donald Duck"
+  },
+  "supportingInformation": [
+    {
+      "reference": "Condition/f203"
+    }
+  ],
+  "performer": [
+    {
+      "actor": {
+        "reference": "Practitioner/f006"
+      },
+      "onBehalfOf": {
+        "reference": "Organization/2.16.840.1.113883.19.5"
+      }
+    }
+  ],
+  "authorizingPrescription": [
+    {
+      "reference": "MedicationRequest/medrx0318"
+    }
+  ],
+  "type": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v3/ActCode",
+        "code": "EM",
+        "display": "Emergency Supply"
+      }
+    ]
+  },
+  "quantity": {
+    "value": 12,
+    "unit": "Vial",
+    "system": "http://hl7.org/fhir/v3/orderableDrugForm",
+    "code": "Vial"
+  },
+  "daysSupply": {
+    "value": 3,
+    "unit": "Day",
+    "system": "http://unitsofmeasure.org",
+    "code": "d"
+  },
+  "whenPrepared": "2015-01-15T10:20:00Z",
+  "destination": {
+    "reference": "Location/ph"
+  },
+  "receiver": [
+    {
+      "reference": "Patient/pat1",
+      "display": "Donald Duck"
+    }
+  ],
+  "dosageInstruction": [
+    {
+      "sequence": 1,
+      "text": "500mg IV q6h x 3 days",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 6,
+          "periodUnit": "h"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "255560000",
+            "display": "Intravenous"
+          }
+        ]
+      },
+      "method": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "420620005",
+            "display": "Push - dosing instruction imperative (qualifier value)"
+          }
+        ]
+      },
+      "doseQuantity": {
+        "value": 500,
+        "unit": "mg",
+        "system": "http://unitsofmeasure.org",
+        "code": "mg"
+      }
+    }
+  ],
+  "eventHistory": [
+    {
+      "reference": "#signature",
+      "display": "Author's Signature"
+    }
+  ]
+}

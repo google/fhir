@@ -1,0 +1,1 @@
+{"base":"Observation","code":"assessed-condition","description":"Condition assessed by genetic test","id":"observation-genetics-cg-prf-1a-Observation-assessed-condition","name":"assessed-condition","resourceType":"SearchParameter","type":"reference","url":"http://hl7.org/fhir/SearchParameter/observation-genetics-cg-prf-1a-Observation-assessed-condition","xpathUsage":"normal"}

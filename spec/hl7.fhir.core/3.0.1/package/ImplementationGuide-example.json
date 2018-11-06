@@ -1,0 +1,102 @@
+{
+  "resourceType": "ImplementationGuide",
+  "id": "example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>url</b>: <a>http://hl7.org/fhir/us/daf</a></p><p><b>version</b>: 0</p><p><b>name</b>: Data Access Framework (DAF)</p><p><b>status</b>: draft</p><p><b>experimental</b>: false</p><p><b>date</b>: 01/01/2015</p><p><b>publisher</b>: ONC / HL7 Joint project</p><p><b>contact</b>: , </p><p><b>description</b>: The Data Access Framework (DAF) Initiative leverages the HL7 FHIR standards to standardize access to Meaningful Use Stage 2 structured information both within the organization and from external organizations</p><p><b>jurisdiction</b>: United States <span>(Details : {urn:iso:std:iso:3166 code 'US' = 'United States)</span></p><p><b>copyright</b>: Published by ONC under the standard FHIR license (CC0)</p><p><b>fhirVersion</b>: 1.0.0</p><h3>Dependencies</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Uri</b></td></tr><tr><td>*</td><td>reference</td><td><a>http://hl7.org/fhir/ImplementationGuide/uscore</a></td></tr></table><blockquote><p><b>package</b></p><p><b>name</b>: test</p><p><b>description</b>: Base package (not broken up into multiple packages)</p><h3>Resources</h3><table><tr><td>-</td><td><b>Example</b></td><td><b>Name</b></td><td><b>Description</b></td><td><b>Acronym</b></td><td><b>Source[x]</b></td><td><b>ExampleFor</b></td></tr><tr><td>*</td><td>true</td><td>Test Example</td><td>A test example to show how a package works</td><td>daf-tst</td><td><a>test.html</a></td><td><a>StructureDefinition/daf-patient</a></td></tr></table></blockquote><h3>Globals</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Profile</b></td></tr><tr><td>*</td><td>Patient</td><td><a>StructureDefinition/daf-patient</a></td></tr></table><p><b>binary</b>: <a>http://h7.org/fhir/fhir.css</a></p><blockquote><p><b>page</b></p><p><b>source</b>: <a>patient-example.html</a></p><p><b>title</b>: Example Patient Page</p><p><b>kind</b>: page</p><h3>Pages</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote></div>"
+  },
+  "url": "http://hl7.org/fhir/us/daf",
+  "version": "0",
+  "name": "Data Access Framework (DAF)",
+  "status": "draft",
+  "experimental": false,
+  "date": "2015-01-01",
+  "publisher": "ONC / HL7 Joint project",
+  "contact": [
+    {
+      "name": "ONC",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://www.healthit.gov"
+        }
+      ]
+    },
+    {
+      "name": "HL7",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://hl7.org/fhir"
+        }
+      ]
+    }
+  ],
+  "description": "The Data Access Framework (DAF) Initiative leverages the HL7 FHIR standards to standardize access to Meaningful Use Stage 2 structured information both within the organization and from external organizations",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "US"
+        }
+      ]
+    }
+  ],
+  "copyright": "Published by ONC under the standard FHIR license (CC0)",
+  "fhirVersion": "1.0.0",
+  "dependency": [
+    {
+      "type": "reference",
+      "uri": "http://hl7.org/fhir/ImplementationGuide/uscore"
+    }
+  ],
+  "package": [
+    {
+      "name": "test",
+      "description": "Base package (not broken up into multiple packages)",
+      "resource": [
+        {
+          "example": true,
+          "name": "Test Example",
+          "description": "A test example to show how a package works",
+          "acronym": "daf-tst",
+          "sourceUri": "test.html",
+          "exampleFor": {
+            "reference": "StructureDefinition/daf-patient"
+          }
+        }
+      ]
+    }
+  ],
+  "global": [
+    {
+      "type": "Patient",
+      "profile": {
+        "reference": "StructureDefinition/daf-patient"
+      }
+    }
+  ],
+  "binary": [
+    "http://h7.org/fhir/fhir.css"
+  ],
+  "page": {
+    "source": "patient-example.html",
+    "title": "Example Patient Page",
+    "kind": "page",
+    "page": [
+      {
+        "source": "list.html",
+        "title": "Value Set Page",
+        "kind": "list",
+        "type": [
+          "ValueSet"
+        ],
+        "package": [
+          "test"
+        ],
+        "format": "text/html"
+      }
+    ]
+  }
+}

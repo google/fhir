@@ -1,0 +1,13 @@
+{
+  "name": "hl7.fhir.us.core",
+  "version": "1.1.0",
+  "tools-version": 2,
+  "type": "fhir.ig",
+  "license": "CC0-1.0",
+  "canonical": "http://hl7.org/fhir/us/core",
+  "url": "https://build.fhir.org/ig/HL7/US-Core/",
+  "dependencies": {
+    "hl7.fhir.core": "3.0.1"
+  },
+  "author": "HL7 US Realm Steering Committee"
+}

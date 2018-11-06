@@ -1,0 +1,367 @@
+{
+  "resourceType": "EligibilityResponse",
+  "id": "E2501",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the EligibilityResponse.</div>"
+  },
+  "identifier": [
+    {
+      "system": "http://www.BenefitsInc.com/fhir/eligibilityresponse",
+      "value": "881234"
+    }
+  ],
+  "status": "active",
+  "created": "2014-08-16",
+  "request": {
+    "reference": "http://www.BenefitsInc.com/fhir/eligibility/225476332402"
+  },
+  "outcome": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/remittance-outcome",
+        "code": "complete"
+      }
+    ]
+  },
+  "disposition": "Policy is currently in-force.",
+  "insurer": {
+    "reference": "Organization/2"
+  },
+  "inforce": true,
+  "insurance": [
+    {
+      "benefitBalance": [
+        {
+          "category": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-category",
+                "code": "medical"
+              }
+            ]
+          },
+          "subCategory": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-subcategory",
+                "code": "30",
+                "display": "Health Benefit Plan Coverage"
+              }
+            ]
+          },
+          "network": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-network",
+                "code": "in"
+              }
+            ]
+          },
+          "unit": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-unit",
+                "code": "individual"
+              }
+            ]
+          },
+          "term": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-term",
+                "code": "annual"
+              }
+            ]
+          },
+          "financial": [
+            {
+              "type": {
+                "coding": [
+                  {
+                    "code": "benefit"
+                  }
+                ]
+              },
+              "allowedMoney": {
+                "value": 500000,
+                "system": "urn:iso:std:iso:4217",
+                "code": "SAR"
+              }
+            },
+            {
+              "type": {
+                "coding": [
+                  {
+                    "code": "copay-maximum"
+                  }
+                ]
+              },
+              "allowedMoney": {
+                "value": 100,
+                "system": "urn:iso:std:iso:4217",
+                "code": "SAR"
+              }
+            },
+            {
+              "type": {
+                "coding": [
+                  {
+                    "code": "copay-percent"
+                  }
+                ]
+              },
+              "allowedUnsignedInt": 20
+            }
+          ]
+        },
+        {
+          "category": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-category",
+                "code": "medical"
+              }
+            ]
+          },
+          "subCategory": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-subcategory",
+                "code": "69",
+                "display": "Maternity"
+              }
+            ]
+          },
+          "network": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-network",
+                "code": "in"
+              }
+            ]
+          },
+          "unit": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-unit",
+                "code": "individual"
+              }
+            ]
+          },
+          "term": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-term",
+                "code": "annual"
+              }
+            ]
+          },
+          "financial": [
+            {
+              "type": {
+                "coding": [
+                  {
+                    "code": "benefit"
+                  }
+                ]
+              },
+              "allowedMoney": {
+                "value": 15000,
+                "system": "urn:iso:std:iso:4217",
+                "code": "SAR"
+              }
+            }
+          ]
+        },
+        {
+          "category": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-category",
+                "code": "oral"
+              }
+            ]
+          },
+          "subCategory": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-subcategory",
+                "code": "F3",
+                "display": "Dental Coverage"
+              }
+            ]
+          },
+          "network": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-network",
+                "code": "in"
+              }
+            ]
+          },
+          "unit": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-unit",
+                "code": "individual"
+              }
+            ]
+          },
+          "term": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-term",
+                "code": "annual"
+              }
+            ]
+          },
+          "financial": [
+            {
+              "type": {
+                "coding": [
+                  {
+                    "code": "benefit"
+                  }
+                ]
+              },
+              "allowedMoney": {
+                "value": 2000,
+                "system": "urn:iso:std:iso:4217",
+                "code": "SAR"
+              }
+            }
+          ]
+        },
+        {
+          "category": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-category",
+                "code": "vision"
+              }
+            ]
+          },
+          "subCategory": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-subcategory",
+                "code": "F6",
+                "display": "Vision Coverage"
+              }
+            ]
+          },
+          "network": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-network",
+                "code": "in"
+              }
+            ]
+          },
+          "unit": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-unit",
+                "code": "individual"
+              }
+            ]
+          },
+          "term": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-term",
+                "code": "annual"
+              }
+            ]
+          },
+          "financial": [
+            {
+              "type": {
+                "coding": [
+                  {
+                    "code": "benefit"
+                  }
+                ]
+              },
+              "allowedMoney": {
+                "value": 400,
+                "system": "urn:iso:std:iso:4217",
+                "code": "SAR"
+              }
+            }
+          ]
+        },
+        {
+          "category": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-category",
+                "code": "vision"
+              }
+            ]
+          },
+          "subCategory": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-subcategory",
+                "code": "49",
+                "display": "Hospital Room and Board"
+              }
+            ]
+          },
+          "network": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-network",
+                "code": "in"
+              }
+            ]
+          },
+          "unit": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-unit",
+                "code": "individual"
+              }
+            ]
+          },
+          "term": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/benefit-term",
+                "code": "day"
+              }
+            ]
+          },
+          "financial": [
+            {
+              "type": {
+                "coding": [
+                  {
+                    "code": "room"
+                  }
+                ]
+              },
+              "allowedString": "shared"
+            },
+            {
+              "type": {
+                "coding": [
+                  {
+                    "code": "benefit"
+                  }
+                ]
+              },
+              "allowedMoney": {
+                "value": 600,
+                "system": "urn:iso:std:iso:4217",
+                "code": "SAR"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
