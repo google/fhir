@@ -409,7 +409,7 @@ public final class JsonFormat {
     private void printMessage(MessageOrBuilder message) throws IOException {
       boolean printedField = false;
 
-      if (AnnotationUtils.isResource(message.getDescriptorForType())) {
+      if (AnnotationUtils.isResource(message.getDescriptorForType()) && !forAnalytics) {
         printedField = maybeStartMessage(printedField);
         generator.print("\"resourceType\": \"" + message.getDescriptorForType().getName() + "\"");
       }

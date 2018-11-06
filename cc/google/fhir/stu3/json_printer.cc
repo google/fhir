@@ -55,15 +55,6 @@ using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 using ::tensorflow::errors::InvalidArgument;
 
-std::unordered_set<string>* BuildResourceTypesSet() {
-  std::unordered_set<string>* resource_types = new std::unordered_set<string>;
-  for (int i = 0; i < ContainedResource::descriptor()->field_count(); i++) {
-    resource_types->insert(
-        ContainedResource::descriptor()->field(i)->message_type()->full_name());
-  }
-  return resource_types;
-}
-
 class Printer {
  public:
   Printer(absl::TimeZone default_timezone, int indent_size, bool add_newlines,
@@ -120,7 +111,6 @@ class Printer {
   }
 
   Status PrintStandardNonPrimitive(const google::protobuf::Message& proto) {
-    static std::unordered_set<string>* resource_types = BuildResourceTypesSet();
     const Descriptor* descriptor = proto.GetDescriptor();
     const Reflection* reflection = proto.GetReflection();
 
@@ -153,8 +143,7 @@ class Printer {
     }
 
     OpenJsonObject();
-    if (resource_types->find(descriptor->full_name()) !=
-        resource_types->end()) {
+    if (IsResource(descriptor) && !for_analytics_) {
       absl::StrAppend(&output_, "\"resourceType\": \"", descriptor->name(),
                       "\",");
       AddNewline();

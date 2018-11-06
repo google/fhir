@@ -1,5 +1,4 @@
 {
-  "resourceType": "Observation",
   "id": "example-genetics-1",
   "text": {
     "status": "generated",

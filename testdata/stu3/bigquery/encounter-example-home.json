@@ -1,5 +1,4 @@
 {
-  "resourceType": "Encounter",
   "id": "home",
   "text": {
     "status": "generated",
