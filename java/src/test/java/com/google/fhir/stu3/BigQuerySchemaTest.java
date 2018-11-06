@@ -62,7 +62,7 @@ public final class BigQuerySchemaTest {
     File file =
         new File(
             runfiles.rlocation(
-                "com_google_fhir/testdata/stu3/examples/" + name + ".json"));
+                "com_google_fhir/spec/hl7.fhir.core/3.0.1/package/" + name + ".json"));
     String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
     Builder jsonBuilder = builder.clone();
     jsonParser.merge(json, jsonBuilder);
@@ -114,10 +114,7 @@ public final class BigQuerySchemaTest {
         new TableSchema()
             .setFields(
                 ImmutableList.of(
-                    new TableFieldSchema()
-                        .setName("valueUs")
-                        .setType("INT64")
-                        .setMode("NULLABLE"),
+                    new TableFieldSchema().setName("valueUs").setType("INT64").setMode("NULLABLE"),
                     new TableFieldSchema()
                         .setName("timezone")
                         .setType("STRING")
@@ -164,6 +161,6 @@ public final class BigQuerySchemaTest {
 
   @Test
   public void testComposition() throws Exception {
-    testSchema("composition-example", Composition.newBuilder());
+    testSchema("Composition-example", Composition.newBuilder());
   }
 }

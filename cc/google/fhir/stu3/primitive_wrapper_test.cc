@@ -64,8 +64,9 @@ std::vector<string> ReadLines(const string& filename) {
 
 template <class W>
 void TestValidation() {
-  const string file_base = absl::StrCat(
-      "validation/", CamelCaseToLowerUnderscores(W::descriptor()->name()));
+  const string file_base =
+      absl::StrCat("testdata/stu3/validation/",
+                   CamelCaseToLowerUnderscores(W::descriptor()->name()));
   std::vector<string> valid_lines =
       ReadLines(absl::StrCat(file_base, ".valid.ndjson"));
   for (auto line_iter : valid_lines) {

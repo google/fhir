@@ -56,17 +56,17 @@ void TestProfile(const string& filename) {
 
 TEST(ProfilesTest, SimpleExtensions) {
   TestProfile<proto::Observation, proto::ObservationGenetics>(
-      "examples/observation-example-genetics-1");
+      "examples/Observation-example-genetics-1");
 }
 
 TEST(ProfilesTest, FixedCoding) {
   TestProfile<proto::Observation, proto::Bodyheight>(
-      "examples/observation-example-body-height");
+      "examples/Observation-body-height");
 }
 
 TEST(ProfilesTest, VitalSigns) {
   TestProfile<proto::Observation, proto::Vitalsigns>(
-      "examples/observation-example-body-height");
+      "examples/Observation-body-height");
 }
 
 }  // namespace

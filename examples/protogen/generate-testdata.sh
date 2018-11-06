@@ -14,7 +14,8 @@
 # limitations under the License.
 
 ROOT_PATH=../..
-INPUT_PATH=$ROOT_PATH/testdata/stu3/examples
+EXAMPLES=$(ls $ROOT_PATH/testdata/stu3/examples/*.prototxt | cut -d/ -f6 | sed s/.prototxt/.json/)
+INPUT_PATH=$ROOT_PATH/spec/hl7.fhir.core/3.0.1/package
 JSON_TO_PROTO=$ROOT_PATH/bazel-bin/java/JsonToProto
 OUTPUT_PATH=.
 
@@ -40,4 +41,4 @@ shift $((OPTIND -1))
 bazel build //java:JsonToProto
 
 # Parse all the examples, using base resource definitions (without profiles).
-$JSON_TO_PROTO --output_directory $OUTPUT_PATH $INPUT_PATH/*.json
+$JSON_TO_PROTO --output_directory $OUTPUT_PATH $(for in in $EXAMPLES; do echo $INPUT_PATH/$i; done)

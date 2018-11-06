@@ -91,9 +91,7 @@ T ReadProto(const string& filename) {
 string ReadFile(const string& filename) {
   string result;
   TF_CHECK_OK(::tensorflow::ReadFileToString(
-      tensorflow::Env::Default(),
-      "testdata/stu3/" + filename,
-      &result));
+      tensorflow::Env::Default(), filename, &result));
   return result;
 }
 

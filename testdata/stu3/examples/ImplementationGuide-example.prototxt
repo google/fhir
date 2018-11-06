@@ -1,0 +1,162 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>url</b>: <a>http://hl7.org/fhir/us/daf</a></p><p><b>version</b>: 0</p><p><b>name</b>: Data Access Framework (DAF)</p><p><b>status</b>: draft</p><p><b>experimental</b>: false</p><p><b>date</b>: 01/01/2015</p><p><b>publisher</b>: ONC / HL7 Joint project</p><p><b>contact</b>: , </p><p><b>description</b>: The Data Access Framework (DAF) Initiative leverages the HL7 FHIR standards to standardize access to Meaningful Use Stage 2 structured information both within the organization and from external organizations</p><p><b>jurisdiction</b>: United States <span>(Details : {urn:iso:std:iso:3166 code \'US\' = \'United States)</span></p><p><b>copyright</b>: Published by ONC under the standard FHIR license (CC0)</p><p><b>fhirVersion</b>: 1.0.0</p><h3>Dependencies</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Uri</b></td></tr><tr><td>*</td><td>reference</td><td><a>http://hl7.org/fhir/ImplementationGuide/uscore</a></td></tr></table><blockquote><p><b>package</b></p><p><b>name</b>: test</p><p><b>description</b>: Base package (not broken up into multiple packages)</p><h3>Resources</h3><table><tr><td>-</td><td><b>Example</b></td><td><b>Name</b></td><td><b>Description</b></td><td><b>Acronym</b></td><td><b>Source[x]</b></td><td><b>ExampleFor</b></td></tr><tr><td>*</td><td>true</td><td>Test Example</td><td>A test example to show how a package works</td><td>daf-tst</td><td><a>test.html</a></td><td><a>StructureDefinition/daf-patient</a></td></tr></table></blockquote><h3>Globals</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Profile</b></td></tr><tr><td>*</td><td>Patient</td><td><a>StructureDefinition/daf-patient</a></td></tr></table><p><b>binary</b>: <a>http://h7.org/fhir/fhir.css</a></p><blockquote><p><b>page</b></p><p><b>source</b>: <a>patient-example.html</a></p><p><b>title</b>: Example Patient Page</p><p><b>kind</b>: page</p><h3>Pages</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote></div>"
+  }
+}
+url {
+  value: "http://hl7.org/fhir/us/daf"
+}
+version {
+  value: "0"
+}
+name {
+  value: "Data Access Framework (DAF)"
+}
+status {
+  value: DRAFT
+}
+experimental {
+}
+date {
+  value_us: 1420030800000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "ONC / HL7 Joint project"
+}
+contact {
+  name {
+    value: "ONC"
+  }
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://www.healthit.gov"
+    }
+  }
+}
+contact {
+  name {
+    value: "HL7"
+  }
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+}
+description {
+  value: "The Data Access Framework (DAF) Initiative leverages the HL7 FHIR standards to standardize access to Meaningful Use Stage 2 structured information both within the organization and from external organizations"
+}
+jurisdiction {
+  coding {
+    system {
+      value: "urn:iso:std:iso:3166"
+    }
+    code {
+      value: "US"
+    }
+  }
+}
+copyright {
+  value: "Published by ONC under the standard FHIR license (CC0)"
+}
+fhir_version {
+  value: "1.0.0"
+}
+dependency {
+  type {
+    value: REFERENCE
+  }
+  uri {
+    value: "http://hl7.org/fhir/ImplementationGuide/uscore"
+  }
+}
+package_value {
+  name {
+    value: "test"
+  }
+  description {
+    value: "Base package (not broken up into multiple packages)"
+  }
+  resource {
+    example {
+      value: true
+    }
+    name {
+      value: "Test Example"
+    }
+    description {
+      value: "A test example to show how a package works"
+    }
+    acronym {
+      value: "daf-tst"
+    }
+    source {
+      uri {
+        value: "test.html"
+      }
+    }
+    example_for {
+      structure_definition_id {
+        value: "daf-patient"
+      }
+    }
+  }
+}
+global {
+  type {
+    value: PATIENT
+  }
+  profile {
+    structure_definition_id {
+      value: "daf-patient"
+    }
+  }
+}
+binary {
+  value: "http://h7.org/fhir/fhir.css"
+}
+page {
+  source {
+    value: "patient-example.html"
+  }
+  title {
+    value: "Example Patient Page"
+  }
+  kind {
+    value: PAGE
+  }
+  page {
+    source {
+      value: "list.html"
+    }
+    title {
+      value: "Value Set Page"
+    }
+    kind {
+      value: LIST
+    }
+    type {
+      value: VALUE_SET
+    }
+    package_value {
+      value: "test"
+    }
+    format {
+      value: "text/html"
+    }
+  }
+}

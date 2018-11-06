@@ -1,0 +1,412 @@
+id {
+  value: "testscript-example-multisystem"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: testscript-example-multisystem</p><p><b>url</b>: <a>http://hl7.org/fhir/TestScript/testscript-example-multisystem</a></p><p><b>identifier</b>: urn:oid:1.3.6.1.4.1.21367.2005.3.7.9878</p><p><b>version</b>: 1.0</p><p><b>name</b>: testscript-example-multisystem</p><p><b>title</b>: Multisystem Test Script</p><p><b>status</b>: draft</p><p><b>experimental</b>: true</p><p><b>date</b>: 18/01/2017</p><p><b>publisher</b>: HL7</p><p><b>contact</b>: </p><p><b>description</b>: TestScript example resource showing use of origin and destination for multisystem support. The single origin will execute a Patient read against the two destination systems using user defined dynamic variables. The test engine will wait at each operation action with a defined origin and destination for the origin test system to send the expected FHIR operation to the destination test system. Once the expected request and response is observed, the test engine will continue with the test execution.</p><p><b>jurisdiction</b>: United States of America (the) <span>(Details : {urn:iso:std:iso:3166 code \'US\' = \'United States\', given as \'United States of America (the)\'})</span></p><p><b>purpose</b>: Patient Read Operation</p><p><b>copyright</b>: \302\251 HL7.org 2011+</p><h3>Origins</h3><table><tr><td>-</td><td><b>Index</b></td><td><b>Profile</b></td></tr><tr><td>*</td><td>1</td><td>FHIR-Client (Details: [not stated] code FHIR-Client = \'FHIR-Client\', stated as \'null\')</td></tr></table><blockquote><p><b>destination</b></p><p><b>index</b>: 1</p><p><b>profile</b>: FHIR-Server (Details: [not stated] code FHIR-Server = \'FHIR-Server\', stated as \'null\')</p></blockquote><blockquote><p><b>destination</b></p><p><b>index</b>: 2</p><p><b>profile</b>: FHIR-Server (Details: [not stated] code FHIR-Server = \'FHIR-Server\', stated as \'null\')</p></blockquote><blockquote><p><b>metadata</b></p><h3>Links</h3><table><tr><td>-</td><td><b>Url</b></td><td><b>Description</b></td></tr><tr><td>*</td><td><a>http://hl7.org/fhir/patient.html</a></td><td>Demographics and other administrative information about an individual or animal receiving care or other health-related services.</td></tr></table><blockquote><p><b>capability</b></p><p><b>required</b>: true</p><p><b>validated</b>: false</p><p><b>description</b>: Patient Read Operation</p><p><b>origin</b>: 1</p><p><b>destination</b>: 1</p><p><b>link</b>: <a>http://hl7.org/fhir/http.html#read</a></p><p><b>capabilities</b>: <a>CapabilityStatement/example</a></p></blockquote><blockquote><p><b>capability</b></p><p><b>required</b>: true</p><p><b>validated</b>: false</p><p><b>description</b>: Patient Read Operation</p><p><b>origin</b>: 1</p><p><b>destination</b>: 2</p><p><b>link</b>: <a>http://hl7.org/fhir/http.html#read</a></p><p><b>capabilities</b>: <a>CapabilityStatement/example</a></p></blockquote></blockquote><blockquote><p><b>variable</b></p><p><b>name</b>: Dest1PatientResourceId</p><p><b>defaultValue</b>: example</p></blockquote><blockquote><p><b>variable</b></p><p><b>name</b>: Dest2PatientResourceId</p><p><b>defaultValue</b>: example</p></blockquote><blockquote><p><b>test</b></p><p><b>name</b>: ReadPatient-Destination1</p><p><b>description</b>: Read a Patient from the first destination test system using the user defined dynamic variable ${Dest1PatientResourceId}. Perform basic validation.</p><blockquote><p><b>action</b></p><h3>Operations</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote></blockquote><blockquote><p><b>test</b></p><p><b>name</b>: ReadPatient-Destination2</p><p><b>description</b>: Read a Patient from the second destination test system using the user defined dynamic variable ${Dest2PatientResourceId}. Perform basic validation.</p><blockquote><p><b>action</b></p><h3>Operations</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote></blockquote></div>"
+  }
+}
+url {
+  value: "http://hl7.org/fhir/TestScript/testscript-example-multisystem"
+}
+identifier {
+  system {
+    value: "urn:ietf:rfc:3986"
+  }
+  value {
+    value: "urn:oid:1.3.6.1.4.1.21367.2005.3.7.9878"
+  }
+}
+version {
+  value: "1.0"
+}
+name {
+  value: "testscript-example-multisystem"
+}
+title {
+  value: "Multisystem Test Script"
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+date {
+  value_us: 1484658000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "HL7"
+}
+contact {
+  name {
+    value: "Support"
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "support@HL7.org"
+    }
+    use {
+      value: WORK
+    }
+  }
+}
+description {
+  value: "TestScript example resource showing use of origin and destination for multisystem support. The single origin will execute a Patient read against the two destination systems using user defined dynamic variables. The test engine will wait at each operation action with a defined origin and destination for the origin test system to send the expected FHIR operation to the destination test system. Once the expected request and response is observed, the test engine will continue with the test execution."
+}
+jurisdiction {
+  coding {
+    system {
+      value: "urn:iso:std:iso:3166"
+    }
+    code {
+      value: "US"
+    }
+    display {
+      value: "United States of America (the)"
+    }
+  }
+}
+purpose {
+  value: "Patient Read Operation"
+}
+copyright {
+  value: "\302\251 HL7.org 2011+"
+}
+origin {
+  index {
+    value: 1
+  }
+  profile {
+    code {
+      value: "FHIR-Client"
+    }
+  }
+}
+destination {
+  index {
+    value: 1
+  }
+  profile {
+    code {
+      value: "FHIR-Server"
+    }
+  }
+}
+destination {
+  index {
+    value: 2
+  }
+  profile {
+    code {
+      value: "FHIR-Server"
+    }
+  }
+}
+metadata {
+  link {
+    url {
+      value: "http://hl7.org/fhir/patient.html"
+    }
+    description {
+      value: "Demographics and other administrative information about an individual or animal receiving care or other health-related services."
+    }
+  }
+  capability {
+    required {
+      value: true
+    }
+    validated {
+    }
+    description {
+      value: "Patient Read Operation"
+    }
+    origin {
+      value: 1
+    }
+    destination {
+      value: 1
+    }
+    link {
+      value: "http://hl7.org/fhir/http.html#read"
+    }
+    capabilities {
+      capability_statement_id {
+        value: "example"
+      }
+    }
+  }
+  capability {
+    required {
+      value: true
+    }
+    validated {
+    }
+    description {
+      value: "Patient Read Operation"
+    }
+    origin {
+      value: 1
+    }
+    destination {
+      value: 2
+    }
+    link {
+      value: "http://hl7.org/fhir/http.html#read"
+    }
+    capabilities {
+      capability_statement_id {
+        value: "example"
+      }
+    }
+  }
+}
+variable {
+  name {
+    value: "Dest1PatientResourceId"
+  }
+  default_value {
+    value: "example"
+  }
+}
+variable {
+  name {
+    value: "Dest2PatientResourceId"
+  }
+  default_value {
+    value: "example"
+  }
+}
+test {
+  id {
+    value: "01-ReadPatient-Destination1"
+  }
+  name {
+    value: "ReadPatient-Destination1"
+  }
+  description {
+    value: "Read a Patient from the first destination test system using the user defined dynamic variable ${Dest1PatientResourceId}. Perform basic validation."
+  }
+  action {
+    operation {
+      type {
+        system {
+          value: "http://hl7.org/fhir/testscript-operation-codes"
+        }
+        code {
+          value: "read"
+        }
+      }
+      resource {
+        value: PATIENT
+      }
+      description {
+        value: "Read a Patient from the first destination test system and perform basic validation."
+      }
+      accept {
+        value: XML
+      }
+      content_type {
+        value: XML
+      }
+      destination {
+        value: 1
+      }
+      origin {
+        value: 1
+      }
+      params {
+        value: "/${Dest1PatientResourceId}"
+      }
+      request_id {
+        value: "request-read-patient-01"
+      }
+    }
+  }
+  action {
+    assert_value {
+      description {
+        value: "Confirm that the request method GET was sent by the client system under test."
+      }
+      request_method {
+        value: GET
+      }
+    }
+  }
+  action {
+    assert_value {
+      description {
+        value: "Confirm that the client requested an Accept of xml."
+      }
+      direction {
+        value: REQUEST
+      }
+      header_field {
+        value: "Accept"
+      }
+      operator {
+        value: CONTAINS
+      }
+      value {
+        value: "xml"
+      }
+    }
+  }
+  action {
+    assert_value {
+      description {
+        value: "Confirm that the returned HTTP status is 200(OK)."
+      }
+      direction {
+        value: RESPONSE
+      }
+      response {
+        value: OKAY
+      }
+    }
+  }
+  action {
+    assert_value {
+      description {
+        value: "Confirm that the returned format is XML."
+      }
+      direction {
+        value: RESPONSE
+      }
+      content_type {
+        value: XML
+      }
+    }
+  }
+  action {
+    assert_value {
+      description {
+        value: "Confirm that the returned resource type is Patient."
+      }
+      direction {
+        value: RESPONSE
+      }
+      resource {
+        value: PATIENT
+      }
+    }
+  }
+}
+test {
+  id {
+    value: "02-ReadPatient-Destination2"
+  }
+  name {
+    value: "ReadPatient-Destination2"
+  }
+  description {
+    value: "Read a Patient from the second destination test system using the user defined dynamic variable ${Dest2PatientResourceId}. Perform basic validation."
+  }
+  action {
+    operation {
+      type {
+        system {
+          value: "http://hl7.org/fhir/testscript-operation-codes"
+        }
+        code {
+          value: "read"
+        }
+      }
+      resource {
+        value: PATIENT
+      }
+      description {
+        value: "Read a Patient from the second destination test system and perform basic validation."
+      }
+      accept {
+        value: XML
+      }
+      content_type {
+        value: XML
+      }
+      destination {
+        value: 2
+      }
+      origin {
+        value: 1
+      }
+      params {
+        value: "/${Dest2PatientResourceId}"
+      }
+      request_header {
+        field {
+          value: "Accept-Charset"
+        }
+        value {
+          value: "utf-8"
+        }
+      }
+    }
+  }
+  action {
+    assert_value {
+      description {
+        value: "Confirm that the client requested an Accept of xml."
+      }
+      direction {
+        value: REQUEST
+      }
+      header_field {
+        value: "Accept"
+      }
+      operator {
+        value: CONTAINS
+      }
+      value {
+        value: "xml"
+      }
+    }
+  }
+  action {
+    assert_value {
+      description {
+        value: "Confirm that the returned HTTP status is 200(OK)."
+      }
+      direction {
+        value: RESPONSE
+      }
+      response {
+        value: OKAY
+      }
+    }
+  }
+  action {
+    assert_value {
+      description {
+        value: "Confirm that the returned format is XML."
+      }
+      direction {
+        value: RESPONSE
+      }
+      content_type {
+        value: XML
+      }
+    }
+  }
+  action {
+    assert_value {
+      description {
+        value: "Confirm that the returned resource type is Patient."
+      }
+      direction {
+        value: RESPONSE
+      }
+      resource {
+        value: PATIENT
+      }
+    }
+  }
+}

@@ -91,6 +91,7 @@ java_test(
     size = "small",
     srcs = ["src/test/java/com/google/fhir/stu3/BigQuerySchemaTest.java"],
     data = [
+        "//spec:stu3",
         "//testdata/stu3:bigquery",
         "//testdata/stu3:examples",
     ],
@@ -188,6 +189,7 @@ java_test(
     size = "medium",
     srcs = ["src/test/java/com/google/fhir/stu3/JsonFormatTest.java"],
     data = [
+        "//spec:stu3",
         "//testdata/stu3:bigquery",
         "//testdata/stu3:examples",
     ],

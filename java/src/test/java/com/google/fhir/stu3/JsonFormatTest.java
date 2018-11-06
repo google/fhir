@@ -164,7 +164,7 @@ public class JsonFormatTest {
 
   /** Read the specifed json file from the testdata directory as a String. */
   private String loadJson(String filename) throws IOException {
-    File file = new File(runfiles.rlocation("com_google_fhir/testdata/stu3/" + filename));
+    File file = new File(runfiles.rlocation("com_google_fhir/" + filename));
     return Files.asCharSource(file, StandardCharsets.UTF_8).read();
   }
 
@@ -177,7 +177,7 @@ public class JsonFormatTest {
   private void testParse(String name, Builder builder) throws IOException {
     // Parse the json version of the input.
     Builder jsonBuilder = builder.clone();
-    jsonParser.merge(loadJson("examples/" + name + ".json"), jsonBuilder);
+    jsonParser.merge(loadJson("spec/hl7.fhir.core/3.0.1/package/" + name + ".json"), jsonBuilder);
     // Parse the proto text version of the input.
     Builder textBuilder = builder.clone();
     mergeText("examples/" + name + ".prototxt", textBuilder);
@@ -219,7 +219,7 @@ public class JsonFormatTest {
     Builder textBuilder = builder.clone();
     mergeText("examples/" + name + ".prototxt", textBuilder);
     // Load the json version of the input as a String.
-    String jsonGolden = loadJson("examples/" + name + ".json");
+    String jsonGolden = loadJson("spec/hl7.fhir.core/3.0.1/package/" + name + ".json");
     // Print the proto as json and compare.
     String jsonTest = jsonPrinter.print(textBuilder);
     assertThat(jsonTest).isEqualTo(jsonGolden);
@@ -228,9 +228,9 @@ public class JsonFormatTest {
   private void testConvertForAnalytics(String name, Builder builder) throws IOException {
     // Parse the json version of the input.
     Builder jsonBuilder = builder.clone();
-    jsonParser.merge(loadJson("examples/" + name + ".json"), jsonBuilder);
+    jsonParser.merge(loadJson("spec/hl7.fhir.core/3.0.1/package/" + name + ".json"), jsonBuilder);
     // Load the analytics version of the input as a String.
-    String analyticsGolden = loadJson("bigquery/" + name + ".json");
+    String analyticsGolden = loadJson("testdata/stu3/bigquery/" + name + ".json");
     // Print and compare.
     String analyticsTest = jsonPrinter.forAnalytics().print(jsonBuilder);
     assertThat(analyticsTest.trim()).isEqualTo(analyticsGolden.trim());
@@ -248,7 +248,7 @@ public class JsonFormatTest {
   /** Test parsing JSON edge cases. */
   @Test
   public void parseEdgeCases() throws Exception {
-    testParse("json-edge-cases", Patient.newBuilder());
+    testParse("Patient-null", Patient.newBuilder());
   }
 
   /**
@@ -257,9 +257,9 @@ public class JsonFormatTest {
    */
   @Test
   public void printEdgeCases() throws Exception {
-    String jsonGolden = loadJson("examples/json-edge-cases.json");
+    String jsonGolden = loadJson("spec/hl7.fhir.core/3.0.1/package/Patient-null.json");
     Patient.Builder patient = Patient.newBuilder();
-    mergeText("examples/json-edge-cases.prototxt", patient);
+    mergeText("examples/Patient-null.prototxt", patient);
     String jsonTest = jsonPrinter.print(patient);
     assertThat(canonicalizeJson(jsonTest)).isEqualTo(canonicalizeJson(jsonGolden));
   }
@@ -267,9 +267,9 @@ public class JsonFormatTest {
   /** Test the analytics output format. */
   @Test
   public void convertForAnalytics() throws Exception {
-    testConvertForAnalytics("composition-example", Composition.newBuilder());
-    testConvertForAnalytics("encounter-example-home", Encounter.newBuilder());
-    testConvertForAnalytics("observation-example-genetics-1", Observation.newBuilder());
+    testConvertForAnalytics("Composition-example", Composition.newBuilder());
+    testConvertForAnalytics("Encounter-home", Encounter.newBuilder());
+    testConvertForAnalytics("Observation-example-genetics-1", Observation.newBuilder());
     testConvertForAnalytics("patient-example", Patient.newBuilder());
   }
 
@@ -278,329 +278,335 @@ public class JsonFormatTest {
   /** Test parsing of the Account FHIR resource. */
   @Test
   public void parseAccount() throws Exception {
-    testParse("account-example", Account.newBuilder());
-    testParse("account-example-with-guarantor", Account.newBuilder());
+    testParse("Account-example", Account.newBuilder());
+    testParse("Account-ewg", Account.newBuilder());
   }
 
   /** Test printing of the Account FHIR resource. */
   @Test
   public void printAccount() throws Exception {
-    testPrint("account-example", Account.newBuilder());
-    testPrint("account-example-with-guarantor", Account.newBuilder());
+    testPrint("Account-example", Account.newBuilder());
+    testPrint("Account-ewg", Account.newBuilder());
   }
 
   /** Test parsing of the ActivityDefinition FHIR resource. */
   @Test
   public void parseActivityDefinition() throws Exception {
-    testParse("activitydefinition-example", ActivityDefinition.newBuilder());
-    testParse("activitydefinition-medicationorder-example", ActivityDefinition.newBuilder());
-    testParse("activitydefinition-predecessor-example", ActivityDefinition.newBuilder());
-    testParse("activitydefinition-procedurerequest-example", ActivityDefinition.newBuilder());
-    testParse("activitydefinition-supplyrequest-example", ActivityDefinition.newBuilder());
+    testParse(
+        "ActivityDefinition-referralPrimaryCareMentalHealth", ActivityDefinition.newBuilder());
+    testParse("ActivityDefinition-citalopramPrescription", ActivityDefinition.newBuilder());
+    testParse(
+        "ActivityDefinition-referralPrimaryCareMentalHealth-initial",
+        ActivityDefinition.newBuilder());
+    testParse("ActivityDefinition-heart-valve-replacement", ActivityDefinition.newBuilder());
+    testParse("ActivityDefinition-blood-tubes-supply", ActivityDefinition.newBuilder());
   }
 
   /** Test printing of the ActivityDefinition FHIR resource. */
   @Test
   public void printActivityDefinition() throws Exception {
-    testPrint("activitydefinition-example", ActivityDefinition.newBuilder());
-    testPrint("activitydefinition-medicationorder-example", ActivityDefinition.newBuilder());
-    testPrint("activitydefinition-predecessor-example", ActivityDefinition.newBuilder());
-    testPrint("activitydefinition-procedurerequest-example", ActivityDefinition.newBuilder());
-    testPrint("activitydefinition-supplyrequest-example", ActivityDefinition.newBuilder());
+    testPrint(
+        "ActivityDefinition-referralPrimaryCareMentalHealth", ActivityDefinition.newBuilder());
+    testPrint("ActivityDefinition-citalopramPrescription", ActivityDefinition.newBuilder());
+    testPrint(
+        "ActivityDefinition-referralPrimaryCareMentalHealth-initial",
+        ActivityDefinition.newBuilder());
+    testPrint("ActivityDefinition-heart-valve-replacement", ActivityDefinition.newBuilder());
+    testPrint("ActivityDefinition-blood-tubes-supply", ActivityDefinition.newBuilder());
   }
 
   /** Test parsing of the AdverseEvent FHIR resource. */
   @Test
   public void parseAdverseEvent() throws Exception {
-    testParse("adverseevent-example", AdverseEvent.newBuilder());
+    testParse("AdverseEvent-example", AdverseEvent.newBuilder());
   }
 
   /** Test printing of the AdverseEvent FHIR resource. */
   @Test
   public void printAdverseEvent() throws Exception {
-    testPrint("adverseevent-example", AdverseEvent.newBuilder());
+    testPrint("AdverseEvent-example", AdverseEvent.newBuilder());
   }
 
   /** Test parsing of the AllergyIntolerance FHIR resource. */
   @Test
   public void parseAllergyIntolerance() throws Exception {
-    testParse("allergyintolerance-example", AllergyIntolerance.newBuilder());
+    testParse("AllergyIntolerance-example", AllergyIntolerance.newBuilder());
   }
 
   /** Test printing of the AllergyIntolerance FHIR resource. */
   @Test
   public void printAllergyIntolerance() throws Exception {
-    testPrint("allergyintolerance-example", AllergyIntolerance.newBuilder());
+    testPrint("AllergyIntolerance-example", AllergyIntolerance.newBuilder());
   }
 
   /** Test parsing of the Appointment FHIR resource. */
   @Test
   public void parseAppointment() throws Exception {
-    testParse("appointment-example", Appointment.newBuilder());
-    testParse("appointment-example2doctors", Appointment.newBuilder());
-    testParse("appointment-example-request", Appointment.newBuilder());
+    testParse("Appointment-example", Appointment.newBuilder());
+    testParse("Appointment-2docs", Appointment.newBuilder());
+    testParse("Appointment-examplereq", Appointment.newBuilder());
   }
 
   /** Test printing of the Appointment FHIR resource. */
   @Test
   public void printAppointment() throws Exception {
-    testPrint("appointment-example", Appointment.newBuilder());
-    testPrint("appointment-example2doctors", Appointment.newBuilder());
-    testPrint("appointment-example-request", Appointment.newBuilder());
+    testPrint("Appointment-example", Appointment.newBuilder());
+    testPrint("Appointment-2docs", Appointment.newBuilder());
+    testPrint("Appointment-examplereq", Appointment.newBuilder());
   }
 
   /** Test parsing of the AppointmentResponse FHIR resource. */
   @Test
   public void parseAppointmentResponse() throws Exception {
-    testParse("appointmentresponse-example", AppointmentResponse.newBuilder());
-    testParse("appointmentresponse-example-req", AppointmentResponse.newBuilder());
+    testParse("AppointmentResponse-example", AppointmentResponse.newBuilder());
+    testParse("AppointmentResponse-exampleresp", AppointmentResponse.newBuilder());
   }
 
   /** Test printing of the AppointmentResponse FHIR resource. */
   @Test
   public void printAppointmentResponse() throws Exception {
-    testPrint("appointmentresponse-example", AppointmentResponse.newBuilder());
-    testPrint("appointmentresponse-example-req", AppointmentResponse.newBuilder());
+    testPrint("AppointmentResponse-example", AppointmentResponse.newBuilder());
+    testPrint("AppointmentResponse-exampleresp", AppointmentResponse.newBuilder());
   }
 
   /** Test parsing of the AuditEvent FHIR resource. */
   @Test
   public void parseAuditEvent() throws Exception {
-    testParse("auditevent-example", AuditEvent.newBuilder());
-    testParse("auditevent-example-disclosure", AuditEvent.newBuilder());
-    testParse("audit-event-example-login", AuditEvent.newBuilder());
-    testParse("audit-event-example-logout", AuditEvent.newBuilder());
-    testParse("audit-event-example-media", AuditEvent.newBuilder());
-    testParse("audit-event-example-pixQuery", AuditEvent.newBuilder());
-    testParse("audit-event-example-search", AuditEvent.newBuilder());
-    testParse("audit-event-example-vread", AuditEvent.newBuilder());
+    testParse("AuditEvent-example", AuditEvent.newBuilder());
+    testParse("AuditEvent-example-disclosure", AuditEvent.newBuilder());
+    testParse("AuditEvent-example-login", AuditEvent.newBuilder());
+    testParse("AuditEvent-example-logout", AuditEvent.newBuilder());
+    testParse("AuditEvent-example-media", AuditEvent.newBuilder());
+    testParse("AuditEvent-example-pixQuery", AuditEvent.newBuilder());
+    testParse("AuditEvent-example-search", AuditEvent.newBuilder());
+    testParse("AuditEvent-example-rest", AuditEvent.newBuilder());
   }
 
   /** Test printing of the AuditEvent FHIR resource. */
   @Test
   public void printAuditEvent() throws Exception {
-    testPrint("auditevent-example", AuditEvent.newBuilder());
-    testPrint("auditevent-example-disclosure", AuditEvent.newBuilder());
-    testPrint("audit-event-example-login", AuditEvent.newBuilder());
-    testPrint("audit-event-example-logout", AuditEvent.newBuilder());
-    testPrint("audit-event-example-media", AuditEvent.newBuilder());
-    testPrint("audit-event-example-pixQuery", AuditEvent.newBuilder());
-    testPrint("audit-event-example-search", AuditEvent.newBuilder());
-    testPrint("audit-event-example-vread", AuditEvent.newBuilder());
+    testPrint("AuditEvent-example", AuditEvent.newBuilder());
+    testPrint("AuditEvent-example-disclosure", AuditEvent.newBuilder());
+    testPrint("AuditEvent-example-login", AuditEvent.newBuilder());
+    testPrint("AuditEvent-example-logout", AuditEvent.newBuilder());
+    testPrint("AuditEvent-example-media", AuditEvent.newBuilder());
+    testPrint("AuditEvent-example-pixQuery", AuditEvent.newBuilder());
+    testPrint("AuditEvent-example-search", AuditEvent.newBuilder());
+    testPrint("AuditEvent-example-rest", AuditEvent.newBuilder());
   }
 
   /** Test parsing of the Basic FHIR resource. */
   @Test
   public void parseBasic() throws Exception {
-    testParse("basic-example", Basic.newBuilder());
-    testParse("basic-example2", Basic.newBuilder());
-    testParse("basic-example-narrative", Basic.newBuilder());
+    testParse("Basic-referral", Basic.newBuilder());
+    testParse("Basic-classModel", Basic.newBuilder());
+    testParse("Basic-basic-example-narrative", Basic.newBuilder());
   }
 
   /** Test printing of the Basic FHIR resource. */
   @Test
   public void printBasic() throws Exception {
-    testPrint("basic-example", Basic.newBuilder());
-    testPrint("basic-example2", Basic.newBuilder());
-    testPrint("basic-example-narrative", Basic.newBuilder());
+    testPrint("Basic-referral", Basic.newBuilder());
+    testPrint("Basic-classModel", Basic.newBuilder());
+    testPrint("Basic-basic-example-narrative", Basic.newBuilder());
   }
 
   /** Test parsing of the Binary FHIR resource. */
   @Test
   public void parseBinary() throws Exception {
-    testParse("binary-example", Binary.newBuilder());
+    testParse("Binary-example", Binary.newBuilder());
   }
 
   /** Test printing of the Binary FHIR resource. */
   @Test
   public void printBinary() throws Exception {
-    testPrint("binary-example", Binary.newBuilder());
+    testPrint("Binary-example", Binary.newBuilder());
   }
 
   /** Test parsing of the BodySite FHIR resource. */
   @Test
   public void parseBodySite() throws Exception {
-    testParse("bodysite-example-fetus", BodySite.newBuilder());
-    testParse("bodysite-example-skin-patch", BodySite.newBuilder());
-    testParse("bodysite-example-tumor", BodySite.newBuilder());
+    testParse("BodySite-fetus", BodySite.newBuilder());
+    testParse("BodySite-skin-patch", BodySite.newBuilder());
+    testParse("BodySite-tumor", BodySite.newBuilder());
   }
 
   /** Test printing of the BodySite FHIR resource. */
   @Test
   public void printBodySite() throws Exception {
-    testPrint("bodysite-example-fetus", BodySite.newBuilder());
-    testPrint("bodysite-example-skin-patch", BodySite.newBuilder());
-    testPrint("bodysite-example-tumor", BodySite.newBuilder());
+    testPrint("BodySite-fetus", BodySite.newBuilder());
+    testPrint("BodySite-skin-patch", BodySite.newBuilder());
+    testPrint("BodySite-tumor", BodySite.newBuilder());
   }
 
   /** Test parsing of the Bundle FHIR resource. */
   @Test
   public void parseBundle() throws Exception {
-    testParse("bundle-example", Bundle.newBuilder());
-    testParse("diagnosticreport-examples-general", Bundle.newBuilder());
-    testParse("diagnosticreport-hla-genetics-results-example", Bundle.newBuilder());
-    testParse("document-example-dischargesummary", Bundle.newBuilder());
-    testParse("endpoint-examples-general-template", Bundle.newBuilder());
-    testParse("location-examples-general", Bundle.newBuilder());
+    testParse("Bundle-bundle-example", Bundle.newBuilder());
+    testParse("Bundle-72ac8493-52ac-41bd-8d5d-7258c289b5ea", Bundle.newBuilder());
+    testParse("Bundle-hla-1", Bundle.newBuilder());
+    testParse("Bundle-father", Bundle.newBuilder());
+    testParse("Bundle-b0a5e4277-83c4-4adb-87e2-e3efe3369b6f", Bundle.newBuilder());
+    testParse("Bundle-3ad0687e-f477-468c-afd5-fcc2bf897819", Bundle.newBuilder());
     testParse("patient-examples-cypress-template", Bundle.newBuilder());
-    testParse("patient-examples-general", Bundle.newBuilder());
-    testParse("practitioner-examples-general", Bundle.newBuilder());
-    testParse("practitionerrole-examples-general", Bundle.newBuilder());
-    testParse("questionnaire-profile-example-ussg-fht", Bundle.newBuilder());
-    testParse("xds-example", Bundle.newBuilder());
+    testParse("Bundle-b248b1b2-1686-4b94-9936-37d7a5f94b51", Bundle.newBuilder());
+    testParse("Bundle-3ad0687e-f477-468c-afd5-fcc2bf897809", Bundle.newBuilder());
+    testParse("Bundle-3ad0687e-f477-468c-afd5-fcc2bf897808", Bundle.newBuilder());
+    testParse("Bundle-ussg-fht", Bundle.newBuilder());
+    testParse("Bundle-xds", Bundle.newBuilder());
   }
 
   /** Test printing of the Bundle FHIR resource. */
   @Test
   public void printBundle() throws Exception {
-    testPrint("bundle-example", Bundle.newBuilder());
-    testPrint("diagnosticreport-examples-general", Bundle.newBuilder());
-    testPrint("diagnosticreport-hla-genetics-results-example", Bundle.newBuilder());
-    testPrint("document-example-dischargesummary", Bundle.newBuilder());
-    testPrint("endpoint-examples-general-template", Bundle.newBuilder());
-    testPrint("location-examples-general", Bundle.newBuilder());
+    testPrint("Bundle-bundle-example", Bundle.newBuilder());
+    testPrint("Bundle-72ac8493-52ac-41bd-8d5d-7258c289b5ea", Bundle.newBuilder());
+    testPrint("Bundle-hla-1", Bundle.newBuilder());
+    testPrint("Bundle-father", Bundle.newBuilder());
+    testPrint("Bundle-b0a5e4277-83c4-4adb-87e2-e3efe3369b6f", Bundle.newBuilder());
+    testPrint("Bundle-3ad0687e-f477-468c-afd5-fcc2bf897819", Bundle.newBuilder());
     testPrint("patient-examples-cypress-template", Bundle.newBuilder());
-    testPrint("patient-examples-general", Bundle.newBuilder());
-    testPrint("practitioner-examples-general", Bundle.newBuilder());
-    testPrint("practitionerrole-examples-general", Bundle.newBuilder());
-    testPrint("questionnaire-profile-example-ussg-fht", Bundle.newBuilder());
-    testPrint("xds-example", Bundle.newBuilder());
+    testPrint("Bundle-b248b1b2-1686-4b94-9936-37d7a5f94b51", Bundle.newBuilder());
+    testPrint("Bundle-3ad0687e-f477-468c-afd5-fcc2bf897809", Bundle.newBuilder());
+    testPrint("Bundle-3ad0687e-f477-468c-afd5-fcc2bf897808", Bundle.newBuilder());
+    testPrint("Bundle-ussg-fht", Bundle.newBuilder());
+    testPrint("Bundle-xds", Bundle.newBuilder());
   }
 
   /** Test parsing of the CapabilityStatement FHIR resource. */
   @Test
   public void parseCapabilityStatement() throws Exception {
-    testParse("capabilitystatement-example", CapabilityStatement.newBuilder());
-    testParse("capabilitystatement-phr-example", CapabilityStatement.newBuilder());
+    testParse("CapabilityStatement-example", CapabilityStatement.newBuilder());
+    testParse("CapabilityStatement-phr", CapabilityStatement.newBuilder());
   }
 
   /** Test printing of the CapabilityStatement FHIR resource. */
   @Test
   public void printCapabilityStatement() throws Exception {
-    testPrint("capabilitystatement-example", CapabilityStatement.newBuilder());
-    testPrint("capabilitystatement-phr-example", CapabilityStatement.newBuilder());
+    testPrint("CapabilityStatement-example", CapabilityStatement.newBuilder());
+    testPrint("CapabilityStatement-phr", CapabilityStatement.newBuilder());
   }
 
   /** Test parsing of the CarePlan FHIR resource. */
   @Test
   public void parseCarePlan() throws Exception {
-    testParse("careplan-example", CarePlan.newBuilder());
-    testParse("careplan-example-f001-heart", CarePlan.newBuilder());
-    testParse("careplan-example-f002-lung", CarePlan.newBuilder());
-    testParse("careplan-example-f003-pharynx", CarePlan.newBuilder());
-    testParse("careplan-example-f201-renal", CarePlan.newBuilder());
-    testParse("careplan-example-f202-malignancy", CarePlan.newBuilder());
-    testParse("careplan-example-f203-sepsis", CarePlan.newBuilder());
-    testParse("careplan-example-GPVisit", CarePlan.newBuilder());
-    testParse("careplan-example-integrated", CarePlan.newBuilder());
-    testParse("careplan-example-obesity-narrative", CarePlan.newBuilder());
-    testParse("careplan-example-pregnancy", CarePlan.newBuilder());
+    testParse("CarePlan-example", CarePlan.newBuilder());
+    testParse("CarePlan-f001", CarePlan.newBuilder());
+    testParse("CarePlan-f002", CarePlan.newBuilder());
+    testParse("CarePlan-f003", CarePlan.newBuilder());
+    testParse("CarePlan-f201", CarePlan.newBuilder());
+    testParse("CarePlan-f202", CarePlan.newBuilder());
+    testParse("CarePlan-f203", CarePlan.newBuilder());
+    testParse("CarePlan-gpvisit", CarePlan.newBuilder());
+    testParse("CarePlan-integrate", CarePlan.newBuilder());
+    testParse("CarePlan-obesity-narrative", CarePlan.newBuilder());
+    testParse("CarePlan-preg", CarePlan.newBuilder());
   }
 
   /** Test printing of the CarePlan FHIR resource. */
   @Test
   public void printCarePlan() throws Exception {
-    testPrint("careplan-example", CarePlan.newBuilder());
-    testPrint("careplan-example-f001-heart", CarePlan.newBuilder());
-    testPrint("careplan-example-f002-lung", CarePlan.newBuilder());
-    testPrint("careplan-example-f003-pharynx", CarePlan.newBuilder());
-    testPrint("careplan-example-f201-renal", CarePlan.newBuilder());
-    testPrint("careplan-example-f202-malignancy", CarePlan.newBuilder());
-    testPrint("careplan-example-f203-sepsis", CarePlan.newBuilder());
-    testPrint("careplan-example-GPVisit", CarePlan.newBuilder());
-    testPrint("careplan-example-integrated", CarePlan.newBuilder());
-    testPrint("careplan-example-obesity-narrative", CarePlan.newBuilder());
-    testPrint("careplan-example-pregnancy", CarePlan.newBuilder());
+    testPrint("CarePlan-example", CarePlan.newBuilder());
+    testPrint("CarePlan-f001", CarePlan.newBuilder());
+    testPrint("CarePlan-f002", CarePlan.newBuilder());
+    testPrint("CarePlan-f003", CarePlan.newBuilder());
+    testPrint("CarePlan-f201", CarePlan.newBuilder());
+    testPrint("CarePlan-f202", CarePlan.newBuilder());
+    testPrint("CarePlan-f203", CarePlan.newBuilder());
+    testPrint("CarePlan-gpvisit", CarePlan.newBuilder());
+    testPrint("CarePlan-integrate", CarePlan.newBuilder());
+    testPrint("CarePlan-obesity-narrative", CarePlan.newBuilder());
+    testPrint("CarePlan-preg", CarePlan.newBuilder());
   }
 
   /** Test parsing of the CareTeam FHIR resource. */
   @Test
   public void parseCareTeam() throws Exception {
-    testParse("careteam-example", CareTeam.newBuilder());
+    testParse("CareTeam-example", CareTeam.newBuilder());
   }
 
   /** Test printing of the CareTeam FHIR resource. */
   @Test
   public void printCareTeam() throws Exception {
-    testPrint("careteam-example", CareTeam.newBuilder());
+    testPrint("CareTeam-example", CareTeam.newBuilder());
   }
 
   /** Test parsing of the ChargeItem FHIR resource. */
   @Test
   public void parseChargeItem() throws Exception {
-    testParse("chargeitem-example", ChargeItem.newBuilder());
+    testParse("ChargeItem-example", ChargeItem.newBuilder());
   }
 
   /** Test printing of the ChargeItem FHIR resource. */
   @Test
   public void printChargeItem() throws Exception {
-    testPrint("chargeitem-example", ChargeItem.newBuilder());
+    testPrint("ChargeItem-example", ChargeItem.newBuilder());
   }
 
   /** Test parsing of the Claim FHIR resource. */
   @Test
   public void parseClaim() throws Exception {
-    testParse("claim-example", Claim.newBuilder());
-    testParse("claim-example-institutional", Claim.newBuilder());
-    testParse("claim-example-institutional-rich", Claim.newBuilder());
-    testParse("claim-example-oral-average", Claim.newBuilder());
-    testParse("claim-example-oral-bridge", Claim.newBuilder());
-    testParse("claim-example-oral-contained", Claim.newBuilder());
-    testParse("claim-example-oral-contained-identifier", Claim.newBuilder());
-    testParse("claim-example-oral-identifier", Claim.newBuilder());
-    testParse("claim-example-oral-orthoplan", Claim.newBuilder());
-    testParse("claim-example-pharmacy", Claim.newBuilder());
-    testParse("claim-example-pharmacy-compound", Claim.newBuilder());
-    testParse("claim-example-pharmacy-medication", Claim.newBuilder());
-    testParse("claim-example-professional", Claim.newBuilder());
-    testParse("claim-example-vision", Claim.newBuilder());
-    testParse("claim-example-vision-glasses", Claim.newBuilder());
-    testParse("claim-example-vision-glasses-3tier", Claim.newBuilder());
+    testParse("Claim-100150", Claim.newBuilder());
+    testParse("Claim-960150", Claim.newBuilder());
+    testParse("Claim-960151", Claim.newBuilder());
+    testParse("Claim-100151", Claim.newBuilder());
+    testParse("Claim-100156", Claim.newBuilder());
+    testParse("Claim-100152", Claim.newBuilder());
+    testParse("Claim-100155", Claim.newBuilder());
+    testParse("Claim-100154", Claim.newBuilder());
+    testParse("Claim-100153", Claim.newBuilder());
+    testParse("Claim-760150", Claim.newBuilder());
+    testParse("Claim-760152", Claim.newBuilder());
+    testParse("Claim-760151", Claim.newBuilder());
+    testParse("Claim-860150", Claim.newBuilder());
+    testParse("Claim-660150", Claim.newBuilder());
+    testParse("Claim-660151", Claim.newBuilder());
+    testParse("Claim-660152", Claim.newBuilder());
   }
 
   /** Test printing of the Claim FHIR resource. */
   @Test
   public void printClaim() throws Exception {
-    testPrint("claim-example", Claim.newBuilder());
-    testPrint("claim-example-institutional", Claim.newBuilder());
-    testPrint("claim-example-institutional-rich", Claim.newBuilder());
-    testPrint("claim-example-oral-average", Claim.newBuilder());
-    testPrint("claim-example-oral-bridge", Claim.newBuilder());
-    testPrint("claim-example-oral-contained", Claim.newBuilder());
-    testPrint("claim-example-oral-contained-identifier", Claim.newBuilder());
-    testPrint("claim-example-oral-identifier", Claim.newBuilder());
-    testPrint("claim-example-oral-orthoplan", Claim.newBuilder());
-    testPrint("claim-example-pharmacy", Claim.newBuilder());
-    testPrint("claim-example-pharmacy-compound", Claim.newBuilder());
-    testPrint("claim-example-pharmacy-medication", Claim.newBuilder());
-    testPrint("claim-example-professional", Claim.newBuilder());
-    testPrint("claim-example-vision", Claim.newBuilder());
-    testPrint("claim-example-vision-glasses", Claim.newBuilder());
-    testPrint("claim-example-vision-glasses-3tier", Claim.newBuilder());
+    testPrint("Claim-100150", Claim.newBuilder());
+    testPrint("Claim-960150", Claim.newBuilder());
+    testPrint("Claim-960151", Claim.newBuilder());
+    testPrint("Claim-100151", Claim.newBuilder());
+    testPrint("Claim-100156", Claim.newBuilder());
+    testPrint("Claim-100152", Claim.newBuilder());
+    testPrint("Claim-100155", Claim.newBuilder());
+    testPrint("Claim-100154", Claim.newBuilder());
+    testPrint("Claim-100153", Claim.newBuilder());
+    testPrint("Claim-760150", Claim.newBuilder());
+    testPrint("Claim-760152", Claim.newBuilder());
+    testPrint("Claim-760151", Claim.newBuilder());
+    testPrint("Claim-860150", Claim.newBuilder());
+    testPrint("Claim-660150", Claim.newBuilder());
+    testPrint("Claim-660151", Claim.newBuilder());
+    testPrint("Claim-660152", Claim.newBuilder());
   }
 
   /** Test parsing of the ClaimResponse FHIR resource. */
   @Test
   public void parseClaimResponse() throws Exception {
-    testParse("claimresponse-example", ClaimResponse.newBuilder());
+    testParse("ClaimResponse-R3500", ClaimResponse.newBuilder());
   }
 
   /** Test printing of the ClaimResponse FHIR resource. */
   @Test
   public void printClaimResponse() throws Exception {
-    testPrint("claimresponse-example", ClaimResponse.newBuilder());
+    testPrint("ClaimResponse-R3500", ClaimResponse.newBuilder());
   }
 
   /** Test parsing of the ClinicalImpression FHIR resource. */
   @Test
   public void parseClinicalImpression() throws Exception {
-    testParse("clinicalimpression-example", ClinicalImpression.newBuilder());
+    testParse("ClinicalImpression-example", ClinicalImpression.newBuilder());
   }
 
   /** Test printing of the ClinicalImpression FHIR resource. */
   @Test
   public void printClinicalImpression() throws Exception {
-    testPrint("clinicalimpression-example", ClinicalImpression.newBuilder());
+    testPrint("ClinicalImpression-example", ClinicalImpression.newBuilder());
   }
 
   /** Test parsing of the CodeSystem FHIR resource. */
@@ -622,57 +628,55 @@ public class JsonFormatTest {
   /** Test parsing of the Communication FHIR resource. */
   @Test
   public void parseCommunication() throws Exception {
-    testParse("communication-example", Communication.newBuilder());
-    testParse("communication-example-fm-attachment", Communication.newBuilder());
-    testParse("communication-example-fm-solicited-attachment", Communication.newBuilder());
+    testParse("Communication-example", Communication.newBuilder());
+    testParse("Communication-fm-attachment", Communication.newBuilder());
+    testParse("Communication-fm-solicited", Communication.newBuilder());
   }
 
   /** Test printing of the Communication FHIR resource. */
   @Test
   public void printCommunication() throws Exception {
-    testPrint("communication-example", Communication.newBuilder());
-    testPrint("communication-example-fm-attachment", Communication.newBuilder());
-    testPrint("communication-example-fm-solicited-attachment", Communication.newBuilder());
+    testPrint("Communication-example", Communication.newBuilder());
+    testPrint("Communication-fm-attachment", Communication.newBuilder());
+    testPrint("Communication-fm-solicited", Communication.newBuilder());
   }
 
   /** Test parsing of the CommunicationRequest FHIR resource. */
   @Test
   public void parseCommunicationRequest() throws Exception {
-    testParse("communicationrequest-example", CommunicationRequest.newBuilder());
-    testParse(
-        "communicationrequest-example-fm-solicit-attachment", CommunicationRequest.newBuilder());
+    testParse("CommunicationRequest-example", CommunicationRequest.newBuilder());
+    testParse("CommunicationRequest-fm-solicit", CommunicationRequest.newBuilder());
   }
 
   /** Test printing of the CommunicationRequest FHIR resource. */
   @Test
   public void printCommunicationRequest() throws Exception {
-    testPrint("communicationrequest-example", CommunicationRequest.newBuilder());
-    testPrint(
-        "communicationrequest-example-fm-solicit-attachment", CommunicationRequest.newBuilder());
+    testPrint("CommunicationRequest-example", CommunicationRequest.newBuilder());
+    testPrint("CommunicationRequest-fm-solicit", CommunicationRequest.newBuilder());
   }
 
   /** Test parsing of the CompartmentDefinition FHIR resource. */
   @Test
   public void parseCompartmentDefinition() throws Exception {
-    testParse("compartmentdefinition-example", CompartmentDefinition.newBuilder());
+    testParse("CompartmentDefinition-example", CompartmentDefinition.newBuilder());
   }
 
   /** Test printing of the CompartmentDefinition FHIR resource. */
   @Test
   public void printCompartmentDefinition() throws Exception {
-    testPrint("compartmentdefinition-example", CompartmentDefinition.newBuilder());
+    testPrint("CompartmentDefinition-example", CompartmentDefinition.newBuilder());
   }
 
   /** Test parsing of the Composition FHIR resource. */
   @Test
   public void parseComposition() throws Exception {
-    testParse("composition-example", Composition.newBuilder());
+    testParse("Composition-example", Composition.newBuilder());
   }
 
   /** Test printing of the Composition FHIR resource. */
   @Test
   public void printComposition() throws Exception {
-    testPrint("composition-example", Composition.newBuilder());
+    testPrint("Composition-example", Composition.newBuilder());
   }
 
   /** Test parsing of the ConceptMap FHIR resource. */
@@ -694,559 +698,559 @@ public class JsonFormatTest {
   /** Test parsing of the Condition FHIR resource. */
   @Test
   public void parseCondition() throws Exception {
-    testParse("condition-example", Condition.newBuilder());
-    testParse("condition-example2", Condition.newBuilder());
-    testParse("condition-example-f001-heart", Condition.newBuilder());
-    testParse("condition-example-f002-lung", Condition.newBuilder());
-    testParse("condition-example-f003-abscess", Condition.newBuilder());
-    testParse("condition-example-f201-fever", Condition.newBuilder());
-    testParse("condition-example-f202-malignancy", Condition.newBuilder());
-    testParse("condition-example-f203-sepsis", Condition.newBuilder());
-    testParse("condition-example-f204-renal", Condition.newBuilder());
-    testParse("condition-example-f205-infection", Condition.newBuilder());
-    testParse("condition-example-family-history", Condition.newBuilder());
-    testParse("condition-example-stroke", Condition.newBuilder());
+    testParse("Condition-example", Condition.newBuilder());
+    testParse("Condition-example2", Condition.newBuilder());
+    testParse("Condition-f001", Condition.newBuilder());
+    testParse("Condition-f002", Condition.newBuilder());
+    testParse("Condition-f003", Condition.newBuilder());
+    testParse("Condition-f201", Condition.newBuilder());
+    testParse("Condition-f202", Condition.newBuilder());
+    testParse("Condition-f203", Condition.newBuilder());
+    testParse("Condition-f204", Condition.newBuilder());
+    testParse("Condition-f205", Condition.newBuilder());
+    testParse("Condition-family-history", Condition.newBuilder());
+    testParse("Condition-stroke", Condition.newBuilder());
   }
 
   /** Test printing of the Condition FHIR resource. */
   @Test
   public void printCondition() throws Exception {
-    testPrint("condition-example", Condition.newBuilder());
-    testPrint("condition-example2", Condition.newBuilder());
-    testPrint("condition-example-f001-heart", Condition.newBuilder());
-    testPrint("condition-example-f002-lung", Condition.newBuilder());
-    testPrint("condition-example-f003-abscess", Condition.newBuilder());
-    testPrint("condition-example-f201-fever", Condition.newBuilder());
-    testPrint("condition-example-f202-malignancy", Condition.newBuilder());
-    testPrint("condition-example-f203-sepsis", Condition.newBuilder());
-    testPrint("condition-example-f204-renal", Condition.newBuilder());
-    testPrint("condition-example-f205-infection", Condition.newBuilder());
-    testPrint("condition-example-family-history", Condition.newBuilder());
-    testPrint("condition-example-stroke", Condition.newBuilder());
+    testPrint("Condition-example", Condition.newBuilder());
+    testPrint("Condition-example2", Condition.newBuilder());
+    testPrint("Condition-f001", Condition.newBuilder());
+    testPrint("Condition-f002", Condition.newBuilder());
+    testPrint("Condition-f003", Condition.newBuilder());
+    testPrint("Condition-f201", Condition.newBuilder());
+    testPrint("Condition-f202", Condition.newBuilder());
+    testPrint("Condition-f203", Condition.newBuilder());
+    testPrint("Condition-f204", Condition.newBuilder());
+    testPrint("Condition-f205", Condition.newBuilder());
+    testPrint("Condition-family-history", Condition.newBuilder());
+    testPrint("Condition-stroke", Condition.newBuilder());
   }
 
   /** Test parsing of the Consent FHIR resource. */
   @Test
   public void parseConsent() throws Exception {
-    testParse("consent-example", Consent.newBuilder());
-    testParse("consent-example-Emergency", Consent.newBuilder());
-    testParse("consent-example-grantor", Consent.newBuilder());
-    testParse("consent-example-notAuthor", Consent.newBuilder());
-    testParse("consent-example-notOrg", Consent.newBuilder());
-    testParse("consent-example-notThem", Consent.newBuilder());
-    testParse("consent-example-notThis", Consent.newBuilder());
-    testParse("consent-example-notTime", Consent.newBuilder());
-    testParse("consent-example-Out", Consent.newBuilder());
-    testParse("consent-example-pkb", Consent.newBuilder());
-    testParse("consent-example-signature", Consent.newBuilder());
-    testParse("consent-example-smartonfhir", Consent.newBuilder());
+    testParse("Consent-consent-example-basic", Consent.newBuilder());
+    testParse("Consent-consent-example-Emergency", Consent.newBuilder());
+    testParse("Consent-consent-example-grantor", Consent.newBuilder());
+    testParse("Consent-consent-example-notAuthor", Consent.newBuilder());
+    testParse("Consent-consent-example-notOrg", Consent.newBuilder());
+    testParse("Consent-consent-example-notThem", Consent.newBuilder());
+    testParse("Consent-consent-example-notThis", Consent.newBuilder());
+    testParse("Consent-consent-example-notTime", Consent.newBuilder());
+    testParse("Consent-consent-example-Out", Consent.newBuilder());
+    testParse("Consent-consent-example-pkb", Consent.newBuilder());
+    testParse("Consent-consent-example-signature", Consent.newBuilder());
+    testParse("Consent-consent-example-smartonfhir", Consent.newBuilder());
   }
 
   /** Test printing of the Consent FHIR resource. */
   @Test
   public void printConsent() throws Exception {
-    testPrint("consent-example", Consent.newBuilder());
-    testPrint("consent-example-Emergency", Consent.newBuilder());
-    testPrint("consent-example-grantor", Consent.newBuilder());
-    testPrint("consent-example-notAuthor", Consent.newBuilder());
-    testPrint("consent-example-notOrg", Consent.newBuilder());
-    testPrint("consent-example-notThem", Consent.newBuilder());
-    testPrint("consent-example-notThis", Consent.newBuilder());
-    testPrint("consent-example-notTime", Consent.newBuilder());
-    testPrint("consent-example-Out", Consent.newBuilder());
-    testPrint("consent-example-pkb", Consent.newBuilder());
-    testPrint("consent-example-signature", Consent.newBuilder());
-    testPrint("consent-example-smartonfhir", Consent.newBuilder());
+    testPrint("Consent-consent-example-basic", Consent.newBuilder());
+    testPrint("Consent-consent-example-Emergency", Consent.newBuilder());
+    testPrint("Consent-consent-example-grantor", Consent.newBuilder());
+    testPrint("Consent-consent-example-notAuthor", Consent.newBuilder());
+    testPrint("Consent-consent-example-notOrg", Consent.newBuilder());
+    testPrint("Consent-consent-example-notThem", Consent.newBuilder());
+    testPrint("Consent-consent-example-notThis", Consent.newBuilder());
+    testPrint("Consent-consent-example-notTime", Consent.newBuilder());
+    testPrint("Consent-consent-example-Out", Consent.newBuilder());
+    testPrint("Consent-consent-example-pkb", Consent.newBuilder());
+    testPrint("Consent-consent-example-signature", Consent.newBuilder());
+    testPrint("Consent-consent-example-smartonfhir", Consent.newBuilder());
   }
 
   /** Test parsing of the Contract FHIR resource. */
   @Test
   public void parseContract() throws Exception {
-    testParse("contract-example", Contract.newBuilder());
-    testParse("contract-example-42cfr-part2", Contract.newBuilder());
-    testParse("pcd-example-notAuthor", Contract.newBuilder());
-    testParse("pcd-example-notLabs", Contract.newBuilder());
-    testParse("pcd-example-notOrg", Contract.newBuilder());
-    testParse("pcd-example-notThem", Contract.newBuilder());
-    testParse("pcd-example-notThis", Contract.newBuilder());
+    testParse("Contract-C-123", Contract.newBuilder());
+    testParse("Contract-C-2121", Contract.newBuilder());
+    testParse("Contract-pcd-example-notAuthor", Contract.newBuilder());
+    testParse("Contract-pcd-example-notLabs", Contract.newBuilder());
+    testParse("Contract-pcd-example-notOrg", Contract.newBuilder());
+    testParse("Contract-pcd-example-notThem", Contract.newBuilder());
+    testParse("Contract-pcd-example-notThis", Contract.newBuilder());
   }
 
   /** Test printing of the Contract FHIR resource. */
   @Test
   public void printContract() throws Exception {
-    testPrint("contract-example", Contract.newBuilder());
-    testPrint("contract-example-42cfr-part2", Contract.newBuilder());
-    testPrint("pcd-example-notAuthor", Contract.newBuilder());
-    testPrint("pcd-example-notLabs", Contract.newBuilder());
-    testPrint("pcd-example-notOrg", Contract.newBuilder());
-    testPrint("pcd-example-notThem", Contract.newBuilder());
-    testPrint("pcd-example-notThis", Contract.newBuilder());
+    testPrint("Contract-C-123", Contract.newBuilder());
+    testPrint("Contract-C-2121", Contract.newBuilder());
+    testPrint("Contract-pcd-example-notAuthor", Contract.newBuilder());
+    testPrint("Contract-pcd-example-notLabs", Contract.newBuilder());
+    testPrint("Contract-pcd-example-notOrg", Contract.newBuilder());
+    testPrint("Contract-pcd-example-notThem", Contract.newBuilder());
+    testPrint("Contract-pcd-example-notThis", Contract.newBuilder());
   }
 
   /** Test parsing of the Coverage FHIR resource. */
   @Test
   public void parseCoverage() throws Exception {
-    testParse("coverage-example", Coverage.newBuilder());
-    testParse("coverage-example-2", Coverage.newBuilder());
-    testParse("coverage-example-ehic", Coverage.newBuilder());
-    testParse("coverage-example-selfpay", Coverage.newBuilder());
+    testParse("Coverage-9876B1", Coverage.newBuilder());
+    testParse("Coverage-7546D", Coverage.newBuilder());
+    testParse("Coverage-7547E", Coverage.newBuilder());
+    testParse("Coverage-SP1234", Coverage.newBuilder());
   }
 
   /** Test printing of the Coverage FHIR resource. */
   @Test
   public void printCoverage() throws Exception {
-    testPrint("coverage-example", Coverage.newBuilder());
-    testPrint("coverage-example-2", Coverage.newBuilder());
-    testPrint("coverage-example-ehic", Coverage.newBuilder());
-    testPrint("coverage-example-selfpay", Coverage.newBuilder());
+    testPrint("Coverage-9876B1", Coverage.newBuilder());
+    testPrint("Coverage-7546D", Coverage.newBuilder());
+    testPrint("Coverage-7547E", Coverage.newBuilder());
+    testPrint("Coverage-SP1234", Coverage.newBuilder());
   }
 
   /** Test parsing of the DataElement FHIR resource. */
   @Test
   public void parseDataElement() throws Exception {
-    testParse("dataelement-example", DataElement.newBuilder());
-    testParse("dataelement-labtestmaster-example", DataElement.newBuilder());
+    testParse("DataElement-gender", DataElement.newBuilder());
+    testParse("DataElement-prothrombin", DataElement.newBuilder());
   }
 
   /** Test printing of the DataElement FHIR resource. */
   @Test
   public void printDataElement() throws Exception {
-    testPrint("dataelement-example", DataElement.newBuilder());
-    testPrint("dataelement-labtestmaster-example", DataElement.newBuilder());
+    testPrint("DataElement-gender", DataElement.newBuilder());
+    testPrint("DataElement-prothrombin", DataElement.newBuilder());
   }
 
   /** Test parsing of the DetectedIssue FHIR resource. */
   @Test
   public void parseDetectedIssue() throws Exception {
-    testParse("detectedissue-example", DetectedIssue.newBuilder());
-    testParse("detectedissue-example-allergy", DetectedIssue.newBuilder());
-    testParse("detectedissue-example-dup", DetectedIssue.newBuilder());
-    testParse("detectedissue-example-lab", DetectedIssue.newBuilder());
+    testParse("DetectedIssue-ddi", DetectedIssue.newBuilder());
+    testParse("DetectedIssue-allergy", DetectedIssue.newBuilder());
+    testParse("DetectedIssue-duplicate", DetectedIssue.newBuilder());
+    testParse("DetectedIssue-lab", DetectedIssue.newBuilder());
   }
 
   /** Test printing of the DetectedIssue FHIR resource. */
   @Test
   public void printDetectedIssue() throws Exception {
-    testPrint("detectedissue-example", DetectedIssue.newBuilder());
-    testPrint("detectedissue-example-allergy", DetectedIssue.newBuilder());
-    testPrint("detectedissue-example-dup", DetectedIssue.newBuilder());
-    testPrint("detectedissue-example-lab", DetectedIssue.newBuilder());
+    testPrint("DetectedIssue-ddi", DetectedIssue.newBuilder());
+    testPrint("DetectedIssue-allergy", DetectedIssue.newBuilder());
+    testPrint("DetectedIssue-duplicate", DetectedIssue.newBuilder());
+    testPrint("DetectedIssue-lab", DetectedIssue.newBuilder());
   }
 
   /** Test parsing of the Device FHIR resource. */
   @Test
   public void parseDevice() throws Exception {
-    testParse("device-example", Device.newBuilder());
-    testParse("device-example-f001-feedingtube", Device.newBuilder());
-    testParse("device-example-ihe-pcd", Device.newBuilder());
-    testParse("device-example-pacemaker", Device.newBuilder());
-    testParse("device-example-software", Device.newBuilder());
-    testParse("device-example-udi1", Device.newBuilder());
-    testParse("device-example-udi2", Device.newBuilder());
-    testParse("device-example-udi3", Device.newBuilder());
-    testParse("device-example-udi4", Device.newBuilder());
+    testParse("Device-example", Device.newBuilder());
+    testParse("Device-f001", Device.newBuilder());
+    testParse("Device-ihe-pcd", Device.newBuilder());
+    testParse("Device-example-pacemaker", Device.newBuilder());
+    testParse("Device-software", Device.newBuilder());
+    testParse("Device-example-udi1", Device.newBuilder());
+    testParse("Device-example-udi2", Device.newBuilder());
+    testParse("Device-example-udi3", Device.newBuilder());
+    testParse("Device-example-udi4", Device.newBuilder());
   }
 
   /** Test printing of the Device FHIR resource. */
   @Test
   public void printDevice() throws Exception {
-    testPrint("device-example", Device.newBuilder());
-    testPrint("device-example-f001-feedingtube", Device.newBuilder());
-    testPrint("device-example-ihe-pcd", Device.newBuilder());
-    testPrint("device-example-pacemaker", Device.newBuilder());
-    testPrint("device-example-software", Device.newBuilder());
-    testPrint("device-example-udi1", Device.newBuilder());
-    testPrint("device-example-udi2", Device.newBuilder());
-    testPrint("device-example-udi3", Device.newBuilder());
-    testPrint("device-example-udi4", Device.newBuilder());
+    testPrint("Device-example", Device.newBuilder());
+    testPrint("Device-f001", Device.newBuilder());
+    testPrint("Device-ihe-pcd", Device.newBuilder());
+    testPrint("Device-example-pacemaker", Device.newBuilder());
+    testPrint("Device-software", Device.newBuilder());
+    testPrint("Device-example-udi1", Device.newBuilder());
+    testPrint("Device-example-udi2", Device.newBuilder());
+    testPrint("Device-example-udi3", Device.newBuilder());
+    testPrint("Device-example-udi4", Device.newBuilder());
   }
 
   /** Test parsing of the DeviceComponent FHIR resource. */
   @Test
   public void parseDeviceComponent() throws Exception {
-    testParse("devicecomponent-example", DeviceComponent.newBuilder());
-    testParse("devicecomponent-example-prodspec", DeviceComponent.newBuilder());
+    testParse("DeviceComponent-example", DeviceComponent.newBuilder());
+    testParse("DeviceComponent-example-prodspec", DeviceComponent.newBuilder());
   }
 
   /** Test printing of the DeviceComponent FHIR resource. */
   @Test
   public void printDeviceComponent() throws Exception {
-    testPrint("devicecomponent-example", DeviceComponent.newBuilder());
-    testPrint("devicecomponent-example-prodspec", DeviceComponent.newBuilder());
+    testPrint("DeviceComponent-example", DeviceComponent.newBuilder());
+    testPrint("DeviceComponent-example-prodspec", DeviceComponent.newBuilder());
   }
 
   /** Test parsing of the DeviceMetric FHIR resource. */
   @Test
   public void parseDeviceMetric() throws Exception {
-    testParse("devicemetric-example", DeviceMetric.newBuilder());
+    testParse("DeviceMetric-example", DeviceMetric.newBuilder());
   }
 
   /** Test printing of the DeviceMetric FHIR resource. */
   @Test
   public void printDeviceMetric() throws Exception {
-    testPrint("devicemetric-example", DeviceMetric.newBuilder());
+    testPrint("DeviceMetric-example", DeviceMetric.newBuilder());
   }
 
   /** Test parsing of the DeviceRequest FHIR resource. */
   @Test
   public void parseDeviceRequest() throws Exception {
-    testParse("devicerequest-example", DeviceRequest.newBuilder());
-    testParse("devicerequest-example-insulinpump", DeviceRequest.newBuilder());
+    testParse("DeviceRequest-example", DeviceRequest.newBuilder());
+    testParse("DeviceRequest-insulinpump", DeviceRequest.newBuilder());
   }
 
   /** Test printing of the DeviceRequest FHIR resource. */
   @Test
   public void printDeviceRequest() throws Exception {
-    testPrint("devicerequest-example", DeviceRequest.newBuilder());
-    testPrint("devicerequest-example-insulinpump", DeviceRequest.newBuilder());
+    testPrint("DeviceRequest-example", DeviceRequest.newBuilder());
+    testPrint("DeviceRequest-insulinpump", DeviceRequest.newBuilder());
   }
 
   /** Test parsing of the DeviceUseStatement FHIR resource. */
   @Test
   public void parseDeviceUseStatement() throws Exception {
-    testParse("deviceusestatement-example", DeviceUseStatement.newBuilder());
+    testParse("DeviceUseStatement-example", DeviceUseStatement.newBuilder());
   }
 
   /** Test printing of the DeviceUseStatement FHIR resource. */
   @Test
   public void printDeviceUseStatement() throws Exception {
-    testPrint("deviceusestatement-example", DeviceUseStatement.newBuilder());
+    testPrint("DeviceUseStatement-example", DeviceUseStatement.newBuilder());
   }
 
   /** Test parsing of the DiagnosticReport FHIR resource. */
   @Test
   public void parseDiagnosticReport() throws Exception {
-    testParse("diagnosticreport-example", DiagnosticReport.newBuilder());
-    testParse("diagnosticreport-example-dxa", DiagnosticReport.newBuilder());
-    testParse("diagnosticreport-example-f001-bloodexam", DiagnosticReport.newBuilder());
-    testParse("diagnosticreport-example-f201-brainct", DiagnosticReport.newBuilder());
-    testParse("diagnosticreport-example-f202-bloodculture", DiagnosticReport.newBuilder());
-    testParse("diagnosticreport-example-ghp", DiagnosticReport.newBuilder());
-    testParse("diagnosticreport-example-gingival-mass", DiagnosticReport.newBuilder());
-    testParse("diagnosticreport-example-lipids", DiagnosticReport.newBuilder());
-    testParse("diagnosticreport-example-papsmear", DiagnosticReport.newBuilder());
-    testParse("diagnosticreport-example-pgx", DiagnosticReport.newBuilder());
-    testParse("diagnosticreport-example-ultrasound", DiagnosticReport.newBuilder());
-    testParse("diagnosticreport-genetics-example-2-familyhistory", DiagnosticReport.newBuilder());
+    testParse("DiagnosticReport-101", DiagnosticReport.newBuilder());
+    testParse("DiagnosticReport-102", DiagnosticReport.newBuilder());
+    testParse("DiagnosticReport-f001", DiagnosticReport.newBuilder());
+    testParse("DiagnosticReport-f201", DiagnosticReport.newBuilder());
+    testParse("DiagnosticReport-f202", DiagnosticReport.newBuilder());
+    testParse("DiagnosticReport-ghp", DiagnosticReport.newBuilder());
+    testParse("DiagnosticReport-gingival-mass", DiagnosticReport.newBuilder());
+    testParse("DiagnosticReport-lipids", DiagnosticReport.newBuilder());
+    testParse("DiagnosticReport-pap", DiagnosticReport.newBuilder());
+    testParse("DiagnosticReport-example-pgx", DiagnosticReport.newBuilder());
+    testParse("DiagnosticReport-ultrasound", DiagnosticReport.newBuilder());
+    testParse("DiagnosticReport-dg2", DiagnosticReport.newBuilder());
   }
 
   /** Test printing of the DiagnosticReport FHIR resource. */
   @Test
   public void printDiagnosticReport() throws Exception {
-    testPrint("diagnosticreport-example", DiagnosticReport.newBuilder());
-    testPrint("diagnosticreport-example-dxa", DiagnosticReport.newBuilder());
-    testPrint("diagnosticreport-example-f001-bloodexam", DiagnosticReport.newBuilder());
-    testPrint("diagnosticreport-example-f201-brainct", DiagnosticReport.newBuilder());
-    testPrint("diagnosticreport-example-f202-bloodculture", DiagnosticReport.newBuilder());
-    testPrint("diagnosticreport-example-ghp", DiagnosticReport.newBuilder());
-    testPrint("diagnosticreport-example-gingival-mass", DiagnosticReport.newBuilder());
-    testPrint("diagnosticreport-example-lipids", DiagnosticReport.newBuilder());
-    testPrint("diagnosticreport-example-papsmear", DiagnosticReport.newBuilder());
-    testPrint("diagnosticreport-example-pgx", DiagnosticReport.newBuilder());
-    testPrint("diagnosticreport-example-ultrasound", DiagnosticReport.newBuilder());
-    testPrint("diagnosticreport-genetics-example-2-familyhistory", DiagnosticReport.newBuilder());
+    testPrint("DiagnosticReport-101", DiagnosticReport.newBuilder());
+    testPrint("DiagnosticReport-102", DiagnosticReport.newBuilder());
+    testPrint("DiagnosticReport-f001", DiagnosticReport.newBuilder());
+    testPrint("DiagnosticReport-f201", DiagnosticReport.newBuilder());
+    testPrint("DiagnosticReport-f202", DiagnosticReport.newBuilder());
+    testPrint("DiagnosticReport-ghp", DiagnosticReport.newBuilder());
+    testPrint("DiagnosticReport-gingival-mass", DiagnosticReport.newBuilder());
+    testPrint("DiagnosticReport-lipids", DiagnosticReport.newBuilder());
+    testPrint("DiagnosticReport-pap", DiagnosticReport.newBuilder());
+    testPrint("DiagnosticReport-example-pgx", DiagnosticReport.newBuilder());
+    testPrint("DiagnosticReport-ultrasound", DiagnosticReport.newBuilder());
+    testPrint("DiagnosticReport-dg2", DiagnosticReport.newBuilder());
   }
 
   /** Test parsing of the DocumentManifest FHIR resource. */
   @Test
   public void parseDocumentManifest() throws Exception {
-    testParse("documentmanifest-example", DocumentManifest.newBuilder());
+    testParse("DocumentManifest-example", DocumentManifest.newBuilder());
   }
 
   /** Test printing of the DocumentManifest FHIR resource. */
   @Test
   public void printDocumentManifest() throws Exception {
-    testPrint("documentmanifest-example", DocumentManifest.newBuilder());
+    testPrint("DocumentManifest-example", DocumentManifest.newBuilder());
   }
 
   /** Test parsing of the DocumentReference FHIR resource. */
   @Test
   public void parseDocumentReference() throws Exception {
-    testParse("documentreference-example", DocumentReference.newBuilder());
+    testParse("DocumentReference-example", DocumentReference.newBuilder());
   }
 
   /** Test printing of the DocumentReference FHIR resource. */
   @Test
   public void printDocumentReference() throws Exception {
-    testPrint("documentreference-example", DocumentReference.newBuilder());
+    testPrint("DocumentReference-example", DocumentReference.newBuilder());
   }
 
   /** Test parsing of the EligibilityRequest FHIR resource. */
   @Test
   public void parseEligibilityRequest() throws Exception {
-    testParse("eligibilityrequest-example", EligibilityRequest.newBuilder());
-    testParse("eligibilityrequest-example-2", EligibilityRequest.newBuilder());
+    testParse("EligibilityRequest-52345", EligibilityRequest.newBuilder());
+    testParse("EligibilityRequest-52346", EligibilityRequest.newBuilder());
   }
 
   /** Test printing of the EligibilityRequest FHIR resource. */
   @Test
   public void printEligibilityRequest() throws Exception {
-    testPrint("eligibilityrequest-example", EligibilityRequest.newBuilder());
-    testPrint("eligibilityrequest-example-2", EligibilityRequest.newBuilder());
+    testPrint("EligibilityRequest-52345", EligibilityRequest.newBuilder());
+    testPrint("EligibilityRequest-52346", EligibilityRequest.newBuilder());
   }
 
   /** Test parsing of the EligibilityResponse FHIR resource. */
   @Test
   public void parseEligibilityResponse() throws Exception {
-    testParse("eligibilityresponse-example", EligibilityResponse.newBuilder());
-    testParse("eligibilityresponse-example-benefits", EligibilityResponse.newBuilder());
-    testParse("eligibilityresponse-example-benefits-2", EligibilityResponse.newBuilder());
-    testParse("eligibilityresponse-example-error", EligibilityResponse.newBuilder());
+    testParse("EligibilityResponse-E2500", EligibilityResponse.newBuilder());
+    testParse("EligibilityResponse-E2501", EligibilityResponse.newBuilder());
+    testParse("EligibilityResponse-E2502", EligibilityResponse.newBuilder());
+    testParse("EligibilityResponse-E2503", EligibilityResponse.newBuilder());
   }
 
   /** Test printing of the EligibilityResponse FHIR resource. */
   @Test
   public void printEligibilityResponse() throws Exception {
-    testPrint("eligibilityresponse-example", EligibilityResponse.newBuilder());
-    testPrint("eligibilityresponse-example-benefits", EligibilityResponse.newBuilder());
-    testPrint("eligibilityresponse-example-benefits-2", EligibilityResponse.newBuilder());
-    testPrint("eligibilityresponse-example-error", EligibilityResponse.newBuilder());
+    testPrint("EligibilityResponse-E2500", EligibilityResponse.newBuilder());
+    testPrint("EligibilityResponse-E2501", EligibilityResponse.newBuilder());
+    testPrint("EligibilityResponse-E2502", EligibilityResponse.newBuilder());
+    testPrint("EligibilityResponse-E2503", EligibilityResponse.newBuilder());
   }
 
   /** Test parsing of the Encounter FHIR resource. */
   @Test
   public void parseEncounter() throws Exception {
-    testParse("encounter-example", Encounter.newBuilder());
-    testParse("encounter-example-emerg", Encounter.newBuilder());
-    testParse("encounter-example-f001-heart", Encounter.newBuilder());
-    testParse("encounter-example-f002-lung", Encounter.newBuilder());
-    testParse("encounter-example-f003-abscess", Encounter.newBuilder());
-    testParse("encounter-example-f201-20130404", Encounter.newBuilder());
-    testParse("encounter-example-f202-20130128", Encounter.newBuilder());
-    testParse("encounter-example-f203-20130311", Encounter.newBuilder());
-    testParse("encounter-example-home", Encounter.newBuilder());
-    testParse("encounter-example-xcda", Encounter.newBuilder());
+    testParse("Encounter-example", Encounter.newBuilder());
+    testParse("Encounter-emerg", Encounter.newBuilder());
+    testParse("Encounter-f001", Encounter.newBuilder());
+    testParse("Encounter-f002", Encounter.newBuilder());
+    testParse("Encounter-f003", Encounter.newBuilder());
+    testParse("Encounter-f201", Encounter.newBuilder());
+    testParse("Encounter-f202", Encounter.newBuilder());
+    testParse("Encounter-f203", Encounter.newBuilder());
+    testParse("Encounter-home", Encounter.newBuilder());
+    testParse("Encounter-xcda", Encounter.newBuilder());
   }
 
   /** Test printing of the Encounter FHIR resource. */
   @Test
   public void printEncounter() throws Exception {
-    testPrint("encounter-example", Encounter.newBuilder());
-    testPrint("encounter-example-emerg", Encounter.newBuilder());
-    testPrint("encounter-example-f001-heart", Encounter.newBuilder());
-    testPrint("encounter-example-f002-lung", Encounter.newBuilder());
-    testPrint("encounter-example-f003-abscess", Encounter.newBuilder());
-    testPrint("encounter-example-f201-20130404", Encounter.newBuilder());
-    testPrint("encounter-example-f202-20130128", Encounter.newBuilder());
-    testPrint("encounter-example-f203-20130311", Encounter.newBuilder());
-    testPrint("encounter-example-home", Encounter.newBuilder());
-    testPrint("encounter-example-xcda", Encounter.newBuilder());
+    testPrint("Encounter-example", Encounter.newBuilder());
+    testPrint("Encounter-emerg", Encounter.newBuilder());
+    testPrint("Encounter-f001", Encounter.newBuilder());
+    testPrint("Encounter-f002", Encounter.newBuilder());
+    testPrint("Encounter-f003", Encounter.newBuilder());
+    testPrint("Encounter-f201", Encounter.newBuilder());
+    testPrint("Encounter-f202", Encounter.newBuilder());
+    testPrint("Encounter-f203", Encounter.newBuilder());
+    testPrint("Encounter-home", Encounter.newBuilder());
+    testPrint("Encounter-xcda", Encounter.newBuilder());
   }
 
   /** Test parsing of the Endpoint FHIR resource. */
   @Test
   public void parseEndpoint() throws Exception {
-    testParse("endpoint-example", Endpoint.newBuilder());
-    testParse("endpoint-example-iid", Endpoint.newBuilder());
-    testParse("endpoint-example-wadors", Endpoint.newBuilder());
+    testParse("Endpoint-example", Endpoint.newBuilder());
+    testParse("Endpoint-example-iid", Endpoint.newBuilder());
+    testParse("Endpoint-example-wadors", Endpoint.newBuilder());
   }
 
   /** Test printing of the Endpoint FHIR resource. */
   @Test
   public void printEndpoint() throws Exception {
-    testPrint("endpoint-example", Endpoint.newBuilder());
-    testPrint("endpoint-example-iid", Endpoint.newBuilder());
-    testPrint("endpoint-example-wadors", Endpoint.newBuilder());
+    testPrint("Endpoint-example", Endpoint.newBuilder());
+    testPrint("Endpoint-example-iid", Endpoint.newBuilder());
+    testPrint("Endpoint-example-wadors", Endpoint.newBuilder());
   }
 
   /** Test parsing of the EnrollmentRequest FHIR resource. */
   @Test
   public void parseEnrollmentRequest() throws Exception {
-    testParse("enrollmentrequest-example", EnrollmentRequest.newBuilder());
+    testParse("EnrollmentRequest-22345", EnrollmentRequest.newBuilder());
   }
 
   /** Test printing of the EnrollmentRequest FHIR resource. */
   @Test
   public void printEnrollmentRequest() throws Exception {
-    testPrint("enrollmentrequest-example", EnrollmentRequest.newBuilder());
+    testPrint("EnrollmentRequest-22345", EnrollmentRequest.newBuilder());
   }
 
   /** Test parsing of the EnrollmentResponse FHIR resource. */
   @Test
   public void parseEnrollmentResponse() throws Exception {
-    testParse("enrollmentresponse-example", EnrollmentResponse.newBuilder());
+    testParse("EnrollmentResponse-ER2500", EnrollmentResponse.newBuilder());
   }
 
   /** Test printing of the EnrollmentResponse FHIR resource. */
   @Test
   public void printEnrollmentResponse() throws Exception {
-    testPrint("enrollmentresponse-example", EnrollmentResponse.newBuilder());
+    testPrint("EnrollmentResponse-ER2500", EnrollmentResponse.newBuilder());
   }
 
   /** Test parsing of the EpisodeOfCare FHIR resource. */
   @Test
   public void parseEpisodeOfCare() throws Exception {
-    testParse("episodeofcare-example", EpisodeOfCare.newBuilder());
+    testParse("EpisodeOfCare-example", EpisodeOfCare.newBuilder());
   }
 
   /** Test printing of the EpisodeOfCare FHIR resource. */
   @Test
   public void printEpisodeOfCare() throws Exception {
-    testPrint("episodeofcare-example", EpisodeOfCare.newBuilder());
+    testPrint("EpisodeOfCare-example", EpisodeOfCare.newBuilder());
   }
 
   /** Test parsing of the ExpansionProfile FHIR resource. */
   @Test
   public void parseExpansionProfile() throws Exception {
-    testParse("expansionprofile-example", ExpansionProfile.newBuilder());
+    testParse("ExpansionProfile-example", ExpansionProfile.newBuilder());
   }
 
   /** Test printing of the ExpansionProfile FHIR resource. */
   @Test
   public void printExpansionProfile() throws Exception {
-    testPrint("expansionprofile-example", ExpansionProfile.newBuilder());
+    testPrint("ExpansionProfile-example", ExpansionProfile.newBuilder());
   }
 
   /** Test parsing of the ExplanationOfBenefit FHIR resource. */
   @Test
   public void parseExplanationOfBenefit() throws Exception {
-    testParse("explanationofbenefit-example", ExplanationOfBenefit.newBuilder());
+    testParse("ExplanationOfBenefit-EB3500", ExplanationOfBenefit.newBuilder());
   }
 
   /** Test printing of the ExplanationOfBenefit FHIR resource. */
   @Test
   public void printExplanationOfBenefit() throws Exception {
-    testPrint("explanationofbenefit-example", ExplanationOfBenefit.newBuilder());
+    testPrint("ExplanationOfBenefit-EB3500", ExplanationOfBenefit.newBuilder());
   }
 
   /** Test parsing of the FamilyMemberHistory FHIR resource. */
   @Test
   public void parseFamilyMemberHistory() throws Exception {
-    testParse("familymemberhistory-example", FamilyMemberHistory.newBuilder());
-    testParse("familymemberhistory-example-mother", FamilyMemberHistory.newBuilder());
+    testParse("FamilyMemberHistory-father", FamilyMemberHistory.newBuilder());
+    testParse("FamilyMemberHistory-mother", FamilyMemberHistory.newBuilder());
   }
 
   /** Test printing of the FamilyMemberHistory FHIR resource. */
   @Test
   public void printFamilyMemberHistory() throws Exception {
-    testPrint("familymemberhistory-example", FamilyMemberHistory.newBuilder());
-    testPrint("familymemberhistory-example-mother", FamilyMemberHistory.newBuilder());
+    testPrint("FamilyMemberHistory-father", FamilyMemberHistory.newBuilder());
+    testPrint("FamilyMemberHistory-mother", FamilyMemberHistory.newBuilder());
   }
 
   /** Test parsing of the Flag FHIR resource. */
   @Test
   public void parseFlag() throws Exception {
-    testParse("flag-example", Flag.newBuilder());
-    testParse("flag-example-encounter", Flag.newBuilder());
+    testParse("Flag-example", Flag.newBuilder());
+    testParse("Flag-example-encounter", Flag.newBuilder());
   }
 
   /** Test printing of the Flag FHIR resource. */
   @Test
   public void printFlag() throws Exception {
-    testPrint("flag-example", Flag.newBuilder());
-    testPrint("flag-example-encounter", Flag.newBuilder());
+    testPrint("Flag-example", Flag.newBuilder());
+    testPrint("Flag-example-encounter", Flag.newBuilder());
   }
 
   /** Test parsing of the Goal FHIR resource. */
   @Test
   public void parseGoal() throws Exception {
-    testParse("goal-example", Goal.newBuilder());
-    testParse("goal-example-stop-smoking", Goal.newBuilder());
+    testParse("Goal-example", Goal.newBuilder());
+    testParse("Goal-stop-smoking", Goal.newBuilder());
   }
 
   /** Test printing of the Goal FHIR resource. */
   @Test
   public void printGoal() throws Exception {
-    testPrint("goal-example", Goal.newBuilder());
-    testPrint("goal-example-stop-smoking", Goal.newBuilder());
+    testPrint("Goal-example", Goal.newBuilder());
+    testPrint("Goal-stop-smoking", Goal.newBuilder());
   }
 
   /** Test parsing of the GraphDefinition FHIR resource. */
   @Test
   public void parseGraphDefinition() throws Exception {
-    testParse("graphdefinition-example", GraphDefinition.newBuilder());
+    testParse("GraphDefinition-example", GraphDefinition.newBuilder());
   }
 
   /** Test printing of the GraphDefinition FHIR resource. */
   @Test
   public void printGraphDefinition() throws Exception {
-    testPrint("graphdefinition-example", GraphDefinition.newBuilder());
+    testPrint("GraphDefinition-example", GraphDefinition.newBuilder());
   }
 
   /** Test parsing of the Group FHIR resource. */
   @Test
   public void parseGroup() throws Exception {
-    testParse("group-example", Group.newBuilder());
-    testParse("group-example-member", Group.newBuilder());
+    testParse("Group-101", Group.newBuilder());
+    testParse("Group-102", Group.newBuilder());
   }
 
   /** Test printing of the Group FHIR resource. */
   @Test
   public void printGroup() throws Exception {
-    testPrint("group-example", Group.newBuilder());
-    testPrint("group-example-member", Group.newBuilder());
+    testPrint("Group-101", Group.newBuilder());
+    testPrint("Group-102", Group.newBuilder());
   }
 
   /** Test parsing of the GuidanceResponse FHIR resource. */
   @Test
   public void parseGuidanceResponse() throws Exception {
-    testParse("guidanceresponse-example", GuidanceResponse.newBuilder());
+    testParse("GuidanceResponse-example", GuidanceResponse.newBuilder());
   }
 
   /** Test printing of the GuidanceResponse FHIR resource. */
   @Test
   public void printGuidanceResponse() throws Exception {
-    testPrint("guidanceresponse-example", GuidanceResponse.newBuilder());
+    testPrint("GuidanceResponse-example", GuidanceResponse.newBuilder());
   }
 
   /** Test parsing of the HealthcareService FHIR resource. */
   @Test
   public void parseHealthcareService() throws Exception {
-    testParse("healthcareservice-example", HealthcareService.newBuilder());
+    testParse("HealthcareService-example", HealthcareService.newBuilder());
   }
 
   /** Test printing of the HealthcareService FHIR resource. */
   @Test
   public void printHealthcareService() throws Exception {
-    testPrint("healthcareservice-example", HealthcareService.newBuilder());
+    testPrint("HealthcareService-example", HealthcareService.newBuilder());
   }
 
   /** Test parsing of the ImagingManifest FHIR resource. */
   @Test
   public void parseImagingManifest() throws Exception {
-    testParse("imagingmanifest-example", ImagingManifest.newBuilder());
+    testParse("ImagingManifest-example", ImagingManifest.newBuilder());
   }
 
   /** Test printing of the ImagingManifest FHIR resource. */
   @Test
   public void printImagingManifest() throws Exception {
-    testPrint("imagingmanifest-example", ImagingManifest.newBuilder());
+    testPrint("ImagingManifest-example", ImagingManifest.newBuilder());
   }
 
   /** Test parsing of the ImagingStudy FHIR resource. */
   @Test
   public void parseImagingStudy() throws Exception {
-    testParse("imagingstudy-example", ImagingStudy.newBuilder());
-    testParse("imagingstudy-example-xr", ImagingStudy.newBuilder());
+    testParse("ImagingStudy-example", ImagingStudy.newBuilder());
+    testParse("ImagingStudy-example-xr", ImagingStudy.newBuilder());
   }
 
   /** Test printing of the ImagingStudy FHIR resource. */
   @Test
   public void printImagingStudy() throws Exception {
-    testPrint("imagingstudy-example", ImagingStudy.newBuilder());
-    testPrint("imagingstudy-example-xr", ImagingStudy.newBuilder());
+    testPrint("ImagingStudy-example", ImagingStudy.newBuilder());
+    testPrint("ImagingStudy-example-xr", ImagingStudy.newBuilder());
   }
 
   /** Test parsing of the Immunization FHIR resource. */
   @Test
   public void parseImmunization() throws Exception {
-    testParse("immunization-example", Immunization.newBuilder());
-    testParse("immunization-example-historical", Immunization.newBuilder());
-    testParse("immunization-example-refused", Immunization.newBuilder());
+    testParse("Immunization-example", Immunization.newBuilder());
+    testParse("Immunization-historical", Immunization.newBuilder());
+    testParse("Immunization-notGiven", Immunization.newBuilder());
   }
 
   /** Test printing of the Immunization FHIR resource. */
   @Test
   public void printImmunization() throws Exception {
-    testPrint("immunization-example", Immunization.newBuilder());
-    testPrint("immunization-example-historical", Immunization.newBuilder());
-    testPrint("immunization-example-refused", Immunization.newBuilder());
+    testPrint("Immunization-example", Immunization.newBuilder());
+    testPrint("Immunization-historical", Immunization.newBuilder());
+    testPrint("Immunization-notGiven", Immunization.newBuilder());
   }
 
   /** Test parsing of the ImmunizationRecommendation FHIR resource. */
   @Test
   public void parseImmunizationRecommendation() throws Exception {
-    testParse("immunizationrecommendation-example", ImmunizationRecommendation.newBuilder());
+    testParse("ImmunizationRecommendation-example", ImmunizationRecommendation.newBuilder());
     testParse(
         "immunizationrecommendation-target-disease-example",
         ImmunizationRecommendation.newBuilder());
@@ -1255,534 +1259,532 @@ public class JsonFormatTest {
   /** Test printing of the ImmunizationRecommendation FHIR resource. */
   @Test
   public void printImmunizationRecommendation() throws Exception {
-    testPrint("immunizationrecommendation-example", ImmunizationRecommendation.newBuilder());
-    testPrint(
-        "immunizationrecommendation-target-disease-example",
-        ImmunizationRecommendation.newBuilder());
+    testPrint("ImmunizationRecommendation-example", ImmunizationRecommendation.newBuilder());
+    testPrint("ImmunizationRecommendation-example", ImmunizationRecommendation.newBuilder());
   }
 
   /** Test parsing of the ImplementationGuide FHIR resource. */
   @Test
   public void parseImplementationGuide() throws Exception {
-    testParse("implementationguide-example", ImplementationGuide.newBuilder());
+    testParse("ImplementationGuide-example", ImplementationGuide.newBuilder());
   }
 
   /** Test printing of the ImplementationGuide FHIR resource. */
   @Test
   public void printImplementationGuide() throws Exception {
-    testPrint("implementationguide-example", ImplementationGuide.newBuilder());
+    testPrint("ImplementationGuide-example", ImplementationGuide.newBuilder());
   }
 
   /** Test parsing of the Library FHIR resource. */
   @Test
   public void parseLibrary() throws Exception {
-    testParse("library-cms146-example", Library.newBuilder());
-    testParse("library-composition-example", Library.newBuilder());
-    testParse("library-example", Library.newBuilder());
-    testParse("library-predecessor-example", Library.newBuilder());
+    testParse("Library-library-cms146-example", Library.newBuilder());
+    testParse("Library-composition-example", Library.newBuilder());
+    testParse("Library-example", Library.newBuilder());
+    testParse("Library-library-fhir-helpers-predecessor", Library.newBuilder());
   }
 
   /** Test printing of the Library FHIR resource. */
   @Test
   public void printLibrary() throws Exception {
-    testPrint("library-cms146-example", Library.newBuilder());
-    testPrint("library-composition-example", Library.newBuilder());
-    testPrint("library-example", Library.newBuilder());
-    testPrint("library-predecessor-example", Library.newBuilder());
+    testPrint("Library-library-cms146-example", Library.newBuilder());
+    testPrint("Library-composition-example", Library.newBuilder());
+    testPrint("Library-example", Library.newBuilder());
+    testPrint("Library-library-fhir-helpers-predecessor", Library.newBuilder());
   }
 
   /** Test parsing of the Linkage FHIR resource. */
   @Test
   public void parseLinkage() throws Exception {
-    testParse("linkage-example", Linkage.newBuilder());
+    testParse("Linkage-example", Linkage.newBuilder());
   }
 
   /** Test printing of the Linkage FHIR resource. */
   @Test
   public void printLinkage() throws Exception {
-    testPrint("linkage-example", Linkage.newBuilder());
+    testPrint("Linkage-example", Linkage.newBuilder());
   }
 
   /** Test parsing of the List FHIR resource. */
   @Test
   public void parseList() throws Exception {
-    testParse("list-example", List.newBuilder());
-    testParse("list-example-allergies", List.newBuilder());
-    testParse("list-example-double-cousin-relationship-pedigree", List.newBuilder());
-    testParse("list-example-empty", List.newBuilder());
-    testParse("list-example-familyhistory-f201-roel", List.newBuilder());
-    testParse("list-example-familyhistory-genetics-profile", List.newBuilder());
-    testParse("list-example-familyhistory-genetics-profile-annie", List.newBuilder());
-    testParse("list-example-medlist", List.newBuilder());
-    testParse("list-example-simple-empty", List.newBuilder());
+    testParse("List-example", List.newBuilder());
+    testParse("List-current-allergies", List.newBuilder());
+    testParse("List-example-double-cousin-relationship", List.newBuilder());
+    testParse("List-example-empty", List.newBuilder());
+    testParse("List-f201", List.newBuilder());
+    testParse("List-genetic", List.newBuilder());
+    testParse("List-prognosis", List.newBuilder());
+    testParse("List-med-list", List.newBuilder());
+    testParse("List-example-simple-empty", List.newBuilder());
   }
 
   /** Test printing of the List FHIR resource. */
   @Test
   public void printList() throws Exception {
-    testPrint("list-example", List.newBuilder());
-    testPrint("list-example-allergies", List.newBuilder());
-    testPrint("list-example-double-cousin-relationship-pedigree", List.newBuilder());
-    testPrint("list-example-empty", List.newBuilder());
-    testPrint("list-example-familyhistory-f201-roel", List.newBuilder());
-    testPrint("list-example-familyhistory-genetics-profile", List.newBuilder());
-    testPrint("list-example-familyhistory-genetics-profile-annie", List.newBuilder());
-    testPrint("list-example-medlist", List.newBuilder());
-    testPrint("list-example-simple-empty", List.newBuilder());
+    testPrint("List-example", List.newBuilder());
+    testPrint("List-current-allergies", List.newBuilder());
+    testPrint("List-example-double-cousin-relationship", List.newBuilder());
+    testPrint("List-example-empty", List.newBuilder());
+    testPrint("List-f201", List.newBuilder());
+    testPrint("List-genetic", List.newBuilder());
+    testPrint("List-prognosis", List.newBuilder());
+    testPrint("List-med-list", List.newBuilder());
+    testPrint("List-example-simple-empty", List.newBuilder());
   }
 
   /** Test parsing of the Location FHIR resource. */
   @Test
   public void parseLocation() throws Exception {
-    testParse("location-example", Location.newBuilder());
-    testParse("location-example-ambulance", Location.newBuilder());
-    testParse("location-example-hl7hq", Location.newBuilder());
-    testParse("location-example-patients-home", Location.newBuilder());
-    testParse("location-example-room", Location.newBuilder());
-    testParse("location-example-ukpharmacy", Location.newBuilder());
+    testParse("Location-1", Location.newBuilder());
+    testParse("Location-amb", Location.newBuilder());
+    testParse("Location-hl7", Location.newBuilder());
+    testParse("Location-ph", Location.newBuilder());
+    testParse("Location-2", Location.newBuilder());
+    testParse("Location-ukp", Location.newBuilder());
   }
 
   /** Test printing of the Location FHIR resource. */
   @Test
   public void printLocation() throws Exception {
-    testPrint("location-example", Location.newBuilder());
-    testPrint("location-example-ambulance", Location.newBuilder());
-    testPrint("location-example-hl7hq", Location.newBuilder());
-    testPrint("location-example-patients-home", Location.newBuilder());
-    testPrint("location-example-room", Location.newBuilder());
-    testPrint("location-example-ukpharmacy", Location.newBuilder());
+    testPrint("Location-1", Location.newBuilder());
+    testPrint("Location-amb", Location.newBuilder());
+    testPrint("Location-hl7", Location.newBuilder());
+    testPrint("Location-ph", Location.newBuilder());
+    testPrint("Location-2", Location.newBuilder());
+    testPrint("Location-ukp", Location.newBuilder());
   }
 
   /** Test parsing of the Measure FHIR resource. */
   @Test
   public void parseMeasure() throws Exception {
-    testParse("measure-cms146-example", Measure.newBuilder());
-    testParse("measure-component-a-example", Measure.newBuilder());
-    testParse("measure-component-b-example", Measure.newBuilder());
-    testParse("measure-composite-example", Measure.newBuilder());
-    testParse("measure-predecessor-example", Measure.newBuilder());
+    testParse("Measure-measure-cms146-example", Measure.newBuilder());
+    testParse("Measure-component-a-example", Measure.newBuilder());
+    testParse("Measure-component-b-example", Measure.newBuilder());
+    testParse("Measure-composite-example", Measure.newBuilder());
+    testParse("Measure-measure-predecessor-example", Measure.newBuilder());
   }
 
   /** Test printing of the Measure FHIR resource. */
   @Test
   public void printMeasure() throws Exception {
-    testPrint("measure-cms146-example", Measure.newBuilder());
-    testPrint("measure-component-a-example", Measure.newBuilder());
-    testPrint("measure-component-b-example", Measure.newBuilder());
-    testPrint("measure-composite-example", Measure.newBuilder());
-    testPrint("measure-predecessor-example", Measure.newBuilder());
+    testPrint("Measure-measure-cms146-example", Measure.newBuilder());
+    testPrint("Measure-component-a-example", Measure.newBuilder());
+    testPrint("Measure-component-b-example", Measure.newBuilder());
+    testPrint("Measure-composite-example", Measure.newBuilder());
+    testPrint("Measure-measure-predecessor-example", Measure.newBuilder());
   }
 
   /** Test parsing of the MeasureReport FHIR resource. */
   @Test
   public void parseMeasureReport() throws Exception {
-    testParse("measurereport-cms146-cat1-example", MeasureReport.newBuilder());
-    testParse("measurereport-cms146-cat2-example", MeasureReport.newBuilder());
-    testParse("measurereport-cms146-cat3-example", MeasureReport.newBuilder());
+    testParse("MeasureReport-measurereport-cms146-cat1-example", MeasureReport.newBuilder());
+    testParse("MeasureReport-measurereport-cms146-cat2-example", MeasureReport.newBuilder());
+    testParse("MeasureReport-measurereport-cms146-cat3-example", MeasureReport.newBuilder());
   }
 
   /** Test printing of the MeasureReport FHIR resource. */
   @Test
   public void printMeasureReport() throws Exception {
-    testPrint("measurereport-cms146-cat1-example", MeasureReport.newBuilder());
-    testPrint("measurereport-cms146-cat2-example", MeasureReport.newBuilder());
-    testPrint("measurereport-cms146-cat3-example", MeasureReport.newBuilder());
+    testPrint("MeasureReport-measurereport-cms146-cat1-example", MeasureReport.newBuilder());
+    testPrint("MeasureReport-measurereport-cms146-cat2-example", MeasureReport.newBuilder());
+    testPrint("MeasureReport-measurereport-cms146-cat3-example", MeasureReport.newBuilder());
   }
 
   /** Test parsing of the Media FHIR resource. */
   @Test
   public void parseMedia() throws Exception {
-    testParse("media-example", Media.newBuilder());
-    testParse("media-example-dicom", Media.newBuilder());
-    testParse("media-example-sound", Media.newBuilder());
-    testParse("media-example-xray", Media.newBuilder());
+    testParse("Media-example", Media.newBuilder());
+    testParse("Media-1.2.840.11361907579238403408700.3.0.14.19970327150033", Media.newBuilder());
+    testParse("Media-sound", Media.newBuilder());
+    testParse("Media-xray", Media.newBuilder());
   }
 
   /** Test printing of the Media FHIR resource. */
   @Test
   public void printMedia() throws Exception {
-    testPrint("media-example", Media.newBuilder());
-    testPrint("media-example-dicom", Media.newBuilder());
-    testPrint("media-example-sound", Media.newBuilder());
-    testPrint("media-example-xray", Media.newBuilder());
+    testPrint("Media-example", Media.newBuilder());
+    testPrint("Media-1.2.840.11361907579238403408700.3.0.14.19970327150033", Media.newBuilder());
+    testPrint("Media-sound", Media.newBuilder());
+    testPrint("Media-xray", Media.newBuilder());
   }
 
   /** Test parsing of the Medication FHIR resource. */
   @Test
   public void parseMedication() throws Exception {
-    testParse("medicationexample0301", Medication.newBuilder());
-    testParse("medicationexample0302", Medication.newBuilder());
-    testParse("medicationexample0303", Medication.newBuilder());
-    testParse("medicationexample0304", Medication.newBuilder());
-    testParse("medicationexample0305", Medication.newBuilder());
-    testParse("medicationexample0306", Medication.newBuilder());
-    testParse("medicationexample0307", Medication.newBuilder());
-    testParse("medicationexample0308", Medication.newBuilder());
-    testParse("medicationexample0309", Medication.newBuilder());
-    testParse("medicationexample0310", Medication.newBuilder());
-    testParse("medicationexample0311", Medication.newBuilder());
-    testParse("medicationexample0312", Medication.newBuilder());
-    testParse("medicationexample0313", Medication.newBuilder());
-    testParse("medicationexample0314", Medication.newBuilder());
-    testParse("medicationexample0315", Medication.newBuilder());
-    testParse("medicationexample0316", Medication.newBuilder());
-    testParse("medicationexample0317", Medication.newBuilder());
-    testParse("medicationexample0318", Medication.newBuilder());
-    testParse("medicationexample0319", Medication.newBuilder());
-    testParse("medicationexample0320", Medication.newBuilder());
-    testParse("medicationexample0321", Medication.newBuilder());
-    testParse("medicationexample1", Medication.newBuilder());
-    testParse("medicationexample15", Medication.newBuilder());
+    testParse("Medication-med0301", Medication.newBuilder());
+    testParse("Medication-med0302", Medication.newBuilder());
+    testParse("Medication-med0303", Medication.newBuilder());
+    testParse("Medication-med0304", Medication.newBuilder());
+    testParse("Medication-med0305", Medication.newBuilder());
+    testParse("Medication-med0306", Medication.newBuilder());
+    testParse("Medication-med0307", Medication.newBuilder());
+    testParse("Medication-med0308", Medication.newBuilder());
+    testParse("Medication-med0309", Medication.newBuilder());
+    testParse("Medication-med0310", Medication.newBuilder());
+    testParse("Medication-med0311", Medication.newBuilder());
+    testParse("Medication-med0312", Medication.newBuilder());
+    testParse("Medication-med0313", Medication.newBuilder());
+    testParse("Medication-med0314", Medication.newBuilder());
+    testParse("Medication-med0315", Medication.newBuilder());
+    testParse("Medication-med0316", Medication.newBuilder());
+    testParse("Medication-med0317", Medication.newBuilder());
+    testParse("Medication-med0318", Medication.newBuilder());
+    testParse("Medication-med0319", Medication.newBuilder());
+    testParse("Medication-med0320", Medication.newBuilder());
+    testParse("Medication-med0321", Medication.newBuilder());
+    testParse("Medication-medicationexample1", Medication.newBuilder());
+    testParse("Medication-medexample015", Medication.newBuilder());
   }
 
   /** Test printing of the Medication FHIR resource. */
   @Test
   public void printMedication() throws Exception {
-    testPrint("medicationexample0301", Medication.newBuilder());
-    testPrint("medicationexample0302", Medication.newBuilder());
-    testPrint("medicationexample0303", Medication.newBuilder());
-    testPrint("medicationexample0304", Medication.newBuilder());
-    testPrint("medicationexample0305", Medication.newBuilder());
-    testPrint("medicationexample0306", Medication.newBuilder());
-    testPrint("medicationexample0307", Medication.newBuilder());
-    testPrint("medicationexample0308", Medication.newBuilder());
-    testPrint("medicationexample0309", Medication.newBuilder());
-    testPrint("medicationexample0310", Medication.newBuilder());
-    testPrint("medicationexample0311", Medication.newBuilder());
-    testPrint("medicationexample0312", Medication.newBuilder());
-    testPrint("medicationexample0313", Medication.newBuilder());
-    testPrint("medicationexample0314", Medication.newBuilder());
-    testPrint("medicationexample0315", Medication.newBuilder());
-    testPrint("medicationexample0316", Medication.newBuilder());
-    testPrint("medicationexample0317", Medication.newBuilder());
-    testPrint("medicationexample0318", Medication.newBuilder());
-    testPrint("medicationexample0319", Medication.newBuilder());
-    testPrint("medicationexample0320", Medication.newBuilder());
-    testPrint("medicationexample0321", Medication.newBuilder());
-    testPrint("medicationexample1", Medication.newBuilder());
-    testPrint("medicationexample15", Medication.newBuilder());
+    testPrint("Medication-med0301", Medication.newBuilder());
+    testPrint("Medication-med0302", Medication.newBuilder());
+    testPrint("Medication-med0303", Medication.newBuilder());
+    testPrint("Medication-med0304", Medication.newBuilder());
+    testPrint("Medication-med0305", Medication.newBuilder());
+    testPrint("Medication-med0306", Medication.newBuilder());
+    testPrint("Medication-med0307", Medication.newBuilder());
+    testPrint("Medication-med0308", Medication.newBuilder());
+    testPrint("Medication-med0309", Medication.newBuilder());
+    testPrint("Medication-med0310", Medication.newBuilder());
+    testPrint("Medication-med0311", Medication.newBuilder());
+    testPrint("Medication-med0312", Medication.newBuilder());
+    testPrint("Medication-med0313", Medication.newBuilder());
+    testPrint("Medication-med0314", Medication.newBuilder());
+    testPrint("Medication-med0315", Medication.newBuilder());
+    testPrint("Medication-med0316", Medication.newBuilder());
+    testPrint("Medication-med0317", Medication.newBuilder());
+    testPrint("Medication-med0318", Medication.newBuilder());
+    testPrint("Medication-med0319", Medication.newBuilder());
+    testPrint("Medication-med0320", Medication.newBuilder());
+    testPrint("Medication-med0321", Medication.newBuilder());
+    testPrint("Medication-medicationexample1", Medication.newBuilder());
+    testPrint("Medication-medexample015", Medication.newBuilder());
   }
 
   /** Test parsing of the MedicationAdministration FHIR resource. */
   @Test
   public void parseMedicationAdministration() throws Exception {
-    testParse("medicationadministrationexample3", MedicationAdministration.newBuilder());
+    testParse("MedicationAdministration-medadminexample03", MedicationAdministration.newBuilder());
   }
 
   /** Test printing of the MedicationAdministration FHIR resource. */
   @Test
   public void printMedicationAdministration() throws Exception {
-    testPrint("medicationadministrationexample3", MedicationAdministration.newBuilder());
+    testPrint("MedicationAdministration-medadminexample03", MedicationAdministration.newBuilder());
   }
 
   /** Test parsing of the MedicationDispense FHIR resource. */
   @Test
   public void parseMedicationDispense() throws Exception {
-    testParse("medicationdispenseexample8", MedicationDispense.newBuilder());
+    testParse("MedicationDispense-meddisp008", MedicationDispense.newBuilder());
   }
 
   /** Test printing of the MedicationDispense FHIR resource. */
   @Test
   public void printMedicationDispense() throws Exception {
-    testPrint("medicationdispenseexample8", MedicationDispense.newBuilder());
+    testPrint("MedicationDispense-meddisp008", MedicationDispense.newBuilder());
   }
 
   /** Test parsing of the MedicationRequest FHIR resource. */
   @Test
   public void parseMedicationRequest() throws Exception {
-    testParse("medicationrequestexample1", MedicationRequest.newBuilder());
-    testParse("medicationrequestexample2", MedicationRequest.newBuilder());
+    testParse("MedicationRequest-medrx0311", MedicationRequest.newBuilder());
+    testParse("MedicationRequest-medrx002", MedicationRequest.newBuilder());
   }
 
   /** Test printing of the MedicationRequest FHIR resource. */
   @Test
   public void printMedicationRequest() throws Exception {
-    testPrint("medicationrequestexample1", MedicationRequest.newBuilder());
-    testPrint("medicationrequestexample2", MedicationRequest.newBuilder());
+    testPrint("MedicationRequest-medrx0311", MedicationRequest.newBuilder());
+    testPrint("MedicationRequest-medrx002", MedicationRequest.newBuilder());
   }
 
   /** Test parsing of the MedicationStatement FHIR resource. */
   @Test
   public void parseMedicationStatement() throws Exception {
-    testParse("medicationstatementexample1", MedicationStatement.newBuilder());
-    testParse("medicationstatementexample2", MedicationStatement.newBuilder());
-    testParse("medicationstatementexample3", MedicationStatement.newBuilder());
-    testParse("medicationstatementexample4", MedicationStatement.newBuilder());
-    testParse("medicationstatementexample5", MedicationStatement.newBuilder());
-    testParse("medicationstatementexample6", MedicationStatement.newBuilder());
-    testParse("medicationstatementexample7", MedicationStatement.newBuilder());
+    testParse("MedicationStatement-example001", MedicationStatement.newBuilder());
+    testParse("MedicationStatement-example002", MedicationStatement.newBuilder());
+    testParse("MedicationStatement-example003", MedicationStatement.newBuilder());
+    testParse("MedicationStatement-example004", MedicationStatement.newBuilder());
+    testParse("MedicationStatement-example005", MedicationStatement.newBuilder());
+    testParse("MedicationStatement-example006", MedicationStatement.newBuilder());
+    testParse("MedicationStatement-example007", MedicationStatement.newBuilder());
   }
 
   /** Test printing of the MedicationStatement FHIR resource. */
   @Test
   public void printMedicationStatement() throws Exception {
-    testPrint("medicationstatementexample1", MedicationStatement.newBuilder());
-    testPrint("medicationstatementexample2", MedicationStatement.newBuilder());
-    testPrint("medicationstatementexample3", MedicationStatement.newBuilder());
-    testPrint("medicationstatementexample4", MedicationStatement.newBuilder());
-    testPrint("medicationstatementexample5", MedicationStatement.newBuilder());
-    testPrint("medicationstatementexample6", MedicationStatement.newBuilder());
-    testPrint("medicationstatementexample7", MedicationStatement.newBuilder());
+    testPrint("MedicationStatement-example001", MedicationStatement.newBuilder());
+    testPrint("MedicationStatement-example002", MedicationStatement.newBuilder());
+    testPrint("MedicationStatement-example003", MedicationStatement.newBuilder());
+    testPrint("MedicationStatement-example004", MedicationStatement.newBuilder());
+    testPrint("MedicationStatement-example005", MedicationStatement.newBuilder());
+    testPrint("MedicationStatement-example006", MedicationStatement.newBuilder());
+    testPrint("MedicationStatement-example007", MedicationStatement.newBuilder());
   }
 
   /** Test parsing of the MessageDefinition FHIR resource. */
   @Test
   public void parseMessageDefinition() throws Exception {
-    testParse("messagedefinition-example", MessageDefinition.newBuilder());
+    testParse("MessageDefinition-example", MessageDefinition.newBuilder());
   }
 
   /** Test printing of the MessageDefinition FHIR resource. */
   @Test
   public void printMessageDefinition() throws Exception {
-    testPrint("messagedefinition-example", MessageDefinition.newBuilder());
+    testPrint("MessageDefinition-example", MessageDefinition.newBuilder());
   }
 
   /** Test parsing of the MessageHeader FHIR resource. */
   @Test
   public void parseMessageHeader() throws Exception {
-    testParse("messageheader-example", MessageHeader.newBuilder());
+    testParse("MessageHeader-1cbdfb97-5859-48a4-8301-d54eab818d68", MessageHeader.newBuilder());
   }
 
   /** Test printing of the MessageHeader FHIR resource. */
   @Test
   public void printMessageHeader() throws Exception {
-    testPrint("messageheader-example", MessageHeader.newBuilder());
+    testPrint("MessageHeader-1cbdfb97-5859-48a4-8301-d54eab818d68", MessageHeader.newBuilder());
   }
 
   /** Test parsing of the NamingSystem FHIR resource. */
   @Test
   public void parseNamingSystem() throws Exception {
-    testParse("namingsystem-example", NamingSystem.newBuilder());
-    testParse("namingsystem-example-id", NamingSystem.newBuilder());
-    testParse("namingsystem-example-replaced", NamingSystem.newBuilder());
+    testParse("NamingSystem-example", NamingSystem.newBuilder());
+    testParse("NamingSystem-example-id", NamingSystem.newBuilder());
+    testParse("NamingSystem-example-replaced", NamingSystem.newBuilder());
   }
 
   /** Test printing of the NamingSystem FHIR resource. */
   @Test
   public void printNamingSystem() throws Exception {
-    testPrint("namingsystem-example", NamingSystem.newBuilder());
-    testPrint("namingsystem-example-id", NamingSystem.newBuilder());
-    testPrint("namingsystem-example-replaced", NamingSystem.newBuilder());
+    testPrint("NamingSystem-example", NamingSystem.newBuilder());
+    testPrint("NamingSystem-example-id", NamingSystem.newBuilder());
+    testPrint("NamingSystem-example-replaced", NamingSystem.newBuilder());
   }
 
   /** Test parsing of the NutritionOrder FHIR resource. */
   @Test
   public void parseNutritionOrder() throws Exception {
-    testParse("nutritionorder-example-cardiacdiet", NutritionOrder.newBuilder());
-    testParse("nutritionorder-example-diabeticdiet", NutritionOrder.newBuilder());
-    testParse("nutritionorder-example-diabeticsupplement", NutritionOrder.newBuilder());
-    testParse("nutritionorder-example-energysupplement", NutritionOrder.newBuilder());
-    testParse("nutritionorder-example-enteralbolus", NutritionOrder.newBuilder());
-    testParse("nutritionorder-example-enteralcontinuous", NutritionOrder.newBuilder());
-    testParse("nutritionorder-example-fiberrestricteddiet", NutritionOrder.newBuilder());
-    testParse("nutritionorder-example-infantenteral", NutritionOrder.newBuilder());
-    testParse("nutritionorder-example-proteinsupplement", NutritionOrder.newBuilder());
-    testParse("nutritionorder-example-pureeddiet", NutritionOrder.newBuilder());
-    testParse("nutritionorder-example-pureeddiet-simple", NutritionOrder.newBuilder());
-    testParse("nutritionorder-example-renaldiet", NutritionOrder.newBuilder());
-    testParse("nutritionorder-example-texture-modified", NutritionOrder.newBuilder());
+    testParse("NutritionOrder-cardiacdiet", NutritionOrder.newBuilder());
+    testParse("NutritionOrder-diabeticdiet", NutritionOrder.newBuilder());
+    testParse("NutritionOrder-diabeticsupplement", NutritionOrder.newBuilder());
+    testParse("NutritionOrder-energysupplement", NutritionOrder.newBuilder());
+    testParse("NutritionOrder-enteralbolus", NutritionOrder.newBuilder());
+    testParse("NutritionOrder-enteralcontinuous", NutritionOrder.newBuilder());
+    testParse("NutritionOrder-fiberrestricteddiet", NutritionOrder.newBuilder());
+    testParse("NutritionOrder-infantenteral", NutritionOrder.newBuilder());
+    testParse("NutritionOrder-proteinsupplement", NutritionOrder.newBuilder());
+    testParse("NutritionOrder-pureeddiet", NutritionOrder.newBuilder());
+    testParse("NutritionOrder-pureeddiet-simple", NutritionOrder.newBuilder());
+    testParse("NutritionOrder-renaldiet", NutritionOrder.newBuilder());
+    testParse("NutritionOrder-texturemodified", NutritionOrder.newBuilder());
   }
 
   /** Test printing of the NutritionOrder FHIR resource. */
   @Test
   public void printNutritionOrder() throws Exception {
-    testPrint("nutritionorder-example-cardiacdiet", NutritionOrder.newBuilder());
-    testPrint("nutritionorder-example-diabeticdiet", NutritionOrder.newBuilder());
-    testPrint("nutritionorder-example-diabeticsupplement", NutritionOrder.newBuilder());
-    testPrint("nutritionorder-example-energysupplement", NutritionOrder.newBuilder());
-    testPrint("nutritionorder-example-enteralbolus", NutritionOrder.newBuilder());
-    testPrint("nutritionorder-example-enteralcontinuous", NutritionOrder.newBuilder());
-    testPrint("nutritionorder-example-fiberrestricteddiet", NutritionOrder.newBuilder());
-    testPrint("nutritionorder-example-infantenteral", NutritionOrder.newBuilder());
-    testPrint("nutritionorder-example-proteinsupplement", NutritionOrder.newBuilder());
-    testPrint("nutritionorder-example-pureeddiet", NutritionOrder.newBuilder());
-    testPrint("nutritionorder-example-pureeddiet-simple", NutritionOrder.newBuilder());
-    testPrint("nutritionorder-example-renaldiet", NutritionOrder.newBuilder());
-    testPrint("nutritionorder-example-texture-modified", NutritionOrder.newBuilder());
+    testPrint("NutritionOrder-cardiacdiet", NutritionOrder.newBuilder());
+    testPrint("NutritionOrder-diabeticdiet", NutritionOrder.newBuilder());
+    testPrint("NutritionOrder-diabeticsupplement", NutritionOrder.newBuilder());
+    testPrint("NutritionOrder-energysupplement", NutritionOrder.newBuilder());
+    testPrint("NutritionOrder-enteralbolus", NutritionOrder.newBuilder());
+    testPrint("NutritionOrder-enteralcontinuous", NutritionOrder.newBuilder());
+    testPrint("NutritionOrder-fiberrestricteddiet", NutritionOrder.newBuilder());
+    testPrint("NutritionOrder-infantenteral", NutritionOrder.newBuilder());
+    testPrint("NutritionOrder-proteinsupplement", NutritionOrder.newBuilder());
+    testPrint("NutritionOrder-pureeddiet", NutritionOrder.newBuilder());
+    testPrint("NutritionOrder-pureeddiet-simple", NutritionOrder.newBuilder());
+    testPrint("NutritionOrder-renaldiet", NutritionOrder.newBuilder());
+    testPrint("NutritionOrder-texturemodified", NutritionOrder.newBuilder());
   }
 
   /** Test parsing of the Observation FHIR resource. */
   @Test
   public void parseObservation() throws Exception {
-    testParse("observation-example", Observation.newBuilder());
-    testParse("observation-example-10minute-apgar-score", Observation.newBuilder());
-    testParse("observation-example-1minute-apgar-score", Observation.newBuilder());
-    testParse("observation-example-20minute-apgar-score", Observation.newBuilder());
-    testParse("observation-example-2minute-apgar-score", Observation.newBuilder());
-    testParse("observation-example-5minute-apgar-score", Observation.newBuilder());
-    testParse("observation-example-bloodpressure", Observation.newBuilder());
-    testParse("observation-example-bloodpressure-cancel", Observation.newBuilder());
-    testParse("observation-example-bloodpressure-dar", Observation.newBuilder());
-    testParse("observation-example-bmd", Observation.newBuilder());
-    testParse("observation-example-bmi", Observation.newBuilder());
-    testParse("observation-example-body-height", Observation.newBuilder());
-    testParse("observation-example-body-length", Observation.newBuilder());
-    testParse("observation-example-body-temperature", Observation.newBuilder());
-    testParse("observation-example-date-lastmp", Observation.newBuilder());
-    testParse("observation-example-diplotype1", Observation.newBuilder());
-    testParse("observation-example-eye-color", Observation.newBuilder());
-    testParse("observation-example-f001-glucose", Observation.newBuilder());
-    testParse("observation-example-f002-excess", Observation.newBuilder());
-    testParse("observation-example-f003-co2", Observation.newBuilder());
-    testParse("observation-example-f004-erythrocyte", Observation.newBuilder());
-    testParse("observation-example-f005-hemoglobin", Observation.newBuilder());
-    testParse("observation-example-f202-temperature", Observation.newBuilder());
-    testParse("observation-example-f203-bicarbonate", Observation.newBuilder());
-    testParse("observation-example-f204-creatinine", Observation.newBuilder());
-    testParse("observation-example-f205-egfr", Observation.newBuilder());
-    testParse("observation-example-f206-staphylococcus", Observation.newBuilder());
-    testParse("observation-example-genetics-1", Observation.newBuilder());
-    testParse("observation-example-genetics-2", Observation.newBuilder());
-    testParse("observation-example-genetics-3", Observation.newBuilder());
-    testParse("observation-example-genetics-4", Observation.newBuilder());
-    testParse("observation-example-genetics-5", Observation.newBuilder());
-    testParse("observation-example-glasgow", Observation.newBuilder());
-    testParse("observation-example-glasgow-qa", Observation.newBuilder());
-    testParse("observation-example-haplotype1", Observation.newBuilder());
-    testParse("observation-example-haplotype2", Observation.newBuilder());
-    testParse("observation-example-head-circumference", Observation.newBuilder());
-    testParse("observation-example-heart-rate", Observation.newBuilder());
-    testParse("observation-example-mbp", Observation.newBuilder());
-    testParse("observation-example-phenotype", Observation.newBuilder());
-    testParse("observation-example-respiratory-rate", Observation.newBuilder());
-    testParse("observation-example-sample-data", Observation.newBuilder());
-    testParse("observation-example-satO2", Observation.newBuilder());
-    testParse("observation-example-TPMT-diplotype", Observation.newBuilder());
-    testParse("observation-example-TPMT-haplotype-one", Observation.newBuilder());
-    testParse("observation-example-TPMT-haplotype-two", Observation.newBuilder());
-    testParse("observation-example-unsat", Observation.newBuilder());
-    testParse("observation-example-vitals-panel", Observation.newBuilder());
+    testParse("Observation-example", Observation.newBuilder());
+    testParse("Observation-10minute-apgar-score", Observation.newBuilder());
+    testParse("Observation-1minute-apgar-score", Observation.newBuilder());
+    testParse("Observation-20minute-apgar-score", Observation.newBuilder());
+    testParse("Observation-2minute-apgar-score", Observation.newBuilder());
+    testParse("Observation-5minute-apgar-score", Observation.newBuilder());
+    testParse("Observation-blood-pressure", Observation.newBuilder());
+    testParse("Observation-blood-pressure-cancel", Observation.newBuilder());
+    testParse("Observation-blood-pressure-dar", Observation.newBuilder());
+    testParse("Observation-bmd", Observation.newBuilder());
+    testParse("Observation-bmi", Observation.newBuilder());
+    testParse("Observation-body-height", Observation.newBuilder());
+    testParse("Observation-body-length", Observation.newBuilder());
+    testParse("Observation-body-temperature", Observation.newBuilder());
+    testParse("Observation-date-lastmp", Observation.newBuilder());
+    testParse("Observation-example-diplotype1", Observation.newBuilder());
+    testParse("Observation-eye-color", Observation.newBuilder());
+    testParse("Observation-f001", Observation.newBuilder());
+    testParse("Observation-f002", Observation.newBuilder());
+    testParse("Observation-f003", Observation.newBuilder());
+    testParse("Observation-f004", Observation.newBuilder());
+    testParse("Observation-f005", Observation.newBuilder());
+    testParse("Observation-f202", Observation.newBuilder());
+    testParse("Observation-f203", Observation.newBuilder());
+    testParse("Observation-f204", Observation.newBuilder());
+    testParse("Observation-f205", Observation.newBuilder());
+    testParse("Observation-f206", Observation.newBuilder());
+    testParse("Observation-example-genetics-1", Observation.newBuilder());
+    testParse("Observation-example-genetics-2", Observation.newBuilder());
+    testParse("Observation-example-genetics-3", Observation.newBuilder());
+    testParse("Observation-example-genetics-4", Observation.newBuilder());
+    testParse("Observation-example-genetics-5", Observation.newBuilder());
+    testParse("Observation-glasgow", Observation.newBuilder());
+    testParse("Observation-gcs-qa", Observation.newBuilder());
+    testParse("Observation-example-haplotype1", Observation.newBuilder());
+    testParse("Observation-example-haplotype2", Observation.newBuilder());
+    testParse("Observation-head-circumference", Observation.newBuilder());
+    testParse("Observation-heart-rate", Observation.newBuilder());
+    testParse("Observation-mbp", Observation.newBuilder());
+    testParse("Observation-example-phenotype", Observation.newBuilder());
+    testParse("Observation-respiratory-rate", Observation.newBuilder());
+    testParse("Observation-ekg", Observation.newBuilder());
+    testParse("Observation-satO2", Observation.newBuilder());
+    testParse("Observation-example-TPMT-diplotype", Observation.newBuilder());
+    testParse("Observation-example-TPMT-haplotype-one", Observation.newBuilder());
+    testParse("Observation-example-TPMT-haplotype-two", Observation.newBuilder());
+    testParse("Observation-unsat", Observation.newBuilder());
+    testParse("Observation-vitals-panel", Observation.newBuilder());
   }
 
   /** Test printing of the Observation FHIR resource. */
   @Test
   public void printObservation() throws Exception {
-    testPrint("observation-example", Observation.newBuilder());
-    testPrint("observation-example-10minute-apgar-score", Observation.newBuilder());
-    testPrint("observation-example-1minute-apgar-score", Observation.newBuilder());
-    testPrint("observation-example-20minute-apgar-score", Observation.newBuilder());
-    testPrint("observation-example-2minute-apgar-score", Observation.newBuilder());
-    testPrint("observation-example-5minute-apgar-score", Observation.newBuilder());
-    testPrint("observation-example-bloodpressure", Observation.newBuilder());
-    testPrint("observation-example-bloodpressure-cancel", Observation.newBuilder());
-    testPrint("observation-example-bloodpressure-dar", Observation.newBuilder());
-    testPrint("observation-example-bmd", Observation.newBuilder());
-    testPrint("observation-example-bmi", Observation.newBuilder());
-    testPrint("observation-example-body-height", Observation.newBuilder());
-    testPrint("observation-example-body-length", Observation.newBuilder());
-    testPrint("observation-example-body-temperature", Observation.newBuilder());
-    testPrint("observation-example-date-lastmp", Observation.newBuilder());
-    testPrint("observation-example-diplotype1", Observation.newBuilder());
-    testPrint("observation-example-eye-color", Observation.newBuilder());
-    testPrint("observation-example-f001-glucose", Observation.newBuilder());
-    testPrint("observation-example-f002-excess", Observation.newBuilder());
-    testPrint("observation-example-f003-co2", Observation.newBuilder());
-    testPrint("observation-example-f004-erythrocyte", Observation.newBuilder());
-    testPrint("observation-example-f005-hemoglobin", Observation.newBuilder());
-    testPrint("observation-example-f202-temperature", Observation.newBuilder());
-    testPrint("observation-example-f203-bicarbonate", Observation.newBuilder());
-    testPrint("observation-example-f204-creatinine", Observation.newBuilder());
-    testPrint("observation-example-f205-egfr", Observation.newBuilder());
-    testPrint("observation-example-f206-staphylococcus", Observation.newBuilder());
-    testPrint("observation-example-genetics-1", Observation.newBuilder());
-    testPrint("observation-example-genetics-2", Observation.newBuilder());
-    testPrint("observation-example-genetics-3", Observation.newBuilder());
-    testPrint("observation-example-genetics-4", Observation.newBuilder());
-    testPrint("observation-example-genetics-5", Observation.newBuilder());
-    testPrint("observation-example-glasgow", Observation.newBuilder());
-    testPrint("observation-example-glasgow-qa", Observation.newBuilder());
-    testPrint("observation-example-haplotype1", Observation.newBuilder());
-    testPrint("observation-example-haplotype2", Observation.newBuilder());
-    testPrint("observation-example-head-circumference", Observation.newBuilder());
-    testPrint("observation-example-heart-rate", Observation.newBuilder());
-    testPrint("observation-example-mbp", Observation.newBuilder());
-    testPrint("observation-example-phenotype", Observation.newBuilder());
-    testPrint("observation-example-respiratory-rate", Observation.newBuilder());
-    testPrint("observation-example-sample-data", Observation.newBuilder());
-    testPrint("observation-example-satO2", Observation.newBuilder());
-    testPrint("observation-example-TPMT-diplotype", Observation.newBuilder());
-    testPrint("observation-example-TPMT-haplotype-one", Observation.newBuilder());
-    testPrint("observation-example-TPMT-haplotype-two", Observation.newBuilder());
-    testPrint("observation-example-unsat", Observation.newBuilder());
-    testPrint("observation-example-vitals-panel", Observation.newBuilder());
+    testPrint("Observation-example", Observation.newBuilder());
+    testPrint("Observation-10minute-apgar-score", Observation.newBuilder());
+    testPrint("Observation-1minute-apgar-score", Observation.newBuilder());
+    testPrint("Observation-20minute-apgar-score", Observation.newBuilder());
+    testPrint("Observation-2minute-apgar-score", Observation.newBuilder());
+    testPrint("Observation-5minute-apgar-score", Observation.newBuilder());
+    testPrint("Observation-blood-pressure", Observation.newBuilder());
+    testPrint("Observation-blood-pressure-cancel", Observation.newBuilder());
+    testPrint("Observation-blood-pressure-dar", Observation.newBuilder());
+    testPrint("Observation-bmd", Observation.newBuilder());
+    testPrint("Observation-bmi", Observation.newBuilder());
+    testPrint("Observation-body-height", Observation.newBuilder());
+    testPrint("Observation-body-length", Observation.newBuilder());
+    testPrint("Observation-body-temperature", Observation.newBuilder());
+    testPrint("Observation-date-lastmp", Observation.newBuilder());
+    testPrint("Observation-example-diplotype1", Observation.newBuilder());
+    testPrint("Observation-eye-color", Observation.newBuilder());
+    testPrint("Observation-f001", Observation.newBuilder());
+    testPrint("Observation-f002", Observation.newBuilder());
+    testPrint("Observation-f003", Observation.newBuilder());
+    testPrint("Observation-f004", Observation.newBuilder());
+    testPrint("Observation-f005", Observation.newBuilder());
+    testPrint("Observation-f202", Observation.newBuilder());
+    testPrint("Observation-f203", Observation.newBuilder());
+    testPrint("Observation-f204", Observation.newBuilder());
+    testPrint("Observation-f205", Observation.newBuilder());
+    testPrint("Observation-f206", Observation.newBuilder());
+    testPrint("Observation-example-genetics-1", Observation.newBuilder());
+    testPrint("Observation-example-genetics-2", Observation.newBuilder());
+    testPrint("Observation-example-genetics-3", Observation.newBuilder());
+    testPrint("Observation-example-genetics-4", Observation.newBuilder());
+    testPrint("Observation-example-genetics-5", Observation.newBuilder());
+    testPrint("Observation-glasgow", Observation.newBuilder());
+    testPrint("Observation-gcs-qa", Observation.newBuilder());
+    testPrint("Observation-example-haplotype1", Observation.newBuilder());
+    testPrint("Observation-example-haplotype2", Observation.newBuilder());
+    testPrint("Observation-head-circumference", Observation.newBuilder());
+    testPrint("Observation-heart-rate", Observation.newBuilder());
+    testPrint("Observation-mbp", Observation.newBuilder());
+    testPrint("Observation-example-phenotype", Observation.newBuilder());
+    testPrint("Observation-respiratory-rate", Observation.newBuilder());
+    testPrint("Observation-ekg", Observation.newBuilder());
+    testPrint("Observation-satO2", Observation.newBuilder());
+    testPrint("Observation-example-TPMT-diplotype", Observation.newBuilder());
+    testPrint("Observation-example-TPMT-haplotype-one", Observation.newBuilder());
+    testPrint("Observation-example-TPMT-haplotype-two", Observation.newBuilder());
+    testPrint("Observation-unsat", Observation.newBuilder());
+    testPrint("Observation-vitals-panel", Observation.newBuilder());
   }
 
   /** Test parsing of the OperationDefinition FHIR resource. */
   @Test
   public void parseOperationDefinition() throws Exception {
-    testParse("operationdefinition-example", OperationDefinition.newBuilder());
+    testParse("OperationDefinition-example", OperationDefinition.newBuilder());
   }
 
   /** Test printing of the OperationDefinition FHIR resource. */
   @Test
   public void printOperationDefinition() throws Exception {
-    testPrint("operationdefinition-example", OperationDefinition.newBuilder());
+    testPrint("OperationDefinition-example", OperationDefinition.newBuilder());
   }
 
   /** Test parsing of the OperationOutcome FHIR resource. */
   @Test
   public void parseOperationOutcome() throws Exception {
-    testParse("operationoutcome-example", OperationOutcome.newBuilder());
-    testParse("operationoutcome-example-allok", OperationOutcome.newBuilder());
-    testParse("operationoutcome-example-break-the-glass", OperationOutcome.newBuilder());
-    testParse("operationoutcome-example-exception", OperationOutcome.newBuilder());
-    testParse("operationoutcome-example-searchfail", OperationOutcome.newBuilder());
-    testParse("operationoutcome-example-validationfail", OperationOutcome.newBuilder());
+    testParse("OperationOutcome-101", OperationOutcome.newBuilder());
+    testParse("OperationOutcome-allok", OperationOutcome.newBuilder());
+    testParse("OperationOutcome-break-the-glass", OperationOutcome.newBuilder());
+    testParse("OperationOutcome-exception", OperationOutcome.newBuilder());
+    testParse("OperationOutcome-searchfail", OperationOutcome.newBuilder());
+    testParse("OperationOutcome-validationfail", OperationOutcome.newBuilder());
   }
 
   /** Test printing of the OperationOutcome FHIR resource. */
   @Test
   public void printOperationOutcome() throws Exception {
-    testPrint("operationoutcome-example", OperationOutcome.newBuilder());
-    testPrint("operationoutcome-example-allok", OperationOutcome.newBuilder());
-    testPrint("operationoutcome-example-break-the-glass", OperationOutcome.newBuilder());
-    testPrint("operationoutcome-example-exception", OperationOutcome.newBuilder());
-    testPrint("operationoutcome-example-searchfail", OperationOutcome.newBuilder());
-    testPrint("operationoutcome-example-validationfail", OperationOutcome.newBuilder());
+    testPrint("OperationOutcome-101", OperationOutcome.newBuilder());
+    testPrint("OperationOutcome-allok", OperationOutcome.newBuilder());
+    testPrint("OperationOutcome-break-the-glass", OperationOutcome.newBuilder());
+    testPrint("OperationOutcome-exception", OperationOutcome.newBuilder());
+    testPrint("OperationOutcome-searchfail", OperationOutcome.newBuilder());
+    testPrint("OperationOutcome-validationfail", OperationOutcome.newBuilder());
   }
 
   /** Test parsing of the Organization FHIR resource. */
   @Test
   public void parseOrganization() throws Exception {
-    testParse("organization-example", Organization.newBuilder());
-    testParse("organization-example-f001-burgers", Organization.newBuilder());
-    testParse("organization-example-f002-burgers-card", Organization.newBuilder());
-    testParse("organization-example-f003-burgers-ENT", Organization.newBuilder());
-    testParse("organization-example-f201-aumc", Organization.newBuilder());
-    testParse("organization-example-f203-bumc", Organization.newBuilder());
-    testParse("organization-example-gastro", Organization.newBuilder());
-    testParse("organization-example-good-health-care", Organization.newBuilder());
-    testParse("organization-example-insurer", Organization.newBuilder());
-    testParse("organization-example-lab", Organization.newBuilder());
-    testParse("organization-example-mmanu", Organization.newBuilder());
+    testParse("Organization-hl7", Organization.newBuilder());
+    testParse("Organization-f001", Organization.newBuilder());
+    testParse("Organization-f002", Organization.newBuilder());
+    testParse("Organization-f003", Organization.newBuilder());
+    testParse("Organization-f201", Organization.newBuilder());
+    testParse("Organization-f203", Organization.newBuilder());
+    testParse("Organization-1", Organization.newBuilder());
+    testParse("Organization-2.16.840.1.113883.19.5", Organization.newBuilder());
+    testParse("Organization-2", Organization.newBuilder());
+    testParse("Organization-1832473e-2fe0-452d-abe9-3cdb9879522f", Organization.newBuilder());
+    testParse("Organization-mmanu", Organization.newBuilder());
   }
 
   /** Test printing of the Organization FHIR resource. */
   @Test
   public void printOrganization() throws Exception {
-    testPrint("organization-example", Organization.newBuilder());
-    testPrint("organization-example-f001-burgers", Organization.newBuilder());
-    testPrint("organization-example-f002-burgers-card", Organization.newBuilder());
-    testPrint("organization-example-f003-burgers-ENT", Organization.newBuilder());
-    testPrint("organization-example-f201-aumc", Organization.newBuilder());
-    testPrint("organization-example-f203-bumc", Organization.newBuilder());
-    testPrint("organization-example-gastro", Organization.newBuilder());
-    testPrint("organization-example-good-health-care", Organization.newBuilder());
-    testPrint("organization-example-insurer", Organization.newBuilder());
-    testPrint("organization-example-lab", Organization.newBuilder());
-    testPrint("organization-example-mmanu", Organization.newBuilder());
+    testPrint("Organization-hl7", Organization.newBuilder());
+    testPrint("Organization-f001", Organization.newBuilder());
+    testPrint("Organization-f002", Organization.newBuilder());
+    testPrint("Organization-f003", Organization.newBuilder());
+    testPrint("Organization-f201", Organization.newBuilder());
+    testPrint("Organization-f203", Organization.newBuilder());
+    testPrint("Organization-1", Organization.newBuilder());
+    testPrint("Organization-2.16.840.1.113883.19.5", Organization.newBuilder());
+    testPrint("Organization-2", Organization.newBuilder());
+    testPrint("Organization-1832473e-2fe0-452d-abe9-3cdb9879522f", Organization.newBuilder());
+    testPrint("Organization-mmanu", Organization.newBuilder());
   }
 
   /** Test parsing of the Parameters FHIR resource. */
   @Test
   public void parseParameters() throws Exception {
-    testParse("parameters-example", Parameters.newBuilder());
+    testParse("Parameters-example", Parameters.newBuilder());
   }
 
   /** Test printing of the Parameters FHIR resource. */
   @Test
   public void printParameters() throws Exception {
-    testPrint("parameters-example", Parameters.newBuilder());
+    testPrint("Parameters-example", Parameters.newBuilder());
   }
 
   /** Test parsing of the Patient FHIR resource. */
@@ -1830,645 +1832,645 @@ public class JsonFormatTest {
   /** Test parsing of the PaymentNotice FHIR resource. */
   @Test
   public void parsePaymentNotice() throws Exception {
-    testParse("paymentnotice-example", PaymentNotice.newBuilder());
+    testParse("PaymentNotice-77654", PaymentNotice.newBuilder());
   }
 
   /** Test printing of the PaymentNotice FHIR resource. */
   @Test
   public void printPaymentNotice() throws Exception {
-    testPrint("paymentnotice-example", PaymentNotice.newBuilder());
+    testPrint("PaymentNotice-77654", PaymentNotice.newBuilder());
   }
 
   /** Test parsing of the PaymentReconciliation FHIR resource. */
   @Test
   public void parsePaymentReconciliation() throws Exception {
-    testParse("paymentreconciliation-example", PaymentReconciliation.newBuilder());
+    testParse("PaymentReconciliation-ER2500", PaymentReconciliation.newBuilder());
   }
 
   /** Test printing of the PaymentReconciliation FHIR resource. */
   @Test
   public void printPaymentReconciliation() throws Exception {
-    testPrint("paymentreconciliation-example", PaymentReconciliation.newBuilder());
+    testPrint("PaymentReconciliation-ER2500", PaymentReconciliation.newBuilder());
   }
 
   /** Test parsing of the Person FHIR resource. */
   @Test
   public void parsePerson() throws Exception {
-    testParse("person-example", Person.newBuilder());
-    testParse("person-example-f002-ariadne", Person.newBuilder());
+    testParse("Person-example", Person.newBuilder());
+    testParse("Person-f002", Person.newBuilder());
   }
 
   /** Test printing of the Person FHIR resource. */
   @Test
   public void printPerson() throws Exception {
-    testPrint("person-example", Person.newBuilder());
-    testPrint("person-example-f002-ariadne", Person.newBuilder());
+    testPrint("Person-example", Person.newBuilder());
+    testPrint("Person-f002", Person.newBuilder());
   }
 
   /** Test parsing of the PlanDefinition FHIR resource. */
   @Test
   public void parsePlanDefinition() throws Exception {
-    testParse("plandefinition-example", PlanDefinition.newBuilder());
-    testParse("plandefinition-example-kdn5-simplified", PlanDefinition.newBuilder());
-    testParse("plandefinition-options-example", PlanDefinition.newBuilder());
-    testParse("plandefinition-predecessor-example", PlanDefinition.newBuilder());
-    testParse("plandefinition-protocol-example", PlanDefinition.newBuilder());
+    testParse("PlanDefinition-low-suicide-risk-order-set", PlanDefinition.newBuilder());
+    testParse("PlanDefinition-KDN5", PlanDefinition.newBuilder());
+    testParse("PlanDefinition-options-example", PlanDefinition.newBuilder());
+    testParse("PlanDefinition-zika-virus-intervention-initial", PlanDefinition.newBuilder());
+    testParse("PlanDefinition-protocol-example", PlanDefinition.newBuilder());
   }
 
   /** Test printing of the PlanDefinition FHIR resource. */
   @Test
   public void printPlanDefinition() throws Exception {
-    testPrint("plandefinition-example", PlanDefinition.newBuilder());
-    testPrint("plandefinition-example-kdn5-simplified", PlanDefinition.newBuilder());
-    testPrint("plandefinition-options-example", PlanDefinition.newBuilder());
-    testPrint("plandefinition-predecessor-example", PlanDefinition.newBuilder());
-    testPrint("plandefinition-protocol-example", PlanDefinition.newBuilder());
+    testPrint("PlanDefinition-low-suicide-risk-order-set", PlanDefinition.newBuilder());
+    testPrint("PlanDefinition-KDN5", PlanDefinition.newBuilder());
+    testPrint("PlanDefinition-options-example", PlanDefinition.newBuilder());
+    testPrint("PlanDefinition-zika-virus-intervention-initial", PlanDefinition.newBuilder());
+    testPrint("PlanDefinition-protocol-example", PlanDefinition.newBuilder());
   }
 
   /** Test parsing of the Practitioner FHIR resource. */
   @Test
   public void parsePractitioner() throws Exception {
-    testParse("practitioner-example", Practitioner.newBuilder());
-    testParse("practitioner-example-f001-evdb", Practitioner.newBuilder());
-    testParse("practitioner-example-f002-pv", Practitioner.newBuilder());
-    testParse("practitioner-example-f003-mv", Practitioner.newBuilder());
-    testParse("practitioner-example-f004-rb", Practitioner.newBuilder());
-    testParse("practitioner-example-f005-al", Practitioner.newBuilder());
-    testParse("practitioner-example-f006-rvdb", Practitioner.newBuilder());
-    testParse("practitioner-example-f007-sh", Practitioner.newBuilder());
-    testParse("practitioner-example-f201-ab", Practitioner.newBuilder());
-    testParse("practitioner-example-f202-lm", Practitioner.newBuilder());
-    testParse("practitioner-example-f203-jvg", Practitioner.newBuilder());
-    testParse("practitioner-example-f204-ce", Practitioner.newBuilder());
-    testParse("practitioner-example-xcda1", Practitioner.newBuilder());
-    testParse("practitioner-example-xcda-author", Practitioner.newBuilder());
+    testParse("Practitioner-example", Practitioner.newBuilder());
+    testParse("Practitioner-f001", Practitioner.newBuilder());
+    testParse("Practitioner-f002", Practitioner.newBuilder());
+    testParse("Practitioner-f003", Practitioner.newBuilder());
+    testParse("Practitioner-f004", Practitioner.newBuilder());
+    testParse("Practitioner-f005", Practitioner.newBuilder());
+    testParse("Practitioner-f006", Practitioner.newBuilder());
+    testParse("Practitioner-f007", Practitioner.newBuilder());
+    testParse("Practitioner-f201", Practitioner.newBuilder());
+    testParse("Practitioner-f202", Practitioner.newBuilder());
+    testParse("Practitioner-f203", Practitioner.newBuilder());
+    testParse("Practitioner-f204", Practitioner.newBuilder());
+    testParse("Practitioner-xcda1", Practitioner.newBuilder());
+    testParse("Practitioner-xcda-author", Practitioner.newBuilder());
   }
 
   /** Test printing of the Practitioner FHIR resource. */
   @Test
   public void printPractitioner() throws Exception {
-    testPrint("practitioner-example", Practitioner.newBuilder());
-    testPrint("practitioner-example-f001-evdb", Practitioner.newBuilder());
-    testPrint("practitioner-example-f002-pv", Practitioner.newBuilder());
-    testPrint("practitioner-example-f003-mv", Practitioner.newBuilder());
-    testPrint("practitioner-example-f004-rb", Practitioner.newBuilder());
-    testPrint("practitioner-example-f005-al", Practitioner.newBuilder());
-    testPrint("practitioner-example-f006-rvdb", Practitioner.newBuilder());
-    testPrint("practitioner-example-f007-sh", Practitioner.newBuilder());
-    testPrint("practitioner-example-f201-ab", Practitioner.newBuilder());
-    testPrint("practitioner-example-f202-lm", Practitioner.newBuilder());
-    testPrint("practitioner-example-f203-jvg", Practitioner.newBuilder());
-    testPrint("practitioner-example-f204-ce", Practitioner.newBuilder());
-    testPrint("practitioner-example-xcda1", Practitioner.newBuilder());
-    testPrint("practitioner-example-xcda-author", Practitioner.newBuilder());
+    testPrint("Practitioner-example", Practitioner.newBuilder());
+    testPrint("Practitioner-f001", Practitioner.newBuilder());
+    testPrint("Practitioner-f002", Practitioner.newBuilder());
+    testPrint("Practitioner-f003", Practitioner.newBuilder());
+    testPrint("Practitioner-f004", Practitioner.newBuilder());
+    testPrint("Practitioner-f005", Practitioner.newBuilder());
+    testPrint("Practitioner-f006", Practitioner.newBuilder());
+    testPrint("Practitioner-f007", Practitioner.newBuilder());
+    testPrint("Practitioner-f201", Practitioner.newBuilder());
+    testPrint("Practitioner-f202", Practitioner.newBuilder());
+    testPrint("Practitioner-f203", Practitioner.newBuilder());
+    testPrint("Practitioner-f204", Practitioner.newBuilder());
+    testPrint("Practitioner-xcda1", Practitioner.newBuilder());
+    testPrint("Practitioner-xcda-author", Practitioner.newBuilder());
   }
 
   /** Test parsing of the PractitionerRole FHIR resource. */
   @Test
   public void parsePractitionerRole() throws Exception {
-    testParse("practitionerrole-example", PractitionerRole.newBuilder());
+    testParse("PractitionerRole-example", PractitionerRole.newBuilder());
   }
 
   /** Test printing of the PractitionerRole FHIR resource. */
   @Test
   public void printPractitionerRole() throws Exception {
-    testPrint("practitionerrole-example", PractitionerRole.newBuilder());
+    testPrint("PractitionerRole-example", PractitionerRole.newBuilder());
   }
 
   /** Test parsing of the Procedure FHIR resource. */
   @Test
   public void parseProcedure() throws Exception {
-    testParse("procedure-example", Procedure.newBuilder());
-    testParse("procedure-example-ambulation", Procedure.newBuilder());
-    testParse("procedure-example-appendectomy-narrative", Procedure.newBuilder());
-    testParse("procedure-example-biopsy", Procedure.newBuilder());
-    testParse("procedure-example-colon-biopsy", Procedure.newBuilder());
-    testParse("procedure-example-colonoscopy", Procedure.newBuilder());
-    testParse("procedure-example-education", Procedure.newBuilder());
-    testParse("procedure-example-f001-heart", Procedure.newBuilder());
-    testParse("procedure-example-f002-lung", Procedure.newBuilder());
-    testParse("procedure-example-f003-abscess", Procedure.newBuilder());
-    testParse("procedure-example-f004-tracheotomy", Procedure.newBuilder());
-    testParse("procedure-example-f201-tpf", Procedure.newBuilder());
-    testParse("procedure-example-implant", Procedure.newBuilder());
-    testParse("procedure-example-ob", Procedure.newBuilder());
-    testParse("procedure-example-physical-therapy", Procedure.newBuilder());
+    testParse("Procedure-example", Procedure.newBuilder());
+    testParse("Procedure-ambulation", Procedure.newBuilder());
+    testParse("Procedure-appendectomy-narrative", Procedure.newBuilder());
+    testParse("Procedure-biopsy", Procedure.newBuilder());
+    testParse("Procedure-colon-biopsy", Procedure.newBuilder());
+    testParse("Procedure-colonoscopy", Procedure.newBuilder());
+    testParse("Procedure-education", Procedure.newBuilder());
+    testParse("Procedure-f001", Procedure.newBuilder());
+    testParse("Procedure-f002", Procedure.newBuilder());
+    testParse("Procedure-f003", Procedure.newBuilder());
+    testParse("Procedure-f004", Procedure.newBuilder());
+    testParse("Procedure-f201", Procedure.newBuilder());
+    testParse("Procedure-example-implant", Procedure.newBuilder());
+    testParse("Procedure-ob", Procedure.newBuilder());
+    testParse("Procedure-physical-therapy", Procedure.newBuilder());
   }
 
   /** Test printing of the Procedure FHIR resource. */
   @Test
   public void printProcedure() throws Exception {
-    testPrint("procedure-example", Procedure.newBuilder());
-    testPrint("procedure-example-ambulation", Procedure.newBuilder());
-    testPrint("procedure-example-appendectomy-narrative", Procedure.newBuilder());
-    testPrint("procedure-example-biopsy", Procedure.newBuilder());
-    testPrint("procedure-example-colon-biopsy", Procedure.newBuilder());
-    testPrint("procedure-example-colonoscopy", Procedure.newBuilder());
-    testPrint("procedure-example-education", Procedure.newBuilder());
-    testPrint("procedure-example-f001-heart", Procedure.newBuilder());
-    testPrint("procedure-example-f002-lung", Procedure.newBuilder());
-    testPrint("procedure-example-f003-abscess", Procedure.newBuilder());
-    testPrint("procedure-example-f004-tracheotomy", Procedure.newBuilder());
-    testPrint("procedure-example-f201-tpf", Procedure.newBuilder());
-    testPrint("procedure-example-implant", Procedure.newBuilder());
-    testPrint("procedure-example-ob", Procedure.newBuilder());
-    testPrint("procedure-example-physical-therapy", Procedure.newBuilder());
+    testPrint("Procedure-example", Procedure.newBuilder());
+    testPrint("Procedure-ambulation", Procedure.newBuilder());
+    testPrint("Procedure-appendectomy-narrative", Procedure.newBuilder());
+    testPrint("Procedure-biopsy", Procedure.newBuilder());
+    testPrint("Procedure-colon-biopsy", Procedure.newBuilder());
+    testPrint("Procedure-colonoscopy", Procedure.newBuilder());
+    testPrint("Procedure-education", Procedure.newBuilder());
+    testPrint("Procedure-f001", Procedure.newBuilder());
+    testPrint("Procedure-f002", Procedure.newBuilder());
+    testPrint("Procedure-f003", Procedure.newBuilder());
+    testPrint("Procedure-f004", Procedure.newBuilder());
+    testPrint("Procedure-f201", Procedure.newBuilder());
+    testPrint("Procedure-example-implant", Procedure.newBuilder());
+    testPrint("Procedure-ob", Procedure.newBuilder());
+    testPrint("Procedure-physical-therapy", Procedure.newBuilder());
   }
 
   /** Test parsing of the ProcedureRequest FHIR resource. */
   @Test
   public void parseProcedureRequest() throws Exception {
-    testParse("procedurerequest-example", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example2", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example3", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example4", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example-ambulation", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example-appendectomy", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example-colonoscopy", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example-colonoscopy-bx", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example-di", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example-edu", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example-ft4", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example-implant", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example-lipid", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example-ob", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example-pgx", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example-pt", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-example-subrequest", ProcedureRequest.newBuilder());
-    testParse("procedurerequest-genetics-example-1", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-example", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-physiotherapy", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-do-not-turn", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-benchpress", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-ambulation", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-appendectomy-narrative", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-colonoscopy", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-colon-biopsy", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-di", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-education", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-ft4", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-example-implant", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-lipid", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-ob", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-example-pgx", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-physical-therapy", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-subrequest", ProcedureRequest.newBuilder());
+    testParse("ProcedureRequest-og-example1", ProcedureRequest.newBuilder());
   }
 
   /** Test printing of the ProcedureRequest FHIR resource. */
   @Test
   public void printProcedureRequest() throws Exception {
-    testPrint("procedurerequest-example", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example2", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example3", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example4", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example-ambulation", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example-appendectomy", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example-colonoscopy", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example-colonoscopy-bx", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example-di", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example-edu", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example-ft4", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example-implant", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example-lipid", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example-ob", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example-pgx", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example-pt", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-example-subrequest", ProcedureRequest.newBuilder());
-    testPrint("procedurerequest-genetics-example-1", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-example", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-physiotherapy", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-do-not-turn", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-benchpress", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-ambulation", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-appendectomy-narrative", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-colonoscopy", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-colon-biopsy", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-di", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-education", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-ft4", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-example-implant", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-lipid", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-ob", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-example-pgx", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-physical-therapy", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-subrequest", ProcedureRequest.newBuilder());
+    testPrint("ProcedureRequest-og-example1", ProcedureRequest.newBuilder());
   }
 
   /** Test parsing of the ProcessRequest FHIR resource. */
   @Test
   public void parseProcessRequest() throws Exception {
-    testParse("processrequest-example", ProcessRequest.newBuilder());
-    testParse("processrequest-example-poll-eob", ProcessRequest.newBuilder());
-    testParse("processrequest-example-poll-exclusive", ProcessRequest.newBuilder());
-    testParse("processrequest-example-poll-inclusive", ProcessRequest.newBuilder());
-    testParse("processrequest-example-poll-payrec", ProcessRequest.newBuilder());
-    testParse("processrequest-example-poll-specific", ProcessRequest.newBuilder());
-    testParse("processrequest-example-reprocess", ProcessRequest.newBuilder());
-    testParse("processrequest-example-reverse", ProcessRequest.newBuilder());
-    testParse("processrequest-example-status", ProcessRequest.newBuilder());
+    testParse("ProcessRequest-1110", ProcessRequest.newBuilder());
+    testParse("ProcessRequest-1115", ProcessRequest.newBuilder());
+    testParse("ProcessRequest-1113", ProcessRequest.newBuilder());
+    testParse("ProcessRequest-1112", ProcessRequest.newBuilder());
+    testParse("ProcessRequest-1114", ProcessRequest.newBuilder());
+    testParse("ProcessRequest-1111", ProcessRequest.newBuilder());
+    testParse("ProcessRequest-44654", ProcessRequest.newBuilder());
+    testParse("ProcessRequest-87654", ProcessRequest.newBuilder());
+    testParse("ProcessRequest-87655", ProcessRequest.newBuilder());
   }
 
   /** Test printing of the ProcessRequest FHIR resource. */
   @Test
   public void printProcessRequest() throws Exception {
-    testPrint("processrequest-example", ProcessRequest.newBuilder());
-    testPrint("processrequest-example-poll-eob", ProcessRequest.newBuilder());
-    testPrint("processrequest-example-poll-exclusive", ProcessRequest.newBuilder());
-    testPrint("processrequest-example-poll-inclusive", ProcessRequest.newBuilder());
-    testPrint("processrequest-example-poll-payrec", ProcessRequest.newBuilder());
-    testPrint("processrequest-example-poll-specific", ProcessRequest.newBuilder());
-    testPrint("processrequest-example-reprocess", ProcessRequest.newBuilder());
-    testPrint("processrequest-example-reverse", ProcessRequest.newBuilder());
-    testPrint("processrequest-example-status", ProcessRequest.newBuilder());
+    testPrint("ProcessRequest-1110", ProcessRequest.newBuilder());
+    testPrint("ProcessRequest-1115", ProcessRequest.newBuilder());
+    testPrint("ProcessRequest-1113", ProcessRequest.newBuilder());
+    testPrint("ProcessRequest-1112", ProcessRequest.newBuilder());
+    testPrint("ProcessRequest-1114", ProcessRequest.newBuilder());
+    testPrint("ProcessRequest-1111", ProcessRequest.newBuilder());
+    testPrint("ProcessRequest-44654", ProcessRequest.newBuilder());
+    testPrint("ProcessRequest-87654", ProcessRequest.newBuilder());
+    testPrint("ProcessRequest-87655", ProcessRequest.newBuilder());
   }
 
   /** Test parsing of the ProcessResponse FHIR resource. */
   @Test
   public void parseProcessResponse() throws Exception {
-    testParse("processresponse-example", ProcessResponse.newBuilder());
-    testParse("processresponse-example-error", ProcessResponse.newBuilder());
-    testParse("processresponse-example-pended", ProcessResponse.newBuilder());
+    testParse("ProcessResponse-SR2500", ProcessResponse.newBuilder());
+    testParse("ProcessResponse-SR2349", ProcessResponse.newBuilder());
+    testParse("ProcessResponse-SR2499", ProcessResponse.newBuilder());
   }
 
   /** Test printing of the ProcessResponse FHIR resource. */
   @Test
   public void printProcessResponse() throws Exception {
-    testPrint("processresponse-example", ProcessResponse.newBuilder());
-    testPrint("processresponse-example-error", ProcessResponse.newBuilder());
-    testPrint("processresponse-example-pended", ProcessResponse.newBuilder());
+    testPrint("ProcessResponse-SR2500", ProcessResponse.newBuilder());
+    testPrint("ProcessResponse-SR2349", ProcessResponse.newBuilder());
+    testPrint("ProcessResponse-SR2499", ProcessResponse.newBuilder());
   }
 
   /** Test parsing of the Provenance FHIR resource. */
   @Test
   public void parseProvenance() throws Exception {
-    testParse("provenance-example", Provenance.newBuilder());
-    testParse("provenance-example-biocompute-object", Provenance.newBuilder());
-    testParse("provenance-example-cwl", Provenance.newBuilder());
-    testParse("provenance-example-sig", Provenance.newBuilder());
+    testParse("Provenance-example", Provenance.newBuilder());
+    testParse("Provenance-example-biocompute-object", Provenance.newBuilder());
+    testParse("Provenance-example-cwl", Provenance.newBuilder());
+    testParse("Provenance-signature", Provenance.newBuilder());
   }
 
   /** Test printing of the Provenance FHIR resource. */
   @Test
   public void printProvenance() throws Exception {
-    testPrint("provenance-example", Provenance.newBuilder());
-    testPrint("provenance-example-biocompute-object", Provenance.newBuilder());
-    testPrint("provenance-example-cwl", Provenance.newBuilder());
-    testPrint("provenance-example-sig", Provenance.newBuilder());
+    testPrint("Provenance-example", Provenance.newBuilder());
+    testPrint("Provenance-example-biocompute-object", Provenance.newBuilder());
+    testPrint("Provenance-example-cwl", Provenance.newBuilder());
+    testPrint("Provenance-signature", Provenance.newBuilder());
   }
 
   /** Test parsing of the Questionnaire FHIR resource. */
   @Test
   public void parseQuestionnaire() throws Exception {
-    testParse("questionnaire-example", Questionnaire.newBuilder());
-    testParse("questionnaire-example-bluebook", Questionnaire.newBuilder());
-    testParse("questionnaire-example-f201-lifelines", Questionnaire.newBuilder());
-    testParse("questionnaire-example-gcs", Questionnaire.newBuilder());
+    testParse("Questionnaire-3141", Questionnaire.newBuilder());
+    testParse("Questionnaire-bb", Questionnaire.newBuilder());
+    testParse("Questionnaire-f201", Questionnaire.newBuilder());
+    testParse("Questionnaire-gcs", Questionnaire.newBuilder());
   }
 
   /** Test printing of the Questionnaire FHIR resource. */
   @Test
   public void printQuestionnaire() throws Exception {
-    testPrint("questionnaire-example", Questionnaire.newBuilder());
-    testPrint("questionnaire-example-bluebook", Questionnaire.newBuilder());
-    testPrint("questionnaire-example-f201-lifelines", Questionnaire.newBuilder());
-    testPrint("questionnaire-example-gcs", Questionnaire.newBuilder());
+    testPrint("Questionnaire-3141", Questionnaire.newBuilder());
+    testPrint("Questionnaire-bb", Questionnaire.newBuilder());
+    testPrint("Questionnaire-f201", Questionnaire.newBuilder());
+    testPrint("Questionnaire-gcs", Questionnaire.newBuilder());
   }
 
   /** Test parsing of the QuestionnaireResponse FHIR resource. */
   @Test
   public void parseQuestionnaireResponse() throws Exception {
-    testParse("questionnaireresponse-example", QuestionnaireResponse.newBuilder());
-    testParse("questionnaireresponse-example-bluebook", QuestionnaireResponse.newBuilder());
-    testParse("questionnaireresponse-example-f201-lifelines", QuestionnaireResponse.newBuilder());
-    testParse("questionnaireresponse-example-gcs", QuestionnaireResponse.newBuilder());
-    testParse("questionnaireresponse-example-ussg-fht-answers", QuestionnaireResponse.newBuilder());
+    testParse("QuestionnaireResponse-3141", QuestionnaireResponse.newBuilder());
+    testParse("QuestionnaireResponse-bb", QuestionnaireResponse.newBuilder());
+    testParse("QuestionnaireResponse-f201", QuestionnaireResponse.newBuilder());
+    testParse("QuestionnaireResponse-gcs", QuestionnaireResponse.newBuilder());
+    testParse("QuestionnaireResponse-ussg-fht-answers", QuestionnaireResponse.newBuilder());
   }
 
   /** Test printing of the QuestionnaireResponse FHIR resource. */
   @Test
   public void printQuestionnaireResponse() throws Exception {
-    testPrint("questionnaireresponse-example", QuestionnaireResponse.newBuilder());
-    testPrint("questionnaireresponse-example-bluebook", QuestionnaireResponse.newBuilder());
-    testPrint("questionnaireresponse-example-f201-lifelines", QuestionnaireResponse.newBuilder());
-    testPrint("questionnaireresponse-example-gcs", QuestionnaireResponse.newBuilder());
-    testPrint("questionnaireresponse-example-ussg-fht-answers", QuestionnaireResponse.newBuilder());
+    testPrint("QuestionnaireResponse-3141", QuestionnaireResponse.newBuilder());
+    testPrint("QuestionnaireResponse-bb", QuestionnaireResponse.newBuilder());
+    testPrint("QuestionnaireResponse-f201", QuestionnaireResponse.newBuilder());
+    testPrint("QuestionnaireResponse-gcs", QuestionnaireResponse.newBuilder());
+    testPrint("QuestionnaireResponse-ussg-fht-answers", QuestionnaireResponse.newBuilder());
   }
 
   /** Test parsing of the ReferralRequest FHIR resource. */
   @Test
   public void parseReferralRequest() throws Exception {
-    testParse("referralrequest-example", ReferralRequest.newBuilder());
+    testParse("ReferralRequest-example", ReferralRequest.newBuilder());
   }
 
   /** Test printing of the ReferralRequest FHIR resource. */
   @Test
   public void printReferralRequest() throws Exception {
-    testPrint("referralrequest-example", ReferralRequest.newBuilder());
+    testPrint("ReferralRequest-example", ReferralRequest.newBuilder());
   }
 
   /** Test parsing of the RelatedPerson FHIR resource. */
   @Test
   public void parseRelatedPerson() throws Exception {
-    testParse("relatedperson-example", RelatedPerson.newBuilder());
-    testParse("relatedperson-example-f001-sarah", RelatedPerson.newBuilder());
-    testParse("relatedperson-example-f002-ariadne", RelatedPerson.newBuilder());
-    testParse("relatedperson-example-peter", RelatedPerson.newBuilder());
+    testParse("RelatedPerson-benedicte", RelatedPerson.newBuilder());
+    testParse("RelatedPerson-f001", RelatedPerson.newBuilder());
+    testParse("RelatedPerson-f002", RelatedPerson.newBuilder());
+    testParse("RelatedPerson-peter", RelatedPerson.newBuilder());
   }
 
   /** Test printing of the RelatedPerson FHIR resource. */
   @Test
   public void printRelatedPerson() throws Exception {
-    testPrint("relatedperson-example", RelatedPerson.newBuilder());
-    testPrint("relatedperson-example-f001-sarah", RelatedPerson.newBuilder());
-    testPrint("relatedperson-example-f002-ariadne", RelatedPerson.newBuilder());
-    testPrint("relatedperson-example-peter", RelatedPerson.newBuilder());
+    testPrint("RelatedPerson-benedicte", RelatedPerson.newBuilder());
+    testPrint("RelatedPerson-f001", RelatedPerson.newBuilder());
+    testPrint("RelatedPerson-f002", RelatedPerson.newBuilder());
+    testPrint("RelatedPerson-peter", RelatedPerson.newBuilder());
   }
 
   /** Test parsing of the RequestGroup FHIR resource. */
   @Test
   public void parseRequestGroup() throws Exception {
-    testParse("requestgroup-example", RequestGroup.newBuilder());
-    testParse("requestgroup-kdn5-example", RequestGroup.newBuilder());
+    testParse("RequestGroup-example", RequestGroup.newBuilder());
+    testParse("RequestGroup-kdn5-example", RequestGroup.newBuilder());
   }
 
   /** Test printing of the RequestGroup FHIR resource. */
   @Test
   public void printRequestGroup() throws Exception {
-    testPrint("requestgroup-example", RequestGroup.newBuilder());
-    testPrint("requestgroup-kdn5-example", RequestGroup.newBuilder());
+    testPrint("RequestGroup-example", RequestGroup.newBuilder());
+    testPrint("RequestGroup-kdn5-example", RequestGroup.newBuilder());
   }
 
   /** Test parsing of the ResearchStudy FHIR resource. */
   @Test
   public void parseResearchStudy() throws Exception {
-    testParse("researchstudy-example", ResearchStudy.newBuilder());
+    testParse("ResearchStudy-example", ResearchStudy.newBuilder());
   }
 
   /** Test printing of the ResearchStudy FHIR resource. */
   @Test
   public void printResearchStudy() throws Exception {
-    testPrint("researchstudy-example", ResearchStudy.newBuilder());
+    testPrint("ResearchStudy-example", ResearchStudy.newBuilder());
   }
 
   /** Test parsing of the ResearchSubject FHIR resource. */
   @Test
   public void parseResearchSubject() throws Exception {
-    testParse("researchsubject-example", ResearchSubject.newBuilder());
+    testParse("ResearchSubject-example", ResearchSubject.newBuilder());
   }
 
   /** Test printing of the ResearchSubject FHIR resource. */
   @Test
   public void printResearchSubject() throws Exception {
-    testPrint("researchsubject-example", ResearchSubject.newBuilder());
+    testPrint("ResearchSubject-example", ResearchSubject.newBuilder());
   }
 
   /** Test parsing of the RiskAssessment FHIR resource. */
   @Test
   public void parseRiskAssessment() throws Exception {
-    testParse("riskassessment-example", RiskAssessment.newBuilder());
-    testParse("riskassessment-example-cardiac", RiskAssessment.newBuilder());
-    testParse("riskassessment-example-population", RiskAssessment.newBuilder());
-    testParse("riskassessment-example-prognosis", RiskAssessment.newBuilder());
+    testParse("RiskAssessment-genetic", RiskAssessment.newBuilder());
+    testParse("RiskAssessment-cardiac", RiskAssessment.newBuilder());
+    testParse("RiskAssessment-population", RiskAssessment.newBuilder());
+    testParse("RiskAssessment-prognosis", RiskAssessment.newBuilder());
   }
 
   /** Test printing of the RiskAssessment FHIR resource. */
   @Test
   public void printRiskAssessment() throws Exception {
-    testPrint("riskassessment-example", RiskAssessment.newBuilder());
-    testPrint("riskassessment-example-cardiac", RiskAssessment.newBuilder());
-    testPrint("riskassessment-example-population", RiskAssessment.newBuilder());
-    testPrint("riskassessment-example-prognosis", RiskAssessment.newBuilder());
+    testPrint("RiskAssessment-genetic", RiskAssessment.newBuilder());
+    testPrint("RiskAssessment-cardiac", RiskAssessment.newBuilder());
+    testPrint("RiskAssessment-population", RiskAssessment.newBuilder());
+    testPrint("RiskAssessment-prognosis", RiskAssessment.newBuilder());
   }
 
   /** Test parsing of the Schedule FHIR resource. */
   @Test
   public void parseSchedule() throws Exception {
-    testParse("schedule-example", Schedule.newBuilder());
-    testParse("schedule-provider-location1-example", Schedule.newBuilder());
-    testParse("schedule-provider-location2-example", Schedule.newBuilder());
+    testParse("Schedule-example", Schedule.newBuilder());
+    testParse("Schedule-exampleloc1", Schedule.newBuilder());
+    testParse("Schedule-exampleloc2", Schedule.newBuilder());
   }
 
   /** Test printing of the Schedule FHIR resource. */
   @Test
   public void printSchedule() throws Exception {
-    testPrint("schedule-example", Schedule.newBuilder());
-    testPrint("schedule-provider-location1-example", Schedule.newBuilder());
-    testPrint("schedule-provider-location2-example", Schedule.newBuilder());
+    testPrint("Schedule-example", Schedule.newBuilder());
+    testPrint("Schedule-exampleloc1", Schedule.newBuilder());
+    testPrint("Schedule-exampleloc2", Schedule.newBuilder());
   }
 
   /** Test parsing of the SearchParameter FHIR resource. */
   @Test
   public void parseSearchParameter() throws Exception {
-    testParse("searchparameter-example", SearchParameter.newBuilder());
-    testParse("searchparameter-example-extension", SearchParameter.newBuilder());
-    testParse("searchparameter-example-reference", SearchParameter.newBuilder());
+    testParse("SearchParameter-example", SearchParameter.newBuilder());
+    testParse("SearchParameter-example-extension", SearchParameter.newBuilder());
+    testParse("SearchParameter-example-reference", SearchParameter.newBuilder());
   }
 
   /** Test printing of the SearchParameter FHIR resource. */
   @Test
   public void printSearchParameter() throws Exception {
-    testPrint("searchparameter-example", SearchParameter.newBuilder());
-    testPrint("searchparameter-example-extension", SearchParameter.newBuilder());
-    testPrint("searchparameter-example-reference", SearchParameter.newBuilder());
+    testPrint("SearchParameter-example", SearchParameter.newBuilder());
+    testPrint("SearchParameter-example-extension", SearchParameter.newBuilder());
+    testPrint("SearchParameter-example-reference", SearchParameter.newBuilder());
   }
 
   /** Test parsing of the Sequence FHIR resource. */
   @Test
   public void parseSequence() throws Exception {
-    testParse("coord-0base-example", Sequence.newBuilder());
-    testParse("coord-1base-example", Sequence.newBuilder());
-    testParse("sequence-example", Sequence.newBuilder());
-    testParse("sequence-example-fda", Sequence.newBuilder());
-    testParse("sequence-example-fda-comparisons", Sequence.newBuilder());
-    testParse("sequence-example-fda-vcfeval", Sequence.newBuilder());
-    testParse("sequence-example-pgx-1", Sequence.newBuilder());
-    testParse("sequence-example-pgx-2", Sequence.newBuilder());
-    testParse("sequence-example-TPMT-one", Sequence.newBuilder());
-    testParse("sequence-example-TPMT-two", Sequence.newBuilder());
-    testParse("sequence-graphic-example-1", Sequence.newBuilder());
-    testParse("sequence-graphic-example-2", Sequence.newBuilder());
-    testParse("sequence-graphic-example-3", Sequence.newBuilder());
-    testParse("sequence-graphic-example-4", Sequence.newBuilder());
-    testParse("sequence-graphic-example-5", Sequence.newBuilder());
+    testParse("Sequence-coord-0-base", Sequence.newBuilder());
+    testParse("Sequence-coord-1-base", Sequence.newBuilder());
+    testParse("Sequence-example", Sequence.newBuilder());
+    testParse("Sequence-fda-example", Sequence.newBuilder());
+    testParse("Sequence-fda-vcf-comparison", Sequence.newBuilder());
+    testParse("Sequence-fda-vcfeval-comparison", Sequence.newBuilder());
+    testParse("Sequence-example-pgx-1", Sequence.newBuilder());
+    testParse("Sequence-example-pgx-2", Sequence.newBuilder());
+    testParse("Sequence-example-TPMT-one", Sequence.newBuilder());
+    testParse("Sequence-example-TPMT-two", Sequence.newBuilder());
+    testParse("Sequence-graphic-example-1", Sequence.newBuilder());
+    testParse("Sequence-graphic-example-2", Sequence.newBuilder());
+    testParse("Sequence-graphic-example-3", Sequence.newBuilder());
+    testParse("Sequence-graphic-example-4", Sequence.newBuilder());
+    testParse("Sequence-graphic-example-5", Sequence.newBuilder());
   }
 
   /** Test printing of the Sequence FHIR resource. */
   @Test
   public void printSequence() throws Exception {
-    testPrint("coord-0base-example", Sequence.newBuilder());
-    testPrint("coord-1base-example", Sequence.newBuilder());
-    testPrint("sequence-example", Sequence.newBuilder());
-    testPrint("sequence-example-fda", Sequence.newBuilder());
-    testPrint("sequence-example-fda-comparisons", Sequence.newBuilder());
-    testPrint("sequence-example-fda-vcfeval", Sequence.newBuilder());
-    testPrint("sequence-example-pgx-1", Sequence.newBuilder());
-    testPrint("sequence-example-pgx-2", Sequence.newBuilder());
-    testPrint("sequence-example-TPMT-one", Sequence.newBuilder());
-    testPrint("sequence-example-TPMT-two", Sequence.newBuilder());
-    testPrint("sequence-graphic-example-1", Sequence.newBuilder());
-    testPrint("sequence-graphic-example-2", Sequence.newBuilder());
-    testPrint("sequence-graphic-example-3", Sequence.newBuilder());
-    testPrint("sequence-graphic-example-4", Sequence.newBuilder());
-    testPrint("sequence-graphic-example-5", Sequence.newBuilder());
+    testPrint("Sequence-coord-0-base", Sequence.newBuilder());
+    testPrint("Sequence-coord-1-base", Sequence.newBuilder());
+    testPrint("Sequence-example", Sequence.newBuilder());
+    testPrint("Sequence-fda-example", Sequence.newBuilder());
+    testPrint("Sequence-fda-vcf-comparison", Sequence.newBuilder());
+    testPrint("Sequence-fda-vcfeval-comparison", Sequence.newBuilder());
+    testPrint("Sequence-example-pgx-1", Sequence.newBuilder());
+    testPrint("Sequence-example-pgx-2", Sequence.newBuilder());
+    testPrint("Sequence-example-TPMT-one", Sequence.newBuilder());
+    testPrint("Sequence-example-TPMT-two", Sequence.newBuilder());
+    testPrint("Sequence-graphic-example-1", Sequence.newBuilder());
+    testPrint("Sequence-graphic-example-2", Sequence.newBuilder());
+    testPrint("Sequence-graphic-example-3", Sequence.newBuilder());
+    testPrint("Sequence-graphic-example-4", Sequence.newBuilder());
+    testPrint("Sequence-graphic-example-5", Sequence.newBuilder());
   }
 
   /** Test parsing of the ServiceDefinition FHIR resource. */
   @Test
   public void parseServiceDefinition() throws Exception {
-    testParse("servicedefinition-example", ServiceDefinition.newBuilder());
+    testParse("ServiceDefinition-example", ServiceDefinition.newBuilder());
   }
 
   /** Test printing of the ServiceDefinition FHIR resource. */
   @Test
   public void printServiceDefinition() throws Exception {
-    testPrint("servicedefinition-example", ServiceDefinition.newBuilder());
+    testPrint("ServiceDefinition-example", ServiceDefinition.newBuilder());
   }
 
   /** Test parsing of the Slot FHIR resource. */
   @Test
   public void parseSlot() throws Exception {
-    testParse("slot-example", Slot.newBuilder());
-    testParse("slot-example-busy", Slot.newBuilder());
-    testParse("slot-example-tentative", Slot.newBuilder());
-    testParse("slot-example-unavailable", Slot.newBuilder());
+    testParse("Slot-example", Slot.newBuilder());
+    testParse("Slot-1", Slot.newBuilder());
+    testParse("Slot-2", Slot.newBuilder());
+    testParse("Slot-3", Slot.newBuilder());
   }
 
   /** Test printing of the Slot FHIR resource. */
   @Test
   public void printSlot() throws Exception {
-    testPrint("slot-example", Slot.newBuilder());
-    testPrint("slot-example-busy", Slot.newBuilder());
-    testPrint("slot-example-tentative", Slot.newBuilder());
-    testPrint("slot-example-unavailable", Slot.newBuilder());
+    testPrint("Slot-example", Slot.newBuilder());
+    testPrint("Slot-1", Slot.newBuilder());
+    testPrint("Slot-2", Slot.newBuilder());
+    testPrint("Slot-3", Slot.newBuilder());
   }
 
   /** Test parsing of the Specimen FHIR resource. */
   @Test
   public void parseSpecimen() throws Exception {
-    testParse("specimen-example", Specimen.newBuilder());
-    testParse("specimen-example-isolate", Specimen.newBuilder());
-    testParse("specimen-example-serum", Specimen.newBuilder());
-    testParse("specimen-example-urine", Specimen.newBuilder());
+    testParse("Specimen-101", Specimen.newBuilder());
+    testParse("Specimen-isolate", Specimen.newBuilder());
+    testParse("Specimen-sst", Specimen.newBuilder());
+    testParse("Specimen-vma-urine", Specimen.newBuilder());
   }
 
   /** Test printing of the Specimen FHIR resource. */
   @Test
   public void printSpecimen() throws Exception {
-    testPrint("specimen-example", Specimen.newBuilder());
-    testPrint("specimen-example-isolate", Specimen.newBuilder());
-    testPrint("specimen-example-serum", Specimen.newBuilder());
-    testPrint("specimen-example-urine", Specimen.newBuilder());
+    testPrint("Specimen-101", Specimen.newBuilder());
+    testPrint("Specimen-isolate", Specimen.newBuilder());
+    testPrint("Specimen-sst", Specimen.newBuilder());
+    testPrint("Specimen-vma-urine", Specimen.newBuilder());
   }
 
   /** Test parsing of the StructureDefinition FHIR resource. */
   @Test
   public void parseStructureDefinition() throws Exception {
-    testParse("structuredefinition-example", StructureDefinition.newBuilder());
+    testParse("StructureDefinition-example", StructureDefinition.newBuilder());
   }
 
   /** Test printing of the StructureDefinition FHIR resource. */
   @Test
   public void printStructureDefinition() throws Exception {
-    testPrint("structuredefinition-example", StructureDefinition.newBuilder());
+    testPrint("StructureDefinition-example", StructureDefinition.newBuilder());
   }
 
   /** Test parsing of the StructureMap FHIR resource. */
   @Test
   public void parseStructureMap() throws Exception {
-    testParse("structuremap-example", StructureMap.newBuilder());
+    testParse("StructureMap-example", StructureMap.newBuilder());
   }
 
   /** Test printing of the StructureMap FHIR resource. */
   @Test
   public void printStructureMap() throws Exception {
-    testPrint("structuremap-example", StructureMap.newBuilder());
+    testPrint("StructureMap-example", StructureMap.newBuilder());
   }
 
   /** Test parsing of the Subscription FHIR resource. */
   @Test
   public void parseSubscription() throws Exception {
-    testParse("subscription-example", Subscription.newBuilder());
-    testParse("subscription-example-error", Subscription.newBuilder());
+    testParse("Subscription-example", Subscription.newBuilder());
+    testParse("Subscription-example-error", Subscription.newBuilder());
   }
 
   /** Test printing of the Subscription FHIR resource. */
   @Test
   public void printSubscription() throws Exception {
-    testPrint("subscription-example", Subscription.newBuilder());
-    testPrint("subscription-example-error", Subscription.newBuilder());
+    testPrint("Subscription-example", Subscription.newBuilder());
+    testPrint("Subscription-example-error", Subscription.newBuilder());
   }
 
   /** Test parsing of the Substance FHIR resource. */
   @Test
   public void parseSubstance() throws Exception {
-    testParse("substance-example", Substance.newBuilder());
-    testParse("substance-example-amoxicillin-clavulanate", Substance.newBuilder());
-    testParse("substance-example-f201-dust", Substance.newBuilder());
-    testParse("substance-example-f202-staphylococcus", Substance.newBuilder());
-    testParse("substance-example-f203-potassium", Substance.newBuilder());
-    testParse("substance-example-silver-nitrate-product", Substance.newBuilder());
+    testParse("Substance-example", Substance.newBuilder());
+    testParse("Substance-f205", Substance.newBuilder());
+    testParse("Substance-f201", Substance.newBuilder());
+    testParse("Substance-f202", Substance.newBuilder());
+    testParse("Substance-f203", Substance.newBuilder());
+    testParse("Substance-f204", Substance.newBuilder());
   }
 
   /** Test printing of the Substance FHIR resource. */
   @Test
   public void printSubstance() throws Exception {
-    testPrint("substance-example", Substance.newBuilder());
-    testPrint("substance-example-amoxicillin-clavulanate", Substance.newBuilder());
-    testPrint("substance-example-f201-dust", Substance.newBuilder());
-    testPrint("substance-example-f202-staphylococcus", Substance.newBuilder());
-    testPrint("substance-example-f203-potassium", Substance.newBuilder());
-    testPrint("substance-example-silver-nitrate-product", Substance.newBuilder());
+    testPrint("Substance-example", Substance.newBuilder());
+    testPrint("Substance-f205", Substance.newBuilder());
+    testPrint("Substance-f201", Substance.newBuilder());
+    testPrint("Substance-f202", Substance.newBuilder());
+    testPrint("Substance-f203", Substance.newBuilder());
+    testPrint("Substance-f204", Substance.newBuilder());
   }
 
   /** Test parsing of the SupplyDelivery FHIR resource. */
   @Test
   public void parseSupplyDelivery() throws Exception {
-    testParse("supplydelivery-example", SupplyDelivery.newBuilder());
-    testParse("supplydelivery-example-pumpdelivery", SupplyDelivery.newBuilder());
+    testParse("SupplyDelivery-simpledelivery", SupplyDelivery.newBuilder());
+    testParse("SupplyDelivery-pumpdelivery", SupplyDelivery.newBuilder());
   }
 
   /** Test printing of the SupplyDelivery FHIR resource. */
   @Test
   public void printSupplyDelivery() throws Exception {
-    testPrint("supplydelivery-example", SupplyDelivery.newBuilder());
-    testPrint("supplydelivery-example-pumpdelivery", SupplyDelivery.newBuilder());
+    testPrint("SupplyDelivery-simpledelivery", SupplyDelivery.newBuilder());
+    testPrint("SupplyDelivery-pumpdelivery", SupplyDelivery.newBuilder());
   }
 
   /** Test parsing of the SupplyRequest FHIR resource. */
   @Test
   public void parseSupplyRequest() throws Exception {
-    testParse("supplyrequest-example-simpleorder", SupplyRequest.newBuilder());
+    testParse("SupplyRequest-simpleorder", SupplyRequest.newBuilder());
   }
 
   /** Test printing of the SupplyRequest FHIR resource. */
   @Test
   public void printSupplyRequest() throws Exception {
-    testPrint("supplyrequest-example-simpleorder", SupplyRequest.newBuilder());
+    testPrint("SupplyRequest-simpleorder", SupplyRequest.newBuilder());
   }
 
   /** Test parsing of the Task FHIR resource. */
   @Test
   public void parseTask() throws Exception {
-    testParse("task-example1", Task.newBuilder());
-    testParse("task-example2", Task.newBuilder());
-    testParse("task-example3", Task.newBuilder());
-    testParse("task-example4", Task.newBuilder());
-    testParse("task-example5", Task.newBuilder());
-    testParse("task-example6", Task.newBuilder());
+    testParse("Task-example1", Task.newBuilder());
+    testParse("Task-example2", Task.newBuilder());
+    testParse("Task-example3", Task.newBuilder());
+    testParse("Task-example4", Task.newBuilder());
+    testParse("Task-example5", Task.newBuilder());
+    testParse("Task-example6", Task.newBuilder());
   }
 
   /** Test printing of the Task FHIR resource. */
   @Test
   public void printTask() throws Exception {
-    testPrint("task-example1", Task.newBuilder());
-    testPrint("task-example2", Task.newBuilder());
-    testPrint("task-example3", Task.newBuilder());
-    testPrint("task-example4", Task.newBuilder());
-    testPrint("task-example5", Task.newBuilder());
-    testPrint("task-example6", Task.newBuilder());
+    testPrint("Task-example1", Task.newBuilder());
+    testPrint("Task-example2", Task.newBuilder());
+    testPrint("Task-example3", Task.newBuilder());
+    testPrint("Task-example4", Task.newBuilder());
+    testPrint("Task-example5", Task.newBuilder());
+    testPrint("Task-example6", Task.newBuilder());
   }
 
   /** Test parsing of the TestReport FHIR resource. */
   @Test
   public void parseTestReport() throws Exception {
-    testParse("testreport-example", TestReport.newBuilder());
+    testParse("TestReport-testreport-example", TestReport.newBuilder());
   }
 
   /** Test printing of the TestReport FHIR resource. */
   @Test
   public void printTestReport() throws Exception {
-    testPrint("testreport-example", TestReport.newBuilder());
+    testPrint("TestReport-testreport-example", TestReport.newBuilder());
   }
 
   /** Test parsing of the TestScript FHIR resource. */
   @Test
   public void parseTestScript() throws Exception {
-    testParse("testscript-example", TestScript.newBuilder());
-    testParse("testscript-example-history", TestScript.newBuilder());
-    testParse("testscript-example-multisystem", TestScript.newBuilder());
-    testParse("testscript-example-readtest", TestScript.newBuilder());
-    testParse("testscript-example-rule", TestScript.newBuilder());
-    testParse("testscript-example-search", TestScript.newBuilder());
-    testParse("testscript-example-update", TestScript.newBuilder());
+    testParse("TestScript-testscript-example", TestScript.newBuilder());
+    testParse("TestScript-testscript-example-history", TestScript.newBuilder());
+    testParse("TestScript-testscript-example-multisystem", TestScript.newBuilder());
+    testParse("TestScript-testscript-example-readtest", TestScript.newBuilder());
+    testParse("TestScript-testscript-example-rule", TestScript.newBuilder());
+    testParse("TestScript-testscript-example-search", TestScript.newBuilder());
+    testParse("TestScript-testscript-example-update", TestScript.newBuilder());
   }
 
   /** Test printing of the TestScript FHIR resource. */
   @Test
   public void printTestScript() throws Exception {
-    testPrint("testscript-example", TestScript.newBuilder());
-    testPrint("testscript-example-history", TestScript.newBuilder());
-    testPrint("testscript-example-multisystem", TestScript.newBuilder());
-    testPrint("testscript-example-readtest", TestScript.newBuilder());
-    testPrint("testscript-example-rule", TestScript.newBuilder());
-    testPrint("testscript-example-search", TestScript.newBuilder());
-    testPrint("testscript-example-update", TestScript.newBuilder());
+    testPrint("TestScript-testscript-example", TestScript.newBuilder());
+    testPrint("TestScript-testscript-example-history", TestScript.newBuilder());
+    testPrint("TestScript-testscript-example-multisystem", TestScript.newBuilder());
+    testPrint("TestScript-testscript-example-readtest", TestScript.newBuilder());
+    testPrint("TestScript-testscript-example-rule", TestScript.newBuilder());
+    testPrint("TestScript-testscript-example-search", TestScript.newBuilder());
+    testPrint("TestScript-testscript-example-update", TestScript.newBuilder());
   }
 
   /** Test parsing of the ValueSet FHIR resource. */
@@ -2496,14 +2498,14 @@ public class JsonFormatTest {
   /** Test parsing of the VisionPrescription FHIR resource. */
   @Test
   public void parseVisionPrescription() throws Exception {
-    testParse("visionprescription-example", VisionPrescription.newBuilder());
-    testParse("visionprescription-example-1", VisionPrescription.newBuilder());
+    testParse("VisionPrescription-33123", VisionPrescription.newBuilder());
+    testParse("VisionPrescription-33124", VisionPrescription.newBuilder());
   }
 
   /** Test printing of the VisionPrescription FHIR resource. */
   @Test
   public void printVisionPrescription() throws Exception {
-    testPrint("visionprescription-example", VisionPrescription.newBuilder());
-    testPrint("visionprescription-example-1", VisionPrescription.newBuilder());
+    testPrint("VisionPrescription-33123", VisionPrescription.newBuilder());
+    testPrint("VisionPrescription-33124", VisionPrescription.newBuilder());
   }
 }

@@ -1,0 +1,511 @@
+id {
+  value: "citalopramPrescription"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: citalopramPrescription</p><p><b>contained</b>: , </p><p><b>url</b>: <a>http://motivemi.com/artifacts/ActivityDefinition/citalopramPrescription</a></p><p><b>identifier</b>: citalopramPrescription (OFFICIAL)</p><p><b>version</b>: 1.0.0</p><p><b>name</b>: CitalopramPrescription</p><p><b>title</b>: Citalopram Prescription</p><p><b>status</b>: active</p><p><b>experimental</b>: true</p><p><b>date</b>: 15/08/2015</p><p><b>publisher</b>: Motive Medical Intelligence</p><p><b>description</b>: Citalopram 20 mg tablet 1 tablet oral 1 time daily now (30 table; 3 refills</p><p><b>purpose</b>: Defines a guideline supported prescription for the treatment of depressive disorders</p><p><b>usage</b>: This activity definition is used as part of various suicide risk order sets</p><p><b>approvalDate</b>: 12/03/2016</p><p><b>lastReviewDate</b>: 15/08/2016</p><p><b>effectivePeriod</b>: 01/01/2016 --&gt; 31/12/2017</p><p><b>useContext</b>: , , , , , , </p><p><b>jurisdiction</b>: United States <span>(Details : {urn:iso:std:iso:3166 code \'US\' = \'United States)</span></p><p><b>topic</b>: Mental Health Treatment <span>(Details )</span></p><p><b>contributor</b>: </p><p><b>contact</b>: </p><p><b>copyright</b>: \302\251 Copyright 2016 Motive Medical Intelligence. All rights reserved.</p><p><b>relatedArtifact</b>: , </p><p><b>kind</b>: MedicationRequest</p><p><b>product</b>: id: citalopramMedication; citalopram <span>(Details : {RxNorm code \'200371\' = \'200371)</span>; Tablet dose form <span>(Details : {SNOMED CT code \'385055001\' = \'Tablet\', given as \'Tablet dose form\'})</span></p><p><b>dosage</b>: </p><blockquote><p><b>dynamicValue</b></p><p><b>description</b>: dispenseRequest.numberOfRepeatsAllowed is three (3)</p><p><b>path</b>: dispenseRequest.numberOfRepeatsAllowed</p><p><b>language</b>: text/cql</p><p><b>expression</b>: 3</p></blockquote><blockquote><p><b>dynamicValue</b></p><p><b>description</b>: dispenseRequest.quantity is thirty (30) tablets</p><p><b>path</b>: dispenseRequest.quantity</p><p><b>language</b>: text/cql</p><p><b>expression</b>: 30 \'{tbl}\'</p></blockquote></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "citalopramMedication"
+    }
+    code {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "200371"
+        }
+      }
+      text {
+        value: "citalopram"
+      }
+    }
+    form {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "385055001"
+        }
+        display {
+          value: "Tablet dose form"
+        }
+      }
+      text {
+        value: "Tablet dose form"
+      }
+    }
+    ingredient {
+      item {
+        reference {
+          fragment {
+            value: "citalopramSubstance"
+          }
+        }
+      }
+      amount {
+        numerator {
+          value {
+            value: "20"
+          }
+          unit {
+            value: "mg"
+          }
+        }
+        denominator {
+          value {
+            value: "1"
+          }
+          unit {
+            value: "{tbl}"
+          }
+        }
+      }
+    }
+  }
+}
+contained {
+  substance {
+    id {
+      value: "citalopramSubstance"
+    }
+    code {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "2556"
+        }
+      }
+      text {
+        value: "citalopram"
+      }
+    }
+  }
+}
+url {
+  value: "http://motivemi.com/artifacts/ActivityDefinition/citalopramPrescription"
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://motivemi.com"
+  }
+  value {
+    value: "citalopramPrescription"
+  }
+}
+version {
+  value: "1.0.0"
+}
+name {
+  value: "CitalopramPrescription"
+}
+title {
+  value: "Citalopram Prescription"
+}
+status {
+  value: ACTIVE
+}
+experimental {
+  value: true
+}
+date {
+  value_us: 1439560800000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "Motive Medical Intelligence"
+}
+description {
+  value: "Citalopram 20 mg tablet 1 tablet oral 1 time daily now (30 table; 3 refills"
+}
+purpose {
+  value: "Defines a guideline supported prescription for the treatment of depressive disorders"
+}
+usage {
+  value: "This activity definition is used as part of various suicide risk order sets"
+}
+approval_date {
+  value_us: 1457701200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+last_review_date {
+  value_us: 1471183200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+effective_period {
+  start {
+    value_us: 1451566800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1514638800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "age"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "https://meshb.nlm.nih.gov"
+        }
+        code {
+          value: "D000328"
+        }
+        display {
+          value: "Adult"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "87512008"
+        }
+        display {
+          value: "Mild major depression"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "40379007"
+        }
+        display {
+          value: "Major depression, recurrent, mild"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "225444004"
+        }
+        display {
+          value: "At risk for suicide (finding)"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "306206005"
+        }
+        display {
+          value: "Referral to service (procedure)"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "user"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "309343006"
+        }
+        display {
+          value: "Physician"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://hl7.org/fhir/usage-context-type"
+    }
+    code {
+      value: "venue"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "440655000"
+        }
+        display {
+          value: "Outpatient environment"
+        }
+      }
+    }
+  }
+}
+jurisdiction {
+  coding {
+    system {
+      value: "urn:iso:std:iso:3166"
+    }
+    code {
+      value: "US"
+    }
+  }
+}
+topic {
+  text {
+    value: "Mental Health Treatment"
+  }
+}
+contributor {
+  type {
+    value: AUTHOR
+  }
+  name {
+    value: "Motive Medical Intelligence"
+  }
+  contact {
+    telecom {
+      system {
+        value: PHONE
+      }
+      value {
+        value: "415-362-4007"
+      }
+      use {
+        value: WORK
+      }
+    }
+    telecom {
+      system {
+        value: EMAIL
+      }
+      value {
+        value: "info@motivemi.com"
+      }
+      use {
+        value: WORK
+      }
+    }
+  }
+}
+contact {
+  telecom {
+    system {
+      value: PHONE
+    }
+    value {
+      value: "415-362-4007"
+    }
+    use {
+      value: WORK
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "info@motivemi.com"
+    }
+    use {
+      value: WORK
+    }
+  }
+}
+copyright {
+  value: "\302\251 Copyright 2016 Motive Medical Intelligence. All rights reserved."
+}
+related_artifact {
+  type {
+    value: CITATION
+  }
+  display {
+    value: "Practice Guideline for the Treatment of Patients with Major Depressive Disorder"
+  }
+  url {
+    value: "http://psychiatryonline.org/pb/assets/raw/sitewide/practice_guidelines/guidelines/mdd.pdf"
+  }
+}
+related_artifact {
+  type {
+    value: COMPOSED_OF
+  }
+  resource {
+    fragment {
+      value: "citalopramMedication"
+    }
+  }
+}
+kind {
+  value: MEDICATION_REQUEST
+}
+product {
+  reference {
+    fragment {
+      value: "citalopramMedication"
+    }
+  }
+}
+dosage {
+  text {
+    value: "1 tablet oral 1 time daily"
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 1
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  route {
+    coding {
+      code {
+        value: "26643006"
+      }
+      display {
+        value: "Oral route (qualifier value)"
+      }
+    }
+    text {
+      value: "Oral route (qualifier value)"
+    }
+  }
+  dose {
+    quantity {
+      value {
+        value: "1"
+      }
+      unit {
+        value: "{tbl}"
+      }
+    }
+  }
+}
+dynamic_value {
+  description {
+    value: "dispenseRequest.numberOfRepeatsAllowed is three (3)"
+  }
+  path {
+    value: "dispenseRequest.numberOfRepeatsAllowed"
+  }
+  language {
+    value: "text/cql"
+  }
+  expression {
+    value: "3"
+  }
+}
+dynamic_value {
+  description {
+    value: "dispenseRequest.quantity is thirty (30) tablets"
+  }
+  path {
+    value: "dispenseRequest.quantity"
+  }
+  language {
+    value: "text/cql"
+  }
+  expression {
+    value: "30 \'{tbl}\'"
+  }
+}
