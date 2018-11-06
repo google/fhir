@@ -5,6 +5,7 @@ licenses(["notice"])
 exports_files(["version_config.textproto"])
 
 load("//bazel:proto.bzl", "fhir_proto_library")
+load("//bazel:protogen.bzl", "gen_fhir_protos")
 
 fhir_proto_library(
     srcs = ["annotations.proto"],
@@ -82,6 +83,15 @@ fhir_proto_library(
     proto_library_prefix = "profiles",
 )
 
+gen_fhir_protos(
+    name = "uscore",
+    add_apache_license = True,
+    additional_proto_imports = [
+        "proto/stu3/uscore_codes.proto",
+    ],
+    package = "//testdata/stu3/uscore:uscore",
+)
+
 fhir_proto_library(
     srcs = [
         "uscore.proto",
@@ -90,7 +100,6 @@ fhir_proto_library(
         ":annotations_proto",
         ":codes_proto",
         ":datatypes_proto",
-        ":extensions_proto",
         ":metadatatypes_proto",
         ":resources_proto",
         ":uscore_codes_proto",

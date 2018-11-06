@@ -83,4 +83,8 @@ public final class AnnotationUtils {
     }
     return descriptor.getOptions().getExtension(Annotations.valueRegex);
   }
+
+  public static String getStructureDefinitionUrl(Descriptor descriptor) {
+    return descriptor.getOptions().getExtension(Annotations.fhirStructureDefinitionUrl);
+  }
 }

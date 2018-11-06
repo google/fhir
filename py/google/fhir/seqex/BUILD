@@ -3,12 +3,12 @@ licenses(["notice"])
 package(default_visibility = ["//visibility:public"])
 
 load("//bazel:cython.bzl", "pyx_library")
+
 load(
-    "@io_bazel_rules_python//python:python.bzl",
-    "py_binary",
-    "py_library",
-    "py_test",
+ "@io_bazel_rules_python//python:python.bzl",
+ "py_binary", "py_library", "py_test",
 )
+
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 
 # @io_bazel_rules_python may not be able to pull in transitive dependency correctly
@@ -108,15 +108,15 @@ py_test(
         "//proto/stu3:version_config.textproto",
     ],
     deps = [
-        ":bundle_seqex_converter",
         ":bundle_to_seqex",
+        ":bundle_seqex_converter",
+        "@protobuf_archive//:protobuf_python",
         "//proto/stu3:extensions_py_pb2",
         "//proto/stu3:resources_py_pb2",
         "//proto/stu3:version_config_py_pb2",
         "//py/google/fhir/testutil:protobuf_compare",
         "@absl_py//absl/testing:absltest",
         "@org_tensorflow//tensorflow/core:protos_all_py",
-        "@protobuf_archive//:protobuf_python",
         requirement("apache_beam"),
         requirement("nose"),
     ],
@@ -131,6 +131,7 @@ py_binary(
     ],
     deps = [
         ":bundle_to_seqex",
+        "@protobuf_archive//:protobuf_python",
         "//proto/stu3:extensions_py_pb2",
         "//proto/stu3:resources_py_pb2",
         "//proto/stu3:version_config_py_pb2",
@@ -138,7 +139,6 @@ py_binary(
         "@absl_py//absl/flags",
         "@absl_py//absl/logging",
         "@org_tensorflow//tensorflow/core:protos_all_py",
-        "@protobuf_archive//:protobuf_python",
         requirement("apache_beam"),
     ],
 )

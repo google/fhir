@@ -50,7 +50,7 @@ $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --emit_proto \
   --output_directory $OUTPUT_PATH \
-  --output_filename datatypes.proto \
+  --output_name datatypes \
   $(for i in $PRIMITIVES $DATATYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 # Some datatypes are manually generated.
 # These include:
@@ -73,7 +73,7 @@ $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --emit_proto \
   --output_directory $OUTPUT_PATH \
-  --output_filename metadatatypes.proto \
+  --output_name metadatatypes \
   $(for i in $METADATATYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
 # generate resources.proto
@@ -82,7 +82,7 @@ $PROTO_GENERATOR \
   --emit_proto \
   --output_directory $OUTPUT_PATH \
   --include_contained_resource \
-  --output_filename resources.proto \
+  --output_name resources \
   $(for i in $RESOURCETYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
 # generate profiles.proto
@@ -90,7 +90,7 @@ $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --emit_proto \
   --output_directory $OUTPUT_PATH \
-  --output_filename profiles.proto \
+  --output_name profiles \
   $(for i in $PROFILES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
 # generate extensions
@@ -98,7 +98,7 @@ $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --emit_proto \
   --output_directory $OUTPUT_PATH \
-  --output_filename extensions.proto \
+  --output_name extensions \
   $(for i in $EXTENSIONS; do echo "$i"; done)
 
 # generate google-specific extensions
@@ -107,15 +107,5 @@ $PROTO_GENERATOR \
   --emit_proto \
   --package_info $GOOGLE_PACKAGE_INFO \
   --output_directory $OUTPUT_PATH \
-  --output_filename google_extensions.proto \
+  --output_name google_extensions \
   $(for i in $GOOGLE_EXTENSIONS; do echo "$i"; done)
-
-# generate US Core package
-$PROTO_GENERATOR \
-  $NO_PACKAGE_FLAGS \
-  --emit_proto \
-  --package_info $US_CORE_PACKAGE_INFO \
-  --additional_import "$FHIR_PROTO_ROOT/uscore_codes.proto" \
-  --output_directory $OUTPUT_PATH \
-  --output_filename uscore.proto \
-  $(for i in $US_CORE_PROFILES; do echo "$i"; done)

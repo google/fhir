@@ -3,6 +3,7 @@
 package(default_visibility = ["//visibility:public"])
 
 load("//bazel:protogen.bzl", "zip_file")
+load("//bazel:protogen.bzl", "structure_definition_package")
 
 licenses(["notice"])
 
@@ -19,4 +20,10 @@ zip_file(
     srcs = glob([
         "*.json",
     ]),
+)
+
+structure_definition_package(
+    package_name = "uscore",
+    package_info = "uscore_package_info.prototxt",
+    structure_definitions_zip = "uscore_structure_definitions.zip",
 )

@@ -1,6 +1,5 @@
 licenses(["notice"])
-
-package(default_visibility = ["//visibility:public"])
+package(default_visibility = ["//visibility:public"],)
 
 cc_library(
     name = "extensions",
@@ -14,7 +13,6 @@ cc_library(
         "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/strings",
         "@org_tensorflow//tensorflow/core:lib",
-        "@protobuf_archive//:protobuf",
     ],
 )
 
@@ -49,7 +47,6 @@ cc_library(
         "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/strings",
         "@org_tensorflow//tensorflow/core:lib",
-        "@protobuf_archive//:protobuf",
     ],
 )
 
@@ -85,7 +82,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
         "@org_tensorflow//tensorflow/core:lib",
-        "@protobuf_archive//:protobuf",
     ],
 )
 
@@ -120,7 +116,6 @@ cc_library(
         "//proto/stu3:resources_cc_proto",
         "@com_google_absl//absl/strings",
         "@org_tensorflow//tensorflow/core:lib",
-        "@protobuf_archive//:protobuf",
     ],
 )
 

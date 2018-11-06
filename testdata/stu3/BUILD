@@ -3,10 +3,9 @@
 package(default_visibility = ["//visibility:public"])
 
 load("//bazel:protogen.bzl", "zip_file")
+load("//bazel:protogen.bzl", "structure_definition_package")
 
 licenses(["notice"])
-
-exports_files(["fhir_package_info.prototxt"])
 
 # These files are used to help test bigquery integration.
 filegroup(
@@ -60,6 +59,12 @@ zip_file(
         "structure_definitions/*.profile.json",
         "extensions/*.json",
     ]),
+)
+
+structure_definition_package(
+    package_name = "fhir",
+    package_info = "fhir_package_info.prototxt",
+    structure_definitions_zip = "fhir_structure_definitions.zip",
 )
 
 # These files contain valid and invalid examples for various types.

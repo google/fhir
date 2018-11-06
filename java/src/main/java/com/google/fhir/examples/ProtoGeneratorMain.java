@@ -23,10 +23,12 @@ import com.beust.jcommander.ParameterException;
 import com.google.common.base.Splitter;
 import com.google.common.io.Files;
 import com.google.fhir.proto.PackageInfo;
+import com.google.fhir.stu3.AnnotationUtils;
 import com.google.fhir.stu3.FileUtils;
 import com.google.fhir.stu3.ProtoFilePrinter;
 import com.google.fhir.stu3.ProtoGenerator;
 import com.google.fhir.stu3.proto.Bundle;
+import com.google.fhir.stu3.proto.Extension;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
@@ -54,7 +56,10 @@ class ProtoGeneratorMain {
   // The convention is to name profiles as the lowercased version of the element they define,
   // but this is not guaranteed by the spec, so we don't rely on it.
   // This mapping lets us keep track of source filenames for generated types.
-  private final Map<String, String> typeToSourceFileBaseName = new HashMap<>();
+  private static final Map<String, String> typeToSourceFileBaseName = new HashMap<>();
+
+  private static final String EXTENSION_STRUCTURE_DEFINITION_URL =
+      AnnotationUtils.getStructureDefinitionUrl(Extension.getDescriptor());
 
   private static class Args {
     @Parameter(
@@ -82,12 +87,6 @@ class ProtoGeneratorMain {
               + " in the proto"
     )
     private Boolean includeContainedResource = false;
-
-    @Parameter(
-      names = {"--output_filename"},
-      description = "File name of the output .proto file, relative to --output_directory"
-    )
-    private String outputFilename = "output.proto";
 
     @Parameter(
         names = {"--package_info"},
@@ -122,9 +121,28 @@ class ProtoGeneratorMain {
     private Boolean addApacheLicense = false;
 
     @Parameter(
+        names = {"--separate_extensions"},
+        description =
+            "If true, will separate all extensions into a ${output_name}_extensions.proto file.")
+    private boolean separateExtensions = false;
+
+    @Parameter(
+        names = {"--output_name"},
+        description =
+            "Name for output proto files.  If separate_extensions is true, will "
+                + "output ${output_name}.proto and ${output_name}_extensions.proto.  "
+                + "Otherwise, just outputs ${output_name}.proto.")
+    private String outputName = "output";
+
+    @Parameter(
         names = {"--input_bundle"},
         description = "Input Bundle of StructureDefinitions")
     private String inputBundleFile = null;
+
+    @Parameter(
+        names = {"--input_zip"},
+        description = "Input Zip of StructureDefinitions")
+    private String inputZipFile = null;
 
     @Parameter(description = "List of input StructureDefinitions")
     private List<String> inputFiles = new ArrayList<>();
@@ -189,9 +207,6 @@ class ProtoGeneratorMain {
     ArrayList<StructureDefinition> definitions = new ArrayList<>();
     for (String filename : args.inputFiles) {
       StructureDefinition definition = FileUtils.loadStructureDefinition(filename);
-      // TODO: We could skip over simple extensions here (since they'll get inlined as
-      // primitives, but that would break usages of things like ExtensionWrapper.fromExtensionsIn.
-      // Think about this a bit more.
       definitions.add(definition);
 
       // Keep a mapping from Message name that will be generated to file name that it came from.
@@ -217,16 +232,48 @@ class ProtoGeneratorMain {
       }
     }
 
+    if (args.inputZipFile != null) {
+      for (StructureDefinition structDef :
+          FileUtils.loadStructureDefinitionsInZip(args.inputZipFile)) {
+        definitions.add(structDef);
+        typeToSourceFileBaseName.put(
+            ProtoGenerator.getTypeName(structDef), structDef.getId().getValue());
+        knownTypes.put(structDef, packageInfo.getProtoPackage());
+      }
+    }
+
     // Generate the proto file.
     writer.println("Generating proto descriptors...");
     writer.flush();
-    FileDescriptorProto proto;
 
     ProtoGenerator generator = new ProtoGenerator(packageInfo, args.fhirProtoRoot, knownTypes);
-    proto = generator.generateFileDescriptor(definitions);
-    if (args.includeContainedResource) {
-      proto = generator.addContainedResource(proto);
+
+    if (args.separateExtensions) {
+      List<StructureDefinition> extensions = new ArrayList<>();
+      List<StructureDefinition> profiles = new ArrayList<>();
+      for (StructureDefinition structDef : definitions) {
+        if (structDef.getBaseDefinition().getValue().equals(EXTENSION_STRUCTURE_DEFINITION_URL)) {
+          extensions.add(structDef);
+        } else {
+          profiles.add(structDef);
+        }
+      }
+      writeProto(
+          generator.generateFileDescriptor(extensions),
+          args.outputName + "_extensions.proto",
+          args);
+      writeProto(generator.generateFileDescriptor(profiles), args.outputName + ".proto", args);
+    } else {
+      FileDescriptorProto proto = generator.generateFileDescriptor(definitions);
+      if (args.includeContainedResource) {
+        proto = generator.addContainedResource(proto);
+      }
+      writeProto(proto, args.outputName + ".proto", args);
     }
+  }
+
+  private void writeProto(FileDescriptorProto proto, String protoFileName, Args args)
+      throws IOException {
     for (String additionalImport : args.additionalImports) {
       proto = proto.toBuilder().addDependency(new File(additionalImport).toString()).build();
     }
@@ -234,9 +281,9 @@ class ProtoGeneratorMain {
 
     if (args.emitProto) {
       // Save the result as a .proto file
-      writer.println("Writing " + args.outputFilename + "...");
+      writer.println("Writing " + protoFileName + "...");
       writer.flush();
-      File outputFile = new File(args.outputDirectory, args.outputFilename);
+      File outputFile = new File(args.outputDirectory, protoFileName);
       Files.asCharSink(outputFile, UTF_8).write(protoFileContents);
     }
 

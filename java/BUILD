@@ -33,6 +33,7 @@ java_library(
     deps = [
         ":stu3",
         "//external:guava",
+        "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
         "//proto/stu3:profile_config_java_proto",
         "//proto/stu3:resources_java_proto",

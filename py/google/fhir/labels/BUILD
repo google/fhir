@@ -3,11 +3,10 @@ licenses(["notice"])
 package(default_visibility = ["//visibility:public"])
 
 load(
-    "@io_bazel_rules_python//python:python.bzl",
-    "py_binary",
-    "py_library",
-    "py_test",
+ "@io_bazel_rules_python//python:python.bzl",
+ "py_binary", "py_library", "py_test",
 )
+
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 
 # @io_bazel_rules_python may not be able to pull in transitive dependency correctly
@@ -104,9 +103,9 @@ py_test(
     deps = [
         ":bundle_to_label",
         ":label",
+        "@protobuf_archive//:protobuf_python",
         "//proto/stu3:resources_py_pb2",
         "@absl_py//absl/testing:absltest",
-        "@protobuf_archive//:protobuf_python",
         requirement("apache_beam"),
         requirement("nose"),
     ],
