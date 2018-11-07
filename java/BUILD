@@ -237,10 +237,10 @@ java_test(
     size = "medium",
     srcs = ["src/test/java/com/google/fhir/stu3/ProtoGeneratorTest.java"],
     data = [
+        "//spec:uscore",
         "//testdata/stu3:descriptors",
         "//testdata/stu3:fhir_structure_definitions",
         "//testdata/stu3:google",
-        "//testdata/stu3/uscore:uscore_structure_definitions",
     ],
     test_class = "com.google.fhir.stu3.ProtoGeneratorTest",
     deps = [

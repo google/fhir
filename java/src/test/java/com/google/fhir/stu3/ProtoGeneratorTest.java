@@ -106,7 +106,7 @@ public class ProtoGeneratorTest {
     // NOTE: consentdirective is omitted because it is malformed.  See:
     // https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_item_id=19263
     for (File file :
-        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/" + dir))
+        new File(runfiles.rlocation("com_google_fhir/" + dir))
             .listFiles(
                 (listDir, name) ->
                     name.endsWith(".json") && !name.endsWith("consentdirective.profile.json"))) {
@@ -122,10 +122,10 @@ public class ProtoGeneratorTest {
       return knownStructDefs;
     }
     knownStructDefs = new HashMap<>();
-    addPackage(knownStructDefs, "structure_definitions", "google.fhir.stu3.proto");
-    addPackage(knownStructDefs, "extensions", "google.fhir.stu3.proto");
-    addPackage(knownStructDefs, "google", "google.fhir.stu3.google");
-    addPackage(knownStructDefs, "uscore", "google.fhir.stu3.uscore");
+    addPackage(knownStructDefs, "testdata/stu3/structure_definitions", "google.fhir.stu3.proto");
+    addPackage(knownStructDefs, "testdata/stu3/extensions", "google.fhir.stu3.proto");
+    addPackage(knownStructDefs, "testdata/stu3/google", "google.fhir.stu3.google");
+    addPackage(knownStructDefs, "spec/hl7.fhir.us.core/1.0.1/package", "google.fhir.stu3.uscore");
     return knownStructDefs;
   }
 
@@ -1428,7 +1428,7 @@ public class ProtoGeneratorTest {
     testGeneratedExtension("extension-elementdefinition-allowedunits");
   }
 
-  /** Test generating the codename-history extension. */
+  /** Test generating the codesystem-history extension. */
   @Test
   public void generateCodesystemHistory() throws Exception {
     testGeneratedExtension("extension-codesystem-history");
