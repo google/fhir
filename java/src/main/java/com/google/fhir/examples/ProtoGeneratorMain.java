@@ -261,21 +261,26 @@ class ProtoGeneratorMain {
       writeProto(
           generator.generateFileDescriptor(extensions),
           args.outputName + "_extensions.proto",
-          args);
-      writeProto(generator.generateFileDescriptor(profiles), args.outputName + ".proto", args);
+          args,
+          false);
+      writeProto(
+          generator.generateFileDescriptor(profiles), args.outputName + ".proto", args, true);
     } else {
       FileDescriptorProto proto = generator.generateFileDescriptor(definitions);
       if (args.includeContainedResource) {
         proto = generator.addContainedResource(proto);
       }
-      writeProto(proto, args.outputName + ".proto", args);
+      writeProto(proto, args.outputName + ".proto", args, true);
     }
   }
 
-  private void writeProto(FileDescriptorProto proto, String protoFileName, Args args)
+  private void writeProto(
+      FileDescriptorProto proto, String protoFileName, Args args, boolean includeAdditionalImports)
       throws IOException {
-    for (String additionalImport : args.additionalImports) {
-      proto = proto.toBuilder().addDependency(new File(additionalImport).toString()).build();
+    if (includeAdditionalImports) {
+      for (String additionalImport : args.additionalImports) {
+        proto = proto.toBuilder().addDependency(new File(additionalImport).toString()).build();
+      }
     }
     String protoFileContents = printer.print(proto);
 
