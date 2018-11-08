@@ -63,6 +63,7 @@ resource_config {
   key: "Procedure"
   value {
     default_timestamp_fields: "Procedure.performed.dateTime"
+    default_timestamp_fields: "Procedure.performed.period.start"
   }
 }
 resource_config {
