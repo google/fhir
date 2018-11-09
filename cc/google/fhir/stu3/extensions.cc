@@ -119,7 +119,7 @@ Status AddFieldsToExtension(const Message& message, Extension* extension) {
     if (field->is_repeated()) {
       for (int j = 0; j < reflection->FieldSize(message, field); j++) {
         Extension* child = extension->add_extension();
-        child->mutable_url()->set_value(field->name());
+        child->mutable_url()->set_value(GetInlinedExtensionUrl(field));
         FHIR_RETURN_IF_ERROR(CheckIsMessage(field));
         FHIR_RETURN_IF_ERROR(AddValueToExtension(
             reflection->GetRepeatedMessage(message, field, j), child,
