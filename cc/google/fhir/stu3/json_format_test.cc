@@ -45,18 +45,24 @@ R LoadProto(const string& filename) {
 }
 
 template <typename R>
-void TestParse(const string& name) {
-  string json = ReadFile(
-      absl::StrCat("spec/hl7.fhir.core/3.0.1/package/", name + ".json"));
+void TestParseWithJsonFilepath(const string& proto_name,
+                               const string& json_path) {
+  string json = ReadFile(json_path);
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
   R from_json = JsonFhirStringToProto<R>(json, tz).ValueOrDie();
-  R from_disk = LoadProto<R>(name + ".prototxt");
+  R from_disk = LoadProto<R>(proto_name + ".prototxt");
 
   ::google::protobuf::util::MessageDifferencer differencer;
   string differences;
   differencer.ReportDifferencesToString(&differences);
   ASSERT_TRUE(differencer.Compare(from_json, from_disk)) << differences;
+}
+
+template <typename R>
+void TestParse(const string& name) {
+  TestParseWithJsonFilepath<R>(
+      name, absl::StrCat("spec/hl7.fhir.core/3.0.1/package/", name + ".json"));
 }
 
 Json::Value ParseJsonStringToValue(const string& raw_json) {
@@ -104,6 +110,12 @@ void TestPrintForAnalytics(const string& name) {
 
 /** Test parsing of FHIR edge cases. */
 TEST(JsonFormatTest, EdgeCasesParse) { TestParse<Patient>("Patient-null"); }
+
+/** Test parsing of FHIR edge casers from ndjson. */
+TEST(JsonFormatTest, EdgeCasesNdjsonParse) {
+  TestParseWithJsonFilepath<Patient>(
+      "Patient-null", "testdata/stu3/ndjson/Patient-null.ndjson");
+}
 
 /** Test printing of FHIR edge cases. */
 TEST(JsonFormatTest, EdgeCasesPrint) { TestPrint<Patient>("Patient-null"); }

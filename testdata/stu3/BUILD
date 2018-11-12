@@ -15,12 +15,19 @@ filegroup(
     ]),
 )
 
-# These files are sample resources from the FHIR spec.
+# These files are prototxt representations of sample resources provided by FHIR.
 filegroup(
     name = "examples",
     srcs = glob([
-        "examples/*.json",
         "examples/*.prototxt",
+    ]),
+)
+
+# These files are ndjson representations of some sample resources provided by FHIR.
+filegroup(
+    name = "ndjson",
+    srcs = glob([
+        "ndjson/*.ndjson",
     ]),
 )
 

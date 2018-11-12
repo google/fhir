@@ -365,10 +365,16 @@ Status MergeJsonFhirStringIntoProto(const string& raw_json, Message* target,
   // parsed into C++ doubles.  To avoid this, add quotes around any decimal
   // fields to ensure that they are parsed as strings.  Note that any field
   // that is already in quotes will not match this regex, and thus be ignored.
+  //
+  // This regex is three capture groups:
+  // 1: a un-escaped double-quote followed by a colon and arbitrary whitespace,
+  //    to ensure this is a field value (and not inside a string).
+  // 2: a decimal
+  // 3: any field-ending token.
   static const LazyRE2 kDecimalKeyValuePattern{
-      "(?m):\\s*(-?\\d*\\.\\d*?)(\\,?)$"};
+      "(?m)([^\\\\]\":\\s*)(-?\\d*\\.\\d*?)([\\s,\\}\\]$])"};
   RE2::GlobalReplace(&mutable_raw_json, *kDecimalKeyValuePattern,
-                     ":\"\\1\"\\2");
+                     "\\1\"\\2\"\\3");
 
   FHIR_ASSIGN_OR_RETURN(Json::Value value, ParseJsonValue(mutable_raw_json));
 

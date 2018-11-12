@@ -40,6 +40,7 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":extensions",
+        ":json_format",
         ":proto_util",
         ":resource_validation",
         "//cc/google/fhir/status",
@@ -246,6 +247,7 @@ cc_test(
         "//spec:stu3",
         "//testdata/stu3:bigquery",
         "//testdata/stu3:examples",
+        "//testdata/stu3:ndjson",
     ],
     deps = [
         ":json_format",
