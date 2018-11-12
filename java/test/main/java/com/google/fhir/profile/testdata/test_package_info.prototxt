@@ -1,0 +1,7 @@
+base_url: "http://test/url/base"
+proto_package: "testing.package"
+java_proto_package: "java.com.google.testing.package"
+go_proto_package: "tEsTiNg@pAcKaGe"
+publisher: "Testington Inc."
+fhir_version: "3.0.1"
+telcom_url: "http://www.testington.com"

@@ -1,0 +1,63 @@
+profile {
+  element_data {
+    name: "TestPatient"
+    description: "Patient with some fields changed for test."
+  }
+  base_url: "http://hl7.org/fhir/StructureDefinition/Patient"
+
+  restriction {
+    field_id: "Patient.birthDate"
+    size_restriction: ABSENT
+  }
+
+  restriction {
+    field_id: "Patient.address"
+    size_restriction: REQUIRED
+  }
+
+  restriction {
+    field_id: "Patient.contact.address"
+    size_restriction: REQUIRED
+  }
+
+  extension_slice {
+    element_data {
+      name: "birthPlace"
+      description: "The patient's address of birth"
+      size_restriction: REQUIRED
+    }
+    url: "http://hl7.org/fhir/StructureDefinition/birthPlace"
+  }
+
+  extension_slice {
+    element_data {
+      name: "telAddress"
+      description: "Telephone or fax number."
+      size_restriction: REPEATED
+    }
+    field_id: "Patient.contact"
+    url: "http://hl7.org/fhir/StructureDefinition/iso21090-TEL-address"
+  }
+}
+
+profile {
+  element_data {
+    name: "TestObservation"
+    description: "Patient with some fields changed for test."
+  }
+  base_url: "http://hl7.org/fhir/StructureDefinition/Observation"
+
+  codeable_concept_slice {
+    coding_slice {
+      element_data {
+        name: "loinc"
+        description: "loinc code for this observation."
+        size_restriction: REQUIRED
+      }
+      code_data {
+        system: "http://loinc.org"
+      }
+    }
+    field_id: "Observation.code"
+  }
+}

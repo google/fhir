@@ -16,6 +16,7 @@
 
 STU3_STRUCTURE_DEFINITION_DEP = "//testdata/stu3:fhir"
 PROTO_GENERATOR = "//java:ProtoGenerator"
+PROFILE_GENERATOR = "//java:ProfileGenerator"
 FHIR_PROTO_ROOT = "proto/stu3"
 
 def zip_file(name, srcs = []):
@@ -109,6 +110,94 @@ def gen_fhir_protos(
         srcs = srcs,
         tools = [PROTO_GENERATOR],
         cmd = cmd,
+    )
+
+def gen_fhir_definitions_and_protos(
+        name,
+        package_info,
+        extensions = [],
+        profiles = [],
+        package_deps = [],
+        additional_proto_imports = [],
+        separate_extensions = False,
+        add_apache_license = False):
+    """Generates structure definitions and protos based on Extensions and Profiles protos.
+
+    These rules should be run by medical/records/fhir/generate_protos.sh, which will generate the
+    profiles and protos and move them into the source directory.
+    e.g., medical/records/fhir/generate_protos.sh foo/bar:quux
+
+    This also exports the package_info and a zip of structure definitions, so that this target
+    can be used as a dependency of other gen_fhir_proto_profiles.
+
+    Args:
+      name: name prefix for all generated rules
+      package_info: Metadata shared by all generated Structure Definitions.
+      extensions: List of Extensions prototxt files
+      profiles: List of Profiles prototxt files.
+      package_deps: Any package_deps these definitions depend on.
+                    Core fhir structure definitions are automatically included.
+      additional_proto_imports: Additional proto files the generated profiles should import
+                                FHIR datatypes, annotations, and codes are included automatically.
+      separate_extensions: If true, will produce two proto files, one for extensions
+                                          and one for profiles.
+      add_apache_license: Whether or not to include the apache license
+    """
+
+    extension_flags = " ".join([("--extensions %s " % extension) for extension in extensions])
+    profile_flags = " ".join([("--profiles %s " % profile) for profile in profiles])
+
+    all_struct_def_deps = [STU3_STRUCTURE_DEFINITION_DEP] + package_deps
+    struct_def_dep_zip_flags = " ".join([
+        ("--struct_def_dep_zip $(location %s) " % _get_zip_for_pkg(dep))
+        for dep in all_struct_def_deps
+    ])
+
+    structure_definition_srcs = ([package_info] +
+                                 extensions +
+                                 profiles +
+                                 [_get_zip_for_pkg(dep) for dep in all_struct_def_deps])
+
+    native.genrule(
+        name = name + "_structure_definitions",
+        outs = ["_genfiles_" + name + "_extensions.json", "_genfiles_" + name + ".json"],
+        srcs = structure_definition_srcs,
+        tools = [
+            PROFILE_GENERATOR,
+        ],
+        cmd = ("""
+            $(location %s) \
+                --output_directory $(@D) \
+                --name _genfiles_%s \
+                --package_info %s \
+                %s %s %s""" % (
+            PROFILE_GENERATOR,
+            name,
+            package_info,
+            struct_def_dep_zip_flags,
+            extension_flags,
+            profile_flags,
+        )),
+    )
+
+    zip_file(
+        name = name + "_structure_definitions.zip",
+        srcs = [name + "_extensions.json", name + ".json"],
+    )
+
+    structure_definition_package(
+        package_name = name,
+        structure_definitions_zip = name + "_structure_definitions.zip",
+        package_info = package_info,
+    )
+
+    gen_fhir_protos(
+        name = name,
+        package = name,
+        package_deps = package_deps,
+        additional_proto_imports = additional_proto_imports,
+        separate_extensions = separate_extensions,
+        add_apache_license = add_apache_license,
     )
 
 def _get_zip_for_pkg(pkg):

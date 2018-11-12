@@ -289,3 +289,37 @@ java_test(
         "@junit_junit//jar",
     ],
 )
+
+java_library(
+    name = "profile_generator_lib",
+    srcs = ["src/main/java/com/google/fhir/profile/ProfileGenerator.java"],
+    deps = [
+        "//external:gson",
+        "//external:guava",
+        "//proto/stu3:annotations_java_proto",
+        "//proto/stu3:codes_java_proto",
+        "//proto/stu3:datatypes_java_proto",
+        "//proto/stu3:extensions_java_proto",
+        "//proto/stu3:metadatatypes_java_proto",
+        "//proto/stu3:profile_config_java_proto",
+        "//proto/stu3:profiles_java_proto",
+        "//proto/stu3:resources_java_proto",
+        "//java:stu3",
+        "@com_google_protobuf//:protobuf_java",
+    ],
+)
+
+java_binary(
+    name = "ProfileGenerator",
+    srcs = ["src/main/java/com/google/fhir/profile/ProfileGeneratorMain.java"],
+    main_class = "com.google.fhir.profile.ProfileGeneratorMain",
+    deps = [
+        ":profile_generator_lib",
+        "//external:guava",
+        "//proto/stu3:profile_config_java_proto",
+        "//proto/stu3:resources_java_proto",
+        "//java:stu3",
+        "@com_beust_jcommander//jar",
+        "@com_google_protobuf//:protobuf_java",
+    ],
+)

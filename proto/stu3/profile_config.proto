@@ -1,11 +1,10 @@
 syntax = "proto3";
 
+import "proto/stu3/codes.proto";
+
 package google.fhir.proto;
 option java_package = "com.google.fhir.proto";
 option java_multiple_files = true;
-
-// TODO: Consolidate proto/profile generation code in a separate
-// location.
 
 message PackageInfo {
   // Base url to use for all profiles defined here.
@@ -19,4 +18,167 @@ message PackageInfo {
   string publisher = 5;
   string fhir_version = 6;
   string telcom_url = 7;
+}
+
+enum SizeRestriction {
+  UNKNOWN = 0;
+  ABSENT = 1;
+  REQUIRED = 2;
+  OPTIONAL = 3;
+  AT_LEAST_ONE = 4;  // Repeated field that should have at least one value.
+  REPEATED = 5;
+}
+
+message Profiles {
+  repeated Profile profile = 2;
+}
+
+message Extensions {
+  repeated SimpleExtension simple_extension = 2;
+  repeated ComplexExtension complex_extension = 3;
+}
+
+message Profile {
+  ElementData element_data = 1;
+
+  // Url of the Structure Definition being profiled
+  // e.g., http://hl7.org/fhir/StructureDefinition/Patient
+  string base_url = 2;
+
+  // Restrictions to existing fields (does not add new fields/slices)
+  repeated FieldRestriction restriction = 3;
+
+  // Extensions to be inlined as fields
+  repeated ExtensionSlice extension_slice = 4;
+
+  // CodeableConcept field to slice by Coding system uri.
+  repeated CodeableConceptSlice codeable_concept_slice = 5;
+}
+
+message FieldRestriction {
+  // Id in the Structure Definition of the field to modify.
+  // e.g., Patient.birthDate
+  string field_id = 1;
+
+  // Restriction on the size of the field.  Must be stricter than the
+  // original - the new size must be a valid subset of the original.
+  SizeRestriction size_restriction = 2;
+}
+
+message ExtensionSlice {
+  // Id in the Structure Definition of the field to add the extension to.
+  // e.g., Patient.birthDate
+  // Optional - if empty, defaults to top-level element.
+  string field_id = 1;
+
+  ElementData element_data = 2;
+
+  // Must be an absolute url for the Structure Definition that defines this
+  // extension.
+  // e.g., http://hl7.org/fhir/StructureDefinition/patient-birthTime
+  // or g.co/fhir/extensions/BinaryClassificationMetadata
+  string url = 3;
+}
+
+message CodeableConceptSlice {
+  // Id in the Structure Definition of the CodeableConcept to slice.
+  // e.g., Observation.code, or RiskAssessment.prediction.qualitativeRisk
+  // Note that this should be of type CodeableConcept, NOT type Coding.
+  string field_id = 1;
+
+  message CodingSlice {
+    ElementData element_data = 1;
+
+    CodeData code_data = 2;
+  }
+  repeated CodingSlice coding_slice = 2;
+
+  // Whether or not to allow Codings that do not fit into any of the above
+  // slices.
+  // Optional - defaults to CLOSED
+  google.fhir.stu3.proto.SlicingRulesCode.Value rules = 4;
+}
+
+message ComplexExtension {
+  ElementData element_data = 1;
+  bool can_have_additional_extensions = 2;
+
+  repeated SimpleExtension simple_field = 3;
+  repeated ComplexExtension complex_field = 4;
+
+  // TODO support choice-type fields as well.
+}
+
+message SimpleExtension {
+  ElementData element_data = 1;
+
+  // SimpleExtensions should have either types or a code_type.
+  // These are effectively a oneof, but type must be repeated to support
+  // choice-types, and repeated fields are forbidden in oneofs.
+
+  // Must be one of the types listed in the Extension.value[x] element here:
+  // http://hl7.org/fhir/extension.profile.json
+  // If this field has size > 1 it will generate a choice-type value
+  repeated string type = 2;
+
+  // Code types can have further specifications -
+  // e.g., fixed system, proto code type, or fixed values.
+  CodeData code_type = 3;
+
+  bool can_have_extensions = 4;
+}
+
+message ElementData {
+  // Name for the element.
+  // For top-level elements:
+  // * This will be the name of the generated message
+  // * Must TitleCased and unique within all top-level elements in the package.
+  // * The url will be this name appended to Extensions#base_url.
+  // For subfields:
+  // * This will be the name of the field
+  // * Must jsonCased and unique within the containing message.
+  // * If this represents a container field, the generated message will be
+  //   this name in TitleCase.
+  // * The url will be equal to the name.
+  string name = 1;
+
+  SizeRestriction size_restriction = 2;
+
+  string description = 3;
+
+  // Short description.
+  // Optional - will re-use description if absent
+  string short = 4;
+
+  // Free-form comment
+  // Optional
+  string comment = 5;
+
+  // If set, provides an override for the structure definition URL.
+  // Should ONLY be used on top-level elements.
+  string url_override = 6;
+}
+
+// Describes a code type with additional metadata
+// (e.g., fixed system, binding name, or value)
+message CodeData {
+  // Fixed Url of the value set to use
+  string system = 1;
+
+  // Optional - if set, inlines this Code using a predefined type.
+  // Should be a Code type defined in a proto file (e.g., codes.proto)
+  // without the trailing "Code".
+  // If unset, will be inlined as a raw fhir String
+  // TODO: remove this advice once protogenerator uses url
+  // to pull down code type.  This will make binding name arbitrary.
+  string binding_name = 2;
+
+  // "Strength" of value set binding - i.e., whether to allow codes that
+  // are not in that value set.
+  // Optional - defaults to required.
+  google.fhir.stu3.proto.BindingStrengthCode.Value binding_strength = 3;
+
+  // Optional - if set, this code will have a fixed value, and will not be
+  // inlined as a field.
+  string fixed_value = 4;
 }

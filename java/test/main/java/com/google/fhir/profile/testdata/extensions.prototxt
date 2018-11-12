@@ -1,0 +1,116 @@
+simple_extension {
+  element_data {
+    name: "SimpleExtA"
+    size_restriction: REPEATED
+    description: "This is the A-Extension"
+    short: "short A desc"
+    comment: "something notable"
+  }
+  type: "decimal"
+  can_have_extensions: true
+}
+
+simple_extension {
+  element_data {
+    name: "SimpleExtB"
+    size_restriction: REQUIRED
+    description: "This is the B-Extension"
+    comment: "something quotable"
+    url_override: "https://randomwebsite.com"
+  }
+  code_type {
+    binding_name: "CarePlanActivityStatus"
+    system: "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
+  }
+}
+
+complex_extension {
+  element_data {
+    name: "ComplexExtA"
+    size_restriction: REPEATED
+    description: "This is the A-complex extension"
+    short: "short complex def"
+  }
+
+  simple_field {
+    element_data {
+      name: "subExtA"
+      size_restriction: REPEATED
+      description: "This is the A-sub-extension"
+      short: "something short"
+      comment: "something notable"
+    }
+    type: "string"
+    can_have_extensions: true
+  }
+
+  simple_field {
+    element_data {
+      name: "subExtB"
+      size_restriction: OPTIONAL
+      description: "This is the B-sub-extension"
+      comment: "something notable"
+    }
+    type: "string"
+  }
+
+  complex_field {
+    element_data {
+      name: "subComplexExt1"
+      size_restriction: REQUIRED
+      description: "The sub complex 1"
+    }
+
+    simple_field {
+      element_data {
+        name: "subExt1SubA"
+        size_restriction: REPEATED
+        description: "This is the SubExt1SubA"
+        comment: "SubExt1SubA comment"
+      }
+      type: "string"
+      type: "decimal"
+      type: "boolean"
+      can_have_extensions: true
+    }
+
+    simple_field {
+      element_data {
+        name: "subExt1SubB"
+        size_restriction: REPEATED
+        description: "This is the SubExt1SubB"
+        comment: "SubExt1SubB comment"
+      }
+      type: "UnsignedInt"
+    }
+
+    complex_field {
+      element_data {
+        name: "subSubComplexExt1"
+        size_restriction: REQUIRED
+        description: "The sub sub complex 1"
+      }
+      can_have_additional_extensions: true
+
+      simple_field {
+        element_data {
+          name: "subSubExt1SubA"
+          size_restriction: REPEATED
+          description: "This is the SubSubExt1SubA"
+          comment: "SubSubExt1SubA comment"
+        }
+        type: "string"
+      }
+
+      simple_field {
+        element_data {
+          name: "subSubExt1SubB"
+          size_restriction: REPEATED
+          description: "This is the SubSubExt1SubB"
+          comment: "SubSubExt1SubB comment"
+        }
+        type: "UnsignedInt"
+      }
+    }
+  }
+}

@@ -129,6 +129,9 @@ fhir_proto_library(
     srcs = [
         "profile_config.proto",
     ],
+    proto_deps = [
+        ":codes_proto",
+    ],
     proto_library_prefix = "profile_config",
 )
 
