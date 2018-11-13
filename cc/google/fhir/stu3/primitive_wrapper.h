@@ -50,6 +50,10 @@ struct JsonPrimitive {
 ::google::fhir::StatusOr<JsonPrimitive> WrapPrimitiveProto(
     const google::protobuf::Message& proto, const absl::TimeZone tz);
 
+::google::fhir::Status ConvertToTypedCode(
+    const google::fhir::stu3::proto::Code& generic_code,
+    google::protobuf::Message* typed_code);
+
 }  // namespace stu3
 }  // namespace fhir
 }  // namespace google

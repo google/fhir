@@ -24,6 +24,7 @@
 #include "absl/strings/str_cat.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/stu3/extensions.h"
+#include "google/fhir/stu3/primitive_wrapper.h"
 #include "google/fhir/stu3/proto_util.h"
 #include "google/fhir/stu3/resource_validation.h"
 #include "proto/stu3/annotations.pb.h"
@@ -37,6 +38,7 @@ namespace fhir {
 namespace stu3 {
 
 using std::string;
+using ::google::fhir::stu3::proto::Code;
 using ::google::fhir::stu3::proto::CodeableConcept;
 using ::google::fhir::stu3::proto::Coding;
 using ::google::fhir::stu3::proto::CodingWithFixedCode;
@@ -96,27 +98,33 @@ Status PerformExtensionSlicing(Message* message) {
         // into, it's just a single primitive inlined field.
         const Descriptor* destination_type = inlined_field->message_type();
         const Extension::Value& value = raw_extension.value();
-        const FieldDescriptor* value_field =
+        const FieldDescriptor* src_datatype_field =
             value.GetReflection()->GetOneofFieldDescriptor(
                 value, value.GetDescriptor()->FindOneofByName("value"));
-        if (value_field == nullptr) {
+        if (src_datatype_field == nullptr) {
           return InvalidArgument(
               absl::StrCat("Invalid extension: neither value nor extensions "
                            "set on extension ",
                            url));
         }
-        if (destination_type != value_field->message_type()) {
-          return InvalidArgument(
-              "Profiled extension slice is incorrect type: ", url, "should be ",
-              destination_type->full_name(), "but is ",
-              value_field->message_type()->full_name());
-        }
         Message* typed_extension =
             inlined_field->is_repeated()
                 ? reflection->AddMessage(message, inlined_field)
                 : reflection->MutableMessage(message, inlined_field);
-        typed_extension->CopyFrom(
-            value.GetReflection()->GetMessage(value, value_field));
+        const Message& src_value =
+            value.GetReflection()->GetMessage(value, src_datatype_field);
+        if (destination_type == src_datatype_field->message_type()) {
+          typed_extension->CopyFrom(src_value);
+        } else if (src_datatype_field->message_type()->full_name() ==
+                   Code::descriptor()->full_name()) {
+          TF_RETURN_IF_ERROR(ConvertToTypedCode(
+              dynamic_cast<const Code&>(src_value), typed_extension));
+        } else {
+          return InvalidArgument(
+              "Profiled extension slice is incorrect type: ", url, "should be ",
+              destination_type->full_name(), " but is ",
+              src_datatype_field->message_type()->full_name());
+        }
       } else {
         // This is a complex extension
         Message* typed_extension =
