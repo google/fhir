@@ -40,7 +40,7 @@ source $(dirname "$BASH_SOURCE")/generate_protos_utils.sh
 # Build structure definitions, and then copy them into source
 try_build "$dir:${label}_structure_definitions"
 copy_to_src_if_present ${label}_extensions.json
-copy_to_src_if_present.json
+copy_to_src_if_present ${label}.json
 
 # Build protos, and then copy them into source
 try_build "$dir:${label}_proto_files"
