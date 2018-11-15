@@ -1,0 +1,4 @@
+proto_package: "company.fhir.stu3.demo"
+java_proto_package: "com.company.fhir.stu3.demo"
+fhir_version: "3.0.1"
+base_url: "https://company.com/fhir/demo"

@@ -1,0 +1,221 @@
+syntax = "proto3";
+
+package company.fhir.stu3.demo;
+
+import "proto/stu3/annotations.proto";
+import "proto/stu3/codes.proto";
+import "proto/stu3/datatypes.proto";
+import "proto/stu3/metadatatypes.proto";
+import "proto/stu3/resources.proto";
+import "proto/stu3/uscore.proto";
+import "proto/stu3/uscore_codes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.company.fhir.stu3.demo";
+
+// Auto-generated from StructureDefinition for DemoPatient.
+// US Core Patient Profile.
+// See https://company.com/fhir/demo/DemoPatient
+message DemoPatient {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "https://company.com/fhir/demo/DemoPatient";
+
+  // Logical id of this artifact
+  .google.fhir.stu3.proto.Id id = 1;
+
+  // Metadata about the resource
+  .google.fhir.stu3.proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  .google.fhir.stu3.proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  .google.fhir.stu3.proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  .google.fhir.stu3.proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated .google.fhir.stu3.proto.ContainedResource contained = 6;
+
+  // Extension
+  repeated .google.fhir.stu3.proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated .google.fhir.stu3.proto.Extension modifier_extension = 8;
+
+  // An identifier for this patient
+  repeated .google.fhir.stu3.proto.Identifier identifier = 9
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Whether this patient's record is in active use
+  .google.fhir.stu3.proto.Boolean active = 10;
+
+  // A name associated with the patient
+  repeated .google.fhir.stu3.proto.HumanName name = 11
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // A contact detail for the individual
+  repeated .google.fhir.stu3.proto.ContactPoint telecom = 12;
+
+  // male | female | other | unknown
+  .google.fhir.stu3.proto.AdministrativeGenderCode gender = 13
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The date of birth for the individual
+  .google.fhir.stu3.proto.Date birth_date = 14;
+
+  // Indicates if the individual is deceased or not
+  message Deceased {
+    oneof deceased {
+      .google.fhir.stu3.proto.Boolean boolean = 1;
+      .google.fhir.stu3.proto.DateTime date_time = 2;
+    }
+  }
+  Deceased deceased = 15 [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+  // Addresses for the individual
+  repeated .google.fhir.stu3.proto.Address address = 16;
+
+  // Marital (civil) status of a patient
+  .google.fhir.stu3.proto.CodeableConcept marital_status = 17;
+
+  // Whether patient is part of a multiple birth
+  message MultipleBirth {
+    oneof multiple_birth {
+      .google.fhir.stu3.proto.Boolean boolean = 1;
+      .google.fhir.stu3.proto.Integer integer = 2;
+    }
+  }
+  MultipleBirth multiple_birth = 18
+      [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+  // Image of the patient
+  repeated .google.fhir.stu3.proto.Attachment photo = 19;
+
+  // A contact party (e.g. guardian, partner, friend) for the patient
+  message Contact {
+    // xml:id (or equivalent in JSON)
+    .google.fhir.stu3.proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated .google.fhir.stu3.proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated .google.fhir.stu3.proto.Extension modifier_extension = 3;
+
+    // The kind of relationship
+    repeated .google.fhir.stu3.proto.CodeableConcept relationship = 4;
+
+    // A name associated with the contact person
+    .google.fhir.stu3.proto.HumanName name = 5;
+
+    // A contact detail for the person
+    repeated .google.fhir.stu3.proto.ContactPoint telecom = 6;
+
+    // Address for the contact person
+    .google.fhir.stu3.proto.Address address = 7;
+
+    // male | female | other | unknown
+    .google.fhir.stu3.proto.AdministrativeGenderCode gender = 8;
+
+    // Organization that is associated with the contact
+    .google.fhir.stu3.proto.Reference organization = 9
+        [(.google.fhir.stu3.proto.valid_reference_type) =
+             "http://hl7.org/fhir/StructureDefinition/Organization"];
+
+    // The period during which this contact person or organization is valid to
+    // be contacted relating to this patient
+    .google.fhir.stu3.proto.Period period = 10;
+  }
+  repeated Contact contact = 20;
+
+  // A list of Languages which may be used to communicate with the patient about
+  // his or her health
+  message Communication {
+    // xml:id (or equivalent in JSON)
+    .google.fhir.stu3.proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated .google.fhir.stu3.proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated .google.fhir.stu3.proto.Extension modifier_extension = 3;
+
+    // The language which can be used to communicate with the patient about his
+    // or her health
+    .google.fhir.stu3.proto.CodeableConcept language = 4
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Language preference indicator
+    .google.fhir.stu3.proto.Boolean preferred = 5;
+  }
+  repeated Communication communication = 22;
+
+  // Patient's nominated primary care provider
+  repeated .google.fhir.stu3.proto.Reference general_practitioner = 23 [
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner"
+  ];
+
+  // Organization that is the custodian of the patient record
+  .google.fhir.stu3.proto.Reference managing_organization = 24
+      [(.google.fhir.stu3.proto.valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Organization"];
+
+  // Link to another patient resource that concerns the same actual person
+  message Link {
+    // xml:id (or equivalent in JSON)
+    .google.fhir.stu3.proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated .google.fhir.stu3.proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated .google.fhir.stu3.proto.Extension modifier_extension = 3;
+
+    // The other patient or related person resource that the link refers to
+    .google.fhir.stu3.proto.Reference other = 4 [
+      (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.stu3.proto.valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Patient",
+      (.google.fhir.stu3.proto.valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+    ];
+
+    // replaced-by | replaces | refer | seealso - type of link
+    .google.fhir.stu3.proto.LinkTypeCode type = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Link link = 25;
+
+  // Extension
+  .google.fhir.stu3.uscore.PatientUSCoreRaceExtension race = 26
+      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+           "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"];
+
+  // Extension
+  .google.fhir.stu3.uscore.PatientUSCoreEthnicityExtension ethnicity = 27
+      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+           "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"];
+
+  // Extension
+  .google.fhir.stu3.uscore.UsCoreBirthSexCode birthsex = 28
+      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+           "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"];
+
+  // Mother's Maiden Name
+  .google.fhir.stu3.proto.String mothers_maiden_name = 29
+      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+           "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"];
+
+  // Patient's Birth Place
+  .google.fhir.stu3.proto.Address birth_place = 30
+      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+           "http://hl7.org/fhir/StructureDefinition/birthPlace"];
+}

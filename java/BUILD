@@ -29,7 +29,10 @@ java_library(
 
 java_library(
     name = "examples",
-    srcs = glob(["src/main/java/com/google/fhir/examples/*.java"]),
+    srcs = glob(
+        ["src/main/java/com/google/fhir/examples/*.java"],
+        exclude = ["src/main/java/com/google/fhir/examples/BigQuerySchemaGeneratorMain.java"],
+    ),
     deps = [
         ":stu3",
         "//external:guava",
@@ -68,6 +71,29 @@ java_binary(
     name = "SplitBundle",
     main_class = "com.google.fhir.examples.SplitBundleMain",
     runtime_deps = [":examples"],
+)
+
+java_library(
+    name = "big_query_schema_generator_lib",
+    srcs = ["src/main/java/com/google/fhir/examples/BigQuerySchemaGeneratorMain.java"],
+    deps = [
+        ":stu3",
+        "//external:guava",
+        "//examples/profiles:demo_java_proto",
+        "@com_beust_jcommander//jar",
+        "@com_google_apis_google_api_services_bigquery//jar",
+        "@com_google_http_client_google_http_client//jar",
+        "@com_google_http_client_google_http_client_gson//jar",
+        "@com_google_protobuf//:protobuf_java",
+    ],
+)
+
+java_binary(
+    name = "BigQuerySchemaGenerator",
+    main_class = "com.google.fhir.examples.BigQuerySchemaGeneratorMain",
+    runtime_deps = [
+        ":big_query_schema_generator_lib",
+    ],
 )
 
 java_test(

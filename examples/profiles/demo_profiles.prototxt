@@ -1,0 +1,25 @@
+profile {
+  element_data {
+    name: "DemoPatient"
+    description: "Extension of US Core Patient for FHIR Profile demo"
+  }
+  base_url: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+
+  extension_slice {
+    element_data {
+      name: "mothersMaidenName"
+      description: "Mother's Maiden Name"
+      size_restriction: OPTIONAL
+    }
+    url: "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"
+  }
+
+  extension_slice {
+    element_data {
+      name: "birthPlace"
+      description: "Patient's Birth Place"
+      size_restriction: OPTIONAL
+    }
+    url: "http://hl7.org/fhir/StructureDefinition/birthPlace"
+  }
+}

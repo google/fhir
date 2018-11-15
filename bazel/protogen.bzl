@@ -144,8 +144,8 @@ def gen_fhir_definitions_and_protos(
       add_apache_license: Whether or not to include the apache license
     """
 
-    extension_flags = " ".join([("--extensions %s " % extension) for extension in extensions])
-    profile_flags = " ".join([("--profiles %s " % profile) for profile in profiles])
+    extension_flags = " ".join([("--extensions $(location %s) " % extension) for extension in extensions])
+    profile_flags = " ".join([("--profiles $(location %s) " % profile) for profile in profiles])
 
     all_struct_def_deps = [STU3_STRUCTURE_DEFINITION_DEP] + package_deps
     struct_def_dep_zip_flags = " ".join([
@@ -169,7 +169,7 @@ def gen_fhir_definitions_and_protos(
             $(location %s) \
                 --output_directory $(@D) \
                 --name _genfiles_%s \
-                --package_info %s \
+                --package_info $(location %s) \
                 %s %s %s""" % (
             PROFILE_GENERATOR,
             name,
