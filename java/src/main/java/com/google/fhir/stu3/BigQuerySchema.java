@@ -17,11 +17,11 @@ package com.google.fhir.stu3;
 import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableSchema;
 import com.google.fhir.stu3.proto.ContainedResource;
+import com.google.fhir.stu3.proto.Decimal;
 import com.google.fhir.stu3.proto.Extension;
 import com.google.fhir.stu3.proto.Identifier;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.MessageOrBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +29,7 @@ import java.util.List;
 public final class BigQuerySchema {
 
   /* Generate a schema for a specific FieldDescriptor, with an optional message instance. */
-  private static TableFieldSchema fromFieldDescriptor(
-      FieldDescriptor descriptor, MessageOrBuilder instance) {
+  private static TableFieldSchema fromFieldDescriptor(FieldDescriptor descriptor) {
     // We directly use the jsonName of the field when generating the schema.
     String fieldName = descriptor.getJsonName();
     TableFieldSchema field =
@@ -38,64 +37,42 @@ public final class BigQuerySchema {
             .setName(fieldName)
             .setMode(descriptor.isRepeated() ? "REPEATED" : "NULLABLE");
     if (descriptor.getType() != FieldDescriptor.Type.MESSAGE) {
-      field.setType(schemaTypeForField(descriptor));
-    } else {
-      field.setType("RECORD");
-      boolean hasData =
-          instance != null
-              && ((descriptor.isRepeated() && instance.getRepeatedFieldCount(descriptor) > 0)
-                  || (!descriptor.isRepeated() && instance.hasField(descriptor)));
-      if (hasData) {
-        if (descriptor.isRepeated()) {
-          TableSchema schema = new TableSchema();
-          for (Object child : (List) instance.getField(descriptor)) {
-            TableSchema oneSchema = fromMessage((MessageOrBuilder) child);
-            // TODO: implement mergeTableSchema properly, it currently uses a simple
-            // heuristic.
-            schema = mergeTableSchema(schema, oneSchema);
-          }
-          field.setFields(schema.getFields());
-        } else {
-          field.setFields(
-              fromMessage((MessageOrBuilder) instance.getField(descriptor)).getFields());
-        }
-      } else {
-        // We don't include extensions or contained resources unless they exist in the data.
-        if (descriptor.getMessageType().equals(Extension.getDescriptor())
-            || descriptor.getMessageType().equals(ContainedResource.getDescriptor())) {
-          return null;
-        }
-        // We don't include fields inside extensions or contained resources unless they exist.
-        if (descriptor.getContainingType().equals(Extension.getDescriptor())
-            || descriptor.getContainingType().equals(Extension.Value.getDescriptor())
-            || descriptor.getContainingType().equals(ContainedResource.getDescriptor())) {
-          return null;
-        }
-        // We don't include the "id" field unless it exists, except for resources.
-        if (fieldName.equals("id") && !AnnotationUtils.isResource(descriptor.getMessageType())) {
-          return null;
-        }
-        // We don't include nested types unless they exist in the data.
-        if (descriptor.getMessageType().equals(descriptor.getContainingType())) {
-          return null;
-        }
-        // Identifier and Reference refer to each other. We stop the recursion by not including
-        // Identifier.assigner unless it exists in the data.
-        if (descriptor.getContainingType().equals(Identifier.getDescriptor())
-            && fieldName.equals("assigner")) {
-          return null;
-        }
-        field.setFields(fromDescriptor(descriptor.getMessageType()).getFields());
-      }
+      throw new IllegalStateException("Unexpected primitive field: " + descriptor.getFullName());
     }
-    return field;
+    Descriptor fieldType = descriptor.getMessageType();
+    // We don't include the "id" except for resources.
+    if (fieldName.equals("id") && !AnnotationUtils.isResource(descriptor.getContainingType())) {
+      return null;
+    }
+    if (AnnotationUtils.isPrimitiveType(fieldType)) {
+      return field.setType(schemaTypeForPrimitive(fieldType));
+    }
+
+    // We don't include extensions or contained resources unless they exist in the data.
+    if (fieldType.equals(Extension.getDescriptor())
+        || fieldType.equals(ContainedResource.getDescriptor())) {
+      return field.setType("STRING");
+    }
+    // We don't include nested types.
+    // TODO: consider allowing a certain level of nesting.
+    if (fieldType.equals(descriptor.getContainingType())) {
+      return null;
+    }
+    // Identifier and Reference refer to each other. We stop the recursion by not including
+    // Identifier.assigner unless it exists in the data.
+    if (descriptor.getContainingType().equals(Identifier.getDescriptor())
+        && fieldName.equals("assigner")) {
+      return null;
+    }
+    field.setType("RECORD");
+    return field.setFields(fromDescriptor(fieldType).getFields());
   }
 
-  /** Build a BigQuery schema for this message type, assuming extensions are not populated. */
+  /** Build a BigQuery schema for this message type when serialized to analytic JSON. */
   public static TableSchema fromDescriptor(Descriptor descriptor) {
     List<TableFieldSchema> fields = new ArrayList<>();
     for (FieldDescriptor field : descriptor.getFields()) {
-      TableFieldSchema fieldSchema = fromFieldDescriptor(field, null);
+      TableFieldSchema fieldSchema = fromFieldDescriptor(field);
       if (fieldSchema != null) {
         fields.add(fieldSchema);
       }
@@ -103,37 +80,17 @@ public final class BigQuerySchema {
     return new TableSchema().setFields(fields);
   }
 
-  /**
-   * Build a BigQuery schema for this message instance, including any extensions that are present in
-   * the given message.
-   */
-  public static TableSchema fromMessage(MessageOrBuilder message) {
-    List<TableFieldSchema> fields = new ArrayList<>();
-    for (FieldDescriptor field : message.getDescriptorForType().getFields()) {
-      TableFieldSchema fieldSchema = fromFieldDescriptor(field, message);
-      if (fieldSchema != null) {
-        fields.add(fieldSchema);
-      }
+  private static String schemaTypeForPrimitive(Descriptor primitive) {
+    if (primitive.getFullName().equals(Decimal.getDescriptor().getFullName())) {
+      return "FLOAT";
     }
-    return new TableSchema().setFields(fields);
-  }
-
-  private static TableSchema mergeTableSchema(TableSchema first, TableSchema second) {
-    // TODO: implement properly
-    if (first.toString().length() > second.toString().length()) {
-      return first;
-    } else {
-      return second;
+    FieldDescriptor valueField = primitive.findFieldByNumber(1);
+    // If this is a timelike value field (value_us, for value_microseconds),
+    // it will be rendered as a date string.
+    if (valueField.getName().equals("value_us")) {
+      return "STRING";
     }
-  }
-
-  private static String schemaTypeForField(FieldDescriptor field) {
-    // If this is a timelike value field, mark as int64. Note that this is always microsends in UTC,
-    // independent of the timezone of the data.
-    if (field.getName().equals("value_us")) {
-      return "INT64";
-    }
-    switch (field.getType()) {
+    switch (valueField.getType()) {
       case BOOL:
         return "BOOLEAN";
       case BYTES:
@@ -146,7 +103,7 @@ public final class BigQuerySchema {
       case UINT32:
         return "INTEGER";
       default:
-        throw new IllegalArgumentException("Unsupported field type " + field.getType());
+        throw new IllegalArgumentException("Unsupported field type " + valueField.getType());
     }
   }
 }

@@ -21,7 +21,7 @@ fi
 # Note: requires Cloud Bigquery SDK, see https://cloud.google.com/bigquery/quickstart-command-line
 bq mk synthea
 
-for i in $(basename -a -s.ndjson /tmp/fhir/*.ndjson); do
+for i in $(basename -a -s.ndjson /tmp/fhir/*.analytic.ndjson); do
   echo "Uploading $i..."
-  bq load --source_format=NEWLINE_DELIMITED_JSON --schema=$1/$i.schema.json synthea.$i $1/$i.ndjson
+  bq load --source_format=NEWLINE_DELIMITED_JSON --schema=$1/$i.schema.json synthea.$i $1/$i.analytic.ndjson
 done

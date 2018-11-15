@@ -19,20 +19,16 @@ import static com.google.common.truth.Truth.assertThat;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableSchema;
-import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
-import com.google.fhir.stu3.proto.Base64Binary;
 import com.google.fhir.stu3.proto.Composition;
-import com.google.fhir.stu3.proto.DateTime;
-import com.google.fhir.stu3.proto.Integer;
+import com.google.fhir.stu3.proto.Encounter;
+import com.google.fhir.stu3.proto.Observation;
 import com.google.fhir.stu3.proto.Patient;
-import com.google.protobuf.Message;
-import com.google.protobuf.Message.Builder;
+import com.google.protobuf.Descriptors.Descriptor;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,31 +38,13 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class BigQuerySchemaTest {
 
-  private static final Boolean GENERATE_GOLDEN = true;
-  private static final String GOLDEN_OUTPUT_DIRECTORY = "/tmp";
-
-  private JsonFormat.Parser jsonParser;
+  private static final Boolean GENERATE_GOLDEN = false;
+  private static final String GOLDEN_OUTPUT_DIRECTORY = "/tmp/schema";
   private GsonFactory gsonFactory;
-  private Runfiles runfiles;
 
   @Before
   public void setUp() throws IOException {
-    jsonParser =
-        JsonFormat.Parser.newBuilder().withDefaultTimeZone(ZoneId.of("Australia/Sydney")).build();
     gsonFactory = new GsonFactory();
-    runfiles = Runfiles.create();
-  }
-
-  /** Read the specifed json file from the testdata directory as a String. */
-  private Message loadMessage(String name, Builder builder) throws IOException {
-    File file =
-        new File(
-            runfiles.rlocation(
-                "com_google_fhir/spec/hl7.fhir.core/3.0.1/package/" + name + ".json"));
-    String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
-    Builder jsonBuilder = builder.clone();
-    jsonParser.merge(json, jsonBuilder);
-    return jsonBuilder.build();
   }
 
   /** Read the specifed json schema file from the testdata directory and parse it. */
@@ -82,10 +60,9 @@ public final class BigQuerySchemaTest {
     return new TableSchema().setFields(fields);
   }
 
-  private void testSchema(String name, Builder builder) throws IOException {
-    // Parse the json version of the input.
-    Message input = loadMessage(name, builder);
-    TableSchema schema = BigQuerySchema.fromMessage(input);
+  private void testSchema(Descriptor descriptor) throws IOException {
+    TableSchema schema = BigQuerySchema.fromDescriptor(descriptor);
+    String name = descriptor.getName();
 
     if (GENERATE_GOLDEN) {
       // Not actually testing, just generating test data.
@@ -103,64 +80,22 @@ public final class BigQuerySchemaTest {
   }
 
   @Test
-  public void testDateTime() throws Exception {
-    DateTime input =
-        DateTime.newBuilder()
-            .setValueUs(31536000000000L)
-            .setPrecision(DateTime.Precision.YEAR)
-            .setTimezone("UTC")
-            .build();
-    TableSchema expected =
-        new TableSchema()
-            .setFields(
-                ImmutableList.of(
-                    new TableFieldSchema().setName("valueUs").setType("INT64").setMode("NULLABLE"),
-                    new TableFieldSchema()
-                        .setName("timezone")
-                        .setType("STRING")
-                        .setMode("NULLABLE"),
-                    new TableFieldSchema()
-                        .setName("precision")
-                        .setType("STRING")
-                        .setMode("NULLABLE")));
-    TableSchema schema = BigQuerySchema.fromMessage(input);
-    assertThat(schema).isEqualTo(expected);
-  }
-
-  @Test
-  public void testEmptyBase64Binary() throws Exception {
-    Base64Binary input = Base64Binary.newBuilder().build();
-    TableSchema expected =
-        new TableSchema()
-            .setFields(
-                ImmutableList.of(
-                    new TableFieldSchema().setName("value").setType("BYTES").setMode("NULLABLE")));
-    TableSchema schema = BigQuerySchema.fromMessage(input);
-    assertThat(schema).isEqualTo(expected);
-  }
-
-  @Test
-  public void testInteger() throws Exception {
-    Integer input = Integer.newBuilder().setValue(3).build();
-    TableSchema expected =
-        new TableSchema()
-            .setFields(
-                ImmutableList.of(
-                    new TableFieldSchema()
-                        .setName("value")
-                        .setType("INTEGER")
-                        .setMode("NULLABLE")));
-    TableSchema schema = BigQuerySchema.fromMessage(input);
-    assertThat(schema).isEqualTo(expected);
-  }
-
-  @Test
   public void testPatient() throws Exception {
-    testSchema("patient-example", Patient.newBuilder());
+    testSchema(Patient.getDescriptor());
   }
 
   @Test
   public void testComposition() throws Exception {
-    testSchema("Composition-example", Composition.newBuilder());
+    testSchema(Composition.getDescriptor());
+  }
+
+  @Test
+  public void testObservation() throws Exception {
+    testSchema(Observation.getDescriptor());
+  }
+
+  @Test
+  public void testEncounter() throws Exception {
+    testSchema(Encounter.getDescriptor());
   }
 }

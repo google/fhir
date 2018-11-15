@@ -1,0 +1,7228 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "id",
+    "type": "STRING"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "versionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "lastUpdated",
+        "type": "STRING"
+      },
+      {
+        "mode": "REPEATED",
+        "name": "profile",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "version",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "code",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "display",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "userSelected",
+            "type": "BOOLEAN"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "security",
+        "type": "RECORD"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "version",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "code",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "display",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "userSelected",
+            "type": "BOOLEAN"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "tag",
+        "type": "RECORD"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "meta",
+    "type": "RECORD"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "implicitRules",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "language",
+    "type": "STRING"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "status",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "div",
+        "type": "STRING"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "text",
+    "type": "RECORD"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "contained",
+    "type": "STRING"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "extension",
+    "type": "STRING"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "modifierExtension",
+    "type": "STRING"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "use",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "version",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "display",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "userSelected",
+                "type": "BOOLEAN"
+              }
+            ],
+            "mode": "REPEATED",
+            "name": "coding",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "text",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "type",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "system",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "value",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "start",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "end",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "period",
+        "type": "RECORD"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "identifier",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "reference",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "fragment",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "accountId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "activityDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "adverseEventId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "allergyIntoleranceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "appointmentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "appointmentResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "auditEventId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "basicId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "binaryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "bodySiteId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "bundleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "capabilityStatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "carePlanId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "careTeamId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "chargeItemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "claimId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "claimResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "clinicalImpressionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "codeSystemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "communicationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "communicationRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "compartmentDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "compositionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "conceptMapId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "conditionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "consentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "contractId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "coverageId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "dataElementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "detectedIssueId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceComponentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceMetricId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceUsestatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "diagnosticReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "documentManifestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "documentReferenceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "eligibilityRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "eligibilityResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "encounterId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "endpointId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "enrollmentRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "enrollmentResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "episodeOfcareId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "expansionProfileId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "explanationOfbenefitId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "familyMemberhistoryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "flagId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "goalId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "graphDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "groupId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "guidanceResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "healthcareServiceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "imagingManifestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "imagingStudyId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "immunizationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "immunizationRecommendationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "implementationGuideId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "libraryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "linkageId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "listId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "locationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "measureId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "measureReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "mediaId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationAdministrationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationDispenseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationStatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "messageDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "messageHeaderId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "namingSystemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "nutritionOrderId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "observationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "operationDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "operationOutcomeId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "organizationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "parametersId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "patientId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "paymentNoticeId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "paymentReconciliationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "personId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "planDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "practitionerId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "practitionerRoleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "procedureId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "procedureRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "processRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "processResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "provenanceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "questionnaireId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "questionnaireResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "referralRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "relatedPersonId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "requestGroupId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "researchStudyId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "researchSubjectId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "riskAssessmentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "scheduleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "searchParameterId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "sequenceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "serviceDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "slotId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "specimenId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "structureDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "structureMapId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "subscriptionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "substanceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "supplyDeliveryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "supplyRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "taskId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "testReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "testScriptId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "valueSetId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "visionPrescriptionId",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "use",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "version",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "display",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "userSelected",
+                    "type": "BOOLEAN"
+                  }
+                ],
+                "mode": "REPEATED",
+                "name": "coding",
+                "type": "RECORD"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "text",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "type",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "value",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "start",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "end",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "period",
+            "type": "RECORD"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "identifier",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "display",
+        "type": "STRING"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "basedOn",
+    "type": "RECORD"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "status",
+    "type": "STRING"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "version",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "code",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "display",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "userSelected",
+            "type": "BOOLEAN"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "coding",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "text",
+        "type": "STRING"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "category",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "version",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "code",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "display",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "userSelected",
+            "type": "BOOLEAN"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "coding",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "text",
+        "type": "STRING"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "code",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "reference",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "fragment",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "accountId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "activityDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "adverseEventId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "allergyIntoleranceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "appointmentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "appointmentResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "auditEventId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "basicId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "binaryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "bodySiteId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "bundleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "capabilityStatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "carePlanId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "careTeamId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "chargeItemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "claimId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "claimResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "clinicalImpressionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "codeSystemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "communicationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "communicationRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "compartmentDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "compositionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "conceptMapId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "conditionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "consentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "contractId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "coverageId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "dataElementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "detectedIssueId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceComponentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceMetricId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceUsestatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "diagnosticReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "documentManifestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "documentReferenceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "eligibilityRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "eligibilityResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "encounterId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "endpointId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "enrollmentRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "enrollmentResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "episodeOfcareId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "expansionProfileId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "explanationOfbenefitId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "familyMemberhistoryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "flagId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "goalId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "graphDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "groupId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "guidanceResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "healthcareServiceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "imagingManifestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "imagingStudyId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "immunizationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "immunizationRecommendationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "implementationGuideId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "libraryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "linkageId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "listId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "locationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "measureId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "measureReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "mediaId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationAdministrationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationDispenseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationStatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "messageDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "messageHeaderId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "namingSystemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "nutritionOrderId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "observationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "operationDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "operationOutcomeId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "organizationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "parametersId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "patientId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "paymentNoticeId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "paymentReconciliationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "personId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "planDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "practitionerId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "practitionerRoleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "procedureId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "procedureRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "processRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "processResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "provenanceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "questionnaireId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "questionnaireResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "referralRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "relatedPersonId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "requestGroupId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "researchStudyId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "researchSubjectId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "riskAssessmentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "scheduleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "searchParameterId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "sequenceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "serviceDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "slotId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "specimenId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "structureDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "structureMapId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "subscriptionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "substanceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "supplyDeliveryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "supplyRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "taskId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "testReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "testScriptId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "valueSetId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "visionPrescriptionId",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "use",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "version",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "display",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "userSelected",
+                    "type": "BOOLEAN"
+                  }
+                ],
+                "mode": "REPEATED",
+                "name": "coding",
+                "type": "RECORD"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "text",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "type",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "value",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "start",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "end",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "period",
+            "type": "RECORD"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "identifier",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "display",
+        "type": "STRING"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "subject",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "reference",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "fragment",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "accountId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "activityDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "adverseEventId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "allergyIntoleranceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "appointmentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "appointmentResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "auditEventId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "basicId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "binaryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "bodySiteId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "bundleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "capabilityStatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "carePlanId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "careTeamId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "chargeItemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "claimId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "claimResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "clinicalImpressionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "codeSystemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "communicationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "communicationRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "compartmentDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "compositionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "conceptMapId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "conditionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "consentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "contractId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "coverageId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "dataElementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "detectedIssueId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceComponentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceMetricId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceUsestatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "diagnosticReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "documentManifestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "documentReferenceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "eligibilityRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "eligibilityResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "encounterId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "endpointId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "enrollmentRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "enrollmentResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "episodeOfcareId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "expansionProfileId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "explanationOfbenefitId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "familyMemberhistoryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "flagId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "goalId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "graphDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "groupId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "guidanceResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "healthcareServiceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "imagingManifestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "imagingStudyId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "immunizationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "immunizationRecommendationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "implementationGuideId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "libraryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "linkageId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "listId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "locationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "measureId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "measureReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "mediaId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationAdministrationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationDispenseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationStatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "messageDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "messageHeaderId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "namingSystemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "nutritionOrderId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "observationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "operationDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "operationOutcomeId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "organizationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "parametersId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "patientId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "paymentNoticeId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "paymentReconciliationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "personId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "planDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "practitionerId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "practitionerRoleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "procedureId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "procedureRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "processRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "processResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "provenanceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "questionnaireId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "questionnaireResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "referralRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "relatedPersonId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "requestGroupId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "researchStudyId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "researchSubjectId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "riskAssessmentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "scheduleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "searchParameterId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "sequenceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "serviceDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "slotId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "specimenId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "structureDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "structureMapId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "subscriptionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "substanceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "supplyDeliveryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "supplyRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "taskId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "testReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "testScriptId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "valueSetId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "visionPrescriptionId",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "use",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "version",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "display",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "userSelected",
+                    "type": "BOOLEAN"
+                  }
+                ],
+                "mode": "REPEATED",
+                "name": "coding",
+                "type": "RECORD"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "text",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "type",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "value",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "start",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "end",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "period",
+            "type": "RECORD"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "identifier",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "display",
+        "type": "STRING"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "context",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "mode": "NULLABLE",
+        "name": "dateTime",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "start",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "end",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "period",
+        "type": "RECORD"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "effective",
+    "type": "RECORD"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "issued",
+    "type": "STRING"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "reference",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "fragment",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "accountId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "activityDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "adverseEventId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "allergyIntoleranceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "appointmentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "appointmentResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "auditEventId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "basicId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "binaryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "bodySiteId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "bundleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "capabilityStatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "carePlanId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "careTeamId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "chargeItemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "claimId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "claimResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "clinicalImpressionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "codeSystemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "communicationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "communicationRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "compartmentDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "compositionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "conceptMapId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "conditionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "consentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "contractId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "coverageId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "dataElementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "detectedIssueId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceComponentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceMetricId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceUsestatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "diagnosticReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "documentManifestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "documentReferenceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "eligibilityRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "eligibilityResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "encounterId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "endpointId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "enrollmentRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "enrollmentResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "episodeOfcareId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "expansionProfileId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "explanationOfbenefitId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "familyMemberhistoryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "flagId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "goalId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "graphDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "groupId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "guidanceResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "healthcareServiceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "imagingManifestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "imagingStudyId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "immunizationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "immunizationRecommendationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "implementationGuideId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "libraryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "linkageId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "listId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "locationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "measureId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "measureReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "mediaId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationAdministrationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationDispenseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationStatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "messageDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "messageHeaderId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "namingSystemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "nutritionOrderId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "observationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "operationDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "operationOutcomeId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "organizationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "parametersId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "patientId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "paymentNoticeId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "paymentReconciliationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "personId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "planDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "practitionerId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "practitionerRoleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "procedureId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "procedureRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "processRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "processResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "provenanceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "questionnaireId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "questionnaireResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "referralRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "relatedPersonId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "requestGroupId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "researchStudyId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "researchSubjectId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "riskAssessmentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "scheduleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "searchParameterId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "sequenceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "serviceDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "slotId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "specimenId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "structureDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "structureMapId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "subscriptionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "substanceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "supplyDeliveryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "supplyRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "taskId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "testReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "testScriptId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "valueSetId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "visionPrescriptionId",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "use",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "version",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "display",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "userSelected",
+                    "type": "BOOLEAN"
+                  }
+                ],
+                "mode": "REPEATED",
+                "name": "coding",
+                "type": "RECORD"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "text",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "type",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "value",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "start",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "end",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "period",
+            "type": "RECORD"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "identifier",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "display",
+        "type": "STRING"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "performer",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "value",
+            "type": "FLOAT"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "comparator",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "unit",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "code",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "quantity",
+        "type": "RECORD"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "version",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "display",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "userSelected",
+                "type": "BOOLEAN"
+              }
+            ],
+            "mode": "REPEATED",
+            "name": "coding",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "text",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "codeableConcept",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "string",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "boolean",
+        "type": "BOOLEAN"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "value",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "unit",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "low",
+            "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "value",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "unit",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "high",
+            "type": "RECORD"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "range",
+        "type": "RECORD"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "value",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "comparator",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "unit",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "numerator",
+            "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "value",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "comparator",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "unit",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "denominator",
+            "type": "RECORD"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "ratio",
+        "type": "RECORD"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "value",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "unit",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "origin",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "period",
+            "type": "FLOAT"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "factor",
+            "type": "FLOAT"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "lowerLimit",
+            "type": "FLOAT"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "upperLimit",
+            "type": "FLOAT"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "dimensions",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "data",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "sampledData",
+        "type": "RECORD"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "contentType",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "language",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "data",
+            "type": "BYTES"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "url",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "size",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "hash",
+            "type": "BYTES"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "title",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "creation",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "attachment",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "time",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "dateTime",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "start",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "end",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "period",
+        "type": "RECORD"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "value",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "version",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "code",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "display",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "userSelected",
+            "type": "BOOLEAN"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "coding",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "text",
+        "type": "STRING"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "dataAbsentReason",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "version",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "code",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "display",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "userSelected",
+            "type": "BOOLEAN"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "coding",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "text",
+        "type": "STRING"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "interpretation",
+    "type": "RECORD"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "comment",
+    "type": "STRING"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "version",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "code",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "display",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "userSelected",
+            "type": "BOOLEAN"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "coding",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "text",
+        "type": "STRING"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "bodySite",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "version",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "code",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "display",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "userSelected",
+            "type": "BOOLEAN"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "coding",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "text",
+        "type": "STRING"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "method",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "reference",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "fragment",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "accountId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "activityDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "adverseEventId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "allergyIntoleranceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "appointmentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "appointmentResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "auditEventId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "basicId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "binaryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "bodySiteId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "bundleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "capabilityStatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "carePlanId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "careTeamId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "chargeItemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "claimId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "claimResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "clinicalImpressionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "codeSystemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "communicationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "communicationRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "compartmentDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "compositionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "conceptMapId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "conditionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "consentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "contractId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "coverageId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "dataElementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "detectedIssueId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceComponentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceMetricId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceUsestatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "diagnosticReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "documentManifestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "documentReferenceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "eligibilityRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "eligibilityResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "encounterId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "endpointId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "enrollmentRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "enrollmentResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "episodeOfcareId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "expansionProfileId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "explanationOfbenefitId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "familyMemberhistoryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "flagId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "goalId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "graphDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "groupId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "guidanceResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "healthcareServiceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "imagingManifestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "imagingStudyId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "immunizationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "immunizationRecommendationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "implementationGuideId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "libraryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "linkageId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "listId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "locationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "measureId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "measureReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "mediaId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationAdministrationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationDispenseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationStatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "messageDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "messageHeaderId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "namingSystemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "nutritionOrderId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "observationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "operationDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "operationOutcomeId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "organizationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "parametersId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "patientId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "paymentNoticeId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "paymentReconciliationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "personId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "planDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "practitionerId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "practitionerRoleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "procedureId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "procedureRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "processRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "processResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "provenanceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "questionnaireId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "questionnaireResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "referralRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "relatedPersonId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "requestGroupId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "researchStudyId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "researchSubjectId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "riskAssessmentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "scheduleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "searchParameterId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "sequenceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "serviceDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "slotId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "specimenId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "structureDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "structureMapId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "subscriptionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "substanceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "supplyDeliveryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "supplyRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "taskId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "testReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "testScriptId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "valueSetId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "visionPrescriptionId",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "use",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "version",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "display",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "userSelected",
+                    "type": "BOOLEAN"
+                  }
+                ],
+                "mode": "REPEATED",
+                "name": "coding",
+                "type": "RECORD"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "text",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "type",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "value",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "start",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "end",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "period",
+            "type": "RECORD"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "identifier",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "display",
+        "type": "STRING"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "specimen",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "reference",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "fragment",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "accountId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "activityDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "adverseEventId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "allergyIntoleranceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "appointmentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "appointmentResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "auditEventId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "basicId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "binaryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "bodySiteId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "bundleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "capabilityStatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "carePlanId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "careTeamId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "chargeItemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "claimId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "claimResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "clinicalImpressionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "codeSystemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "communicationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "communicationRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "compartmentDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "compositionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "conceptMapId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "conditionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "consentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "contractId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "coverageId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "dataElementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "detectedIssueId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceComponentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceMetricId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "deviceUsestatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "diagnosticReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "documentManifestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "documentReferenceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "eligibilityRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "eligibilityResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "encounterId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "endpointId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "enrollmentRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "enrollmentResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "episodeOfcareId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "expansionProfileId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "explanationOfbenefitId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "familyMemberhistoryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "flagId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "goalId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "graphDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "groupId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "guidanceResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "healthcareServiceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "imagingManifestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "imagingStudyId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "immunizationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "immunizationRecommendationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "implementationGuideId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "libraryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "linkageId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "listId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "locationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "measureId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "measureReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "mediaId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationAdministrationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationDispenseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "medicationStatementId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "messageDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "messageHeaderId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "namingSystemId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "nutritionOrderId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "observationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "operationDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "operationOutcomeId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "organizationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "parametersId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "patientId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "paymentNoticeId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "paymentReconciliationId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "personId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "planDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "practitionerId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "practitionerRoleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "procedureId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "procedureRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "processRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "processResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "provenanceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "questionnaireId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "questionnaireResponseId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "referralRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "relatedPersonId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "requestGroupId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "researchStudyId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "researchSubjectId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "riskAssessmentId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "scheduleId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "searchParameterId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "sequenceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "serviceDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "slotId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "specimenId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "structureDefinitionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "structureMapId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "subscriptionId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "substanceId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "supplyDeliveryId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "supplyRequestId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "taskId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "testReportId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "testScriptId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "valueSetId",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "visionPrescriptionId",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "use",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "version",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "display",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "userSelected",
+                    "type": "BOOLEAN"
+                  }
+                ],
+                "mode": "REPEATED",
+                "name": "coding",
+                "type": "RECORD"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "text",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "type",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "value",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "start",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "end",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "period",
+            "type": "RECORD"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "identifier",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "display",
+        "type": "STRING"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "device",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "mode": "REPEATED",
+        "name": "modifierExtension",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "value",
+            "type": "FLOAT"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "unit",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "code",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "low",
+        "type": "RECORD"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "value",
+            "type": "FLOAT"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "unit",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "system",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "code",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "high",
+        "type": "RECORD"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "version",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "display",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "userSelected",
+                "type": "BOOLEAN"
+              }
+            ],
+            "mode": "REPEATED",
+            "name": "coding",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "text",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "type",
+        "type": "RECORD"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "version",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "display",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "userSelected",
+                "type": "BOOLEAN"
+              }
+            ],
+            "mode": "REPEATED",
+            "name": "coding",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "text",
+            "type": "STRING"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "appliesTo",
+        "type": "RECORD"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "value",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "unit",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "low",
+            "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "value",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "unit",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "high",
+            "type": "RECORD"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "age",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "text",
+        "type": "STRING"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "referenceRange",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "mode": "REPEATED",
+        "name": "modifierExtension",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "type",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "reference",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "fragment",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "accountId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "activityDefinitionId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "adverseEventId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "allergyIntoleranceId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "appointmentId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "appointmentResponseId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "auditEventId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "basicId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "binaryId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "bodySiteId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "bundleId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "capabilityStatementId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "carePlanId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "careTeamId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "chargeItemId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "claimId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "claimResponseId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "clinicalImpressionId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "codeSystemId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "communicationId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "communicationRequestId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "compartmentDefinitionId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "compositionId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "conceptMapId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "conditionId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "consentId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "contractId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "coverageId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "dataElementId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "detectedIssueId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "deviceId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "deviceComponentId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "deviceMetricId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "deviceRequestId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "deviceUsestatementId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "diagnosticReportId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "documentManifestId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "documentReferenceId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "eligibilityRequestId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "eligibilityResponseId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "encounterId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "endpointId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "enrollmentRequestId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "enrollmentResponseId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "episodeOfcareId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "expansionProfileId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "explanationOfbenefitId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "familyMemberhistoryId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "flagId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "goalId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "graphDefinitionId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "groupId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "guidanceResponseId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "healthcareServiceId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "imagingManifestId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "imagingStudyId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "immunizationId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "immunizationRecommendationId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "implementationGuideId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "libraryId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "linkageId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "listId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "locationId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "measureId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "measureReportId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "mediaId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "medicationId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "medicationAdministrationId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "medicationDispenseId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "medicationRequestId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "medicationStatementId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "messageDefinitionId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "messageHeaderId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "namingSystemId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "nutritionOrderId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "observationId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "operationDefinitionId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "operationOutcomeId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "organizationId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "parametersId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "patientId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "paymentNoticeId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "paymentReconciliationId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "personId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "planDefinitionId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "practitionerId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "practitionerRoleId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "procedureId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "procedureRequestId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "processRequestId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "processResponseId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "provenanceId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "questionnaireId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "questionnaireResponseId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "referralRequestId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "relatedPersonId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "requestGroupId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "researchStudyId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "researchSubjectId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "riskAssessmentId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "scheduleId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "searchParameterId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "sequenceId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "serviceDefinitionId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "slotId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "specimenId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "structureDefinitionId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "structureMapId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "subscriptionId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "substanceId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "supplyDeliveryId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "supplyRequestId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "taskId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "testReportId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "testScriptId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "valueSetId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "visionPrescriptionId",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "use",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "fields": [
+                      {
+                        "mode": "REPEATED",
+                        "name": "extension",
+                        "type": "STRING"
+                      },
+                      {
+                        "mode": "NULLABLE",
+                        "name": "system",
+                        "type": "STRING"
+                      },
+                      {
+                        "mode": "NULLABLE",
+                        "name": "version",
+                        "type": "STRING"
+                      },
+                      {
+                        "mode": "NULLABLE",
+                        "name": "code",
+                        "type": "STRING"
+                      },
+                      {
+                        "mode": "NULLABLE",
+                        "name": "display",
+                        "type": "STRING"
+                      },
+                      {
+                        "mode": "NULLABLE",
+                        "name": "userSelected",
+                        "type": "BOOLEAN"
+                      }
+                    ],
+                    "mode": "REPEATED",
+                    "name": "coding",
+                    "type": "RECORD"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "text",
+                    "type": "STRING"
+                  }
+                ],
+                "mode": "NULLABLE",
+                "name": "type",
+                "type": "RECORD"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "value",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "start",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "end",
+                    "type": "STRING"
+                  }
+                ],
+                "mode": "NULLABLE",
+                "name": "period",
+                "type": "RECORD"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "identifier",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "display",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "target",
+        "type": "RECORD"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "related",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "mode": "REPEATED",
+        "name": "extension",
+        "type": "STRING"
+      },
+      {
+        "mode": "REPEATED",
+        "name": "modifierExtension",
+        "type": "STRING"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "version",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "display",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "userSelected",
+                "type": "BOOLEAN"
+              }
+            ],
+            "mode": "REPEATED",
+            "name": "coding",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "text",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "code",
+        "type": "RECORD"
+      },
+      {
+        "fields": [
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "value",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "comparator",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "unit",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "quantity",
+            "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "version",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "display",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "userSelected",
+                    "type": "BOOLEAN"
+                  }
+                ],
+                "mode": "REPEATED",
+                "name": "coding",
+                "type": "RECORD"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "text",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "codeableConcept",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "string",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "value",
+                    "type": "FLOAT"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "unit",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  }
+                ],
+                "mode": "NULLABLE",
+                "name": "low",
+                "type": "RECORD"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "value",
+                    "type": "FLOAT"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "unit",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  }
+                ],
+                "mode": "NULLABLE",
+                "name": "high",
+                "type": "RECORD"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "range",
+            "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "value",
+                    "type": "FLOAT"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "comparator",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "unit",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  }
+                ],
+                "mode": "NULLABLE",
+                "name": "numerator",
+                "type": "RECORD"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "value",
+                    "type": "FLOAT"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "comparator",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "unit",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  }
+                ],
+                "mode": "NULLABLE",
+                "name": "denominator",
+                "type": "RECORD"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "ratio",
+            "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "value",
+                    "type": "FLOAT"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "unit",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  }
+                ],
+                "mode": "NULLABLE",
+                "name": "origin",
+                "type": "RECORD"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "period",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "factor",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "lowerLimit",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "upperLimit",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "dimensions",
+                "type": "INTEGER"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "data",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "sampledData",
+            "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "contentType",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "language",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "data",
+                "type": "BYTES"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "url",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "size",
+                "type": "INTEGER"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "hash",
+                "type": "BYTES"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "title",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "creation",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "attachment",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "time",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "dateTime",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "start",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "end",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "period",
+            "type": "RECORD"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "value",
+        "type": "RECORD"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "version",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "display",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "userSelected",
+                "type": "BOOLEAN"
+              }
+            ],
+            "mode": "REPEATED",
+            "name": "coding",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "text",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "dataAbsentReason",
+        "type": "RECORD"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "version",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "display",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "userSelected",
+                "type": "BOOLEAN"
+              }
+            ],
+            "mode": "REPEATED",
+            "name": "coding",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "text",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "interpretation",
+        "type": "RECORD"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "REPEATED",
+            "name": "modifierExtension",
+            "type": "STRING"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "value",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "unit",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "low",
+            "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "value",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "unit",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "system",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "code",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "high",
+            "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "version",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "display",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "userSelected",
+                    "type": "BOOLEAN"
+                  }
+                ],
+                "mode": "REPEATED",
+                "name": "coding",
+                "type": "RECORD"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "text",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "type",
+            "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "version",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "display",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "userSelected",
+                    "type": "BOOLEAN"
+                  }
+                ],
+                "mode": "REPEATED",
+                "name": "coding",
+                "type": "RECORD"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "text",
+                "type": "STRING"
+              }
+            ],
+            "mode": "REPEATED",
+            "name": "appliesTo",
+            "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "value",
+                    "type": "FLOAT"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "unit",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  }
+                ],
+                "mode": "NULLABLE",
+                "name": "low",
+                "type": "RECORD"
+              },
+              {
+                "fields": [
+                  {
+                    "mode": "REPEATED",
+                    "name": "extension",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "value",
+                    "type": "FLOAT"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "unit",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "system",
+                    "type": "STRING"
+                  },
+                  {
+                    "mode": "NULLABLE",
+                    "name": "code",
+                    "type": "STRING"
+                  }
+                ],
+                "mode": "NULLABLE",
+                "name": "high",
+                "type": "RECORD"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "age",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "text",
+            "type": "STRING"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "referenceRange",
+        "type": "RECORD"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "component",
+    "type": "RECORD"
+  }
+]

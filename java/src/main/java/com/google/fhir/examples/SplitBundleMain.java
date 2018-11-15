@@ -19,11 +19,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.bigquery.model.TableSchema;
 import com.google.fhir.stu3.BigQuerySchema;
+import com.google.fhir.stu3.JsonFormat;
 import com.google.fhir.stu3.JsonFormat.Parser;
+import com.google.fhir.stu3.JsonFormat.Printer;
 import com.google.fhir.stu3.ResourceUtils;
 import com.google.fhir.stu3.proto.Bundle;
 import com.google.protobuf.Message;
-import com.google.protobuf.util.JsonFormat.Printer;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -41,13 +42,15 @@ public class SplitBundleMain {
 
   public static void main(String[] args) throws IOException {
     Parser fhirParser = com.google.fhir.stu3.JsonFormat.getParser();
-    Printer protoPrinter =
-        com.google.protobuf.util.JsonFormat.printer().omittingInsignificantWhitespace();
+    Printer fhirPrinter = JsonFormat.getPrinter().omittingInsignificantWhitespace();
+    Printer analyticPrinter =
+        JsonFormat.getPrinter().omittingInsignificantWhitespace().forAnalytics();
 
     // Process the input files one by one, and count the number of processed resources.
     Map<String, Integer> counts = new HashMap<>();
     // We create one file per output resource type.
-    Map<String, BufferedWriter> output = new HashMap<>();
+    Map<String, BufferedWriter> fhirOutput = new HashMap<>();
+    Map<String, BufferedWriter> analyticOutput = new HashMap<>();
     // We create one schema per output resource type.
     Map<String, TableSchema> schema = new HashMap<>();
     for (String file : args) {
@@ -72,21 +75,32 @@ public class SplitBundleMain {
         String resourceType = ResourceUtils.getResourceType(resource);
         int count = counts.containsKey(resourceType) ? counts.get(resourceType) : 0;
         counts.put(resourceType, count + 1);
-        if (!output.containsKey(resourceType)) {
-          output.put(
-              resourceType, Files.newBufferedWriter(Paths.get(resourceType + ".ndjson"), UTF_8));
+        if (!fhirOutput.containsKey(resourceType)) {
+          fhirOutput.put(
+              resourceType,
+              Files.newBufferedWriter(Paths.get(resourceType + ".fhir.ndjson"), UTF_8));
+          analyticOutput.put(
+              resourceType,
+              Files.newBufferedWriter(Paths.get(resourceType + ".analytic.ndjson"), UTF_8));
         }
         if (!schema.containsKey(resourceType)) {
           // Generate a schema for this type. Note that we do this purely based on a single message,
           // which could potentially cause issues with extensions.
-          schema.put(resourceType, BigQuerySchema.fromMessage(resource));
+          schema.put(resourceType, BigQuerySchema.fromDescriptor(resource.getDescriptorForType()));
         }
-        BufferedWriter resourceOutput = output.get(resourceType);
-        protoPrinter.appendTo(resource, resourceOutput);
+        BufferedWriter resourceOutput = fhirOutput.get(resourceType);
+        fhirPrinter.appendTo(resource, resourceOutput);
         resourceOutput.newLine();
+
+        BufferedWriter analyticResourceOutput = analyticOutput.get(resourceType);
+        analyticPrinter.appendTo(resource, resourceOutput);
+        analyticResourceOutput.newLine();
       }
     }
-    for (BufferedWriter writer : output.values()) {
+    for (BufferedWriter writer : fhirOutput.values()) {
+      writer.close();
+    }
+    for (BufferedWriter writer : analyticOutput.values()) {
       writer.close();
     }
     // Write the schemas to disk.

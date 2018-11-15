@@ -66,7 +66,7 @@ public class ConvertNdJsonForBigQueryMain {
         if (schema == null) {
           // Generate a schema for this file. Note that we do this purely based on a single message,
           // which could potentially cause issues with extensions.
-          schema = BigQuerySchema.fromMessage(parsed);
+          schema = BigQuerySchema.fromDescriptor(parsed.getDescriptorForType());
         }
         protoPrinter.appendTo(parsed, output);
         output.newLine();
