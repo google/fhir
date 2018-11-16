@@ -14,20 +14,9 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 proto_library(
     name = "stu3_proto",
     visibility = ["//visibility:private"],
-    srcs = [
-        "annotations.proto",
-        "codes.proto",
-        "datatypes.proto",
-        "extensions.proto",
-        "google_extensions.proto",
-        "metadatatypes.proto",
-        "profile_config.proto",
-        "profiles.proto",
-        "resources.proto",
-        "uscore.proto",
-        "uscore_codes.proto",
-        "version_config.proto",
-    ],
+    srcs = glob([
+        "*.proto",
+    ]),
     deps = [
         "@protobuf_archive//:descriptor_proto",
     ],
