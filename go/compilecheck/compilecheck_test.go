@@ -1,6 +1,6 @@
-// Package dummy exists purely to ensure proper Go compilation of protos as part
-// of bazel tests.
-package dummy
+// Package compilecheck exists purely to ensure proper Go compilation of protos
+// as part of bazel tests.
+package compilecheck
 
 import (
 	"testing"
