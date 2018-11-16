@@ -27,8 +27,14 @@
 #
 # This will generate foo/bar/quux.proto in the source directory
 
-tokens=(${1/:/ })
-dir=${tokens[0]}
+target=$1
+tokens=(${target/:/ })
+target_dir=${tokens[0]}
+if [[ ${target_dir:0:2} != "//" ]]; then
+  echo "Taget must be absolute and begin with //"
+  exit 1
+fi
+dir=${target_dir#"//"}
 label=${tokens[1]}
 
 source $(dirname "$BASH_SOURCE")/generate_protos_utils.sh
@@ -38,4 +44,3 @@ try_build "$dir:${label}_proto_files"
 
 copy_to_src_if_present ${label}.proto
 copy_to_src_if_present ${label}_extensions.proto
-

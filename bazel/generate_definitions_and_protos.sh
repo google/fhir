@@ -31,18 +31,24 @@
 # * foo/bar/quux_profiles.json    (bundle of profile StructureDefinitions)
 # * foo/bar/quux_profiles.proto   (profiles proto file)
 
-tokens=(${1/:/ })
-dir=${tokens[0]}
+target=$1
+tokens=(${target/:/ })
+target_dir=${tokens[0]}
+if [[ ${target_dir:0:2} != "//" ]]; then
+  echo "Taget must be absolute and begin with //"
+  exit 1
+fi
+dir=${target_dir#"//"}
 label=${tokens[1]}
 
 source $(dirname "$BASH_SOURCE")/generate_protos_utils.sh
 
 # Build structure definitions, and then copy them into source
-try_build "$dir:${label}_structure_definitions"
+try_build "${target}_structure_definitions"
 copy_to_src_if_present ${label}_extensions.json
 copy_to_src_if_present ${label}.json
 
 # Build protos, and then copy them into source
-try_build "$dir:${label}_proto_files"
+try_build "${target}_proto_files"
 copy_to_src_if_present ${label}.proto
 copy_to_src_if_present ${label}_extensions.proto

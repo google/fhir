@@ -93,7 +93,7 @@ public class SplitBundleMain {
         resourceOutput.newLine();
 
         BufferedWriter analyticResourceOutput = analyticOutput.get(resourceType);
-        analyticPrinter.appendTo(resource, resourceOutput);
+        analyticPrinter.appendTo(resource, analyticResourceOutput);
         analyticResourceOutput.newLine();
       }
     }
