@@ -6,6 +6,46 @@ exports_files(["version_config.textproto"])
 
 load("//bazel:proto.bzl", "fhir_proto_library")
 
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+# stu3_proto aggregates all of the proto files for the go_proto_library as bazel
+# conforms to Go convention of having only one package per directly.
+proto_library(
+    name = "stu3_proto",
+    visibility = ["//visibility:private"],
+    srcs = [
+        "annotations.proto",
+        "codes.proto",
+        "datatypes.proto",
+        "extensions.proto",
+        "google_extensions.proto",
+        "metadatatypes.proto",
+        "profile_config.proto",
+        "profiles.proto",
+        "resources.proto",
+        "uscore.proto",
+        "uscore_codes.proto",
+        "version_config.proto",
+    ],
+    deps = [
+        "@protobuf_archive//:descriptor_proto",
+    ],
+)
+
+go_proto_library(
+    name = "stu3_go_proto",
+    importpath = "github.com/google/fhir/proto/stu3",
+    proto = ":stu3_proto",
+)
+
+go_library(
+    name = "go_default_library",
+    embed = [":stu3_go_proto"],
+    importpath = "github.com/google/fhir/proto/stu3",
+)
+
+
 fhir_proto_library(
     srcs = ["annotations.proto"],
     proto_deps = [
