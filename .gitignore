@@ -1,2 +1,3 @@
 # Ignore the bazel symlinks
 /bazel-*
+.vscode

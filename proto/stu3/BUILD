@@ -5,12 +5,14 @@ licenses(["notice"])
 exports_files(["version_config.textproto"])
 
 load("//bazel:proto.bzl", "fhir_proto_library")
-
 load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
-# stu3_proto aggregates all of the proto files for the go_proto_library as bazel
-# conforms to Go convention of having only one package per directly.
+# stu3_proto aggregates all of the proto files for the go_proto_library as Bazel
+# conforms to Go convention of having only one package per directory. To use
+# Gazelle for automatic Go build-file creation, we need to tag these rules with
+# "keep" comments as a signal to Gazelle not to modify them.
+# keep
 proto_library(
     name = "stu3_proto",
     visibility = ["//visibility:private"],
@@ -22,18 +24,21 @@ proto_library(
     ],
 )
 
+# keep
 go_proto_library(
     name = "stu3_go_proto",
     importpath = "github.com/google/fhir/proto/stu3",
     proto = ":stu3_proto",
 )
 
+# keep
 go_library(
     name = "go_default_library",
+    srcs = ["json.go"],
     embed = [":stu3_go_proto"],
     importpath = "github.com/google/fhir/proto/stu3",
+    deps = ["@com_github_golang_protobuf//jsonpb:go_default_library_gen"],
 )
-
 
 fhir_proto_library(
     srcs = ["annotations.proto"],
