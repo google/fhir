@@ -21,9 +21,13 @@ package stu3
 import (
 	"encoding/base64"
 	"fmt"
+	"regexp"
+	"strconv"
 	"strings"
 
+	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/jsonpb"
+	"github.com/golang/protobuf/proto"
 )
 
 const (
@@ -51,6 +55,44 @@ func parseJSONString(buf []byte) (string, error) {
 	return strings.Replace(s, escapedDoubleQuote, doubleQuote, -1), nil
 }
 
+// reMatch checks if the JSON string matches the regular expression in the
+// proto option "value_regex".
+func reMatch(msg descriptor.Message, json []byte) error {
+	_, md := descriptor.ForMessage(msg)
+	if !proto.HasExtension(md.Options, E_ValueRegex) {
+		return nil
+	}
+	ex, err := proto.GetExtension(md.Options, E_ValueRegex)
+	if err != nil {
+		return fmt.Errorf("proto.GetExtension(value_regex) of %T: %v", msg, err)
+	}
+
+	switch s := ex.(type) {
+	case *string:
+		if s == nil {
+			return nil
+		}
+		// The FHIR definition states that "regexes should be qualified with start
+		// of string and end of string anchors based on the regex implementation
+		// used" - http://hl7.org/fhir/datatypes.html
+		reStr := fmt.Sprintf("^%s$", *s)
+
+		re, err := regexp.Compile(reStr)
+		if err != nil {
+			// This would indicate a bug in the proto conversion process, or
+			// that the specification has a bad regex, rather than poorly formed
+			// JSON input.
+			return fmt.Errorf("compiling regex %s for %T: %v", reStr, msg, err)
+		}
+		if !re.Match(json) {
+			return fmt.Errorf("does not match regex %s for %T", reStr, msg)
+		}
+		return nil
+	default:
+		return fmt.Errorf("value_regex for %T option of type %T", msg, s)
+	}
+}
+
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
 func (p *Base64Binary) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
@@ -59,7 +101,10 @@ func (p *Base64Binary) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *Base64Binary) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *Base64Binary) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	s, err := parseJSONString(buf)
 	if err != nil {
 		return err
@@ -74,204 +119,276 @@ func (p *Base64Binary) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error 
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
-func (p *Boolean) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+func (p *Boolean) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
+	if p.Value {
+		return []byte(`true`), nil
+	}
+	return []byte(`false`), nil
+}
+
+// UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
+// interface.
+func (p *Boolean) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
+	switch string(buf) {
+	case `true`:
+		p.Value = true
+		return nil
+	case `false`:
+		p.Value = false
+		return nil
+	}
+	return fmt.Errorf(`invalid JSON boolean %s`, buf)
+}
+
+// MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
+// interface.
+func (p *Code) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
 }
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *Boolean) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *Code) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
 }
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
-func (p *Code) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+func (p *Date) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
 }
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *Code) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *Date) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
 }
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
-func (p *Date) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+func (p *DateTime) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
 }
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *Date) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *DateTime) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
 }
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
-func (p *DateTime) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+func (p *Decimal) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
 }
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *DateTime) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *Decimal) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
 }
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
-func (p *Decimal) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+func (p *Id) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
 }
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *Decimal) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *Id) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
 }
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
-func (p *Id) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+func (p *Instant) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
 }
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *Id) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *Instant) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
 }
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
-func (p *Instant) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+func (p *Integer) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
+	return []byte(fmt.Sprintf("%d", p.Value)), nil
+}
+
+// UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
+// interface.
+func (p *Integer) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
+	i, err := strconv.ParseInt(string(buf), 10, 32)
+	if err != nil {
+		return fmt.Errorf("parse %s as 32-bit integer: %v", buf, err)
+	}
+	p.Value = int32(i)
+	return nil
+}
+
+// MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
+// interface.
+func (p *Markdown) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
 }
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *Instant) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *Markdown) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
 }
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
-func (p *Integer) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+func (p *Oid) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
 }
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *Integer) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *Oid) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
 }
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
-func (p *Markdown) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+func (p *PositiveInt) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
 }
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *Markdown) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *PositiveInt) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
 }
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
-func (p *Oid) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+func (p *String) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
+	return jsonString(p.Value), nil
+}
+
+// UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
+// interface.
+func (p *String) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
+	s, err := parseJSONString(buf)
+	if err != nil {
+		return err
+	}
+	p.Value = s
+	return nil
+}
+
+// MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
+// interface.
+func (p *Time) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
 }
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *Oid) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *Time) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
 }
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
-func (p *PositiveInt) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+func (p *UnsignedInt) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
 }
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *PositiveInt) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *UnsignedInt) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
 }
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
-func (p *String) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+func (p *Uri) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
 }
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *String) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *Uri) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
 }
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
-func (p *Time) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+func (p *Uuid) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
 }
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *Time) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *Uuid) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
 }
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface.
-func (p *UnsignedInt) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+func (p *Xhtml) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
 }
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface.
-func (p *UnsignedInt) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
-	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
-}
-
-// MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
-// interface.
-func (p *Uri) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
-	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
-}
-
-// UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
-// interface.
-func (p *Uri) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
-	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
-}
-
-// MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
-// interface.
-func (p *Uuid) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
-	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
-}
-
-// UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
-// interface.
-func (p *Uuid) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
-	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
-}
-
-// MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
-// interface.
-func (p *Xhtml) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
-	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
-}
-
-// UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
-// interface.
-func (p *Xhtml) UnmarshalJSONPB(m *jsonpb.Unmarshaler, buf []byte) error {
+func (p *Xhtml) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
+	if err := reMatch(p, buf); err != nil {
+		return err
+	}
 	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
 }

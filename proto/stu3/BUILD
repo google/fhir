@@ -37,7 +37,10 @@ go_library(
     srcs = ["json.go"],
     embed = [":stu3_go_proto"],
     importpath = "github.com/google/fhir/proto/stu3",
-    deps = ["@com_github_golang_protobuf//jsonpb:go_default_library_gen"],
+    deps = [
+        "@com_github_golang_protobuf//descriptor:go_default_library_gen",
+        "@com_github_golang_protobuf//jsonpb:go_default_library_gen",
+    ],
 )
 
 fhir_proto_library(
