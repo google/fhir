@@ -72,6 +72,37 @@ func TestGoodConversions(t *testing.T) {
 			json: `"1986-10-18"`,
 		},
 		{
+			msg: &pb.Decimal{
+				Value: `2.71828`,
+			},
+			json: `2.71828`,
+		},
+		{
+			msg: &pb.Decimal{
+				Value: `-3.14159`,
+			},
+			json: `-3.14159`,
+		},
+		{
+			msg: &pb.Decimal{
+				Value: `0.000`,
+			},
+			json: `0.000`,
+		},
+		{
+			// Very important for Decimal as they must maintain precision.
+			msg: &pb.Decimal{
+				Value: `0.14285700000`,
+			},
+			json: `0.14285700000`,
+		},
+		{
+			msg: &pb.Decimal{
+				Value: `42`,
+			},
+			json: `42`,
+		},
+		{
 			msg: &pb.Integer{
 				Value: 0,
 			},
@@ -192,6 +223,17 @@ func TestBadJSON(t *testing.T) {
 			wantErrContains: "regex",
 		},
 		{
+			msg:             &pb.Decimal{},
+			json:            `"42y"`,
+			wantErrContains: "regex",
+		},
+		{
+			msg: &pb.Decimal{},
+			// leading zero
+			json:            `"042"`,
+			wantErrContains: "regex",
+		},
+		{
 			msg:             &pb.Integer{},
 			json:            `"x"`,
 			wantErrContains: "regex",
@@ -264,6 +306,12 @@ func TestBadProto(t *testing.T) {
 				Timezone: "+0100",
 			},
 			wantErrContains: "zone",
+		},
+		{
+			msg: &pb.Decimal{
+				Value: "42x",
+			},
+			wantErrContains: "regex",
 		},
 		{
 			msg: &pb.String{

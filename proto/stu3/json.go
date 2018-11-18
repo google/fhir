@@ -281,8 +281,14 @@ func (p *DateTime) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
 // interface, to properly handle this FHIR primitive type.
 func (p *Decimal) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
-	return nil, fmt.Errorf("MarshalJSONPB unimplemented for %T", p)
+	if err := reMatch(p, []byte(p.Value)); err != nil {
+		return nil, err
+	}
+	return []byte(p.Value), nil
 }
+
+// TODO(arrans) implement Decimal proto to numeric equivalent helpers. Should
+// these use math/big.Float?
 
 // UnmarshalJSONPB implements the single method of the jsonpb.JSONPBUnmarshaler
 // interface, to properly handle this FHIR primitive type.
@@ -290,7 +296,8 @@ func (p *Decimal) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, buf []byte) error {
 	if err := reMatch(p, buf); err != nil {
 		return err
 	}
-	return fmt.Errorf("UnmarshalJSONPB unimplemented for %T", p)
+	p.Value = string(buf)
+	return nil
 }
 
 // MarshalJSONPB implements the single method of the jsonpb.JSONPBMarshaler
