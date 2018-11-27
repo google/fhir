@@ -7,6 +7,7 @@ cc_library(
     hdrs = ["extensions.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":proto_util",
         ":util",
         "//cc/google/fhir/status",
         "//proto/stu3:annotations_cc_proto",

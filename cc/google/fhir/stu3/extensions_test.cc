@@ -20,6 +20,7 @@
 #include "google/fhir/stu3/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/datatypes.pb.h"
+#include "proto/stu3/extensions.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
@@ -33,6 +34,8 @@ namespace {
 using ::google::fhir::stu3::google::EventLabel;
 using ::google::fhir::stu3::google::EventTrigger;
 using ::google::fhir::stu3::google::PrimitiveHasNoValue;
+using ::google::fhir::stu3::proto::
+    CapabilityStatementSearchParameterCombination;
 using ::google::fhir::stu3::proto::Extension;
 using ::google::fhir::testutil::EqualsProto;
 
@@ -43,84 +46,47 @@ void ReadTestData(const string& type, T* message, Extension* extension) {
       absl::StrCat("google/", type, ".extension.prototxt"));
 }
 
-TEST(ExtensionsTest, ParseEventTrigger) {
-  EventTrigger message;
+template <class T>
+void TestExtension(const string& name) {
+  T message;
   Extension extension;
-  ReadTestData("trigger", &message, &extension);
+  ReadTestData(name, &message, &extension);
 
-  EventTrigger output;
+  T output;
   TF_ASSERT_OK(ExtensionToMessage(extension, &output));
   EXPECT_THAT(output, EqualsProto(message));
+}
+
+TEST(ExtensionsTest, ParseEventTrigger) {
+  TestExtension<EventTrigger>("trigger");
 }
 
 TEST(ExtensionsTest, PrintEventTrigger) {
-  EventTrigger message;
-  Extension extension;
-  ReadTestData("trigger", &message, &extension);
-
-  Extension output;
-  TF_ASSERT_OK(ConvertToExtension(message, &output));
-  EXPECT_THAT(output, EqualsProto(extension));
+  TestExtension<EventTrigger>("trigger");
 }
 
-TEST(ExtensionsTest, ParseEventLabel) {
-  EventLabel message;
-  Extension extension;
-  ReadTestData("label", &message, &extension);
+TEST(ExtensionsTest, ParseEventLabel) { TestExtension<EventLabel>("label"); }
 
-  EventLabel output;
-  TF_ASSERT_OK(ExtensionToMessage(extension, &output));
-  EXPECT_THAT(output, EqualsProto(message));
-}
-
-TEST(ExtensionsTest, PrintEventLabel) {
-  EventLabel message;
-  Extension extension;
-  ReadTestData("label", &message, &extension);
-
-  Extension output;
-  TF_ASSERT_OK(ConvertToExtension(message, &output));
-  EXPECT_THAT(output, EqualsProto(extension));
-}
+TEST(ExtensionsTest, PrintEventLabel) { TestExtension<EventLabel>("label"); }
 
 TEST(ExtensionsTest, ParsePrimitiveHasNoValue) {
-  PrimitiveHasNoValue message;
-  Extension extension;
-  ReadTestData("primitive_has_no_value", &message, &extension);
-
-  PrimitiveHasNoValue output;
-  TF_ASSERT_OK(ExtensionToMessage(extension, &output));
-  EXPECT_THAT(output, EqualsProto(message));
+  TestExtension<PrimitiveHasNoValue>("primitive_has_no_value");
 }
 
 TEST(ExtensionsTest, ParsePrimitiveHasNoValue_Empty) {
-  PrimitiveHasNoValue message;
-  Extension extension;
-  ReadTestData("empty", &message, &extension);
-
-  PrimitiveHasNoValue output;
-  TF_ASSERT_OK(ExtensionToMessage(extension, &output));
-  EXPECT_THAT(output, EqualsProto(message));
+  TestExtension<PrimitiveHasNoValue>("empty");
 }
 
 TEST(ExtensionsTest, PrintPrimitiveHasNoValue) {
-  PrimitiveHasNoValue message;
-  Extension extension;
-  ReadTestData("primitive_has_no_value", &message, &extension);
-
-  Extension output;
-  TF_ASSERT_OK(ConvertToExtension(message, &output));
-  EXPECT_THAT(output, EqualsProto(extension));
+  TestExtension<PrimitiveHasNoValue>("primitive_has_no_value");
 }
 
 TEST(ExtensionsTest, PrintPrimitiveHasNoValue_Empty) {
-  PrimitiveHasNoValue message;
-  Extension extension;
-  ReadTestData("empty", &message, &extension);
+  TestExtension<PrimitiveHasNoValue>("empty");
+}
 
-  Extension output;
-  TF_ASSERT_OK(ConvertToExtension(message, &output));
-  EXPECT_THAT(output, EqualsProto(extension));
+TEST(ExtensionsTest, CapabilityStatementSearchParameterCombination) {
+  TestExtension<CapabilityStatementSearchParameterCombination>("capability");
 }
 
 }  // namespace

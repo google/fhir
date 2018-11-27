@@ -19,6 +19,7 @@
 #include "google/protobuf/descriptor.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/stu3/proto_util.h"
 #include "google/fhir/stu3/util.h"
 #include "proto/stu3/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
@@ -193,13 +194,8 @@ Status ValueToMessage(const Extension& extension, Message* message,
   }
   const Extension::Value value = extension.value();
   const Reflection* value_reflection = value.GetReflection();
-  if (field->is_repeated()) {
-    message_reflection->AddMessage(message, field)
-        ->CopyFrom(value_reflection->GetMessage(extension, value_field));
-  } else {
-    message_reflection->MutableMessage(message, field)
-        ->CopyFrom(value_reflection->GetMessage(value, value_field));
-  }
+  MutableOrAddMessage(message, field)
+      ->CopyFrom(value_reflection->GetMessage(value, value_field));
   return Status::OK();
 }
 
