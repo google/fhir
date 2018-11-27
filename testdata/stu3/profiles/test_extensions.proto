@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package testing.pkg;
+
+import "proto/stu3/annotations.proto";
+import "proto/stu3/codes.proto";
+import "proto/stu3/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "java.com.google.testing.pkg";
+
+// Auto-generated from StructureDefinition for SimpleDecimalExt.
+// This is the A-Extension.
+// See http://test/url/base/SimpleDecimalExt
+message SimpleDecimalExt {
+  option (.google.fhir.stu3.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://test/url/base/SimpleDecimalExt";
+
+  // xml:id (or equivalent in JSON)
+  .google.fhir.stu3.proto.String id = 1;
+
+  // Additional Content defined by implementations
+  repeated .google.fhir.stu3.proto.Extension extension = 2;
+
+  // Value of extension
+  .google.fhir.stu3.proto.Decimal value_decimal = 3;
+}
+
+// Auto-generated from StructureDefinition for SimpleCodeableConceptExtension.
+// SimpleCodeableConcept Extension.
+// See http://test/url/base/SimpleCodeableConceptExtension
+message SimpleCodeableConceptExtension {
+  option (.google.fhir.stu3.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://test/url/base/SimpleCodeableConceptExtension";
+
+  // xml:id (or equivalent in JSON)
+  .google.fhir.stu3.proto.String id = 1;
+
+  // Value of extension
+  .google.fhir.stu3.proto.CarePlanActivityStatusCode value_code = 3;
+}
+
+// Auto-generated from StructureDefinition for ComplexExt.
+// complex extension.
+// See http://test/url/base/ComplexExt
+message ComplexExt {
+  option (.google.fhir.stu3.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://test/url/base/ComplexExt";
+
+  // xml:id (or equivalent in JSON)
+  .google.fhir.stu3.proto.String id = 1;
+
+  // simple subfield
+  .google.fhir.stu3.proto.String simple_subfield = 4;
+
+  // complex subfield
+  message ComplexSubfield {
+    // xml:id (or equivalent in JSON)
+    .google.fhir.stu3.proto.String id = 1;
+
+    // choice type
+    message SimpleSubSubFieldA {
+      oneof simple_sub_sub_field_a {
+        .google.fhir.stu3.proto.String string_value = 1 [json_name = "string"];
+        .google.fhir.stu3.proto.Decimal decimal = 2;
+        .google.fhir.stu3.proto.Boolean boolean = 3;
+      }
+    }
+    SimpleSubSubFieldA simple_sub_sub_field_a = 4
+        [(.google.fhir.stu3.proto.is_choice_type) = true];
+
+    // simple sub sub field b
+    repeated .google.fhir.stu3.proto.UnsignedInt simple_sub_sub_field_b = 5;
+  }
+  ComplexSubfield complex_subfield = 5
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+}

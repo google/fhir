@@ -1,0 +1,41 @@
+id {
+  value: "example"
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "http://sysa.org"
+    }
+    code {
+      value: "acode"
+    }
+    display {
+      value: "A Display"
+    }
+  },
+  coding {
+    system {
+      value: "http://sysb.org"
+    }
+    code {
+      value: "bcode"
+    }
+    display {
+      value: "BDisplay"
+    }
+  },
+  coding {
+    system {
+      value: "http://sysc.org"
+    }
+    code {
+      value: "ccode"
+    }
+    display {
+      value: "CDisplay"
+    }
+  }
+}

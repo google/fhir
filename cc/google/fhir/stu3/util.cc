@@ -314,10 +314,6 @@ Status GetTimezone(const string& timezone_str, absl::TimeZone* tz) {
 
 StatusOr<string> GetResourceId(const Message& message) {
   const auto* desc = message.GetDescriptor();
-  if (!absl::StartsWith(desc->full_name(), "google.fhir.stu3")) {
-    return ::tensorflow::errors::InvalidArgument(
-        absl::StrCat("Message is not a STU3 resource: ", desc->full_name()));
-  }
   const google::protobuf::Reflection* ref = message.GetReflection();
   const google::protobuf::FieldDescriptor* field = desc->FindFieldByName("id");
   const Message* entry_message = &message;

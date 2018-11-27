@@ -24,6 +24,7 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/stu3/resource_validation.h"
@@ -83,9 +84,14 @@ T ReadProto(const string& filename) {
   T result;
   TF_CHECK_OK(::tensorflow::ReadTextProto(
       tensorflow::Env::Default(),
-      "testdata/stu3/" + filename,
+      filename,
       &result));
   return result;
+}
+
+template <class T>
+T ReadStu3Proto(const string& filename) {
+  return ReadProto<T>(absl::StrCat("testdata/stu3/", filename));
 }
 
 string ReadFile(const string& filename) {

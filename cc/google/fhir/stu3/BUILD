@@ -55,7 +55,10 @@ cc_library(
 cc_test(
     name = "profiles_test",
     srcs = ["profiles_test.cc"],
-    data = ["//testdata/stu3:examples"],
+    data = [
+        "//testdata/stu3:examples",
+        "//testdata/stu3/profiles:testdata",
+    ],
     deps = [
         ":profiles",
         ":test_helper",
@@ -64,6 +67,7 @@ cc_test(
         "//proto/stu3:extensions_cc_proto",
         "//proto/stu3:profiles_cc_proto",
         "//proto/stu3:resources_cc_proto",
+        "//testdata/stu3/profiles:test_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
     ],

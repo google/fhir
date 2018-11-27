@@ -1,0 +1,35 @@
+id {
+  value: "example"
+}
+status {
+  value: FINAL
+}
+code {
+  sys_a {
+    code {
+      value: "acode"
+    }
+    display {
+      value: "A Display"
+    }
+  },
+  sys_b {
+    code {
+      value: "bcode"
+    }
+    display {
+      value: "BDisplay"
+    }
+  },
+  coding {
+    system {
+      value: "http://sysc.org"
+    }
+    code {
+      value: "ccode"
+    }
+    display {
+      value: "CDisplay"
+    }
+  }
+}

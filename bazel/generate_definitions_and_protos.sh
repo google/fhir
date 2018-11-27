@@ -36,6 +36,7 @@ tokens=(${target/:/ })
 target_dir=${tokens[0]}
 if [[ ${target_dir:0:2} != "//" ]]; then
   echo "Taget must be absolute and begin with //"
+  echo "e.g., //path/to/my:target"
   exit 1
 fi
 dir=${target_dir#"//"}

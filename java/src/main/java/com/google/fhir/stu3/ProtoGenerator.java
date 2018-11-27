@@ -1211,6 +1211,9 @@ public class ProtoGenerator {
     }
     if (!baseType.equals("Element")) {
       // Traverse up the tree to check for a choice type in this element's ancestry.
+      if (!structDefDataById.containsKey(baseType)) {
+        throw new IllegalArgumentException("Unknown StructureDefinition id: " + baseType);
+      }
       return getChoiceTypeBase(
           getElementDefinitionById(
               basePath, structDefDataById.get(baseType).structDef.getSnapshot().getElementList()));

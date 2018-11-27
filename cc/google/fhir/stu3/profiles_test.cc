@@ -18,14 +18,15 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "absl/strings/str_cat.h"
 #include "absl/strings/ascii.h"
+#include "absl/strings/str_cat.h"
 #include "google/fhir/stu3/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "proto/stu3/profiles.pb.h"
 #include "proto/stu3/resources.pb.h"
+#include "testdata/stu3/profiles/test.pb.h"
 
 namespace google {
 namespace fhir {
@@ -56,17 +57,22 @@ void TestProfile(const string& filename) {
 
 TEST(ProfilesTest, SimpleExtensions) {
   TestProfile<proto::Observation, proto::ObservationGenetics>(
-      "examples/Observation-example-genetics-1");
+      "testdata/stu3/examples/Observation-example-genetics-1");
 }
 
 TEST(ProfilesTest, FixedCoding) {
   TestProfile<proto::Observation, proto::Bodyheight>(
-      "examples/Observation-body-height");
+      "testdata/stu3/examples/Observation-body-height");
 }
 
 TEST(ProfilesTest, VitalSigns) {
   TestProfile<proto::Observation, proto::Vitalsigns>(
-      "examples/Observation-body-height");
+      "testdata/stu3/examples/Observation-body-height");
+}
+
+TEST(ProfilesTest, FixedSystem) {
+  TestProfile<proto::Observation, testing::pkg::TestObservation>(
+      "testdata/stu3/profiles/observation");
 }
 
 }  // namespace

@@ -1,0 +1,1801 @@
+{
+  "resourceType": "Bundle",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "StructureDefinition",
+        "id": "SimpleDecimalExt",
+        "url": "http://test/url/base/SimpleDecimalExt",
+        "name": "SimpleDecimalExt",
+        "date": "2018-11-27",
+        "publisher": "Testington Inc.",
+        "contact": [
+          {
+            "telecom": [
+              {
+                "system": "url",
+                "value": "http://www.testington.com"
+              }
+            ]
+          }
+        ],
+        "description": "This is the A-Extension",
+        "fhirVersion": "3.0.1",
+        "kind": "complex-type",
+        "abstract": false,
+        "contextType": "resource",
+        "type": "Extension",
+        "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+        "derivation": "constraint",
+        "snapshot": {
+          "element": [
+            {
+              "id": "Extension",
+              "path": "Extension",
+              "short": "This is the A-Extension",
+              "definition": "This is the A-Extension",
+              "min": 0,
+              "max": "*",
+              "base": {
+                "path": "Extension",
+                "min": 0,
+                "max": "*"
+              },
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                },
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Extension.id",
+              "path": "Extension.id",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "xml:id (or equivalent in JSON)",
+              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Element.id",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension",
+              "path": "Extension.extension",
+              "slicing": {
+                "discriminator": [
+                  {
+                    "type": "value",
+                    "path": "url"
+                  }
+                ],
+                "description": "Extensions are always sliced by (at least) url",
+                "rules": "open"
+              },
+              "short": "Additional Content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content"
+              ],
+              "min": 0,
+              "max": "*",
+              "base": {
+                "path": "Element.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Extension.url",
+              "path": "Extension.url",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "identifies the meaning of the extension",
+              "definition": "Source of the definition for the extension code - a logical name or a URL.",
+              "comment": "The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.",
+              "min": 1,
+              "max": "1",
+              "base": {
+                "path": "Extension.url",
+                "min": 1,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "uri"
+                }
+              ],
+              "fixedUri": "http://test/url/base/SimpleDecimalExt",
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Extension.valueDecimal",
+              "path": "Extension.valueDecimal",
+              "short": "Value of extension",
+              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Extension.value[x]",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "decimal"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            }
+          ]
+        },
+        "differential": {
+          "element": [
+            {
+              "id": "Extension",
+              "path": "Extension",
+              "short": "This is the A-Extension",
+              "definition": "This is the A-Extension",
+              "constraint": [
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ]
+            },
+            {
+              "id": "Extension.url",
+              "path": "Extension.url",
+              "fixedUri": "http://test/url/base/SimpleDecimalExt"
+            },
+            {
+              "id": "Extension.valueDecimal",
+              "path": "Extension.valueDecimal",
+              "type": [
+                {
+                  "code": "decimal"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "StructureDefinition",
+        "id": "SimpleCodeableConceptExtension",
+        "url": "http://test/url/base/SimpleCodeableConceptExtension",
+        "name": "SimpleCodeableConceptExtension",
+        "date": "2018-11-27",
+        "publisher": "Testington Inc.",
+        "contact": [
+          {
+            "telecom": [
+              {
+                "system": "url",
+                "value": "http://www.testington.com"
+              }
+            ]
+          }
+        ],
+        "description": "SimpleCodeableConcept Extension",
+        "fhirVersion": "3.0.1",
+        "kind": "complex-type",
+        "abstract": false,
+        "contextType": "resource",
+        "type": "Extension",
+        "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+        "derivation": "constraint",
+        "snapshot": {
+          "element": [
+            {
+              "id": "Extension",
+              "path": "Extension",
+              "short": "SimpleCodeableConcept Extension",
+              "definition": "SimpleCodeableConcept Extension",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Extension",
+                "min": 0,
+                "max": "*"
+              },
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                },
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Extension.id",
+              "path": "Extension.id",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "xml:id (or equivalent in JSON)",
+              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Element.id",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension",
+              "path": "Extension.extension",
+              "slicing": {
+                "discriminator": [
+                  {
+                    "type": "value",
+                    "path": "url"
+                  }
+                ],
+                "description": "Extensions are always sliced by (at least) url",
+                "rules": "open"
+              },
+              "short": "Additional Content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content"
+              ],
+              "min": 0,
+              "max": "0",
+              "base": {
+                "path": "Element.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Extension.url",
+              "path": "Extension.url",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "identifies the meaning of the extension",
+              "definition": "Source of the definition for the extension code - a logical name or a URL.",
+              "comment": "The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.",
+              "min": 1,
+              "max": "1",
+              "base": {
+                "path": "Extension.url",
+                "min": 1,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "uri"
+                }
+              ],
+              "fixedUri": "http://test/url/base/SimpleCodeableConceptExtension",
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Extension.valueCode",
+              "path": "Extension.valueCode",
+              "short": "Value of extension",
+              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Extension.value[x]",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "code"
+                }
+              ],
+              "binding": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                    "valueString": "CarePlanActivityStatus"
+                  }
+                ],
+                "strength": "required",
+                "valueSetReference": {
+                  "reference": "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
+                }
+              },
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            }
+          ]
+        },
+        "differential": {
+          "element": [
+            {
+              "id": "Extension",
+              "path": "Extension",
+              "short": "SimpleCodeableConcept Extension",
+              "definition": "SimpleCodeableConcept Extension",
+              "max": "1",
+              "constraint": [
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension",
+              "path": "Extension.extension",
+              "max": "0"
+            },
+            {
+              "id": "Extension.url",
+              "path": "Extension.url",
+              "fixedUri": "http://test/url/base/SimpleCodeableConceptExtension"
+            },
+            {
+              "id": "Extension.valueCode",
+              "path": "Extension.valueCode",
+              "type": [
+                {
+                  "code": "code"
+                }
+              ],
+              "binding": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                    "valueString": "CarePlanActivityStatus"
+                  }
+                ],
+                "strength": "required",
+                "valueSetReference": {
+                  "reference": "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "StructureDefinition",
+        "id": "ComplexExt",
+        "url": "http://test/url/base/ComplexExt",
+        "name": "ComplexExt",
+        "date": "2018-11-27",
+        "publisher": "Testington Inc.",
+        "contact": [
+          {
+            "telecom": [
+              {
+                "system": "url",
+                "value": "http://www.testington.com"
+              }
+            ]
+          }
+        ],
+        "description": "complex extension",
+        "fhirVersion": "3.0.1",
+        "kind": "complex-type",
+        "abstract": false,
+        "contextType": "resource",
+        "type": "Extension",
+        "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+        "derivation": "constraint",
+        "snapshot": {
+          "element": [
+            {
+              "id": "Extension",
+              "path": "Extension",
+              "short": "complex extension",
+              "definition": "complex extension",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Extension",
+                "min": 0,
+                "max": "*"
+              },
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                },
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Extension.id",
+              "path": "Extension.id",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "xml:id (or equivalent in JSON)",
+              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Element.id",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension",
+              "path": "Extension.extension",
+              "slicing": {
+                "discriminator": [
+                  {
+                    "type": "value",
+                    "path": "url"
+                  }
+                ],
+                "description": "Extensions are always sliced by (at least) url",
+                "rules": "open"
+              },
+              "short": "Additional Content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content"
+              ],
+              "min": 0,
+              "max": "0",
+              "base": {
+                "path": "Element.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Extension.url",
+              "path": "Extension.url",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "identifies the meaning of the extension",
+              "definition": "Source of the definition for the extension code - a logical name or a URL.",
+              "comment": "The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.",
+              "min": 1,
+              "max": "1",
+              "base": {
+                "path": "Extension.url",
+                "min": 1,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "uri"
+                }
+              ],
+              "fixedUri": "http://test/url/base/ComplexExt",
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
+              "short": "Value of extension",
+              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "min": 0,
+              "max": "0",
+              "base": {
+                "path": "Extension.value[x]",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "base64Binary"
+                },
+                {
+                  "code": "boolean"
+                },
+                {
+                  "code": "code"
+                },
+                {
+                  "code": "date"
+                },
+                {
+                  "code": "dateTime"
+                },
+                {
+                  "code": "decimal"
+                },
+                {
+                  "code": "id"
+                },
+                {
+                  "code": "instant"
+                },
+                {
+                  "code": "integer"
+                },
+                {
+                  "code": "markdown"
+                },
+                {
+                  "code": "oid"
+                },
+                {
+                  "code": "positiveInt"
+                },
+                {
+                  "code": "string"
+                },
+                {
+                  "code": "time"
+                },
+                {
+                  "code": "unsignedInt"
+                },
+                {
+                  "code": "uri"
+                },
+                {
+                  "code": "Address"
+                },
+                {
+                  "code": "Age"
+                },
+                {
+                  "code": "Annotation"
+                },
+                {
+                  "code": "Attachment"
+                },
+                {
+                  "code": "CodeableConcept"
+                },
+                {
+                  "code": "Coding"
+                },
+                {
+                  "code": "ContactPoint"
+                },
+                {
+                  "code": "Count"
+                },
+                {
+                  "code": "Distance"
+                },
+                {
+                  "code": "Duration"
+                },
+                {
+                  "code": "HumanName"
+                },
+                {
+                  "code": "Identifier"
+                },
+                {
+                  "code": "Money"
+                },
+                {
+                  "code": "Period"
+                },
+                {
+                  "code": "Quantity"
+                },
+                {
+                  "code": "Range"
+                },
+                {
+                  "code": "Ratio"
+                },
+                {
+                  "code": "Reference"
+                },
+                {
+                  "code": "SampledData"
+                },
+                {
+                  "code": "Signature"
+                },
+                {
+                  "code": "Timing"
+                },
+                {
+                  "code": "Meta"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:simpleSubfield",
+              "path": "Extension.extension",
+              "sliceName": "simpleSubfield",
+              "short": "simple subfield",
+              "definition": "simple subfield",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Extension.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:simpleSubfield.id",
+              "path": "Extension.extension.id",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "xml:id (or equivalent in JSON)",
+              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Element.id",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:simpleSubfield.extension",
+              "path": "Extension.extension.extension",
+              "slicing": {
+                "discriminator": [
+                  {
+                    "type": "value",
+                    "path": "url"
+                  }
+                ],
+                "description": "Extensions are always sliced by (at least) url",
+                "rules": "open"
+              },
+              "short": "Additional Content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content"
+              ],
+              "min": 0,
+              "max": "0",
+              "base": {
+                "path": "Element.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:simpleSubfield.url",
+              "path": "Extension.extension.url",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "identifies the meaning of the extension",
+              "definition": "Source of the definition for the extension code - a logical name or a URL.",
+              "comment": "The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.",
+              "min": 1,
+              "max": "1",
+              "base": {
+                "path": "Extension.url",
+                "min": 1,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "uri"
+                }
+              ],
+              "fixedUri": "simpleSubfield",
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:simpleSubfield.valueString",
+              "path": "Extension.extension.valueString",
+              "short": "Value of extension",
+              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Extension.value[x]",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield",
+              "path": "Extension.extension",
+              "sliceName": "complexSubfield",
+              "short": "complex subfield",
+              "definition": "complex subfield",
+              "min": 1,
+              "max": "1",
+              "base": {
+                "path": "Extension.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.id",
+              "path": "Extension.extension.id",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "xml:id (or equivalent in JSON)",
+              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Element.id",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension",
+              "path": "Extension.extension.extension",
+              "slicing": {
+                "discriminator": [
+                  {
+                    "type": "value",
+                    "path": "url"
+                  }
+                ],
+                "description": "Extensions are always sliced by (at least) url",
+                "rules": "open"
+              },
+              "short": "Additional Content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content"
+              ],
+              "min": 0,
+              "max": "0",
+              "base": {
+                "path": "Element.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.url",
+              "path": "Extension.extension.url",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "identifies the meaning of the extension",
+              "definition": "Source of the definition for the extension code - a logical name or a URL.",
+              "comment": "The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.",
+              "min": 1,
+              "max": "1",
+              "base": {
+                "path": "Extension.url",
+                "min": 1,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "uri"
+                }
+              ],
+              "fixedUri": "complexSubfield",
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.value[x]",
+              "path": "Extension.extension.value[x]",
+              "short": "Value of extension",
+              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "min": 0,
+              "max": "0",
+              "base": {
+                "path": "Extension.value[x]",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "base64Binary"
+                },
+                {
+                  "code": "boolean"
+                },
+                {
+                  "code": "code"
+                },
+                {
+                  "code": "date"
+                },
+                {
+                  "code": "dateTime"
+                },
+                {
+                  "code": "decimal"
+                },
+                {
+                  "code": "id"
+                },
+                {
+                  "code": "instant"
+                },
+                {
+                  "code": "integer"
+                },
+                {
+                  "code": "markdown"
+                },
+                {
+                  "code": "oid"
+                },
+                {
+                  "code": "positiveInt"
+                },
+                {
+                  "code": "string"
+                },
+                {
+                  "code": "time"
+                },
+                {
+                  "code": "unsignedInt"
+                },
+                {
+                  "code": "uri"
+                },
+                {
+                  "code": "Address"
+                },
+                {
+                  "code": "Age"
+                },
+                {
+                  "code": "Annotation"
+                },
+                {
+                  "code": "Attachment"
+                },
+                {
+                  "code": "CodeableConcept"
+                },
+                {
+                  "code": "Coding"
+                },
+                {
+                  "code": "ContactPoint"
+                },
+                {
+                  "code": "Count"
+                },
+                {
+                  "code": "Distance"
+                },
+                {
+                  "code": "Duration"
+                },
+                {
+                  "code": "HumanName"
+                },
+                {
+                  "code": "Identifier"
+                },
+                {
+                  "code": "Money"
+                },
+                {
+                  "code": "Period"
+                },
+                {
+                  "code": "Quantity"
+                },
+                {
+                  "code": "Range"
+                },
+                {
+                  "code": "Ratio"
+                },
+                {
+                  "code": "Reference"
+                },
+                {
+                  "code": "SampledData"
+                },
+                {
+                  "code": "Signature"
+                },
+                {
+                  "code": "Timing"
+                },
+                {
+                  "code": "Meta"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldA",
+              "path": "Extension.extension.extension",
+              "sliceName": "simpleSubSubFieldA",
+              "short": "choice type",
+              "definition": "choice type",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Extension.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldA.id",
+              "path": "Extension.extension.extension.id",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "xml:id (or equivalent in JSON)",
+              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Element.id",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldA.extension",
+              "path": "Extension.extension.extension.extension",
+              "slicing": {
+                "discriminator": [
+                  {
+                    "type": "value",
+                    "path": "url"
+                  }
+                ],
+                "description": "Extensions are always sliced by (at least) url",
+                "rules": "open"
+              },
+              "short": "Additional Content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content"
+              ],
+              "min": 0,
+              "max": "*",
+              "base": {
+                "path": "Element.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldA.url",
+              "path": "Extension.extension.extension.url",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "identifies the meaning of the extension",
+              "definition": "Source of the definition for the extension code - a logical name or a URL.",
+              "comment": "The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.",
+              "min": 1,
+              "max": "1",
+              "base": {
+                "path": "Extension.url",
+                "min": 1,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "uri"
+                }
+              ],
+              "fixedUri": "simpleSubSubFieldA",
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldA.value[x]",
+              "path": "Extension.extension.extension.value[x]",
+              "short": "Value of extension",
+              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Extension.value[x]",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "string"
+                },
+                {
+                  "code": "decimal"
+                },
+                {
+                  "code": "boolean"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB",
+              "path": "Extension.extension.extension",
+              "sliceName": "simpleSubSubFieldB",
+              "short": "simple sub sub field b",
+              "definition": "simple sub sub field b",
+              "min": 0,
+              "max": "*",
+              "base": {
+                "path": "Extension.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB.id",
+              "path": "Extension.extension.extension.id",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "xml:id (or equivalent in JSON)",
+              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Element.id",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB.extension",
+              "path": "Extension.extension.extension.extension",
+              "slicing": {
+                "discriminator": [
+                  {
+                    "type": "value",
+                    "path": "url"
+                  }
+                ],
+                "description": "Extensions are always sliced by (at least) url",
+                "rules": "open"
+              },
+              "short": "Additional Content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content"
+              ],
+              "min": 0,
+              "max": "0",
+              "base": {
+                "path": "Element.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB.url",
+              "path": "Extension.extension.extension.url",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "identifies the meaning of the extension",
+              "definition": "Source of the definition for the extension code - a logical name or a URL.",
+              "comment": "The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.",
+              "min": 1,
+              "max": "1",
+              "base": {
+                "path": "Extension.url",
+                "min": 1,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "uri"
+                }
+              ],
+              "fixedUri": "simpleSubSubFieldB",
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB.valueUnsignedInt",
+              "path": "Extension.extension.extension.valueUnsignedInt",
+              "short": "Value of extension",
+              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Extension.value[x]",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "UnsignedInt"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            }
+          ]
+        },
+        "differential": {
+          "element": [
+            {
+              "id": "Extension",
+              "path": "Extension",
+              "short": "complex extension",
+              "definition": "complex extension",
+              "max": "1",
+              "constraint": [
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension",
+              "path": "Extension.extension",
+              "max": "0"
+            },
+            {
+              "id": "Extension.url",
+              "path": "Extension.url",
+              "fixedUri": "http://test/url/base/ComplexExt"
+            },
+            {
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
+              "max": "0"
+            },
+            {
+              "id": "Extension.extension:simpleSubfield",
+              "path": "Extension.extension",
+              "sliceName": "simpleSubfield",
+              "short": "simple subfield",
+              "definition": "simple subfield",
+              "comment": "",
+              "max": "1",
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:simpleSubfield.id",
+              "path": "Extension.extension.id"
+            },
+            {
+              "id": "Extension.extension:simpleSubfield.extension",
+              "path": "Extension.extension.extension",
+              "max": "0"
+            },
+            {
+              "id": "Extension.extension:simpleSubfield.url",
+              "path": "Extension.extension.url",
+              "fixedUri": "simpleSubfield"
+            },
+            {
+              "id": "Extension.extension:simpleSubfield.valueString",
+              "path": "Extension.extension.valueString",
+              "type": [
+                {
+                  "code": "string"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield",
+              "path": "Extension.extension",
+              "sliceName": "complexSubfield",
+              "short": "complex subfield",
+              "definition": "complex subfield",
+              "comment": "",
+              "min": 1,
+              "max": "1",
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.id",
+              "path": "Extension.extension.id"
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension",
+              "path": "Extension.extension.extension",
+              "max": "0"
+            },
+            {
+              "id": "Extension.extension:complexSubfield.url",
+              "path": "Extension.extension.url",
+              "fixedUri": "complexSubfield"
+            },
+            {
+              "id": "Extension.extension:complexSubfield.value[x]",
+              "path": "Extension.extension.value[x]",
+              "max": "0"
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldA",
+              "path": "Extension.extension.extension",
+              "sliceName": "simpleSubSubFieldA",
+              "short": "choice type",
+              "definition": "choice type",
+              "comment": "",
+              "max": "1",
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldA.id",
+              "path": "Extension.extension.extension.id"
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldA.extension",
+              "path": "Extension.extension.extension.extension"
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldA.url",
+              "path": "Extension.extension.extension.url",
+              "fixedUri": "simpleSubSubFieldA"
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldA.value[x]",
+              "path": "Extension.extension.extension.value[x]",
+              "type": [
+                {
+                  "code": "string"
+                },
+                {
+                  "code": "decimal"
+                },
+                {
+                  "code": "boolean"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB",
+              "path": "Extension.extension.extension",
+              "sliceName": "simpleSubSubFieldB",
+              "short": "simple sub sub field b",
+              "definition": "simple sub sub field b",
+              "comment": "",
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ]
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB.id",
+              "path": "Extension.extension.extension.id"
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB.extension",
+              "path": "Extension.extension.extension.extension",
+              "max": "0"
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB.url",
+              "path": "Extension.extension.extension.url",
+              "fixedUri": "simpleSubSubFieldB"
+            },
+            {
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB.valueUnsignedInt",
+              "path": "Extension.extension.extension.valueUnsignedInt",
+              "type": [
+                {
+                  "code": "UnsignedInt"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

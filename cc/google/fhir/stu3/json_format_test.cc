@@ -41,7 +41,7 @@ static const char* const kTimeZoneString = "Australia/Sydney";
 
 template <typename R>
 R LoadProto(const string& filename) {
-  return ReadProto<R>(absl::StrCat("examples/", filename));
+  return ReadStu3Proto<R>(absl::StrCat("examples/", filename));
 }
 
 template <typename R>

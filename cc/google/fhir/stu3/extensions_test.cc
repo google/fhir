@@ -41,8 +41,9 @@ using ::google::fhir::testutil::EqualsProto;
 
 template <class T>
 void ReadTestData(const string& type, T* message, Extension* extension) {
-  *message = ReadProto<T>(absl::StrCat("google/", type, ".message.prototxt"));
-  *extension = ReadProto<Extension>(
+  *message =
+      ReadStu3Proto<T>(absl::StrCat("google/", type, ".message.prototxt"));
+  *extension = ReadStu3Proto<Extension>(
       absl::StrCat("google/", type, ".extension.prototxt"));
 }
 
