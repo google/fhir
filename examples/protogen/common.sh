@@ -29,19 +29,16 @@ PROFILES="Bmi Bodyheight Bodylength Bodytemp Bodyweight Bp Cholesterol Clinicald
 # LANG=C ensures ASCII sorting order
 EXTENSIONS=$(LANG=C ls $EXTENSION_PATH/extension-*.json)
 GOOGLE_EXTENSIONS=$(LANG=C ls $GOOGLE_EXTENSION_PATH/extension-*.json)
-US_CORE_PROFILES=$(LANG=C ls $US_CORE_PATH/*.json)
 FHIR_PROTO_ROOT="proto/stu3"
 
 FHIR_PACKAGE_INFO="$INPUT_PATH/../fhir_package_info.prototxt"
 GOOGLE_PACKAGE_INFO="$GOOGLE_EXTENSION_PATH/google_package_info.prototxt"
-US_CORE_PACKAGE_INFO="$US_CORE_PATH/uscore_package_info.prototxt"
 
 NO_PACKAGE_FLAGS="\
   --add_apache_license \
   --struct_def_dep_pkg $INPUT_PATH|$FHIR_PACKAGE_INFO \
   --struct_def_dep_pkg $EXTENSION_PATH|$FHIR_PACKAGE_INFO \
   --struct_def_dep_pkg $GOOGLE_EXTENSION_PATH|$GOOGLE_PACKAGE_INFO \
-  --struct_def_dep_pkg $US_CORE_PATH|$US_CORE_PACKAGE_INFO \
   --fhir_proto_root $FHIR_PROTO_ROOT"
 COMMON_FLAGS="$NO_PACKAGE_FLAGS \
   --package_info $FHIR_PACKAGE_INFO"

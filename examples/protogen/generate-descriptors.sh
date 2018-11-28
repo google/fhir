@@ -66,12 +66,4 @@ $PROTO_GENERATOR \
   --output_directory $GOOGLE_EXTENSION_PATH \
   $(for i in $GOOGLE_EXTENSIONS; do echo $i; done)
 
-# Generate descriptors for US Core package.
-$PROTO_GENERATOR \
-  $NO_PACKAGE_FLAGS \
-  --emit_descriptors \
-  --package_info $US_CORE_PACKAGE_INFO \
-  --output_directory $US_CORE_PATH \
-  $(for i in $US_CORE_PROFILES; do echo "$i"; done)
-
 
