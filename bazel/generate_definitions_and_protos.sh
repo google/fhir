@@ -13,11 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Script intended to be used on gen_fhir_proto_profiles rules.
-# The only argument to this should be a gen_fhir_proto_profiles.
+# Script intended to be used on gen_fhir_definitions_and_protos rules.
+# The only argument to this should be a gen_fhir_definitions_and_protos.
 #
 # e.g., for rule in //foo/bar/BUILD,
-# gen_fhir_proto_profiles(
+# gen_fhir_definitions_and_protos(
 #   name = "quux",
 #   ...
 # ),

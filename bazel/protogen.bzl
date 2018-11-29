@@ -133,12 +133,12 @@ def gen_fhir_definitions_and_protos(
         add_apache_license = False):
     """Generates structure definitions and protos based on Extensions and Profiles protos.
 
-    These rules should be run by medical/records/fhir/generate_protos.sh, which will generate the
+    These rules should be run by bazel/generate_protos.sh, which will generate the
     profiles and protos and move them into the source directory.
-    e.g., medical/records/fhir/generate_protos.sh foo/bar:quux
+    e.g., bazel/generate_protos.sh foo/bar:quux
 
     This also exports the package_info and a zip of structure definitions, so that this target
-    can be used as a dependency of other gen_fhir_proto_profiles.
+    can be used as a dependency of other gen_fhir_definitions_and_protos.
 
     Args:
       name: name prefix for all generated rules
