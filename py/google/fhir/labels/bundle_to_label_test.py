@@ -40,14 +40,11 @@ class BundleToLabelTest(absltest.TestCase):
   def setUp(self):
     self._test_data_dir = os.path.join(absltest.get_default_test_srcdir(),
                                        _TESTDATA_PATH)
-    enc = resources_pb2.Encounter()
-    with open(os.path.join(self._test_data_dir, 'encounter_1.pbtxt')) as f:
-      text_format.Parse(f.read(), enc)
-    patient = resources_pb2.Patient()
-    patient.id.value = 'Patient/1'
     self._bundle = resources_pb2.Bundle()
-    self._bundle.entry.add().resource.encounter.CopyFrom(enc)
-    self._bundle.entry.add().resource.patient.CopyFrom(patient)
+    with open(os.path.join(self._test_data_dir, 'bundle_1.pbtxt')) as f:
+      text_format.Parse(f.read(), self._bundle)
+    enc = self._bundle.entry[0].resource.encounter
+    patient = self._bundle.entry[1].resource.patient
 
     self._expected_label = label.ComposeLabel(
         patient, enc,

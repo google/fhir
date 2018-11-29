@@ -21,7 +21,6 @@ from __future__ import print_function
 
 from absl import app
 from absl import flags
-from absl import logging
 import apache_beam as beam
 from proto.stu3 import google_extensions_pb2
 from proto.stu3 import resources_pb2
@@ -74,8 +73,7 @@ def main(argv):
       FLAGS.output_path,
       coder=beam.coders.ProtoCoder(google_extensions_pb2.EventLabel))
 
-  result = p.run()
-  logging.info('Job result: %s', result)
+  p.run()
 
 
 if __name__ == '__main__':

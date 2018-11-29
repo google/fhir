@@ -23,7 +23,6 @@ from __future__ import print_function
 
 from absl import app
 from absl import flags
-from absl import logging
 import apache_beam as beam
 from google.protobuf import text_format
 from proto.stu3 import google_extensions_pb2
@@ -34,14 +33,14 @@ from tensorflow.core.example import example_pb2
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string('input_filepattern', None, 'Input FHIR bundle filepattern.')
-flags.DEFINE_string('output_filepattern', None,
-                    'Output SequenceExample filepattern.')
+flags.DEFINE_string('bundle_path', None, 'Input FHIR bundle filepattern.')
+flags.DEFINE_string('output_path', None, 'Output SequenceExample filepattern.')
 flags.DEFINE_string(
-    'labels_filepattern', None,
-    'Pattern of input files with EventLabel protos to be '
+    'label_path', None, 'Pattern of input files with EventLabel protos to be '
     'used in place of the Bundle to mark both the end of the '
     'sequence the training label.')
+flags.DEFINE_string('fhir_version_config', None,
+                    'Location of the fhir version config ')
 
 
 def _get_version_config(version_config_path):
@@ -58,13 +57,12 @@ def main(argv):
   keyed_bundles = (
       p
       | 'readBundles' >> beam.io.ReadFromTFRecord(
-          FLAGS.input_filepattern,
-          coder=beam.coders.ProtoCoder(resources_pb2.Bundle))
+          FLAGS.bundle_path, coder=beam.coders.ProtoCoder(resources_pb2.Bundle))
       | 'KeyBundlesByPatientId' >> beam.ParDo(
           bundle_to_seqex.KeyBundleByPatientIdFn()))
   event_labels = (
       p | 'readEventLabels' >> beam.io.ReadFromTFRecord(
-          FLAGS.labels_filepattern,
+          FLAGS.label_path,
           coder=beam.coders.ProtoCoder(google_extensions_pb2.EventLabel)))
   keyed_event_labels = bundle_to_seqex.CreateTriggerLabelsPairLists(
       event_labels)
@@ -75,14 +73,15 @@ def main(argv):
       | 'Reshuffle1' >> beam.Reshuffle()
       | 'GenerateSeqex' >> beam.ParDo(
           bundle_to_seqex.BundleAndLabelsToSeqexDoFn(
-              version_config=version_config, enable_attribution=False))
+              version_config=version_config,
+              enable_attribution=False,
+              generate_sequence_label=False))
       | 'Reshuffle2' >> beam.Reshuffle()
       | 'WriteSeqex' >> beam.io.WriteToTFRecord(
-          FLAGS.output_filepattern,
+          FLAGS.output_path,
           coder=beam.coders.ProtoCoder(example_pb2.SequenceExample)))
 
-  result = p.run()
-  logging.info('Job result: %s', result)
+  p.run()
 
 
 if __name__ == '__main__':
