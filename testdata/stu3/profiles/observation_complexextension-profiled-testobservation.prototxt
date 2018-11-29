@@ -1,0 +1,19 @@
+id {
+  value: "example"
+}
+status {
+  value: FINAL
+}
+component {
+  id {
+    value: "12345"
+  }
+  on_nested {
+    value: "1.234"
+  }
+}
+my_complex_extension {
+  simple_subfield {
+    value: "foobar"
+  }
+}

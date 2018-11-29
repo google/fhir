@@ -134,15 +134,6 @@ bool EndsInIndex(const string& field_path) {
 string StripIndex(const string& field_path) {
   return field_path.substr(0, field_path.find_last_of('['));
 }
-
-Message* MutableOrAddMessage(Message* message,
-                             const google::protobuf::FieldDescriptor* field) {
-  if (field->is_repeated()) {
-    return message->GetReflection()->AddMessage(message, field);
-  }
-  return message->GetReflection()->MutableMessage(message, field);
-}
-
 StatusOr<const bool> HasSubmessageByPath(const Message& message,
                                          const string& field_path) {
   const Status& status = GetSubmessageByPath(message, field_path).status();
@@ -196,6 +187,50 @@ Status ClearFieldByPath(Message* message, const string& field_path) {
   }
   parent_reflection->ClearField(parent_message, field_descriptor);
   return Status::OK();
+}
+
+Message* MutableOrAddMessage(Message* message,
+                             const google::protobuf::FieldDescriptor* field) {
+  if (field->is_repeated()) {
+    return message->GetReflection()->AddMessage(message, field);
+  }
+  return message->GetReflection()->MutableMessage(message, field);
+}
+
+bool FieldHasValue(const Message& message,
+                   const google::protobuf::FieldDescriptor* field) {
+  return PotentiallyRepeatedFieldSize(message, field) > 0;
+}
+
+int PotentiallyRepeatedFieldSize(const google::protobuf::Message& message,
+                                 const google::protobuf::FieldDescriptor* field) {
+  if (field->is_repeated()) {
+    return message.GetReflection()->FieldSize(message, field);
+  }
+  return message.GetReflection()->HasField(message, field) ? 1 : 0;
+}
+
+const google::protobuf::Message& GetPotentiallyRepeatedMessage(
+    const google::protobuf::Message& message, const google::protobuf::FieldDescriptor* field,
+    const int index) {
+  if (field->is_repeated()) {
+    return message.GetReflection()->GetRepeatedMessage(message, field, index);
+  }
+  DCHECK_EQ(index, 0) << "GetPotentiallyRepeatedMessage called on singular "
+                         "field with index not equal to 0";
+  return message.GetReflection()->GetMessage(message, field);
+}
+
+google::protobuf::Message* MutablePotentiallyRepeatedMessage(
+    google::protobuf::Message* message, const google::protobuf::FieldDescriptor* field,
+    const int index) {
+  if (field->is_repeated()) {
+    return message->GetReflection()->MutableRepeatedMessage(message, field,
+                                                            index);
+  }
+  DCHECK_EQ(index, 0) << "MutablePotentiallyRepeatedMessage called on singular "
+                         "field with index > 0";
+  return message->GetReflection()->MutableMessage(message, field);
 }
 
 }  // namespace stu3

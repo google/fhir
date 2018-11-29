@@ -185,6 +185,15 @@ bool IsChoiceType(const google::protobuf::FieldDescriptor* field) {
   return field->options().GetExtension(stu3::proto::is_choice_type);
 }
 
+const string GetFhirProfileBase(const google::protobuf::Descriptor* descriptor) {
+  return descriptor->options().GetExtension(stu3::proto::fhir_profile_base);
+}
+
+const string GetStructureDefinitionUrl(const google::protobuf::Descriptor* descriptor) {
+  return descriptor->options().GetExtension(
+      stu3::proto::fhir_structure_definition_url);
+}
+
 StatusOr<string> ReferenceProtoToString(const Reference& reference) {
   if (reference.has_uri()) {
     return reference.uri().value();

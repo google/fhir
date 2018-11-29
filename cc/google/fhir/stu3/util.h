@@ -102,6 +102,10 @@ Status GetPatient(const Bundle& bundle, const Patient** patient);
 
 bool IsChoiceType(const ::google::protobuf::FieldDescriptor* field);
 
+const string GetFhirProfileBase(const ::google::protobuf::Descriptor* descriptor);
+
+const string GetStructureDefinitionUrl(const ::google::protobuf::Descriptor* descriptor);
+
 bool IsPrimitive(const ::google::protobuf::Descriptor* descriptor);
 
 bool IsResource(const ::google::protobuf::Descriptor* descriptor);

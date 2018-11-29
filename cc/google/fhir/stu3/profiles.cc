@@ -27,6 +27,7 @@
 #include "google/fhir/stu3/primitive_wrapper.h"
 #include "google/fhir/stu3/proto_util.h"
 #include "google/fhir/stu3/resource_validation.h"
+#include "google/fhir/stu3/util.h"
 #include "proto/stu3/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
@@ -54,12 +55,10 @@ using ::tensorflow::errors::InvalidArgument;
 
 namespace {
 
-const string GetCodeableConceptUrl() {
-  static const string url =
-      CodeableConcept::descriptor()->options().GetExtension(
-          stu3::proto::fhir_structure_definition_url);
-  return url;
-}
+//////////////////////////////////////////////////////////////
+// Slicing functions begins here
+//
+// These functions help with going from Unprofiled -> Profiled
 
 // Finds any extensions that can be slotted into slices, and moves them.
 Status PerformExtensionSlicing(Message* message) {
@@ -107,10 +106,7 @@ Status PerformExtensionSlicing(Message* message) {
                            "set on extension ",
                            url));
         }
-        Message* typed_extension =
-            inlined_field->is_repeated()
-                ? reflection->AddMessage(message, inlined_field)
-                : reflection->MutableMessage(message, inlined_field);
+        Message* typed_extension = MutableOrAddMessage(message, inlined_field);
         const Message& src_value =
             value.GetReflection()->GetMessage(value, src_datatype_field);
         if (destination_type == src_datatype_field->message_type()) {
@@ -127,10 +123,7 @@ Status PerformExtensionSlicing(Message* message) {
         }
       } else {
         // This is a complex extension
-        Message* typed_extension =
-            inlined_field->is_repeated()
-                ? reflection->AddMessage(message, inlined_field)
-                : reflection->MutableMessage(message, inlined_field);
+        Message* typed_extension = MutableOrAddMessage(message, inlined_field);
         TF_RETURN_IF_ERROR(ExtensionToMessage(raw_extension, typed_extension));
       }
       // Finally, remove the original from the unsliced extension field.
@@ -169,8 +162,7 @@ Status SliceCodingsInCodeableConcept(Message* codeable_concept_like) {
 
   const FieldDescriptor* coding_field = descriptor->FindFieldByName("coding");
   if (!coding_field || !coding_field->is_repeated() ||
-      coding_field->message_type()->full_name() !=
-          Coding::descriptor()->full_name()) {
+      !IsMessageType<Coding>(coding_field->message_type())) {
     return InvalidArgument(
         "Cannot slice CodeableConcept-like: ", descriptor->full_name(),
         ".  No repeated coding field found.");
@@ -236,7 +228,7 @@ Status PerformCodeableConceptSlicing(Message* message) {
     }
     if (field_type->options().HasExtension(proto::fhir_profile_base) &&
         field_type->options().GetExtension(proto::fhir_profile_base) ==
-            GetCodeableConceptUrl()) {
+            GetStructureDefinitionUrl(CodeableConcept::descriptor())) {
       if (field->is_repeated()) {
         for (int i = 0; i < reflection->FieldSize(*message, field); i++) {
           FHIR_RETURN_IF_ERROR(SliceCodingsInCodeableConcept(
@@ -253,16 +245,37 @@ Status PerformCodeableConceptSlicing(Message* message) {
   return Status::OK();
 }
 
+bool CanHaveSlicing(const FieldDescriptor* field) {
+  if (IsChoiceType(field)) {
+    return false;
+  }
+  // There are two kinds of subfields that could potentially have slices:
+  // 1) Types that are themselves profiles
+  // 2) "Backbone" i.e. nested types defined on this message
+  const Descriptor* field_type = field->message_type();
+  const string& profile_base = GetFhirProfileBase(field_type);
+  if (!profile_base.empty()) {
+    if (profile_base ==
+            GetStructureDefinitionUrl(CodeableConcept::descriptor()) ||
+        profile_base == GetStructureDefinitionUrl(Extension::descriptor())) {
+      // Profiles on Extensions and CodeableConcepts are the slices themselves,
+      // rather than elements that *have* slices.
+      return false;
+    }
+    return true;
+  }
+  // The type is a nested message defined on this type if its full name starts
+  // with the full name of the containing type.
+  return field_type->full_name().rfind(field->containing_type()->full_name(),
+                                       0) == 0;
+}
+
 Status PerformSlicing(Message* message) {
   FHIR_RETURN_IF_ERROR(PerformExtensionSlicing(message));
   FHIR_RETURN_IF_ERROR(PerformCodeableConceptSlicing(message));
   // TODO: Perform generic slicing
 
-  // There are two kinds of subfields that could potentially have slices:
-  // 1) "Backbone" i.e. nested types defined on this message
-  // 2) Types that are themselves profiles
   const Descriptor* descriptor = message->GetDescriptor();
-  const Reflection* reflection = message->GetReflection();
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
     const Descriptor* field_type = field->message_type();
@@ -270,20 +283,152 @@ Status PerformSlicing(Message* message) {
       return InvalidArgument("Encountered unexpected primitive type on field: ",
                              field->full_name());
     }
-    const bool is_nested_type =
-        field_type->full_name().rfind(descriptor->full_name(), 0) == 0;
-    const bool is_profile =
-        field_type->options().HasExtension(proto::fhir_profile_base);
-    if (is_nested_type || is_profile) {
-      if (field->is_repeated()) {
-        for (int i = 0; i < reflection->FieldSize(*message, field); i++) {
-          FHIR_RETURN_IF_ERROR(
-              PerformSlicing(message->GetReflection()->MutableRepeatedMessage(
-                  message, field, i)));
-        }
-      } else if (reflection->HasField(*message, field)) {
+    if (CanHaveSlicing(field)) {
+      for (int j = 0; j < PotentiallyRepeatedFieldSize(*message, field); j++) {
         FHIR_RETURN_IF_ERROR(PerformSlicing(
-            message->GetReflection()->MutableMessage(message, field)));
+            MutablePotentiallyRepeatedMessage(message, field, j)));
+      }
+    }
+  }
+  return Status::OK();
+}
+
+//////////////////////////////////////////////////////////////
+// Unslicing functions begins here
+//
+// These functions help with going from Profiled -> Unprofiled
+
+Status PerformExtensionUnslicing(const google::protobuf::Message& profiled_message,
+                                 google::protobuf::Message* base_message) {
+  const Descriptor* profiled_descriptor = profiled_message.GetDescriptor();
+  const Descriptor* base_descriptor = base_message->GetDescriptor();
+  const Reflection* profiled_reflection = profiled_message.GetReflection();
+  const Reflection* base_reflection = base_message->GetReflection();
+
+  for (int i = 0; i < profiled_descriptor->field_count(); i++) {
+    const FieldDescriptor* field = profiled_descriptor->field(i);
+    if (!field->options().HasExtension(proto::fhir_inlined_extension_url) ||
+        !FieldHasValue(profiled_message, field)) {
+      // We only care about present fields with inlined extension urls.
+      continue;
+    }
+    // We've found a profiled extension field.
+    // Convert it into a vanilla extension on the base message.
+    Extension* raw_extension =
+        dynamic_cast<Extension*>(base_reflection->AddMessage(
+            base_message, base_descriptor->FindFieldByName("extension")));
+    const Message& extension_as_message =
+        profiled_reflection->GetMessage(profiled_message, field);
+    if (GetFhirProfileBase(extension_as_message.GetDescriptor()) ==
+        GetStructureDefinitionUrl(Extension::descriptor())) {
+      // This a profile on extension, and therefore a complex extension
+      FHIR_RETURN_IF_ERROR(
+          ConvertToExtension(extension_as_message, raw_extension));
+    } else {
+      // This just a raw datatype, and therefore a simple extension
+      raw_extension->mutable_url()->set_value(
+          field->options().GetExtension(proto::fhir_inlined_extension_url));
+      FHIR_RETURN_IF_ERROR(
+          SetDatatypeOnExtension(extension_as_message, raw_extension));
+    }
+  }
+
+  return Status::OK();
+}
+
+Status UnsliceCodingsWithinCodeableConcept(
+    const google::protobuf::Message& profiled_concept, CodeableConcept* target_concept) {
+  const Descriptor* profiled_descriptor = profiled_concept.GetDescriptor();
+  for (int i = 0; i < profiled_descriptor->field_count(); i++) {
+    const FieldDescriptor* profiled_field = profiled_descriptor->field(i);
+    if (GetFhirProfileBase(profiled_field->message_type()) ==
+        GetStructureDefinitionUrl(Coding::descriptor())) {
+      // This is a specialization of Coding.
+      // Convert it to a normal coding and add it to the base message.
+      for (int i = 0;
+           i < PotentiallyRepeatedFieldSize(profiled_concept, profiled_field);
+           i++) {
+        const Message& profiled_coding =
+            GetPotentiallyRepeatedMessage(profiled_concept, profiled_field, i);
+        Coding* new_coding = target_concept->add_coding();
+
+        // Copy over as many fields as we can.
+        new_coding->ParseFromString(profiled_coding.SerializeAsString());
+        new_coding->DiscardUnknownFields();
+
+        // If we see an inlined system or code, copy that over.
+        const string& inlined_system = profiled_field->options().GetExtension(
+            proto::fhir_inlined_coding_system);
+        if (!inlined_system.empty()) {
+          new_coding->mutable_system()->set_value(inlined_system);
+        }
+
+        const string& inlined_code = profiled_field->options().GetExtension(
+            proto::fhir_inlined_coding_code);
+        if (!inlined_code.empty()) {
+          new_coding->mutable_code()->set_value(inlined_code);
+        }
+      }
+    }
+  }
+  return Status::OK();
+}
+
+Status PerformCodeableConceptUnslicing(const google::protobuf::Message& profiled_message,
+                                       google::protobuf::Message* base_message) {
+  const Descriptor* profiled_descriptor = profiled_message.GetDescriptor();
+  const Descriptor* base_descriptor = base_message->GetDescriptor();
+
+  // Iterate over all the base fields that are of type CodeableConcept,
+  // and find the ones that are *not* CodeableConcepts in the profiled message.
+  // For these, find any additional codings that are defined as inlined fields
+  // on the profiled message, and add them as raw codings on the base message.
+  for (int i = 0; i < base_descriptor->field_count(); i++) {
+    const FieldDescriptor* base_field = base_descriptor->field(i);
+    const FieldDescriptor* profiled_field = profiled_descriptor->field(i);
+    if (!FieldHasValue(profiled_message, profiled_field)) {
+      continue;
+    }
+    if (IsMessageType<CodeableConcept>(base_field->message_type()) &&
+        !IsMessageType<CodeableConcept>(profiled_field->message_type())) {
+      for (int j = 0;
+           j < PotentiallyRepeatedFieldSize(profiled_message, profiled_field);
+           j++) {
+        FHIR_RETURN_IF_ERROR(UnsliceCodingsWithinCodeableConcept(
+            GetPotentiallyRepeatedMessage(profiled_message, profiled_field, j),
+            dynamic_cast<CodeableConcept*>(MutablePotentiallyRepeatedMessage(
+                base_message, base_field, j))));
+      }
+    }
+  }
+
+  return Status::OK();
+}
+
+Status PerformUnslicing(const google::protobuf::Message& profiled_message,
+                        google::protobuf::Message* base_message) {
+  FHIR_RETURN_IF_ERROR(
+      PerformExtensionUnslicing(profiled_message, base_message));
+  FHIR_RETURN_IF_ERROR(
+      PerformCodeableConceptUnslicing(profiled_message, base_message));
+
+  const Descriptor* profiled_descriptor = profiled_message.GetDescriptor();
+  const Descriptor* base_descriptor = base_message->GetDescriptor();
+  for (int i = 0; i < profiled_descriptor->field_count(); i++) {
+    const FieldDescriptor* profiled_field = profiled_descriptor->field(i);
+    const FieldDescriptor* base_field = base_descriptor->field(i);
+    const Descriptor* field_type = profiled_field->message_type();
+    if (!field_type) {
+      return InvalidArgument("Encountered unexpected primitive type on field: ",
+                             profiled_field->full_name());
+    }
+    if (CanHaveSlicing(profiled_field)) {
+      for (int j = 0;
+           j < PotentiallyRepeatedFieldSize(profiled_message, profiled_field);
+           j++) {
+        FHIR_RETURN_IF_ERROR(PerformUnslicing(
+            GetPotentiallyRepeatedMessage(profiled_message, profiled_field, j),
+            MutablePotentiallyRepeatedMessage(base_message, base_field, j)));
       }
     }
   }
@@ -322,6 +467,31 @@ Status ConvertToProfileLenient(const Message& base_message,
         "applies constraints that the resource does not meet.");
   }
   return PerformSlicing(profiled_message);
+}
+
+Status ConvertToBaseResource(const google::protobuf::Message& profiled_message,
+                             google::protobuf::Message* base_message) {
+  const Descriptor* profiled_descriptor = profiled_message.GetDescriptor();
+  const Descriptor* base_descriptor = base_message->GetDescriptor();
+
+  // Serialize the profiled message, and re-parse as a base message.
+  // This is possible because when generating profiled messages, we ensure that
+  // any fields that are common between the two messages share identical field
+  // numbers.  Any fields that are only present on the profiled message will
+  // show up as unknown fields.
+  // We will copy that data over by inspecting these fields on the profiled
+  // message.
+  // TODO: Benchmark this against other approaches.
+  if (!base_message->ParseFromString(profiled_message.SerializeAsString())) {
+    return InvalidArgument(
+        "Unable to convert ", profiled_descriptor->full_name(), " to ",
+        base_descriptor->full_name(), ".  They are not binary compatible.");
+  }
+  // Unknown fields represent profiled fields that aren't present on the base
+  // message.  We toss them out here, and then handled these fields in the
+  // profiled message by reading annotations.
+  base_message->DiscardUnknownFields();
+  return PerformUnslicing(profiled_message, base_message);
 }
 
 }  // namespace stu3

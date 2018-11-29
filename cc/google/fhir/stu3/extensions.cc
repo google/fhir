@@ -74,8 +74,6 @@ Status CheckIsMessage(const FieldDescriptor* field) {
 Status AddValueToExtension(const Message& message, Extension* extension,
                            bool is_choice_type) {
   const Descriptor* descriptor = message.GetDescriptor();
-  const Reflection* extension_value_reflection =
-      extension->value().GetReflection();
 
   if (is_choice_type) {
     const google::protobuf::OneofDescriptor* oneof = descriptor->oneof_decl(0);
@@ -94,12 +92,8 @@ Status AddValueToExtension(const Message& message, Extension* extension,
     return AddValueToExtension(
         message_reflection->GetMessage(message, value_field), extension, false);
   }
-  auto value_field_iter =
-      GetExtensionValueFieldsMap()->find(descriptor->full_name());
-  if (value_field_iter != GetExtensionValueFieldsMap()->end()) {
-    extension_value_reflection
-        ->MutableMessage(extension->mutable_value(), value_field_iter->second)
-        ->CopyFrom(message);
+  // Try to set the message directly as a datatype value on the extension.
+  if (SetDatatypeOnExtension(message, extension).ok()) {
     return Status::OK();
   }
   // Fall back to adding individual fields as sub-extensions.
@@ -212,6 +206,25 @@ const std::vector<const FieldDescriptor*> FindValueFields(
 }
 
 }  // namespace
+
+// Given a datatype message (E.g., String, Code, Boolean, etc.),
+// finds the appropriate field on the target extension and sets it.
+// Returns InvalidArgument if there's no matching oneof type on the extension
+// for the message.
+Status SetDatatypeOnExtension(const Message& message, Extension* extension) {
+  const Descriptor* descriptor = message.GetDescriptor();
+  auto value_field_iter =
+      GetExtensionValueFieldsMap()->find(descriptor->full_name());
+  if (value_field_iter != GetExtensionValueFieldsMap()->end()) {
+    extension->value()
+        .GetReflection()
+        ->MutableMessage(extension->mutable_value(), value_field_iter->second)
+        ->CopyFrom(message);
+    return Status::OK();
+  }
+  return InvalidArgument(descriptor->full_name(),
+                         " is not a valid value type on Extension.");
+}
 
 Status ValidateExtension(const Descriptor* descriptor) {
   if (descriptor->options().GetExtension(stu3::proto::fhir_profile_base) !=

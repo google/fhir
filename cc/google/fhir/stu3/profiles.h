@@ -32,7 +32,8 @@ Status ConvertToProfile(const google::protobuf::Message& base_message,
 Status ConvertToProfileLenient(const google::protobuf::Message& base_message,
                                google::protobuf::Message* profiled_message);
 
-// TODO: add ConvertToUnprofiled
+Status ConvertToBaseResource(const google::protobuf::Message& profiled_message,
+                             google::protobuf::Message* base_message);
 
 }  // namespace stu3
 }  // namespace fhir

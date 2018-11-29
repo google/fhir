@@ -1,0 +1,121 @@
+id {
+  value: "example"
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://catA.org"
+    }
+    code {
+      value: "acode1"
+    }
+    display {
+      value: "A Display1"
+    }
+  },
+  coding {
+    system {
+      value: "http://catA.org"
+    }
+    code {
+      value: "acode2"
+    }
+    display {
+      value: "A Display2"
+    }
+  },
+  coding {
+    system {
+      value: "http://asdf.org"
+    }
+    code {
+      value: "fdsa"
+    }
+    display {
+      value: "asdf"
+    }
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://catA.org"
+    }
+    code {
+      value: "acode3"
+    }
+    display {
+      value: "A Display3"
+    }
+  },
+  coding {
+    system {
+      value: "http://qqqqqq.org"
+    }
+    code {
+      value: "qqqq"
+    }
+    display {
+      value: "qq"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://sysa.org"
+    }
+    code {
+      value: "acode"
+    }
+    display {
+      value: "A Display"
+    }
+  },
+  coding {
+    system {
+      value: "http://sysb.org"
+    }
+    code {
+      value: "bcode"
+    }
+    display {
+      value: "BDisplay"
+    }
+  },
+  coding {
+    system {
+      value: "http://sysc.org"
+    }
+    code {
+      value: "ccode"
+    }
+    display {
+      value: "CDisplay"
+    }
+  }
+}
+component {
+  id { value: "2468" }
+  interpretation {
+    coding {
+      system {
+        value: "http://nestedconcept.org"
+      }
+      code {
+        value: "nestington"
+      }
+    },
+    coding {
+      system {
+        value: "http://sysc.org"
+      }
+      code {
+        value: "ccode"
+      }
+    }
+  }
+}

@@ -43,6 +43,13 @@ tensorflow::Status ExtensionToMessage(const stu3::proto::Extension& extension,
 tensorflow::Status ConvertToExtension(const ::google::protobuf::Message& message,
                                       stu3::proto::Extension* extension);
 
+// Given a datatype message (E.g., String, Code, Boolean, etc.),
+// finds the appropriate field on the target extension and sets it.
+// Returns InvalidArgument if there's no matching oneof type on the extension
+// for the message.
+tensorflow::Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
+                                          stu3::proto::Extension* extension);
+
 tensorflow::Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor);
 
 // Extract all matching extensions from a container into a vector, and parse

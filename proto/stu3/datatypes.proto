@@ -1310,7 +1310,8 @@ message Extension {
 message CodingWithFixedSystem {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/Coding";
+      "https://g.co/fhir/StructureDefinition/CodingWithFixedSystem";
+  option (fhir_profile_base) = "http://hl7.org/fhir/StructureDefinition/Coding";
 
   // xml:id (or equivalent in JSON)
   String id = 1;
@@ -1339,7 +1340,8 @@ message CodingWithFixedSystem {
 message CodingWithFixedCode {
   option (structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/Coding";
+      "https://g.co/fhir/StructureDefinition/CodingWithFixedCode";
+  option (fhir_profile_base) = "http://hl7.org/fhir/StructureDefinition/Coding";
 
   // xml:id (or equivalent in JSON)
   String id = 1;

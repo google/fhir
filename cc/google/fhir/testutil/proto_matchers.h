@@ -28,6 +28,13 @@ MATCHER_P(EqualsProto, other, "") {
   return ::google::protobuf::util::MessageDifferencer::Equals(arg, other);
 }
 
+MATCHER_P(EqualsProtoIgnoringReordering, other, "") {
+  ::google::protobuf::util::MessageDifferencer differencer;
+  differencer.set_repeated_field_comparison(
+      ::google::protobuf::util::MessageDifferencer::AS_SET);
+  return differencer.Compare(arg, other);
+}
+
 }  // namespace testutil
 }  // namespace fhir
 }  // namespace google

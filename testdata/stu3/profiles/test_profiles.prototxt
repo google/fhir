@@ -50,4 +50,47 @@ profile {
     }
     field_id: "Observation.code"
   }
+
+  codeable_concept_slice {
+    coding_slice {
+      element_data {
+        name: "catA"
+        size_restriction: REPEATED
+      }
+      code_data {
+        system: "http://catA.org"
+      }
+    }
+    field_id: "Observation.category"
+  }
+
+  extension_slice {
+    element_data {
+      name: "myComplexExtension"
+      size_restriction: OPTIONAL
+    }
+    url: "http://test/url/base/ComplexExt"
+  }
+
+  extension_slice {
+    element_data {
+      name: "onNested"
+      size_restriction: OPTIONAL
+    }
+    url: "http://test/url/base/SimpleDecimalExt"
+    field_id: "Observation.component"
+  }
+
+  codeable_concept_slice {
+    coding_slice {
+      element_data {
+        name: "onNestedConcept"
+        size_restriction: OPTIONAL
+      }
+      code_data {
+        system: "http://nestedconcept.org"
+      }
+    }
+    field_id: "Observation.component.interpretation"
+  }
 }

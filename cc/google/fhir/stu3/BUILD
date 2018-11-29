@@ -44,6 +44,7 @@ cc_library(
         ":json_format",
         ":proto_util",
         ":resource_validation",
+        ":util",
         "//cc/google/fhir/status",
         "//proto/stu3:annotations_cc_proto",
         "//proto/stu3:datatypes_cc_proto",

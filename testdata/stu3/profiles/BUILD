@@ -44,8 +44,5 @@ fhir_proto_library(
 
 filegroup(
     name = "testdata",
-    srcs = [
-        "observation.prototxt",
-        "observation-profiled-testobservation.prototxt",
-    ],
+    srcs = glob(["*.prototxt"]),
 )

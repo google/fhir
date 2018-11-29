@@ -88,12 +88,6 @@ StatusOr<const T*> GetSubmessageByPathAndCheckType(
   return dynamic_cast<const T*>(submessage);
 }
 
-// Convenience method for adding a message to a field.
-// If the field is singular, returns the mutable message.
-// If the field is repeated, returns a newly added message.
-google::protobuf::Message* MutableOrAddMessage(google::protobuf::Message* message,
-                                     const google::protobuf::FieldDescriptor* field);
-
 // Returns true if the field specified by field_path is set on a message,
 // false if the field is unset, and InvalidArgument if the field_path doesn't
 // resolve to a field, or the field is an unindexed repeated.
@@ -124,6 +118,39 @@ bool EndsInIndex(const string& field_path);
 // StripIndex("repeatedSubfield[5]"); // "repeatedSubfield"
 // Is a no-op on fields for which EndsInIndex is false.
 string StripIndex(const string& field_path);
+
+// Convenience method for adding a message to a field.
+// If the field is singular, returns the mutable message.
+// If the field is repeated, returns a newly added message.
+google::protobuf::Message* MutableOrAddMessage(google::protobuf::Message* message,
+                                     const google::protobuf::FieldDescriptor* field);
+
+// Convenience method for checking if a message has a field set.
+// If the field is singular, returns HasField.
+// If the field is repeated, returns FieldSize > 0.
+bool FieldHasValue(const google::protobuf::Message& message,
+                   const google::protobuf::FieldDescriptor* field);
+
+int PotentiallyRepeatedFieldSize(const google::protobuf::Message& message,
+                                 const google::protobuf::FieldDescriptor* field);
+
+const google::protobuf::Message& GetPotentiallyRepeatedMessage(
+    const google::protobuf::Message& message, const google::protobuf::FieldDescriptor* field,
+    const int index);
+
+google::protobuf::Message* MutablePotentiallyRepeatedMessage(
+    google::protobuf::Message* message, const google::protobuf::FieldDescriptor* field,
+    const int index);
+
+template <typename T>
+bool IsMessageType(const google::protobuf::Descriptor* descriptor) {
+  return descriptor->full_name() == T::descriptor()->full_name();
+}
+
+template <typename T>
+bool IsMessageType(const google::protobuf::Message& message) {
+  return IsMessageType<T>(message.GetDescriptor());
+}
 
 }  // namespace stu3
 }  // namespace fhir

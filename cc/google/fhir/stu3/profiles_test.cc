@@ -33,17 +33,19 @@ namespace fhir {
 namespace stu3 {
 
 namespace {
+
 using ::google::fhir::testutil::EqualsProto;
+using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
 
 template <class B, class P>
 void TestProfile(const string& filename) {
-  B unprofiled = ReadProto<B>(absl::StrCat(filename, ".prototxt"));
+  const B unprofiled = ReadProto<B>(absl::StrCat(filename, ".prototxt"));
   P profiled;
 
-  auto status = ConvertToProfile(unprofiled, &profiled);
+  auto status = ConvertToProfileLenient(unprofiled, &profiled);
   if (!status.ok()) {
     LOG(ERROR) << status.error_message();
-    EXPECT_TRUE(status.ok());
+    ASSERT_TRUE(status.ok());
   }
   EXPECT_THAT(
       profiled,
@@ -55,24 +57,51 @@ void TestProfile(const string& filename) {
               ".prototxt"))));
 }
 
+template <class B, class P>
+void TestConvertToBaseResource(const string& filename) {
+  const P profiled = ReadProto<P>(absl::StrCat(
+      filename, "-profiled-", absl::AsciiStrToLower(P::descriptor()->name()),
+      ".prototxt"));
+  B unprofiled;
+
+  auto status = ConvertToBaseResource(profiled, &unprofiled);
+  if (!status.ok()) {
+    LOG(ERROR) << status.error_message();
+    ASSERT_TRUE(status.ok());
+  }
+  EXPECT_THAT(unprofiled, EqualsProtoIgnoringReordering(ReadProto<B>(
+                              absl::StrCat(filename, ".prototxt"))));
+}
+
+template <class B, class P>
+void TestPair(const string& filename) {
+  TestProfile<B, P>(filename);
+  TestConvertToBaseResource<B, P>(filename);
+}
+
 TEST(ProfilesTest, SimpleExtensions) {
-  TestProfile<proto::Observation, proto::ObservationGenetics>(
+  TestPair<proto::Observation, proto::ObservationGenetics>(
       "testdata/stu3/examples/Observation-example-genetics-1");
 }
 
 TEST(ProfilesTest, FixedCoding) {
-  TestProfile<proto::Observation, proto::Bodyheight>(
+  TestPair<proto::Observation, proto::Bodyheight>(
       "testdata/stu3/examples/Observation-body-height");
 }
 
 TEST(ProfilesTest, VitalSigns) {
-  TestProfile<proto::Observation, proto::Vitalsigns>(
+  TestPair<proto::Observation, proto::Vitalsigns>(
       "testdata/stu3/examples/Observation-body-height");
 }
 
 TEST(ProfilesTest, FixedSystem) {
-  TestProfile<proto::Observation, testing::pkg::TestObservation>(
-      "testdata/stu3/profiles/observation");
+  TestPair<proto::Observation, testing::pkg::TestObservation>(
+      "testdata/stu3/profiles/observation_fixedsystem");
+}
+
+TEST(ProfilesTest, ComplexExtension) {
+  TestPair<proto::Observation, testing::pkg::TestObservation>(
+      "testdata/stu3/profiles/observation_complexextension");
 }
 
 }  // namespace

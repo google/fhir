@@ -9,6 +9,7 @@ import "proto/stu3/metadatatypes.proto";
 import "proto/stu3/resources.proto";
 import "proto/stu3/uscore.proto";
 import "proto/stu3/uscore_codes.proto";
+import "testdata/stu3/profiles/test_extensions.proto";
 
 option java_multiple_files = true;
 option java_package = "java.com.google.testing.pkg";
@@ -283,7 +284,27 @@ message TestObservation {
       [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated .google.fhir.stu3.proto.CodeableConcept category = 12;
+  message CodeableConceptForCategory {
+    option (.google.fhir.stu3.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
+
+    // xml:id (or equivalent in JSON)
+    .google.fhir.stu3.proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated .google.fhir.stu3.proto.Extension extension = 2;
+
+    // Code defined by a terminology system
+    repeated .google.fhir.stu3.proto.Coding coding = 3;
+
+    // Plain text representation of the concept
+    .google.fhir.stu3.proto.String text = 4;
+
+    repeated google.fhir.stu3.proto.CodingWithFixedSystem cat_a = 5
+        [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
+             "http://catA.org"];
+  }
+  repeated CodeableConceptForCategory category = 12;
 
   // Type of observation (code / type)
   message CodeableConceptForCode {
@@ -498,10 +519,40 @@ message TestObservation {
     .google.fhir.stu3.proto.CodeableConcept data_absent_reason = 6;
 
     // High, low, normal, etc.
-    .google.fhir.stu3.proto.CodeableConcept interpretation = 7;
+    message CodeableConceptForInterpretation {
+      option (.google.fhir.stu3.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
+
+      // xml:id (or equivalent in JSON)
+      .google.fhir.stu3.proto.String id = 1;
+
+      // Additional Content defined by implementations
+      repeated .google.fhir.stu3.proto.Extension extension = 2;
+
+      // Code defined by a terminology system
+      repeated .google.fhir.stu3.proto.Coding coding = 3;
+
+      // Plain text representation of the concept
+      .google.fhir.stu3.proto.String text = 4;
+
+      google.fhir.stu3.proto.CodingWithFixedSystem on_nested_concept = 5
+          [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
+               "http://nestedconcept.org"];
+    }
+    CodeableConceptForInterpretation interpretation = 7;
 
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
+
+    //
+    .google.fhir.stu3.proto.Decimal on_nested = 9
+        [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+             "http://test/url/base/SimpleDecimalExt"];
   }
   repeated Component component = 29;
+
+  //
+  ComplexExt my_complex_extension = 30
+      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+           "http://test/url/base/ComplexExt"];
 }
