@@ -19,6 +19,7 @@
 #include "google/protobuf/descriptor.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/stu3/codes.h"
 #include "google/fhir/stu3/proto_util.h"
 #include "google/fhir/stu3/util.h"
 #include "proto/stu3/annotations.pb.h"
@@ -93,6 +94,7 @@ Status AddValueToExtension(const Message& message, Extension* extension,
         message_reflection->GetMessage(message, value_field), extension, false);
   }
   // Try to set the message directly as a datatype value on the extension.
+  // E.g., put message of type boolean into the value.boolean field
   if (SetDatatypeOnExtension(message, extension).ok()) {
     return Status::OK();
   }
@@ -179,6 +181,14 @@ Status ValueToMessage(const Extension& extension, Message* message,
                            extension.DebugString());
   }
 
+  if (HasValueset(field->message_type())) {
+    // The target message is a bound code type.  Convert the generic code
+    // field from the extension into the target typed code.
+    return ConvertToTypedCode(
+        extension.value().code(),
+        message_reflection->MutableMessage(message, field));
+  }
+
   // Value types must match.
   if (value_field->message_type()->full_name() !=
       field->message_type()->full_name()) {
@@ -206,7 +216,6 @@ const std::vector<const FieldDescriptor*> FindValueFields(
 }
 
 }  // namespace
-
 // Given a datatype message (E.g., String, Code, Boolean, etc.),
 // finds the appropriate field on the target extension and sets it.
 // Returns InvalidArgument if there's no matching oneof type on the extension
@@ -221,6 +230,12 @@ Status SetDatatypeOnExtension(const Message& message, Extension* extension) {
         ->MutableMessage(extension->mutable_value(), value_field_iter->second)
         ->CopyFrom(message);
     return Status::OK();
+  }
+  if (HasValueset(message.GetDescriptor())) {
+    // The source message is a bound code type.
+    // Convert it to a generic code, and add it to the extension.
+    return ConvertToGenericCode(message,
+                                extension->mutable_value()->mutable_code());
   }
   return InvalidArgument(descriptor->full_name(),
                          " is not a valid value type on Extension.");

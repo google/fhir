@@ -2,11 +2,27 @@ licenses(["notice"])
 package(default_visibility = ["//visibility:public"],)
 
 cc_library(
+    name = "codes",
+    srcs = ["codes.cc"],
+    hdrs = ["codes.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":proto_util",
+        ":util",
+        "//cc/google/fhir/status",
+        "//proto/stu3:annotations_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_library(
     name = "extensions",
     srcs = ["extensions.cc"],
     hdrs = ["extensions.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":codes",
         ":proto_util",
         ":util",
         "//cc/google/fhir/status",
@@ -27,6 +43,7 @@ cc_test(
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:extensions_cc_proto",
+        "//testdata/stu3/profiles:test_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@org_tensorflow//tensorflow/core:lib",
@@ -40,8 +57,8 @@ cc_library(
     hdrs = ["profiles.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":codes",
         ":extensions",
-        ":json_format",
         ":proto_util",
         ":resource_validation",
         ":util",
@@ -228,6 +245,7 @@ cc_library(
     ],
     strip_include_prefix = "//cc/",
     deps = [
+        ":codes",
         ":extensions",
         ":util",
         "//cc/google/fhir/status",

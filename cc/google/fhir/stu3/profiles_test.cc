@@ -95,12 +95,12 @@ TEST(ProfilesTest, VitalSigns) {
 }
 
 TEST(ProfilesTest, FixedSystem) {
-  TestPair<proto::Observation, testing::pkg::TestObservation>(
+  TestPair<proto::Observation, ::google::fhir::stu3::testing::TestObservation>(
       "testdata/stu3/profiles/observation_fixedsystem");
 }
 
 TEST(ProfilesTest, ComplexExtension) {
-  TestPair<proto::Observation, testing::pkg::TestObservation>(
+  TestPair<proto::Observation, ::google::fhir::stu3::testing::TestObservation>(
       "testdata/stu3/profiles/observation_complexextension");
 }
 

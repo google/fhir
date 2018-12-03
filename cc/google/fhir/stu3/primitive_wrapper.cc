@@ -35,6 +35,7 @@
 #include "absl/strings/string_view.h"
 #include "absl/strings/strip.h"
 #include "absl/time/time.h"
+#include "google/fhir/stu3/codes.h"
 #include "google/fhir/stu3/extensions.h"
 #include "google/fhir/stu3/util.h"
 #include "proto/stu3/annotations.pb.h"
@@ -483,96 +484,11 @@ class IntegerInputWrapper : public SpecificWrapper<T> {
 class CodeWrapper : public StringTypeWrapper<Code> {
  public:
   Status Wrap(const ::google::protobuf::Message& codelike) override {
-    FHIR_ASSIGN_OR_RETURN(this->GetWrapped(), BuildCode(codelike));
-    return Status::OK();
+    return ConvertToGenericCode(codelike, &this->GetWrapped());
   }
 
   Status MergeInto(Message* target) const override {
-    const Descriptor* target_descriptor = target->GetDescriptor();
-    const Reflection* target_reflection = target->GetReflection();
-
-    // If there is no valueset url, assume we're just copying a plain old Code
-    if (!HasValueset(target_descriptor)) {
-      if (target_descriptor->full_name() != Code::descriptor()->full_name()) {
-        return InvalidArgument("Type ", target_descriptor->full_name(),
-                               " is not a valid FHIR code type.");
-      }
-      return SpecificWrapper<Code>::MergeInto(target);
-    }
-
-    // Handle specialized codes.
-    if (GetWrapped().has_id()) {
-      target_reflection
-          ->MutableMessage(target, target_descriptor->FindFieldByName("id"))
-          ->CopyFrom(GetWrapped().id());
-    }
-    const FieldDescriptor* extension_field =
-        target_descriptor->FindFieldByName("extension");
-    if (!extension_field) {
-      return InvalidArgument("Type ", target_descriptor->full_name(),
-                             " has no extension field");
-    }
-    for (const Extension& extension : GetWrapped().extension()) {
-      target_reflection->AddMessage(target, extension_field)
-          ->CopyFrom(extension);
-    }
-    if (!HasValue()) {
-      // We're done if there is no value to parse.
-      return Status::OK();
-    }
-
-    const FieldDescriptor* target_value_field =
-        target_descriptor->FindFieldByName("value");
-    if (!target_value_field) {
-      return InvalidArgument("Type ", target_descriptor->full_name(),
-                             " has no value field");
-    }
-    // If target it a string, just set it from the wrapped value.
-    if (target_value_field->type() == FieldDescriptor::Type::TYPE_STRING) {
-      target_reflection->SetString(target, target_value_field,
-                                   GetWrapped().value());
-      return Status::OK();
-    }
-    // If target field is not string, it has to be an Enum.
-    if (target_value_field->type() != FieldDescriptor::Type::TYPE_ENUM) {
-      return InvalidArgument("Invalid target message: ",
-                             target_descriptor->full_name());
-    }
-
-    // Try to find the Enum value by name (with some common substitutions).
-    string target_enum_name = GetWrapped().value();
-    for (std::string::size_type i = 0; i < target_enum_name.length(); i++) {
-      target_enum_name[i] = std::toupper(target_enum_name[i]);
-    }
-    std::replace(target_enum_name.begin(), target_enum_name.end(), '-', '_');
-    const EnumValueDescriptor* target_enum_value =
-        target_value_field->enum_type()->FindValueByName(target_enum_name);
-    if (target_enum_value != nullptr) {
-      target_reflection->SetEnum(target, target_value_field, target_enum_value);
-      return Status::OK();
-    }
-
-    // Finally, some codes had to be renamed to make them valid enum values.
-    // Iterate through all target enum values, and ook for the
-    // "fhir_original_code" annotation for the original name.
-    const EnumDescriptor* target_enum_descriptor =
-        target_value_field->enum_type();
-    for (int i = 0; i < target_enum_descriptor->value_count(); i++) {
-      const EnumValueDescriptor* target_value =
-          target_enum_descriptor->value(i);
-      if (target_value->options().HasExtension(
-              ::google::fhir::stu3::proto::fhir_original_code) &&
-          target_value->options().GetExtension(
-              ::google::fhir::stu3::proto::fhir_original_code) ==
-              GetWrapped().value()) {
-        target_reflection->SetEnum(target, target_value_field, target_value);
-        return Status::OK();
-      }
-    }
-
-    return InvalidArgument(
-        "Failed to convert to ", target_descriptor->full_name(), ": \"",
-        GetWrapped().value(), "\" is not a valid enum entry");
+    return ConvertToTypedCode(this->GetWrapped(), target);
   }
 
  protected:
@@ -581,71 +497,6 @@ class CodeWrapper : public StringTypeWrapper<Code> {
     FHIR_RETURN_IF_ERROR(ValidateString(json_string, PATTERN));
     SetValue(json_string);
     return Status::OK();
-  }
-
-  StatusOr<Code> BuildCode(const Message& codelike) {
-    if (codelike.GetDescriptor()->full_name() ==
-        Code::descriptor()->full_name()) {
-      return dynamic_cast<const Code&>(codelike);
-    }
-
-    const Descriptor* descriptor = codelike.GetDescriptor();
-    const Reflection* reflection = codelike.GetReflection();
-    if (!HasValueset(descriptor)) {
-      return InvalidArgument("Type ", descriptor->full_name(),
-                             " is not a FHIR code type.");
-    }
-
-    Code code;
-    // Copy the Element parts
-    const FieldDescriptor* id_field = descriptor->FindFieldByName("id");
-    if (reflection->HasField(codelike, id_field)) {
-      code.mutable_id()->CopyFrom(reflection->GetMessage(codelike, id_field));
-    }
-    const FieldDescriptor* extension_field =
-        descriptor->FindFieldByName("extension");
-    if (!extension_field) {
-      return InvalidArgument("Type ", descriptor->full_name(),
-                             " has no extension field");
-    }
-    for (int i = 0; i < reflection->FieldSize(codelike, extension_field); i++) {
-      code.add_extension()->CopyFrom(
-          reflection->GetRepeatedMessage(codelike, extension_field, i));
-    }
-
-    const FieldDescriptor* value_field = descriptor->FindFieldByName("value");
-    if (!value_field) {
-      return InvalidArgument("Type ", descriptor->full_name(),
-                             " has no value field");
-    }
-    if (!reflection->HasField(codelike, value_field)) {
-      return code;
-    }
-
-    if (value_field->type() == FieldDescriptor::Type::TYPE_STRING) {
-      code.set_value(reflection->GetString(codelike, value_field));
-      return code;
-    }
-
-    if (value_field->type() != FieldDescriptor::TYPE_ENUM) {
-      return InvalidArgument("Invalid Code type: ", descriptor->full_name());
-    }
-
-    const ::google::protobuf::EnumValueDescriptor* enum_descriptor =
-        reflection->GetEnum(codelike, value_field);
-    if (enum_descriptor->options().HasExtension(
-            ::google::fhir::stu3::proto::fhir_original_code)) {
-      code.set_value(enum_descriptor->options().GetExtension(
-          ::google::fhir::stu3::proto::fhir_original_code));
-      return code;
-    }
-
-    string code_string = enum_descriptor->name();
-    std::transform(code_string.begin(), code_string.end(), code_string.begin(),
-                   tolower);
-    std::replace(code_string.begin(), code_string.end(), '_', '-');
-    code.set_value(code_string);
-    return code;
   }
 };
 
@@ -1025,13 +876,6 @@ StatusOr<JsonPrimitive> WrapPrimitiveProto(const ::google::protobuf::Message& pr
     return JsonPrimitive{value, std::move(wrapped)};
   }
   return JsonPrimitive{value, nullptr};
-}
-
-Status ConvertToTypedCode(const Code& generic_code,
-                          ::google::protobuf::Message* typed_code) {
-  CodeWrapper wrapper;
-  TF_RETURN_IF_ERROR(wrapper.Wrap(generic_code));
-  return wrapper.MergeInto(typed_code);
 }
 
 }  // namespace stu3

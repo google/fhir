@@ -7,10 +7,6 @@ load("//bazel:protogen.bzl", "gen_fhir_definitions_and_protos")
 
 gen_fhir_definitions_and_protos(
     name = "test",
-    additional_proto_imports = [
-        "proto/stu3/uscore.proto",
-        "proto/stu3/uscore_codes.proto",
-    ],
     extensions = [
         "test_extensions.prototxt",
     ],
@@ -36,8 +32,6 @@ fhir_proto_library(
         "//proto/stu3:extensions_proto",
         "//proto/stu3:metadatatypes_proto",
         "//proto/stu3:resources_proto",
-        "//proto/stu3:uscore_codes_proto",
-        "//proto/stu3:uscore_proto",
     ],
     proto_library_prefix = "test",
 )

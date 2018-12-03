@@ -22,6 +22,7 @@
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/extensions.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
+#include "testdata/stu3/profiles/test_extensions.pb.h"
 #include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
 
@@ -37,6 +38,7 @@ using ::google::fhir::stu3::google::PrimitiveHasNoValue;
 using ::google::fhir::stu3::proto::
     CapabilityStatementSearchParameterCombination;
 using ::google::fhir::stu3::proto::Extension;
+using ::google::fhir::stu3::testing::DigitalMediaType;
 using ::google::fhir::testutil::EqualsProto;
 
 template <class T>
@@ -48,7 +50,7 @@ void ReadTestData(const string& type, T* message, Extension* extension) {
 }
 
 template <class T>
-void TestExtension(const string& name) {
+void TestExtensionToMessage(const string& name) {
   T message;
   Extension extension;
   ReadTestData(name, &message, &extension);
@@ -58,36 +60,65 @@ void TestExtension(const string& name) {
   EXPECT_THAT(output, EqualsProto(message));
 }
 
+template <class T>
+void TestConvertToExtension(const string& name) {
+  T message;
+  Extension extension;
+  ReadTestData(name, &message, &extension);
+
+  Extension output;
+  TF_ASSERT_OK(ConvertToExtension(message, &output));
+  EXPECT_THAT(output, EqualsProto(extension));
+}
+
 TEST(ExtensionsTest, ParseEventTrigger) {
-  TestExtension<EventTrigger>("trigger");
+  TestExtensionToMessage<EventTrigger>("trigger");
 }
 
 TEST(ExtensionsTest, PrintEventTrigger) {
-  TestExtension<EventTrigger>("trigger");
+  TestConvertToExtension<EventTrigger>("trigger");
 }
 
-TEST(ExtensionsTest, ParseEventLabel) { TestExtension<EventLabel>("label"); }
+TEST(ExtensionsTest, ParseEventLabel) {
+  TestExtensionToMessage<EventLabel>("label");
+}
 
-TEST(ExtensionsTest, PrintEventLabel) { TestExtension<EventLabel>("label"); }
+TEST(ExtensionsTest, PrintEventLabel) {
+  TestConvertToExtension<EventLabel>("label");
+}
 
 TEST(ExtensionsTest, ParsePrimitiveHasNoValue) {
-  TestExtension<PrimitiveHasNoValue>("primitive_has_no_value");
-}
-
-TEST(ExtensionsTest, ParsePrimitiveHasNoValue_Empty) {
-  TestExtension<PrimitiveHasNoValue>("empty");
+  TestExtensionToMessage<PrimitiveHasNoValue>("primitive_has_no_value");
 }
 
 TEST(ExtensionsTest, PrintPrimitiveHasNoValue) {
-  TestExtension<PrimitiveHasNoValue>("primitive_has_no_value");
+  TestConvertToExtension<PrimitiveHasNoValue>("primitive_has_no_value");
+}
+
+TEST(ExtensionsTest, ParsePrimitiveHasNoValue_Empty) {
+  TestExtensionToMessage<PrimitiveHasNoValue>("empty");
 }
 
 TEST(ExtensionsTest, PrintPrimitiveHasNoValue_Empty) {
-  TestExtension<PrimitiveHasNoValue>("empty");
+  TestConvertToExtension<PrimitiveHasNoValue>("empty");
 }
 
-TEST(ExtensionsTest, CapabilityStatementSearchParameterCombination) {
-  TestExtension<CapabilityStatementSearchParameterCombination>("capability");
+TEST(ExtensionsTest, ParseCapabilityStatementSearchParameterCombination) {
+  TestExtensionToMessage<CapabilityStatementSearchParameterCombination>(
+      "capability");
+}
+
+TEST(ExtensionsTest, PrintCapabilityStatementSearchParameterCombination) {
+  TestConvertToExtension<CapabilityStatementSearchParameterCombination>(
+      "capability");
+}
+
+TEST(ExtensionsTest, ParseBoundCodeExtension) {
+  TestExtensionToMessage<DigitalMediaType>("digital_media_type");
+}
+
+TEST(ExtensionsTest, PrintBoundCodeExtension) {
+  TestConvertToExtension<DigitalMediaType>("digital_media_type");
 }
 
 }  // namespace

@@ -65,3 +65,15 @@ complex_extension {
     }
   }
 }
+
+simple_extension {
+  element_data {
+    name: "DigitalMediaType"
+    size_restriction: OPTIONAL
+    description: "Extension for Digital Media Type code."
+  }
+  code_type {
+    binding_name: "DigitalMediaType"
+    system: "http://hl7.org/fhir/ValueSet/digital-media-type"
+  }
+}
