@@ -1,5 +1,7 @@
 workspace(name = "com_google_fhir")
 
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
 # Needed by TensorFlow. com_google_protobuf and com_google_googletest
 # are also imported here.
 http_archive(
@@ -23,10 +25,11 @@ http_archive(
     ],
 )
 
-git_repository(
-    name="io_bazel_rules_python",
-    remote="https://github.com/bazelbuild/rules_python.git",
-    commit="b25495c47eb7446729a2ed6b1643f573afa47d99", # April 6, 2018
+http_archive(
+    name = "io_bazel_rules_python",
+    sha256 = "8b32d2dbb0b0dca02e0410da81499eef8ff051dad167d6931a92579e3b2a1d48",
+    strip_prefix = "rules_python-8b5d0683a7d878b28fffe464779c8a53659fc645",
+    urls = ["https://github.com/bazelbuild/rules_python/archive/8b5d0683a7d878b28fffe464779c8a53659fc645.tar.gz"],
 )
 
 load("@io_bazel_rules_python//python:pip.bzl", "pip_repositories")
