@@ -35,8 +35,7 @@ filegroup(
 filegroup(
     name = "descriptors",
     srcs = glob([
-        "extensions/*.descriptor.prototxt",
-        "structure_definitions/*.descriptor.prototxt",
+        "descriptors/*",
     ]),
 )
 

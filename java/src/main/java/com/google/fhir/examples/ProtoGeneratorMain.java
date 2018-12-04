@@ -28,6 +28,7 @@ import com.google.fhir.stu3.FileUtils;
 import com.google.fhir.stu3.ProtoFilePrinter;
 import com.google.fhir.stu3.ProtoGenerator;
 import com.google.fhir.stu3.proto.Bundle;
+import com.google.fhir.stu3.proto.ContainedResource;
 import com.google.fhir.stu3.proto.Extension;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
@@ -73,6 +74,11 @@ class ProtoGeneratorMain {
       description = "Directory where generated output will be saved"
     )
     private String outputDirectory = ".";
+
+    @Parameter(
+        names = {"--descriptor_output_directory"},
+        description = "Directory where generated descriptor output will be saved")
+    private String descriptorOutputDirectory = ".";
 
     @Parameter(
       names = {"--emit_proto"},
@@ -294,9 +300,12 @@ class ProtoGeneratorMain {
 
     if (args.emitDescriptors) {
       // Save the result as individual .descriptor.prototxt files
-      writer.println("Writing individual descriptors to " + args.outputDirectory + "...");
+      writer.println("Writing individual descriptors to " + args.descriptorOutputDirectory + "...");
       writer.flush();
       for (DescriptorProto descriptor : proto.getMessageTypeList()) {
+        if (descriptor.getName().equals(ContainedResource.getDescriptor().getName())) {
+          continue;
+        }
         String fileBaseName = typeToSourceFileBaseName.get(descriptor.getName());
         if (fileBaseName == null) {
           throw new IllegalArgumentException(
@@ -305,7 +314,8 @@ class ProtoGeneratorMain {
                   + "\n"
                   + typeToSourceFileBaseName);
         }
-        File outputFile = new File(args.outputDirectory, fileBaseName + ".descriptor.prototxt");
+        File outputFile =
+            new File(args.descriptorOutputDirectory, fileBaseName + ".descriptor.prototxt");
         Files.asCharSink(outputFile, UTF_8).write(TextFormat.printToString(descriptor));
       }
     }

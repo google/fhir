@@ -65,7 +65,7 @@ public class ProtoGeneratorTest {
 
   /** Read and parse the specified DescriptorProto. */
   private DescriptorProto readDescriptorProto(String relativePath) throws IOException {
-    String text = loadFile(relativePath);
+    String text = loadFile("descriptors/" + relativePath);
     DescriptorProto.Builder builder = DescriptorProto.newBuilder();
     textParser.merge(text, registry, builder);
     return builder.build();
@@ -75,28 +75,30 @@ public class ProtoGeneratorTest {
     String relativePath = "structure_definitions/" + resourceName.toLowerCase();
     StructureDefinition resource = readStructureDefinition(relativePath + ".profile.json");
     DescriptorProto generatedProto = protoGenerator.generateProto(resource);
-    DescriptorProto golden = readDescriptorProto(relativePath + ".descriptor.prototxt");
+    DescriptorProto golden =
+        readDescriptorProto(resourceName.toLowerCase() + ".descriptor.prototxt");
     assertThat(generatedProto).isEqualTo(golden);
   }
 
   private void testGeneratedExtension(String extensionFileName) throws IOException {
-    testExtension(protoGenerator, "extensions/" + extensionFileName);
+    testExtension(protoGenerator, "extensions/", extensionFileName);
   }
 
   private void testGoogleExtension(String extensionFileName) throws IOException {
-    testExtension(googleProtoGenerator, "google/" + extensionFileName);
+    testExtension(googleProtoGenerator, "google/", extensionFileName);
   }
 
-  private void testExtension(ProtoGenerator generator, String relativePath) throws IOException {
-    StructureDefinition resource = readStructureDefinition(relativePath + ".json");
+  private void testExtension(ProtoGenerator generator, String root, String extensionFileName)
+      throws IOException {
+    StructureDefinition resource = readStructureDefinition(root + extensionFileName + ".json");
     DescriptorProto generatedProto = generator.generateProto(resource);
-    DescriptorProto golden = readDescriptorProto(relativePath + ".descriptor.prototxt");
+    DescriptorProto golden = readDescriptorProto(extensionFileName + ".descriptor.prototxt");
     assertThat(generatedProto).isEqualTo(golden);
   }
 
   private void verifyCompiledDescriptor(Descriptor descriptor) throws IOException {
-    String relativePath = "structure_definitions/" + descriptor.getName().toLowerCase();
-    DescriptorProto golden = readDescriptorProto(relativePath + ".descriptor.prototxt");
+    DescriptorProto golden =
+        readDescriptorProto(descriptor.getName().toLowerCase() + ".descriptor.prototxt");
     assertThat(descriptor.toProto()).isEqualTo(golden);
   }
 
@@ -439,12 +441,6 @@ public class ProtoGeneratorTest {
   @Test
   public void generateBackboneElement() throws Exception {
     testGeneratedProto("BackboneElement");
-  }
-
-  /** Test generating the DomainResource FHIR special-purpose type. */
-  @Test
-  public void generateDomainResource() throws Exception {
-    testGeneratedProto("DomainResource");
   }
 
   /** Test generating the Dosage FHIR special-purpose type. */

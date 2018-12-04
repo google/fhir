@@ -20404,6 +20404,40 @@ message VisionPrescription {
   repeated Dispense dispense = 16;
 }
 
+// Auto-generated from StructureDefinition for DomainResource, last updated
+// 2017-04-19T07:44:43.294+10:00. A resource with narrative, extensions, and
+// contained resources. See
+// http://hl7.org/fhir/StructureDefinition/DomainResource
+message DomainResource {
+  option (structure_definition_kind) = KIND_RESOURCE;
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/DomainResource";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 8;
+}
+
 message ContainedResource {
   oneof oneof_resource {
     Account account = 1;

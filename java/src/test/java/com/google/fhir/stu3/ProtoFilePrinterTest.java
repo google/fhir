@@ -261,6 +261,9 @@ public final class ProtoFilePrinterTest {
               + ".profile.json";
       resourceDefinitions.add(readStructureDefinition(relativePath));
     }
+    // DomainResource is not a contained resource.
+    resourceDefinitions.add(readStructureDefinition(
+          "structure_definitions/domainresource.profile.json"));
     FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(resourceDefinitions);
     descriptor = protoGenerator.addContainedResource(descriptor);
     String generated = protoPrinter.print(descriptor);

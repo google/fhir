@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-OUTPUT_PATH=.
-MANUAL_ADDITIONS_ROOT=.
+OUTPUT_PATH=../../proto/stu3/
+DESCRIPTOR_OUTPUT_PATH=../../testdata/stu3/descriptors/
 
 while getopts ":io:" opt; do
   case ${opt} in
@@ -49,7 +49,9 @@ source "common.sh"
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --emit_proto \
+  --emit_descriptors \
   --output_directory $OUTPUT_PATH \
+  --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH \
   --output_name datatypes \
   $(for i in $PRIMITIVES $DATATYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 # Some datatypes are manually generated.
@@ -62,17 +64,19 @@ $PROTO_GENERATOR \
 if [ $? -eq 0 ]
 then
   echo -e "\n//End of auto-generated messages.\n" >> $OUTPUT_PATH/datatypes.proto
-  cat $MANUAL_ADDITIONS_ROOT/extension_proto.txt >> $OUTPUT_PATH/datatypes.proto
-  cat $MANUAL_ADDITIONS_ROOT/fixed_coding_proto.txt >> $OUTPUT_PATH/datatypes.proto
-  cat $MANUAL_ADDITIONS_ROOT/reference_proto.txt >> $OUTPUT_PATH/datatypes.proto
-  cat $MANUAL_ADDITIONS_ROOT/codes_proto.txt >> $OUTPUT_PATH/datatypes.proto
+  cat extension_proto.txt >> $OUTPUT_PATH/datatypes.proto
+  cat fixed_coding_proto.txt >> $OUTPUT_PATH/datatypes.proto
+  cat reference_proto.txt >> $OUTPUT_PATH/datatypes.proto
+  cat codes_proto.txt >> $OUTPUT_PATH/datatypes.proto
 fi
 
 # generate metadatatypes.proto
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --emit_proto \
+  --emit_descriptors \
   --output_directory $OUTPUT_PATH \
+  --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH \
   --output_name metadatatypes \
   $(for i in $METADATATYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
@@ -80,7 +84,9 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --emit_proto \
+  --emit_descriptors \
   --output_directory $OUTPUT_PATH \
+  --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH \
   --include_contained_resource \
   --output_name resources \
   $(for i in $RESOURCETYPES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
@@ -89,7 +95,9 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --emit_proto \
+  --emit_descriptors \
   --output_directory $OUTPUT_PATH \
+  --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH \
   --output_name profiles \
   $(for i in $PROFILES; do echo "$INPUT_PATH/${i,,}.profile.json"; done)
 
@@ -97,7 +105,9 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --emit_proto \
+  --emit_descriptors \
   --output_directory $OUTPUT_PATH \
+  --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH \
   --output_name extensions \
   $(for i in $EXTENSIONS; do echo "$i"; done)
 
@@ -105,7 +115,9 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   $NO_PACKAGE_FLAGS \
   --emit_proto \
+  --emit_descriptors \
   --package_info $GOOGLE_PACKAGE_INFO \
   --output_directory $OUTPUT_PATH \
+  --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH \
   --output_name google_extensions \
   $(for i in $GOOGLE_EXTENSIONS; do echo "$i"; done)

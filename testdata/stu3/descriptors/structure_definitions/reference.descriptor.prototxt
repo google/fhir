@@ -1,0 +1,992 @@
+name: "Reference"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+}
+field {
+  name: "uri"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  oneof_index: 0
+  json_name: "reference"
+}
+field {
+  name: "fragment"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  oneof_index: 0
+}
+field {
+  name: "account_id"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "activity_definition_id"
+  number: 6
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "adverse_event_id"
+  number: 7
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "allergy_intolerance_id"
+  number: 8
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "appointment_id"
+  number: 9
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "appointment_response_id"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "audit_event_id"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "basic_id"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "binary_id"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "body_site_id"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "bundle_id"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "capability_statement_id"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "care_plan_id"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "care_team_id"
+  number: 18
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "charge_item_id"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "claim_id"
+  number: 20
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "claim_response_id"
+  number: 21
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "clinical_impression_id"
+  number: 22
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "code_system_id"
+  number: 23
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "communication_id"
+  number: 24
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "communication_request_id"
+  number: 25
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "compartment_definition_id"
+  number: 26
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "composition_id"
+  number: 27
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "concept_map_id"
+  number: 28
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "condition_id"
+  number: 29
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "consent_id"
+  number: 30
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "contract_id"
+  number: 31
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "coverage_id"
+  number: 32
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "data_element_id"
+  number: 33
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "detected_issue_id"
+  number: 34
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "device_id"
+  number: 35
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "device_component_id"
+  number: 36
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "device_metric_id"
+  number: 37
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "device_request_id"
+  number: 38
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "device_usestatement_id"
+  number: 39
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "diagnostic_report_id"
+  number: 40
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "document_manifest_id"
+  number: 41
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "document_reference_id"
+  number: 42
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "eligibility_request_id"
+  number: 43
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "eligibility_response_id"
+  number: 44
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "encounter_id"
+  number: 45
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "endpoint_id"
+  number: 46
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "enrollment_request_id"
+  number: 47
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "enrollment_response_id"
+  number: 48
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "episode_ofcare_id"
+  number: 49
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "expansion_profile_id"
+  number: 50
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "explanation_ofbenefit_id"
+  number: 51
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "family_memberhistory_id"
+  number: 52
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "flag_id"
+  number: 53
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "goal_id"
+  number: 54
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "graph_definition_id"
+  number: 55
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "group_id"
+  number: 56
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "guidance_response_id"
+  number: 57
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "healthcare_service_id"
+  number: 58
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "imaging_manifest_id"
+  number: 59
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "imaging_study_id"
+  number: 60
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "immunization_id"
+  number: 61
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "immunization_recommendation_id"
+  number: 62
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "implementation_guide_id"
+  number: 63
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "library_id"
+  number: 64
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "linkage_id"
+  number: 65
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "list_id"
+  number: 66
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "location_id"
+  number: 67
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "measure_id"
+  number: 68
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "measure_report_id"
+  number: 69
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "media_id"
+  number: 70
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "medication_id"
+  number: 71
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "medication_administration_id"
+  number: 72
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "medication_dispense_id"
+  number: 73
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "medication_request_id"
+  number: 74
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "medication_statement_id"
+  number: 75
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "message_definition_id"
+  number: 76
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "message_header_id"
+  number: 77
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "naming_system_id"
+  number: 78
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "nutrition_order_id"
+  number: 79
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "observation_id"
+  number: 80
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "operation_definition_id"
+  number: 81
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "operation_outcome_id"
+  number: 82
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "organization_id"
+  number: 83
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "parameters_id"
+  number: 84
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "patient_id"
+  number: 85
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "payment_notice_id"
+  number: 86
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "payment_reconciliation_id"
+  number: 87
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "person_id"
+  number: 88
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "plan_definition_id"
+  number: 89
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "practitioner_id"
+  number: 90
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "practitioner_role_id"
+  number: 91
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "procedure_id"
+  number: 92
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "procedure_request_id"
+  number: 93
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "process_request_id"
+  number: 94
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "process_response_id"
+  number: 95
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "provenance_id"
+  number: 96
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "questionnaire_id"
+  number: 97
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "questionnaire_response_id"
+  number: 98
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "referral_request_id"
+  number: 99
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "related_person_id"
+  number: 100
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "request_group_id"
+  number: 101
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "research_study_id"
+  number: 102
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "research_subject_id"
+  number: 103
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "risk_assessment_id"
+  number: 104
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "schedule_id"
+  number: 105
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "search_parameter_id"
+  number: 106
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "sequence_id"
+  number: 107
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "service_definition_id"
+  number: 108
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "slot_id"
+  number: 109
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "specimen_id"
+  number: 110
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "structure_definition_id"
+  number: 111
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "structure_map_id"
+  number: 112
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "subscription_id"
+  number: 113
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "substance_id"
+  number: 114
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "supply_delivery_id"
+  number: 115
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "supply_request_id"
+  number: 116
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "task_id"
+  number: 117
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "test_report_id"
+  number: 118
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "test_script_id"
+  number: 119
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "value_set_id"
+  number: 120
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "vision_prescription_id"
+  number: 121
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ReferenceId"
+  oneof_index: 0
+}
+field {
+  name: "identifier"
+  number: 122
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Identifier"
+}
+field {
+  name: "display"
+  number: 123
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+}
+options {
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.stu3.proto.fhir_reference_type]: "Resource"
+}
+oneof_decl {
+  name: "reference"
+  options {
+    [google.fhir.stu3.proto.fhir_oneof_is_optional]: true
+  }
+}
