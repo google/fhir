@@ -3,7 +3,14 @@
 This repository contains a Google implementation of protocol buffers for
 FHIR. This is not an officially supported Google product.
 
-To build this repository, install [bazel](https://bazel.build/), and then run
+To build this repository, install [bazel](https://bazel.build/), and necessary
+dependencies (we recommend you to run this from an virtual env):
+
+```
+$ pip install -r bazel/requirements.txt
+```
+
+Then run:
 
 ```
 $ bazel test //...
