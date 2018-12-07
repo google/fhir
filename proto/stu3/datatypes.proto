@@ -1430,10 +1430,10 @@ message Reference {
     ReferenceId endpoint_id = 46;
     ReferenceId enrollment_request_id = 47;
     ReferenceId enrollment_response_id = 48;
-    ReferenceId episode_ofcare_id = 49;
+    ReferenceId episode_of_care_id = 49;
     ReferenceId expansion_profile_id = 50;
-    ReferenceId explanation_ofbenefit_id = 51;
-    ReferenceId family_memberhistory_id = 52;
+    ReferenceId explanation_of_benefit_id = 51;
+    ReferenceId family_member_history_id = 52;
     ReferenceId flag_id = 53;
     ReferenceId goal_id = 54;
     ReferenceId graph_definition_id = 55;

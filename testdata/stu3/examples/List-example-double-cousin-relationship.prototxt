@@ -231,8 +231,8 @@ contained {
         }
         value {
           reference {
-            uri {
-              value: "FamilyMemberHistory/mother"
+            family_member_history_id {
+              value: "mother"
             }
             display {
               value: "paternal grandmother"
@@ -327,8 +327,8 @@ contained {
         }
         value {
           reference {
-            uri {
-              value: "FamilyMemberHistory/147146"
+            family_member_history_id {
+              value: "147146"
             }
             display {
               value: "maternal grandmother"
@@ -423,8 +423,8 @@ contained {
         }
         value {
           reference {
-            uri {
-              value: "FamilyMemberHistory/father"
+            family_member_history_id {
+              value: "father"
             }
             display {
               value: "maternal grandfather"

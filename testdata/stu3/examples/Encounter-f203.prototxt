@@ -78,8 +78,8 @@ subject {
   }
 }
 episode_of_care {
-  uri {
-    value: "EpisodeOfCare/example"
+  episode_of_care_id {
+    value: "example"
   }
 }
 incoming_referral {

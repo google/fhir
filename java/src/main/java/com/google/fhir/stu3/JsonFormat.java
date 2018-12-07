@@ -674,6 +674,11 @@ public final class JsonFormat {
                   + names);
         }
       }
+
+      if (AnnotationUtils.isReference(builder.getDescriptorForType())) {
+        // Special-case the "reference" field, which was parsed into the uri field.
+        ResourceUtils.splitIfRelativeReference(builder);
+      }
     }
 
     private void mergeChoiceField(
@@ -786,13 +791,6 @@ public final class JsonFormat {
       builder.setField(resource, innerBuilder.build()).build();
     }
 
-    private Message parseReference(JsonObject json, Message.Builder builder) {
-      // Parse the standard fields.
-      mergeMessage(json, builder);
-      // Special-case the "reference" field, which was parsed into the uri field.
-      return ResourceUtils.splitIfRelativeReference(builder);
-    }
-
     // Supress lack of compile-time type safety because of proto newBuilderForType
     @SuppressWarnings("unchecked")
     private Message parseFieldValue(
@@ -815,9 +813,6 @@ public final class JsonFormat {
         } catch (IllegalArgumentException e) {
           throw new IllegalArgumentException("Error parsing field: " + field.getFullName(), e);
         }
-      } else if (AnnotationUtils.isReference(field.getMessageType())) {
-        // We split relative references into components using a special parser.
-        return parseReference((JsonObject) json, subBuilder);
       }
 
       if (!(json instanceof JsonObject)) {

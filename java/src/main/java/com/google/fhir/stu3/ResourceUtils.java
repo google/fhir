@@ -151,7 +151,9 @@ public final class ResourceUtils {
       return builder
           .setField(
               fragment,
-              com.google.fhir.stu3.proto.String.newBuilder().setValue(string.substring(1)).build())
+              com.google.fhir.stu3.proto.String.newBuilder()
+                  .setValue(new IdWrapper(string.substring(1)).getWrapped().getValue())
+                  .build())
           .build();
     }
     // Look for references of type "ResourceType/ResourceId"
@@ -160,10 +162,15 @@ public final class ResourceUtils {
       String resourceFieldName =
           CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, parts.get(0)) + "_id";
       FieldDescriptor field = builder.getDescriptorForType().findFieldByName(resourceFieldName);
-      if (field != null) {
-        ReferenceId.Builder refId = ReferenceId.newBuilder().setValue(parts.get(1));
+      if (field == null) {
+        throw new IllegalArgumentException(
+            "Invalid resource type in reference: " + resourceFieldName + ":" + parts.get(0));
+      } else {
+        // Parse as an Id to ensure validation.
+        ReferenceId.Builder refId =
+            ReferenceId.newBuilder().setValue(new IdWrapper(parts.get(1)).getWrapped().getValue());
         if (parts.size() == 4) {
-          refId.setHistory(Id.newBuilder().setValue(parts.get(3)).build());
+          refId.setHistory(new IdWrapper(parts.get(3)).getWrapped());
         }
         return builder.setField(field, refId.build()).build();
       }

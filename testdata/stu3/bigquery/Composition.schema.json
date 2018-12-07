@@ -607,7 +607,7 @@
       },
       {
         "mode": "NULLABLE",
-        "name": "episodeOfcareId",
+        "name": "episodeOfCareId",
         "type": "STRING"
       },
       {
@@ -617,12 +617,12 @@
       },
       {
         "mode": "NULLABLE",
-        "name": "explanationOfbenefitId",
+        "name": "explanationOfBenefitId",
         "type": "STRING"
       },
       {
         "mode": "NULLABLE",
-        "name": "familyMemberhistoryId",
+        "name": "familyMemberHistoryId",
         "type": "STRING"
       },
       {
@@ -1322,7 +1322,7 @@
       },
       {
         "mode": "NULLABLE",
-        "name": "episodeOfcareId",
+        "name": "episodeOfCareId",
         "type": "STRING"
       },
       {
@@ -1332,12 +1332,12 @@
       },
       {
         "mode": "NULLABLE",
-        "name": "explanationOfbenefitId",
+        "name": "explanationOfBenefitId",
         "type": "STRING"
       },
       {
         "mode": "NULLABLE",
-        "name": "familyMemberhistoryId",
+        "name": "familyMemberHistoryId",
         "type": "STRING"
       },
       {
@@ -2042,7 +2042,7 @@
       },
       {
         "mode": "NULLABLE",
-        "name": "episodeOfcareId",
+        "name": "episodeOfCareId",
         "type": "STRING"
       },
       {
@@ -2052,12 +2052,12 @@
       },
       {
         "mode": "NULLABLE",
-        "name": "explanationOfbenefitId",
+        "name": "explanationOfBenefitId",
         "type": "STRING"
       },
       {
         "mode": "NULLABLE",
-        "name": "familyMemberhistoryId",
+        "name": "familyMemberHistoryId",
         "type": "STRING"
       },
       {
@@ -2789,7 +2789,7 @@
           },
           {
             "mode": "NULLABLE",
-            "name": "episodeOfcareId",
+            "name": "episodeOfCareId",
             "type": "STRING"
           },
           {
@@ -2799,12 +2799,12 @@
           },
           {
             "mode": "NULLABLE",
-            "name": "explanationOfbenefitId",
+            "name": "explanationOfBenefitId",
             "type": "STRING"
           },
           {
             "mode": "NULLABLE",
-            "name": "familyMemberhistoryId",
+            "name": "familyMemberHistoryId",
             "type": "STRING"
           },
           {
@@ -3509,7 +3509,7 @@
       },
       {
         "mode": "NULLABLE",
-        "name": "episodeOfcareId",
+        "name": "episodeOfCareId",
         "type": "STRING"
       },
       {
@@ -3519,12 +3519,12 @@
       },
       {
         "mode": "NULLABLE",
-        "name": "explanationOfbenefitId",
+        "name": "explanationOfBenefitId",
         "type": "STRING"
       },
       {
         "mode": "NULLABLE",
-        "name": "familyMemberhistoryId",
+        "name": "familyMemberHistoryId",
         "type": "STRING"
       },
       {
@@ -4346,7 +4346,7 @@
               },
               {
                 "mode": "NULLABLE",
-                "name": "episodeOfcareId",
+                "name": "episodeOfCareId",
                 "type": "STRING"
               },
               {
@@ -4356,12 +4356,12 @@
               },
               {
                 "mode": "NULLABLE",
-                "name": "explanationOfbenefitId",
+                "name": "explanationOfBenefitId",
                 "type": "STRING"
               },
               {
                 "mode": "NULLABLE",
-                "name": "familyMemberhistoryId",
+                "name": "familyMemberHistoryId",
                 "type": "STRING"
               },
               {
@@ -5159,7 +5159,7 @@
           },
           {
             "mode": "NULLABLE",
-            "name": "episodeOfcareId",
+            "name": "episodeOfCareId",
             "type": "STRING"
           },
           {
@@ -5169,12 +5169,12 @@
           },
           {
             "mode": "NULLABLE",
-            "name": "explanationOfbenefitId",
+            "name": "explanationOfBenefitId",
             "type": "STRING"
           },
           {
             "mode": "NULLABLE",
-            "name": "familyMemberhistoryId",
+            "name": "familyMemberHistoryId",
             "type": "STRING"
           },
           {
@@ -6031,7 +6031,7 @@
           },
           {
             "mode": "NULLABLE",
-            "name": "episodeOfcareId",
+            "name": "episodeOfCareId",
             "type": "STRING"
           },
           {
@@ -6041,12 +6041,12 @@
           },
           {
             "mode": "NULLABLE",
-            "name": "explanationOfbenefitId",
+            "name": "explanationOfBenefitId",
             "type": "STRING"
           },
           {
             "mode": "NULLABLE",
-            "name": "familyMemberhistoryId",
+            "name": "familyMemberHistoryId",
             "type": "STRING"
           },
           {

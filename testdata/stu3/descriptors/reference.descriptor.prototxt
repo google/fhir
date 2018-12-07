@@ -383,7 +383,7 @@ field {
   oneof_index: 0
 }
 field {
-  name: "episode_ofcare_id"
+  name: "episode_of_care_id"
   number: 49
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
@@ -399,7 +399,7 @@ field {
   oneof_index: 0
 }
 field {
-  name: "explanation_ofbenefit_id"
+  name: "explanation_of_benefit_id"
   number: 51
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
@@ -407,7 +407,7 @@ field {
   oneof_index: 0
 }
 field {
-  name: "family_memberhistory_id"
+  name: "family_member_history_id"
   number: 52
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE

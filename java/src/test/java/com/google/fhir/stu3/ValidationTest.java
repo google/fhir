@@ -51,7 +51,7 @@ public final class ValidationTest {
       jsonParser.merge(line, builder);
       fail("Unexpected parse success for input: '" + line + "', result is " + builder.toString());
     } catch (IllegalArgumentException exception) {
-      assertThat(exception).hasMessageThat().contains("Invalid");
+      assertThat(exception).hasMessageThat().containsMatch("Invalid|Unknown|Error");
     }
   }
 
@@ -143,6 +143,11 @@ public final class ValidationTest {
   @Test
   public void testPositiveInt() throws IOException {
     testValidation(com.google.fhir.stu3.proto.PositiveInt.newBuilder());
+  }
+
+  @Test
+  public void testReference() throws IOException {
+    testValidation(com.google.fhir.stu3.proto.Reference.newBuilder());
   }
 
   @Test
