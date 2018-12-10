@@ -15,7 +15,7 @@ To run:
 ```
 MY_DIR=/tmp/fhir
 ./01-get-synthea.sh $MY_DIR
-./02-parse-into-protobuf.sh $MY_DIR
+./02-split-bundles-by-resource-type.sh $MY_DIR
 ./03-upload-to-bq.sh $MY_DIR
 ./04-run-queries.sh
 ```
