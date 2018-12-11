@@ -88,3 +88,10 @@ filegroup(
         "labels/*",
     ]),
 )
+
+filegroup(
+    name = "tensorflow",
+    srcs = glob([
+        "tensorflow/*",
+    ]),
+)
