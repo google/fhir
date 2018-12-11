@@ -31,9 +31,13 @@ java_library(
     name = "examples",
     srcs = glob(
         ["src/main/java/com/google/fhir/examples/*.java"],
-        exclude = ["src/main/java/com/google/fhir/examples/BigQuerySchemaGeneratorMain.java"],
+        exclude = [
+            "src/main/java/com/google/fhir/examples/BigQuerySchemaGeneratorMain.java",
+            "src/main/java/com/google/fhir/examples/StructureDefinitionTransformerMain.java",
+        ],
     ),
     deps = [
+        ":structure_definition_transformer",
         ":stu3",
         "//external:guava",
         "//proto/stu3:datatypes_java_proto",
@@ -71,6 +75,46 @@ java_binary(
     name = "SplitBundle",
     main_class = "com.google.fhir.examples.SplitBundleMain",
     runtime_deps = [":examples"],
+)
+
+java_library(
+    name = "structure_definition_transformer",
+    srcs = [
+        "src/main/java/com/google/fhir/dstu2/StructureDefinitionTransformer.java",
+    ],
+    deps = [
+        "//external:gson",
+        "//external:guava",
+        "@com_beust_jcommander//jar",
+        "@com_google_http_client_google_http_client//jar",
+        "@com_google_http_client_google_http_client_gson//jar",
+    ],
+)
+
+java_test(
+    name = "StructureDefinitionTransformerTest",
+    size = "small",
+    srcs = ["src/test/java/com/google/fhir/dstu2/StructureDefinitionTransformerTest.java"],
+    test_class = "com.google.fhir.dstu2.StructureDefinitionTransformerTest",
+    deps = [
+        ":structure_definition_transformer",
+        "//external:gson",
+        "@com_google_http_client_google_http_client//jar",
+        "@com_google_http_client_google_http_client_gson//jar",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
+    ],
+)
+
+java_binary(
+    name = "StructureDefinitionTransformer",
+    srcs = ["src/main/java/com/google/fhir/examples/StructureDefinitionTransformerMain.java"],
+    main_class = "com.google.fhir.examples.StructureDefinitionTransformerMain",
+    deps = [
+        ":structure_definition_transformer",
+        "//external:guava",
+        "@com_beust_jcommander//jar",
+    ],
 )
 
 java_library(

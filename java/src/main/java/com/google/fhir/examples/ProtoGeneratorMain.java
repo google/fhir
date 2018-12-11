@@ -17,14 +17,18 @@ package com.google.fhir.examples;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.google.common.base.Ascii;
 import com.google.common.base.Splitter;
 import com.google.common.io.Files;
+import com.google.fhir.dstu2.StructureDefinitionTransformer;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.stu3.AnnotationUtils;
 import com.google.fhir.stu3.FileUtils;
+import com.google.fhir.stu3.JsonFormat;
 import com.google.fhir.stu3.ProtoFilePrinter;
 import com.google.fhir.stu3.ProtoGenerator;
 import com.google.fhir.stu3.proto.Bundle;
@@ -39,6 +43,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +66,33 @@ class ProtoGeneratorMain {
 
   private static final String EXTENSION_STRUCTURE_DEFINITION_URL =
       AnnotationUtils.getStructureDefinitionUrl(Extension.getDescriptor());
+
+  private static enum FhirVersion {
+    DSTU2,
+    STU3;
+
+    /** Converts from a String value. */
+    public static FhirVersion fromString(String code) {
+      for (FhirVersion fhirVersion : FhirVersion.values()) {
+        if (Ascii.equalsIgnoreCase(fhirVersion.toString(), code)) {
+          return fhirVersion;
+        }
+      }
+      return null;
+    }
+  }
+
+  private static class FhirVersionConverter implements IStringConverter<FhirVersion> {
+
+    @Override
+    public FhirVersion convert(String value) {
+      FhirVersion convertedValue = FhirVersion.fromString(value);
+      if (convertedValue == null) {
+        throw new ParameterException(String.format("failed to convert %s to FHIR version", value));
+      }
+      return convertedValue;
+    }
+  }
 
   private static class Args {
     @Parameter(
@@ -150,6 +182,12 @@ class ProtoGeneratorMain {
         description = "Input Zip of StructureDefinitions")
     private String inputZipFile = null;
 
+    @Parameter(
+        names = {"--fhir_version"},
+        description = "FHIR version of the StructureDefinitions, DSTU2 or STU3",
+        converter = FhirVersionConverter.class)
+    private FhirVersion fhirVersion = FhirVersion.STU3;
+
     @Parameter(description = "List of input StructureDefinitions")
     private List<String> inputFiles = new ArrayList<>();
 
@@ -173,6 +211,18 @@ class ProtoGeneratorMain {
       }
       return packages;
     }
+  }
+
+  private static StructureDefinition loadStructureDefinition(
+      String fullFilename, FhirVersion fhirVersion) throws IOException {
+    if (FhirVersion.DSTU2.equals(fhirVersion)) {
+      String json = Files.asCharSource(new File(fullFilename), StandardCharsets.UTF_8).read();
+      String transformed = StructureDefinitionTransformer.transform(json);
+      StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
+      JsonFormat.Parser.newBuilder().build().merge(transformed, structDefBuilder);
+      return structDefBuilder.build();
+    }
+    return FileUtils.loadStructureDefinition(new File(fullFilename));
   }
 
   ProtoGeneratorMain(PrintWriter writer, ProtoFilePrinter protoPrinter) {
@@ -212,7 +262,7 @@ class ProtoGeneratorMain {
     // Read the inputs in sequence.
     ArrayList<StructureDefinition> definitions = new ArrayList<>();
     for (String filename : args.inputFiles) {
-      StructureDefinition definition = FileUtils.loadStructureDefinition(filename);
+      StructureDefinition definition = loadStructureDefinition(filename, args.fhirVersion);
       definitions.add(definition);
 
       // Keep a mapping from Message name that will be generated to file name that it came from.
