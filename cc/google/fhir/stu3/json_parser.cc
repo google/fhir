@@ -132,7 +132,7 @@ class Parser {
         return InvalidArgument("Unsupported resource type: ", resource_type);
       }
       return MergeMessage(value, target->GetReflection()->MutableMessage(
-                                  target, resource_field_iter->second));
+                                     target, resource_field_iter->second));
     }
 
     const std::unordered_map<string, const FieldDescriptor*> field_map =
@@ -155,9 +155,9 @@ class Parser {
         string resource_type = sub_value_iter->asString();
         if (!IsResource(target_descriptor) ||
             target_descriptor->name() != resource_type) {
-          return InvalidArgument(
-              "Error merging json resource of type ", resource_type,
-              " into message of type", target_descriptor->name());
+          return InvalidArgument("Error merging json resource of type ",
+                                 resource_type, " into message of type",
+                                 target_descriptor->name());
         }
       } else {
         return InvalidArgument("Unable to merge field ",
@@ -179,7 +179,7 @@ class Parser {
     auto value_field_iter = choice_type_field_map.find(value_suffix);
     if (value_field_iter == choice_type_field_map.end()) {
       return InvalidArgument("Can't find ", value_suffix, " on ",
-                                          choice_field->full_name());
+                             choice_field->full_name());
     }
     Message* choice_msg =
         parent->GetReflection()->MutableMessage(parent, choice_field);
@@ -276,31 +276,33 @@ class Parser {
   StatusOr<std::unique_ptr<Message>> ParseFieldValue(
       const FieldDescriptor* field, const Json::Value& json, Message* parent) {
     if (field->type() != FieldDescriptor::Type::TYPE_MESSAGE) {
-      return InvalidArgument(
-          "Error in FHIR proto definition: Field ",
-                       field->full_name(), " is not a message.");
+      return InvalidArgument("Error in FHIR proto definition: Field ",
+                             field->full_name(), " is not a message.");
     }
-
     std::unique_ptr<Message> target =
         absl::WrapUnique(parent->GetReflection()
                              ->GetMessageFactory()
                              ->GetPrototype(field->message_type())
                              ->New());
+    FHIR_RETURN_IF_ERROR(MergeValue(json, target.get()));
+    return std::move(target);
+  }
 
+  Status MergeValue(const Json::Value& json, Message* target) {
     if (IsPrimitive(target->GetDescriptor())) {
       if (json.isObject()) {
         // This is a primitive type extension.
         // Merge the extension fields into into the empty target proto,
         // and tag it as having no value.
-        FHIR_RETURN_IF_ERROR(MergeMessage(json, target.get()));
+        FHIR_RETURN_IF_ERROR(MergeMessage(json, target));
         target->GetReflection()
-            ->AddMessage(target.get(),
+            ->AddMessage(target,
                          target->GetDescriptor()->FindFieldByName("extension"))
             ->CopyFrom(*GetPrimitiveHasNoValueExtension());
-        return std::move(target);
+        return Status::OK();
       } else {
-        FHIR_RETURN_IF_ERROR(ParseInto(json, default_timezone_, target.get()));
-        return std::move(target);
+        FHIR_RETURN_IF_ERROR(ParseInto(json, default_timezone_, target));
+        return Status::OK();
       }
     } else if (IsReference(target->GetDescriptor())) {
       ::google::fhir::stu3::proto::Reference reference;
@@ -309,37 +311,38 @@ class Parser {
       // Proto references support more structure than json references.
       // Serialize and deserialize to get the most structured version
       // possible.
-      StatusOr<string> parsed_reference = ReferenceProtoToString(reference);
-      if (parsed_reference.ok()) {
-        StatusOr<::google::fhir::stu3::proto::Reference> referenceAsProto =
-            ReferenceStringToProto(parsed_reference.ValueOrDie());
-        if (referenceAsProto.ok()) {
-          ::google::fhir::stu3::proto::Reference& parsed_reference =
-              referenceAsProto.ValueOrDie();
-          if (reference.has_display()) {
-            parsed_reference.mutable_display()->set_value(
-                reference.display().value());
-          }
-          if (reference.has_id()) {
-            parsed_reference.mutable_id()->set_value(reference.id().value());
-          }
-          for (const Extension& extension : reference.extension()) {
-            *(parsed_reference.add_extension()) = extension;
-          }
-          target->MergeFrom(parsed_reference);
-          return std::move(target);
+      StatusOr<string> reference_string = ReferenceProtoToString(reference);
+      if (!reference_string.ok()) {
+        // This code path is taken for References which don't have "reference"
+        // set, such as references with only a "display" field.
+        target->MergeFrom(reference);
+        return Status::OK();
+      } else {
+        string reference_value = reference_string.ValueOrDie();
+        FHIR_ASSIGN_OR_RETURN(
+            ::google::fhir::stu3::proto::Reference parsed_reference,
+            ReferenceStringToProto(reference_value));
+        if (reference.has_display()) {
+          parsed_reference.mutable_display()->set_value(
+              reference.display().value());
         }
+        if (reference.has_id()) {
+          parsed_reference.mutable_id()->set_value(reference.id().value());
+        }
+        for (const Extension& extension : reference.extension()) {
+          *(parsed_reference.add_extension()) = extension;
+        }
+        target->MergeFrom(parsed_reference);
+        return Status::OK();
       }
-      target->MergeFrom(reference);
-      return std::move(target);
     }
     // Must be another FHIR element.
     if (!json.isObject()) {
-      return InvalidArgument(
-          "Expected JsonObject for field ", field->full_name());
+      return InvalidArgument("Expected JsonObject for field of type ",
+                             target->GetDescriptor()->full_name());
     }
-    FHIR_RETURN_IF_ERROR(MergeMessage(json, target.get()));
-    return std::move(target);
+    FHIR_RETURN_IF_ERROR(MergeMessage(json, target));
+    return Status::OK();
   }
 
  private:
@@ -376,23 +379,22 @@ Status MergeJsonFhirStringIntoProto(const string& raw_json, Message* target,
   RE2::GlobalReplace(&mutable_raw_json, *kDecimalKeyValuePattern,
                      "\\1\"\\2\"\\3");
 
-  FHIR_ASSIGN_OR_RETURN(Json::Value value, ParseJsonValue(mutable_raw_json));
+  Json::Value value;
 
   // TODO: Decide if we want to support value-only JSON
-  if (IsPrimitive(target->GetDescriptor())) {
-    if (target->GetDescriptor()->full_name() ==
-            proto::Decimal::descriptor()->full_name() &&
-        raw_json != "null") {
-      // Similar to above, if this is a standalone decimal, parse it as a string
-      // to avoid changing reprentation due to precision.
-      FHIR_ASSIGN_OR_RETURN(
-          value, ParseJsonValue(absl::StrCat("\"", mutable_raw_json, "\"")));
-    }
-    return ParseInto(value, default_timezone, target);
+  if (target->GetDescriptor()->full_name() ==
+          proto::Decimal::descriptor()->full_name() &&
+      raw_json != "null") {
+    // Similar to above, if this is a standalone decimal, parse it as a string
+    // to avoid changing reprentation due to precision.
+    FHIR_ASSIGN_OR_RETURN(
+        value, ParseJsonValue(absl::StrCat("\"", mutable_raw_json, "\"")));
+  } else {
+    FHIR_ASSIGN_OR_RETURN(value, ParseJsonValue(mutable_raw_json));
   }
 
   Parser parser{default_timezone};
-  return parser.MergeMessage(value, target);
+  return parser.MergeValue(value, target);
 }
 
 }  // namespace stu3

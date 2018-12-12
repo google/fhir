@@ -70,7 +70,7 @@ void TestValidation() {
   std::vector<string> valid_lines =
       ReadLines(absl::StrCat(file_base, ".valid.ndjson"));
   for (auto line_iter : valid_lines) {
-    TF_CHECK_OK(JsonFhirStringToProto<W>(line_iter, kTimeZone).status());
+    TF_ASSERT_OK(JsonFhirStringToProto<W>(line_iter, kTimeZone).status());
   }
   std::vector<string> invalid_lines =
       ReadLines(absl::StrCat(file_base, ".invalid.ndjson"));
@@ -107,6 +107,8 @@ TEST(PrimitiveValidationTest, Markdown) { TestValidation<Markdown>(); }
 TEST(PrimitiveValidationTest, Oid) { TestValidation<Oid>(); }
 
 TEST(PrimitiveValidationTest, PositiveInt) { TestValidation<PositiveInt>(); }
+
+TEST(PrimitiveValidationTest, Reference) { TestValidation<Reference>(); }
 
 TEST(PrimitiveValidationTest, String) { TestValidation<String>(); }
 

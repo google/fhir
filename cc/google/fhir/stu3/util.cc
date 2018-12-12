@@ -345,7 +345,8 @@ StatusOr<string> GetResourceId(const Message& message) {
 
 StatusOr<Reference> ReferenceStringToProto(const string& input) {
   static const LazyRE2 kInternalReferenceRegex{
-      "([0-9A-Za-z_]+)/([^/]+)(?:/_history/([A-Za-z0-9.-]{1,64}))?"};
+      "([0-9A-Za-z_]+)/([A-Za-z0-9.-]{1,64})(?:/_history/"
+      "([A-Za-z0-9.-]{1,64}))?"};
   string resource_type;
   string resource_id;
   string version;
@@ -370,44 +371,15 @@ StatusOr<Reference> ReferenceStringToProto(const string& input) {
     return reference;
   }
 
-  static const LazyRE2 kFragmentReferenceRegex{"#.*"};
+  static const LazyRE2 kFragmentReferenceRegex{"#[A-Za-z0-9.-]{1,64}"};
   if (RE2::FullMatch(input, *kFragmentReferenceRegex)) {
     Reference reference;
     reference.mutable_fragment()->set_value(input.substr(1));
     return reference;
   }
 
-  // From https://www.hl7.org/fhir/references.html#literal
-  static LazyRE2 kUrlReference = {
-      "((http|https):\\/\\/"
-      "([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/"
-      ")*)?(Account|ActivityDefinition|AdverseEvent|"
-      "AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|"
-      "Binary|BodySite|Bundle|CapabilityStatement|CarePlan|CareTeam|ChargeItem|"
-      "Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|"
-      "CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|"
-      "Condition|Consent|Contract|Coverage|DataElement|DetectedIssue|Device|"
-      "DeviceComponent|DeviceMetric|DeviceRequest|DeviceUseStatement|"
-      "DiagnosticReport|DocumentManifest|DocumentReference|EligibilityRequest|"
-      "EligibilityResponse|Encounter|Endpoint|EnrollmentRequest|"
-      "EnrollmentResponse|EpisodeOfCare|ExpansionProfile|ExplanationOfBenefit|"
-      "FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|"
-      "HealthcareService|ImagingManifest|ImagingStudy|Immunization|"
-      "ImmunizationRecommendation|ImplementationGuide|Library|Linkage|List|"
-      "Location|Measure|MeasureReport|Media|Medication|"
-      "MedicationAdministration|"
-      "MedicationDispense|MedicationRequest|MedicationStatement|"
-      "MessageDefinition|MessageHeader|NamingSystem|NutritionOrder|Observation|"
-      "OperationDefinition|OperationOutcome|Organization|Patient|PaymentNotice|"
-      "PaymentReconciliation|Person|PlanDefinition|Practitioner|"
-      "PractitionerRole|"
-      "Procedure|ProcedureRequest|ProcessRequest|ProcessResponse|Provenance|"
-      "Questionnaire|QuestionnaireResponse|ReferralRequest|RelatedPerson|"
-      "RequestGroup|ResearchStudy|ResearchSubject|RiskAssessment|Schedule|"
-      "SearchParameter|Sequence|ServiceDefinition|Slot|Specimen|"
-      "StructureDefinition|StructureMap|Subscription|Substance|SupplyDelivery|"
-      "SupplyRequest|Task|TestReport|TestScript|ValueSet|VisionPrescription)\\/"
-      "[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"};
+  // We're permissive about various full url schemes.
+  static LazyRE2 kUrlReference = {"(http|https|urn):.*"};
   if (RE2::FullMatch(input, *kUrlReference)) {
     Reference reference;
     reference.mutable_uri()->set_value(input);
