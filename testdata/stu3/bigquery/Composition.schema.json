@@ -557,7 +557,7 @@
       },
       {
         "mode": "NULLABLE",
-        "name": "deviceUsestatementId",
+        "name": "deviceUseStatementId",
         "type": "STRING"
       },
       {
@@ -2234,7 +2234,7 @@
           },
           {
             "mode": "NULLABLE",
-            "name": "deviceUsestatementId",
+            "name": "deviceUseStatementId",
             "type": "STRING"
           },
           {
@@ -3106,7 +3106,7 @@
           },
           {
             "mode": "NULLABLE",
-            "name": "deviceUsestatementId",
+            "name": "deviceUseStatementId",
             "type": "STRING"
           },
           {

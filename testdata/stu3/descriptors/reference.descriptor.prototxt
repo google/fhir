@@ -303,7 +303,7 @@ field {
   oneof_index: 0
 }
 field {
-  name: "device_usestatement_id"
+  name: "device_use_statement_id"
   number: 39
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE

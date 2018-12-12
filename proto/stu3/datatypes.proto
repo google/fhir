@@ -1420,7 +1420,7 @@ message Reference {
     ReferenceId device_component_id = 36;
     ReferenceId device_metric_id = 37;
     ReferenceId device_request_id = 38;
-    ReferenceId device_usestatement_id = 39;
+    ReferenceId device_use_statement_id = 39;
     ReferenceId diagnostic_report_id = 40;
     ReferenceId document_manifest_id = 41;
     ReferenceId document_reference_id = 42;
