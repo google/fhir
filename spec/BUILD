@@ -1,9 +1,8 @@
 # Data files containing the base FHIR specification.
 
-package(default_visibility = ["//visibility:public"])
+load("//bazel:protogen.bzl", "structure_definition_package", "zip_file")
 
-load("//bazel:protogen.bzl", "zip_file")
-load("//bazel:protogen.bzl", "structure_definition_package")
+package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
 
@@ -25,6 +24,25 @@ filegroup(
     ]),
 )
 
+filegroup(
+    name = "fhir_stu3_structure_definitions",
+    srcs = glob(["hl7.fhir.core/3.0.1/package/StructureDefinition-*.json"]) + glob([
+        "hl7.fhir.core/3.0.1/modified/StructureDefinition-*.json",
+    ]),
+)
+
+# Structure Definitions for the STU3 core types.
+zip_file(
+    name = "fhir_stu3_structure_definitions.zip",
+    srcs = glob(["hl7.fhir.core/3.0.1/package/StructureDefinition-*.json"]),
+)
+
+structure_definition_package(
+    package_name = "fhir_stu3_package",
+    package_info = "fhir_stu3_package_info.prototxt",
+    structure_definitions_zip = "fhir_stu3_structure_definitions.zip",
+)
+
 # Current R4 package
 filegroup(
     name = "r4",
@@ -44,7 +62,7 @@ filegroup(
 # Structure Definitions for the US-Core profiles.
 zip_file(
     name = "uscore_structure_definitions.zip",
-    srcs = glob(["hl7.fhir.us.core/1.0.1/package/StructureDefinition*.json"]),
+    srcs = glob(["hl7.fhir.us.core/1.0.1/package/StructureDefinition-*.json"]),
 )
 
 structure_definition_package(

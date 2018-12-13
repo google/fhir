@@ -14,7 +14,7 @@
 
 """Rules for generating Protos from Profiles and StructureDefinitions"""
 
-STU3_STRUCTURE_DEFINITION_DEP = "//testdata/stu3:fhir"
+STU3_STRUCTURE_DEFINITION_DEP = "//spec:fhir_stu3_package"
 PROTO_GENERATOR = "//java:ProtoGenerator"
 PROFILE_GENERATOR = "//java:ProfileGenerator"
 FHIR_PROTO_ROOT = "proto/stu3"

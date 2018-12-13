@@ -1528,6 +1528,445 @@ message ConsentWitness {
       [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
 }
 
+// Auto-generated from StructureDefinition for calculatedValue.
+// A calculated value.
+// See http://hl7.org/fhir/StructureDefinition/cqif-calculatedValue
+message CalculatedValue {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-calculatedValue";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  String value_string = 3;
+}
+
+// Auto-generated from StructureDefinition for citation.
+// Bibliographic citation for the resource.
+// See http://hl7.org/fhir/StructureDefinition/cqif-citation
+message AttachmentCitation {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-citation";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  String value_string = 3;
+}
+
+// Auto-generated from StructureDefinition for cqifCondition.
+// A condition expression.
+// See http://hl7.org/fhir/StructureDefinition/cqif-condition
+message CqifCondition {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-condition";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  String value_string = 3;
+}
+
+// Auto-generated from StructureDefinition for cqlExpression.
+// CQL expression.
+// See http://hl7.org/fhir/StructureDefinition/cqif-cqlExpression
+message CqlExpression {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-cqlExpression";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  String value_string = 3;
+}
+
+// Auto-generated from StructureDefinition for fhirPathExpression.
+// FHIRPath expression.
+// See http://hl7.org/fhir/StructureDefinition/cqif-fhirPathExpression
+message FhirPathExpression {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-fhirPathExpression";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  String value_string = 3;
+}
+
+// Auto-generated from StructureDefinition for encounterClass.
+// Extension.
+// See http://hl7.org/fhir/StructureDefinition/cqif-guidanceencounterClass
+message BasicEncounterClass {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-guidanceencounterClass";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  CodeableConcept value_codeable_concept = 3;
+}
+
+// Auto-generated from StructureDefinition for encounterType.
+// Extension.
+// See http://hl7.org/fhir/StructureDefinition/cqif-guidanceencounterType
+message BasicEncounterType {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-guidanceencounterType";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  CodeableConcept value_codeable_concept = 3;
+}
+
+// Auto-generated from StructureDefinition for initiatingOrganization.
+// Extension.
+// See
+// http://hl7.org/fhir/StructureDefinition/cqif-guidanceinitiatingOrganization
+message BasicInitiatingOrganization {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-guidanceinitiatingOrganization";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  Reference value_reference = 3
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Organization"];
+}
+
+// Auto-generated from StructureDefinition for initiatingPerson.
+// Extension.
+// See http://hl7.org/fhir/StructureDefinition/cqif-guidanceinitiatingPerson
+message BasicInitiatingPerson {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-guidanceinitiatingPerson";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  message Value {
+    oneof value {
+      Reference reference = 1 [
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Person",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Patient",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+      ];
+    }
+  }
+  Value value = 3
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+}
+
+// Auto-generated from StructureDefinition for receivingOrganization.
+// Extension.
+// See
+// http://hl7.org/fhir/StructureDefinition/cqif-guidancereceivingOrganization
+message BasicReceivingOrganization {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-guidancereceivingOrganization";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  Reference value_reference = 3
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Organization"];
+}
+
+// Auto-generated from StructureDefinition for receivingPerson.
+// Extension.
+// See http://hl7.org/fhir/StructureDefinition/cqif-guidancereceivingPerson
+message BasicReceivingPerson {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-guidancereceivingPerson";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  message Value {
+    oneof value {
+      Reference reference = 1 [
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Person",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Patient",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+        (valid_reference_type) =
+            "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+      ];
+    }
+  }
+  Value value = 3
+      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+}
+
+// Auto-generated from StructureDefinition for recipientLanguage.
+// Extension.
+// See http://hl7.org/fhir/StructureDefinition/cqif-guidancerecipientLanguage
+message BasicRecipientLanguage {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-guidancerecipientLanguage";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  CodeableConcept value_codeable_concept = 3;
+}
+
+// Auto-generated from StructureDefinition for recipientType.
+// Extension.
+// See http://hl7.org/fhir/StructureDefinition/cqif-guidancerecipientType
+message BasicRecipientType {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-guidancerecipientType";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  CodeableConcept value_codeable_concept = 3;
+}
+
+// Auto-generated from StructureDefinition for systemUserLanguage.
+// Extension.
+// See http://hl7.org/fhir/StructureDefinition/cqif-guidancesystemUserLanguage
+message BasicSystemUserLanguage {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-guidancesystemUserLanguage";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  CodeableConcept value_codeable_concept = 3;
+}
+
+// Auto-generated from StructureDefinition for systemUserTaskContext.
+// The task the system user is performing.
+// See
+// http://hl7.org/fhir/StructureDefinition/cqif-guidancesystemUserTaskContext
+message BasicSystemUserTaskContext {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-guidancesystemUserTaskContext";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  CodeableConcept value_codeable_concept = 3;
+}
+
+// Auto-generated from StructureDefinition for systemUserType.
+// The type of user initiating the request.
+// See http://hl7.org/fhir/StructureDefinition/cqif-guidancesystemUserType
+message BasicSystemUserType {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-guidancesystemUserType";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  CodeableConcept value_codeable_concept = 3;
+}
+
+// Auto-generated from StructureDefinition for initialValue.
+// An initial value expression.
+// See http://hl7.org/fhir/StructureDefinition/cqif-initialValue
+message InitialValue {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-initialValue";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  String value_string = 3;
+}
+
+// Auto-generated from StructureDefinition for cqifLibrary.
+// A library containing logic used by the artifact.
+// See http://hl7.org/fhir/StructureDefinition/cqif-library
+message CqifLibrary {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-library";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  Reference value_reference = 3
+      [(valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Library"];
+}
+
+// Auto-generated from StructureDefinition for measureInfo.
+// Measure criteria for the resource.
+// See http://hl7.org/fhir/StructureDefinition/cqif-measureInfo
+message MeasureInfo {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-measureInfo";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 2;
+
+  // The measure being calculated
+  Reference measure = 4;
+
+  // The group identifier
+  Identifier group_identifier = 5;
+
+  // The population identifier
+  Identifier population_identifier = 6;
+}
+
+// Auto-generated from StructureDefinition for optionCode.
+// Meaning of the response option.
+// See http://hl7.org/fhir/StructureDefinition/cqif-optionCode
+message QuestionnaireOptionCode {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-optionCode";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  CodeableConcept value_codeable_concept = 3;
+}
+
+// Auto-generated from StructureDefinition for qualityOfEvidence.
+// The quality of the evidence.
+// See http://hl7.org/fhir/StructureDefinition/cqif-qualityOfEvidence
+message AttachmentQualityOfEvidence {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-qualityOfEvidence";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  CodeableConcept value_codeable_concept = 3;
+}
+
+// Auto-generated from StructureDefinition for sourceValueSet.
+// Source value set for the coding.
+// See http://hl7.org/fhir/StructureDefinition/cqif-sourceValueSet
+message CodingSourceValueSet {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-sourceValueSet";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  Uri value_uri = 3;
+}
+
+// Auto-generated from StructureDefinition for strengthOfRecommendation.
+// The strength of the recommendation.
+// See http://hl7.org/fhir/StructureDefinition/cqif-strengthOfRecommendation
+message AttachmentStrengthOfRecommendation {
+  option (structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqif-strengthOfRecommendation";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Value of extension
+  CodeableConcept value_codeable_concept = 3;
+}
+
 // Auto-generated from StructureDefinition for Data Absent Reason.
 // unknown | asked | temp | notasked | masked | unsupported | astext | error.
 // See http://hl7.org/fhir/StructureDefinition/data-absent-reason

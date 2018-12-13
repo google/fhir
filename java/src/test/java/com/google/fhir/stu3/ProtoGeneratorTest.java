@@ -50,55 +50,70 @@ public class ProtoGeneratorTest {
 
   /** Read the specifed file from the testdata directory into a String. */
   private String loadFile(String relativePath) throws IOException {
-    File file =
-        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/" + relativePath));
+    File file = new File(runfiles.rlocation(relativePath));
     return Files.asCharSource(file, StandardCharsets.UTF_8).read();
   }
 
   /** Read and parse the specified StructureDefinition. */
-  private StructureDefinition readStructureDefinition(String relativePath) throws IOException {
-    String json = loadFile(relativePath);
+  private StructureDefinition readStructureDefinition(String resourceName) throws IOException {
+    String json =
+        loadFile(
+            "com_google_fhir/spec/hl7.fhir.core/3.0.1/package/StructureDefinition-"
+                + resourceName
+                + ".json");
+    StructureDefinition.Builder builder = StructureDefinition.newBuilder();
+    jsonParser.merge(json, builder);
+    return builder.build();
+  }
+
+  /** Read and parse the specified StructureDefinition. */
+  private StructureDefinition readModifiedStructureDefinition(String resourceName)
+      throws IOException {
+    String json =
+        loadFile(
+            "com_google_fhir/spec/hl7.fhir.core/3.0.1/modified/StructureDefinition-"
+                + resourceName
+                + ".json");
     StructureDefinition.Builder builder = StructureDefinition.newBuilder();
     jsonParser.merge(json, builder);
     return builder.build();
   }
 
   /** Read and parse the specified DescriptorProto. */
-  private DescriptorProto readDescriptorProto(String relativePath) throws IOException {
-    String text = loadFile("descriptors/" + relativePath);
+  private DescriptorProto readDescriptorProto(String resourceName) throws IOException {
+    String text =
+        loadFile(
+            "com_google_fhir/testdata/stu3/descriptors/StructureDefinition-"
+                + resourceName
+                + ".descriptor.prototxt");
     DescriptorProto.Builder builder = DescriptorProto.newBuilder();
     textParser.merge(text, registry, builder);
     return builder.build();
   }
 
   private void testGeneratedProto(String resourceName) throws IOException {
-    String relativePath = "structure_definitions/" + resourceName.toLowerCase();
-    StructureDefinition resource = readStructureDefinition(relativePath + ".profile.json");
+    StructureDefinition resource = readStructureDefinition(resourceName);
     DescriptorProto generatedProto = protoGenerator.generateProto(resource);
-    DescriptorProto golden =
-        readDescriptorProto(resourceName.toLowerCase() + ".descriptor.prototxt");
+    DescriptorProto golden = readDescriptorProto(resourceName);
     assertThat(generatedProto).isEqualTo(golden);
   }
 
-  private void testGeneratedExtension(String extensionFileName) throws IOException {
-    testExtension(protoGenerator, "extensions/", extensionFileName);
+  private void testModifiedGeneratedProto(String resourceName) throws IOException {
+    StructureDefinition resource = readModifiedStructureDefinition(resourceName);
+    DescriptorProto generatedProto = protoGenerator.generateProto(resource);
+    DescriptorProto golden = readDescriptorProto(resourceName);
+    assertThat(generatedProto).isEqualTo(golden);
   }
 
-  private void testGoogleExtension(String extensionFileName) throws IOException {
-    testExtension(googleProtoGenerator, "google/", extensionFileName);
-  }
-
-  private void testExtension(ProtoGenerator generator, String root, String extensionFileName)
-      throws IOException {
-    StructureDefinition resource = readStructureDefinition(root + extensionFileName + ".json");
-    DescriptorProto generatedProto = generator.generateProto(resource);
-    DescriptorProto golden = readDescriptorProto(extensionFileName + ".descriptor.prototxt");
+  private void testExtension(String resourceName) throws IOException {
+    StructureDefinition resource = readStructureDefinition(resourceName);
+    DescriptorProto generatedProto = protoGenerator.generateProto(resource);
+    DescriptorProto golden = readDescriptorProto(resourceName);
     assertThat(generatedProto).isEqualTo(golden);
   }
 
   private void verifyCompiledDescriptor(Descriptor descriptor) throws IOException {
-    DescriptorProto golden =
-        readDescriptorProto(descriptor.getName().toLowerCase() + ".descriptor.prototxt");
+    DescriptorProto golden = readDescriptorProto(descriptor.getName());
     assertThat(descriptor.toProto()).isEqualTo(golden);
   }
 
@@ -124,8 +139,7 @@ public class ProtoGeneratorTest {
       return knownStructDefs;
     }
     knownStructDefs = new HashMap<>();
-    addPackage(knownStructDefs, "testdata/stu3/structure_definitions", "google.fhir.stu3.proto");
-    addPackage(knownStructDefs, "testdata/stu3/extensions", "google.fhir.stu3.proto");
+    addPackage(knownStructDefs, "spec/hl7.fhir.core/3.0.1/package", "google.fhir.stu3.proto");
     addPackage(knownStructDefs, "testdata/stu3/google", "google.fhir.stu3.google");
     addPackage(knownStructDefs, "spec/hl7.fhir.us.core/1.0.1/package", "google.fhir.stu3.uscore");
     return knownStructDefs;
@@ -176,97 +190,97 @@ public class ProtoGeneratorTest {
   /** Test generating the Base64Binary FHIR primitive type. */
   @Test
   public void generateBase64Binary() throws Exception {
-    testGeneratedProto("Base64Binary");
+    testGeneratedProto("base64Binary");
   }
 
   /** Test generating the Boolean FHIR primitive type. */
   @Test
   public void generateBoolean() throws Exception {
-    testGeneratedProto("Boolean");
+    testGeneratedProto("boolean");
   }
 
   /** Test generating the Code FHIR primitive type. */
   @Test
   public void generateCode() throws Exception {
-    testGeneratedProto("Code");
+    testGeneratedProto("code");
   }
 
   /** Test generating the Date FHIR primitive type. */
   @Test
   public void generateDate() throws Exception {
-    testGeneratedProto("Date");
+    testGeneratedProto("date");
   }
 
   /** Test generating the DateTime FHIR primitive type. */
   @Test
   public void generateDateTime() throws Exception {
-    testGeneratedProto("DateTime");
+    testGeneratedProto("dateTime");
   }
 
   /** Test generating the Decimal FHIR primitive type. */
   @Test
   public void generateDecimal() throws Exception {
-    testGeneratedProto("Decimal");
+    testGeneratedProto("decimal");
   }
 
   /** Test generating the Id FHIR primitive type. */
   @Test
   public void generateId() throws Exception {
-    testGeneratedProto("Id");
+    testGeneratedProto("id");
   }
 
   /** Test generating the Instant FHIR primitive type. */
   @Test
   public void generateInstant() throws Exception {
-    testGeneratedProto("Instant");
+    testGeneratedProto("instant");
   }
 
   /** Test generating the Integer FHIR primitive type. */
   @Test
   public void generateInteger() throws Exception {
-    testGeneratedProto("Integer");
+    testGeneratedProto("integer");
   }
 
   /** Test generating the Markdown FHIR primitive type. */
   @Test
   public void generateMarkdown() throws Exception {
-    testGeneratedProto("Markdown");
+    testGeneratedProto("markdown");
   }
 
   /** Test generating the Oid FHIR primitive type. */
   @Test
   public void generateOid() throws Exception {
-    testGeneratedProto("Oid");
+    testGeneratedProto("oid");
   }
 
   /** Test generating the PositiveInt FHIR primitive type. */
   @Test
   public void generatePositiveInt() throws Exception {
-    testGeneratedProto("PositiveInt");
+    testGeneratedProto("positiveInt");
   }
 
   /** Test generating the String FHIR primitive type. */
   @Test
   public void generateString() throws Exception {
-    testGeneratedProto("String");
+    testGeneratedProto("string");
   }
 
   /** Test generating the Time FHIR primitive type. */
   @Test
   public void generateTime() throws Exception {
-    testGeneratedProto("Time");
+    testGeneratedProto("time");
   }
 
   /** Test generating the UnsignedInt FHIR primitive type. */
   @Test
   public void generateUnsignedInt() throws Exception {
-    testGeneratedProto("UnsignedInt");
+    testGeneratedProto("unsignedInt");
   }
 
   /** Test generating the Uri FHIR primitive type. */
   @Test
   public void generateUri() throws Exception {
-    testGeneratedProto("Uri");
+    testGeneratedProto("uri");
   }
 
   // Test the complex FHIR data types individually. */
@@ -1139,7 +1153,7 @@ public class ProtoGeneratorTest {
   /** Test generating the StructureDefinition FHIR resource. */
   @Test
   public void generateStructureDefinition() throws Exception {
-    testGeneratedProto("StructureDefinition");
+    testModifiedGeneratedProto("StructureDefinition");
   }
 
   /** Test generating the StructureMap FHIR resource. */
@@ -1278,12 +1292,6 @@ public class ProtoGeneratorTest {
     testGeneratedProto("elementdefinition-de");
   }
 
-  /** Test generating the familymemberhistory-genetic profile. */
-  @Test
-  public void generateFamilymemberhistoryGenetic() throws Exception {
-    testGeneratedProto("familymemberhistory-genetic");
-  }
-
   /** Test generating the hdlcholesterol profile. */
   @Test
   public void generateHdlcholesterol() throws Exception {
@@ -1359,7 +1367,7 @@ public class ProtoGeneratorTest {
   /** Test generating the simplequantity profile. */
   @Test
   public void generateSimplequantity() throws Exception {
-    testGeneratedProto("simplequantity");
+    testGeneratedProto("SimpleQuantity");
   }
 
   /** Test generating the triglyceride profile. */
@@ -1397,66 +1405,42 @@ public class ProtoGeneratorTest {
   /** Test generating the elementdefinition-bindingname extension. */
   @Test
   public void generateElementDefinitionBindingName() throws Exception {
-    testGeneratedExtension("extension-elementdefinition-bindingname");
+    testExtension("elementdefinition-bindingName");
   }
 
   /** Test generating the structuredefinition-explicit-type-name extension. */
   @Test
   public void generateElementDefinitionExplicitTypeName() throws Exception {
-    testGeneratedExtension("extension-structuredefinition-explicit-type-name");
+    testExtension("structuredefinition-explicit-type-name");
   }
 
   /** Test generating the structuredefinition-regex extension. */
   @Test
   public void generateElementDefinitionRegex() throws Exception {
-    testGeneratedExtension("extension-structuredefinition-regex");
+    testExtension("structuredefinition-regex");
   }
 
   /** Test generating the patient-clinicaltrial extension. */
   @Test
   public void generatePatientClinicalTrial() throws Exception {
-    testGeneratedExtension("extension-patient-clinicaltrial");
+    testExtension("patient-clinicalTrial");
   }
 
   /** Test generating the elementdefinition-allowedunits extension. */
   @Test
   public void generateElementDefinitionAllowedUnits() throws Exception {
-    testGeneratedExtension("extension-elementdefinition-allowedunits");
+    testExtension("elementdefinition-allowedUnits");
   }
 
   /** Test generating the codesystem-history extension. */
   @Test
   public void generateCodesystemHistory() throws Exception {
-    testGeneratedExtension("extension-codesystem-history");
+    testExtension("codesystem-history");
   }
 
-  /** Test generating the extension-timing-daysofcycle extension. */
+  /** Test generating the timing-daysofcycle extension. */
   @Test
   public void generateTimingDaysofcycle() throws Exception {
-    testGeneratedExtension("extension-timing-daysofcycle");
-  }
-
-  /** Test generating the google-specific extension-primitive-has-no-value extension. */
-  @Test
-  public void generatePrimitiveHasNoValue() throws Exception {
-    testGoogleExtension("extension-primitive-has-no-value");
-  }
-
-  /** Test generating the google-specific extension-separator-stride extension. */
-  @Test
-  public void generateSeparatorStride() throws Exception {
-    testGoogleExtension("extension-base64binary-separator-stride");
-  }
-
-  /** Test generating the google-specific extension-event-trigger extension. */
-  @Test
-  public void generateEventTrigger() throws Exception {
-    testGoogleExtension("extension-event-trigger");
-  }
-
-  /** Test generating the google-specific extension-event-label extension. */
-  @Test
-  public void generateEventLabel() throws Exception {
-    testGoogleExtension("extension-event-label");
+    testExtension("timing-daysOfCycle");
   }
 }

@@ -282,8 +282,8 @@ java_test(
     srcs = ["src/test/java/com/google/fhir/stu3/ProtoFilePrinterTest.java"],
     data = [
         "//proto/stu3:testdata",
+        "//spec:fhir_stu3_structure_definitions",
         "//testdata/stu3:descriptors",
-        "//testdata/stu3:fhir_structure_definitions",
     ],
     test_class = "com.google.fhir.stu3.ProtoFilePrinterTest",
     deps = [
@@ -292,6 +292,7 @@ java_test(
         "//external:guava",
         "//proto/stu3:annotations_java_proto",
         "//proto/stu3:datatypes_java_proto",
+        "//proto/stu3:extensions_java_proto",
         "//proto/stu3:metadatatypes_java_proto",
         "//proto/stu3:profile_config_java_proto",
         "//proto/stu3:resources_java_proto",
@@ -307,9 +308,9 @@ java_test(
     size = "medium",
     srcs = ["src/test/java/com/google/fhir/stu3/ProtoGeneratorTest.java"],
     data = [
+        "//spec:fhir_stu3_structure_definitions",
         "//spec:uscore",
         "//testdata/stu3:descriptors",
-        "//testdata/stu3:fhir_structure_definitions",
         "//testdata/stu3:google",
     ],
     test_class = "com.google.fhir.stu3.ProtoGeneratorTest",

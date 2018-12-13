@@ -1,0 +1,243 @@
+name: "Dosage"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "sequence"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Integer"
+  options {
+    [google.fhir.stu3.proto.field_description]: "The order of the dosage instructions"
+  }
+}
+field {
+  name: "text"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Free text dosage instructions e.g. SIG"
+  }
+}
+field {
+  name: "additional_instruction"
+  number: 5
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Supplemental instruction - e.g. \"with meals\""
+  }
+}
+field {
+  name: "patient_instruction"
+  number: 6
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Patient or consumer oriented instructions"
+  }
+}
+field {
+  name: "timing"
+  number: 7
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Timing"
+  options {
+    [google.fhir.stu3.proto.field_description]: "When medication should be administered"
+  }
+}
+field {
+  name: "as_needed"
+  number: 8
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Dosage.AsNeeded"
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.stu3.proto.field_description]: "Take \"as needed\" (for x)"
+  }
+}
+field {
+  name: "site"
+  number: 9
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Body site to administer to"
+  }
+}
+field {
+  name: "route"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "How drug should enter body"
+  }
+}
+field {
+  name: "method"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Technique for administering medication"
+  }
+}
+field {
+  name: "dose"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Dosage.Dose"
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.stu3.proto.field_description]: "Amount of medication per dose"
+  }
+}
+field {
+  name: "max_dose_per_period"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Ratio"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Upper limit on medication per unit of time"
+  }
+}
+field {
+  name: "max_dose_per_administration"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.SimpleQuantity"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Upper limit on medication per administration"
+  }
+}
+field {
+  name: "max_dose_per_lifetime"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.SimpleQuantity"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Upper limit on medication per lifetime of the patient"
+  }
+}
+field {
+  name: "rate"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Dosage.Rate"
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.stu3.proto.field_description]: "Amount of medication per unit of time"
+  }
+}
+nested_type {
+  name: "AsNeeded"
+  field {
+    name: "boolean"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Boolean"
+    oneof_index: 0
+  }
+  field {
+    name: "codeable_concept"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.CodeableConcept"
+    oneof_index: 0
+  }
+  oneof_decl {
+    name: "as_needed"
+  }
+}
+nested_type {
+  name: "Dose"
+  field {
+    name: "range"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Range"
+    oneof_index: 0
+  }
+  field {
+    name: "quantity"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.SimpleQuantity"
+    oneof_index: 0
+  }
+  oneof_decl {
+    name: "dose"
+  }
+}
+nested_type {
+  name: "Rate"
+  field {
+    name: "ratio"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Ratio"
+    oneof_index: 0
+  }
+  field {
+    name: "range"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.Range"
+    oneof_index: 0
+  }
+  field {
+    name: "quantity"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.stu3.proto.SimpleQuantity"
+    oneof_index: 0
+  }
+  oneof_decl {
+    name: "rate"
+  }
+}
+options {
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Dosage, last updated 2017-04-19T07:44:43.294+10:00.\nHow the medication is/was taken or should be taken.\nSee http://hl7.org/fhir/StructureDefinition/Dosage"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Dosage"
+}

@@ -1,0 +1,76 @@
+name: "ContactPoint"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Extension"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "system"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ContactPointSystemCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "phone | fax | email | pager | url | sms | other"
+  }
+}
+field {
+  name: "value"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.String"
+  options {
+    [google.fhir.stu3.proto.field_description]: "The actual contact point details"
+  }
+}
+field {
+  name: "use"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.ContactPointUseCode"
+  options {
+    [google.fhir.stu3.proto.field_description]: "home | work | temp | old | mobile - purpose of this contact point"
+  }
+}
+field {
+  name: "rank"
+  number: 6
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.PositiveInt"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Specify preferred order of use (1 = highest)"
+  }
+}
+field {
+  name: "period"
+  number: 7
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.stu3.proto.Period"
+  options {
+    [google.fhir.stu3.proto.field_description]: "Time period when the contact point was/is in use"
+  }
+}
+options {
+  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for ContactPoint, last updated 2017-04-19T07:44:43.294+10:00.\nDetails of a Technology mediated contact point (phone, fax, email, etc.).\nSee http://hl7.org/fhir/StructureDefinition/ContactPoint"
+  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ContactPoint"
+}

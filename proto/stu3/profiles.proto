@@ -4209,9 +4209,9 @@ message Lipidprofile {
            "http://hl7.org/fhir/StructureDefinition/ldlcholesterol"];
 }
 
-// Auto-generated from StructureDefinition for MetadataResource.
-// Common Ancestor declaration for definitional resources.
-// See http://hl7.org/fhir/StructureDefinition/MetadataResource
+// Auto-generated from StructureDefinition for MetadataResource, last updated
+// 2017-04-19T07:44:43.294+10:00. Common Ancestor declaration for definitional
+// resources. See http://hl7.org/fhir/StructureDefinition/MetadataResource
 message MetadataResource {
   option (structure_definition_kind) = KIND_LOGICAL;
   option (fhir_structure_definition_url) =
