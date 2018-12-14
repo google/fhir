@@ -82,7 +82,8 @@ class ProtoGeneratorMain {
     }
   }
 
-  private static class FhirVersionConverter implements IStringConverter<FhirVersion> {
+  /** Class that implements string flag to FHIR version enum. */
+  public static class FhirVersionConverter implements IStringConverter<FhirVersion> {
 
     @Override
     public FhirVersion convert(String value) {
