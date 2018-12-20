@@ -41,6 +41,13 @@ class EncounterTest(absltest.TestCase):
       text_format.Parse(f.read(), self._enc)
     self._bundle = resources_pb2.Bundle()
     self._bundle.entry.add().resource.encounter.CopyFrom(self._enc)
+    self._synthea_enc = resources_pb2.Encounter()
+    with open(os.path.join(self._test_data_dir,
+                           'encounter_synthea.pbtxt')) as f:
+      text_format.Parse(f.read(), self._synthea_enc)
+    self._synthea_bundle = resources_pb2.Bundle()
+    self._synthea_bundle.entry.add().resource.encounter.CopyFrom(
+        self._synthea_enc)
 
   def testOnEncounter(self):
     self.assertTrue(encounter.EncounterIsValidHospitalization(self._enc))
@@ -48,7 +55,7 @@ class EncounterTest(absltest.TestCase):
 
   def testAtDuration(self):
     inp24hr = [inp for inp in encounter.Inpatient24HrEncounters(self._bundle)]
-    self.assertEqual(1, len(inp24hr))
+    self.assertLen(inp24hr, 1)
     enc = inp24hr[0]
     at_duration_24_before = encounter.AtDuration(enc, -24)
     at_duration_0 = encounter.AtDuration(enc, 0)
@@ -62,17 +69,26 @@ class EncounterTest(absltest.TestCase):
 
   def testEncounterLengthDays(self):
     inp24hr = [inp for inp in encounter.Inpatient24HrEncounters(self._bundle)]
-    self.assertEqual(1, len(inp24hr))
+    self.assertLen(inp24hr, 1)
     enc = inp24hr[0]
     self.assertEqual(12860, int(encounter.EncounterLengthDays(enc)))
     self.assertLess(12860.0, encounter.EncounterLengthDays(enc))
 
   def testOnBundle(self):
     inp24hr = [inp for inp in encounter.Inpatient24HrEncounters(self._bundle)]
-    self.assertEqual(1, len(inp24hr))
+    self.assertLen(inp24hr, 1)
     # make sure we are not creating new copies of encounter.
     self.assertEqual(id(inp24hr[0]),
                      id(self._bundle.entry[0].resource.encounter))
+
+  def testOnSyntheaBundle(self):
+    inp24hr = [
+        inp for inp in encounter.Inpatient24HrEncounters(
+            bundle=self._synthea_bundle, for_synthea=True)
+    ]
+    self.assertLen(inp24hr, 1)
+    self.assertEqual(
+        id(inp24hr[0]), id(self._synthea_bundle.entry[0].resource.encounter))
 
 
 if __name__ == '__main__':

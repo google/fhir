@@ -29,6 +29,12 @@ from proto.stu3 import resources_pb2
 from py.google.fhir.labels import encounter
 from py.google.fhir.labels import label
 
+# If set to false, encounter class codesystem is expected to be
+# http://hl7.org/fhir/v3/ActCode .
+# On the other hand, Synthea data is using the string 'inpatient' as the code
+# value to represent inpatient encounter.
+flags.DEFINE_bool('for_synthea', False,
+                  'Set to true if the underlying data is from synthea.')
 flags.DEFINE_string('output_path', '', 'The output file path')
 flags.DEFINE_string('input_path', '', 'The input file path')
 
@@ -51,6 +57,9 @@ class LengthOfStayRangeLabelAt24HoursFn(beam.DoFn):
     Label: multi-label for length of stay ranges, see label.py for detail
   """
 
+  def __init__(self, for_synthea=False):
+    self._for_synthea = for_synthea
+
   def process(self, bundle):
     """Iterate through bundle and yield label.
 
@@ -63,7 +72,7 @@ class LengthOfStayRangeLabelAt24HoursFn(beam.DoFn):
     patient = encounter.GetPatient(bundle)
     if patient is not None:
       # Cohort: inpatient encounter > 24 hours.
-      for enc in encounter.Inpatient24HrEncounters(bundle):
+      for enc in encounter.Inpatient24HrEncounters(bundle, self._for_synthea):
         for one_label in label.LengthOfStayRangeAt24Hours(patient, enc):
           yield one_label
 
@@ -98,7 +107,7 @@ def main(argv):
       flags.FLAGS.input_path,
       coder=beam.coders.ProtoCoder(resources_pb2.Bundle))
   labels = bundles | 'BundleToLabel' >> beam.ParDo(
-      LengthOfStayRangeLabelAt24HoursFn())
+      LengthOfStayRangeLabelAt24HoursFn(for_synthea=flags.FLAGS.for_synthea))
   _ = labels | beam.io.WriteToTFRecord(
       flags.FLAGS.output_path,
       coder=beam.coders.ProtoCoder(google_extensions_pb2.EventLabel))

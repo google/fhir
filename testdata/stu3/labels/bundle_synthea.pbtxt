@@ -1,0 +1,51 @@
+entry {
+  resource {
+    encounter {
+      id { value: "5678" }
+      status { value: FINISHED }
+      class_value {
+        code { value: "inpatient" }
+      }
+      subject { patient_id { value: "1" } }
+      period {
+        start {
+          # value_us is always UTC.
+          # February 13, 2009 11:31:30 PM UTC
+          value_us: 1234567890000000
+          precision: SECOND
+        }
+        end {
+          # Sunday, May 1, 2044 1:28:21 AM UTC
+          value_us: 2345678901000000
+          precision: SECOND
+        }
+      }
+      diagnosis {
+        condition {
+          condition_id {
+            value: "1234"
+          }
+        }
+        role {
+          coding {
+            system {
+              value: "http://hl7.org/fhir/diagnosis-role"
+            }
+            code {
+              value: "DD"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  resource {
+    patient {
+      id {
+        value: "Patient/1"
+      }
+    }
+  }
+}

@@ -66,6 +66,13 @@ def EncounterIsValidHospitalization(encounter):
           enc_class.code.value == CLASS_INPATIENT)
 
 
+def EncounterIsValidHospitalizationForSynthea(
+    encounter):
+  enc_class = encounter.class_value
+  return (EncounterIsFinished(encounter) and
+          enc_class.code.value == 'inpatient')
+
+
 def AtDuration(encounter,
                hours):
   # encounter.start + hours
@@ -104,34 +111,40 @@ def AllEncounters(bundle):
       yield entry.resource.encounter
 
 
-def InpatientEncounters(bundle):
+def InpatientEncounters(bundle, for_synthea=False):
   """Yields all inpatient encounters in a bundle.
 
   Args:
     bundle: Bundle proto.
+    for_synthea: Whether to use ENCOUNTER_CLASS_CODESYSTEM or string 'inpatient'
+      as code value for encounter class (for synthea).
   Yields:
     all inpatient encounters in a bundle.
   """
   for encounter in AllEncounters(bundle):
-    if EncounterIsValidHospitalization(encounter):
+    if (not for_synthea) & EncounterIsValidHospitalization(encounter):
+      yield encounter
+    elif for_synthea & EncounterIsValidHospitalizationForSynthea(encounter):
       yield encounter
 
 
-def InpatientEncountersLongerThan(bundle, n_hours):
+def InpatientEncountersLongerThan(bundle, n_hours, for_synthea=False):
   """Yields all inpatient encounters in a bundle that is longer than N hours.
 
   Args:
     bundle: Bundle proto.
     n_hours: min duration of the encounter.
+    for_synthea: Whether to use ENCOUNTER_CLASS_CODESYSTEM or string 'inpatient'
+      as code value for encounter class (for synthea).
   Yields:
     all inpatient encounters in a bundle that is longer than N hours.
   """
-  for encounter in InpatientEncounters(bundle):
+  for encounter in InpatientEncounters(bundle, for_synthea):
     if (ToTime(encounter.period.end) - ToTime(encounter.period.start) >
         timedelta(seconds=n_hours * SECS_PER_HOUR)):
       yield encounter
 
 
-# One line wrapper for 24 or 48 hrs.
-def Inpatient24HrEncounters(bundle):
-  return InpatientEncountersLongerThan(bundle, 24)
+# One line wrapper for 24.
+def Inpatient24HrEncounters(bundle, for_synthea=False):
+  return InpatientEncountersLongerThan(bundle, 24, for_synthea)

@@ -40,27 +40,36 @@ class BundleToLabelTest(absltest.TestCase):
   def setUp(self):
     self._test_data_dir = os.path.join(absltest.get_default_test_srcdir(),
                                        _TESTDATA_PATH)
-    self._bundle = resources_pb2.Bundle()
-    with open(os.path.join(self._test_data_dir, 'bundle_1.pbtxt')) as f:
-      text_format.Parse(f.read(), self._bundle)
-    enc = self._bundle.entry[0].resource.encounter
-    patient = self._bundle.entry[1].resource.patient
 
-    self._expected_label = label.ComposeLabel(
-        patient, enc,
+  def _VerifyPipeline(self, for_synthea):
+    bundle_text_file = 'bundle_1.pbtxt'
+    if for_synthea:
+      bundle_text_file = 'bundle_synthea.pbtxt'
+    bundle = resources_pb2.Bundle()
+    with open(os.path.join(self._test_data_dir, bundle_text_file)) as f:
+      text_format.Parse(f.read(), bundle)
+    enc = bundle.entry[0].resource.encounter
+    patient = bundle.entry[1].resource.patient
+    expected_label = label.ComposeLabel(
+        patient,
+        enc,
         label.LOS_RANGE_LABEL,
         'above_14',
         # 24 hours after admission
         datetime.datetime(2009, 2, 14, 23, 31, 30))
-
-  def testPipeline(self):
     with test_pipeline.TestPipeline() as pipeline:
       result = (
           pipeline
-          | 'input' >> beam.Create([self._bundle])
+          | 'input' >> beam.Create([bundle])
           | 'process' >> beam.ParDo(
-              bundle_to_label.LengthOfStayRangeLabelAt24HoursFn()))
-      util.assert_that(result, util.equal_to([self._expected_label]))
+              bundle_to_label.LengthOfStayRangeLabelAt24HoursFn(for_synthea)))
+      util.assert_that(result, util.equal_to([expected_label]))
+
+  def testPipeline(self):
+    self._VerifyPipeline(for_synthea=True)
+
+  def testPipelineForSynthea(self):
+    self._VerifyPipeline(for_synthea=False)
 
 
 if __name__ == '__main__':
