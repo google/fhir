@@ -80,7 +80,8 @@ public class StructureDefinitionTransformer {
           "time",
           "unsignedInt",
           "uri",
-          "uuid");
+          "uuid",
+          "xhtml");
 
   // Some extended datatypes are defined as profile on the basic datatypes but they are used as
   // first-class datatypes. We need special handling of their paths.
