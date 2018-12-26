@@ -192,12 +192,6 @@ Status GetPreferredCode(const CodeableConcept& concept, string* result) {
 
 }  // namespace
 
-string GetPreferredCodeOrDie(const CodeableConcept& concept) {
-  string code;
-  CHECK(GetPreferredCode(concept, &code).ok());
-  return code;
-}
-
 string GetCode(const Coding& coding) {
   CodeableConcept concept;
   *concept.add_coding() = coding;
@@ -213,10 +207,18 @@ void AddCodeableConceptToExample(
     const CodeableConcept& concept, const string& name,
     ::tensorflow::Example* example, std::set<string>* tokenize_feature_set,
     const std::set<string>& add_tokenize_feature_set, bool enable_attribution) {
+  string code;
+  Status code_status = GetPreferredCode(concept, &code);
+  if (!code_status.ok()) {
+    // Ignore the code that we do not recognize.
+    LOG(INFO) << "Unable to handle the codeable concept: "
+              << code_status.error_message();
+    return;
+  }
   // Codeable concepts are emitted using the preferred coding systems.
   (*example->mutable_features()->mutable_feature())[name]
       .mutable_bytes_list()
-      ->add_value(GetPreferredCodeOrDie(concept));
+      ->add_value(code);
   if (concept.has_text()) {
     const string full_name = absl::StrCat(name, ".text");
     if (FLAGS_tokenize_code_text_features) {
@@ -404,9 +406,8 @@ void MessageToExample(const google::protobuf::Message& message, const string& pr
           MessageToExample(child, name, example, enable_attribution);
         }
       } else {
-        LOG(FATAL) << "Unable to handle field " << name
-                   << " in message of type "
-                   << message.GetDescriptor()->full_name();
+        LOG(INFO) << "Unable to handle field " << name << " in message of type "
+                  << message.GetDescriptor()->full_name();
       }
     }
   }
