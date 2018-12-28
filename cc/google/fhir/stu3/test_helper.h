@@ -56,7 +56,13 @@ class FhirProtoParseHelper {
   template <class T>
   operator T() {
     T tmp;
-    google::protobuf::TextFormat::ParseFromString(asciipb_, &tmp);
+    const bool parsed_ok = google::protobuf::TextFormat::ParseFromString(asciipb_, &tmp);
+    if (!parsed_ok) {
+      EXPECT_TRUE(false) << "Unable to parse FHIR proto of type "
+                         << T::descriptor()->name() << " on line " << line_
+                         << " in file " << file_;
+      return T();
+    }
     Status status = ValidateFhirConstraints(tmp);
     if (valid_) {
       EXPECT_TRUE(status.ok())
