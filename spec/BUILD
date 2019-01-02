@@ -47,7 +47,7 @@ structure_definition_package(
 filegroup(
     name = "r4",
     srcs = glob([
-        "hl7.fhir.core/3.5.0/package/*.json",
+        "hl7.fhir.core/4.0.0/package/*.json",
     ]),
 )
 

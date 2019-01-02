@@ -1,0 +1,281 @@
+{
+  "resourceType": "TestScript",
+  "id": "testscript-example-search",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: testscript-example-search</p><p><b>url</b>: <b>http://hl7.org/fhir/TestScript/testscript-example-search</b></p><p><b>identifier</b>: urn:oid:1.3.6.1.4.1.21367.2005.3.7.9881</p><p><b>version</b>: 1.0</p><p><b>name</b>: TestScript Example Search</p><p><b>status</b>: draft</p><p><b>experimental</b>: true</p><p><b>date</b>: 18/01/2017</p><p><b>publisher</b>: HL7</p><p><b>contact</b>: </p><p><b>description</b>: TestScript example resource with simple Patient search test. The read tests will utilize user defined dynamic variables that will hold the Patient search parameter values.</p><p><b>jurisdiction</b>: United States of America (the) <span>(Details : {urn:iso:std:iso:3166 code 'US' = 'United States of America', given as 'United States of America (the)'})</span></p><p><b>purpose</b>: Patient Search Operation</p><p><b>copyright</b>: © HL7.org 2011+</p><blockquote><p><b>metadata</b></p><h3>Links</h3><table><tr><td>-</td><td><b>Url</b></td><td><b>Description</b></td></tr><tr><td>*</td><td><a>http://hl7.org/fhir/patient.html</a></td><td>Demographics and other administrative information about an individual or animal receiving care or other health-related services.</td></tr></table><h3>Capabilities</h3><table><tr><td>-</td><td><b>Required</b></td><td><b>Validated</b></td><td><b>Description</b></td><td><b>Link</b></td><td><b>Capabilities</b></td></tr><tr><td>*</td><td>true</td><td>false</td><td>Patient Search Operation</td><td><a>http://hl7.org/fhir/http.html#search</a></td><td><a>CapabilityStatement/example</a></td></tr></table></blockquote><h3>Fixtures</h3><table><tr><td>-</td><td><b>Autocreate</b></td><td><b>Autodelete</b></td><td><b>Resource</b></td></tr><tr><td>*</td><td>false</td><td>false</td><td><a>Peter Chalmers</a></td></tr></table><p><b>profile</b>: <a>Generated Summary: url: http://hl7.org/fhir/StructureDefinition/Bundle; version: 4.0.0; name: Bundle; ACTIVE; date: 27/12/2018 10:37:54 PM; publisher: Health Level Seven International (FHIR Infrastructure); description: A container for a collection of resources.; 4.0.0; RESOURCE; type: Bundle; baseDefinition: http://hl7.org/fhir/StructureDefinition/Resource; SPECIALIZATION</a></p><blockquote><p><b>variable</b></p><p><b>name</b>: PatientCreateLocation</p><p><b>headerField</b>: Location</p><p><b>sourceId</b>: PatientCreateResponse</p></blockquote><blockquote><p><b>variable</b></p><p><b>name</b>: PatientSearchFamilyName</p><p><b>description</b>: Enter patient search criteria for a known family name on the target system</p><p><b>hint</b>: [Family name]</p></blockquote><blockquote><p><b>variable</b></p><p><b>name</b>: PatientSearchGivenName</p><p><b>description</b>: Enter patient search criteria for a known given name on the target system</p><p><b>hint</b>: [Given name]</p></blockquote><blockquote><p><b>variable</b></p><p><b>name</b>: PatientSearchBundleTotal</p><p><b>description</b>: Evaluate the returned Patient searchset Bundle.total value</p><p><b>expression</b>: Bundle.total.toInteger()</p></blockquote><blockquote><p><b>setup</b></p><blockquote><p><b>action</b></p><h3>Operations</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Resource</b></td><td><b>Description</b></td><td><b>Accept</b></td><td><b>EncodeRequestUrl</b></td><td><b>Params</b></td></tr><tr><td>*</td><td>Search (Details: http://terminology.hl7.org/CodeSystem/testscript-operation-codes code search = 'Search', stated as 'null')</td><td>Patient</td><td>Test simple search to verify server support.</td><td>xml</td><td>true</td><td>?family=DONTEXPECTAMATCH&amp;given=DONTEXPECTAMATCH</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td><td><b>Description</b></td><td><b>Direction</b></td><td><b>Operator</b></td><td><b>RequestURL</b></td><td><b>WarningOnly</b></td></tr><tr><td>*</td><td>Confirm that the request url contains the family search parameter.</td><td>request</td><td>contains</td><td>family</td><td>false</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td><td><b>Description</b></td><td><b>Direction</b></td><td><b>ResponseCode</b></td><td><b>WarningOnly</b></td></tr><tr><td>*</td><td>Confirm that the returned HTTP status is 200(OK).</td><td>response</td><td>200</td><td>false</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td><td><b>Description</b></td><td><b>Resource</b></td><td><b>WarningOnly</b></td></tr><tr><td>*</td><td>Confirm that the returned resource type is Bundle.</td><td>Bundle</td><td>false</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td><td><b>Description</b></td><td><b>NavigationLinks</b></td><td><b>WarningOnly</b></td></tr><tr><td>*</td><td>Confirm that the returned Bundle correctly defines the navigation links.</td><td>true</td><td>false</td></tr></table></blockquote></blockquote><blockquote><p><b>test</b></p><p><b>name</b>: Patient Create Search</p><p><b>description</b>: Create a Patient resource and capture the returned HTTP Header Location. Then search for (read) that Patient using the Location URL value and validate the response.</p><blockquote><p><b>action</b></p><h3>Operations</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Operations</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote></blockquote><blockquote><p><b>test</b></p><p><b>name</b>: Patient Search Dynamic</p><p><b>description</b>: Search for Patient resources using the user defined dynamic variables ${PatientSearchFamilyName} and ${PatientSearchGivenName} and validate response.</p><blockquote><p><b>action</b></p><h3>Operations</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote></blockquote></div>"
+  },
+  "url": "http://hl7.org/fhir/TestScript/testscript-example-search",
+  "identifier": {
+    "system": "urn:ietf:rfc:3986",
+    "value": "urn:oid:1.3.6.1.4.1.21367.2005.3.7.9881"
+  },
+  "version": "1.0",
+  "name": "TestScript Example Search",
+  "status": "draft",
+  "experimental": true,
+  "date": "2017-01-18",
+  "publisher": "HL7",
+  "contact": [
+    {
+      "name": "Support",
+      "telecom": [
+        {
+          "system": "email",
+          "value": "support@HL7.org",
+          "use": "work"
+        }
+      ]
+    }
+  ],
+  "description": "TestScript example resource with simple Patient search test. The read tests will utilize user defined dynamic variables that will hold the Patient search parameter values.",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "US",
+          "display": "United States of America (the)"
+        }
+      ]
+    }
+  ],
+  "purpose": "Patient Search Operation",
+  "copyright": "© HL7.org 2011+",
+  "metadata": {
+    "link": [
+      {
+        "url": "http://hl7.org/fhir/patient.html",
+        "description": "Demographics and other administrative information about an individual or animal receiving care or other health-related services."
+      }
+    ],
+    "capability": [
+      {
+        "required": true,
+        "validated": false,
+        "description": "Patient Search Operation",
+        "link": [
+          "http://hl7.org/fhir/http.html#search"
+        ],
+        "capabilities": "CapabilityStatement/example"
+      }
+    ]
+  },
+  "fixture": [
+    {
+      "id": "fixture-patient-create",
+      "autocreate": false,
+      "autodelete": false,
+      "resource": {
+        "reference": "Patient/example",
+        "display": "Peter Chalmers"
+      }
+    }
+  ],
+  "profile": [
+    {
+      "id": "bundle-profile",
+      "reference": "http://hl7.org/fhir/StructureDefinition/Bundle"
+    }
+  ],
+  "variable": [
+    {
+      "name": "PatientCreateLocation",
+      "headerField": "Location",
+      "sourceId": "PatientCreateResponse"
+    },
+    {
+      "name": "PatientSearchFamilyName",
+      "description": "Enter patient search criteria for a known family name on the target system",
+      "hint": "[Family name]"
+    },
+    {
+      "name": "PatientSearchGivenName",
+      "description": "Enter patient search criteria for a known given name on the target system",
+      "hint": "[Given name]"
+    },
+    {
+      "name": "PatientSearchBundleTotal",
+      "description": "Evaluate the returned Patient searchset Bundle.total value",
+      "expression": "Bundle.total.toInteger()"
+    }
+  ],
+  "setup": {
+    "action": [
+      {
+        "operation": {
+          "type": {
+            "system": "http://terminology.hl7.org/CodeSystem/testscript-operation-codes",
+            "code": "search"
+          },
+          "resource": "Patient",
+          "description": "Test simple search to verify server support.",
+          "accept": "xml",
+          "encodeRequestUrl": true,
+          "params": "?family=DONTEXPECTAMATCH&given=DONTEXPECTAMATCH"
+        }
+      },
+      {
+        "assert": {
+          "description": "Confirm that the request url contains the family search parameter.",
+          "direction": "request",
+          "operator": "contains",
+          "requestURL": "family",
+          "warningOnly": false
+        }
+      },
+      {
+        "assert": {
+          "description": "Confirm that the returned HTTP status is 200(OK).",
+          "direction": "response",
+          "responseCode": "200",
+          "warningOnly": false
+        }
+      },
+      {
+        "assert": {
+          "description": "Confirm that the returned resource type is Bundle.",
+          "resource": "Bundle",
+          "warningOnly": false
+        }
+      },
+      {
+        "assert": {
+          "description": "Confirm that the returned Bundle correctly defines the navigation links.",
+          "navigationLinks": true,
+          "warningOnly": false
+        }
+      }
+    ]
+  },
+  "test": [
+    {
+      "id": "01-PatientCreateSearch",
+      "name": "Patient Create Search",
+      "description": "Create a Patient resource and capture the returned HTTP Header Location. Then search for (read) that Patient using the Location URL value and validate the response.",
+      "action": [
+        {
+          "operation": {
+            "type": {
+              "system": "http://terminology.hl7.org/CodeSystem/testscript-operation-codes",
+              "code": "create"
+            },
+            "resource": "Patient",
+            "description": "Create a Patient resource and capture the returned HTTP Header Location.",
+            "accept": "xml",
+            "contentType": "xml",
+            "encodeRequestUrl": true,
+            "responseId": "PatientCreateResponse",
+            "sourceId": "fixture-patient-create"
+          }
+        },
+        {
+          "assert": {
+            "description": "Confirm that the returned HTTP status is 201(Created).",
+            "response": "created",
+            "warningOnly": false
+          }
+        },
+        {
+          "assert": {
+            "description": "Confirm that the returned HTTP Header Location is present.",
+            "direction": "response",
+            "headerField": "Location",
+            "operator": "notEmpty",
+            "warningOnly": false
+          }
+        },
+        {
+          "operation": {
+            "type": {
+              "system": "http://terminology.hl7.org/CodeSystem/testscript-operation-codes",
+              "code": "read"
+            },
+            "description": "Read the created Patient using the captured Location URL value.",
+            "accept": "xml",
+            "encodeRequestUrl": true,
+            "url": "${PatientCreateLocation}"
+          }
+        },
+        {
+          "assert": {
+            "description": "Confirm that the returned HTTP status is 200(OK).",
+            "response": "okay",
+            "warningOnly": false
+          }
+        },
+        {
+          "assert": {
+            "description": "Confirm that the returned resource type is Patient.",
+            "resource": "Patient",
+            "warningOnly": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "02-PatientSearchDynamic",
+      "name": "Patient Search Dynamic",
+      "description": "Search for Patient resources using the user defined dynamic variables ${PatientSearchFamilyName} and ${PatientSearchGivenName} and validate response.",
+      "action": [
+        {
+          "operation": {
+            "type": {
+              "system": "http://terminology.hl7.org/CodeSystem/testscript-operation-codes",
+              "code": "search"
+            },
+            "resource": "Patient",
+            "description": "Search for Patient resources on the destination test system.",
+            "accept": "xml",
+            "encodeRequestUrl": true,
+            "params": "?family=${PatientSearchFamilyName}&given=${PatientSearchGivenName}"
+          }
+        },
+        {
+          "assert": {
+            "description": "Confirm that the returned HTTP status is 200(OK).",
+            "response": "okay",
+            "warningOnly": false
+          }
+        },
+        {
+          "assert": {
+            "description": "Confirm that the returned format is XML.",
+            "contentType": "xml",
+            "warningOnly": false
+          }
+        },
+        {
+          "assert": {
+            "description": "Confirm that the returned resource type is Bundle.",
+            "resource": "Bundle",
+            "warningOnly": false
+          }
+        },
+        {
+          "assert": {
+            "description": "Confirm that the returned Bundle conforms to the base FHIR specification.",
+            "validateProfileId": "bundle-profile",
+            "warningOnly": false
+          }
+        },
+        {
+          "assert": {
+            "description": "Confirm that the returned Bundle type equals 'searchset'.",
+            "operator": "equals",
+            "path": "fhir:Bundle/fhir:type/@value",
+            "value": "searchset",
+            "warningOnly": false
+          }
+        },
+        {
+          "assert": {
+            "description": "Confirm that the returned Bundle total is greater than or equal to the number of returned entries.",
+            "expression": "Bundle.total.toInteger() >= entry.count()",
+            "warningOnly": false
+          }
+        }
+      ]
+    }
+  ]
+}

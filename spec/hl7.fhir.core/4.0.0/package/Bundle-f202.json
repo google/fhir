@@ -1,0 +1,111 @@
+{
+  "resourceType": "Bundle",
+  "id": "f202",
+  "type": "collection",
+  "entry": [
+    {
+      "fullUrl": "https://example.com/base/DiagnosticReport/f202",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "f202",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f202</p><p><b>basedOn</b>: <a>ServiceRequest/req</a></p><p><b>status</b>: final</p><p><b>category</b>: Laboratory test <span>(Details : {SNOMED CT code '15220000' = 'Laboratory test', given as 'Laboratory test'}; {http://terminology.hl7.org/CodeSystem/v2-0074 code 'LAB' = 'Laboratory)</span></p><p><b>code</b>: Blood culture for bacteria, including anaerobic screen <span>(Details : {SNOMED CT code '104177005' = 'Blood culture for bacteria, including anaerobic screen', given as 'Blood culture for bacteria, including anaerobic screen'})</span></p><p><b>subject</b>: <a>Roel</a></p><p><b>issued</b>: 11/03/2013 10:28:00 AM</p><p><b>performer</b>: <a>AUMC</a></p><p><b>result</b>: <a>Results for staphylococcus analysis on Roel's blood culture</a></p><p><b>conclusion</b>: Blood culture tested positive on staphylococcus aureus</p><p><b>conclusionCode</b>: Bacteremia due to staphylococcus <span>(Details : {SNOMED CT code '428763004' = 'Bacteremia due to Staphylococcus aureus', given as 'Bacteremia due to staphylococcus'})</span></p></div>"
+        },
+        "basedOn": [
+          {
+            "reference": "ServiceRequest/req"
+          }
+        ],
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "15220000",
+                "display": "Laboratory test"
+              },
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+                "code": "LAB"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "104177005",
+              "display": "Blood culture for bacteria, including anaerobic screen"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/f201",
+          "display": "Roel"
+        },
+        "issued": "2013-03-11T10:28:00+01:00",
+        "performer": [
+          {
+            "reference": "Organization/f201",
+            "display": "AUMC"
+          }
+        ],
+        "result": [
+          {
+            "reference": "Observation/f206",
+            "display": "Results for staphylococcus analysis on Roel's blood culture"
+          }
+        ],
+        "conclusion": "Blood culture tested positive on staphylococcus aureus",
+        "conclusionCode": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "428763004",
+                "display": "Bacteremia due to staphylococcus"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "https://example.com/base/ServiceRequest/req",
+      "resource": {
+        "resourceType": "ServiceRequest",
+        "id": "req",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: req</p><p><b>status</b>: active</p><p><b>intent</b>: original-order</p><p><b>code</b>: Blood culture for bacteria, including anaerobic screen <span>(Details : {SNOMED CT code '104177005' = 'Blood culture for bacteria, including anaerobic screen', given as 'Blood culture for bacteria, including anaerobic screen'})</span></p><p><b>subject</b>: <a>Roel</a></p><p><b>encounter</b>: <a>Roel's encounter on March elevanth 2013</a></p><p><b>requester</b>: <a>Dokter Bronsig</a></p></div>"
+        },
+        "status": "active",
+        "intent": "original-order",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "104177005",
+              "display": "Blood culture for bacteria, including anaerobic screen"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/f201",
+          "display": "Roel"
+        },
+        "encounter": {
+          "reference": "Encounter/f203",
+          "display": "Roel's encounter on March elevanth 2013"
+        },
+        "requester": {
+          "reference": "Practitioner/f201",
+          "display": "Dokter Bronsig"
+        }
+      }
+    }
+  ]
+}

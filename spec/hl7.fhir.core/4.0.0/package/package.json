@@ -1,0 +1,13 @@
+{
+  "name": "hl7.fhir.core",
+  "version": "4.0.0",
+  "tools-version": 3,
+  "type": "fhir.core",
+  "license": "CC0-1.0",
+  "canonical": "http://hl7.org/fhir",
+  "url": "http://build.fhir.org/",
+  "title": "FHIR Core package",
+  "description": "FHIR Core package - the NPM package that contains all the definitions for the base FHIR specification (built 20181227223754+11:00)",
+  "author": "HL7 Inc",
+  "homepage": "http://build.fhir.org/"
+}

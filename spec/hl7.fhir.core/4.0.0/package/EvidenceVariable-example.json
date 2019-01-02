@@ -1,0 +1,16 @@
+{
+  "resourceType": "EvidenceVariable",
+  "id": "example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>"
+  },
+  "status": "draft",
+  "characteristic": [
+    {
+      "definitionCodeableConcept": {
+        "text": "Diabetic patients over 65"
+      }
+    }
+  ]
+}

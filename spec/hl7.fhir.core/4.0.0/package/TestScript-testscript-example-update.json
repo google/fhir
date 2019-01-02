@@ -1,0 +1,196 @@
+{
+  "resourceType": "TestScript",
+  "id": "testscript-example-update",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: testscript-example-update</p><p><b>url</b>: <b>http://hl7.org/fhir/TestScript/testscript-example-update</b></p><p><b>identifier</b>: urn:oid:1.3.6.1.4.1.21367.2005.3.7.9882</p><p><b>version</b>: 1.0</p><p><b>name</b>: TestScript Example Update</p><p><b>status</b>: draft</p><p><b>experimental</b>: true</p><p><b>date</b>: 18/01/2017</p><p><b>publisher</b>: HL7</p><p><b>contact</b>: </p><p><b>description</b>: TestScript example resource with setup to delete if present and create a new instance of a Patient; and single test definition to update that Patient with various asserts.</p><p><b>jurisdiction</b>: United States of America (the) <span>(Details : {urn:iso:std:iso:3166 code 'US' = 'United States of America', given as 'United States of America (the)'})</span></p><p><b>purpose</b>: Patient (Conditional) Create, Update, Delete Operations</p><p><b>copyright</b>: © HL7.org 2011+</p><blockquote><p><b>metadata</b></p><h3>Links</h3><table><tr><td>-</td><td><b>Url</b></td><td><b>Description</b></td></tr><tr><td>*</td><td><a>http://hl7.org/fhir/patient.html</a></td><td>Demographics and other administrative information about an individual or animal receiving care or other health-related services.</td></tr></table><h3>Capabilities</h3><table><tr><td>-</td><td><b>Required</b></td><td><b>Validated</b></td><td><b>Description</b></td><td><b>Link</b></td><td><b>Capabilities</b></td></tr><tr><td>*</td><td>true</td><td>false</td><td>Patient Update and Delete Operations</td><td><a>http://hl7.org/fhir/http.html#update</a></td><td><a>CapabilityStatement/example</a></td></tr></table></blockquote><blockquote><p><b>fixture</b></p><p><b>autocreate</b>: false</p><p><b>autodelete</b>: false</p><p><b>resource</b>: <a>Peter Chalmers</a></p></blockquote><blockquote><p><b>fixture</b></p><p><b>autocreate</b>: false</p><p><b>autodelete</b>: false</p><p><b>resource</b>: <a>Donald Duck</a></p></blockquote><p><b>profile</b>: <a>Generated Summary: url: http://hl7.org/fhir/StructureDefinition/Patient; version: 4.0.0; name: Patient; ACTIVE; date: 27/12/2018 10:37:54 PM; publisher: Health Level Seven International (Patient Administration); description: Demographics and other administrative information about an individual or animal receiving care or other health-related services.; purpose: Tracking patient is the center of the healthcare process.; 4.0.0; RESOURCE; type: Patient; baseDefinition: http://hl7.org/fhir/StructureDefinition/DomainResource; SPECIALIZATION</a></p><h3>Variables</h3><table><tr><td>-</td><td><b>Name</b></td><td><b>Path</b></td><td><b>SourceId</b></td></tr><tr><td>*</td><td>createResourceId</td><td>Patient/id</td><td>fixture-patient-create</td></tr></table><blockquote><p><b>setup</b></p><blockquote><p><b>action</b></p><h3>Operations</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Resource</b></td><td><b>Label</b></td><td><b>Description</b></td><td><b>Accept</b></td><td><b>EncodeRequestUrl</b></td><td><b>Params</b></td></tr><tr><td>*</td><td>Delete (Details: http://terminology.hl7.org/CodeSystem/testscript-operation-codes code delete = 'Delete', stated as 'null')</td><td>Patient</td><td>SetupDeletePatient</td><td>Execute a delete operation to insure the patient does not exist on the server.</td><td>xml</td><td>true</td><td>/${createResourceId}</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td><td><b>Description</b></td><td><b>Direction</b></td><td><b>Operator</b></td><td><b>ResponseCode</b></td><td><b>WarningOnly</b></td></tr><tr><td>*</td><td>Confirm that the returned HTTP status is 200(OK) or 204(No Content).</td><td>response</td><td>in</td><td>200,204</td><td>false</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Operations</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Resource</b></td><td><b>Label</b></td><td><b>Description</b></td><td><b>Accept</b></td><td><b>ContentType</b></td><td><b>EncodeRequestUrl</b></td><td><b>Params</b></td><td><b>SourceId</b></td></tr><tr><td>*</td><td>Update (Details: http://terminology.hl7.org/CodeSystem/testscript-operation-codes code update = 'Update', stated as 'null')</td><td>Patient</td><td>SetupCreatePatient</td><td>Create patient resource on test server using the contents of fixture-patient-create</td><td>xml</td><td>xml</td><td>true</td><td>/${createResourceId}</td><td>fixture-patient-create</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td><td><b>Description</b></td><td><b>Direction</b></td><td><b>ResponseCode</b></td><td><b>WarningOnly</b></td></tr><tr><td>*</td><td>Confirm that the returned HTTP status is 201(Created).</td><td>response</td><td>201</td><td>false</td></tr></table></blockquote></blockquote><blockquote><p><b>test</b></p><p><b>name</b>: Update Patient</p><p><b>description</b>: Update a Patient and validate response.</p><blockquote><p><b>action</b></p><h3>Operations</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>action</b></p><h3>Asserts</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote></blockquote></div>"
+  },
+  "url": "http://hl7.org/fhir/TestScript/testscript-example-update",
+  "identifier": {
+    "system": "urn:ietf:rfc:3986",
+    "value": "urn:oid:1.3.6.1.4.1.21367.2005.3.7.9882"
+  },
+  "version": "1.0",
+  "name": "TestScript Example Update",
+  "status": "draft",
+  "experimental": true,
+  "date": "2017-01-18",
+  "publisher": "HL7",
+  "contact": [
+    {
+      "name": "Support",
+      "telecom": [
+        {
+          "system": "email",
+          "value": "support@HL7.org",
+          "use": "work"
+        }
+      ]
+    }
+  ],
+  "description": "TestScript example resource with setup to delete if present and create a new instance of a Patient; and single test definition to update that Patient with various asserts.",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "US",
+          "display": "United States of America (the)"
+        }
+      ]
+    }
+  ],
+  "purpose": "Patient (Conditional) Create, Update, Delete Operations",
+  "copyright": "© HL7.org 2011+",
+  "metadata": {
+    "link": [
+      {
+        "url": "http://hl7.org/fhir/patient.html",
+        "description": "Demographics and other administrative information about an individual or animal receiving care or other health-related services."
+      }
+    ],
+    "capability": [
+      {
+        "required": true,
+        "validated": false,
+        "description": "Patient Update and Delete Operations",
+        "link": [
+          "http://hl7.org/fhir/http.html#update",
+          "http://hl7.org/fhir/http.html#delete"
+        ],
+        "capabilities": "CapabilityStatement/example"
+      }
+    ]
+  },
+  "fixture": [
+    {
+      "id": "fixture-patient-create",
+      "autocreate": false,
+      "autodelete": false,
+      "resource": {
+        "reference": "Patient/example",
+        "display": "Peter Chalmers"
+      }
+    },
+    {
+      "id": "fixture-patient-update",
+      "autocreate": false,
+      "autodelete": false,
+      "resource": {
+        "reference": "Patient/pat1",
+        "display": "Donald Duck"
+      }
+    }
+  ],
+  "profile": [
+    {
+      "id": "patient-profile",
+      "reference": "http://hl7.org/fhir/StructureDefinition/Patient"
+    }
+  ],
+  "variable": [
+    {
+      "name": "createResourceId",
+      "path": "Patient/id",
+      "sourceId": "fixture-patient-create"
+    }
+  ],
+  "setup": {
+    "action": [
+      {
+        "operation": {
+          "type": {
+            "system": "http://terminology.hl7.org/CodeSystem/testscript-operation-codes",
+            "code": "delete"
+          },
+          "resource": "Patient",
+          "label": "SetupDeletePatient",
+          "description": "Execute a delete operation to insure the patient does not exist on the server.",
+          "accept": "xml",
+          "encodeRequestUrl": true,
+          "params": "/${createResourceId}"
+        }
+      },
+      {
+        "assert": {
+          "description": "Confirm that the returned HTTP status is 200(OK) or 204(No Content).",
+          "direction": "response",
+          "operator": "in",
+          "responseCode": "200,204",
+          "warningOnly": false
+        }
+      },
+      {
+        "operation": {
+          "type": {
+            "system": "http://terminology.hl7.org/CodeSystem/testscript-operation-codes",
+            "code": "update"
+          },
+          "resource": "Patient",
+          "label": "SetupCreatePatient",
+          "description": "Create patient resource on test server using the contents of fixture-patient-create",
+          "accept": "xml",
+          "contentType": "xml",
+          "encodeRequestUrl": true,
+          "params": "/${createResourceId}",
+          "sourceId": "fixture-patient-create"
+        }
+      },
+      {
+        "assert": {
+          "description": "Confirm that the returned HTTP status is 201(Created).",
+          "direction": "response",
+          "responseCode": "201",
+          "warningOnly": false
+        }
+      }
+    ]
+  },
+  "test": [
+    {
+      "id": "01-UpdatePatient",
+      "name": "Update Patient",
+      "description": "Update a Patient and validate response.",
+      "action": [
+        {
+          "operation": {
+            "type": {
+              "system": "http://terminology.hl7.org/CodeSystem/testscript-operation-codes",
+              "code": "update"
+            },
+            "resource": "Patient",
+            "label": "SetupUpdatePatient",
+            "description": "Update patient resource on test server using the contents of fixture-patient-update",
+            "accept": "xml",
+            "contentType": "xml",
+            "encodeRequestUrl": true,
+            "params": "/${createResourceId}",
+            "sourceId": "fixture-patient-update"
+          }
+        },
+        {
+          "assert": {
+            "description": "Confirm that the returned HTTP status is 200(OK).",
+            "response": "okay",
+            "warningOnly": false
+          }
+        },
+        {
+          "assert": {
+            "description": "Confirm that the returned format is XML.",
+            "contentType": "xml",
+            "warningOnly": false
+          }
+        },
+        {
+          "assert": {
+            "description": "Confirm that the returned HTTP Header Last-Modified is present. Warning only as the server might not support versioning.",
+            "headerField": "Last-Modified",
+            "operator": "notEmpty",
+            "warningOnly": true
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "resourceType": "CapabilityStatement",
+  "id": "measure-processor",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <h2>Measure Calculation Service Conformance Statement</h2>\n      <div>\n        <p>Basic conformance statement for a Measure Processor Service. A server can support more functionality\n           than defined here, but this is the minimum amount</p>\n\n      </div>\n      <table>\n        <tr>\n          <td>Mode</td>\n          <td>SERVER</td>\n        </tr>\n        <tr>\n          <td>Description</td>\n          <td>RESTful Measure Processor Server</td>\n        </tr>\n        <tr>\n          <td>Transaction</td>\n          <td/>\n        </tr>\n        <tr>\n          <td>System History</td>\n          <td/>\n        </tr>\n        <tr>\n          <td>System Search</td>\n          <td/>\n        </tr>\n      </table>\n      <table>\n        <tr>\n          <th>\n            <b>Resource Type</b>\n          </th>\n          <th>\n            <b>Profile</b>\n          </th>\n          <th>\n            <b>Read</b>\n          </th>\n          <th>\n            <b>V-Read</b>\n          </th>\n          <th>\n            <b>Search</b>\n          </th>\n          <th>\n            <b>Update</b>\n          </th>\n          <th>\n            <b>Updates</b>\n          </th>\n          <th>\n            <b>Create</b>\n          </th>\n          <th>\n            <b>Delete</b>\n          </th>\n          <th>\n            <b>History</b>\n          </th>\n        </tr>\n      </table>\n    </div>"
+  },
+  "url": "http://hl7.org/fhir/measure-processor",
+  "name": "Measure Processor Service Conformance Statement",
+  "status": "draft",
+  "date": "2016-09-16",
+  "publisher": "HL7, Inc",
+  "contact": [
+    {
+      "name": "FHIR Project",
+      "telecom": [
+        {
+          "system": "other",
+          "value": "http://hl7.org/fhir"
+        }
+      ]
+    }
+  ],
+  "description": "Basic conformance statement for a Measure Processor Service. A server can support more functionality    than defined here, but this is the minimum amount",
+  "kind": "capability",
+  "software": {
+    "name": "ACME Measure Processor Service"
+  },
+  "fhirVersion": "4.0.0",
+  "format": [
+    "json",
+    "xml"
+  ],
+  "rest": [
+    {
+      "mode": "server",
+      "documentation": "RESTful Measure Processor Service",
+      "security": {
+        "cors": true,
+        "service": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/restful-security-service",
+                "code": "Certificates"
+              }
+            ]
+          }
+        ]
+      },
+      "resource": [
+        {
+          "type": "Measure",
+          "profile": "StructureDefinition/Measure",
+          "interaction": [
+            {
+              "code": "read",
+              "documentation": "Read allows clients to get the logical definitions of the measures"
+            },
+            {
+              "code": "search-type",
+              "documentation": "Search allows clients to filter measures based on a provided search parameter"
+            }
+          ],
+          "searchParam": [
+            {
+              "name": "identifier",
+              "definition": "http://hl7.org/fhir/SearchParameter/Measure-identifier",
+              "type": "token"
+            },
+            {
+              "name": "status",
+              "definition": "http://hl7.org/fhir/SearchParameter/Measure-status",
+              "type": "token"
+            },
+            {
+              "name": "version",
+              "definition": "http://hl7.org/fhir/SearchParameter/Measure-version",
+              "type": "string"
+            }
+          ]
+        }
+      ],
+      "operation": [
+        {
+          "name": "evaluate-measure",
+          "definition": "OperationDefinition/Measure-evaluate-measure"
+        },
+        {
+          "name": "data-requirements",
+          "definition": "OperationDefinition/Measure-data-requirements"
+        }
+      ]
+    }
+  ]
+}
