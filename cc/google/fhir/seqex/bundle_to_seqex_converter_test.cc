@@ -806,6 +806,132 @@ TEST_F(BundleToSeqexConverterTest, TestClassLabel) {
               {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
 }
 
+TEST_F(BundleToSeqexConverterTest, TestDateTimeLabel) {
+  EventTrigger trigger;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
+    event_time { value_us: 1420444800000000 }
+    source { encounter_id { value: "1" } }
+  )proto", &trigger));
+  stu3::google::EventLabel label;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
+    type {
+      system { value: "test_datetime_system" }
+      code { value: "test_datetime_label" }
+    }
+    event_time { value_us: 1420444800000000 }
+    label {
+      class_value {
+        date_time {
+          value_us: 1515980100000000  # Monday, January 15, 2018 1:35:00 AM
+          timezone: "UTC"
+          precision: DAY
+        }
+      }
+    }
+  )proto", &label));
+  std::vector<TriggerLabelsPair> trigger_labels_pair({{trigger, {label}}});
+  Bundle bundle;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
+    entry {
+      resource {
+        patient {
+          id { value: "14" }
+          birth_date {
+            value_us: -1323388800000000
+            precision: DAY
+            timezone: "America/New_York"
+          }
+        }
+      }
+    }
+    entry {
+      resource {
+        encounter {
+          id { value: "1" }
+          subject { patient_id { value: "14" } }
+          class_value {
+            system { value: "http://hl7.org/fhir/v3/ActCode" }
+            code { value: "IMP" }
+          }
+          period {
+            start {
+              value_us: 1420444800000000  # "2015-01-05T08:00:00+00:00"
+            }
+            end {
+              value_us: 1420455600000000  # "2015-01-05T11:00:00+00:00"
+            }
+          }
+        }
+      }
+    })proto", &bundle));
+
+  SequenceExample seqex;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
+    context: {
+      feature {
+        key: "Patient.birthDate"
+        value { int64_list { value: -1323388800 } }
+      }
+      feature {
+        key: "currentEncounterId"
+        value { int64_list { value: 1420444800 } }
+      }
+      feature {
+        key: "patientId"
+        value { bytes_list { value: "14" } }
+      }
+      feature {
+        key: "sequenceLength"
+        value { int64_list { value: 1 } }
+      }
+      feature {
+        key: "timestamp"
+        value { int64_list { value: 1420444800 } }
+      }
+      feature {
+        key: "label.test_datetime_label.class"
+        value {}
+      }
+      feature {
+        key: "label.test_datetime_label.timestamp_secs"
+        value { int64_list { value: 1420444800 } }
+      }
+      feature {
+        key: "label.test_datetime_label.value_datetime_secs"
+        value { int64_list { value: 1515980100 } }
+      }
+    }
+    feature_lists: {
+      feature_list {
+        key: "Encounter.meta.lastUpdated"
+        value { feature { int64_list { value: 1420444800 } } }
+      }
+      feature_list {
+        key: "Encounter.class"
+        value { feature { bytes_list { value: "actcode:IMP" } } }
+      }
+      feature_list {
+        key: "Encounter.period.end"
+        value { feature { int64_list {} } }
+      }
+      feature_list {
+        key: "Encounter.period.start"
+        value { feature { int64_list { value: 1420444800 } } }
+      }
+      feature_list {
+        key: "encounterId"
+        value { feature { int64_list { value: 1420444800 } } }
+      }
+      feature_list {
+        key: "eventId"
+        value { feature { int64_list { value: 1420444800 } } }
+      }
+    })proto", &seqex));
+
+  PerformTest("Patient/14", bundle, trigger_labels_pair,
+              {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
+}
+
 TEST_F(BundleToSeqexConverterTest, RedactedFeatures) {
   // We redact the icd9 flavor features for Encounter.reason, but
   // keep the main Encounter.reason feature for test purposes.

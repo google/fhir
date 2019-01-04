@@ -95,6 +95,7 @@ message EventLabel {
         proto.Decimal decimal = 2;
         proto.Integer integer = 3;
         proto.String string_value = 4 [json_name = "string"];
+        proto.DateTime date_time = 5;
       }
     }
     ClassValue class_value = 5 [

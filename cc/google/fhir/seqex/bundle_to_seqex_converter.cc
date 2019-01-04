@@ -312,6 +312,7 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
     Feature class_names;
     Feature integers;
     Feature floats;
+    Feature datetime_secs;
     for (const auto& label : event_label.label()) {
       int label_value_types = 0;
       if (label.class_name().has_code()) {
@@ -331,6 +332,12 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
           CHECK(stu3::GetDecimalValue(label.class_value().decimal(), &value)
                     .ok());
           floats.mutable_float_list()->add_value(value);
+        }
+        if (label.class_value().has_date_time()) {
+           ::absl::Time date_time = stu3::GetTimeFromTimelikeElement(
+               label.class_value().date_time());
+           datetime_secs.mutable_int64_list()->add_value(
+               absl::ToUnixSeconds(date_time));
         }
         CHECK(!label.class_value().has_boolean());  // TODO: implement
         label_value_types++;
@@ -356,6 +363,10 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
     if (floats.float_list().value_size() > 0) {
       (*result.mutable_feature())[absl::StrCat(label_prefix, ".value_float")] =
           floats;
+    }
+    if (datetime_secs.int64_list().value_size() > 0) {
+      (*result.mutable_feature())[
+          absl::StrCat(label_prefix, ".value_datetime_secs")] = datetime_secs;
     }
   }
   return result;
