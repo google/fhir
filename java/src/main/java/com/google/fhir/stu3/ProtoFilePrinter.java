@@ -51,6 +51,10 @@ public class ProtoFilePrinter {
           + "//    See the License for the specific language governing permissions and\n"
           + "//    limitations under the License.\n";
 
+  // The proto package that contains the annotation definitions for proto options.
+  // TODO: Move the annotation to a general location.
+  static final String ANNOTATION_PACKAGE = "google.fhir.stu3.proto";
+
   private boolean addLicense = false;
 
   private static final Escaper VALUE_REGEX_ESCAPER =
@@ -158,9 +162,7 @@ public class ProtoFilePrinter {
     // For fhir options, only fully type the package name if we are not writing to the core FHIR
     // package.
     String optionPackage =
-        packageName.equals("." + ProtoGenerator.CORE_FHIR_PACKAGE)
-            ? ""
-            : "." + ProtoGenerator.CORE_FHIR_PACKAGE + ".";
+        packageName.equals("." + ANNOTATION_PACKAGE) ? "" : "." + ANNOTATION_PACKAGE + ".";
     if (options.hasExtension(Annotations.structureDefinitionKind)) {
       message
           .append(fieldIndent)

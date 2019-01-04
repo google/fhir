@@ -21,9 +21,9 @@ import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
-import com.google.common.base.Ascii;
 import com.google.common.base.Splitter;
 import com.google.common.io.Files;
+import com.google.fhir.common.FhirVersion;
 import com.google.fhir.dstu2.StructureDefinitionTransformer;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.stu3.AnnotationUtils;
@@ -66,21 +66,6 @@ class ProtoGeneratorMain {
 
   private static final String EXTENSION_STRUCTURE_DEFINITION_URL =
       AnnotationUtils.getStructureDefinitionUrl(Extension.getDescriptor());
-
-  private static enum FhirVersion {
-    DSTU2,
-    STU3;
-
-    /** Converts from a String value. */
-    public static FhirVersion fromString(String code) {
-      for (FhirVersion fhirVersion : FhirVersion.values()) {
-        if (Ascii.equalsIgnoreCase(fhirVersion.toString(), code)) {
-          return fhirVersion;
-        }
-      }
-      return null;
-    }
-  }
 
   /** Class that implements string flag to FHIR version enum. */
   public static class FhirVersionConverter implements IStringConverter<FhirVersion> {
@@ -216,14 +201,14 @@ class ProtoGeneratorMain {
 
   private static StructureDefinition loadStructureDefinition(
       String fullFilename, FhirVersion fhirVersion) throws IOException {
-    if (FhirVersion.DSTU2.equals(fhirVersion)) {
-      String json = Files.asCharSource(new File(fullFilename), StandardCharsets.UTF_8).read();
-      String transformed = StructureDefinitionTransformer.transform(json);
-      StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
-      JsonFormat.Parser.newBuilder().build().merge(transformed, structDefBuilder);
-      return structDefBuilder.build();
+    if (FhirVersion.STU3.equals(fhirVersion)) {
+      return FileUtils.loadStructureDefinition(new File(fullFilename));
     }
-    return FileUtils.loadStructureDefinition(new File(fullFilename));
+    String json = Files.asCharSource(new File(fullFilename), StandardCharsets.UTF_8).read();
+    String transformed = StructureDefinitionTransformer.transform(json);
+    StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
+    JsonFormat.Parser.newBuilder().build().merge(transformed, structDefBuilder);
+    return structDefBuilder.build();
   }
 
   ProtoGeneratorMain(PrintWriter writer, ProtoFilePrinter protoPrinter) {
@@ -303,7 +288,8 @@ class ProtoGeneratorMain {
     writer.println("Generating proto descriptors...");
     writer.flush();
 
-    ProtoGenerator generator = new ProtoGenerator(packageInfo, args.fhirProtoRoot, knownTypes);
+    ProtoGenerator generator =
+        new ProtoGenerator(packageInfo, args.fhirProtoRoot, args.fhirVersion, knownTypes);
 
     if (args.separateExtensions) {
       List<StructureDefinition> extensions = new ArrayList<>();

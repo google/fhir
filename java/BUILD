@@ -11,6 +11,7 @@ java_library(
     name = "stu3",
     srcs = glob(["src/main/java/com/google/fhir/stu3/*.java"]),
     deps = [
+        ":fhir_common",
         "//external:gson",
         "//external:guava",
         "//proto/stu3:annotations_java_proto",
@@ -37,6 +38,7 @@ java_library(
         ],
     ),
     deps = [
+        ":fhir_common",
         ":structure_definition_transformer",
         ":stu3",
         "//external:guava",
@@ -88,6 +90,23 @@ java_library(
         "@com_beust_jcommander//jar",
         "@com_google_http_client_google_http_client//jar",
         "@com_google_http_client_google_http_client_gson//jar",
+    ],
+)
+
+java_library(
+    name = "fhir_common",
+    srcs = [
+        "src/main/java/com/google/fhir/common/FhirVersion.java",
+    ],
+    deps = [
+        "//external:guava",
+        "//proto/stu3:codes_java_proto",
+        "//proto/stu3:datatypes_java_proto",
+        "//proto/stu3:extensions_java_proto",
+        "//proto/stu3:metadatatypes_java_proto",
+        "//proto/stu3:resources_java_proto",
+        "//proto/stu3:uscore_codes_java_proto",
+        "@com_google_protobuf//:protobuf_java",
     ],
 )
 
@@ -287,6 +306,7 @@ java_test(
     ],
     test_class = "com.google.fhir.stu3.ProtoFilePrinterTest",
     deps = [
+        ":fhir_common",
         ":stu3",
         "//external:gson",
         "//external:guava",
@@ -315,6 +335,7 @@ java_test(
     ],
     test_class = "com.google.fhir.stu3.ProtoGeneratorTest",
     deps = [
+        ":fhir_common",
         ":stu3",
         "//external:gson",
         "//external:guava",

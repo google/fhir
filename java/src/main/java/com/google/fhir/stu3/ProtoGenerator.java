@@ -22,24 +22,20 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.MoreCollectors;
+import com.google.fhir.common.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
-import com.google.fhir.stu3.proto.AbstractTypeCode;
-import com.google.fhir.stu3.proto.AddressTypeCode;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.CodeableConcept;
 import com.google.fhir.stu3.proto.CodingWithFixedCode;
 import com.google.fhir.stu3.proto.CodingWithFixedSystem;
 import com.google.fhir.stu3.proto.ContainedResource;
-import com.google.fhir.stu3.proto.Decimal;
 import com.google.fhir.stu3.proto.ElementDefinition;
-import com.google.fhir.stu3.proto.ElementDefinitionBindingName;
 import com.google.fhir.stu3.proto.ElementDefinitionExplicitTypeName;
 import com.google.fhir.stu3.proto.ElementDefinitionRegex;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.fhir.stu3.proto.StructureDefinitionKindCode;
 import com.google.fhir.stu3.proto.TypeDerivationRuleCode;
 import com.google.fhir.stu3.proto.Uri;
-import com.google.fhir.stu3.uscore.UsCoreBirthSexCode;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
@@ -72,11 +68,9 @@ import java.util.stream.Collectors;
 // TODO: Move a bunch of the public static methods into ProtoGeneratorUtils.
 public class ProtoGenerator {
 
-  // This is the core package containing types defined by FHIR in the STU3 spec.
-  // Things like datatypes and extensions will be imported from this package.
-  // When regenerating proto files defined by the fhir spec like Decimal or Patient, this will equal
-  // the #packageName.
-  static final String CORE_FHIR_PACKAGE = "google.fhir.stu3.proto";
+  // The path for annotation definition of proto options.
+  // TODO: Move the annotation to a general location.
+  private static final String ANNOTATION_PATH = "proto/stu3";
 
   // Map of time-like primitive type ids to supported granularity
   private static final ImmutableMap<String, List<String>> TIME_LIKE_PRECISION_MAP =
@@ -127,22 +121,9 @@ public class ProtoGenerator {
   // Mapping from urls for StructureDefinition to data about that StructureDefinition.
   private final ImmutableMap<String, StructureDefinitionData> structDefDataById;
   // Mapping from ValueSet url to Descriptor for the message type it should be inlined as.
-  private final ImmutableMap<String, Descriptor> valueSetTypesByCodeReference;
+  private final ImmutableMap<String, Descriptor> valueSetTypesByUrl;
 
-  private final ImmutableMap<String, Set<String>> coreTypeDefinitionsByFile =
-      new ImmutableMap.Builder<String, Set<String>>()
-          .put("datatypes.proto", getTypesDefinedInFile(Decimal.getDescriptor().getFile()))
-          .put(
-              "resources.proto",
-              getTypesDefinedInFile(StructureDefinition.getDescriptor().getFile()))
-          .put(
-              "metadatatypes.proto",
-              getTypesDefinedInFile(ElementDefinition.getDescriptor().getFile()))
-          .put(
-              "extensions.proto",
-              getTypesDefinedInFile(ElementDefinitionBindingName.getDescriptor().getFile()))
-          .put("codes.proto", getTypesDefinedInFile(AbstractTypeCode.getDescriptor().getFile()))
-          .build();
+  private final ImmutableMap<String, Set<String>> coreTypeDefinitionsByFile;
 
   private static Set<String> getTypesDefinedInFile(FileDescriptor file) {
     return file.getMessageTypes().stream()
@@ -153,6 +134,11 @@ public class ProtoGenerator {
   // The package to write new protos to.
   private final PackageInfo packageInfo;
   private final String fhirProtoRootPath;
+  // This is the core package containing types defined by FHIR in the spec.
+  // Things like datatypes and extensions will be imported from this package.
+  // When regenerating proto files defined by the fhir spec like Decimal or Patient, this will equal
+  // the #packageName.
+  private final String coreFhirPackage;
 
   private static class StructureDefinitionData {
     final StructureDefinition structDef;
@@ -224,17 +210,25 @@ public class ProtoGenerator {
   public ProtoGenerator(
       PackageInfo packageInfo,
       String fhirProtoRootPath,
+      FhirVersion fhirVersion,
       Map<StructureDefinition, String> knownTypes) {
     this.packageInfo = packageInfo;
     this.fhirProtoRootPath = fhirProtoRootPath;
+    this.coreFhirPackage = fhirVersion.coreFhirPackage;
 
-    // TODO: Do this with ValueSet resources once we have them
-    this.valueSetTypesByCodeReference =
-        new ImmutableMap.Builder<String, Descriptor>()
-            .putAll(loadCodeTypesFromFile(AbstractTypeCode.getDescriptor().getFile()))
-            .putAll(loadCodeTypesFromFile(AddressTypeCode.getDescriptor().getFile()))
-            .putAll(loadCodeTypesFromFile(UsCoreBirthSexCode.getDescriptor().getFile()))
-            .build();
+    // TODO: Do this with ValueSet resources once we have them.
+    ImmutableMap.Builder<String, Descriptor> valueSetTypesByUrlBuilder =
+        new ImmutableMap.Builder<>();
+    for (FileDescriptor desc : fhirVersion.codeTypeList) {
+      valueSetTypesByUrlBuilder.putAll(loadCodeTypesFromFile(desc));
+    }
+    this.valueSetTypesByUrl = valueSetTypesByUrlBuilder.build();
+
+    ImmutableMap.Builder<String, Set<String>> coreTypeBuilder = new ImmutableMap.Builder<>();
+    for (Map.Entry<String, FileDescriptor> entry : fhirVersion.coreTypeMap.entrySet()) {
+      coreTypeBuilder.put(entry.getKey(), getTypesDefinedInFile(entry.getValue()));
+    }
+    this.coreTypeDefinitionsByFile = coreTypeBuilder.build();
 
     Map<String, StructureDefinitionData> mutableStructDefDataByUrl = new HashMap<>();
     Map<String, StructureDefinitionData> mutableStructDefDataById = new HashMap<>();
@@ -311,7 +305,7 @@ public class ProtoGenerator {
     }
     if (!(structDefData.protoPackage.equals(packageInfo.getProtoPackage())
         || (isSingleTypedExtensionDefinition(structDefData.structDef)
-            && structDefData.protoPackage.equals(CORE_FHIR_PACKAGE)))) {
+            && structDefData.protoPackage.equals(coreFhirPackage)))) {
       throw new IllegalArgumentException(
           "Inconsistent package name for "
               + def.getUrl().getValue()
@@ -398,7 +392,7 @@ public class ProtoGenerator {
       builder.addMessageType(proto);
     }
     // Add imports. Annotations is always needed; datatypes is needed unless we are building them.
-    builder.addDependency(new File(fhirProtoRootPath, "annotations.proto").toString());
+    builder.addDependency(new File(ANNOTATION_PATH, "annotations.proto").toString());
     // Add the remaining FHIR dependencies if the file uses a type from the FHIR dep, but does not
     // define a type from that dep.
     for (Map.Entry<String, Set<String>> entry : coreTypeDefinitionsByFile.entrySet()) {
@@ -415,7 +409,7 @@ public class ProtoGenerator {
   // Returns true if the file proto uses a type from a set of types, but does not define it.
   private boolean needsDep(FileDescriptorProtoOrBuilder fileProto, Set<String> types) {
     for (DescriptorProto descriptor : fileProto.getMessageTypeList()) {
-      if (types.contains(CORE_FHIR_PACKAGE + "." + descriptor.getName())) {
+      if (types.contains(coreFhirPackage + "." + descriptor.getName())) {
         // This file defines a type from the set.  It can't depend on itself.
         return false;
       }
@@ -551,13 +545,13 @@ public class ProtoGenerator {
           buildNestedTypeIfNeeded(element, elementList, field);
       if (optionalNestedType.isPresent()) {
         builder.addNestedType(optionalNestedType.get());
-        // The nested type is defined in the local package, so replace the CORE_FHIR_PACKAGE
+        // The nested type is defined in the local package, so replace the core FHIR package
         // with the local packageName in the field type.
         field =
             field
                 .toBuilder()
                 .setTypeName(
-                    field.getTypeName().replace(CORE_FHIR_PACKAGE, packageInfo.getProtoPackage()))
+                    field.getTypeName().replace(coreFhirPackage, packageInfo.getProtoPackage()))
                 .build();
       }
       builder.addField(field);
@@ -973,8 +967,8 @@ public class ProtoGenerator {
     if (url.isEmpty()) {
       return Optional.empty();
     }
-    if (valueSetTypesByCodeReference.containsKey(url)) {
-      return Optional.of(valueSetTypesByCodeReference.get(url));
+    if (valueSetTypesByUrl.containsKey(url)) {
+      return Optional.of(valueSetTypesByUrl.get(url));
     }
     // TODO: Throw an error in strict mode.
     return Optional.empty();
@@ -1051,7 +1045,7 @@ public class ProtoGenerator {
           .build();
     }
 
-    String fieldPackage = CORE_FHIR_PACKAGE;
+    String fieldPackage = coreFhirPackage;
     if (isExtensionBackboneElement(element)) {
       // This is a internally-defined extension slice that will be inlined as a nested type for
       // complex extensions, or as a primitive type simple extensions.
@@ -1263,7 +1257,7 @@ public class ProtoGenerator {
           buildFieldInternal(
                   fieldName,
                   fieldType,
-                  CORE_FHIR_PACKAGE,
+                  coreFhirPackage,
                   nextTag++,
                   FieldDescriptorProto.Label.LABEL_OPTIONAL,
                   options.build())
@@ -1453,7 +1447,7 @@ public class ProtoGenerator {
               valueSetType.get().getName(), valueSetType.get().getFile().getPackage());
         }
       }
-      return new QualifiedType(toFieldTypeCase(rawType), CORE_FHIR_PACKAGE);
+      return new QualifiedType(toFieldTypeCase(rawType), coreFhirPackage);
     }
     // This is a choice-type extension that will be inlined as a message.
     return new QualifiedType(getContainerType(element, elementList), packageInfo.getProtoPackage());

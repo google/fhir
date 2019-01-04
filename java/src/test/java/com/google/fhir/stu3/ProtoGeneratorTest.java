@@ -18,6 +18,7 @@ import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
+import com.google.fhir.common.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.StructureDefinition;
@@ -43,7 +44,6 @@ public class ProtoGeneratorTest {
   private TextFormat.Parser textParser;
   private ExtensionRegistry registry;
   private ProtoGenerator protoGenerator;
-  private ProtoGenerator googleProtoGenerator;
   private Runfiles runfiles;
 
   private static Map<StructureDefinition, String> knownStructDefs = null;
@@ -157,14 +157,7 @@ public class ProtoGeneratorTest {
                 .setJavaProtoPackage("com.google.fhir.stu3.proto")
                 .build(),
             "proto/stu3",
-            getKnownStructDefs());
-    googleProtoGenerator =
-        new ProtoGenerator(
-            PackageInfo.newBuilder()
-                .setProtoPackage("google.fhir.stu3.google")
-                .setJavaProtoPackage("com.google.fhir.stu3.google")
-                .build(),
-            "proto/stu3",
+            FhirVersion.STU3,
             getKnownStructDefs());
 
     registry = ExtensionRegistry.newInstance();
