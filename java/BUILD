@@ -52,6 +52,15 @@ java_library(
         "@com_google_http_client_google_http_client_gson//jar",
         "@com_google_protobuf//:protobuf_java",
         "@com_google_protobuf//:protobuf_java_util",
+        "@org_apache_beam_beam_sdks_java_core//jar",
+    ],
+)
+
+java_library(
+    name = "beam-runners",
+    runtime_deps = [
+        "@org_apache_beam_beam_runners_direct_java//jar",
+        "@org_apache_beam_beam_runners_google_cloud_dataflow_java//jar",
     ],
 )
 
@@ -77,6 +86,15 @@ java_binary(
     name = "SplitBundle",
     main_class = "com.google.fhir.examples.SplitBundleMain",
     runtime_deps = [":examples"],
+)
+
+java_binary(
+    name = "SyntheaToTFRecords",
+    main_class = "com.google.fhir.examples.SyntheaToTFRecordsMain",
+    runtime_deps = [
+        ":beam-runners",
+        ":examples",
+    ],
 )
 
 java_library(

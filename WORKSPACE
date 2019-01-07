@@ -68,6 +68,9 @@ transitive_maven_jar(
         "com.google.code.gson:gson:2.8.5",
         "com.google.truth:truth:0.42",
         "com.google.http-client:google-http-client-gson:1.24.1",
+        "org.apache.beam:beam-runners-direct-java:2.9.0",
+        "org.apache.beam:beam-runners-google-cloud-dataflow-java:2.9.0",
+        "org.apache.beam:beam-sdks-java-core:2.9.0",
         "junit:junit:4.12",
     ]
 )
