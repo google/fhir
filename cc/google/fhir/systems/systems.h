@@ -45,6 +45,12 @@ const char kUnitsOfMeasure[] = "http://unitsofmeasure.org";
 const char kCpt[] = "http://www.ama-assn.org/go/cpt";
 const char kRxNorm[] = "http://www.nlm.nih.gov/research/umls/rxnorm";
 const char kNdc[] = "http://hl7.org/fhir/sid/ndc";
+const char kSnomed[] = "http://snomed.info/sct";
+const char kObservationCategory[] = "http://hl7.org/fhir/observation-category";
+const char kClaimCategory[] = "http://hl7.org/fhir/claiminformationcategory";
+const char kMaritalStatus[] = "http://hl7.org/fhir/v3/MaritalStatus";
+const char kNUBCDischarge[] = "http://www.nubc.org/patient-discharge";
+const char kLanguage[] = "urn:ietf:bcp:47";
 
 // Format ICD9 Diagnosis code according to
 // http://www.icd9data.com/2015/Volume1/default.htm.

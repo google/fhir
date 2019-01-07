@@ -61,6 +61,24 @@ string ToShortSystemName(const string& system) {
   if (system == kNdc) {
     return "ndc";
   }
+  if (system == kSnomed) {
+    return "snomed";
+  }
+  if (system == kObservationCategory) {
+    return "observation_category";
+  }
+  if (system == kClaimCategory) {
+    return "claim_category";
+  }
+  if (system == kMaritalStatus) {
+    return "marital_status";
+  }
+  if (system == kNUBCDischarge) {
+    return "nubc_discharge";
+  }
+  if (system == kLanguage) {
+    return "language";
+  }
   if (system == kRxNorm) {
     return "rxnorm";
   }
