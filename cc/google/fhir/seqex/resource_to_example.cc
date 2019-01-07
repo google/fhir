@@ -60,6 +60,7 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
+using ::google::fhir::stu3::proto::Boolean;
 using ::google::fhir::stu3::proto::CodeableConcept;
 using ::google::fhir::stu3::proto::Coding;
 using ::google::fhir::stu3::proto::Date;
@@ -69,6 +70,7 @@ using ::google::fhir::stu3::proto::Extension;
 using ::google::fhir::stu3::proto::Id;
 using ::google::fhir::stu3::proto::Identifier;
 using ::google::fhir::stu3::proto::Instant;
+using ::google::fhir::stu3::proto::Integer;
 using ::google::fhir::stu3::proto::PositiveInt;
 using ::google::fhir::stu3::proto::Reference;
 using ::google::fhir::stu3::proto::String;
@@ -353,6 +355,20 @@ void MessageToExample(const google::protobuf::Message& message, const string& pr
           AddValueAndOrTokensToExample(
               tokenize_feature_set, add_tokenize_feature_set, name,
               xhtml.value(), example, enable_attribution);
+        } else if (field->message_type()->full_name() ==
+                   Boolean::descriptor()->full_name()) {
+          Boolean boolean;
+          boolean.CopyFrom(child);
+          (*example->mutable_features()->mutable_feature())[name]
+              .mutable_bytes_list()
+              ->add_value(boolean.value() ? "true" : "false");
+        } else if (field->message_type()->full_name() ==
+                   Integer::descriptor()->full_name()) {
+          Integer integer;
+          integer.CopyFrom(child);
+          (*example->mutable_features()->mutable_feature())[name]
+              .mutable_int64_list()
+              ->add_value(integer.value());
         } else if (field->message_type()->full_name() ==
                    PositiveInt::descriptor()->full_name()) {
           PositiveInt positive_int;
