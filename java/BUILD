@@ -59,8 +59,25 @@ java_library(
 java_library(
     name = "beam-runners",
     runtime_deps = [
+        "@com_fasterxml_jackson_core_jackson_annotations//jar",
+        "@com_fasterxml_jackson_core_jackson_core//jar",
+        "@com_fasterxml_jackson_core_jackson_databind//jar",
+        "@com_google_api_client_google_api_client//jar",
+        "@com_google_apis_google_api_services_clouddebugger//jar",
+        "@com_google_apis_google_api_services_dataflow//jar",
+        "@com_google_apis_google_api_services_storage//jar",
+        "@com_google_auth_google_auth_library_credentials//jar",
+        "@com_google_cloud_bigdataoss_util//jar",
+        "@joda_time_joda_time//jar",
+        "@org_apache_beam_beam_model_pipeline//jar",
         "@org_apache_beam_beam_runners_direct_java//jar",
         "@org_apache_beam_beam_runners_google_cloud_dataflow_java//jar",
+        "@org_apache_beam_beam_sdks_java_extensions_google_cloud_platform_core//jar",
+        "@org_apache_beam_beam_sdks_java_io_google_cloud_platform//jar",
+        "@org_apache_beam_beam_vendor_grpc_v1_13_1//jar",
+        "@org_slf4j_slf4j_api//jar",
+        "@org_slf4j_slf4j_simple//jar",
+        "@org_xerial_snappy_snappy_java//jar",
     ],
 )
 

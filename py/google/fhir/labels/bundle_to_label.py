@@ -110,7 +110,8 @@ def main(argv):
       LengthOfStayRangeLabelAt24HoursFn(for_synthea=flags.FLAGS.for_synthea))
   _ = labels | beam.io.WriteToTFRecord(
       flags.FLAGS.output_path,
-      coder=beam.coders.ProtoCoder(google_extensions_pb2.EventLabel))
+      coder=beam.coders.ProtoCoder(google_extensions_pb2.EventLabel),
+      file_name_suffix='.tfrecords')
 
   p.run()
 

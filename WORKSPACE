@@ -64,14 +64,18 @@ transitive_maven_jar(
     name = "dependencies",
     artifacts = [
         "com.beust:jcommander:1.72",
+        "com.fasterxml.jackson.core:jackson-core:2.9.5",
+        "com.fasterxml.jackson.core:jackson-databind:2.9.5",
+        "com.fasterxml.jackson.core:jackson-annotations:2.9.5",
         "com.google.cloud:google-cloud-bigquery:1.38.0",
         "com.google.code.gson:gson:2.8.5",
         "com.google.truth:truth:0.42",
         "com.google.http-client:google-http-client-gson:1.24.1",
+        "junit:junit:4.12",
         "org.apache.beam:beam-runners-direct-java:2.9.0",
         "org.apache.beam:beam-runners-google-cloud-dataflow-java:2.9.0",
         "org.apache.beam:beam-sdks-java-core:2.9.0",
-        "junit:junit:4.12",
+        "org.slf4j:slf4j-simple:1.7.25",
     ]
 )
 

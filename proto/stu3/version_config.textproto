@@ -2,6 +2,7 @@ resource_config {
   key: "Claim"
   value {
     default_timestamp_fields: "Claim.created"
+    default_timestamp_fields: "Claim.billablePeriod.end"
   }
 }
 resource_config {
