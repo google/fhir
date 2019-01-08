@@ -19,17 +19,18 @@ if [[ $# -eq 0 ]] ; then
 fi
 # Remove any trailing "/", which confuses beam's file matcher.
 DIR=$(echo $1 | sed "s/\/$//")
-bazel build //py/google/fhir/labels:all
+bazel build -c opt //py/google/fhir/labels:all
 BUNDLE_TO_LABELS=$(pwd)/../../bazel-bin/py/google/fhir/labels/bundle_to_label
 
 # We generate labels for train, validation, and test separately, using an ad-hoc
 # split method for now.
 $BUNDLE_TO_LABELS  --for_synthea \
   --input_path=${DIR}/bundles-00000-of-00010.tfrecords \
-  --output_path=${DIR}/labels/test
+  --output_path=${DIR}/labels/test &
 $BUNDLE_TO_LABELS  --for_synthea \
   --input_path=${DIR}/bundles-00001-of-00010.tfrecords \
-  --output_path=${DIR}/labels/validation
+  --output_path=${DIR}/labels/validation &
 $BUNDLE_TO_LABELS  --for_synthea \
   --input_path=${DIR}/bundles-0000[23456789]-of-00010.tfrecords \
-  --output_path=${DIR}/labels/train
+  --output_path=${DIR}/labels/train &
+wait

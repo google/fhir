@@ -19,7 +19,7 @@ if [[ $# -eq 0 ]] ; then
 fi
 # Remove any trailing "/", which confuses beam's file matcher.
 DIR=$(echo $1 | sed "s/\/$//")
-bazel build //py/google/fhir/seqex:all
+bazel build -c opt //py/google/fhir/seqex:all
 BUNDLE_TO_SEQEX=$(pwd)/../../bazel-bin/py/google/fhir/seqex/bundle_to_seqex_main
 VERSION_CONFIG=$(pwd)/../../proto/stu3/version_config.textproto
 
@@ -29,5 +29,6 @@ for i in validation test train; do
   $BUNDLE_TO_SEQEX --fhir_version_config=$VERSION_CONFIG \
     --bundle_path=${DIR}/bundles*.tfrecords \
     --label_path=${DIR}/labels/${i}-* \
-    --output_path=${DIR}/seqex/${i}
+    --output_path=${DIR}/seqex/${i} &
 done
+wait

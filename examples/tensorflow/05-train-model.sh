@@ -17,7 +17,7 @@ if [[ $# -eq 0 ]] ; then
     echo 'Missing argument: scratch directory'
     exit 1
 fi
-bazel build //py/google/fhir/models:all
+bazel build -c opt //py/google/fhir/models:all
 TRAIN_MODEL=$(pwd)/../../bazel-bin/py/google/fhir/models/run_locally
 
 $TRAIN_MODEL \
