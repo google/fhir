@@ -174,7 +174,25 @@ Status GetPreferredCode(const CodeableConcept& concept, string* result) {
     *result = absl::StrCat("cpt:" + code);
   } else if (ExtractCodeBySystem(concept, systems::kNdc, &code).ok()) {
     *result = absl::StrCat("ndc:" + code);
-
+  } else if (ExtractCodeBySystem(concept, systems::kRxNorm, &code).ok()) {
+    *result = absl::StrCat("rxnorm:" + code);
+  } else if (ExtractCodeBySystem(concept, systems::kSnomed, &code).ok()) {
+    *result = absl::StrCat("snomed:" + code);
+  } else if (ExtractCodeBySystem(concept, systems::kObservationCategory, &code)
+                 .ok()) {
+    *result = absl::StrCat("observation_category:" + code);
+  } else if (ExtractCodeBySystem(concept, systems::kClaimCategory, &code)
+                 .ok()) {
+    *result = absl::StrCat("claim_category:" + code);
+  } else if (ExtractCodeBySystem(concept, systems::kMaritalStatus, &code)
+                 .ok()) {
+    *result = absl::StrCat("marital_status:" + code);
+  } else if (ExtractCodeBySystem(concept, systems::kNUBCDischarge, &code)
+                 .ok()) {
+    *result = absl::StrCat("nubc_discharge:" + code);
+  } else if (ExtractCodeBySystem(concept, systems::kLanguage, &code)
+                 .ok()) {
+    *result = absl::StrCat("language:" + code);
   } else if (ExtractCodeBySystem(concept, systems::kDischargeDisposition, &code)
                  .ok()) {
     *result = absl::StrCat("discharge_disposition:" + code);
