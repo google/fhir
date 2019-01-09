@@ -12,17 +12,17 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-package com.google.medical.records.fhir;
+package com.google.fhir.profile;
 
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.io.Files;
+import com.google.fhir.proto.Extensions;
 import com.google.fhir.proto.PackageInfo;
+import com.google.fhir.proto.Profiles;
 import com.google.fhir.stu3.JsonFormat;
 import com.google.fhir.stu3.proto.Bundle;
 import com.google.fhir.stu3.proto.StructureDefinition;
-import com.google.medical.records.fhir.proto.Extensions;
-import com.google.medical.records.fhir.proto.Profiles;
 import com.google.protobuf.TextFormat;
 import java.io.File;
 import java.io.IOException;
@@ -46,14 +46,13 @@ public final class ProfileGeneratorTest {
   private List<StructureDefinition> knownTypes;
   private final LocalDate creationDate = LocalDate.of(2018, 9, 22);
 
+  private static final String TESTDATA_DIR = "testdata/stu3/profilegenerator/";
+
   // TODO: consolidate these proto loading functions across test files.
   private static Extensions loadExtensionsProto(String filename) throws IOException {
     Extensions.Builder extensionsBuilder = Extensions.newBuilder();
     TextFormat.merge(
-        Files.asCharSource(
-                new File(
-                    "javatests/com/google/medical/records/fhir/testdata/" + filename + ".prototxt"),
-                StandardCharsets.UTF_8)
+        Files.asCharSource(new File(TESTDATA_DIR + filename + ".prototxt"), StandardCharsets.UTF_8)
             .read(),
         extensionsBuilder);
     return extensionsBuilder.build();
@@ -62,10 +61,7 @@ public final class ProfileGeneratorTest {
   private static Profiles loadProfilesProto(String filename) throws IOException {
     Profiles.Builder profilesBuilder = Profiles.newBuilder();
     TextFormat.merge(
-        Files.asCharSource(
-                new File(
-                    "javatests/com/google/medical/records/fhir/testdata/" + filename + ".prototxt"),
-                StandardCharsets.UTF_8)
+        Files.asCharSource(new File(TESTDATA_DIR + filename + ".prototxt"), StandardCharsets.UTF_8)
             .read(),
         profilesBuilder);
     return profilesBuilder.build();
@@ -74,10 +70,7 @@ public final class ProfileGeneratorTest {
   private static PackageInfo loadPackageInfoProto(String filename) throws IOException {
     PackageInfo.Builder projectInfo = PackageInfo.newBuilder();
     TextFormat.merge(
-        Files.asCharSource(
-                new File(
-                    "javatests/com/google/medical/records/fhir/testdata/" + filename + ".prototxt"),
-                StandardCharsets.UTF_8)
+        Files.asCharSource(new File(TESTDATA_DIR + filename + ".prototxt"), StandardCharsets.UTF_8)
             .read(),
         projectInfo);
     return projectInfo.build();
@@ -92,26 +85,22 @@ public final class ProfileGeneratorTest {
   }
 
   private String loadTestStructureDefinitionJson(String filename) throws IOException {
-    return Files.asCharSource(
-            new File("javatests/com/google/medical/records/fhir/testdata/" + filename),
-            StandardCharsets.UTF_8)
-        .read();
+    return Files.asCharSource(new File(TESTDATA_DIR + filename), StandardCharsets.UTF_8).read();
   }
 
   private StructureDefinition loadFhirStructureDefinition(String filename) throws IOException {
-    return loadStructureDefinition(
-        "testdata/stu3/structure_definitions/" + filename + ".profile.json");
+    return loadStructureDefinition("spec/hl7.fhir.core/3.0.1/package/" + filename);
   }
 
   @Before
   public void setUp() throws IOException {
     knownTypes = new ArrayList<>();
-    knownTypes.add(loadFhirStructureDefinition("coding"));
-    knownTypes.add(loadFhirStructureDefinition("codeableconcept"));
-    knownTypes.add(loadFhirStructureDefinition("element"));
-    knownTypes.add(loadFhirStructureDefinition("extension"));
-    knownTypes.add(loadFhirStructureDefinition("observation"));
-    knownTypes.add(loadFhirStructureDefinition("patient"));
+    knownTypes.add(loadFhirStructureDefinition("StructureDefinition-Coding.json"));
+    knownTypes.add(loadFhirStructureDefinition("StructureDefinition-CodeableConcept.json"));
+    knownTypes.add(loadFhirStructureDefinition("StructureDefinition-Element.json"));
+    knownTypes.add(loadFhirStructureDefinition("StructureDefinition-Extension.json"));
+    knownTypes.add(loadFhirStructureDefinition("StructureDefinition-Observation.json"));
+    knownTypes.add(loadFhirStructureDefinition("StructureDefinition-Patient.json"));
     generator =
         new ProfileGenerator(
             loadPackageInfoProto("test_package_info"),

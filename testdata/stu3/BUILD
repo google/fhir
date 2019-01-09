@@ -69,3 +69,10 @@ filegroup(
         "tensorflow/*",
     ]),
 )
+
+filegroup(
+    name = "profilegenerator",
+    srcs = glob([
+        "profilegenerator/*",
+    ]),
+)

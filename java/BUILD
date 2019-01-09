@@ -436,6 +436,28 @@ java_library(
     ],
 )
 
+java_test(
+    name = "ProfileGeneratorTest",
+    size = "medium",
+    testonly = 1,
+    srcs = ["src/test/java/com/google/fhir/profile/ProfileGeneratorTest.java"],
+    data = [
+        "//spec:fhir_stu3_structure_definitions",
+        "//testdata/stu3:profilegenerator",
+    ],
+    test_class = "com.google.fhir.profile.ProfileGeneratorTest",
+    deps = [
+        ":profile_generator_lib",
+        "//external:guava",
+        "//proto/stu3:profile_config_java_proto",
+        "//proto/stu3:resources_java_proto",
+        "//java:stu3",
+        "@com_google_protobuf//:protobuf_java",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
+    ],
+)
+
 java_binary(
     name = "ProfileGenerator",
     srcs = ["src/main/java/com/google/fhir/profile/ProfileGeneratorMain.java"],
