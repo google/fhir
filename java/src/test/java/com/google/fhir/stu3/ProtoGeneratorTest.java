@@ -140,6 +140,7 @@ public class ProtoGeneratorTest {
     }
     knownStructDefs = new HashMap<>();
     addPackage(knownStructDefs, "spec/hl7.fhir.core/3.0.1/package", "google.fhir.stu3.proto");
+    addPackage(knownStructDefs, "spec/hl7.fhir.core/3.0.1/modified", "google.fhir.stu3.proto");
     addPackage(knownStructDefs, "testdata/stu3/google", "google.fhir.stu3.google");
     addPackage(knownStructDefs, "spec/hl7.fhir.us.core/1.0.1/package", "google.fhir.stu3.uscore");
     return knownStructDefs;

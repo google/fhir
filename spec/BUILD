@@ -24,17 +24,27 @@ filegroup(
     ]),
 )
 
+# Structure Definitions for the STU3 core types.
 filegroup(
-    name = "fhir_stu3_structure_definitions",
-    srcs = glob(["hl7.fhir.core/3.0.1/package/StructureDefinition-*.json"]) + glob([
+    name = "fhir_stu3_structure_definitions_filegroup",
+    srcs = glob(
+        ["hl7.fhir.core/3.0.1/package/StructureDefinition-*.json"],
+        exclude = [
+            "hl7.fhir.core/3.0.1/package/StructureDefinition-StructureDefinition.json",
+            "hl7.fhir.core/3.0.1/package/StructureDefinition-cqif-condition.json",
+            "hl7.fhir.core/3.0.1/package/StructureDefinition-cqif-cqlExpression.json",
+            "hl7.fhir.core/3.0.1/package/StructureDefinition-cqif-fhirPathExpression.json",
+            "hl7.fhir.core/3.0.1/package/StructureDefinition-cqif-library.json",
+            "hl7.fhir.core/3.0.1/package/StructureDefinition-familymemberhistory-genetic.json",
+        ],
+    ) + glob([
         "hl7.fhir.core/3.0.1/modified/StructureDefinition-*.json",
     ]),
 )
 
-# Structure Definitions for the STU3 core types.
 zip_file(
     name = "fhir_stu3_structure_definitions.zip",
-    srcs = glob(["hl7.fhir.core/3.0.1/package/StructureDefinition-*.json"]),
+    filegroup = ":fhir_stu3_structure_definitions_filegroup",
 )
 
 structure_definition_package(
@@ -51,22 +61,21 @@ filegroup(
     ]),
 )
 
-# US Core package
+# Structure Definitions for the US-Core profiles.
 filegroup(
-    name = "uscore",
+    name = "uscore_stu3_structure_definitions_filegroup",
     srcs = glob([
-        "hl7.fhir.us.core/1.0.1/package/StructureDefinition*.json",
+        "hl7.fhir.us.core/1.0.1/package/StructureDefinition-*.json",
     ]),
 )
 
-# Structure Definitions for the US-Core profiles.
 zip_file(
-    name = "uscore_structure_definitions.zip",
-    srcs = glob(["hl7.fhir.us.core/1.0.1/package/StructureDefinition-*.json"]),
+    name = "uscore_stu3_structure_definitions.zip",
+    filegroup = ":uscore_stu3_structure_definitions_filegroup",
 )
 
 structure_definition_package(
     package_name = "uscore-package",
     package_info = "uscore_package_info.prototxt",
-    structure_definitions_zip = "uscore_structure_definitions.zip",
+    structure_definitions_zip = "uscore_stu3_structure_definitions.zip",
 )

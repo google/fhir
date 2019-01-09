@@ -19,12 +19,12 @@ PROTO_GENERATOR = "//java:ProtoGenerator"
 PROFILE_GENERATOR = "//java:ProfileGenerator"
 FHIR_PROTO_ROOT = "proto/stu3"
 
-def zip_file(name, srcs = []):
+def zip_file(name, filegroup):
     native.genrule(
         name = name,
-        srcs = srcs,
+        srcs = [filegroup],
         outs = [name],
-        cmd = "zip --quiet -j $@ $(SRCS)",
+        cmd = "zip --quiet -j $@ $(locations %s)" % filegroup,
     )
 
 def structure_definition_package(package_name, structure_definitions_zip, package_info):
@@ -60,7 +60,7 @@ def gen_fhir_protos(
       additional_proto_imports: Additional proto files the generated protos should import
                                 FHIR datatypes, annotations, and codes are included automatically.
       separate_extensions: If true, will produce two proto files, one for extensions
-                                          and one for profiles.
+                           and one for profiles.
       add_apache_license: Whether or not to include the apache license
     """
 
@@ -190,9 +190,14 @@ def gen_fhir_definitions_and_protos(
         )),
     )
 
+    native.filegroup(
+        name = name + "_structure_definitions_filegroup",
+        srcs = [name + "_extensions.json", name + ".json"],
+    )
+
     zip_file(
         name = name + "_structure_definitions.zip",
-        srcs = [name + "_extensions.json", name + ".json"],
+        filegroup = ":%s_structure_definitions_filegroup" % name,
     )
 
     structure_definition_package(

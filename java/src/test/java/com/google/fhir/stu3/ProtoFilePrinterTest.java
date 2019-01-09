@@ -108,6 +108,10 @@ public final class ProtoFilePrinterTest {
         structDefs,
         new File(runfiles.rlocation("com_google_fhir/spec/hl7.fhir.core/3.0.1/package/"))
             .listFiles(jsonFilter));
+    Collections.addAll(
+        structDefs,
+        new File(runfiles.rlocation("com_google_fhir/spec/hl7.fhir.core/3.0.1/modified/"))
+            .listFiles(jsonFilter));
     knownStructDefs = new HashMap<>();
     for (File file : structDefs) {
       String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
