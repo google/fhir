@@ -28,7 +28,6 @@ import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.CodeableConcept;
 import com.google.fhir.stu3.proto.CodingWithFixedCode;
 import com.google.fhir.stu3.proto.CodingWithFixedSystem;
-import com.google.fhir.stu3.proto.ContainedResource;
 import com.google.fhir.stu3.proto.ElementDefinition;
 import com.google.fhir.stu3.proto.ElementDefinitionExplicitTypeName;
 import com.google.fhir.stu3.proto.ElementDefinitionRegex;
@@ -119,7 +118,7 @@ public class ProtoGenerator {
   // Mapping from urls for StructureDefinition to data about that StructureDefinition.
   private final ImmutableMap<String, StructureDefinitionData> structDefDataByUrl;
   // Mapping from urls for StructureDefinition to data about that StructureDefinition.
-  private final ImmutableMap<String, StructureDefinitionData> structDefDataById;
+  private final ImmutableMap<String, StructureDefinition> baseStructDefsById;
   // Mapping from ValueSet url to Descriptor for the message type it should be inlined as.
   private final ImmutableMap<String, Descriptor> valueSetTypesByUrl;
 
@@ -231,7 +230,6 @@ public class ProtoGenerator {
     this.coreTypeDefinitionsByFile = coreTypeBuilder.build();
 
     Map<String, StructureDefinitionData> mutableStructDefDataByUrl = new HashMap<>();
-    Map<String, StructureDefinitionData> mutableStructDefDataById = new HashMap<>();
     for (Map.Entry<StructureDefinition, String> knownType : knownTypes.entrySet()) {
       StructureDefinition def = knownType.getKey();
       String protoPackage = knownType.getValue();
@@ -257,10 +255,14 @@ public class ProtoGenerator {
       StructureDefinitionData structDefData =
           new StructureDefinitionData(def, inlineType, structDefPackage);
       mutableStructDefDataByUrl.put(def.getUrl().getValue(), structDefData);
-      mutableStructDefDataById.put(def.getId().getValue(), structDefData);
     }
     this.structDefDataByUrl = ImmutableMap.copyOf(mutableStructDefDataByUrl);
-    this.structDefDataById = ImmutableMap.copyOf(mutableStructDefDataById);
+
+    this.baseStructDefsById =
+        knownTypes.keySet().stream()
+            .filter(
+                def -> def.getDerivation().getValue() != TypeDerivationRuleCode.Value.CONSTRAINT)
+            .collect(ImmutableMap.toImmutableMap(def -> def.getId().getValue(), def -> def));
   }
 
   private static Map<String, Descriptor> loadCodeTypesFromFile(FileDescriptor file) {
@@ -341,15 +343,18 @@ public class ProtoGenerator {
 
     // Add message-level annotations.
     DescriptorProto.Builder builder = DescriptorProto.newBuilder();
-    builder.setOptions(
+    MessageOptions.Builder optionsBuilder =
         MessageOptions.newBuilder()
             .setExtension(
                 Annotations.structureDefinitionKind,
                 Annotations.StructureDefinitionKindValue.valueOf(
                     "KIND_" + def.getKind().getValue()))
             .setExtension(Annotations.messageDescription, comment.toString())
-            .setExtension(Annotations.fhirStructureDefinitionUrl, def.getUrl().getValue())
-            .build());
+            .setExtension(Annotations.fhirStructureDefinitionUrl, def.getUrl().getValue());
+    if (def.getAbstract().getValue()) {
+      optionsBuilder.setExtension(Annotations.isAbstractType, def.getAbstract().getValue());
+    }
+    builder.setOptions(optionsBuilder);
 
     // If this is a primitive type, generate the value field first.
     if (isPrimitive) {
@@ -460,17 +465,23 @@ public class ProtoGenerator {
    * Returns a version of the passed-in FileDescriptor that contains a ContainedResource message,
    * which contains only the resource types present in the generated FileDescriptorProto.
    */
-  public FileDescriptorProto addContainedResource(FileDescriptorProto descriptor) {
-    FileDescriptorProto.Builder resultBuilder = descriptor.toBuilder();
-    Set<String> types = new HashSet<>();
+  public FileDescriptorProto addContainedResource(FileDescriptorProto fileDescriptor) {
+    FileDescriptorProto.Builder resultBuilder = fileDescriptor.toBuilder();
+    DescriptorProto.Builder contained =
+        DescriptorProto.newBuilder()
+            .setName("ContainedResource")
+            .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource"));
+    int tagNumber = 1;
     for (DescriptorProto type : resultBuilder.getMessageTypeList()) {
-      types.add(type.getName());
-    }
-    Descriptor containedResource = ContainedResource.getDescriptor();
-    DescriptorProto.Builder contained = containedResource.toProto().toBuilder().clearField();
-    for (FieldDescriptor field : containedResource.getFields()) {
-      if (types.contains(field.getMessageType().getName())) {
-        contained.addField(field.toProto());
+      if (!type.getOptions().getExtension(Annotations.isAbstractType)) {
+        contained.addField(
+            FieldDescriptorProto.newBuilder()
+                .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type.getName()))
+                .setNumber(tagNumber++)
+                .setTypeName(type.getName())
+                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                .setOneofIndex(0 /* the oneof_resource */)
+                .build());
       }
     }
     return resultBuilder.addMessageType(contained).build();
@@ -908,9 +919,34 @@ public class ProtoGenerator {
   }
 
   /**
-   * Gets the field type of a potentially complex element. This handles choice types, types that
-   * reference other elements, references, profiles, etc.
+   * Gets the field type and package of a potentially complex element. This handles choice types,
+   * types that reference other elements, references, profiles, etc.
    */
+  private QualifiedType getQualifiedFieldType(
+      ElementDefinition element, List<ElementDefinition> elementList) {
+    String rawFieldType = getFieldType(element, elementList);
+    if (rawFieldType.equals("Code")) {
+      Optional<Descriptor> valueSetType = getBindingValueSetType(element);
+      if (valueSetType.isPresent()) {
+        return new QualifiedType(
+            valueSetType.get().getName(), valueSetType.get().getFile().getPackage());
+      }
+    }
+    if (rawFieldType.equals("ContainedResource")) {
+      if (packageInfo.getLocalContainedResource()) {
+        return new QualifiedType(rawFieldType, packageInfo.getProtoPackage());
+      }
+      if (!packageInfo.getContainedResourcePackage().isEmpty()) {
+        return new QualifiedType(rawFieldType, packageInfo.getContainedResourcePackage());
+      }
+    }
+    if (isLocalContentReference(element)) {
+      return new QualifiedType(rawFieldType, packageInfo.getProtoPackage());
+    }
+    return new QualifiedType(rawFieldType, coreFhirPackage);
+  }
+
+  /* Gets the field type (without package) of a potentially complex element. */
   private String getFieldType(ElementDefinition element, List<ElementDefinition> elementList) {
     if (isContainer(element) || element.hasContentReference() || isChoiceType(element)) {
       // Get the type for this container, possibly from a named reference to another element.
@@ -1045,7 +1081,6 @@ public class ProtoGenerator {
           .build();
     }
 
-    String fieldPackage = coreFhirPackage;
     if (isExtensionBackboneElement(element)) {
       // This is a internally-defined extension slice that will be inlined as a nested type for
       // complex extensions, or as a primitive type simple extensions.
@@ -1074,18 +1109,7 @@ public class ProtoGenerator {
       options.setExtension(Annotations.isChoiceType, true);
     }
 
-    if (isLocalContentReference(element)) {
-      // Fields that reference local types should have local package.
-      // Note that this does NOT handle locally generated nested types - those require the package
-      // in the field to be updated when we generate the nested type.
-      fieldPackage = packageInfo.getProtoPackage();
-    }
-
-    String fieldType = getFieldType(element, elementList);
-    Optional<Descriptor> valueSetType = getBindingValueSetType(element);
-    if (valueSetType.isPresent()) {
-      fieldPackage = valueSetType.get().getFile().getPackage();
-    }
+    QualifiedType fieldType = getQualifiedFieldType(element, elementList);
 
     // Add typed reference options
     if (!isChoiceType
@@ -1100,7 +1124,12 @@ public class ProtoGenerator {
     }
 
     return buildFieldInternal(
-            jsonFieldNameString, fieldType, fieldPackage, nextTag, fieldSize, options.build())
+            jsonFieldNameString,
+            fieldType.type,
+            fieldType.packageName,
+            nextTag,
+            fieldSize,
+            options.build())
         .build();
   }
 
@@ -1200,17 +1229,17 @@ public class ProtoGenerator {
     if (basePath.endsWith("[x]")) {
       ElementDefinition choiceTypeBase =
           getElementDefinitionById(
-              basePath, structDefDataById.get(baseType).structDef.getSnapshot().getElementList());
+              basePath, baseStructDefsById.get(baseType).getSnapshot().getElementList());
       return Optional.of(choiceTypeBase);
     }
     if (!baseType.equals("Element")) {
       // Traverse up the tree to check for a choice type in this element's ancestry.
-      if (!structDefDataById.containsKey(baseType)) {
+      if (!baseStructDefsById.containsKey(baseType)) {
         throw new IllegalArgumentException("Unknown StructureDefinition id: " + baseType);
       }
       return getChoiceTypeBase(
           getElementDefinitionById(
-              basePath, structDefDataById.get(baseType).structDef.getSnapshot().getElementList()));
+              basePath, baseStructDefsById.get(baseType).getSnapshot().getElementList()));
     }
     return Optional.empty();
   }

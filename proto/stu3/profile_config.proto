@@ -15,9 +15,14 @@ message PackageInfo {
   string java_proto_package = 3;
   string go_proto_package = 4;
 
-  string publisher = 5;
-  string fhir_version = 6;
-  string telcom_url = 7;
+  oneof contained_resource {
+    bool local_contained_resource = 5;
+    string contained_resource_package = 6;
+  }
+
+  string publisher = 7;
+  string fhir_version = 8;
+  string telcom_url = 9;
 }
 
 enum SizeRestriction {

@@ -281,7 +281,8 @@ public final class ProtoFilePrinterTest {
     for (FieldDescriptor resource : ContainedResource.getDescriptor().getFields()) {
       resourceDefinitions.add(readStructureDefinition(resource.getMessageType().getName()));
     }
-    // DomainResource is not a contained resource.
+    // Resource and DomainResource are not contained resources.
+    resourceDefinitions.add(readStructureDefinition("Resource"));
     resourceDefinitions.add(readStructureDefinition("DomainResource"));
     FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(resourceDefinitions);
     descriptor = protoGenerator.addContainedResource(descriptor);

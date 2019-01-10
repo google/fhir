@@ -306,11 +306,14 @@ class ProtoGeneratorMain {
           args.outputName + "_extensions.proto",
           args,
           false);
-      writeProto(
-          generator.generateFileDescriptor(profiles), args.outputName + ".proto", args, true);
+      FileDescriptorProto mainFileProto = generator.generateFileDescriptor(profiles);
+      if (args.includeContainedResource || packageInfo.getLocalContainedResource()) {
+        mainFileProto = generator.addContainedResource(mainFileProto);
+      }
+      writeProto(mainFileProto, args.outputName + ".proto", args, true);
     } else {
       FileDescriptorProto proto = generator.generateFileDescriptor(definitions);
-      if (args.includeContainedResource) {
+      if (args.includeContainedResource || packageInfo.getLocalContainedResource()) {
         proto = generator.addContainedResource(proto);
       }
       writeProto(proto, args.outputName + ".proto", args, true);

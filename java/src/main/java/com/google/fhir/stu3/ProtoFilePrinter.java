@@ -173,6 +173,16 @@ public class ProtoFilePrinter {
           .append(";\n");
       printedField = true;
     }
+    if (options.hasExtension(Annotations.isAbstractType)) {
+      message
+          .append(fieldIndent)
+          .append("option (")
+          .append(optionPackage)
+          .append("is_abstract_type) = ")
+          .append(options.getExtension(Annotations.isAbstractType))
+          .append(";\n");
+      printedField = true;
+    }
     if (options.hasExtension(Annotations.valueRegex)) {
       message
           .append(fieldIndent)
@@ -358,13 +368,10 @@ public class ProtoFilePrinter {
 
     FieldOptions options = field.getOptions();
     boolean hasFieldOption = false;
-    if (options.hasExtension(Annotations.isChoiceType)) {
+    if (options.hasExtension(Annotations.isChoiceType)
+        && options.getExtension(Annotations.isChoiceType)) {
       hasFieldOption =
-          addFieldOption(
-              "(" + optionPackage + "is_choice_type)",
-              options.getExtension(Annotations.isChoiceType).toString(),
-              hasFieldOption,
-              message);
+          addFieldOption("(" + optionPackage + "is_choice_type)", "true", hasFieldOption, message);
     }
     if (options.hasExtension(Annotations.validationRequirement)) {
       hasFieldOption =

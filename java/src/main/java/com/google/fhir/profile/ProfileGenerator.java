@@ -83,7 +83,7 @@ final class ProfileGenerator {
   private final Profiles profiles;
   private final Extensions extensions;
   private final Map<String, StructureDefinition> urlToStructDefMap;
-  private final Map<String, StructureDefinition> idToStructDefMap;
+  private final Map<String, StructureDefinition> idToBaseStructDefMap;
   private final DateTime creationDateTime;
 
   private static final Uri ELEMENT_BINDING_DEFINITION_URL =
@@ -103,8 +103,11 @@ final class ProfileGenerator {
     this.extensions = extensions;
     this.urlToStructDefMap =
         knownTypesList.stream().collect(Collectors.toMap(def -> def.getUrl().getValue(), f -> f));
-    this.idToStructDefMap =
-        knownTypesList.stream().collect(Collectors.toMap(def -> def.getId().getValue(), f -> f));
+    this.idToBaseStructDefMap =
+        knownTypesList.stream()
+            .filter(
+                def -> def.getDerivation().getValue() != TypeDerivationRuleCode.Value.CONSTRAINT)
+            .collect(Collectors.toMap(def -> def.getId().getValue(), f -> f));
     this.creationDateTime = buildCreationDateTime(creationTime);
   }
 
@@ -696,7 +699,7 @@ final class ProfileGenerator {
     // In this case, we have to load the structure definition of the base resource (CodeableConcept
     // in the above example) in order to find the base element definition.
     String elementBaseType = Splitter.on(".").limit(2).splitToList(basePath).get(0);
-    StructureDefinition baseStructDef = idToStructDefMap.get(elementBaseType);
+    StructureDefinition baseStructDef = idToBaseStructDefMap.get(elementBaseType);
     if (baseStructDef != null) {
       Optional<ElementDefinition> baseElementOptional =
           getOptionalElementById(basePath, baseStructDef.getSnapshot().getElementList());
@@ -704,7 +707,6 @@ final class ProfileGenerator {
         return baseElementOptional.get();
       }
     }
-
     throw new IllegalArgumentException(
         "No matching base element for: " + element.getId().getValue());
   }

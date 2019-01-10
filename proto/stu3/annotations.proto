@@ -63,6 +63,9 @@ extend google.protobuf.MessageOptions {
   // This element is a profile version of the base resource named here.
   string fhir_profile_base = 206336851;
 
+  // This message refers to an abstract type in FHIR
+  bool is_abstract_type = 228208334;
+
   // DEPRECATED: use fhir_base_profile to identify extension, and
   // fhir_structure_definition_url to get the extension url.
   string fhir_extension_url = 177048773 [deprecated = true];
