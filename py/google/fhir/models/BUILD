@@ -26,10 +26,21 @@ py_library(
     ],
 )
 
-py_binary(
+py_library(
     name = "model",
     srcs = [
         "model.py",
+    ],
+)
+
+py_binary(
+    name = "mle_task",
+    srcs = [
+        "mle_task.py",
+    ],
+    deps = [
+        ":model",
+        requirement("tensorflow"),
     ],
 )
 
@@ -56,6 +67,24 @@ py_test(
     ],
     deps = [
         ":model",
+        ":test_utils",
+        "@absl_py//absl/testing:absltest",
+        "@absl_py//absl/testing:parameterized",
+        requirement("tensorflow"),
+    ],
+)
+
+py_test(
+    name = "mle_task_test",
+    size = "large",
+    srcs = [
+        "mle_task_test.py",
+    ],
+    data = [
+        "//testdata/stu3:tensorflow",
+    ],
+    deps = [
+        ":mle_task",
         ":test_utils",
         "@absl_py//absl/testing:absltest",
         "@absl_py//absl/testing:parameterized",

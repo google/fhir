@@ -21,10 +21,10 @@ JOB_NAME="job_$(date +%Y%m%d_%H%M%S)"
 
  gcloud ml-engine jobs submit training ${JOB_NAME} --package-path models \
  --module-name models.mle_task --staging-bucket gs://${BUCKET}   \
- --job-dir gs://${BUCKET}/${JOB_NAME}  --runtime-version 1.10 \
- --region us-central1 --config  models/mle_config.yaml -- \
+ --job-dir gs://${BUCKET}/${JOB_NAME}     --runtime-version 1.10 \
+ --region us-central1  --scale-tier basic -- \
  --input_dir gs://${BUCKET}/data --output_dir gs://${BUCKET}/${JOB_NAME} \
- --num_train_steps 100
+ --num_train_steps 500
 
 View tensorboard by running
 tensorboard --logdir=gs://${BUCKET}/${JOB_NAME}
@@ -33,10 +33,8 @@ And preview on port 6006
 
 import argparse
 import os
-
-from models import model
+from . import model  # Using a relative import for ease of use with Cloud.
 import tensorflow as tf
-from tensorflow.contrib.learn.python.learn import learn_runner
 
 
 def make_experiment_fn(input_dir, num_train_steps, num_eval_steps, label_name,
@@ -97,6 +95,13 @@ def make_experiment_fn(input_dir, num_train_steps, num_eval_steps, label_name,
         time_crossed_features=time_crossed_features,
         # Fixing the batch size to get comparable evaluations.
         batch_size=32)
+    serving_input_fn = model.get_serving_input_fn(
+        dedup=hparams.dedup,
+        time_windows=hparams.time_windows,
+        include_age=hparams.include_age,
+        categorical_context_features=hparams.categorical_context_features,
+        sequence_features=hparams.sequence_features,
+        time_crossed_features=time_crossed_features,)
 
     estimator = model.make_estimator(hparams,
                                      label_values.split(','),
@@ -105,11 +110,15 @@ def make_experiment_fn(input_dir, num_train_steps, num_eval_steps, label_name,
         estimator=estimator,
         train_input_fn=train_input_fn,
         eval_input_fn=eval_input_fn,
+        export_strategies=[
+            tf.contrib.learn.utils.saved_model_export_utils.
+            make_export_strategy(serving_input_fn,
+                                 default_output_alternative_key=None,
+                                 exports_to_keep=1)],
         train_steps=num_train_steps,
         eval_steps=num_eval_steps,
         eval_delay_secs=0,
         continuous_eval_throttle_secs=60,
-        export_strategies=[],
         **experiment_args)
 
   return experiment_fn
@@ -171,5 +180,6 @@ if __name__ == '__main__':
   output_directory = arguments.pop('output_dir')
 
   # Run the training job
-  learn_runner.run(make_experiment_fn(**arguments), output_directory)
+  tf.contrib.learn.learn_runner.run(
+      make_experiment_fn(**arguments), output_directory)
 

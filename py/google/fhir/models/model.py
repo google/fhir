@@ -96,6 +96,259 @@ def _dedup_tensor(sp_tensor):
       dense_shape=[tf.to_int64(batch_size), max_len])
 
 
+def _make_parsing_fn(mode, label_name, include_age,
+                     categorical_context_features, sequence_features,
+                     time_crossed_features):
+  """Creates an input function to an estimator.
+
+  Args:
+    mode: The execution mode, as defined in tf.estimator.ModeKeys.
+    label_name: Name of the label present as context feature in the
+      SequenceExamples.
+    include_age: Whether to include the age_in_years as a feature.
+    categorical_context_features: List of string context features that are valid
+      keys in the tf.SequenceExample.
+    sequence_features: List of sequence features (strings) that are valid keys
+      in the tf.SequenceExample.
+    time_crossed_features: List of list of sequence features (strings) that
+      should be crossed at each step along the time dimension.
+
+  Returns:
+    Two dictionaries with the parsing config for the context features and
+    sequence features.
+  """
+  sequence_features_config = dict()
+  for feature in sequence_features:
+    dtype = tf.string
+    if feature == 'Observation.value.quantity.value':
+      dtype = tf.float32
+    sequence_features_config[feature] = tf.VarLenFeature(dtype)
+
+  sequence_features_config['eventId'] = tf.FixedLenSequenceFeature(
+      [], tf.int64, allow_missing=False)
+  for cross in time_crossed_features:
+    for feature in cross:
+      dtype = tf.string
+      if feature == 'Observation.value.quantity.value':
+        dtype = tf.float32
+      sequence_features_config[feature] = tf.VarLenFeature(dtype)
+  context_features_config = dict()
+  if include_age:
+    context_features_config['timestamp'] = tf.FixedLenFeature(
+        [], tf.int64, default_value=-1)
+    context_features_config['Patient.birthDate'] = tf.FixedLenFeature(
+        [], tf.int64, default_value=-1)
+  context_features_config['sequenceLength'] = tf.FixedLenFeature(
+      [], tf.int64, default_value=-1)
+
+  for context_feature in categorical_context_features:
+    context_features_config[context_feature] = tf.VarLenFeature(tf.string)
+  if mode != tf.estimator.ModeKeys.PREDICT:
+    context_features_config[label_name] = tf.FixedLenFeature(
+        [], tf.string, default_value='MISSING')
+
+  def _parse_fn_old(serialized_example):
+    """Parses tf.(Sparse)Tensors from the serialized tf.SequenceExample.
+
+    Also works with TF versions < 1.12 but is slower than _parse_fn_new.
+
+    Args:
+      serialized_example: A single serialized tf.SequenceExample.
+
+    Returns:
+      A dictionary from name to (Sparse)Tensors of the context and sequence
+      features.
+    """
+    context, sequence = tf.parse_single_sequence_example(
+        serialized_example,
+        context_features=context_features_config,
+        sequence_features=sequence_features_config,
+        example_name='parsing_examples')
+    feature_map = dict()
+    for k, v in context.items():
+      feature_map[CONTEXT_KEY_PREFIX + k] = v
+    for k, v in sequence.items():
+      feature_map[SEQUENCE_KEY_PREFIX + k] = v
+    return feature_map
+
+  def _parse_fn_new(serialized_examples):
+    """Parses tf.(Sparse)Tensors from the serialized tf.SequenceExamples.
+
+    Requires TF versions >= 1.12 but is faster than _parse_fn_old.
+
+    Args:
+      serialized_examples: A batch of serialized tf.SequenceExamples.
+
+    Returns:
+      A dictionary from name to (Sparse)Tensors of the context and sequence
+      features.
+    """
+    context, sequence, _ = tf.io.parse_sequence_example(
+        serialized_examples,
+        context_features=context_features_config,
+        sequence_features=sequence_features_config,
+        name='parse_sequence_example')
+    feature_map = dict()
+    for k, v in context.items():
+      feature_map[CONTEXT_KEY_PREFIX + k] = v
+    for k, v in sequence.items():
+      feature_map[SEQUENCE_KEY_PREFIX + k] = v
+    return feature_map
+  parse_fn = _parse_fn_new if tf.__version__ >= '1.12.0' else _parse_fn_old
+  return parse_fn
+
+
+def _make_feature_engineering_fn(dedup, time_windows, include_age,
+                                 sequence_features, time_crossed_features):
+  """Creates an input function to an estimator.
+
+  Args:
+    dedup: Whether to remove duplicate values.
+    time_windows: List of time windows - we bucket all sequence features by
+      their age into buckets [time_windows[i], time_windows[i+1]).
+    include_age: Whether to include the age_in_years as a feature.
+    sequence_features: List of sequence features (strings) that are valid keys
+      in the tf.SequenceExample.
+    time_crossed_features: List of list of sequence features (strings) that
+      should be crossed at each step along the time dimension.
+
+  Returns:
+    Two dictionaries with the parsing config for the context features and
+    sequence features.
+  """
+  def _process(examples):
+    """Supplies input to our model.
+
+    This function supplies input to our model after parsing.
+
+    Args:
+      examples: The dictionary from key to (Sparse)Tensors with context
+        and sequence features.
+
+    Returns:
+      A tuple consisting of 1) a dictionary of tensors whose keys are
+      the feature names, and 2) a tensor of target labels if the mode
+      is not INFER (and None, otherwise).
+    """
+    # Combine into a single dictionary.
+    feature_map = {}
+    # Add age if requested.
+    if include_age:
+      age_in_seconds = (
+          examples[CONTEXT_KEY_PREFIX + 'timestamp'] -
+          examples.pop(CONTEXT_KEY_PREFIX + 'Patient.birthDate'))
+      age_in_years = tf.to_float(age_in_seconds) / (60 * 60 * 24 * 365.0)
+      feature_map[CONTEXT_KEY_PREFIX + AGE_KEY] = age_in_years
+
+    sequence_length = examples.pop(CONTEXT_KEY_PREFIX + 'sequenceLength')
+    # Cross the requested features.
+    for cross in time_crossed_features:
+      # The features may be missing at different rates - we take the union
+      # of the indices supplying defaults.
+      extended_features = dict()
+      dense_shape = tf.concat(
+          [[tf.to_int64(tf.shape(sequence_length)[0])],
+           [tf.reduce_max(sequence_length)],
+           tf.constant([1], dtype=tf.int64)],
+          axis=0)
+      for i, feature in enumerate(cross):
+        sp_tensor = examples[SEQUENCE_KEY_PREFIX + feature]
+        additional_indices = []
+        covered_indices = sp_tensor.indices
+        for j, other_feature in enumerate(cross):
+          if i != j:
+            additional_indices.append(
+                tf.sets.set_difference(
+                    tf.sparse_reorder(
+                        tf.SparseTensor(
+                            indices=examples[SEQUENCE_KEY_PREFIX +
+                                             other_feature].indices,
+                            values=tf.zeros([
+                                tf.shape(examples[SEQUENCE_KEY_PREFIX +
+                                                  other_feature].indices)[0]
+                            ],
+                                            dtype=tf.int32),
+                            dense_shape=dense_shape)),
+                    tf.sparse_reorder(
+                        tf.SparseTensor(
+                            indices=covered_indices,
+                            values=tf.zeros([tf.shape(covered_indices)[0]],
+                                            dtype=tf.int32),
+                            dense_shape=dense_shape))).indices)
+            covered_indices = tf.concat(
+                [sp_tensor.indices] + additional_indices, axis=0)
+
+        additional_indices = tf.concat(additional_indices, axis=0)
+
+        # Supply defaults for all other indices.
+        default = tf.tile(
+            tf.constant(['n/a']),
+            multiples=[tf.shape(additional_indices)[0]])
+
+        string_value = sp_tensor.values
+        if string_value.dtype != tf.string:
+          string_value = tf.as_string(string_value)
+
+        extended_features[feature] = tf.sparse_reorder(
+            tf.SparseTensor(
+                indices=tf.concat([sp_tensor.indices, additional_indices],
+                                  axis=0),
+                values=tf.concat([string_value, default], axis=0),
+                dense_shape=dense_shape))
+
+      new_values = tf.strings.join(
+          [extended_features[f].values for f in cross], separator='-')
+      crossed_sp_tensor = tf.sparse_reorder(
+          tf.SparseTensor(
+              indices=extended_features[cross[0]].indices,
+              values=new_values,
+              dense_shape=extended_features[cross[0]].dense_shape))
+      examples[SEQUENCE_KEY_PREFIX + '_'.join(cross)] = crossed_sp_tensor
+    # Remove unwanted features that are used in the cross but should not be
+    # considered outside the cross.
+    for cross in time_crossed_features:
+      for feature in cross:
+        if (feature not in sequence_features and
+            SEQUENCE_KEY_PREFIX + feature in examples):
+          del examples[SEQUENCE_KEY_PREFIX + feature]
+
+    # Flatten sparse tensor to compute event age. This dense tensor also
+    # contains padded values. These will not be used when gathering elements
+    # from the dense tensor since each sparse feature won't have a value
+    # defined for the padding.
+    padded_event_age = (
+        # Broadcast current time along sequence dimension.
+        tf.expand_dims(examples.pop(CONTEXT_KEY_PREFIX + 'timestamp'), 1)
+        # Subtract time of events.
+        - examples.pop(SEQUENCE_KEY_PREFIX + 'eventId'))
+
+    for i in range(len(time_windows) - 1):
+      max_age = time_windows[i]
+      min_age = time_windows[i+1]
+      padded_in_time_window = tf.logical_and(padded_event_age <= max_age,
+                                             padded_event_age > min_age)
+
+      for k, v in examples.iteritems():
+        if k.startswith(CONTEXT_KEY_PREFIX):
+          continue
+        # For each sparse feature entry, look up whether it is in the time
+        # window or not.
+        in_time_window = tf.gather_nd(padded_in_time_window,
+                                      v.indices[:, 0:2])
+        v = tf.sparse_retain(v, in_time_window)
+        sp_tensor = tf.sparse_reshape(v, [v.dense_shape[0], -1])
+        if dedup:
+          sp_tensor = _dedup_tensor(sp_tensor)
+
+        feature_map[k + '-til-%d' %min_age] = sp_tensor
+
+    for k, v in examples.iteritems():
+      if k.startswith(CONTEXT_KEY_PREFIX):
+        feature_map[k] = v
+    return feature_map
+  return _process
+
+
 def get_input_fn(mode,
                  input_files,
                  label_name,
@@ -144,37 +397,6 @@ def get_input_fn(mode,
       the feature names, and 2) a tensor of target labels if the mode
       is not INFER (and None, otherwise).
     """
-
-    sequence_features_config = dict()
-    for feature in sequence_features:
-      dtype = tf.string
-      if feature == 'Observation.value.quantity.value':
-        dtype = tf.float32
-      sequence_features_config[feature] = tf.VarLenFeature(dtype)
-
-    sequence_features_config['eventId'] = tf.FixedLenSequenceFeature(
-        [], tf.int64, allow_missing=False)
-    for cross in time_crossed_features:
-      for feature in cross:
-        dtype = tf.string
-        if feature == 'Observation.value.quantity.value':
-          dtype = tf.float32
-        sequence_features_config[feature] = tf.VarLenFeature(dtype)
-    context_features_config = dict()
-    if include_age:
-      context_features_config['timestamp'] = tf.FixedLenFeature(
-          [], tf.int64, default_value=-1)
-      context_features_config['Patient.birthDate'] = tf.FixedLenFeature(
-          [], tf.int64, default_value=-1)
-    context_features_config['sequenceLength'] = tf.FixedLenFeature(
-        [], tf.int64, default_value=-1)
-
-    for context_feature in categorical_context_features:
-      context_features_config[context_feature] = tf.VarLenFeature(tf.string)
-    if mode != tf.estimator.ModeKeys.PREDICT:
-      context_features_config[label_name] = tf.FixedLenFeature(
-          [], tf.string, default_value='MISSING')
-
     is_training = mode == tf.estimator.ModeKeys.TRAIN
     num_epochs = None if is_training else 1
 
@@ -189,187 +411,14 @@ def get_input_fn(mode,
                  .repeat(num_epochs))
       if shuffle:
         dataset = dataset.shuffle(buffer_size=100)
-
-      def _parse_fn_old(serialized_example):
-        """Parses tf.(Sparse)Tensors from the serialized tf.SequenceExample.
-
-        Also works with TF versions < 1.12 but is slower than _parse_fn_new.
-
-        Args:
-          serialized_example: A single serialized tf.SequenceExample.
-
-        Returns:
-          A dictionary from name to (Sparse)Tensors of the context and sequence
-          features.
-        """
-        context, sequence = tf.parse_single_sequence_example(
-            serialized_example,
-            context_features=context_features_config,
-            sequence_features=sequence_features_config,
-            example_name='parsing_examples')
-        feature_map = dict()
-        for k, v in context.items():
-          feature_map[CONTEXT_KEY_PREFIX + k] = v
-        for k, v in sequence.items():
-          feature_map[SEQUENCE_KEY_PREFIX + k] = v
-        return feature_map
-
-      def _parse_fn_new(serialized_examples):
-        """Parses tf.(Sparse)Tensors from the serialized tf.SequenceExamples.
-
-        Requires TF versions >= 1.12 but is faster than _parse_fn_old.
-
-        Args:
-          serialized_examples: A batch of serialized tf.SequenceExamples.
-
-        Returns:
-          A dictionary from name to (Sparse)Tensors of the context and sequence
-          features.
-        """
-        context, sequence, _ = tf.io.parse_sequence_example(
-            serialized_examples,
-            context_features=context_features_config,
-            sequence_features=sequence_features_config,
-            name='parse_sequence_example')
-        feature_map = dict()
-        for k, v in context.items():
-          feature_map[CONTEXT_KEY_PREFIX + k] = v
-        for k, v in sequence.items():
-          feature_map[SEQUENCE_KEY_PREFIX + k] = v
-        return feature_map
-
-      def _process(examples):
-        """Supplies input to our model.
-
-        This function supplies input to our model after parsing.
-
-        Args:
-          examples: The dictionary from key to (Sparse)Tensors with context
-            and sequence features.
-
-        Returns:
-          A tuple consisting of 1) a dictionary of tensors whose keys are
-          the feature names, and 2) a tensor of target labels if the mode
-          is not INFER (and None, otherwise).
-        """
-        # Combine into a single dictionary.
-        feature_map = {}
-        # Add age if requested.
-        if include_age:
-          age_in_seconds = (
-              examples[CONTEXT_KEY_PREFIX + 'timestamp'] -
-              examples.pop(CONTEXT_KEY_PREFIX + 'Patient.birthDate'))
-          age_in_years = tf.to_float(age_in_seconds) / (60 * 60 * 24 * 365.0)
-          feature_map[CONTEXT_KEY_PREFIX + AGE_KEY] = age_in_years
-
-        sequence_length = examples.pop(CONTEXT_KEY_PREFIX + 'sequenceLength')
-        # Cross the requested features.
-        for cross in time_crossed_features:
-          # The features may be missing at different rates - we take the union
-          # of the indices supplying defaults.
-          extended_features = dict()
-          dense_shape = tf.concat(
-              [[tf.to_int64(tf.shape(sequence_length)[0])],
-               [tf.reduce_max(sequence_length)],
-               tf.constant([1], dtype=tf.int64)],
-              axis=0)
-          for i, feature in enumerate(cross):
-            sp_tensor = examples[SEQUENCE_KEY_PREFIX + feature]
-            additional_indices = []
-            covered_indices = sp_tensor.indices
-            for j, other_feature in enumerate(cross):
-              if i != j:
-                additional_indices.append(
-                    tf.sets.set_difference(
-                        tf.sparse_reorder(
-                            tf.SparseTensor(
-                                indices=examples[SEQUENCE_KEY_PREFIX +
-                                                 other_feature].indices,
-                                values=tf.zeros([
-                                    tf.shape(examples[SEQUENCE_KEY_PREFIX +
-                                                      other_feature].indices)[0]
-                                ],
-                                                dtype=tf.int32),
-                                dense_shape=dense_shape)),
-                        tf.sparse_reorder(
-                            tf.SparseTensor(
-                                indices=covered_indices,
-                                values=tf.zeros([tf.shape(covered_indices)[0]],
-                                                dtype=tf.int32),
-                                dense_shape=dense_shape))).indices)
-                covered_indices = tf.concat(
-                    [sp_tensor.indices] + additional_indices, axis=0)
-
-            additional_indices = tf.concat(additional_indices, axis=0)
-
-            # Supply defaults for all other indices.
-            default = tf.tile(
-                tf.constant(['n/a']),
-                multiples=[tf.shape(additional_indices)[0]])
-
-            string_value = sp_tensor.values
-            if string_value.dtype != tf.string:
-              string_value = tf.as_string(string_value)
-
-            extended_features[feature] = tf.sparse_reorder(
-                tf.SparseTensor(
-                    indices=tf.concat([sp_tensor.indices, additional_indices],
-                                      axis=0),
-                    values=tf.concat([string_value, default], axis=0),
-                    dense_shape=dense_shape))
-
-          new_values = tf.strings.join(
-              [extended_features[f].values for f in cross], separator='-')
-          crossed_sp_tensor = tf.sparse_reorder(
-              tf.SparseTensor(
-                  indices=extended_features[cross[0]].indices,
-                  values=new_values,
-                  dense_shape=extended_features[cross[0]].dense_shape))
-          examples[SEQUENCE_KEY_PREFIX + '_'.join(cross)] = crossed_sp_tensor
-        # Remove unwanted features that are used in the cross but should not be
-        # considered outside the cross.
-        for cross in time_crossed_features:
-          for feature in cross:
-            if (feature not in sequence_features and
-                SEQUENCE_KEY_PREFIX + feature in examples):
-              del examples[SEQUENCE_KEY_PREFIX + feature]
-
-        # Flatten sparse tensor to compute event age. This dense tensor also
-        # contains padded values. These will not be used when gathering elements
-        # from the dense tensor since each sparse feature won't have a value
-        # defined for the padding.
-        padded_event_age = (
-            # Broadcast current time along sequence dimension.
-            tf.expand_dims(examples.pop(CONTEXT_KEY_PREFIX + 'timestamp'), 1)
-            # Subtract time of events.
-            - examples.pop(SEQUENCE_KEY_PREFIX + 'eventId'))
-
-        for i in range(len(time_windows) - 1):
-          max_age = time_windows[i]
-          min_age = time_windows[i+1]
-          padded_in_time_window = tf.logical_and(padded_event_age <= max_age,
-                                                 padded_event_age > min_age)
-
-          for k, v in examples.iteritems():
-            if k.startswith(CONTEXT_KEY_PREFIX):
-              continue
-            # For each sparse feature entry, look up whether it is in the time
-            # window or not.
-            in_time_window = tf.gather_nd(padded_in_time_window,
-                                          v.indices[:, 0:2])
-            v = tf.sparse_retain(v, in_time_window)
-            sp_tensor = tf.sparse_reshape(v, [v.dense_shape[0], -1])
-            if dedup:
-              sp_tensor = _dedup_tensor(sp_tensor)
-
-            feature_map[k + '-til-%d' %min_age] = sp_tensor
-
-        for k, v in examples.iteritems():
-          if k.startswith(CONTEXT_KEY_PREFIX):
-            feature_map[k] = v
-        return feature_map
+      parse_fn = _make_parsing_fn(
+          mode, label_name, include_age, categorical_context_features,
+          sequence_features, time_crossed_features)
+      feature_engineering_fn = _make_feature_engineering_fn(
+          dedup, time_windows, include_age, sequence_features,
+          time_crossed_features)
       if tf.__version__ < '1.12.0':
-        dataset = dataset.map(_parse_fn_old, num_parallel_calls=8)
+        dataset = dataset.map(parse_fn, num_parallel_calls=8)
         feature_map = (dataset
                        .prefetch(buffer_size=batch_size)
                        .make_one_shot_iterator()
@@ -382,15 +431,15 @@ def get_input_fn(mode,
             capacity=2,
             enqueue_many=False,
             dynamic_pad=True)
-        feature_map = _process(feature_map)
+        feature_map = feature_engineering_fn(feature_map)
       else:
         feature_map = (dataset
                        .batch(batch_size)
                        # Parallelize the input processing and put it behind a
                        # queue to increase performance by removing it from the
                        # critical path of per-step-computation.
-                       .map(_parse_fn_new, num_parallel_calls=8)
-                       .map(_process, num_parallel_calls=8)
+                       .map(parse_fn, num_parallel_calls=8)
+                       .map(feature_engineering_fn, num_parallel_calls=8)
                        .prefetch(buffer_size=1)
                        .make_one_shot_iterator()
                        .get_next())
@@ -400,6 +449,99 @@ def get_input_fn(mode,
                                 label_name)
       return feature_map, label
   return input_fn
+
+
+def get_serving_input_fn(dedup,
+                         time_windows,
+                         include_age,
+                         categorical_context_features,
+                         sequence_features,
+                         time_crossed_features):
+  """Creates an input function to an estimator.
+
+  Args:
+    dedup: Whether to remove duplicate values.
+    time_windows: List of time windows - we bucket all sequence features by
+      their age into buckets [time_windows[i], time_windows[i+1]).
+    include_age: Whether to include the age_in_years as a feature.
+    categorical_context_features: List of string context features that are valid
+      keys in the tf.SequenceExample.
+    sequence_features: List of sequence features (strings) that are valid keys
+      in the tf.SequenceExample.
+    time_crossed_features: List of list of sequence features (strings) that
+      should be crossed at each step along the time dimension.
+
+  Returns:
+    A function that returns a dictionary of features and the target labels.
+  """
+
+  parse_fn = _make_parsing_fn(
+      tf.estimator.ModeKeys.PREDICT, '', include_age,
+      categorical_context_features, sequence_features, time_crossed_features)
+  feature_engineering_fn = _make_feature_engineering_fn(
+      dedup, time_windows, include_age, sequence_features,
+      time_crossed_features)
+
+  def example_serving_input_fn():
+    """Build the serving inputs."""
+    shape = [None] if tf.__version__ >= '1.12.0' else [1]
+    examples = tf.placeholder(
+        shape=shape,
+        dtype=tf.string,
+        name='input_examples')
+    if tf.__version__ < '1.12.0':
+      examples = tf.squeeze(examples)
+    feature_map = parse_fn(examples)
+    if tf.__version__ < '1.12.0':
+      # Add a batch dimension of 1.
+      keys = feature_map.keys()
+      for k in keys:
+        t = feature_map[k]
+        if isinstance(t, tf.SparseTensor):
+          t = sparse_expand_dims(t, axis=0)
+        else:
+          t = tf.expand_dims(t, axis=0)
+        feature_map[k] = t
+
+    feature_map = feature_engineering_fn(feature_map)
+    return tf.estimator.export.ServingInputReceiver(
+        feature_map, {'input_examples': examples})
+  return example_serving_input_fn
+
+
+def sparse_expand_dims(s_tensor, axis=0, index_value=None):
+  """Add a new dimension to a sparse tensor while setting its index.
+
+  For example, if s is a 2d sparse tensor with 1 at (0, 0) and 2 at (8, 7) then
+  sparse_expand_and_set_dim(s, axis=1, index_value=4) will return a 3d sparse
+  tensor with 1 at (0, 4, 0) and 2 at (8, 4, 7).
+
+  Args:
+    s_tensor: A SparseTensor.
+    axis: The new axis, default is 0.
+    index_value: The index to put in the new axis, default is 0.
+
+  Returns:
+    A SparseTensor.
+  """
+  if tf.__version__ >= '1.12.0':
+    return tf.sparse.expand_dims(s_tensor, axis, index_value)
+  if index_value is None:
+    index_value = 0
+
+  indices = s_tensor.indices
+  shape = tf.shape(indices)
+  indices = tf.concat(
+      [
+          indices[:, :axis],
+          tf.to_int64(tf.tile([[index_value]], multiples=[shape[0], 1])),
+          indices[:, axis:]
+      ],
+      axis=1)
+  shape = tf.to_int64(tf.shape(s_tensor))
+  shape = tf.concat([shape[:axis], [index_value + 1], shape[axis:]], axis=0)
+  shape.set_shape([s_tensor.get_shape().ndims + 1])
+  return tf.SparseTensor(indices, s_tensor.values, shape)
 
 
 def make_metrics(label_values):
