@@ -92,6 +92,8 @@ message UsCoreAllergyintolerance {
 
   // When allergy or intolerance was identified
   message Onset {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof onset {
       proto.DateTime date_time = 1;
       proto.Age age = 2;
@@ -100,7 +102,7 @@ message UsCoreAllergyintolerance {
       proto.String string_value = 5 [json_name = "string"];
     }
   }
-  Onset onset = 17 [(.google.fhir.stu3.proto.is_choice_type) = true];
+  Onset onset = 17;
 
   // Date record was believed accurate
   proto.DateTime asserted_date = 18;
@@ -418,14 +420,15 @@ message UsCoreCareplan {
 
       // When activity is to occur
       message Scheduled {
+        option (.google.fhir.stu3.proto.is_choice_type) = true;
+
         oneof scheduled {
           proto.Timing timing = 1;
           proto.Period period = 2;
           proto.String string_value = 3 [json_name = "string"];
         }
       }
-      Scheduled scheduled = 13
-          [(.google.fhir.stu3.proto.is_choice_type) = true];
+      Scheduled scheduled = 13;
 
       // Where it should happen
       proto.Reference location = 14
@@ -448,6 +451,8 @@ message UsCoreCareplan {
 
       // What is to be administered/supplied
       message Product {
+        option (.google.fhir.stu3.proto.is_choice_type) = true;
+
         oneof product {
           proto.CodeableConcept codeable_concept = 1;
           proto.Reference reference = 2 [
@@ -458,7 +463,7 @@ message UsCoreCareplan {
           ];
         }
       }
-      Product product = 16 [(.google.fhir.stu3.proto.is_choice_type) = true];
+      Product product = 16;
 
       // How to consume/day?
       proto.SimpleQuantity daily_amount = 17;
@@ -674,6 +679,8 @@ message UsCoreCondition {
 
   // Estimated or actual date,  date-time, or age
   message Onset {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof onset {
       proto.DateTime date_time = 1;
       proto.Age age = 2;
@@ -682,10 +689,12 @@ message UsCoreCondition {
       proto.String string_value = 5 [json_name = "string"];
     }
   }
-  Onset onset = 18 [(.google.fhir.stu3.proto.is_choice_type) = true];
+  Onset onset = 18;
 
   // If/when in resolution/remission
   message Abatement {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof abatement {
       proto.DateTime date_time = 1;
       proto.Age age = 2;
@@ -695,7 +704,7 @@ message UsCoreCondition {
       proto.String string_value = 6 [json_name = "string"];
     }
   }
-  Abatement abatement = 19 [(.google.fhir.stu3.proto.is_choice_type) = true];
+  Abatement abatement = 19;
 
   // Date record was believed accurate
   proto.DateTime asserted_date = 20;
@@ -970,15 +979,15 @@ message UsCoreDiagnosticreport {
 
   // Specimen Collection Datetime or Period
   message Effective {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof effective {
       proto.DateTime date_time = 1;
       proto.Period period = 2;
     }
   }
-  Effective effective = 16 [
-    (.google.fhir.stu3.proto.is_choice_type) = true,
-    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
-  ];
+  Effective effective = 16
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // DateTime this version was released
   proto.Instant issued = 17
@@ -1172,12 +1181,14 @@ message UsCoreGoal {
 
   // When goal pursuit begins
   message Start {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof start {
       proto.Date date = 1;
       proto.CodeableConcept codeable_concept = 2;
     }
   }
-  Start start = 15 [(.google.fhir.stu3.proto.is_choice_type) = true];
+  Start start = 15;
 
   // Target outcome for the goal
   message Target {
@@ -1195,22 +1206,26 @@ message UsCoreGoal {
 
     // The target value to be achieved
     message Detail {
+      option (.google.fhir.stu3.proto.is_choice_type) = true;
+
       oneof detail {
         proto.Quantity quantity = 1;
         proto.Range range = 2;
         proto.CodeableConcept codeable_concept = 3;
       }
     }
-    Detail detail = 5 [(.google.fhir.stu3.proto.is_choice_type) = true];
+    Detail detail = 5;
 
     // Reach goal on or before
     message Due {
+      option (.google.fhir.stu3.proto.is_choice_type) = true;
+
       oneof due {
         proto.Date date = 1;
         proto.Duration duration = 2;
       }
     }
-    Due due = 6 [(.google.fhir.stu3.proto.is_choice_type) = true];
+    Due due = 6;
   }
   Target target = 16;
 
@@ -1645,6 +1660,8 @@ message UsCoreMedication {
 
     // The product contained
     message Item {
+      option (.google.fhir.stu3.proto.is_choice_type) = true;
+
       oneof item {
         proto.CodeableConcept codeable_concept = 1;
         proto.Reference reference = 2 [
@@ -1655,10 +1672,8 @@ message UsCoreMedication {
         ];
       }
     }
-    Item item = 4 [
-      (.google.fhir.stu3.proto.is_choice_type) = true,
-      (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
-    ];
+    Item item = 4
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Active ingredient indicator
     proto.Boolean is_active = 5;
@@ -1695,6 +1710,8 @@ message UsCoreMedication {
 
       // The item in the package
       message Item {
+        option (.google.fhir.stu3.proto.is_choice_type) = true;
+
         oneof item {
           proto.CodeableConcept codeable_concept = 1;
           proto.Reference reference = 2
@@ -1702,10 +1719,8 @@ message UsCoreMedication {
                    "http://hl7.org/fhir/StructureDefinition/Medication"];
         }
       }
-      Item item = 4 [
-        (.google.fhir.stu3.proto.is_choice_type) = true,
-        (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
-      ];
+      Item item = 4
+          [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Quantity present in the package
       proto.SimpleQuantity amount = 5;
@@ -1814,6 +1829,8 @@ message UsCoreMedicationrequest {
 
   // Medication to be taken
   message Medication {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof medication {
       proto.CodeableConcept codeable_concept = 1;
       proto.Reference reference = 2
@@ -1821,10 +1838,8 @@ message UsCoreMedicationrequest {
                "http://hl7.org/fhir/StructureDefinition/Medication"];
     }
   }
-  Medication medication = 17 [
-    (.google.fhir.stu3.proto.is_choice_type) = true,
-    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
-  ];
+  Medication medication = 17
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who or group medication request is for
   proto.Reference subject = 18 [
@@ -2045,6 +2060,8 @@ message UsCoreMedicationstatement {
 
   // What medication was taken
   message Medication {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof medication {
       proto.CodeableConcept codeable_concept = 1;
       proto.Reference reference = 2
@@ -2052,19 +2069,19 @@ message UsCoreMedicationstatement {
                "http://hl7.org/fhir/StructureDefinition/Medication"];
     }
   }
-  Medication medication = 15 [
-    (.google.fhir.stu3.proto.is_choice_type) = true,
-    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
-  ];
+  Medication medication = 15
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // The date/time or interval when the medication was taken
   message Effective {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof effective {
       proto.DateTime date_time = 1;
       proto.Period period = 2;
     }
   }
-  Effective effective = 16 [(.google.fhir.stu3.proto.is_choice_type) = true];
+  Effective effective = 16;
 
   // When the statement was asserted?
   proto.DateTime date_asserted = 17
@@ -2206,12 +2223,14 @@ message UsCoreObservationresults {
 
   // Clinically relevant time/time-period for observation
   message Effective {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof effective {
       proto.DateTime date_time = 1;
       proto.Period period = 2;
     }
   }
-  Effective effective = 16 [(.google.fhir.stu3.proto.is_choice_type) = true];
+  Effective effective = 16;
 
   // Date/Time this was made available
   proto.Instant issued = 17;
@@ -2230,6 +2249,8 @@ message UsCoreObservationresults {
 
   // Result Value
   message Value {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof value {
       proto.Quantity quantity = 1;
       proto.CodeableConcept codeable_concept = 2;
@@ -2244,7 +2265,7 @@ message UsCoreObservationresults {
       proto.Period period = 11;
     }
   }
-  Value value = 19 [(.google.fhir.stu3.proto.is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   proto.CodeableConcept data_absent_reason = 20;
@@ -2350,6 +2371,8 @@ message UsCoreObservationresults {
 
     // Actual component result
     message Value {
+      option (.google.fhir.stu3.proto.is_choice_type) = true;
+
       oneof value {
         proto.Quantity quantity = 1;
         proto.CodeableConcept codeable_concept = 2;
@@ -2363,7 +2386,7 @@ message UsCoreObservationresults {
         proto.Period period = 10;
       }
     }
-    Value value = 5 [(.google.fhir.stu3.proto.is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     proto.CodeableConcept data_absent_reason = 6;
@@ -2532,12 +2555,14 @@ message UsCorePatient {
 
   // Indicates if the individual is deceased or not
   message Deceased {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof deceased {
       proto.Boolean boolean = 1;
       proto.DateTime date_time = 2;
     }
   }
-  Deceased deceased = 15 [(.google.fhir.stu3.proto.is_choice_type) = true];
+  Deceased deceased = 15;
 
   // Addresses for the individual
   repeated proto.Address address = 16;
@@ -2547,13 +2572,14 @@ message UsCorePatient {
 
   // Whether patient is part of a multiple birth
   message MultipleBirth {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof multiple_birth {
       proto.Boolean boolean = 1;
       proto.Integer integer = 2;
     }
   }
-  MultipleBirth multiple_birth = 18
-      [(.google.fhir.stu3.proto.is_choice_type) = true];
+  MultipleBirth multiple_birth = 18;
 
   // Image of the patient
   repeated proto.Attachment photo = 19;
@@ -2867,15 +2893,15 @@ message UsCoreProcedure {
 
   // Date/Period the procedure was performed
   message Performed {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof performed {
       proto.DateTime date_time = 1;
       proto.Period period = 2;
     }
   }
-  Performed performed = 20 [
-    (.google.fhir.stu3.proto.is_choice_type) = true,
-    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
-  ];
+  Performed performed = 20
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // The people who performed the procedure
   message Performer {
@@ -3124,12 +3150,14 @@ message UsCoreSmokingstatus {
 
   // Clinically relevant time/time-period for observation
   message Effective {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof effective {
       proto.DateTime date_time = 1;
       proto.Period period = 2;
     }
   }
-  Effective effective = 16 [(.google.fhir.stu3.proto.is_choice_type) = true];
+  Effective effective = 16;
 
   // Date/Time this was made available
   proto.Instant issued = 17
@@ -3149,14 +3177,14 @@ message UsCoreSmokingstatus {
 
   // Coded Responses from Smoking Status Value Set
   message Value {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof value {
       proto.CodeableConcept codeable_concept = 2;
     }
   }
-  Value value = 19 [
-    (.google.fhir.stu3.proto.is_choice_type) = true,
-    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR
-  ];
+  Value value = 19
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Why the result is missing
   proto.CodeableConcept data_absent_reason = 20;
@@ -3262,6 +3290,8 @@ message UsCoreSmokingstatus {
 
     // Actual component result
     message Value {
+      option (.google.fhir.stu3.proto.is_choice_type) = true;
+
       oneof value {
         proto.Quantity quantity = 1;
         proto.CodeableConcept codeable_concept = 2;
@@ -3275,7 +3305,7 @@ message UsCoreSmokingstatus {
         proto.Period period = 10;
       }
     }
-    Value value = 5 [(.google.fhir.stu3.proto.is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     proto.CodeableConcept data_absent_reason = 6;

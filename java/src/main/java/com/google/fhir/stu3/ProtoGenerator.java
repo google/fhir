@@ -1061,9 +1061,6 @@ public class ProtoGenerator {
 
     Optional<ElementDefinition> choiceTypeBase = getChoiceTypeBase(element);
     if (choiceTypeBase.isPresent()) {
-      // TODO: remove this once choice type is moved to message definition
-      options.setExtension(Annotations.isChoiceType, true);
-
       ElementDefinition choiceTypeBaseElement = choiceTypeBase.get();
       String jsonName = getJsonNameForElement(choiceTypeBaseElement);
       String containerType = getContainerType(element, elementList);
@@ -1103,14 +1100,10 @@ public class ProtoGenerator {
       }
     }
 
-    // TODO: remove this once choice type is moved to message definition
-    boolean isChoiceType = isChoiceType(element) || isChoiceTypeExtension(element, elementList);
-    if (isChoiceType) {
-      options.setExtension(Annotations.isChoiceType, true);
-    }
 
     QualifiedType fieldType = getQualifiedFieldType(element, elementList);
 
+    boolean isChoiceType = isChoiceType(element) || isChoiceTypeExtension(element, elementList);
     // Add typed reference options
     if (!isChoiceType
         && element.getTypeCount() > 0
@@ -1249,6 +1242,7 @@ public class ProtoGenerator {
     List<String> typeNameParts = Splitter.on('.').splitToList(field.getTypeName());
     DescriptorProto.Builder choiceType =
         DescriptorProto.newBuilder().setName(typeNameParts.get(typeNameParts.size() - 1));
+    choiceType.getOptionsBuilder().setExtension(Annotations.isChoiceType, true);
     OneofDescriptorProto.Builder oneof = choiceType.addOneofDeclBuilder().setName(field.getName());
 
     int nextTag = 1;

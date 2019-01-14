@@ -147,7 +147,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.DefaultValue"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Specified value if missing from instance"
   }
 }
@@ -188,7 +187,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.MinValue"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Minimum Allowed Value (for some types)"
   }
 }
@@ -199,7 +197,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.MaxValue"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Maximum Allowed Value (for some types)"
   }
 }
@@ -702,6 +699,9 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Meta"
     oneof_index: 0
   }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
+  }
   oneof_decl {
     name: "default_value"
   }
@@ -747,7 +747,6 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.Example.Value"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Value of Example (one of allowed types)"
     }
   }
@@ -1058,6 +1057,9 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Meta"
       oneof_index: 0
     }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
+    }
     oneof_decl {
       name: "value"
     }
@@ -1137,6 +1139,9 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Quantity"
     oneof_index: 0
   }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
+  }
   oneof_decl {
     name: "min_value"
   }
@@ -1214,6 +1219,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Quantity"
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "max_value"
@@ -1366,7 +1374,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.ElementDefinitionBinding.ValueSet"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Source of value set"
     }
   }
@@ -1390,6 +1397,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ValueSet"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "value_set"

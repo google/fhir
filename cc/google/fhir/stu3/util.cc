@@ -182,7 +182,9 @@ bool HasValueset(const google::protobuf::Descriptor* descriptor) {
 }
 
 bool IsChoiceType(const google::protobuf::FieldDescriptor* field) {
-  return field->options().GetExtension(stu3::proto::is_choice_type);
+  return field->type() == google::protobuf::FieldDescriptor::Type::TYPE_MESSAGE &&
+         field->message_type()->options().GetExtension(
+             stu3::proto::is_choice_type);
 }
 
 const string GetFhirProfileBase(const google::protobuf::Descriptor* descriptor) {

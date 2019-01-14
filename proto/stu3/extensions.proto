@@ -1101,6 +1101,8 @@ message CommunicationRequestDefinition {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -1110,8 +1112,7 @@ message CommunicationRequestDefinition {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for orderedBy.
@@ -1129,6 +1130,8 @@ message CommunicationRequestOrderedBy {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -1142,8 +1145,7 @@ message CommunicationRequestOrderedBy {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for reasonRejected.
@@ -1254,6 +1256,8 @@ message ConditionBasedOn {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -1265,8 +1269,7 @@ message ConditionBasedOn {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for criticality.
@@ -1320,6 +1323,8 @@ message ConditionDueTo {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2 [
@@ -1336,8 +1341,7 @@ message ConditionDueTo {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for occurredFollowing.
@@ -1355,6 +1359,8 @@ message ConditionOccurredFollowing {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2 [
@@ -1371,8 +1377,7 @@ message ConditionOccurredFollowing {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for outcome.
@@ -1407,6 +1412,8 @@ message ConditionPartOf {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -1418,8 +1425,7 @@ message ConditionPartOf {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for ruledOut.
@@ -1511,6 +1517,8 @@ message ConsentWitness {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -1524,8 +1532,7 @@ message ConsentWitness {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for calculatedValue.
@@ -1682,6 +1689,8 @@ message BasicInitiatingPerson {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -1695,8 +1704,7 @@ message BasicInitiatingPerson {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for receivingOrganization.
@@ -1734,6 +1742,8 @@ message BasicReceivingPerson {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -1747,8 +1757,7 @@ message BasicReceivingPerson {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for recipientLanguage.
@@ -2249,6 +2258,8 @@ message ElementDefinitionAllowedUnits {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2
@@ -2256,8 +2267,7 @@ message ElementDefinitionAllowedUnits {
                "http://hl7.org/fhir/StructureDefinition/ValueSet"];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for bestpractice.
@@ -2275,13 +2285,14 @@ message ElementDefinitionBestpractice {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Boolean boolean = 1;
       CodeableConcept codeable_concept = 2;
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for bindingName.
@@ -2352,6 +2363,8 @@ message ElementDefinitionInheritedExtensibleValueSet {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Uri uri = 1;
       Reference reference = 2
@@ -2359,8 +2372,7 @@ message ElementDefinitionInheritedExtensibleValueSet {
                "http://hl7.org/fhir/StructureDefinition/ValueSet"];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for isCommonBinding.
@@ -2395,6 +2407,8 @@ message ElementDefinitionMaxValueSet {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Uri uri = 1;
       Reference reference = 2
@@ -2402,8 +2416,7 @@ message ElementDefinitionMaxValueSet {
                "http://hl7.org/fhir/StructureDefinition/ValueSet"];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for minValueSet.
@@ -2421,6 +2434,8 @@ message ElementDefinitionMinValueSet {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Uri uri = 1;
       Reference reference = 2
@@ -2428,8 +2443,7 @@ message ElementDefinitionMinValueSet {
                "http://hl7.org/fhir/StructureDefinition/ValueSet"];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for namespace.
@@ -2602,6 +2616,8 @@ message Definition {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -2611,8 +2627,7 @@ message Definition {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for notDone.
@@ -2719,6 +2734,8 @@ message ReasonReference {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -2728,8 +2745,7 @@ message ReasonReference {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for observation.
@@ -2815,14 +2831,15 @@ message FamilyMemberHistoryAbatement {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Date date = 1;
       Age age = 2;
       Boolean boolean = 3;
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for patient-record.
@@ -3959,6 +3976,8 @@ message QuestionnaireMaxValue {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Date date = 1;
       DateTime date_time = 2;
@@ -3968,8 +3987,7 @@ message QuestionnaireMaxValue {
       Integer integer = 6;
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for usualRoute.
@@ -4091,6 +4109,8 @@ message QuestionnaireMinValue {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Date date = 1;
       DateTime date_time = 2;
@@ -4100,8 +4120,7 @@ message QuestionnaireMinValue {
       Integer integer = 6;
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for bodyPosition.
@@ -4602,6 +4621,8 @@ message AllergyIntoleranceTest {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -4611,8 +4632,7 @@ message AllergyIntoleranceTest {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for authority.
@@ -5186,6 +5206,8 @@ message ProcedureCausedBy {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -5213,8 +5235,7 @@ message ProcedureCausedBy {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for incisionDateTime.
@@ -5861,6 +5882,8 @@ message QuestionnaireResponseAuthor {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -5874,8 +5897,7 @@ message QuestionnaireResponseAuthor {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for note.
@@ -6150,13 +6172,14 @@ message SpecimenProcessingTime {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Period period = 1;
       Duration duration = 2;
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for sequenceNumber.
@@ -6483,6 +6506,8 @@ message TaskCandidateList {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -6498,8 +6523,7 @@ message TaskCandidateList {
       ];
     }
   }
-  Value value = 3
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for replaces.
@@ -6578,13 +6602,14 @@ message Translation {
 
   // Content in other Language
   message Content {
+    option (is_choice_type) = true;
+
     oneof content {
       String string_value = 1 [json_name = "string"];
       Markdown markdown = 2;
     }
   }
-  Content content = 5
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Content content = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for group.

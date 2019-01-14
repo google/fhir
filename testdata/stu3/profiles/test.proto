@@ -67,12 +67,14 @@ message TestPatient {
 
   // Indicates if the individual is deceased or not
   message Deceased {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof deceased {
       proto.Boolean boolean = 1;
       proto.DateTime date_time = 2;
     }
   }
-  Deceased deceased = 15 [(.google.fhir.stu3.proto.is_choice_type) = true];
+  Deceased deceased = 15;
 
   // Addresses for the individual
   repeated proto.Address address = 16;
@@ -82,13 +84,14 @@ message TestPatient {
 
   // Whether patient is part of a multiple birth
   message MultipleBirth {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof multiple_birth {
       proto.Boolean boolean = 1;
       proto.Integer integer = 2;
     }
   }
-  MultipleBirth multiple_birth = 18
-      [(.google.fhir.stu3.proto.is_choice_type) = true];
+  MultipleBirth multiple_birth = 18;
 
   // Image of the patient
   repeated proto.Attachment photo = 19;
@@ -354,12 +357,14 @@ message TestObservation {
 
   // Clinically relevant time/time-period for observation
   message Effective {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof effective {
       proto.DateTime date_time = 1;
       proto.Period period = 2;
     }
   }
-  Effective effective = 16 [(.google.fhir.stu3.proto.is_choice_type) = true];
+  Effective effective = 16;
 
   // Date/Time this was made available
   proto.Instant issued = 17;
@@ -378,6 +383,8 @@ message TestObservation {
 
   // Actual result
   message Value {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof value {
       proto.Quantity quantity = 1;
       proto.CodeableConcept codeable_concept = 2;
@@ -392,7 +399,7 @@ message TestObservation {
       proto.Period period = 11;
     }
   }
-  Value value = 19 [(.google.fhir.stu3.proto.is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   proto.CodeableConcept data_absent_reason = 20;
@@ -498,6 +505,8 @@ message TestObservation {
 
     // Actual component result
     message Value {
+      option (.google.fhir.stu3.proto.is_choice_type) = true;
+
       oneof value {
         proto.Quantity quantity = 1;
         proto.CodeableConcept codeable_concept = 2;
@@ -511,7 +520,7 @@ message TestObservation {
         proto.Period period = 10;
       }
     }
-    Value value = 5 [(.google.fhir.stu3.proto.is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     proto.CodeableConcept data_absent_reason = 6;

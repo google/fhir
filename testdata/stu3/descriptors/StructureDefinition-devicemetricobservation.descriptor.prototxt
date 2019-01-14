@@ -159,7 +159,6 @@ field {
   type_name: ".google.fhir.stu3.proto.Devicemetricobservation.Effective"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Clinically relevant time/time-period for observation"
   }
 }
@@ -184,7 +183,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Devicemetricobservation.Value"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Actual result"
   }
 }
@@ -280,6 +278,9 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.DateTime"
     oneof_index: 0
   }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
+  }
   oneof_decl {
     name: "effective"
   }
@@ -366,6 +367,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Period"
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "value"
@@ -569,7 +573,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Devicemetricobservation.Component.Value"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Actual component result"
     }
   }
@@ -685,6 +688,9 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Period"
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "value"

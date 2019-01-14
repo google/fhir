@@ -49,7 +49,6 @@ field {
   type_name: ".google.fhir.stu3.proto.Signature.Who"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Who signed"
   }
 }
@@ -60,7 +59,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Signature.OnBehalfOf"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "The party represented"
   }
 }
@@ -109,6 +107,9 @@ nested_type {
     }
     oneof_index: 0
   }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
+  }
   oneof_decl {
     name: "who"
   }
@@ -137,6 +138,9 @@ nested_type {
       [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
     }
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "on_behalf_of"

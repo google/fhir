@@ -142,8 +142,7 @@ class Parser {
          ++sub_value_iter) {
       const auto& field_entry = field_map.find(sub_value_iter.key().asString());
       if (field_entry != field_map.end()) {
-        if (field_entry->second->options().GetExtension(
-                ::google::fhir::stu3::proto::is_choice_type)) {
+        if (IsChoiceType(field_entry->second)) {
           FHIR_RETURN_IF_ERROR(MergeChoiceField(*sub_value_iter,
                                                 field_entry->second,
                                                 field_entry->first, target));

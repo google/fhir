@@ -528,7 +528,6 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CarePlan.Activity.Detail.Scheduled"
       options {
-        [google.fhir.stu3.proto.is_choice_type]: true
         [google.fhir.stu3.proto.field_description]: "When activity is to occur"
       }
     }
@@ -565,7 +564,6 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CarePlan.Activity.Detail.Product"
       options {
-        [google.fhir.stu3.proto.is_choice_type]: true
         [google.fhir.stu3.proto.field_description]: "What is to be administered/supplied"
       }
     }
@@ -626,6 +624,9 @@ nested_type {
         oneof_index: 0
         json_name: "string"
       }
+      options {
+        [google.fhir.stu3.proto.is_choice_type]: true
+      }
       oneof_decl {
         name: "scheduled"
       }
@@ -651,6 +652,9 @@ nested_type {
           [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Substance"
         }
         oneof_index: 0
+      }
+      options {
+        [google.fhir.stu3.proto.is_choice_type]: true
       }
       oneof_decl {
         name: "product"

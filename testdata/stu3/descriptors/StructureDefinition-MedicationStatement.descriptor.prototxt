@@ -159,7 +159,6 @@ field {
   type_name: ".google.fhir.stu3.proto.MedicationStatement.Medication"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "What medication was taken"
   }
 }
@@ -170,7 +169,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.MedicationStatement.Effective"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "The date/time or interval when the medication was taken"
   }
 }
@@ -306,6 +304,9 @@ nested_type {
     }
     oneof_index: 0
   }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
+  }
   oneof_decl {
     name: "medication"
   }
@@ -327,6 +328,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Period"
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "effective"

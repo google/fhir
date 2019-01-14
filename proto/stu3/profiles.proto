@@ -129,13 +129,14 @@ message Bmi {
 
   // Often just a dateTime for Vital Signs
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -153,11 +154,13 @@ message Bmi {
 
   // Vital Sign Value recorded with UCUM
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -258,11 +261,13 @@ message Bmi {
 
     // Vital Sign Value recorded with UCUM
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -379,13 +384,14 @@ message Bodyheight {
 
   // Often just a dateTime for Vital Signs
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -403,11 +409,13 @@ message Bodyheight {
 
   // Vital Sign Value recorded with UCUM
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -508,11 +516,13 @@ message Bodyheight {
 
     // Vital Sign Value recorded with UCUM
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -629,13 +639,14 @@ message Bodylength {
 
   // Often just a dateTime for Vital Signs
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -653,11 +664,13 @@ message Bodylength {
 
   // Vital Sign Value recorded with UCUM
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -758,11 +771,13 @@ message Bodylength {
 
     // Vital Sign Value recorded with UCUM
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -879,13 +894,14 @@ message Bodytemp {
 
   // Often just a dateTime for Vital Signs
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -903,11 +919,13 @@ message Bodytemp {
 
   // Vital Sign Value recorded with UCUM
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -1008,11 +1026,13 @@ message Bodytemp {
 
     // Vital Sign Value recorded with UCUM
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -1129,13 +1149,14 @@ message Bodyweight {
 
   // Often just a dateTime for Vital Signs
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -1153,11 +1174,13 @@ message Bodyweight {
 
   // Vital Sign Value recorded with UCUM
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -1258,11 +1281,13 @@ message Bodyweight {
 
     // Vital Sign Value recorded with UCUM
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -1379,13 +1404,14 @@ message Bp {
 
   // Often just a dateTime for Vital Signs
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -1526,11 +1552,13 @@ message Bp {
 
     // Vital Sign Value recorded with UCUM
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -1581,11 +1609,13 @@ message Bp {
 
     // Vital Sign Value recorded with UCUM
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -1681,12 +1711,14 @@ message Cholesterol {
 
   // Clinically relevant time/time-period for observation
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16 [(is_choice_type) = true];
+  Effective effective = 16;
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -1704,11 +1736,13 @@ message Cholesterol {
 
   // Cholesterol value
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -1773,6 +1807,8 @@ message Cholesterol {
 
     // Actual component result
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
         CodeableConcept codeable_concept = 2;
@@ -1786,7 +1822,7 @@ message Cholesterol {
         Period period = 10;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -1936,6 +1972,8 @@ message Clinicaldocument {
 
     // Target of the relationship
     message Target {
+      option (is_choice_type) = true;
+
       oneof target {
         Identifier identifier = 1;
         Reference reference = 2
@@ -1943,8 +1981,7 @@ message Clinicaldocument {
                  "http://hl7.org/fhir/StructureDefinition/Composition"];
       }
     }
-    Target target = 5
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Target target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated RelatesTo relates_to = 21;
 
@@ -2085,12 +2122,13 @@ message Devicemetricobservation {
 
   // Clinically relevant time/time-period for observation
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
     }
   }
-  Effective effective = 16
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who is responsible for the observation
   repeated Reference performer = 18 [
@@ -2105,6 +2143,8 @@ message Devicemetricobservation {
 
   // Actual result
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
       CodeableConcept codeable_concept = 2;
@@ -2118,7 +2158,7 @@ message Devicemetricobservation {
       Period period = 11;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // High, low, normal, etc.
   CodeableConcept interpretation = 21;
@@ -2210,6 +2250,8 @@ message Devicemetricobservation {
 
     // Actual component result
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
         CodeableConcept codeable_concept = 2;
@@ -2223,7 +2265,7 @@ message Devicemetricobservation {
         Period period = 10;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -2318,12 +2360,14 @@ message DiagnosticreportGenetics {
 
   // Clinically relevant time/time-period for report
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16 [(is_choice_type) = true];
+  Effective effective = 16;
 
   // DateTime this version was released
   Instant issued = 17;
@@ -2504,6 +2548,8 @@ message ElementdefinitionDe {
 
   // Specified value if missing from instance
   message DefaultValue {
+    option (is_choice_type) = true;
+
     oneof default_value {
       Base64Binary base64_binary = 1;
       Boolean boolean = 2;
@@ -2545,7 +2591,7 @@ message ElementdefinitionDe {
       Meta meta = 38;
     }
   }
-  DefaultValue default_value = 19 [(is_choice_type) = true];
+  DefaultValue default_value = 19;
 
   // Implicit meaning when this element is missing
   Markdown meaning_when_missing = 20;
@@ -2566,6 +2612,8 @@ message ElementdefinitionDe {
 
     // Value of Example (one of allowed types)
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Base64Binary base64_binary = 1;
         Boolean boolean = 2;
@@ -2607,13 +2655,14 @@ message ElementdefinitionDe {
         Meta meta = 38;
       }
     }
-    Value value = 4
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Value value = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Example example = 24;
 
   // Minimum Allowed Value (for some types)
   message MinValue {
+    option (is_choice_type) = true;
+
     oneof min_value {
       Date date = 1;
       DateTime date_time = 2;
@@ -2626,10 +2675,12 @@ message ElementdefinitionDe {
       Quantity quantity = 9;
     }
   }
-  MinValue min_value = 25 [(is_choice_type) = true];
+  MinValue min_value = 25;
 
   // Maximum Allowed Value (for some types)
   message MaxValue {
+    option (is_choice_type) = true;
+
     oneof max_value {
       Date date = 1;
       DateTime date_time = 2;
@@ -2642,7 +2693,7 @@ message ElementdefinitionDe {
       Quantity quantity = 9;
     }
   }
-  MaxValue max_value = 26 [(is_choice_type) = true];
+  MaxValue max_value = 26;
 
   // Max length for strings
   Integer max_length = 27;
@@ -2702,6 +2753,8 @@ message ElementdefinitionDe {
 
     // Source of value set
     message ValueSet {
+      option (is_choice_type) = true;
+
       oneof value_set {
         Uri uri = 1;
         Reference reference = 2
@@ -2709,7 +2762,7 @@ message ElementdefinitionDe {
                  "http://hl7.org/fhir/StructureDefinition/ValueSet"];
       }
     }
-    ValueSet value_set = 5 [(is_choice_type) = true];
+    ValueSet value_set = 5;
   }
   ElementDefinitionBinding binding = 33;
 
@@ -2825,29 +2878,35 @@ message FamilymemberhistoryGenetic {
 
   // (approximate) date of birth
   message Born {
+    option (is_choice_type) = true;
+
     oneof born {
       Period period = 1;
       Date date = 2;
       String string_value = 3 [json_name = "string"];
     }
   }
-  Born born = 19 [(is_choice_type) = true];
+  Born born = 19;
 
   // (approximate) age
   message Age {
+    option (is_choice_type) = true;
+
     oneof age {
       Age age_value = 1 [json_name = "age"];
       Range range = 2;
       String string_value = 3 [json_name = "string"];
     }
   }
-  Age age = 20 [(is_choice_type) = true];
+  Age age = 20;
 
   // Age is estimated?
   Boolean estimated_age = 21;
 
   // Dead? How old/when?
   message Deceased {
+    option (is_choice_type) = true;
+
     oneof deceased {
       Boolean boolean = 1;
       Age age = 2;
@@ -2856,7 +2915,7 @@ message FamilymemberhistoryGenetic {
       String string_value = 5 [json_name = "string"];
     }
   }
-  Deceased deceased = 22 [(is_choice_type) = true];
+  Deceased deceased = 22;
 
   // Why was family member history performed?
   repeated CodeableConcept reason_code = 23;
@@ -2895,6 +2954,8 @@ message FamilymemberhistoryGenetic {
 
     // When condition first manifested
     message Onset {
+      option (is_choice_type) = true;
+
       oneof onset {
         Age age = 1;
         Range range = 2;
@@ -2902,7 +2963,7 @@ message FamilymemberhistoryGenetic {
         String string_value = 4 [json_name = "string"];
       }
     }
-    Onset onset = 6 [(is_choice_type) = true];
+    Onset onset = 6;
 
     // Extra information about condition
     Annotation note = 7;
@@ -3010,12 +3071,14 @@ message Hdlcholesterol {
 
   // Clinically relevant time/time-period for observation
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16 [(is_choice_type) = true];
+  Effective effective = 16;
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -3033,11 +3096,13 @@ message Hdlcholesterol {
 
   // HDL Cholesterol value
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -3102,6 +3167,8 @@ message Hdlcholesterol {
 
     // Actual component result
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
         CodeableConcept codeable_concept = 2;
@@ -3115,7 +3182,7 @@ message Hdlcholesterol {
         Period period = 10;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -3232,13 +3299,14 @@ message Headcircum {
 
   // Often just a dateTime for Vital Signs
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -3256,11 +3324,13 @@ message Headcircum {
 
   // Vital Sign Value recorded with UCUM
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -3361,11 +3431,13 @@ message Headcircum {
 
     // Vital Sign Value recorded with UCUM
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -3482,13 +3554,14 @@ message Heartrate {
 
   // Often just a dateTime for Vital Signs
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -3506,11 +3579,13 @@ message Heartrate {
 
   // Vital Sign Value recorded with UCUM
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -3611,11 +3686,13 @@ message Heartrate {
 
     // Vital Sign Value recorded with UCUM
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -3710,12 +3787,14 @@ message Hlaresult {
 
   // Clinically relevant time/time-period for report
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16 [(is_choice_type) = true];
+  Effective effective = 16;
 
   // DateTime this version was released
   Instant issued = 17;
@@ -3902,12 +3981,14 @@ message Ldlcholesterol {
 
   // Clinically relevant time/time-period for observation
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16 [(is_choice_type) = true];
+  Effective effective = 16;
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -3925,11 +4006,13 @@ message Ldlcholesterol {
 
   // LDL Cholesterol value
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -3994,6 +4077,8 @@ message Ldlcholesterol {
 
     // Actual component result
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
         CodeableConcept codeable_concept = 2;
@@ -4007,7 +4092,7 @@ message Ldlcholesterol {
         Period period = 10;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -4101,12 +4186,14 @@ message Lipidprofile {
 
   // Clinically relevant time/time-period for report
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16 [(is_choice_type) = true];
+  Effective effective = 16;
 
   // DateTime this version was released
   Instant issued = 17;
@@ -4361,12 +4448,14 @@ message ObservationGenetics {
 
   // Clinically relevant time/time-period for observation
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16 [(is_choice_type) = true];
+  Effective effective = 16;
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -4384,6 +4473,8 @@ message ObservationGenetics {
 
   // Actual result
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
       CodeableConcept codeable_concept = 2;
@@ -4398,7 +4489,7 @@ message ObservationGenetics {
       Period period = 11;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -4502,6 +4593,8 @@ message ObservationGenetics {
 
     // Actual component result
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
         CodeableConcept codeable_concept = 2;
@@ -4515,7 +4608,7 @@ message ObservationGenetics {
         Period period = 10;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -4723,13 +4816,14 @@ message Oxygensat {
 
   // Often just a dateTime for Vital Signs
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -4747,11 +4841,13 @@ message Oxygensat {
 
   // Vital Sign Value recorded with UCUM
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -4852,11 +4948,13 @@ message Oxygensat {
 
     // Vital Sign Value recorded with UCUM
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -4965,22 +5063,26 @@ message ProcedurerequestGenetics {
 
   // When procedure should occur
   message Occurrence {
+    option (is_choice_type) = true;
+
     oneof occurrence {
       DateTime date_time = 1;
       Period period = 2;
       Timing timing = 3;
     }
   }
-  Occurrence occurrence = 22 [(is_choice_type) = true];
+  Occurrence occurrence = 22;
 
   // Preconditions for procedure or diagnostic
   message AsNeeded {
+    option (is_choice_type) = true;
+
     oneof as_needed {
       Boolean boolean = 1;
       CodeableConcept codeable_concept = 2;
     }
   }
-  AsNeeded as_needed = 23 [(is_choice_type) = true];
+  AsNeeded as_needed = 23;
 
   // Date request signed
   DateTime authored_on = 24;
@@ -5172,13 +5274,14 @@ message Resprate {
 
   // Often just a dateTime for Vital Signs
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -5196,11 +5299,13 @@ message Resprate {
 
   // Vital Sign Value recorded with UCUM
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -5301,11 +5406,13 @@ message Resprate {
 
     // Vital Sign Value recorded with UCUM
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -5531,6 +5638,8 @@ message Shareablecodesystem {
 
       // Value of the property for this concept
       message Value {
+        option (is_choice_type) = true;
+
         oneof value {
           Code code = 1;
           Coding coding = 2;
@@ -5540,10 +5649,7 @@ message Shareablecodesystem {
           DateTime date_time = 6;
         }
       }
-      Value value = 5 [
-        (is_choice_type) = true,
-        (validation_requirement) = REQUIRED_BY_FHIR
-      ];
+      Value value = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
     }
     repeated ConceptProperty property = 8;
 
@@ -5789,6 +5895,8 @@ message Shareablevalueset {
 
       // Value of the named parameter
       message Value {
+        option (is_choice_type) = true;
+
         oneof value {
           String string_value = 1 [json_name = "string"];
           Boolean boolean = 2;
@@ -5798,7 +5906,7 @@ message Shareablevalueset {
           Code code = 6;
         }
       }
-      Value value = 5 [(is_choice_type) = true];
+      Value value = 5;
     }
     repeated Parameter parameter = 8;
 
@@ -5924,12 +6032,14 @@ message Triglyceride {
 
   // Clinically relevant time/time-period for observation
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16 [(is_choice_type) = true];
+  Effective effective = 16;
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -5947,11 +6057,13 @@ message Triglyceride {
 
   // Triglyceride value
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -6016,6 +6128,8 @@ message Triglyceride {
 
     // Actual component result
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
         CodeableConcept codeable_concept = 2;
@@ -6029,7 +6143,7 @@ message Triglyceride {
         Period period = 10;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -6124,13 +6238,14 @@ message Vitalsigns {
 
   // Often just a dateTime for Vital Signs
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -6148,11 +6263,13 @@ message Vitalsigns {
 
   // Vital Sign Value recorded with UCUM
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -6253,11 +6370,13 @@ message Vitalsigns {
 
     // Vital Sign Value recorded with UCUM
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -6374,13 +6493,14 @@ message Vitalspanel {
 
   // Often just a dateTime for Vital Signs
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -6495,11 +6615,13 @@ message Vitalspanel {
 
     // Vital Sign Value recorded with UCUM
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;

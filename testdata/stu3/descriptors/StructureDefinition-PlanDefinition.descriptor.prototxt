@@ -493,7 +493,6 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.PlanDefinition.Goal.Target.Detail"
       options {
-        [google.fhir.stu3.proto.is_choice_type]: true
         [google.fhir.stu3.proto.field_description]: "The target value to be achieved"
       }
     }
@@ -532,6 +531,9 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.CodeableConcept"
         oneof_index: 0
+      }
+      options {
+        [google.fhir.stu3.proto.is_choice_type]: true
       }
       oneof_decl {
         name: "detail"
@@ -708,7 +710,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PlanDefinition.Action.TimingType"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "When the action should take place"
     }
   }
@@ -960,7 +961,6 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.PlanDefinition.Action.RelatedAction.Offset"
       options {
-        [google.fhir.stu3.proto.is_choice_type]: true
         [google.fhir.stu3.proto.field_description]: "Time offset for the relationship"
       }
     }
@@ -981,6 +981,9 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Range"
         oneof_index: 0
+      }
+      options {
+        [google.fhir.stu3.proto.is_choice_type]: true
       }
       oneof_decl {
         name: "offset"
@@ -1029,6 +1032,9 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Timing"
       oneof_index: 0
       json_name: "timing"
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "timing"

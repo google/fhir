@@ -211,7 +211,6 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Medication.Ingredient.Item"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "The product contained"
     }
   }
@@ -256,6 +255,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Medication"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "item"
@@ -364,7 +366,6 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Medication.Package.Content.Item"
       options {
         [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-        [google.fhir.stu3.proto.is_choice_type]: true
         [google.fhir.stu3.proto.field_description]: "The item in the package"
       }
     }
@@ -398,6 +399,9 @@ nested_type {
           [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Medication"
         }
         oneof_index: 0
+      }
+      options {
+        [google.fhir.stu3.proto.is_choice_type]: true
       }
       oneof_decl {
         name: "item"

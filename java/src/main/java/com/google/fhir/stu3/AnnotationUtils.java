@@ -53,7 +53,8 @@ public final class AnnotationUtils {
   }
 
   public static boolean isChoiceType(FieldDescriptor field) {
-    return field.getOptions().getExtension(Annotations.isChoiceType);
+    return field.getType() == FieldDescriptor.Type.MESSAGE
+        && field.getMessageType().getOptions().getExtension(Annotations.isChoiceType);
   }
 
   public static boolean isReference(MessageOrBuilder message) {

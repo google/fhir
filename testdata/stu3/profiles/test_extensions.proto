@@ -90,14 +90,15 @@ message ComplexExt {
 
     // choice type
     message SimpleSubSubFieldA {
+      option (.google.fhir.stu3.proto.is_choice_type) = true;
+
       oneof simple_sub_sub_field_a {
         proto.String string_value = 1 [json_name = "string"];
         proto.Decimal decimal = 2;
         proto.Boolean boolean = 3;
       }
     }
-    SimpleSubSubFieldA simple_sub_sub_field_a = 4
-        [(.google.fhir.stu3.proto.is_choice_type) = true];
+    SimpleSubSubFieldA simple_sub_sub_field_a = 4;
 
     // simple sub sub field b
     repeated proto.UnsignedInt simple_sub_sub_field_b = 5;

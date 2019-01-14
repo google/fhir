@@ -164,7 +164,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ChargeItem.Occurrence"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "When the charged service was applied"
   }
 }
@@ -360,6 +359,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Timing"
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "occurrence"

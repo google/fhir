@@ -213,6 +213,16 @@ public class ProtoFilePrinter {
           .append("\";\n");
       printedField = true;
     }
+    if (options.hasExtension(Annotations.isChoiceType)) {
+      message
+          .append(fieldIndent)
+          .append("option (")
+          .append(optionPackage)
+          .append("is_choice_type) = ")
+          .append(options.getExtension(Annotations.isChoiceType))
+          .append(";\n");
+      printedField = true;
+    }
 
     // Loop over the elements.
     Set<String> printedNestedTypeDefinitions = new HashSet<>();
@@ -245,6 +255,9 @@ public class ProtoFilePrinter {
     // Loop over the oneofs
     String oneofIndent = fieldIndent + "  ";
     for (int oneofIndex = 0; oneofIndex < descriptor.getOneofDeclCount(); oneofIndex++) {
+      if (printedField) {
+        message.append("\n");
+      }
       message
           .append(fieldIndent)
           .append("oneof ")
@@ -368,11 +381,6 @@ public class ProtoFilePrinter {
 
     FieldOptions options = field.getOptions();
     boolean hasFieldOption = false;
-    if (options.hasExtension(Annotations.isChoiceType)
-        && options.getExtension(Annotations.isChoiceType)) {
-      hasFieldOption =
-          addFieldOption("(" + optionPackage + "is_choice_type)", "true", hasFieldOption, message);
-    }
     if (options.hasExtension(Annotations.validationRequirement)) {
       hasFieldOption =
           addFieldOption(

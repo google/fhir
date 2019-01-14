@@ -76,7 +76,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Dosage.AsNeeded"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Take \"as needed\" (for x)"
   }
 }
@@ -117,7 +116,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Dosage.Dose"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Amount of medication per dose"
   }
 }
@@ -158,7 +156,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Dosage.Rate"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Amount of medication per unit of time"
   }
 }
@@ -179,6 +176,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "as_needed"
@@ -201,6 +201,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "dose"
@@ -231,6 +234,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "rate"

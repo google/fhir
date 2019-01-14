@@ -124,6 +124,8 @@ message DataRequirement {
 
     // Valueset for the filter
     message ValueSet {
+      option (is_choice_type) = true;
+
       oneof value_set {
         String string_value = 1 [json_name = "string"];
         Reference reference = 2
@@ -131,7 +133,7 @@ message DataRequirement {
                  "http://hl7.org/fhir/StructureDefinition/ValueSet"];
       }
     }
-    ValueSet value_set = 4 [(is_choice_type) = true];
+    ValueSet value_set = 4;
 
     // What code is expected
     repeated Code value_code = 5;
@@ -157,13 +159,15 @@ message DataRequirement {
 
     // The value of the filter, as a Period, DateTime, or Duration value
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         DateTime date_time = 1;
         Period period = 2;
         Duration duration = 3;
       }
     }
-    Value value = 4 [(is_choice_type) = true];
+    Value value = 4;
   }
   repeated DateFilter date_filter = 7;
 }
@@ -319,6 +323,8 @@ message ElementDefinition {
 
   // Specified value if missing from instance
   message DefaultValue {
+    option (is_choice_type) = true;
+
     oneof default_value {
       Base64Binary base64_binary = 1;
       Boolean boolean = 2;
@@ -360,7 +366,7 @@ message ElementDefinition {
       Meta meta = 38;
     }
   }
-  DefaultValue default_value = 19 [(is_choice_type) = true];
+  DefaultValue default_value = 19;
 
   // Implicit meaning when this element is missing
   Markdown meaning_when_missing = 20;
@@ -370,6 +376,8 @@ message ElementDefinition {
 
   // Value must be exactly this
   message Fixed {
+    option (is_choice_type) = true;
+
     oneof fixed {
       Base64Binary base64_binary = 1;
       Boolean boolean = 2;
@@ -411,10 +419,12 @@ message ElementDefinition {
       Meta meta = 38;
     }
   }
-  Fixed fixed = 22 [(is_choice_type) = true];
+  Fixed fixed = 22;
 
   // Value must have at least these property values
   message Pattern {
+    option (is_choice_type) = true;
+
     oneof pattern {
       Base64Binary base64_binary = 1;
       Boolean boolean = 2;
@@ -456,7 +466,7 @@ message ElementDefinition {
       Meta meta = 38;
     }
   }
-  Pattern pattern = 23 [(is_choice_type) = true];
+  Pattern pattern = 23;
 
   // Example value (as defined for type)
   message Example {
@@ -471,6 +481,8 @@ message ElementDefinition {
 
     // Value of Example (one of allowed types)
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Base64Binary base64_binary = 1;
         Boolean boolean = 2;
@@ -512,13 +524,14 @@ message ElementDefinition {
         Meta meta = 38;
       }
     }
-    Value value = 4
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Value value = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Example example = 24;
 
   // Minimum Allowed Value (for some types)
   message MinValue {
+    option (is_choice_type) = true;
+
     oneof min_value {
       Date date = 1;
       DateTime date_time = 2;
@@ -531,10 +544,12 @@ message ElementDefinition {
       Quantity quantity = 9;
     }
   }
-  MinValue min_value = 25 [(is_choice_type) = true];
+  MinValue min_value = 25;
 
   // Maximum Allowed Value (for some types)
   message MaxValue {
+    option (is_choice_type) = true;
+
     oneof max_value {
       Date date = 1;
       DateTime date_time = 2;
@@ -547,7 +562,7 @@ message ElementDefinition {
       Quantity quantity = 9;
     }
   }
-  MaxValue max_value = 26 [(is_choice_type) = true];
+  MaxValue max_value = 26;
 
   // Max length for strings
   Integer max_length = 27;
@@ -613,6 +628,8 @@ message ElementDefinition {
 
     // Source of value set
     message ValueSet {
+      option (is_choice_type) = true;
+
       oneof value_set {
         Uri uri = 1;
         Reference reference = 2
@@ -620,7 +637,7 @@ message ElementDefinition {
                  "http://hl7.org/fhir/StructureDefinition/ValueSet"];
       }
     }
-    ValueSet value_set = 5 [(is_choice_type) = true];
+    ValueSet value_set = 5;
   }
   ElementDefinitionBinding binding = 33;
 
@@ -767,6 +784,8 @@ message TriggerDefinition {
 
   // Timing of the event
   message EventTiming {
+    option (is_choice_type) = true;
+
     oneof event_timing {
       Timing timing = 1;
       Reference reference = 2
@@ -776,7 +795,7 @@ message TriggerDefinition {
       DateTime date_time = 4;
     }
   }
-  EventTiming event_timing = 5 [(is_choice_type) = true];
+  EventTiming event_timing = 5;
 
   // Triggering data of the event
   DataRequirement event_data = 6;
@@ -802,12 +821,13 @@ message UsageContext {
 
   // Value that defines the context
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       CodeableConcept codeable_concept = 1;
       Quantity quantity = 2;
       Range range = 3;
     }
   }
-  Value value = 4
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Value value = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 }

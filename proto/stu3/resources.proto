@@ -267,6 +267,8 @@ message ActivityDefinition {
 
   // When activity is to occur
   message TimingType {
+    option (is_choice_type) = true;
+
     oneof timing {
       Timing timing_value = 1 [json_name = "timing"];
       DateTime date_time = 2;
@@ -274,7 +276,7 @@ message ActivityDefinition {
       Range range = 4;
     }
   }
-  TimingType timing = 34 [(is_choice_type) = true];
+  TimingType timing = 34;
 
   // Where it should happen
   Reference location = 35
@@ -303,6 +305,8 @@ message ActivityDefinition {
 
   // What's administered/supplied
   message Product {
+    option (is_choice_type) = true;
+
     oneof product {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -313,7 +317,7 @@ message ActivityDefinition {
       CodeableConcept codeable_concept = 2;
     }
   }
-  Product product = 37 [(is_choice_type) = true];
+  Product product = 37;
 
   // How much is administered/consumed/supplied
   SimpleQuantity quantity = 38;
@@ -589,6 +593,8 @@ message AllergyIntolerance {
 
   // When allergy or intolerance was identified
   message Onset {
+    option (is_choice_type) = true;
+
     oneof onset {
       DateTime date_time = 1;
       Age age = 2;
@@ -597,7 +603,7 @@ message AllergyIntolerance {
       String string_value = 5 [json_name = "string"];
     }
   }
-  Onset onset = 17 [(is_choice_type) = true];
+  Onset onset = 17;
 
   // Date record was believed accurate
   DateTime asserted_date = 18;
@@ -2102,13 +2108,15 @@ message CarePlan {
 
       // When activity is to occur
       message Scheduled {
+        option (is_choice_type) = true;
+
         oneof scheduled {
           Timing timing = 1;
           Period period = 2;
           String string_value = 3 [json_name = "string"];
         }
       }
-      Scheduled scheduled = 13 [(is_choice_type) = true];
+      Scheduled scheduled = 13;
 
       // Where it should happen
       Reference location = 14
@@ -2131,6 +2139,8 @@ message CarePlan {
 
       // What is to be administered/supplied
       message Product {
+        option (is_choice_type) = true;
+
         oneof product {
           CodeableConcept codeable_concept = 1;
           Reference reference = 2 [
@@ -2141,7 +2151,7 @@ message CarePlan {
           ];
         }
       }
-      Product product = 16 [(is_choice_type) = true];
+      Product product = 16;
 
       // How to consume/day?
       SimpleQuantity daily_amount = 17;
@@ -2346,13 +2356,15 @@ message ChargeItem {
 
   // When the charged service was applied
   message Occurrence {
+    option (is_choice_type) = true;
+
     oneof occurrence {
       DateTime date_time = 1;
       Period period = 2;
       Timing timing = 3;
     }
   }
-  Occurrence occurrence = 16 [(is_choice_type) = true];
+  Occurrence occurrence = 16;
 
   // Who performed charged service
   message Participant {
@@ -2679,15 +2691,19 @@ message Claim {
 
     // When it occurred
     message TimingType {
+      option (is_choice_type) = true;
+
       oneof timing {
         Date date = 1;
         Period period = 2;
       }
     }
-    TimingType timing = 7 [(is_choice_type) = true];
+    TimingType timing = 7;
 
     // Additional Data or supporting information
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         String string_value = 1 [json_name = "string"];
         Quantity quantity = 2;
@@ -2697,7 +2713,7 @@ message Claim {
                  "http://hl7.org/fhir/StructureDefinition/Resource"];
       }
     }
-    Value value = 8 [(is_choice_type) = true];
+    Value value = 8;
 
     // Reason associated with the information
     CodeableConcept reason = 9;
@@ -2720,6 +2736,8 @@ message Claim {
 
     // Patient's diagnosis
     message DiagnosisType {
+      option (is_choice_type) = true;
+
       oneof diagnosis {
         CodeableConcept codeable_concept = 1;
         Reference reference = 2
@@ -2727,8 +2745,7 @@ message Claim {
                  "http://hl7.org/fhir/StructureDefinition/Condition"];
       }
     }
-    DiagnosisType diagnosis = 5
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    DiagnosisType diagnosis = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Timing or nature of the diagnosis
     repeated CodeableConcept type = 6;
@@ -2757,6 +2774,8 @@ message Claim {
 
     // Patient's list of procedures performed
     message ProcedureType {
+      option (is_choice_type) = true;
+
       oneof procedure {
         CodeableConcept codeable_concept = 1;
         Reference reference = 2
@@ -2764,8 +2783,7 @@ message Claim {
                  "http://hl7.org/fhir/StructureDefinition/Procedure"];
       }
     }
-    ProcedureType procedure = 6
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    ProcedureType procedure = 6 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Procedure procedure = 32;
 
@@ -2827,6 +2845,8 @@ message Claim {
 
     // Accident Place
     message Location {
+      option (is_choice_type) = true;
+
       oneof location {
         Address address = 1;
         Reference reference = 2
@@ -2834,7 +2854,7 @@ message Claim {
                  "http://hl7.org/fhir/StructureDefinition/Location"];
       }
     }
-    Location location = 6 [(is_choice_type) = true];
+    Location location = 6;
   }
   Accident accident = 34;
 
@@ -2887,15 +2907,19 @@ message Claim {
 
     // Date or dates of Service
     message Serviced {
+      option (is_choice_type) = true;
+
       oneof serviced {
         Date date = 1;
         Period period = 2;
       }
     }
-    Serviced serviced = 14 [(is_choice_type) = true];
+    Serviced serviced = 14;
 
     // Place of service
     message Location {
+      option (is_choice_type) = true;
+
       oneof location {
         CodeableConcept codeable_concept = 1;
         Address address = 2;
@@ -2904,7 +2928,7 @@ message Claim {
                  "http://hl7.org/fhir/StructureDefinition/Location"];
       }
     }
-    Location location = 15 [(is_choice_type) = true];
+    Location location = 15;
 
     // Count of Products or Services
     SimpleQuantity quantity = 16;
@@ -3475,12 +3499,14 @@ message ClinicalImpression {
 
   // Time of assessment
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 15 [(is_choice_type) = true];
+  Effective effective = 15;
 
   // When the assessment was documented
   DateTime date = 16;
@@ -3554,6 +3580,8 @@ message ClinicalImpression {
 
     // What was found
     message Item {
+      option (is_choice_type) = true;
+
       oneof item {
         CodeableConcept codeable_concept = 1;
         Reference reference = 2 [
@@ -3564,8 +3592,7 @@ message ClinicalImpression {
         ];
       }
     }
-    Item item = 4
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Item item = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Which investigations support finding
     String basis = 5;
@@ -3808,6 +3835,8 @@ message CodeSystem {
 
       // Value of the property for this concept
       message Value {
+        option (is_choice_type) = true;
+
         oneof value {
           Code code = 1;
           Coding coding = 2;
@@ -3817,10 +3846,7 @@ message CodeSystem {
           DateTime date_time = 6;
         }
       }
-      Value value = 5 [
-        (is_choice_type) = true,
-        (validation_requirement) = REQUIRED_BY_FHIR
-      ];
+      Value value = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
     }
     repeated ConceptProperty property = 8;
 
@@ -3974,6 +4000,8 @@ message Communication {
 
     // Message part content
     message Content {
+      option (is_choice_type) = true;
+
       oneof content {
         String string_value = 1 [json_name = "string"];
         Attachment attachment = 2;
@@ -3982,8 +4010,7 @@ message Communication {
                  "http://hl7.org/fhir/StructureDefinition/Resource"];
       }
     }
-    Content content = 4
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Content content = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Payload payload = 27;
 
@@ -4099,6 +4126,8 @@ message CommunicationRequest {
 
     // Message part content
     message Content {
+      option (is_choice_type) = true;
+
       oneof content {
         String string_value = 1 [json_name = "string"];
         Attachment attachment = 2;
@@ -4107,19 +4136,20 @@ message CommunicationRequest {
                  "http://hl7.org/fhir/StructureDefinition/Resource"];
       }
     }
-    Content content = 4
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Content content = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Payload payload = 21;
 
   // When scheduled
   message Occurrence {
+    option (is_choice_type) = true;
+
     oneof occurrence {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Occurrence occurrence = 22 [(is_choice_type) = true];
+  Occurrence occurrence = 22;
 
   // When request transitioned to being actionable
   DateTime authored_on = 23;
@@ -4410,6 +4440,8 @@ message Composition {
 
     // Target of the relationship
     message Target {
+      option (is_choice_type) = true;
+
       oneof target {
         Identifier identifier = 1;
         Reference reference = 2
@@ -4417,8 +4449,7 @@ message Composition {
                  "http://hl7.org/fhir/StructureDefinition/Composition"];
       }
     }
-    Target target = 5
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Target target = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated RelatesTo relates_to = 21;
 
@@ -4566,6 +4597,8 @@ message ConceptMap {
 
   // Identifies the source of the concepts which are being mapped
   message Source {
+    option (is_choice_type) = true;
+
     oneof source {
       Uri uri = 1;
       Reference reference = 2
@@ -4573,10 +4606,12 @@ message ConceptMap {
                "http://hl7.org/fhir/StructureDefinition/ValueSet"];
     }
   }
-  Source source = 24 [(is_choice_type) = true];
+  Source source = 24;
 
   // Provides context to the mappings
   message Target {
+    option (is_choice_type) = true;
+
     oneof target {
       Uri uri = 1;
       Reference reference = 2
@@ -4584,7 +4619,7 @@ message ConceptMap {
                "http://hl7.org/fhir/StructureDefinition/ValueSet"];
     }
   }
-  Target target = 25 [(is_choice_type) = true];
+  Target target = 25;
 
   // Same source and target systems
   message Group {
@@ -4783,6 +4818,8 @@ message Condition {
 
   // Estimated or actual date,  date-time, or age
   message Onset {
+    option (is_choice_type) = true;
+
     oneof onset {
       DateTime date_time = 1;
       Age age = 2;
@@ -4791,10 +4828,12 @@ message Condition {
       String string_value = 5 [json_name = "string"];
     }
   }
-  Onset onset = 18 [(is_choice_type) = true];
+  Onset onset = 18;
 
   // If/when in resolution/remission
   message Abatement {
+    option (is_choice_type) = true;
+
     oneof abatement {
       DateTime date_time = 1;
       Age age = 2;
@@ -4804,7 +4843,7 @@ message Condition {
       String string_value = 6 [json_name = "string"];
     }
   }
-  Abatement abatement = 19 [(is_choice_type) = true];
+  Abatement abatement = 19;
 
   // Date record was believed accurate
   DateTime asserted_date = 20;
@@ -4978,6 +5017,8 @@ message Consent {
 
   // Source from which this consent is taken
   message Source {
+    option (is_choice_type) = true;
+
     oneof source {
       Attachment attachment = 1;
       Identifier identifier = 2;
@@ -4993,7 +5034,7 @@ message Consent {
       ];
     }
   }
-  Source source = 19 [(is_choice_type) = true];
+  Source source = 19;
 
   // Policies covered by this consent
   message Policy {
@@ -5318,6 +5359,8 @@ message Contract {
 
     // Contract Valued Item Type
     message Entity {
+      option (is_choice_type) = true;
+
       oneof entity {
         CodeableConcept codeable_concept = 1;
         Reference reference = 2
@@ -5325,7 +5368,7 @@ message Contract {
                  "http://hl7.org/fhir/StructureDefinition/Resource"];
       }
     }
-    Entity entity = 4 [(is_choice_type) = true];
+    Entity entity = 4;
 
     // Contract Valued Item Number
     Identifier identifier = 5;
@@ -5445,6 +5488,8 @@ message Contract {
 
       // Contract Term Valued Item Type
       message Entity {
+        option (is_choice_type) = true;
+
         oneof entity {
           CodeableConcept codeable_concept = 1;
           Reference reference = 2
@@ -5452,7 +5497,7 @@ message Contract {
                    "http://hl7.org/fhir/StructureDefinition/Resource"];
         }
       }
-      Entity entity = 4 [(is_choice_type) = true];
+      Entity entity = 4;
 
       // Contract Term Valued Item Number
       Identifier identifier = 5;
@@ -5484,6 +5529,8 @@ message Contract {
 
   // Binding Contract
   message Binding {
+    option (is_choice_type) = true;
+
     oneof binding {
       Attachment attachment = 1;
       Reference reference = 2 [
@@ -5496,7 +5543,7 @@ message Contract {
       ];
     }
   }
-  Binding binding = 28 [(is_choice_type) = true];
+  Binding binding = 28;
 
   // Contract Friendly Language
   message FriendlyLanguage {
@@ -5511,6 +5558,8 @@ message Contract {
 
     // Easily comprehended representation of this Contract
     message Content {
+      option (is_choice_type) = true;
+
       oneof content {
         Attachment attachment = 1;
         Reference reference = 2 [
@@ -5523,8 +5572,7 @@ message Contract {
         ];
       }
     }
-    Content content = 4
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Content content = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated FriendlyLanguage friendly = 29;
 
@@ -5541,6 +5589,8 @@ message Contract {
 
     // Contract Legal Text
     message Content {
+      option (is_choice_type) = true;
+
       oneof content {
         Attachment attachment = 1;
         Reference reference = 2 [
@@ -5553,8 +5603,7 @@ message Contract {
         ];
       }
     }
-    Content content = 4
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Content content = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated LegalLanguage legal = 30;
 
@@ -5571,6 +5620,8 @@ message Contract {
 
     // Computable Contract Rules
     message Content {
+      option (is_choice_type) = true;
+
       oneof content {
         Attachment attachment = 1;
         Reference reference = 2
@@ -5578,8 +5629,7 @@ message Contract {
                  "http://hl7.org/fhir/StructureDefinition/DocumentReference"];
       }
     }
-    Content content = 4
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Content content = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated ComputableLanguage rule = 31;
 }
@@ -6296,6 +6346,8 @@ message DeviceRequest {
 
   // Device requested
   message Code {
+    option (is_choice_type) = true;
+
     oneof code {
       Reference reference = 1
           [(valid_reference_type) =
@@ -6303,8 +6355,7 @@ message DeviceRequest {
       CodeableConcept codeable_concept = 2;
     }
   }
-  Code code = 17
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Code code = 17 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Focus of request
   Reference subject = 18 [
@@ -6325,13 +6376,15 @@ message DeviceRequest {
 
   // Desired time or schedule for use
   message Occurrence {
+    option (is_choice_type) = true;
+
     oneof occurrence {
       DateTime date_time = 1;
       Period period = 2;
       Timing timing = 3;
     }
   }
-  Occurrence occurrence = 20 [(is_choice_type) = true];
+  Occurrence occurrence = 20;
 
   // When recorded
   DateTime authored_on = 21;
@@ -6454,13 +6507,15 @@ message DeviceUseStatement {
 
   // How often  the device was used
   message TimingType {
+    option (is_choice_type) = true;
+
     oneof timing {
       Timing timing_value = 1 [json_name = "timing"];
       Period period = 2;
       DateTime date_time = 3;
     }
   }
-  TimingType timing = 13 [(is_choice_type) = true];
+  TimingType timing = 13;
 
   // When statement was recorded
   DateTime recorded_on = 14;
@@ -6569,12 +6624,14 @@ message DiagnosticReport {
 
   // Clinically relevant time/time-period for report
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16 [(is_choice_type) = true];
+  Effective effective = 16;
 
   // DateTime this version was released
   Instant issued = 17;
@@ -6753,6 +6810,8 @@ message DocumentManifest {
 
     // Contents of this set of documents
     message P {
+      option (is_choice_type) = true;
+
       oneof p {
         Attachment attachment = 1;
         Reference reference = 2
@@ -6760,8 +6819,7 @@ message DocumentManifest {
                  "http://hl7.org/fhir/StructureDefinition/Resource"];
       }
     }
-    P p = 4
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    P p = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Content content = 19 [(validation_requirement) = REQUIRED_BY_FHIR];
 
@@ -7032,12 +7090,14 @@ message EligibilityRequest {
 
   // Estimated date or dates of Service
   message Serviced {
+    option (is_choice_type) = true;
+
     oneof serviced {
       Date date = 1;
       Period period = 2;
     }
   }
-  Serviced serviced = 13 [(is_choice_type) = true];
+  Serviced serviced = 13;
 
   // Creation date
   DateTime created = 14;
@@ -7225,22 +7285,26 @@ message EligibilityResponse {
 
         // Benefits allowed
         message Allowed {
+          option (is_choice_type) = true;
+
           oneof allowed {
             UnsignedInt unsigned_int = 1;
             String string_value = 2 [json_name = "string"];
             Money money = 3;
           }
         }
-        Allowed allowed = 5 [(is_choice_type) = true];
+        Allowed allowed = 5;
 
         // Benefits used
         message Used {
+          option (is_choice_type) = true;
+
           oneof used {
             UnsignedInt unsigned_int = 1;
             Money money = 2;
           }
         }
-        Used used = 6 [(is_choice_type) = true];
+        Used used = 6;
       }
       repeated Benefit financial = 12;
     }
@@ -8276,15 +8340,19 @@ message ExplanationOfBenefit {
 
     // When it occurred
     message TimingType {
+      option (is_choice_type) = true;
+
       oneof timing {
         Date date = 1;
         Period period = 2;
       }
     }
-    TimingType timing = 7 [(is_choice_type) = true];
+    TimingType timing = 7;
 
     // Additional Data or supporting information
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         String string_value = 1 [json_name = "string"];
         Quantity quantity = 2;
@@ -8294,7 +8362,7 @@ message ExplanationOfBenefit {
                  "http://hl7.org/fhir/StructureDefinition/Resource"];
       }
     }
-    Value value = 8 [(is_choice_type) = true];
+    Value value = 8;
 
     // Reason associated with the information
     Coding reason = 9;
@@ -8351,6 +8419,8 @@ message ExplanationOfBenefit {
 
     // Patient's diagnosis
     message DiagnosisType {
+      option (is_choice_type) = true;
+
       oneof diagnosis {
         CodeableConcept codeable_concept = 1;
         Reference reference = 2
@@ -8358,8 +8428,7 @@ message ExplanationOfBenefit {
                  "http://hl7.org/fhir/StructureDefinition/Condition"];
       }
     }
-    DiagnosisType diagnosis = 5
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    DiagnosisType diagnosis = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Timing or nature of the diagnosis
     repeated CodeableConcept type = 6;
@@ -8388,6 +8457,8 @@ message ExplanationOfBenefit {
 
     // Patient's list of procedures performed
     message ProcedureType {
+      option (is_choice_type) = true;
+
       oneof procedure {
         CodeableConcept codeable_concept = 1;
         Reference reference = 2
@@ -8395,8 +8466,7 @@ message ExplanationOfBenefit {
                  "http://hl7.org/fhir/StructureDefinition/Procedure"];
       }
     }
-    ProcedureType procedure = 6
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    ProcedureType procedure = 6 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Procedure procedure = 33;
 
@@ -8443,6 +8513,8 @@ message ExplanationOfBenefit {
 
     // Accident Place
     message Location {
+      option (is_choice_type) = true;
+
       oneof location {
         Address address = 1;
         Reference reference = 2
@@ -8450,7 +8522,7 @@ message ExplanationOfBenefit {
                  "http://hl7.org/fhir/StructureDefinition/Location"];
       }
     }
-    Location location = 6 [(is_choice_type) = true];
+    Location location = 6;
   }
   Accident accident = 36;
 
@@ -8503,15 +8575,19 @@ message ExplanationOfBenefit {
 
     // Date or dates of Service
     message Serviced {
+      option (is_choice_type) = true;
+
       oneof serviced {
         Date date = 1;
         Period period = 2;
       }
     }
-    Serviced serviced = 14 [(is_choice_type) = true];
+    Serviced serviced = 14;
 
     // Place of service
     message Location {
+      option (is_choice_type) = true;
+
       oneof location {
         CodeableConcept codeable_concept = 1;
         Address address = 2;
@@ -8520,7 +8596,7 @@ message ExplanationOfBenefit {
                  "http://hl7.org/fhir/StructureDefinition/Location"];
       }
     }
-    Location location = 15 [(is_choice_type) = true];
+    Location location = 15;
 
     // Count of Products or Services
     SimpleQuantity quantity = 16;
@@ -8885,22 +8961,26 @@ message ExplanationOfBenefit {
 
       // Benefits allowed
       message Allowed {
+        option (is_choice_type) = true;
+
         oneof allowed {
           UnsignedInt unsigned_int = 1;
           String string_value = 2 [json_name = "string"];
           Money money = 3;
         }
       }
-      Allowed allowed = 5 [(is_choice_type) = true];
+      Allowed allowed = 5;
 
       // Benefits used
       message Used {
+        option (is_choice_type) = true;
+
         oneof used {
           UnsignedInt unsigned_int = 1;
           Money money = 2;
         }
       }
-      Used used = 6 [(is_choice_type) = true];
+      Used used = 6;
     }
     repeated Benefit financial = 12;
   }
@@ -8982,29 +9062,35 @@ message FamilyMemberHistory {
 
   // (approximate) date of birth
   message Born {
+    option (is_choice_type) = true;
+
     oneof born {
       Period period = 1;
       Date date = 2;
       String string_value = 3 [json_name = "string"];
     }
   }
-  Born born = 19 [(is_choice_type) = true];
+  Born born = 19;
 
   // (approximate) age
   message AgeType {
+    option (is_choice_type) = true;
+
     oneof age {
       Age age_value = 1 [json_name = "age"];
       Range range = 2;
       String string_value = 3 [json_name = "string"];
     }
   }
-  AgeType age = 20 [(is_choice_type) = true];
+  AgeType age = 20;
 
   // Age is estimated?
   Boolean estimated_age = 21;
 
   // Dead? How old/when?
   message Deceased {
+    option (is_choice_type) = true;
+
     oneof deceased {
       Boolean boolean = 1;
       Age age = 2;
@@ -9013,7 +9099,7 @@ message FamilyMemberHistory {
       String string_value = 5 [json_name = "string"];
     }
   }
-  Deceased deceased = 22 [(is_choice_type) = true];
+  Deceased deceased = 22;
 
   // Why was family member history performed?
   repeated CodeableConcept reason_code = 23;
@@ -9052,6 +9138,8 @@ message FamilyMemberHistory {
 
     // When condition first manifested
     message Onset {
+      option (is_choice_type) = true;
+
       oneof onset {
         Age age = 1;
         Range range = 2;
@@ -9059,7 +9147,7 @@ message FamilyMemberHistory {
         String string_value = 4 [json_name = "string"];
       }
     }
-    Onset onset = 6 [(is_choice_type) = true];
+    Onset onset = 6;
 
     // Extra information about condition
     repeated Annotation note = 7;
@@ -9208,12 +9296,14 @@ message Goal {
 
   // When goal pursuit begins
   message Start {
+    option (is_choice_type) = true;
+
     oneof start {
       Date date = 1;
       CodeableConcept codeable_concept = 2;
     }
   }
-  Start start = 15 [(is_choice_type) = true];
+  Start start = 15;
 
   // Target outcome for the goal
   message Target {
@@ -9231,22 +9321,26 @@ message Goal {
 
     // The target value to be achieved
     message Detail {
+      option (is_choice_type) = true;
+
       oneof detail {
         Quantity quantity = 1;
         Range range = 2;
         CodeableConcept codeable_concept = 3;
       }
     }
-    Detail detail = 5 [(is_choice_type) = true];
+    Detail detail = 5;
 
     // Reach goal on or before
     message Due {
+      option (is_choice_type) = true;
+
       oneof due {
         Date date = 1;
         Duration duration = 2;
       }
     }
-    Due due = 6 [(is_choice_type) = true];
+    Due due = 6;
   }
   Target target = 16;
 
@@ -9515,6 +9609,8 @@ message Group {
 
     // Value held by characteristic
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         CodeableConcept codeable_concept = 1;
         Boolean boolean = 2;
@@ -9522,8 +9618,7 @@ message Group {
         Range range = 4;
       }
     }
-    Value value = 5
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Value value = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Group includes or excludes
     Boolean exclude = 6 [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -9641,6 +9736,8 @@ message GuidanceResponse {
 
   // Reason for the response
   message Reason {
+    option (is_choice_type) = true;
+
     oneof reason {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2
@@ -9648,7 +9745,7 @@ message GuidanceResponse {
                "http://hl7.org/fhir/StructureDefinition/Resource"];
     }
   }
-  Reason reason = 17 [(is_choice_type) = true];
+  Reason reason = 17;
 
   // Additional notes about the response
   repeated Annotation note = 18;
@@ -10605,6 +10702,8 @@ message ImplementationGuide {
 
       // Location of the resource
       message Source {
+        option (is_choice_type) = true;
+
         oneof source {
           Uri uri = 1;
           Reference reference = 2
@@ -10612,10 +10711,7 @@ message ImplementationGuide {
                    "http://hl7.org/fhir/StructureDefinition/Resource"];
         }
       }
-      Source source = 8 [
-        (is_choice_type) = true,
-        (validation_requirement) = REQUIRED_BY_FHIR
-      ];
+      Source source = 8 [(validation_requirement) = REQUIRED_BY_FHIR];
 
       // Resource this is an example of (if applicable)
       Reference example_for = 9
@@ -11573,12 +11669,14 @@ message Media {
 
   // When Media was collected
   message Occurrence {
+    option (is_choice_type) = true;
+
     oneof occurrence {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Occurrence occurrence = 16 [(is_choice_type) = true];
+  Occurrence occurrence = 16;
 
   // The person who generated the image
   Reference operator = 17
@@ -11682,6 +11780,8 @@ message Medication {
 
     // The product contained
     message Item {
+      option (is_choice_type) = true;
+
       oneof item {
         CodeableConcept codeable_concept = 1;
         Reference reference = 2 [
@@ -11692,8 +11792,7 @@ message Medication {
         ];
       }
     }
-    Item item = 4
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Item item = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Active ingredient indicator
     Boolean is_active = 5;
@@ -11730,6 +11829,8 @@ message Medication {
 
       // The item in the package
       message Item {
+        option (is_choice_type) = true;
+
         oneof item {
           CodeableConcept codeable_concept = 1;
           Reference reference = 2
@@ -11737,10 +11838,7 @@ message Medication {
                    "http://hl7.org/fhir/StructureDefinition/Medication"];
         }
       }
-      Item item = 4 [
-        (is_choice_type) = true,
-        (validation_requirement) = REQUIRED_BY_FHIR
-      ];
+      Item item = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
 
       // Quantity present in the package
       SimpleQuantity amount = 5;
@@ -11831,6 +11929,8 @@ message MedicationAdministration {
 
   // What was administered
   message Medication {
+    option (is_choice_type) = true;
+
     oneof medication {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2
@@ -11838,8 +11938,7 @@ message MedicationAdministration {
                "http://hl7.org/fhir/StructureDefinition/Medication"];
     }
   }
-  Medication medication = 14
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Medication medication = 14 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who received medication
   Reference subject = 15 [
@@ -11863,13 +11962,14 @@ message MedicationAdministration {
 
   // Start and end time of administration
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 18
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 18 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who administered substance
   message Performer {
@@ -11959,12 +12059,14 @@ message MedicationAdministration {
 
     // Dose quantity per unit of time
     message Rate {
+      option (is_choice_type) = true;
+
       oneof rate {
         Ratio ratio = 1;
         SimpleQuantity quantity = 2;
       }
     }
-    Rate rate = 9 [(is_choice_type) = true];
+    Rate rate = 9;
   }
   Dosage dosage = 27;
 
@@ -12023,6 +12125,8 @@ message MedicationDispense {
 
   // What medication was supplied
   message Medication {
+    option (is_choice_type) = true;
+
     oneof medication {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2
@@ -12030,8 +12134,7 @@ message MedicationDispense {
                "http://hl7.org/fhir/StructureDefinition/Medication"];
     }
   }
-  Medication medication = 13
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Medication medication = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who the dispense is for
   Reference subject = 14 [
@@ -12161,6 +12264,8 @@ message MedicationDispense {
 
   // Why a dispense was not performed
   message NotDoneReason {
+    option (is_choice_type) = true;
+
     oneof not_done_reason {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2
@@ -12168,7 +12273,7 @@ message MedicationDispense {
                "http://hl7.org/fhir/StructureDefinition/DetectedIssue"];
     }
   }
-  NotDoneReason not_done_reason = 31 [(is_choice_type) = true];
+  NotDoneReason not_done_reason = 31;
 
   // A list of releveant lifecycle events
   repeated Reference event_history = 32
@@ -12249,6 +12354,8 @@ message MedicationRequest {
 
   // Medication to be taken
   message Medication {
+    option (is_choice_type) = true;
+
     oneof medication {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2
@@ -12256,8 +12363,7 @@ message MedicationRequest {
                "http://hl7.org/fhir/StructureDefinition/Medication"];
     }
   }
-  Medication medication = 17
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Medication medication = 17 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who or group medication request is for
   Reference subject = 18 [
@@ -12479,6 +12585,8 @@ message MedicationStatement {
 
   // What medication was taken
   message Medication {
+    option (is_choice_type) = true;
+
     oneof medication {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2
@@ -12486,17 +12594,18 @@ message MedicationStatement {
                "http://hl7.org/fhir/StructureDefinition/Medication"];
     }
   }
-  Medication medication = 15
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Medication medication = 15 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // The date/time or interval when the medication was taken
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16 [(is_choice_type) = true];
+  Effective effective = 16;
 
   // When the statement was asserted?
   DateTime date_asserted = 17;
@@ -13180,12 +13289,14 @@ message NutritionOrder {
 
       // Speed with which the formula is provided per period of time
       message Rate {
+        option (is_choice_type) = true;
+
         oneof rate {
           SimpleQuantity quantity = 1;
           Ratio ratio = 2;
         }
       }
-      Rate rate = 6 [(is_choice_type) = true];
+      Rate rate = 6;
     }
     repeated Administration administration = 10;
 
@@ -13278,12 +13389,14 @@ message Observation {
 
   // Clinically relevant time/time-period for observation
   message Effective {
+    option (is_choice_type) = true;
+
     oneof effective {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Effective effective = 16 [(is_choice_type) = true];
+  Effective effective = 16;
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -13301,6 +13414,8 @@ message Observation {
 
   // Actual result
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Quantity quantity = 1;
       CodeableConcept codeable_concept = 2;
@@ -13315,7 +13430,7 @@ message Observation {
       Period period = 11;
     }
   }
-  Value value = 19 [(is_choice_type) = true];
+  Value value = 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
@@ -13419,6 +13534,8 @@ message Observation {
 
     // Actual component result
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Quantity quantity = 1;
         CodeableConcept codeable_concept = 2;
@@ -13432,7 +13549,7 @@ message Observation {
         Period period = 10;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // Why the component result is missing
     CodeableConcept data_absent_reason = 6;
@@ -13599,6 +13716,8 @@ message OperationDefinition {
 
       // Source of value set
       message ValueSet {
+        option (is_choice_type) = true;
+
         oneof value_set {
           Uri uri = 1;
           Reference reference = 2
@@ -13606,10 +13725,7 @@ message OperationDefinition {
                    "http://hl7.org/fhir/StructureDefinition/ValueSet"];
         }
       }
-      ValueSet value_set = 5 [
-        (is_choice_type) = true,
-        (validation_requirement) = REQUIRED_BY_FHIR
-      ];
+      ValueSet value_set = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
     }
     Binding binding = 12;
 
@@ -13830,6 +13946,8 @@ message Parameters {
 
     // If parameter is a data type
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Base64Binary base64_binary = 1;
         Boolean boolean = 2;
@@ -13871,7 +13989,7 @@ message Parameters {
         Meta meta = 38;
       }
     }
-    Value value = 5 [(is_choice_type) = true];
+    Value value = 5;
 
     // If parameter is a whole resource
     ContainedResource resource = 6;
@@ -13935,12 +14053,14 @@ message Patient {
 
   // Indicates if the individual is deceased or not
   message Deceased {
+    option (is_choice_type) = true;
+
     oneof deceased {
       Boolean boolean = 1;
       DateTime date_time = 2;
     }
   }
-  Deceased deceased = 15 [(is_choice_type) = true];
+  Deceased deceased = 15;
 
   // Addresses for the individual
   repeated Address address = 16;
@@ -13950,12 +14070,14 @@ message Patient {
 
   // Whether patient is part of a multiple birth
   message MultipleBirth {
+    option (is_choice_type) = true;
+
     oneof multiple_birth {
       Boolean boolean = 1;
       Integer integer = 2;
     }
   }
-  MultipleBirth multiple_birth = 18 [(is_choice_type) = true];
+  MultipleBirth multiple_birth = 18;
 
   // Image of the patient
   repeated Attachment photo = 19;
@@ -14534,13 +14656,15 @@ message PlanDefinition {
 
       // The target value to be achieved
       message Detail {
+        option (is_choice_type) = true;
+
         oneof detail {
           Quantity quantity = 1;
           Range range = 2;
           CodeableConcept codeable_concept = 3;
         }
       }
-      Detail detail = 5 [(is_choice_type) = true];
+      Detail detail = 5;
 
       // Reach goal within
       Duration due = 6;
@@ -14641,17 +14765,21 @@ message PlanDefinition {
 
       // Time offset for the relationship
       message Offset {
+        option (is_choice_type) = true;
+
         oneof offset {
           Duration duration = 1;
           Range range = 2;
         }
       }
-      Offset offset = 6 [(is_choice_type) = true];
+      Offset offset = 6;
     }
     repeated RelatedAction related_action = 16;
 
     // When the action should take place
     message TimingType {
+      option (is_choice_type) = true;
+
       oneof timing {
         DateTime date_time = 1;
         Period period = 2;
@@ -14660,7 +14788,7 @@ message PlanDefinition {
         Timing timing_value = 5 [json_name = "timing"];
       }
     }
-    TimingType timing = 17 [(is_choice_type) = true];
+    TimingType timing = 17;
 
     // Who should participate in the action
     message Participant {
@@ -15057,12 +15185,14 @@ message Procedure {
 
   // Date/Period the procedure was performed
   message Performed {
+    option (is_choice_type) = true;
+
     oneof performed {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Performed performed = 20 [(is_choice_type) = true];
+  Performed performed = 20;
 
   // The people who performed the procedure
   message Performer {
@@ -15267,22 +15397,26 @@ message ProcedureRequest {
 
   // When procedure should occur
   message Occurrence {
+    option (is_choice_type) = true;
+
     oneof occurrence {
       DateTime date_time = 1;
       Period period = 2;
       Timing timing = 3;
     }
   }
-  Occurrence occurrence = 22 [(is_choice_type) = true];
+  Occurrence occurrence = 22;
 
   // Preconditions for procedure or diagnostic
   message AsNeeded {
+    option (is_choice_type) = true;
+
     oneof as_needed {
       Boolean boolean = 1;
       CodeableConcept codeable_concept = 2;
     }
   }
-  AsNeeded as_needed = 23 [(is_choice_type) = true];
+  AsNeeded as_needed = 23;
 
   // Date request signed
   DateTime authored_on = 24;
@@ -15639,6 +15773,8 @@ message Provenance {
 
     // Who participated
     message Who {
+      option (is_choice_type) = true;
+
       oneof who {
         Uri uri = 1;
         Reference reference = 2 [
@@ -15655,11 +15791,12 @@ message Provenance {
         ];
       }
     }
-    Who who = 5
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Who who = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Who the agent is representing
     message OnBehalfOf {
+      option (is_choice_type) = true;
+
       oneof on_behalf_of {
         Uri uri = 1;
         Reference reference = 2 [
@@ -15676,7 +15813,7 @@ message Provenance {
         ];
       }
     }
-    OnBehalfOf on_behalf_of = 6 [(is_choice_type) = true];
+    OnBehalfOf on_behalf_of = 6;
 
     // Type of relationship between agents
     CodeableConcept related_agent_type = 7;
@@ -15700,6 +15837,8 @@ message Provenance {
 
     // Identity of entity
     message What {
+      option (is_choice_type) = true;
+
       oneof what {
         Uri uri = 1;
         Reference reference = 2
@@ -15708,8 +15847,7 @@ message Provenance {
         Identifier identifier = 3;
       }
     }
-    What what = 5
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    What what = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
 
     // Entity is attributed to this agent
     repeated Agent agent = 6;
@@ -15862,6 +16000,8 @@ message Questionnaire {
 
       // Value question must have
       message Answer {
+        option (is_choice_type) = true;
+
         oneof answer {
           Boolean boolean = 1;
           Decimal decimal = 2;
@@ -15879,7 +16019,7 @@ message Questionnaire {
                    "http://hl7.org/fhir/StructureDefinition/Resource"];
         }
       }
-      Answer answer = 6 [(is_choice_type) = true];
+      Answer answer = 6;
     }
     repeated EnableWhen enable_when = 10;
 
@@ -15913,6 +16053,8 @@ message Questionnaire {
 
       // Answer value
       message Value {
+        option (is_choice_type) = true;
+
         oneof value {
           Integer integer = 1;
           Date date = 2;
@@ -15921,15 +16063,14 @@ message Questionnaire {
           Coding coding = 5;
         }
       }
-      Value value = 4 [
-        (is_choice_type) = true,
-        (validation_requirement) = REQUIRED_BY_FHIR
-      ];
+      Value value = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
     }
     repeated Option option = 16;
 
     // Default value when item is first rendered
     message Initial {
+      option (is_choice_type) = true;
+
       oneof initial {
         Boolean boolean = 1;
         Decimal decimal = 2;
@@ -15947,7 +16088,7 @@ message Questionnaire {
                  "http://hl7.org/fhir/StructureDefinition/Resource"];
       }
     }
-    Initial initial = 17 [(is_choice_type) = true];
+    Initial initial = 17;
 
     // Nested questionnaire items
     repeated Item item = 18;
@@ -16089,6 +16230,8 @@ message QuestionnaireResponse {
 
       // Single-valued answer to the question
       message Value {
+        option (is_choice_type) = true;
+
         oneof value {
           Boolean boolean = 1;
           Decimal decimal = 2;
@@ -16106,7 +16249,7 @@ message QuestionnaireResponse {
                    "http://hl7.org/fhir/StructureDefinition/Resource"];
         }
       }
-      Value value = 4 [(is_choice_type) = true];
+      Value value = 4;
 
       // Nested groups and questions
       repeated Item item = 5;
@@ -16212,12 +16355,14 @@ message ReferralRequest {
 
   // When the service(s) requested in the referral should occur
   message Occurrence {
+    option (is_choice_type) = true;
+
     oneof occurrence {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Occurrence occurrence = 21 [(is_choice_type) = true];
+  Occurrence occurrence = 21;
 
   // Date of creation/activation
   DateTime authored_on = 22;
@@ -16454,6 +16599,8 @@ message RequestGroup {
 
   // Reason for the request group
   message Reason {
+    option (is_choice_type) = true;
+
     oneof reason {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2
@@ -16461,7 +16608,7 @@ message RequestGroup {
                "http://hl7.org/fhir/StructureDefinition/Resource"];
     }
   }
-  Reason reason = 21 [(is_choice_type) = true];
+  Reason reason = 21;
 
   // Additional notes about the response
   repeated Annotation note = 22;
@@ -16543,17 +16690,21 @@ message RequestGroup {
 
       // Time offset for the relationship
       message Offset {
+        option (is_choice_type) = true;
+
         oneof offset {
           Duration duration = 1;
           Range range = 2;
         }
       }
-      Offset offset = 6 [(is_choice_type) = true];
+      Offset offset = 6;
     }
     repeated RelatedAction related_action = 11;
 
     // When the action should take place
     message TimingType {
+      option (is_choice_type) = true;
+
       oneof timing {
         DateTime date_time = 1;
         Period period = 2;
@@ -16562,7 +16713,7 @@ message RequestGroup {
         Timing timing_value = 5 [json_name = "timing"];
       }
     }
-    TimingType timing = 12 [(is_choice_type) = true];
+    TimingType timing = 12;
 
     // Who should perform the action
     repeated Reference participant = 13 [
@@ -16869,12 +17020,14 @@ message RiskAssessment {
 
   // When was assessment made?
   message Occurrence {
+    option (is_choice_type) = true;
+
     oneof occurrence {
       DateTime date_time = 1;
       Period period = 2;
     }
   }
-  Occurrence occurrence = 17 [(is_choice_type) = true];
+  Occurrence occurrence = 17;
 
   // Condition assessed
   Reference condition = 18
@@ -16890,6 +17043,8 @@ message RiskAssessment {
 
   // Why the assessment was necessary?
   message Reason {
+    option (is_choice_type) = true;
+
     oneof reason {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2
@@ -16897,7 +17052,7 @@ message RiskAssessment {
                "http://hl7.org/fhir/StructureDefinition/Resource"];
     }
   }
-  Reason reason = 20 [(is_choice_type) = true];
+  Reason reason = 20;
 
   // Information used in assessment
   repeated Reference basis = 21
@@ -16920,12 +17075,14 @@ message RiskAssessment {
 
     // Likelihood of specified outcome
     message Probability {
+      option (is_choice_type) = true;
+
       oneof probability {
         Decimal decimal = 1;
         Range range = 2;
       }
     }
-    Probability probability = 5 [(is_choice_type) = true];
+    Probability probability = 5;
 
     // Likelihood of specified outcome as a qualitative value
     CodeableConcept qualitative_risk = 6;
@@ -16935,12 +17092,14 @@ message RiskAssessment {
 
     // Timeframe or age range
     message When {
+      option (is_choice_type) = true;
+
       oneof when {
         Period period = 1;
         Range range = 2;
       }
     }
-    When when = 8 [(is_choice_type) = true];
+    When when = 8;
 
     // Explanation of prediction
     String rationale = 9;
@@ -17676,12 +17835,14 @@ message Specimen {
 
     // Collection time
     message Collected {
+      option (is_choice_type) = true;
+
       oneof collected {
         DateTime date_time = 1;
         Period period = 2;
       }
     }
-    Collected collected = 5 [(is_choice_type) = true];
+    Collected collected = 5;
 
     // The quantity of specimen collected
     SimpleQuantity quantity = 6;
@@ -17718,12 +17879,14 @@ message Specimen {
 
     // Date and time of specimen processing
     message Time {
+      option (is_choice_type) = true;
+
       oneof time {
         DateTime date_time = 1;
         Period period = 2;
       }
     }
-    Time time = 7 [(is_choice_type) = true];
+    Time time = 7;
   }
   repeated Processing processing = 18;
 
@@ -17755,6 +17918,8 @@ message Specimen {
 
     // Additive associated with container
     message Additive {
+      option (is_choice_type) = true;
+
       oneof additive {
         CodeableConcept codeable_concept = 1;
         Reference reference = 2
@@ -17762,7 +17927,7 @@ message Specimen {
                  "http://hl7.org/fhir/StructureDefinition/Substance"];
       }
     }
-    Additive additive = 9 [(is_choice_type) = true];
+    Additive additive = 9;
   }
   repeated Container container = 19;
 
@@ -18137,6 +18302,8 @@ message StructureMap {
 
         // Default value if no value exists
         message DefaultValue {
+          option (is_choice_type) = true;
+
           oneof default_value {
             Base64Binary base64_binary = 1;
             Boolean boolean = 2;
@@ -18178,7 +18345,7 @@ message StructureMap {
             Meta meta = 38;
           }
         }
-        DefaultValue default_value = 8 [(is_choice_type) = true];
+        DefaultValue default_value = 8;
 
         // Optional field for this source
         String element = 9;
@@ -18243,6 +18410,8 @@ message StructureMap {
 
           // Parameter value - variable or literal
           message Value {
+            option (is_choice_type) = true;
+
             oneof value {
               Id id = 1;
               String string_value = 2 [json_name = "string"];
@@ -18251,10 +18420,7 @@ message StructureMap {
               Decimal decimal = 5;
             }
           }
-          Value value = 4 [
-            (is_choice_type) = true,
-            (validation_requirement) = REQUIRED_BY_FHIR
-          ];
+          Value value = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
         }
         repeated Parameter parameter = 11;
       }
@@ -18457,6 +18623,8 @@ message Substance {
 
     // A component of the substance
     message SubstanceType {
+      option (is_choice_type) = true;
+
       oneof substance {
         CodeableConcept codeable_concept = 1;
         Reference reference = 2
@@ -18464,8 +18632,7 @@ message Substance {
                  "http://hl7.org/fhir/StructureDefinition/Substance"];
       }
     }
-    SubstanceType substance = 5
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    SubstanceType substance = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Ingredient ingredient = 15;
 }
@@ -18544,6 +18711,8 @@ message SupplyDelivery {
 
     // Medication, Substance, or Device supplied
     message Item {
+      option (is_choice_type) = true;
+
       oneof item {
         CodeableConcept codeable_concept = 1;
         Reference reference = 2 [
@@ -18556,19 +18725,21 @@ message SupplyDelivery {
         ];
       }
     }
-    Item item = 5 [(is_choice_type) = true];
+    Item item = 5;
   }
   SuppliedItem supplied_item = 15;
 
   // When event occurred
   message Occurrence {
+    option (is_choice_type) = true;
+
     oneof occurrence {
       DateTime date_time = 1;
       Period period = 2;
       Timing timing = 3;
     }
   }
-  Occurrence occurrence = 16 [(is_choice_type) = true];
+  Occurrence occurrence = 16;
 
   // Dispenser
   Reference supplier = 17 [
@@ -18649,6 +18820,8 @@ message SupplyRequest {
 
     // Medication, Substance, or Device requested to be supplied
     message Item {
+      option (is_choice_type) = true;
+
       oneof item {
         CodeableConcept codeable_concept = 1;
         Reference reference = 2 [
@@ -18661,19 +18834,21 @@ message SupplyRequest {
         ];
       }
     }
-    Item item = 5 [(is_choice_type) = true];
+    Item item = 5;
   }
   OrderedItem ordered_item = 13;
 
   // When the request should be fulfilled
   message Occurrence {
+    option (is_choice_type) = true;
+
     oneof occurrence {
       DateTime date_time = 1;
       Period period = 2;
       Timing timing = 3;
     }
   }
-  Occurrence occurrence = 14 [(is_choice_type) = true];
+  Occurrence occurrence = 14;
 
   // When the request was made
   DateTime authored_on = 15;
@@ -18717,6 +18892,8 @@ message SupplyRequest {
 
   // Why the supply item was requested
   message Reason {
+    option (is_choice_type) = true;
+
     oneof reason {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2
@@ -18724,7 +18901,7 @@ message SupplyRequest {
                "http://hl7.org/fhir/StructureDefinition/Resource"];
     }
   }
-  Reason reason = 18 [(is_choice_type) = true];
+  Reason reason = 18;
 
   // The origin of the supply
   Reference deliver_from = 19 [
@@ -18779,6 +18956,8 @@ message Task {
 
   // Formal definition of task
   message Definition {
+    option (is_choice_type) = true;
+
     oneof definition {
       Uri uri = 1;
       Reference reference = 2
@@ -18786,7 +18965,7 @@ message Task {
                "http://hl7.org/fhir/StructureDefinition/ActivityDefinition"];
     }
   }
-  Definition definition = 10 [(is_choice_type) = true];
+  Definition definition = 10;
 
   // Request fulfilled by this task
   repeated Reference based_on = 11
@@ -18955,6 +19134,8 @@ message Task {
 
     // Content to use in performing the task
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Base64Binary base64_binary = 1;
         Boolean boolean = 2;
@@ -18996,8 +19177,7 @@ message Task {
         Meta meta = 38;
       }
     }
-    Value value = 5
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Value value = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Parameter input = 34;
 
@@ -19017,6 +19197,8 @@ message Task {
 
     // Result of output
     message Value {
+      option (is_choice_type) = true;
+
       oneof value {
         Base64Binary base64_binary = 1;
         Boolean boolean = 2;
@@ -19058,8 +19240,7 @@ message Task {
         Meta meta = 38;
       }
     }
-    Value value = 5
-        [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+    Value value = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Output output = 35;
 }
@@ -20225,6 +20406,8 @@ message ValueSet {
 
       // Value of the named parameter
       message Value {
+        option (is_choice_type) = true;
+
         oneof value {
           String string_value = 1 [json_name = "string"];
           Boolean boolean = 2;
@@ -20234,7 +20417,7 @@ message ValueSet {
           Code code = 6;
         }
       }
-      Value value = 5 [(is_choice_type) = true];
+      Value value = 5;
     }
     repeated Parameter parameter = 8;
 
@@ -20336,6 +20519,8 @@ message VisionPrescription {
 
   // Reason or indication for writing the prescription
   message Reason {
+    option (is_choice_type) = true;
+
     oneof reason {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2
@@ -20343,7 +20528,7 @@ message VisionPrescription {
                "http://hl7.org/fhir/StructureDefinition/Condition"];
     }
   }
-  Reason reason = 15 [(is_choice_type) = true];
+  Reason reason = 15;
 
   // Vision supply authorization
   message Dispense {

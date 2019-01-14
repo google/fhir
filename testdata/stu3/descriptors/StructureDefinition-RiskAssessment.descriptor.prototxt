@@ -173,7 +173,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.RiskAssessment.Occurrence"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "When was assessment made?"
   }
 }
@@ -207,7 +206,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.RiskAssessment.Reason"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Why the assessment was necessary?"
   }
 }
@@ -270,6 +268,9 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Period"
     oneof_index: 0
   }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
+  }
   oneof_decl {
     name: "occurrence"
   }
@@ -294,6 +295,9 @@ nested_type {
       [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
     }
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "reason"
@@ -349,7 +353,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.RiskAssessment.Prediction.Probability"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Likelihood of specified outcome"
     }
   }
@@ -380,7 +383,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.RiskAssessment.Prediction.When"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Timeframe or age range"
     }
   }
@@ -412,6 +414,9 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Range"
       oneof_index: 0
     }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
+    }
     oneof_decl {
       name: "probability"
     }
@@ -433,6 +438,9 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Range"
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "when"

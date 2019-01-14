@@ -489,6 +489,8 @@ message Annotation {
 
   // Individual responsible for the annotation
   message Author {
+    option (is_choice_type) = true;
+
     oneof author {
       Reference reference = 1 [
         (valid_reference_type) =
@@ -501,7 +503,7 @@ message Annotation {
       String string_value = 2 [json_name = "string"];
     }
   }
-  Author author = 3 [(is_choice_type) = true];
+  Author author = 3;
 
   // When the annotation was made
   DateTime time = 4;
@@ -722,12 +724,14 @@ message Dosage {
 
   // Take "as needed" (for x)
   message AsNeeded {
+    option (is_choice_type) = true;
+
     oneof as_needed {
       Boolean boolean = 1;
       CodeableConcept codeable_concept = 2;
     }
   }
-  AsNeeded as_needed = 8 [(is_choice_type) = true];
+  AsNeeded as_needed = 8;
 
   // Body site to administer to
   CodeableConcept site = 9;
@@ -740,12 +744,14 @@ message Dosage {
 
   // Amount of medication per dose
   message Dose {
+    option (is_choice_type) = true;
+
     oneof dose {
       Range range = 1;
       SimpleQuantity quantity = 2;
     }
   }
-  Dose dose = 12 [(is_choice_type) = true];
+  Dose dose = 12;
 
   // Upper limit on medication per unit of time
   Ratio max_dose_per_period = 13;
@@ -758,13 +764,15 @@ message Dosage {
 
   // Amount of medication per unit of time
   message Rate {
+    option (is_choice_type) = true;
+
     oneof rate {
       Ratio ratio = 1;
       Range range = 2;
       SimpleQuantity quantity = 3;
     }
   }
-  Rate rate = 16 [(is_choice_type) = true];
+  Rate rate = 16;
 }
 
 // Auto-generated from StructureDefinition for Duration, last updated
@@ -1080,6 +1088,8 @@ message Signature {
 
   // Who signed
   message Who {
+    option (is_choice_type) = true;
+
     oneof who {
       Uri uri = 1;
       Reference reference = 2 [
@@ -1096,11 +1106,12 @@ message Signature {
       ];
     }
   }
-  Who who = 5
-      [(is_choice_type) = true, (validation_requirement) = REQUIRED_BY_FHIR];
+  Who who = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // The party represented
   message OnBehalfOf {
+    option (is_choice_type) = true;
+
     oneof on_behalf_of {
       Uri uri = 1;
       Reference reference = 2 [
@@ -1117,7 +1128,7 @@ message Signature {
       ];
     }
   }
-  OnBehalfOf on_behalf_of = 6 [(is_choice_type) = true];
+  OnBehalfOf on_behalf_of = 6;
 
   // The technical format of the signature
   MimeTypeCode content_type = 7;
@@ -1182,13 +1193,15 @@ message Timing {
 
     // Length/Range of lengths, or (Start and/or end) limits
     message Bounds {
+      option (is_choice_type) = true;
+
       oneof bounds {
         Duration duration = 1;
         Range range = 2;
         Period period = 3;
       }
     }
-    Bounds bounds = 3 [(is_choice_type) = true];
+    Bounds bounds = 3;
 
     // Number of times to repeat
     Integer count = 4;
@@ -1255,6 +1268,8 @@ message Extension {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = true;
+
     oneof value {
       Base64Binary base64_binary = 1;
       Boolean boolean = 2;
@@ -1296,7 +1311,7 @@ message Extension {
       Meta meta = 38;
     }
   }
-  Value value = 3 [(is_choice_type) = true];
+  Value value = 3;
 
   // Additional Content defined by implementations
   repeated Extension extension = 4;

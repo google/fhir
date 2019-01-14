@@ -160,7 +160,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.SupplyDelivery.Occurrence"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "When event occurred"
   }
 }
@@ -247,7 +246,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SupplyDelivery.SuppliedItem.Item"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Medication, Substance, or Device supplied"
     }
   }
@@ -273,6 +271,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "item"
@@ -304,6 +305,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Timing"
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "occurrence"

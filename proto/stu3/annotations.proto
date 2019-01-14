@@ -66,6 +66,9 @@ extend google.protobuf.MessageOptions {
   // This message refers to an abstract type in FHIR
   bool is_abstract_type = 228208334;
 
+  // Is this message a wrapper around a choice type?
+  bool is_choice_type = 228595764;
+
   // DEPRECATED: use fhir_base_profile to identify extension, and
   // fhir_structure_definition_url to get the extension url.
   string fhir_extension_url = 177048773 [deprecated = true];
@@ -80,9 +83,6 @@ extend google.protobuf.EnumValueOptions {
 extend google.protobuf.FieldOptions {
   // Is this field required?
   Requirement validation_requirement = 162282766;
-
-  // Is this field a wrapper around a choice type?
-  bool is_choice_type = 187112991;
 
   // A brief description of the intended use of this field.
   string field_description = 190357977;

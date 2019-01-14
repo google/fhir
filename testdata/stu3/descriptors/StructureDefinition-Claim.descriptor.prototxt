@@ -679,7 +679,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Claim.SpecialCondition.TimingType"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "When it occurred"
     }
   }
@@ -690,7 +689,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Claim.SpecialCondition.Value"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Additional Data or supporting information"
     }
   }
@@ -721,6 +719,9 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Period"
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "timing"
@@ -763,6 +764,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "value"
@@ -820,7 +824,6 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Claim.Diagnosis.DiagnosisType"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Patient\'s diagnosis"
     }
   }
@@ -864,6 +867,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Condition"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "diagnosis"
@@ -931,7 +937,6 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Claim.Procedure.ProcedureType"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Patient\'s list of procedures performed"
     }
   }
@@ -955,6 +960,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Procedure"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "procedure"
@@ -1119,7 +1127,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Claim.Accident.Location"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Accident Place"
     }
   }
@@ -1143,6 +1150,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Location"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "location"
@@ -1289,7 +1299,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Claim.Item.Serviced"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Date or dates of Service"
     }
   }
@@ -1300,7 +1309,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Claim.Item.Location"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Place of service"
     }
   }
@@ -1414,6 +1422,9 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Period"
       oneof_index: 0
     }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
+    }
     oneof_decl {
       name: "serviced"
     }
@@ -1446,6 +1457,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Location"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "location"

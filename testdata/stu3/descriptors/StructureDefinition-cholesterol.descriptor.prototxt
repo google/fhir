@@ -171,7 +171,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Cholesterol.Effective"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Clinically relevant time/time-period for observation"
   }
 }
@@ -206,7 +205,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Cholesterol.Value"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Cholesterol value"
   }
 }
@@ -322,6 +320,9 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Period"
     oneof_index: 0
   }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
+  }
   oneof_decl {
     name: "effective"
   }
@@ -335,6 +336,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Quantity"
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "value"
@@ -444,7 +448,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Cholesterol.Component.Value"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Actual component result"
     }
   }
@@ -560,6 +563,9 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Period"
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "value"

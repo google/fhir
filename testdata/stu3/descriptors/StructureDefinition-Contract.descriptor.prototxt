@@ -280,7 +280,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Contract.Binding"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Binding Contract"
   }
 }
@@ -486,7 +485,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Contract.ValuedItem.Entity"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Contract Valued Item Type"
     }
   }
@@ -580,6 +578,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "entity"
@@ -851,7 +852,6 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Contract.Term.TermValuedItem.Entity"
       options {
-        [google.fhir.stu3.proto.is_choice_type]: true
         [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Type"
       }
     }
@@ -946,6 +946,9 @@ nested_type {
         }
         oneof_index: 0
       }
+      options {
+        [google.fhir.stu3.proto.is_choice_type]: true
+      }
       oneof_decl {
         name: "entity"
       }
@@ -974,6 +977,9 @@ nested_type {
       [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse"
     }
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "binding"
@@ -1019,7 +1025,6 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Contract.FriendlyLanguage.Content"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Easily comprehended representation of this Contract"
     }
   }
@@ -1045,6 +1050,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "content"
@@ -1091,7 +1099,6 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Contract.LegalLanguage.Content"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Contract Legal Text"
     }
   }
@@ -1117,6 +1124,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "content"
@@ -1163,7 +1173,6 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Contract.ComputableLanguage.Content"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Computable Contract Rules"
     }
   }
@@ -1187,6 +1196,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/DocumentReference"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "content"

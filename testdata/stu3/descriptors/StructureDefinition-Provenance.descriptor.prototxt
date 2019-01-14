@@ -234,7 +234,6 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Provenance.Agent.Who"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Who participated"
     }
   }
@@ -245,7 +244,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Provenance.Agent.OnBehalfOf"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Who the agent is representing"
     }
   }
@@ -284,6 +282,9 @@ nested_type {
       }
       oneof_index: 0
     }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
+    }
     oneof_decl {
       name: "who"
     }
@@ -312,6 +313,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "on_behalf_of"
@@ -369,7 +373,6 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Provenance.Entity.What"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Identity of entity"
     }
   }
@@ -411,6 +414,9 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Identifier"
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "what"

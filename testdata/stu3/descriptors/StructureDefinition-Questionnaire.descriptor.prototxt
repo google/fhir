@@ -462,7 +462,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Questionnaire.Item.Initial"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Default value when item is first rendered"
     }
   }
@@ -537,7 +536,6 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Questionnaire.Item.EnableWhen.Answer"
       options {
-        [google.fhir.stu3.proto.is_choice_type]: true
         [google.fhir.stu3.proto.field_description]: "Value question must have"
       }
     }
@@ -643,6 +641,9 @@ nested_type {
         }
         oneof_index: 0
       }
+      options {
+        [google.fhir.stu3.proto.is_choice_type]: true
+      }
       oneof_decl {
         name: "answer"
       }
@@ -688,7 +689,6 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Questionnaire.Item.Option.Value"
       options {
         [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-        [google.fhir.stu3.proto.is_choice_type]: true
         [google.fhir.stu3.proto.field_description]: "Answer value"
       }
     }
@@ -734,6 +734,9 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Coding"
         oneof_index: 0
+      }
+      options {
+        [google.fhir.stu3.proto.is_choice_type]: true
       }
       oneof_decl {
         name: "value"
@@ -841,6 +844,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "initial"

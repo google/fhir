@@ -14,6 +14,8 @@ message Extension {
 
   // Value of extension
   message Value {
+    option (is_choice_type) = KIND_COMPLEX_TYPE;
+
     oneof value {
       Base64Binary base64_binary = 1;
       Boolean boolean = 2;
@@ -55,7 +57,7 @@ message Extension {
       Meta meta = 38;
     }
   }
-  Value value = 3 [(is_choice_type) = true];
+  Value value = 3;
 
   // Additional Content defined by implementations
   repeated Extension extension = 4;

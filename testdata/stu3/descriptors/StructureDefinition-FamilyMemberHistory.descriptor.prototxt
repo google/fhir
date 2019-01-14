@@ -192,7 +192,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.FamilyMemberHistory.Born"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "(approximate) date of birth"
   }
 }
@@ -203,7 +202,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.FamilyMemberHistory.AgeType"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "(approximate) age"
   }
 }
@@ -224,7 +222,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.FamilyMemberHistory.Deceased"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Dead? How old/when?"
   }
 }
@@ -299,6 +296,9 @@ nested_type {
     oneof_index: 0
     json_name: "string"
   }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
+  }
   oneof_decl {
     name: "born"
   }
@@ -330,6 +330,9 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.String"
     oneof_index: 0
     json_name: "string"
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "age"
@@ -377,6 +380,9 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.String"
     oneof_index: 0
     json_name: "string"
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "deceased"
@@ -442,7 +448,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.FamilyMemberHistory.Condition.Onset"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "When condition first manifested"
     }
   }
@@ -490,6 +495,9 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.String"
       oneof_index: 0
       json_name: "string"
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "onset"

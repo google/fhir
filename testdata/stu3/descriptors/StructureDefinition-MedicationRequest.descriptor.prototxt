@@ -174,7 +174,6 @@ field {
   type_name: ".google.fhir.stu3.proto.MedicationRequest.Medication"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Medication to be taken"
   }
 }
@@ -360,6 +359,9 @@ nested_type {
       [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Medication"
     }
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "medication"

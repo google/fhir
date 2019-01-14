@@ -22,9 +22,6 @@ field {
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension.Value"
-  options {
-    [google.fhir.stu3.proto.is_choice_type]: true
-  }
 }
 field {
   name: "extension"
@@ -342,6 +339,9 @@ nested_type {
   }
   oneof_decl {
     name: "value"
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
 }
 options {

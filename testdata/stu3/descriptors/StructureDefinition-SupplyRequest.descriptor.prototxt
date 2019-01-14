@@ -136,7 +136,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.SupplyRequest.Occurrence"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "When the request should be fulfilled"
   }
 }
@@ -178,7 +177,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.SupplyRequest.Reason"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Why the supply item was requested"
   }
 }
@@ -257,7 +255,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SupplyRequest.OrderedItem.Item"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Medication, Substance, or Device requested to be supplied"
     }
   }
@@ -283,6 +280,9 @@ nested_type {
         [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
       }
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "item"
@@ -314,6 +314,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Timing"
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "occurrence"
@@ -399,6 +402,9 @@ nested_type {
       [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
     }
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "reason"

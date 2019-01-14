@@ -96,7 +96,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Task.Definition"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Formal definition of task"
   }
 }
@@ -386,6 +385,9 @@ nested_type {
     }
     oneof_index: 0
   }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
+  }
   oneof_decl {
     name: "definition"
   }
@@ -569,7 +571,6 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Task.Parameter.Value"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Content to use in performing the task"
     }
   }
@@ -880,6 +881,9 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Meta"
       oneof_index: 0
     }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
+    }
     oneof_decl {
       name: "value"
     }
@@ -936,7 +940,6 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Task.Output.Value"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Result of output"
     }
   }
@@ -1246,6 +1249,9 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Meta"
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "value"

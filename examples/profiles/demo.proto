@@ -70,12 +70,14 @@ message DemoPatient {
 
   // Indicates if the individual is deceased or not
   message Deceased {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof deceased {
       .google.fhir.stu3.proto.Boolean boolean = 1;
       .google.fhir.stu3.proto.DateTime date_time = 2;
     }
   }
-  Deceased deceased = 15 [(.google.fhir.stu3.proto.is_choice_type) = true];
+  Deceased deceased = 15;
 
   // Addresses for the individual
   repeated .google.fhir.stu3.proto.Address address = 16;
@@ -85,13 +87,14 @@ message DemoPatient {
 
   // Whether patient is part of a multiple birth
   message MultipleBirth {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
     oneof multiple_birth {
       .google.fhir.stu3.proto.Boolean boolean = 1;
       .google.fhir.stu3.proto.Integer integer = 2;
     }
   }
-  MultipleBirth multiple_birth = 18
-      [(.google.fhir.stu3.proto.is_choice_type) = true];
+  MultipleBirth multiple_birth = 18;
 
   // Image of the patient
   repeated .google.fhir.stu3.proto.Attachment photo = 19;

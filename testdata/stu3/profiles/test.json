@@ -7,7 +7,7 @@
         "id": "TestPatient",
         "url": "http://test/url/base/TestPatient",
         "name": "TestPatient",
-        "date": "2018-12-03",
+        "date": "2019-01-11",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1874,7 +1874,7 @@
         "id": "TestObservation",
         "url": "http://test/url/base/TestObservation",
         "name": "TestObservation",
-        "date": "2018-12-03",
+        "date": "2019-01-11",
         "publisher": "Testington Inc.",
         "contact": [
           {

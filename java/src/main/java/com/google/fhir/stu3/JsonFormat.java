@@ -417,7 +417,7 @@ public final class JsonFormat {
       for (Map.Entry<FieldDescriptor, Object> field : message.getAllFields().entrySet()) {
         printedField = maybeStartMessage(printedField);
         String name = field.getKey().getJsonName();
-        if (field.getKey().getOptions().getExtension(Annotations.isChoiceType) && !forAnalytics) {
+        if (AnnotationUtils.isChoiceType(field.getKey()) && !forAnalytics) {
           printChoiceField(field.getKey(), field.getValue());
         } else if (isPrimitiveType(field.getKey())) {
           printPrimitiveField(name, field.getKey(), field.getValue());
@@ -611,7 +611,7 @@ public final class JsonFormat {
     private Map<String, FieldDescriptor> getFieldMap(Descriptor descriptor) {
       Map<String, FieldDescriptor> nameToDescriptorMap = new HashMap<>();
       for (FieldDescriptor field : descriptor.getFields()) {
-        if (field.getOptions().getExtension(Annotations.isChoiceType)) {
+        if (AnnotationUtils.isChoiceType(field)) {
           // All the contained fields go in this message.
           Map<String, FieldDescriptor> innerMap = getFieldMap(field.getMessageType());
           for (Map.Entry<String, FieldDescriptor> entry : innerMap.entrySet()) {
@@ -646,7 +646,7 @@ public final class JsonFormat {
       for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
         if (nameToDescriptorMap.containsKey(entry.getKey())) {
           FieldDescriptor field = nameToDescriptorMap.get(entry.getKey());
-          if (field.getOptions().getExtension(Annotations.isChoiceType)) {
+          if (AnnotationUtils.isChoiceType(field)) {
             mergeChoiceField(field, entry.getKey(), entry.getValue(), builder);
           } else {
             mergeField(field, entry.getValue(), builder);

@@ -231,7 +231,6 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CommunicationRequest.Occurrence"
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "When scheduled"
   }
 }
@@ -342,7 +341,6 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.CommunicationRequest.Payload.Content"
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Message part content"
     }
   }
@@ -376,6 +374,9 @@ nested_type {
       }
       oneof_index: 0
     }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
+    }
     oneof_decl {
       name: "content"
     }
@@ -398,6 +399,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Period"
     oneof_index: 0
+  }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "occurrence"

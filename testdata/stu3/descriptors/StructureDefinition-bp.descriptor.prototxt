@@ -171,7 +171,6 @@ field {
   type_name: ".google.fhir.stu3.proto.Bp.Effective"
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.is_choice_type]: true
     [google.fhir.stu3.proto.field_description]: "Often just a dateTime for Vital Signs"
   }
 }
@@ -397,6 +396,9 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Period"
     oneof_index: 0
   }
+  options {
+    [google.fhir.stu3.proto.is_choice_type]: true
+  }
   oneof_decl {
     name: "effective"
   }
@@ -603,7 +605,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Bp.SystolicBP.Value"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Vital Sign Value recorded with UCUM"
     }
   }
@@ -704,6 +705,9 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Quantity"
       oneof_index: 0
     }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
+    }
     oneof_decl {
       name: "value"
     }
@@ -759,7 +763,6 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Bp.DiastolicBP.Value"
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
       [google.fhir.stu3.proto.field_description]: "Vital Sign Value recorded with UCUM"
     }
   }
@@ -859,6 +862,9 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Quantity"
       oneof_index: 0
+    }
+    options {
+      [google.fhir.stu3.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "value"
