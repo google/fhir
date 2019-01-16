@@ -133,11 +133,9 @@ public class ProtoGenerator {
   // The package to write new protos to.
   private final PackageInfo packageInfo;
   private final String fhirProtoRootPath;
-  // This is the core package containing types defined by FHIR in the spec.
-  // Things like datatypes and extensions will be imported from this package.
-  // When regenerating proto files defined by the fhir spec like Decimal or Patient, this will equal
-  // the #packageName.
-  private final String coreFhirPackage;
+  // The fhir version to use (e.g., DSTU2, STU3, R4).
+  // This determines which core dependencies (e.g., datatypes.proto) to use.
+  private final FhirVersion fhirVersion;
 
   private static class StructureDefinitionData {
     final StructureDefinition structDef;
@@ -213,7 +211,7 @@ public class ProtoGenerator {
       Map<StructureDefinition, String> knownTypes) {
     this.packageInfo = packageInfo;
     this.fhirProtoRootPath = fhirProtoRootPath;
-    this.coreFhirPackage = fhirVersion.coreFhirPackage;
+    this.fhirVersion = fhirVersion;
 
     // TODO: Do this with ValueSet resources once we have them.
     ImmutableMap.Builder<String, Descriptor> valueSetTypesByUrlBuilder =
@@ -307,7 +305,7 @@ public class ProtoGenerator {
     }
     if (!(structDefData.protoPackage.equals(packageInfo.getProtoPackage())
         || (isSingleTypedExtensionDefinition(structDefData.structDef)
-            && structDefData.protoPackage.equals(coreFhirPackage)))) {
+            && structDefData.protoPackage.equals(fhirVersion.coreFhirPackage)))) {
       throw new IllegalArgumentException(
           "Inconsistent package name for "
               + def.getUrl().getValue()
@@ -414,7 +412,7 @@ public class ProtoGenerator {
   // Returns true if the file proto uses a type from a set of types, but does not define it.
   private boolean needsDep(FileDescriptorProtoOrBuilder fileProto, Set<String> types) {
     for (DescriptorProto descriptor : fileProto.getMessageTypeList()) {
-      if (types.contains(coreFhirPackage + "." + descriptor.getName())) {
+      if (types.contains(fhirVersion.coreFhirPackage + "." + descriptor.getName())) {
         // This file defines a type from the set.  It can't depend on itself.
         return false;
       }
@@ -466,25 +464,43 @@ public class ProtoGenerator {
    * which contains only the resource types present in the generated FileDescriptorProto.
    */
   public FileDescriptorProto addContainedResource(FileDescriptorProto fileDescriptor) {
-    FileDescriptorProto.Builder resultBuilder = fileDescriptor.toBuilder();
     DescriptorProto.Builder contained =
         DescriptorProto.newBuilder()
             .setName("ContainedResource")
             .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource"));
-    int tagNumber = 1;
-    for (DescriptorProto type : resultBuilder.getMessageTypeList()) {
-      if (!type.getOptions().getExtension(Annotations.isAbstractType)) {
-        contained.addField(
-            FieldDescriptorProto.newBuilder()
-                .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type.getName()))
-                .setNumber(tagNumber++)
-                .setTypeName(type.getName())
-                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-                .setOneofIndex(0 /* the oneof_resource */)
-                .build());
+    if (packageInfo.getProtoPackage().equals(fhirVersion.coreFhirPackage)) {
+      // When generating contained resources for the core type (resources.proto),
+      // just iterate through all the non-abstract types, assigning tag numbers as you go
+      int tagNumber = 1;
+      for (DescriptorProto type : fileDescriptor.getMessageTypeList()) {
+        if (!type.getOptions().getExtension(Annotations.isAbstractType)) {
+          contained.addField(
+              FieldDescriptorProto.newBuilder()
+                  .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type.getName()))
+                  .setNumber(tagNumber++)
+                  .setTypeName(type.getName())
+                  .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                  .setOneofIndex(0 /* the oneof_resource */)
+                  .build());
+        }
+      }
+    } else {
+      // For derived contained resources, make sure to keep the tag numbers from the base file.
+      Descriptor baseContainedResources =
+          fhirVersion.coreTypeMap.get("resources.proto").findMessageTypeByName("ContainedResource");
+      Set<String> resourcesToInclude =
+          fileDescriptor.getMessageTypeList().stream()
+              .map(desc -> desc.getName())
+              .collect(Collectors.toSet());
+      for (FieldDescriptor field : baseContainedResources.getFields()) {
+        if (resourcesToInclude.contains(field.getMessageType().getName())) {
+          contained.addField(
+              field.toProto().toBuilder().setTypeName(field.getMessageType().getName()));
+        }
       }
     }
-    return resultBuilder.addMessageType(contained).build();
+
+    return fileDescriptor.toBuilder().addMessageType(contained).build();
   }
 
   private DescriptorProto generateMessage(
@@ -562,7 +578,9 @@ public class ProtoGenerator {
             field
                 .toBuilder()
                 .setTypeName(
-                    field.getTypeName().replace(coreFhirPackage, packageInfo.getProtoPackage()))
+                    field
+                        .getTypeName()
+                        .replace(fhirVersion.coreFhirPackage, packageInfo.getProtoPackage()))
                 .build();
       }
       builder.addField(field);
@@ -943,7 +961,7 @@ public class ProtoGenerator {
     if (isLocalContentReference(element)) {
       return new QualifiedType(rawFieldType, packageInfo.getProtoPackage());
     }
-    return new QualifiedType(rawFieldType, coreFhirPackage);
+    return new QualifiedType(rawFieldType, fhirVersion.coreFhirPackage);
   }
 
   /* Gets the field type (without package) of a potentially complex element. */
@@ -1280,7 +1298,7 @@ public class ProtoGenerator {
           buildFieldInternal(
                   fieldName,
                   fieldType,
-                  coreFhirPackage,
+                  fhirVersion.coreFhirPackage,
                   nextTag++,
                   FieldDescriptorProto.Label.LABEL_OPTIONAL,
                   options.build())
@@ -1470,7 +1488,7 @@ public class ProtoGenerator {
               valueSetType.get().getName(), valueSetType.get().getFile().getPackage());
         }
       }
-      return new QualifiedType(toFieldTypeCase(rawType), coreFhirPackage);
+      return new QualifiedType(toFieldTypeCase(rawType), fhirVersion.coreFhirPackage);
     }
     // This is a choice-type extension that will be inlined as a message.
     return new QualifiedType(getContainerType(element, elementList), packageInfo.getProtoPackage());
