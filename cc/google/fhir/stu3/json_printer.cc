@@ -150,8 +150,11 @@ class Printer {
     }
     for (size_t i = 0; i < set_fields.size(); i++) {
       const FieldDescriptor* field = set_fields[i];
-      // We don't unroll choice types when in analytic mode, so that we can
-      // look up the choice type in a single query.
+      // Choice types in proto form have a containing message that is not part
+      // of the FHIR spec, so we need a special method to print them as valid
+      // fhir.
+      // In analytics mode, we print the containing message to make it easier
+      // to query all possible choice types in a single query.
       if (IsChoiceType(field) && !for_analytics_) {
         FHIR_RETURN_IF_ERROR(PrintChoiceTypeField(
             reflection->GetMessage(proto, field), field->json_name()));
