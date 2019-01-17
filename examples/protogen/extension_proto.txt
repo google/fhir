@@ -14,7 +14,7 @@ message Extension {
 
   // Value of extension
   message Value {
-    option (is_choice_type) = KIND_COMPLEX_TYPE;
+    option (is_choice_type) = true;
 
     oneof value {
       Base64Binary base64_binary = 1;
