@@ -3,5 +3,5 @@ proto_package: "google.fhir.stu3.testing"
 java_proto_package: "com.google.fhir.stu3.testing"
 go_proto_package: "google/fhir/stu3/testing"
 publisher: "Testington Inc."
-fhir_version: "3.0.1"
+fhir_version: STU3
 telcom_url: "http://www.testington.com"

@@ -23,7 +23,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
-import com.google.fhir.common.FhirVersion;
+import com.google.fhir.proto.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.ContactDetail;
@@ -243,9 +243,9 @@ public final class ProtoFilePrinterTest {
             PackageInfo.newBuilder()
                 .setProtoPackage(packageName)
                 .setJavaProtoPackage("com.google.fhir.stu3.proto")
+                .setFhirVersion(FhirVersion.STU3)
                 .build(),
             "proto/stu3",
-            FhirVersion.STU3,
             getKnownStructDefs());
     protoPrinter = new ProtoFilePrinter().withApacheLicense();
   }

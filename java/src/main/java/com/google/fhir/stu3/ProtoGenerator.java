@@ -207,11 +207,10 @@ public class ProtoGenerator {
   public ProtoGenerator(
       PackageInfo packageInfo,
       String fhirProtoRootPath,
-      FhirVersion fhirVersion,
       Map<StructureDefinition, String> knownTypes) {
     this.packageInfo = packageInfo;
     this.fhirProtoRootPath = fhirProtoRootPath;
-    this.fhirVersion = fhirVersion;
+    this.fhirVersion = FhirVersion.fromPackageInfo(packageInfo.getFhirVersion());
 
     // TODO: Do this with ValueSet resources once we have them.
     ImmutableMap.Builder<String, Descriptor> valueSetTypesByUrlBuilder =

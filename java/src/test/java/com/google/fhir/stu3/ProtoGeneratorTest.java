@@ -18,7 +18,7 @@ import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
-import com.google.fhir.common.FhirVersion;
+import com.google.fhir.proto.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.StructureDefinition;
@@ -156,9 +156,9 @@ public class ProtoGeneratorTest {
             PackageInfo.newBuilder()
                 .setProtoPackage("google.fhir.stu3.proto")
                 .setJavaProtoPackage("com.google.fhir.stu3.proto")
+                .setFhirVersion(FhirVersion.STU3)
                 .build(),
             "proto/stu3",
-            FhirVersion.STU3,
             getKnownStructDefs());
 
     registry = ExtensionRegistry.newInstance();

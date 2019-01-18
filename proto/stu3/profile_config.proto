@@ -6,22 +6,29 @@ package google.fhir.proto;
 option java_package = "com.google.fhir.proto";
 option java_multiple_files = true;
 
+enum FhirVersion {
+  FHIR_VERSION_UNKNOWN = 0;
+  DSTU2 = 1;
+  STU3 = 2;
+  R4 = 4;
+}
+
 message PackageInfo {
+  FhirVersion fhir_version = 1;
   // Base url to use for all profiles defined here.
   // e.g., g.co/fhir/profiles
-  string base_url = 1;
+  string base_url = 2;
 
-  string proto_package = 2;
-  string java_proto_package = 3;
-  string go_proto_package = 4;
+  string proto_package = 3;
+  string java_proto_package = 4;
+  string go_proto_package = 5;
 
   oneof contained_resource {
-    bool local_contained_resource = 5;
-    string contained_resource_package = 6;
+    bool local_contained_resource = 6;
+    string contained_resource_package = 7;
   }
 
-  string publisher = 7;
-  string fhir_version = 8;
+  string publisher = 8;
   string telcom_url = 9;
 }
 

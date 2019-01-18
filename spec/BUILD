@@ -76,6 +76,6 @@ zip_file(
 
 structure_definition_package(
     package_name = "uscore-package",
-    package_info = "uscore_package_info.prototxt",
+    package_info = "uscore_stu3_package_info.prototxt",
     structure_definitions_zip = "uscore_stu3_structure_definitions.zip",
 )

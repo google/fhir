@@ -17,6 +17,7 @@ package com.google.fhir.profile;
 import com.google.common.base.Ascii;
 import com.google.common.base.Splitter;
 import com.google.common.collect.MoreCollectors;
+import com.google.fhir.common.FhirVersion;
 import com.google.fhir.proto.CodeData;
 import com.google.fhir.proto.CodeableConceptSlice;
 import com.google.fhir.proto.CodeableConceptSlice.CodingSlice;
@@ -598,7 +599,9 @@ final class ProfileGenerator {
                                 .setValue(ContactPointSystemCode.Value.URL))
                         .setValue(fhirString(packageInfo.getTelcomUrl()))))
         .setDescription(Markdown.newBuilder().setValue(elementData.getDescription()))
-        .setFhirVersion(Id.newBuilder().setValue(packageInfo.getFhirVersion()))
+        .setFhirVersion(
+            Id.newBuilder()
+                .setValue(FhirVersion.fromPackageInfo(packageInfo.getFhirVersion()).minorVersion))
         .setKind(StructureDefinitionKindCode.newBuilder().setValue(structureDefinitionKind))
         .setAbstract(fhirBoolean(false))
         .setContextType(

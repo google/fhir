@@ -14,7 +14,6 @@
 
 package com.google.fhir.common;
 
-import com.google.common.base.Ascii;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.fhir.stu3.proto.AbstractTypeCode;
@@ -39,7 +38,8 @@ public enum FhirVersion {
           "resources.proto", StructureDefinition.getDescriptor().getFile(),
           "metadatatypes.proto", ElementDefinition.getDescriptor().getFile(),
           "extensions.proto", ElementDefinitionBindingName.getDescriptor().getFile(),
-          "codes.proto", AbstractTypeCode.getDescriptor().getFile()));
+          "codes.proto", AbstractTypeCode.getDescriptor().getFile()),
+      "3.0.1");
 
   // The package of the core FHIR structures.
   public final String coreFhirPackage;
@@ -48,22 +48,26 @@ public enum FhirVersion {
   // A map of all the FHIR core types to their corresponding files.
   public final ImmutableMap<String, FileDescriptor> coreTypeMap;
 
+  public final String minorVersion;
+
   private FhirVersion(
       String coreFhirPackage,
       ImmutableList<FileDescriptor> codeTypeList,
-      ImmutableMap<String, FileDescriptor> coreTypeMap) {
+      ImmutableMap<String, FileDescriptor> coreTypeMap,
+      String minorVersion) {
     this.coreFhirPackage = coreFhirPackage;
     this.codeTypeList = codeTypeList;
     this.coreTypeMap = coreTypeMap;
+    this.minorVersion = minorVersion;
   }
 
   /** Converts from a String value. */
-  public static FhirVersion fromString(String code) {
-    for (FhirVersion fhirVersion : FhirVersion.values()) {
-      if (Ascii.equalsIgnoreCase(fhirVersion.toString(), code)) {
-        return fhirVersion;
-      }
+  public static FhirVersion fromPackageInfo(com.google.fhir.proto.FhirVersion protoEnum) {
+    switch (protoEnum) {
+      case STU3:
+        return STU3;
+      default:
+        throw new IllegalArgumentException("FHIR version unknown or unsupported: " + protoEnum);
     }
-    return null;
   }
 }
