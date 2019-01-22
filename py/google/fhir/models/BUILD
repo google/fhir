@@ -28,6 +28,12 @@ py_library(
 
 py_library(
     name = "model",
+    srcs = ["model.py"],
+    deps = [":model_lib"],
+)
+
+py_library(
+    name = "model_lib",
     srcs = [
         "model.py",
     ],
@@ -66,7 +72,7 @@ py_test(
         "//testdata/stu3:tensorflow",
     ],
     deps = [
-        ":model",
+        ":model_lib",
         ":test_utils",
         "@absl_py//absl/testing:absltest",
         "@absl_py//absl/testing:parameterized",

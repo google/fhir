@@ -77,6 +77,12 @@ py_test(
 
 py_binary(
     name = "bundle_to_label",
+    srcs = ["bundle_to_label.py"],
+    deps = [":bundle_to_label_lib"],
+)
+
+py_library(
+    name = "bundle_to_label_lib",
     srcs = [
         "bundle_to_label.py",
     ],
@@ -101,7 +107,7 @@ py_test(
         "//testdata/stu3:labels",
     ],
     deps = [
-        ":bundle_to_label",
+        ":bundle_to_label_lib",
         ":label",
         "@protobuf_archive//:protobuf_python",
         "//proto/stu3:resources_py_pb2",
