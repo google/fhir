@@ -13,14 +13,13 @@
 -- limitations under the License.
 
 SELECT
-  cc.code.value loinc_code,
-  cc.display.value loinc_name,
-  approx_quantiles(round(o.value.quantity.value.value,1),4) as quantiles,
+  cc.code loinc_code,
+  cc.display loinc_name,
+  approx_quantiles(round(o.value.quantity.value,1),4) as quantiles,
   count(*) as num_obs
 FROM
   synthea.Observation o, o.code.coding cc
 WHERE
-  cc.system.value like '%loinc%' and lower(cc.display.value) like '%cholesterol%'
+  cc.system like '%loinc%' and lower(cc.display) like '%cholesterol%'
 GROUP BY 1,2
 ORDER BY 4 desc
-

@@ -13,13 +13,13 @@
 -- limitations under the License.
 
 SELECT
-  gender.value gender,
-  APPROX_TOP_COUNT(code.text.value, 2) AS top_conditions
+  gender gender,
+  APPROX_TOP_COUNT(code.text, 2) AS top_conditions
 FROM
   synthea.Condition c
 JOIN
   synthea.Patient p
 ON
-  c.subject.patientId.value=p.id.value
+  c.subject.patientId=p.id
 GROUP BY
   1

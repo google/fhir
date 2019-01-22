@@ -17,9 +17,9 @@ SELECT
   APPROX_QUANTILES(num_encounters, 4) num_encounters_quantiles
 FROM (
   SELECT
-    class.code.value encounter_class,
-    subject.patientId.value patient_id,
-    COUNT(DISTINCT id.value) AS num_encounters
+    class.code encounter_class,
+    subject.patientId patient_id,
+    COUNT(DISTINCT id) AS num_encounters
   FROM
     synthea.Encounter
   GROUP BY

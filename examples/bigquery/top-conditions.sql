@@ -13,15 +13,15 @@
 -- limitations under the License.
 
 SELECT
-  cc.code.value snomed_ct,
-  c.code.text.value as diagnosis,
-  COUNT(DISTINCT subject.patientId.value) AS num_patients,
-  COUNT(DISTINCT context.encounterId.value) AS num_encounters
+  cc.code snomed_ct,
+  c.code.text as diagnosis,
+  COUNT(DISTINCT subject.patientId) AS num_patients,
+  COUNT(DISTINCT context.encounterId) AS num_encounters
 FROM
   synthea.Condition c,
   c.code.coding cc
 WHERE
-  cc.system.value like '%snomed%'
+  cc.system LIKE '%snomed%'
 GROUP BY
   1,2
 ORDER BY

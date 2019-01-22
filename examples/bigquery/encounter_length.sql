@@ -13,12 +13,12 @@
 -- limitations under the License.
 
 SELECT
-  class.code.value encounter_class,
-  ROUND(AVG(TIMESTAMP_DIFF(TIMESTAMP_MICROS(period.END.valueUs), TIMESTAMP_MICROS(period.start.valueUs), MINUTE)),1) as avg_minutes
+  class.code encounter_class,
+  ROUND(AVG(TIMESTAMP_DIFF(TIMESTAMP(period.end), TIMESTAMP(period.start), MINUTE)),1) as avg_minutes
 FROM
   synthea.Encounter
 WHERE
-  period.END.valueUs >= period.start.valueUs
+  period.end >= period.start
 GROUP BY
   1
 ORDER BY
