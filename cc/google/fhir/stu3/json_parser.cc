@@ -238,11 +238,11 @@ class Parser {
         if (existing_field_size > 0) {
           Message* field_value =
               parent_reflection->MutableRepeatedMessage(parent, field, i);
-          field_value->MergeFrom(*parsed_value);
           // This is the second time we've visited this field - once for
-          // extensions, and once for value.  So, make sure to clear the
-          // PrimitiveHasNoValue extension.
+          // extensions, and once for value. We therefore clear the
+          // PrimitiveHasNoValue extension so that isn't duplicated.
           FHIR_RETURN_IF_ERROR(ClearPrimitiveHasNoValue(field_value));
+          field_value->MergeFrom(*parsed_value);
         } else {
           parent_reflection->AddAllocatedMessage(parent, field,
                                                  parsed_value.release());
