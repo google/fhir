@@ -17,6 +17,8 @@
 
 #include "google/protobuf/message.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/status/statusor.h"
+#include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 
 namespace google {
@@ -24,12 +26,15 @@ namespace fhir {
 namespace stu3 {
 
 ::google::fhir::Status ConvertToTypedCode(
-    const google::fhir::stu3::proto::Code& generic_code,
+    const ::google::fhir::stu3::proto::Code& generic_code,
     google::protobuf::Message* target);
 
 ::google::fhir::Status ConvertToGenericCode(
     const google::protobuf::Message& typed_code,
-    google::fhir::stu3::proto::Code* generic_code);
+    ::google::fhir::stu3::proto::Code* generic_code);
+
+::google::fhir::StatusOr<::google::fhir::stu3::proto::FHIRAllTypesCode::Value>
+GetCodeForResourceType(const google::protobuf::Message& resource);
 
 }  // namespace stu3
 }  // namespace fhir

@@ -10,9 +10,24 @@ cc_library(
         ":proto_util",
         ":util",
         "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
         "//proto/stu3:annotations_cc_proto",
+        "//proto/stu3:codes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "codes_test",
+    srcs = ["codes_test.cc"],
+    data = ["//testdata/stu3:google"],
+    deps = [
+        ":codes",
+        "//proto/stu3:codes_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "@com_google_googletest//:gtest_main",
     ],
 )
 

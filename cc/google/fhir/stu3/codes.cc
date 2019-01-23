@@ -19,6 +19,7 @@
 #include "google/fhir/stu3/proto_util.h"
 #include "google/fhir/stu3/util.h"
 #include "proto/stu3/annotations.pb.h"
+#include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 
 namespace google {
@@ -26,12 +27,28 @@ namespace fhir {
 namespace stu3 {
 
 using ::google::fhir::stu3::proto::Code;
+using ::google::fhir::stu3::proto::FHIRAllTypesCode;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::EnumDescriptor;
 using ::google::protobuf::EnumValueDescriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Reflection;
 using ::tensorflow::errors::InvalidArgument;
+
+namespace {
+
+string TitleCaseToUpperUnderscores(const string& src) {
+  string dst;
+  for (auto iter = src.begin(); iter != src.end(); ++iter) {
+    if (absl::ascii_isupper(*iter) && iter != src.begin()) {
+      dst.push_back('_');
+    }
+    dst.push_back(absl::ascii_toupper(*iter));
+  }
+  return dst;
+}
+
+}  // namespace
 
 ::google::fhir::Status ConvertToTypedCode(
     const google::fhir::stu3::proto::Code& generic_code,
@@ -186,6 +203,19 @@ using ::tensorflow::errors::InvalidArgument;
   std::replace(code_string.begin(), code_string.end(), '_', '-');
   generic_code->set_value(code_string);
   return Status::OK();
+}
+
+::google::fhir::StatusOr<FHIRAllTypesCode::Value> GetCodeForResourceType(
+    const google::protobuf::Message& resource) {
+  const string enum_string =
+      TitleCaseToUpperUnderscores(resource.GetDescriptor()->name());
+  LOG(WARNING) << "ES: " << enum_string;
+  FHIRAllTypesCode::Value value;
+  if (FHIRAllTypesCode::Value_Parse(enum_string, &value)) {
+    return value;
+  }
+  return InvalidArgument("No FHIRAllTypesCode found for type: ",
+                         resource.GetDescriptor()->name());
 }
 
 }  // namespace stu3

@@ -2322,7 +2322,7 @@ message FHIRAllTypesCode {
     NAMING_SYSTEM = 129 [(fhir_original_code) = "NamingSystem"];
     NUTRITION_ORDER = 130 [(fhir_original_code) = "NutritionOrder"];
     OBSERVATION = 131 [(fhir_original_code) = "Observation"];
-    OPERATIONDEFINITION = 132 [(fhir_original_code) = "OperationDefinition"];
+    OPERATION_DEFINITION = 132 [(fhir_original_code) = "OperationDefinition"];
     OPERATION_OUTCOME = 133 [(fhir_original_code) = "OperationOutcome"];
     ORGANIZATION = 134 [(fhir_original_code) = "Organization"];
     PARAMETERS = 135 [(fhir_original_code) = "Parameters"];
@@ -3907,9 +3907,8 @@ message ImmunizationOriginCodesCode {
 // http://hl7.org/fhir/ValueSet/immunization-recommendation-date-criterion
 message ImmunizationRecommendationDateCriterionCodesCode {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (fhir_valueset_url) =
-      "http://hl7.org/fhir/ValueSet/"
-      "immunization-recommendation-date-criterion";
+  option (fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/"
+                               "immunization-recommendation-date-criterion";
 
   // Primitive value for code
   enum Value {
