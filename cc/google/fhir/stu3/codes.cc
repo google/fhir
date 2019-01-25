@@ -207,9 +207,8 @@ string TitleCaseToUpperUnderscores(const string& src) {
 
 ::google::fhir::StatusOr<FHIRAllTypesCode::Value> GetCodeForResourceType(
     const google::protobuf::Message& resource) {
-  const string enum_string =
+  const string& enum_string =
       TitleCaseToUpperUnderscores(resource.GetDescriptor()->name());
-  LOG(WARNING) << "ES: " << enum_string;
   FHIRAllTypesCode::Value value;
   if (FHIRAllTypesCode::Value_Parse(enum_string, &value)) {
     return value;
