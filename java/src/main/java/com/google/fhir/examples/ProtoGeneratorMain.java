@@ -55,7 +55,6 @@ import java.util.Map;
  */
 class ProtoGeneratorMain {
 
-  private final ProtoFilePrinter printer;
   private final PrintWriter writer;
 
   // The convention is to name profiles as the lowercased version of the element they define,
@@ -191,9 +190,8 @@ class ProtoGeneratorMain {
     return structDefBuilder.build();
   }
 
-  ProtoGeneratorMain(PrintWriter writer, ProtoFilePrinter protoPrinter) {
+  ProtoGeneratorMain(PrintWriter writer) {
     this.writer = checkNotNull(writer);
-    this.printer = checkNotNull(protoPrinter);
   }
 
   void run(Args args) throws IOException {
@@ -270,6 +268,10 @@ class ProtoGeneratorMain {
     writer.flush();
 
     ProtoGenerator generator = new ProtoGenerator(packageInfo, args.fhirProtoRoot, knownTypes);
+    ProtoFilePrinter printer =
+        (args.addApacheLicense || packageInfo.getLicense() == PackageInfo.License.APACHE)
+            ? new ProtoFilePrinter().withApacheLicense()
+            : new ProtoFilePrinter();
 
     if (args.separateExtensions) {
       List<StructureDefinition> extensions = new ArrayList<>();
@@ -285,23 +287,28 @@ class ProtoGeneratorMain {
           generator.generateFileDescriptor(extensions),
           args.outputName + "_extensions.proto",
           args,
-          false);
+          false,
+          printer);
       FileDescriptorProto mainFileProto = generator.generateFileDescriptor(profiles);
       if (args.includeContainedResource || packageInfo.getLocalContainedResource()) {
         mainFileProto = generator.addContainedResource(mainFileProto);
       }
-      writeProto(mainFileProto, args.outputName + ".proto", args, true);
+      writeProto(mainFileProto, args.outputName + ".proto", args, true, printer);
     } else {
       FileDescriptorProto proto = generator.generateFileDescriptor(definitions);
       if (args.includeContainedResource || packageInfo.getLocalContainedResource()) {
         proto = generator.addContainedResource(proto);
       }
-      writeProto(proto, args.outputName + ".proto", args, true);
+      writeProto(proto, args.outputName + ".proto", args, true, printer);
     }
   }
 
   private void writeProto(
-      FileDescriptorProto proto, String protoFileName, Args args, boolean includeAdditionalImports)
+      FileDescriptorProto proto,
+      String protoFileName,
+      Args args,
+      boolean includeAdditionalImports,
+      ProtoFilePrinter printer)
       throws IOException {
     if (includeAdditionalImports) {
       for (String additionalImport : args.additionalImports) {
@@ -351,10 +358,8 @@ class ProtoGeneratorMain {
       System.err.printf("Invalid usage: %s\n", exception.getMessage());
       System.exit(1);
     }
-    ProtoFilePrinter printer =
-        args.addApacheLicense ? new ProtoFilePrinter().withApacheLicense() : new ProtoFilePrinter();
     new ProtoGeneratorMain(
-            new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out, UTF_8))), printer)
+            new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out, UTF_8))))
         .run(args);
   }
 }

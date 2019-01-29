@@ -1,0 +1,141 @@
+complex_extension {
+  element_data {
+    name: "Base64BinarySeparatorStride"
+    description: "Base64Binary rendering parameters."
+    size_restriction: OPTIONAL
+    url_override: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride"
+  }
+
+  simple_field {
+    element_data {
+      name: "separator"
+      size_restriction: REQUIRED
+      description: "The separator, usually a sequence of spaces."
+    }
+    type: "string"
+  }
+
+  simple_field {
+    element_data {
+      name: "stride"
+      size_restriction: REQUIRED
+      description: "The stride."
+    }
+    type: "positiveInt"
+  }
+}
+
+complex_extension {
+  element_data {
+    name: "EventLabel"
+    description: "EventLabels define labels used for TensorFlow model training and evaluation."
+    size_restriction: OPTIONAL
+    url_override: "https://g.co/fhir/StructureDefinition/eventLabel"
+  }
+  can_have_additional_extensions: true
+  simple_field {
+    element_data {
+      name: "patient"
+      size_restriction: REQUIRED
+      description: "The patient associated with this label"
+    }
+    type: "Reference"
+  }
+  simple_field {
+    element_data {
+      name: "type"
+      size_restriction: REQUIRED
+      description: "The type of label, part of the prediction task definition"
+    }
+    type: "Coding"
+  }
+  simple_field {
+    element_data {
+      name: "eventTime"
+      size_restriction: OPTIONAL
+      description: "Time associated with the label event, if available"
+    }
+    type: "dateTime"
+  }
+  simple_field {
+    element_data {
+      name: "source"
+      size_restriction: OPTIONAL
+      description: "Resource that owns this label"
+    }
+    type: "Reference"
+  }
+  complex_field {
+    element_data {
+      name: "label"
+      size_restriction: REPEATED
+      description: "List of labels associated with this event"
+    }
+    simple_field {
+      element_data {
+        name: "className"
+        description: "Class name in multi-class prediction tasks, e.g. code \"780.60\" for icd9"
+        size_restriction: REQUIRED
+      }
+      type: "Coding"
+    }
+    simple_field {
+      element_data {
+        name: "classValue"
+        size_restriction: REQUIRED
+        description: "The value of the label"
+      }
+      type: "boolean"
+      type: "decimal"
+      type: "integer"
+      type: "string"
+      type: "dateTime"
+    }
+  }
+}
+
+complex_extension {
+  element_data {
+    name: "EventTrigger"
+    description: "EventTriggers specify cutoff times for generated TensorFlow examples."
+    size_restriction: OPTIONAL
+    url_override: "https://g.co/fhir/StructureDefinition/eventTrigger"
+  }
+
+  simple_field {
+    element_data {
+      name: "type"
+      size_restriction: REQUIRED
+      description: "The type of trigger, part of the prediction task definition."
+    }
+    type: "Coding"
+  }
+
+  simple_field {
+    element_data {
+      name: "eventTime"
+      size_restriction: REQUIRED
+      description: "Prediction event time, more recent data will be elided."
+    }
+    type: "dateTime"
+  }
+
+  simple_field {
+    element_data {
+      name: "source"
+      size_restriction: OPTIONAL
+      description: "Resource that owns this trigger."
+    }
+    type: "Reference"
+  }
+}
+
+simple_extension {
+  element_data {
+    name: "PrimitiveHasNoValue"
+    description: "Whether or not the primitive is missing a value."
+    size_restriction: OPTIONAL
+    url_override: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue"
+  }
+  type: "boolean"
+}

@@ -30,6 +30,12 @@ message PackageInfo {
 
   string publisher = 8;
   string telcom_url = 9;
+
+  enum License {
+    NONE = 0;
+    APACHE = 1;
+  }
+  License license = 10;
 }
 
 enum SizeRestriction {

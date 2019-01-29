@@ -850,6 +850,7 @@ final class ProfileGenerator {
 
   private static UnsignedInt minSize(SizeRestriction size) {
     switch (size) {
+      case UNKNOWN: // no size specified is treated as optional.
       case ABSENT:
       case OPTIONAL:
       case REPEATED:
@@ -866,6 +867,7 @@ final class ProfileGenerator {
     switch (size) {
       case ABSENT:
         return fhirString("0");
+      case UNKNOWN: // no size specified is treated as optional.
       case OPTIONAL:
       case REQUIRED:
         return fhirString("1");
