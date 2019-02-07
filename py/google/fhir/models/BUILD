@@ -1,6 +1,6 @@
-licenses(["notice"])
-
 package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
 
 load(
  "@io_bazel_rules_python//python:python.bzl",
@@ -41,6 +41,12 @@ py_library(
 
 py_binary(
     name = "mle_task",
+    srcs = ["mle_task.py"],
+    deps = [":mle_task_main_lib"],
+)
+
+py_library(
+    name = "mle_task_main_lib",
     srcs = [
         "mle_task.py",
     ],
@@ -90,7 +96,7 @@ py_test(
         "//testdata/stu3:tensorflow",
     ],
     deps = [
-        ":mle_task",
+        ":mle_task_main_lib",
         ":test_utils",
         "@absl_py//absl/testing:absltest",
         "@absl_py//absl/testing:parameterized",

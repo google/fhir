@@ -43,7 +43,7 @@ flags.DEFINE_string(
     'used in place of the Bundle to mark both the end of the '
     'sequence the training label.')
 flags.DEFINE_string('fhir_version_config', None,
-'Location of the fhir version config ')
+                    'Location of the fhir version config ')
 
 
 def _get_version_config(version_config_path):
