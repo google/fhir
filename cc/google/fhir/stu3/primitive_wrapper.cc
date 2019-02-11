@@ -102,7 +102,8 @@ class PrimitiveWrapper {
  public:
   virtual ~PrimitiveWrapper() {}
   virtual Status MergeInto(::google::protobuf::Message* target) const = 0;
-  virtual Status Parse(const Json::Value& json) = 0;
+  virtual Status Parse(const Json::Value& json,
+                       const absl::TimeZone& default_time_zone) = 0;
   virtual Status Wrap(const ::google::protobuf::Message&) = 0;
   virtual bool HasElement() const = 0;
   virtual StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement() const = 0;
@@ -210,6 +211,14 @@ class SpecificWrapper : public PrimitiveWrapper {
  protected:
   T wrapped_;
   static StatusOr<T> BuildNullValue();
+
+  // TODO: Use the regex compiled into the protos
+  static Status ValidateString(const string& input, const LazyRE2& pattern) {
+    return (RE2::FullMatch(input, *pattern))
+               ? Status::OK()
+               : InvalidArgument("Invalid input for ",
+                                 T::descriptor()->full_name(), ": ", input);
+  }
 };
 
 template <class T>
@@ -241,11 +250,13 @@ StatusOr<Xhtml> SpecificWrapper<Xhtml>::BuildNullValue() {
   return InvalidArgument("Unexpected null xhtml");
 }
 
-// Template for wrappers that expect the input to be a JSON string type
+// Template for wrappers that expect the input to be a JSON string type,
+// and don't care about the default time zone.
 template <typename T>
 class StringInputWrapper : public SpecificWrapper<T> {
  public:
-  Status Parse(const Json::Value& json) override {
+  Status Parse(const Json::Value& json,
+               const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       FHIR_ASSIGN_OR_RETURN(this->wrapped_, this->BuildNullValue());
       return Status::OK();
@@ -260,14 +271,6 @@ class StringInputWrapper : public SpecificWrapper<T> {
 
  protected:
   virtual Status ParseString(const string& string) = 0;
-
-  // TODO: Use the regex compiled into the protos
-  static Status ValidateString(const string& input, const LazyRE2& pattern) {
-    return (RE2::FullMatch(input, *pattern))
-               ? Status::OK()
-               : InvalidArgument("Invalid input for ",
-                                 T::descriptor()->full_name(), ": ", input);
-  }
 };
 
 // Template for wrappers that represent data as a string.
@@ -304,11 +307,8 @@ static const std::unordered_map<string, string>* const no_tz_formatters =
 // Template for wrappers that represent data as Timelike primitives
 // E.g.: Date, DateTime, Instant, etc.
 template <typename T>
-class TimeTypeWrapper : public StringInputWrapper<T> {
+class TimeTypeWrapper : public SpecificWrapper<T> {
  public:
-  explicit TimeTypeWrapper(absl::TimeZone default_time_zone)
-      : default_time_zone_(default_time_zone) {}
-
   StatusOr<string> ToNonNullValueString() const override {
     const T& timelike = this->GetWrapped();
     absl::Time absolute_time = absl::FromUnixMicros(timelike.value_us());
@@ -335,7 +335,18 @@ class TimeTypeWrapper : public StringInputWrapper<T> {
   }
 
  protected:
-  Status ParseString(const string& json_string) override {
+  Status Parse(const Json::Value& json,
+               const absl::TimeZone& default_time_zone) override {
+    if (json.isNull()) {
+      FHIR_ASSIGN_OR_RETURN(this->wrapped_, this->BuildNullValue());
+      return Status::OK();
+    }
+    if (!json.isString()) {
+      return InvalidArgument("Cannot parse ", json.toStyledString(), " as ",
+                             T::descriptor()->full_name(),
+                             ": it is not a string value.");
+    }
+    const string& json_string = json.asString();
     FHIR_RETURN_IF_ERROR(
         this->ValidateString(json_string, GetValidationPattern()));
     // Note that this will handle any level of precision - it's up to various
@@ -358,9 +369,9 @@ class TimeTypeWrapper : public StringInputWrapper<T> {
     for (std::pair<string, string> format : *no_tz_formatters) {
       string err;
       absl::Time time;
-      if (absl::ParseTime(format.second, json_string, default_time_zone_, &time,
+      if (absl::ParseTime(format.second, json_string, default_time_zone, &time,
                           &err)) {
-        string timezone_name = default_time_zone_.name();
+        string timezone_name = default_time_zone.name();
 
         // Clean up the fixed timezone string that is returned from the
         // absl::Timezone library.
@@ -387,8 +398,6 @@ class TimeTypeWrapper : public StringInputWrapper<T> {
   virtual const LazyRE2& GetValidationPattern() = 0;
 
  private:
-  const absl::TimeZone default_time_zone_;
-
   Status SetValue(absl::Time time, const string& timezone_string,
                   const string& precision_string) {
     T& wrapped = this->GetWrapped();
@@ -457,7 +466,8 @@ class TimeTypeWrapper : public StringInputWrapper<T> {
 template <typename T>
 class IntegerInputWrapper : public SpecificWrapper<T> {
  public:
-  Status Parse(const Json::Value& json) override {
+  Status Parse(const Json::Value& json,
+               const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       FHIR_ASSIGN_OR_RETURN(this->wrapped_, this->BuildNullValue());
       return Status::OK();
@@ -557,7 +567,8 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64Binary> {
 
 class BooleanWrapper : public SpecificWrapper<Boolean> {
  private:
-  Status Parse(const Json::Value& json) override {
+  Status Parse(const Json::Value& json,
+               const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       FHIR_ASSIGN_OR_RETURN(wrapped_, BuildNullValue());
       return Status::OK();
@@ -577,10 +588,6 @@ class BooleanWrapper : public SpecificWrapper<Boolean> {
 };
 
 class DateWrapper : public TimeTypeWrapper<Date> {
- public:
-  explicit DateWrapper(absl::TimeZone default_time_zone)
-      : TimeTypeWrapper<Date>(default_time_zone) {}
-
  private:
   const LazyRE2& GetValidationPattern() override {
     static LazyRE2 PATTERN{
@@ -590,10 +597,6 @@ class DateWrapper : public TimeTypeWrapper<Date> {
 };
 
 class DateTimeWrapper : public TimeTypeWrapper<DateTime> {
- public:
-  explicit DateTimeWrapper(absl::TimeZone default_time_zone)
-      : TimeTypeWrapper<DateTime>(default_time_zone) {}
-
  private:
   const LazyRE2& GetValidationPattern() override {
     static LazyRE2 PATTERN{
@@ -619,7 +622,8 @@ class DecimalWrapper : public StringInputWrapper<Decimal> {
   }
 
  private:
-  Status Parse(const Json::Value& json) override {
+  Status Parse(const Json::Value& json,
+               const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       FHIR_ASSIGN_OR_RETURN(this->wrapped_, this->BuildNullValue());
       return Status::OK();
@@ -657,12 +661,6 @@ class IdWrapper : public StringTypeWrapper<Id> {
 };
 
 class InstantWrapper : public TimeTypeWrapper<Instant> {
- public:
-  // Note: This uses UTC as the "default time zone", but that will never be
-  // used, as the fhir spec requires the instant to have the timezone specified,
-  // and this is enforced by the validation pattern.
-  InstantWrapper() : TimeTypeWrapper<Instant>(absl::UTCTimeZone()) {}
-
  private:
   const LazyRE2& GetValidationPattern() override {
     static LazyRE2 PATTERN{
@@ -800,7 +798,7 @@ class XhtmlWrapper : public StringTypeWrapper<Xhtml> {
 };
 
 StatusOr<std::unique_ptr<PrimitiveWrapper>> GetWrapper(
-    const absl::TimeZone tz, const Descriptor* target_descriptor) {
+    const Descriptor* target_descriptor) {
   string target_name = target_descriptor->name();
   if (target_name == "Code" || HasValueset(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>((new CodeWrapper()));
@@ -809,9 +807,9 @@ StatusOr<std::unique_ptr<PrimitiveWrapper>> GetWrapper(
   } else if (target_name == "Boolean") {
     return std::unique_ptr<PrimitiveWrapper>(new BooleanWrapper());
   } else if (target_name == "Date") {
-    return std::unique_ptr<PrimitiveWrapper>(new DateWrapper(tz));
+    return std::unique_ptr<PrimitiveWrapper>(new DateWrapper());
   } else if (target_name == "DateTime") {
-    return std::unique_ptr<PrimitiveWrapper>(new DateTimeWrapper(tz));
+    return std::unique_ptr<PrimitiveWrapper>(new DateTimeWrapper());
   } else if (target_name == "Decimal") {
     return std::unique_ptr<PrimitiveWrapper>(new DecimalWrapper());
   } else if (target_name == "Id") {
@@ -858,16 +856,15 @@ Status ParseInto(const Json::Value& json, absl::TimeZone tz,
                            absl::StrCat(json.toStyledString()));
   }
   FHIR_ASSIGN_OR_RETURN(std::unique_ptr<PrimitiveWrapper> wrapper,
-                        GetWrapper(tz, target->GetDescriptor()));
-  FHIR_RETURN_IF_ERROR(wrapper->Parse(json));
+                        GetWrapper(target->GetDescriptor()));
+  FHIR_RETURN_IF_ERROR(wrapper->Parse(json, tz));
   return wrapper->MergeInto(target);
 }
 
-StatusOr<JsonPrimitive> WrapPrimitiveProto(const ::google::protobuf::Message& proto,
-                                           const absl::TimeZone tz) {
+StatusOr<JsonPrimitive> WrapPrimitiveProto(const ::google::protobuf::Message& proto) {
   const ::google::protobuf::Descriptor* descriptor = proto.GetDescriptor();
   FHIR_ASSIGN_OR_RETURN(std::unique_ptr<PrimitiveWrapper> wrapper,
-                        GetWrapper(tz, descriptor));
+                        GetWrapper(descriptor));
   FHIR_RETURN_IF_ERROR(wrapper->Wrap(proto));
   FHIR_ASSIGN_OR_RETURN(const string value, wrapper->ToValueString());
   if (wrapper->HasElement()) {

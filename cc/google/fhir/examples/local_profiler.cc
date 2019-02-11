@@ -53,8 +53,7 @@ void ConvertToProfile(const absl::TimeZone& time_zone, std::string dir) {
     R raw = JsonFhirStringToProto<Patient>(line, time_zone).ValueOrDie();
     P profiled;
     CHECK(ConvertToProfileLenient(raw, &profiled).ok());
-    write_stream
-        << PrintFhirToJsonStringForAnalytics(profiled, time_zone).ValueOrDie();
+    write_stream << PrintFhirToJsonStringForAnalytics(profiled).ValueOrDie();
     write_stream << "\n";
   }
 }

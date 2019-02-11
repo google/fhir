@@ -50,16 +50,16 @@ template <typename R>
 }
 
 ::google::fhir::StatusOr<string> PrettyPrintFhirToJsonString(
-    const google::protobuf::Message& fhir_proto, const absl::TimeZone default_timezone);
+    const google::protobuf::Message& fhir_proto);
 
 ::google::fhir::StatusOr<string> PrintFhirToJsonString(
-    const google::protobuf::Message& fhir_proto, const absl::TimeZone default_timezone);
+    const google::protobuf::Message& fhir_proto);
 
 ::google::fhir::StatusOr<string> PrintFhirToJsonStringForAnalytics(
-    const google::protobuf::Message& fhir_proto, const absl::TimeZone default_timezone);
+    const google::protobuf::Message& fhir_proto);
 
 ::google::fhir::StatusOr<string> PrettyPrintFhirToJsonStringForAnalytics(
-    const google::protobuf::Message& fhir_proto, const absl::TimeZone default_timezone);
+    const google::protobuf::Message& fhir_proto);
 
 }  // namespace stu3
 }  // namespace fhir

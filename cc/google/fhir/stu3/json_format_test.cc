@@ -75,9 +75,7 @@ Json::Value ParseJsonStringToValue(const string& raw_json) {
 template <typename R>
 void TestPrint(const string& name) {
   const R proto = LoadProto<R>(name + ".prototxt");
-  absl::TimeZone tz;
-  absl::LoadTimeZone(kTimeZoneString, &tz);
-  string from_proto = PrettyPrintFhirToJsonString(proto, tz).ValueOrDie();
+  string from_proto = PrettyPrintFhirToJsonString(proto).ValueOrDie();
   string from_json = ReadFile(
       absl::StrCat("spec/hl7.fhir.core/3.0.1/package/", name + ".json"));
 
@@ -91,9 +89,7 @@ void TestPrint(const string& name) {
 template <typename R>
 void TestPrintForAnalytics(const string& name) {
   const R proto = LoadProto<R>(name + ".prototxt");
-  absl::TimeZone tz;
-  absl::LoadTimeZone(kTimeZoneString, &tz);
-  auto result = PrettyPrintFhirToJsonStringForAnalytics(proto, tz);
+  auto result = PrettyPrintFhirToJsonStringForAnalytics(proto);
   ASSERT_TRUE(result.ok()) << result.status();
   string from_proto = result.ValueOrDie();
   string from_json =

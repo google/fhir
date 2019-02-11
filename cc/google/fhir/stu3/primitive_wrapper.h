@@ -48,7 +48,7 @@ struct JsonPrimitive {
                                  google::protobuf::Message* target);
 
 ::google::fhir::StatusOr<JsonPrimitive> WrapPrimitiveProto(
-    const google::protobuf::Message& proto, const absl::TimeZone tz);
+    const google::protobuf::Message& proto);
 
 }  // namespace stu3
 }  // namespace fhir

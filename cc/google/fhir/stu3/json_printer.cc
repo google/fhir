@@ -57,10 +57,8 @@ using ::tensorflow::errors::InvalidArgument;
 
 class Printer {
  public:
-  Printer(absl::TimeZone default_timezone, int indent_size, bool add_newlines,
-          bool for_analytics)
-      : default_timezone_(default_timezone),
-        indent_size_(indent_size),
+  Printer(int indent_size, bool add_newlines, bool for_analytics)
+      : indent_size_(indent_size),
         add_newlines_(add_newlines),
         for_analytics_(for_analytics) {}
 
@@ -228,7 +226,7 @@ class Printer {
       return Status::OK();
     }
     FHIR_ASSIGN_OR_RETURN(const JsonPrimitive json_primitive,
-                          WrapPrimitiveProto(proto, default_timezone_));
+                          WrapPrimitiveProto(proto));
 
     if (json_primitive.is_non_null()) {
       PrintFieldPreamble(field_name);
@@ -295,7 +293,7 @@ class Printer {
       const Message& field_value =
           reflection->GetRepeatedMessage(containing_proto, field, i);
       FHIR_ASSIGN_OR_RETURN(json_primitives[i],
-                            WrapPrimitiveProto(field_value, default_timezone_));
+                            WrapPrimitiveProto(field_value));
       non_null_values_found =
           non_null_values_found || (json_primitives[i].is_non_null());
       any_primitive_extensions_found =
@@ -368,7 +366,6 @@ class Printer {
     return new_reference;
   }
 
-  const absl::TimeZone default_timezone_;
   const int indent_size_;
   const bool add_newlines_;
   const bool for_analytics_;
@@ -380,26 +377,25 @@ class Printer {
 }  // namespace
 
 StatusOr<string> PrettyPrintFhirToJsonString(
-    const google::protobuf::Message& fhir_proto, const absl::TimeZone default_timezone) {
-  Printer printer{default_timezone, 2, true, false};
+    const google::protobuf::Message& fhir_proto) {
+  Printer printer{2, true, false};
   return printer.WriteMessage(fhir_proto);
 }
 
-StatusOr<string> PrintFhirToJsonString(const google::protobuf::Message& fhir_proto,
-                                       const absl::TimeZone default_timezone) {
-  Printer printer{default_timezone, 0, false, false};
+StatusOr<string> PrintFhirToJsonString(const google::protobuf::Message& fhir_proto) {
+  Printer printer{0, false, false};
   return printer.WriteMessage(fhir_proto);
 }
 
 StatusOr<string> PrintFhirToJsonStringForAnalytics(
-    const google::protobuf::Message& fhir_proto, const absl::TimeZone default_timezone) {
-  Printer printer{default_timezone, 0, false, true};
+    const google::protobuf::Message& fhir_proto) {
+  Printer printer{0, false, true};
   return printer.WriteMessage(fhir_proto);
 }
 
 StatusOr<string> PrettyPrintFhirToJsonStringForAnalytics(
-    const google::protobuf::Message& fhir_proto, const absl::TimeZone default_timezone) {
-  Printer printer{default_timezone, 2, true, true};
+    const google::protobuf::Message& fhir_proto) {
+  Printer printer{2, true, true};
   return printer.WriteMessage(fhir_proto);
 }
 
