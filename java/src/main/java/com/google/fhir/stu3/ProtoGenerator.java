@@ -660,7 +660,7 @@ public class ProtoGenerator {
             .getExtension(Annotations.fhirStructureDefinitionUrl);
     StructureDefinition codeableConceptDefinition =
         structDefDataByUrl.get(codeableConceptStructDefUrl).structDef;
-    String fieldType = getFieldType(element, elementList);
+    String fieldType = getQualifiedFieldType(element, elementList).type;
     DescriptorProto.Builder codeableConceptBuilder =
         generateMessage(
                 codeableConceptDefinition.getSnapshot().getElementList().get(0),
@@ -941,37 +941,22 @@ public class ProtoGenerator {
    */
   private QualifiedType getQualifiedFieldType(
       ElementDefinition element, List<ElementDefinition> elementList) {
-    String rawFieldType = getFieldType(element, elementList);
-    if (rawFieldType.equals("Code")) {
-      Optional<Descriptor> valueSetType = getBindingValueSetType(element);
-      if (valueSetType.isPresent()) {
-        return new QualifiedType(
-            valueSetType.get().getName(), valueSetType.get().getFile().getPackage());
-      }
-    }
-    if (rawFieldType.equals("ContainedResource")) {
-      if (packageInfo.getLocalContainedResource()) {
-        return new QualifiedType(rawFieldType, packageInfo.getProtoPackage());
-      }
-      if (!packageInfo.getContainedResourcePackage().isEmpty()) {
-        return new QualifiedType(rawFieldType, packageInfo.getContainedResourcePackage());
-      }
-    }
-    if (isLocalContentReference(element)) {
-      return new QualifiedType(rawFieldType, packageInfo.getProtoPackage());
-    }
-    return new QualifiedType(rawFieldType, fhirVersion.coreFhirPackage);
-  }
-
-  /* Gets the field type (without package) of a potentially complex element. */
-  private String getFieldType(ElementDefinition element, List<ElementDefinition> elementList) {
-    if (isContainer(element) || element.hasContentReference() || isChoiceType(element)) {
-      // Get the type for this container, possibly from a named reference to another element.
-      return getContainerType(element, elementList);
+    if (isContainer(element) || isChoiceType(element)) {
+      return new QualifiedType(
+          getContainerType(element, elementList), packageInfo.getProtoPackage());
+    } else if (element.hasContentReference()) {
+      // Get the type for this container from a named reference to another element.
+      return new QualifiedType(
+          getContainerType(element, elementList),
+          isLocalContentReference(element)
+              ? packageInfo.getProtoPackage()
+              : fhirVersion.coreFhirPackage);
     } else if (isExtensionBackboneElement(element)) {
       return getInternalExtensionType(element, elementList);
     } else if (element.getType(0).getCode().getValue().equals("Reference")) {
-      return USE_TYPED_REFERENCES ? getTypedReferenceName(element.getTypeList()) : "Reference";
+      return new QualifiedType(
+          USE_TYPED_REFERENCES ? getTypedReferenceName(element.getTypeList()) : "Reference",
+          fhirVersion.coreFhirPackage);
     } else {
       if (element.getTypeCount() > 1) {
         throw new IllegalArgumentException(
@@ -991,24 +976,33 @@ public class ProtoGenerator {
         // fields.
         String containerType = getContainerType(element, elementList);
         int lastDotIndex = containerType.lastIndexOf(".");
-        return containerType.substring(0, lastDotIndex + 1)
-            + normalizedFhirTypeName
-            + "For"
-            + containerType.substring(lastDotIndex + 1);
+        return new QualifiedType(
+            containerType.substring(0, lastDotIndex + 1)
+                + normalizedFhirTypeName
+                + "For"
+                + containerType.substring(lastDotIndex + 1),
+            packageInfo.getProtoPackage());
       }
 
       if (normalizedFhirTypeName.equals("Resource")) {
         // We represent "Resource" FHIR types as "ContainedResource"
-        return "ContainedResource";
+        if (packageInfo.getLocalContainedResource()) {
+          return new QualifiedType("ContainedResource", packageInfo.getProtoPackage());
+        }
+        if (!packageInfo.getContainedResourcePackage().isEmpty()) {
+          return new QualifiedType("ContainedResource", packageInfo.getContainedResourcePackage());
+        }
+        return new QualifiedType("ContainedResource", fhirVersion.coreFhirPackage);
       }
 
       if (normalizedFhirTypeName.equals("Code")) {
         Optional<Descriptor> valueSetType = getBindingValueSetType(element);
         if (valueSetType.isPresent()) {
-          return valueSetType.get().getName();
+          return new QualifiedType(
+              valueSetType.get().getName(), valueSetType.get().getFile().getPackage());
         }
       }
-      return normalizedFhirTypeName;
+      return new QualifiedType(normalizedFhirTypeName, fhirVersion.coreFhirPackage);
     }
   }
 
@@ -1534,11 +1528,11 @@ public class ProtoGenerator {
    * extension, uses the appropriate primitive type. If this is a complex internal extension, treats
    * the element like a backbone container.
    */
-  private String getInternalExtensionType(
+  private QualifiedType getInternalExtensionType(
       ElementDefinition element, List<ElementDefinition> elementList) {
     return isSimpleInternalExtension(element, elementList)
-        ? getSimpleInternalExtensionType(element, elementList).type
-        : getContainerType(element, elementList);
+        ? getSimpleInternalExtensionType(element, elementList)
+        : new QualifiedType(getContainerType(element, elementList), packageInfo.getProtoPackage());
   }
 
   /**
