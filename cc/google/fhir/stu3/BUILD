@@ -112,12 +112,12 @@ cc_library(
     hdrs = ["util.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":proto_util",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//cc/google/fhir/systems",
         "//proto/stu3:annotations_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
-        "//proto/stu3:resources_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
         "@org_tensorflow//tensorflow/core:lib",

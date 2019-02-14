@@ -198,7 +198,8 @@ void StampWrapAndAdd(std::vector<ContainedResource>* versioned_resources,
                  << T::Precision_Name(timelike.precision());
     }
   }
-  versioned_resources->push_back(WrapContainedResource(*resource).ValueOrDie());
+  versioned_resources->push_back(
+      WrapContainedResource<ContainedResource>(*resource).ValueOrDie());
 }
 
 // Expands a TimestampOverride config for a repeated field.

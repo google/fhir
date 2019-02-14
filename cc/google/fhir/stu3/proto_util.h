@@ -44,21 +44,21 @@ using std::string;
 //
 // All versions return an INVALID_ARGUMENT status if the field_path does not
 // resolve to a message
-StatusOr<google::protobuf::Message*> GetMutableSubmessageByPath(google::protobuf::Message* message,
-                                                      const string& field_path);
+StatusOr<::google::protobuf::Message*> GetMutableSubmessageByPath(
+    ::google::protobuf::Message* message, const string& field_path);
 
-StatusOr<const google::protobuf::Message*> GetSubmessageByPath(
-    const google::protobuf::Message& message, const string& field_path);
+StatusOr<const ::google::protobuf::Message*> GetSubmessageByPath(
+    const ::google::protobuf::Message& message, const string& field_path);
 
 // Typed variants that return the requested type, or INVALID_ARGUMENT if
 // the located message is not of the expected type.
 template <typename T>
-StatusOr<T*> GetMutableSubmessageByPathAndCheckType(google::protobuf::Message* message,
+StatusOr<T*> GetMutableSubmessageByPathAndCheckType(::google::protobuf::Message* message,
                                                     const string& field_path) {
   const string& message_name = message->GetDescriptor()->name();
   auto got = GetMutableSubmessageByPath(message, field_path);
   TF_RETURN_IF_ERROR(got.status());
-  google::protobuf::Message* submessage = got.ValueOrDie();
+  ::google::protobuf::Message* submessage = got.ValueOrDie();
   if (T::descriptor()->full_name() !=
       submessage->GetDescriptor()->full_name()) {
     return ::tensorflow::errors::InvalidArgument(
@@ -72,11 +72,11 @@ StatusOr<T*> GetMutableSubmessageByPathAndCheckType(google::protobuf::Message* m
 
 template <typename T>
 StatusOr<const T*> GetSubmessageByPathAndCheckType(
-    const google::protobuf::Message& message, const string& field_path) {
+    const ::google::protobuf::Message& message, const string& field_path) {
   const string& message_name = message.GetDescriptor()->name();
   auto got = GetSubmessageByPath(message, field_path);
   TF_RETURN_IF_ERROR(got.status());
-  const google::protobuf::Message* submessage = got.ValueOrDie();
+  const ::google::protobuf::Message* submessage = got.ValueOrDie();
   if (T::descriptor()->full_name() !=
       submessage->GetDescriptor()->full_name()) {
     return ::tensorflow::errors::InvalidArgument(
@@ -91,7 +91,7 @@ StatusOr<const T*> GetSubmessageByPathAndCheckType(
 // Returns true if the field specified by field_path is set on a message,
 // false if the field is unset, and InvalidArgument if the field_path doesn't
 // resolve to a field, or the field is an unindexed repeated.
-StatusOr<const bool> HasSubmessageByPath(const google::protobuf::Message& message,
+StatusOr<const bool> HasSubmessageByPath(const ::google::protobuf::Message& message,
                                          const string& field_path);
 
 // Clears a field at the location specified by field path.
@@ -101,7 +101,7 @@ StatusOr<const bool> HasSubmessageByPath(const google::protobuf::Message& messag
 // If the path is invalid, returns an InvalidArgument status.
 // Note that this operates on fields, not a submessage, so a field_path ending
 // in an index is considered invalid.
-tensorflow::Status ClearFieldByPath(google::protobuf::Message* message,
+tensorflow::Status ClearFieldByPath(::google::protobuf::Message* message,
                                     const string& field_path);
 
 // Returns true if a field_path ends in a repeated index, e.g.,
@@ -122,33 +122,33 @@ string StripIndex(const string& field_path);
 // Convenience method for adding a message to a field.
 // If the field is singular, returns the mutable message.
 // If the field is repeated, returns a newly added message.
-google::protobuf::Message* MutableOrAddMessage(google::protobuf::Message* message,
-                                     const google::protobuf::FieldDescriptor* field);
+::google::protobuf::Message* MutableOrAddMessage(::google::protobuf::Message* message,
+                                       const ::google::protobuf::FieldDescriptor* field);
 
 // Convenience method for checking if a message has a field set.
 // If the field is singular, returns HasField.
 // If the field is repeated, returns FieldSize > 0.
-bool FieldHasValue(const google::protobuf::Message& message,
-                   const google::protobuf::FieldDescriptor* field);
+bool FieldHasValue(const ::google::protobuf::Message& message,
+                   const ::google::protobuf::FieldDescriptor* field);
 
-int PotentiallyRepeatedFieldSize(const google::protobuf::Message& message,
-                                 const google::protobuf::FieldDescriptor* field);
+int PotentiallyRepeatedFieldSize(const ::google::protobuf::Message& message,
+                                 const ::google::protobuf::FieldDescriptor* field);
 
-const google::protobuf::Message& GetPotentiallyRepeatedMessage(
-    const google::protobuf::Message& message, const google::protobuf::FieldDescriptor* field,
+const ::google::protobuf::Message& GetPotentiallyRepeatedMessage(
+    const ::google::protobuf::Message& message, const ::google::protobuf::FieldDescriptor* field,
     const int index);
 
-google::protobuf::Message* MutablePotentiallyRepeatedMessage(
-    google::protobuf::Message* message, const google::protobuf::FieldDescriptor* field,
+::google::protobuf::Message* MutablePotentiallyRepeatedMessage(
+    ::google::protobuf::Message* message, const ::google::protobuf::FieldDescriptor* field,
     const int index);
 
 template <typename T>
-bool IsMessageType(const google::protobuf::Descriptor* descriptor) {
+bool IsMessageType(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->full_name() == T::descriptor()->full_name();
 }
 
 template <typename T>
-bool IsMessageType(const google::protobuf::Message& message) {
+bool IsMessageType(const ::google::protobuf::Message& message) {
   return IsMessageType<T>(message.GetDescriptor());
 }
 

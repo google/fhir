@@ -86,14 +86,14 @@ TEST(WrapContainedResource, Valid) {
 
   ContainedResource expected;
   *(expected.mutable_encounter()) = encounter;
-  auto result = WrapContainedResource(encounter);
+  auto result = WrapContainedResource<ContainedResource>(encounter);
   ASSERT_TRUE(result.status().ok());
   EXPECT_THAT(result.ValueOrDie(), EqualsProto(expected));
 }
 
 TEST(WrapContainedResource, InvalidType) {
   DateTime datetime;
-  EXPECT_EQ(WrapContainedResource(datetime).status(),
+  EXPECT_EQ(WrapContainedResource<ContainedResource>(datetime).status(),
             ::tensorflow::errors::InvalidArgument(
                 "Resource type DateTime not found in "
                 "fhir::Bundle::Entry::resource"));

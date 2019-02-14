@@ -27,7 +27,6 @@
 #include "google/fhir/systems/systems.h"
 #include "proto/stu3/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/resources.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
 
@@ -35,7 +34,6 @@ namespace google {
 namespace fhir {
 namespace stu3 {
 
-using ::google::fhir::stu3::proto::ContainedResource;
 using ::google::fhir::stu3::proto::DateTime;
 using ::google::fhir::stu3::proto::Id;
 using ::google::fhir::stu3::proto::Reference;
@@ -129,37 +127,6 @@ StatusOr<string> ExtractIcdCode(
   }
 }
 
-Status SetContainedResource(const Message& resource,
-                            ContainedResource* contained) {
-  const google::protobuf::OneofDescriptor* resource_oneof =
-      ContainedResource::descriptor()->FindOneofByName("oneof_resource");
-  const google::protobuf::FieldDescriptor* resource_field = nullptr;
-  for (int i = 0; i < resource_oneof->field_count(); i++) {
-    const google::protobuf::FieldDescriptor* field = resource_oneof->field(i);
-    if (field->cpp_type() != google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
-      return ::tensorflow::errors::InvalidArgument(
-          absl::StrCat("Field ", field->full_name(), "is not a message"));
-    }
-    if (field->message_type()->name() == resource.GetDescriptor()->name()) {
-      resource_field = field;
-    }
-  }
-  if (resource_field == nullptr) {
-    return ::tensorflow::errors::InvalidArgument(
-        absl::StrCat("Resource type ", resource.GetDescriptor()->name(),
-                     " not found in fhir::Bundle::Entry::resource"));
-  }
-  const google::protobuf::Reflection* ref = contained->GetReflection();
-  ref->MutableMessage(contained, resource_field)->CopyFrom(resource);
-  return Status::OK();
-}
-
-StatusOr<ContainedResource> WrapContainedResource(const Message& resource) {
-  ContainedResource contained_resource;
-  TF_RETURN_IF_ERROR(SetContainedResource(resource, &contained_resource));
-  return contained_resource;
-}
-
 bool IsPrimitive(const google::protobuf::Descriptor* descriptor) {
   return descriptor->options().GetExtension(
              stu3::proto::structure_definition_kind) ==
@@ -232,40 +199,6 @@ StatusOr<string> ReferenceProtoToString(const Reference& reference) {
     absl::StrAppend(&reference_string, "/_history/", id.history().value());
   }
   return reference_string;
-}
-
-Status GetPatient(const Bundle& bundle, const Patient** patient) {
-  bool found = false;
-  for (const auto& entry : bundle.entry()) {
-    if (entry.resource().has_patient()) {
-      if (found) {
-        return ::tensorflow::errors::AlreadyExists(
-            "Found more than one patient in bundle");
-      }
-      *patient = &entry.resource().patient();
-      found = true;
-    }
-  }
-  if (found) {
-    return Status::OK();
-  } else {
-    return ::tensorflow::errors::NotFound("No patient in bundle.");
-  }
-}
-
-StatusOr<const Message*> GetContainedResource(
-    const ContainedResource& contained) {
-  const google::protobuf::Reflection* ref = contained.GetReflection();
-  // Get the resource field corresponding to this resource.
-  const google::protobuf::OneofDescriptor* resource_oneof =
-      contained.GetDescriptor()->FindOneofByName("oneof_resource");
-  const google::protobuf::FieldDescriptor* field =
-      contained.GetReflection()->GetOneofFieldDescriptor(contained,
-                                                         resource_oneof);
-  if (!field) {
-    return ::tensorflow::errors::NotFound("No Bundle Resource found");
-  }
-  return &(ref->GetMessage(contained, field));
 }
 
 absl::Duration GetDurationFromTimelikeElement(const DateTime& datetime) {
@@ -402,28 +335,6 @@ Status GetDecimalValue(const stu3::proto::Decimal& decimal, double* value) {
         absl::StrCat("Invalid decimal: '", decimal.value(), "'"));
   }
   return Status::OK();
-}
-
-Status GetResourceFromBundleEntry(const Bundle::Entry& entry,
-                                  const Message** result) {
-  auto got_value = GetContainedResource(entry.resource());
-  TF_RETURN_IF_ERROR(got_value.status());
-  *result = got_value.ValueOrDie();
-  return Status::OK();
-}
-
-StatusOr<const google::protobuf::RepeatedFieldRef<stu3::proto::Extension>>
-GetResourceExtensionsFromBundleEntry(const Bundle::Entry& entry) {
-  const Message* resource;
-  TF_RETURN_IF_ERROR(GetResourceFromBundleEntry(entry, &resource));
-  const google::protobuf::Reflection* ref = resource->GetReflection();
-  // Get the bundle field corresponding to this resource.
-  const google::protobuf::FieldDescriptor* field =
-      resource->GetDescriptor()->FindFieldByName("extension");
-  if (field == nullptr) {
-    return ::tensorflow::errors::NotFound("No extension field.");
-  }
-  return ref->GetRepeatedFieldRef<stu3::proto::Extension>(*resource, field);
 }
 
 }  // namespace stu3
