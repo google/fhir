@@ -1,8 +1,9 @@
 syntax = "proto3";
 
+package google.fhir.proto;
+
 import "proto/stu3/codes.proto";
 
-package google.fhir.proto;
 option java_package = "com.google.fhir.proto";
 option java_multiple_files = true;
 
@@ -36,6 +37,7 @@ message PackageInfo {
     APACHE = 1;
   }
   License license = 10;
+  string license_date = 11;
 }
 
 enum SizeRestriction {

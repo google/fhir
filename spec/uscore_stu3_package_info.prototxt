@@ -1,3 +1,5 @@
 proto_package: "google.fhir.stu3.uscore"
 java_proto_package: "com.google.fhir.stu3.uscore"
 fhir_version: STU3
+license: APACHE
+license_date: "2018"

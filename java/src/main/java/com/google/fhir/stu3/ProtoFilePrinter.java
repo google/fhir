@@ -20,6 +20,7 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.escape.CharEscaperBuilder;
 import com.google.common.escape.Escaper;
+import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
@@ -29,6 +30,8 @@ import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileOptions;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,8 +39,8 @@ import java.util.Set;
 /** A utility to turn protocol message descriptors into .proto files. */
 public class ProtoFilePrinter {
 
-  private static final String LICENSE =
-      "//    Copyright 2018 Google Inc.\n"
+  private static final String APACHE_LICENSE =
+      "//    Copyright %1$s Google Inc.\n"
           + "//\n"
           + "//    Licensed under the Apache License, Version 2.0 (the \"License\");\n"
           + "//    you may not use this file except in compliance with the License.\n"
@@ -55,31 +58,31 @@ public class ProtoFilePrinter {
   // TODO: Move the annotation to a general location.
   static final String ANNOTATION_PACKAGE = "google.fhir.stu3.proto";
 
-  private boolean addLicense = false;
+  private final PackageInfo packageInfo;
 
   private static final Escaper VALUE_REGEX_ESCAPER =
       new CharEscaperBuilder().addEscape('\\', "\\\\").toEscaper();
 
   /** Creates a ProtoFilePrinter with default parameters. */
   public ProtoFilePrinter() {
-    this(false);
+    this(PackageInfo.getDefaultInstance());
   }
 
-  private ProtoFilePrinter(boolean addLicense) {
-    this.addLicense = addLicense;
-  }
-
-  /** Returns a ProtoFilePrinter which will add an Apache 2.0 license to any output. */
-  public ProtoFilePrinter withApacheLicense() {
-    return new ProtoFilePrinter(true);
+  /** Creates a ProtoFilePrinter with default parameters. */
+  public ProtoFilePrinter(PackageInfo packageInfo) {
+    this.packageInfo = packageInfo;
   }
 
   /** Generate a .proto file corresponding to the provided FileDescriptorProto. */
   public String print(FileDescriptorProto fileDescriptor) {
     String fullyQualifiedPackageName = "." + fileDescriptor.getPackage();
     StringBuilder contents = new StringBuilder();
-    if (addLicense) {
-      contents.append(LICENSE).append("\n");
+    if (packageInfo.getLicense() == PackageInfo.License.APACHE) {
+      String licenseDate =
+          packageInfo.getLicenseDate().isEmpty()
+              ? ("" + new GregorianCalendar().get(Calendar.YEAR))
+              : packageInfo.getLicenseDate();
+      contents.append(String.format(APACHE_LICENSE, licenseDate)).append("\n");
     }
     contents.append(printHeader(fileDescriptor)).append("\n");
     contents.append(printImports(fileDescriptor)).append("\n");

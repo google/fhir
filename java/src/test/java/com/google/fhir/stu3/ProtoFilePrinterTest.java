@@ -238,16 +238,20 @@ public final class ProtoFilePrinterTest {
     String packageName = "google.fhir.stu3.proto";
     jsonParser = JsonFormat.getParser();
     runfiles = Runfiles.create();
-    protoGenerator =
-        new ProtoGenerator(
+    PackageInfo packageInfo =
             PackageInfo.newBuilder()
                 .setProtoPackage(packageName)
                 .setJavaProtoPackage("com.google.fhir.stu3.proto")
                 .setFhirVersion(FhirVersion.STU3)
-                .build(),
+                .setLicense(PackageInfo.License.APACHE)
+                .setLicenseDate("2018")
+                .build();
+    protoGenerator =
+        new ProtoGenerator(
+            packageInfo,
             "proto/stu3",
             getKnownStructDefs());
-    protoPrinter = new ProtoFilePrinter().withApacheLicense();
+    protoPrinter = new ProtoFilePrinter(packageInfo);
   }
 
   // TODO: Test the FHIR code types.

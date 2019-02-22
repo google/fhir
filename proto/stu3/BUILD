@@ -85,7 +85,6 @@ fhir_proto_library(
 
 gen_fhir_protos(
     name = "uscore",
-    add_apache_license = True,
     additional_proto_imports = [
         "proto/stu3/uscore_codes.proto",
     ],

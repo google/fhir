@@ -46,7 +46,6 @@ FHIR_PACKAGE_INFO="$ROOT_PATH//spec/fhir_stu3_package_info.prototxt"
 COMMON_FLAGS=" \
   --emit_proto \
   --emit_descriptors \
-  --add_apache_license \
   --struct_def_dep_pkg $FHIR_STRUCT_DEF_ZIP|$FHIR_PACKAGE_INFO \
   --fhir_proto_root $FHIR_PROTO_ROOT \
   --package_info $FHIR_PACKAGE_INFO \

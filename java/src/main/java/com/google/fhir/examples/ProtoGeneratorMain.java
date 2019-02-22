@@ -125,11 +125,6 @@ class ProtoGeneratorMain {
     private List<String> additionalImports = new ArrayList<>();
 
     @Parameter(
-        names = {"--add_apache_license"},
-        description = "Adds Apache License to proto files.")
-    private Boolean addApacheLicense = false;
-
-    @Parameter(
         names = {"--separate_extensions"},
         description =
             "If true, will separate all extensions into a ${output_name}_extensions.proto file.")
@@ -268,10 +263,7 @@ class ProtoGeneratorMain {
     writer.flush();
 
     ProtoGenerator generator = new ProtoGenerator(packageInfo, args.fhirProtoRoot, knownTypes);
-    ProtoFilePrinter printer =
-        (args.addApacheLicense || packageInfo.getLicense() == PackageInfo.License.APACHE)
-            ? new ProtoFilePrinter().withApacheLicense()
-            : new ProtoFilePrinter();
+    ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
 
     if (args.separateExtensions) {
       List<StructureDefinition> extensions = new ArrayList<>();

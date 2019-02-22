@@ -43,8 +43,7 @@ def gen_fhir_protos(
         package,
         package_deps = [],
         additional_proto_imports = None,
-        separate_extensions = False,
-        add_apache_license = False):
+        separate_extensions = False):
     """Generates a proto file from a structure_definition_package
 
     These rules should be run by the generate_protos.sh script, which will generate the
@@ -61,7 +60,6 @@ def gen_fhir_protos(
                                 FHIR datatypes, annotations, and codes are included automatically.
       separate_extensions: If true, will produce two proto files, one for extensions
                            and one for profiles.
-      add_apache_license: Whether or not to include the apache license
     """
 
     all_struct_def_pkgs = package_deps + [STU3_STRUCTURE_DEFINITION_DEP, package]
@@ -102,9 +100,6 @@ def gen_fhir_protos(
 
     cmd += additional_proto_imports_flags + " " + struct_def_dep_flags
 
-    if add_apache_license:
-        cmd += " --add_apache_license "
-
     if separate_extensions:
         outs = ["_genfiles_" + name + ".proto", "_genfiles_" + name + "_extensions.proto"]
         cmd += " --separate_extensions "
@@ -129,8 +124,7 @@ def gen_fhir_definitions_and_protos(
         profiles = [],
         package_deps = [],
         additional_proto_imports = [],
-        separate_extensions = False,
-        add_apache_license = False):
+        separate_extensions = False):
     """Generates structure definitions and protos based on Extensions and Profiles protos.
 
     These rules should be run by bazel/generate_protos.sh, which will generate the
@@ -151,7 +145,6 @@ def gen_fhir_definitions_and_protos(
                                 FHIR datatypes, annotations, and codes are included automatically.
       separate_extensions: If true, will produce two proto files, one for extensions
                                           and one for profiles.
-      add_apache_license: Whether or not to include the apache license
     """
 
     extension_flags = " ".join([("--extensions $(location %s) " % extension) for extension in extensions])
@@ -212,7 +205,6 @@ def gen_fhir_definitions_and_protos(
         package_deps = package_deps,
         additional_proto_imports = additional_proto_imports,
         separate_extensions = separate_extensions,
-        add_apache_license = add_apache_license,
     )
 
 def _get_zip_for_pkg(pkg):
