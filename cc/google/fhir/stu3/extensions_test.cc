@@ -32,11 +32,13 @@ namespace stu3 {
 
 namespace {
 
+using ::google::fhir::stu3::google::Base64BinarySeparatorStride;
 using ::google::fhir::stu3::google::EventLabel;
 using ::google::fhir::stu3::google::EventTrigger;
 using ::google::fhir::stu3::google::PrimitiveHasNoValue;
 using ::google::fhir::stu3::proto::
     CapabilityStatementSearchParameterCombination;
+using ::google::fhir::stu3::proto::Composition;
 using ::google::fhir::stu3::proto::Extension;
 using ::google::fhir::stu3::testing::DigitalMediaType;
 using ::google::fhir::testutil::EqualsProto;
@@ -119,6 +121,162 @@ TEST(ExtensionsTest, ParseBoundCodeExtension) {
 
 TEST(ExtensionsTest, PrintBoundCodeExtension) {
   TestConvertToExtension<DigitalMediaType>("digital_media_type");
+}
+
+TEST(ExtensionsTest, ExtractOnlyMatchingExtensionOneFound) {
+  Composition composition = PARSE_VALID_STU3_PROTO(R"pb(
+    id { value: "1" }
+    status { value: FINAL }
+    subject { patient_id { value: "P0" } }
+    encounter { encounter_id { value: "2" } }
+    author { practitioner_id { value: "3" } }
+    title { value: "Note" }
+    type {
+      coding {
+        system { value: "type-system" }
+        code { value: "RADIOLOGY" }
+      }
+    }
+    date {
+      value_us: 4608099660000000
+      timezone: "America/New_York"
+      precision: SECOND
+    }
+    extension {
+      url { value: "https://g.co/fhir/StructureDefinition/random" }
+      extension {
+        url { value: "foo" }
+        value { string_value { value: "barr" } }
+      }
+    }
+    extension {
+      url {
+        value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride"
+      }
+      extension {
+        url { value: "separator" }
+        value { string_value { value: "!" } }
+      }
+      extension {
+        url { value: "stride" }
+        value { positive_int { value: 5 } }
+      }
+    }
+    extension {
+      url { value: "https://g.co/fhir/StructureDefinition/more-random" }
+      extension {
+        url { value: "baz" }
+        value { string_value { value: "quux" } }
+      }
+    }
+  )pb");
+
+  StatusOr<Base64BinarySeparatorStride> extracted =
+      ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(composition);
+
+  Base64BinarySeparatorStride expected;
+  ASSERT_TRUE(::google::protobuf::TextFormat::ParseFromString(R"pb(
+                                                    separator { value: "!" }
+                                                    stride { value: 5 }
+                                                  )pb",
+                                                  &expected));
+
+  TF_ASSERT_OK(extracted.status());
+  EXPECT_THAT(extracted.ValueOrDie(), EqualsProto(expected));
+}
+
+TEST(ExtensionsTest, ExtractOnlyMatchingExtensionNoneFound) {
+  Composition composition = PARSE_VALID_STU3_PROTO(R"pb(
+    id { value: "1" }
+    status { value: FINAL }
+    subject { patient_id { value: "P0" } }
+    encounter { encounter_id { value: "2" } }
+    author { practitioner_id { value: "3" } }
+    title { value: "Note" }
+    type {
+      coding {
+        system { value: "type-system" }
+        code { value: "RADIOLOGY" }
+      }
+    }
+    date {
+      value_us: 4608099660000000
+      timezone: "America/New_York"
+      precision: SECOND
+    }
+    extension {
+      url { value: "https://g.co/fhir/StructureDefinition/random" }
+      extension {
+        url { value: "foo" }
+        value { string_value { value: "barr" } }
+      }
+    }
+    extension {
+      url { value: "https://g.co/fhir/StructureDefinition/more-random" }
+      extension {
+        url { value: "baz" }
+        value { string_value { value: "quux" } }
+      }
+    }
+  )pb");
+
+  StatusOr<Base64BinarySeparatorStride> extracted =
+      ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(composition);
+
+  EXPECT_FALSE(extracted.status().ok());
+}
+
+TEST(ExtensionsTest, ExtractOnlyMatchingExtensionMultipleFound) {
+  Composition composition = PARSE_VALID_STU3_PROTO(R"pb(
+    id { value: "1" }
+    status { value: FINAL }
+    subject { patient_id { value: "P0" } }
+    encounter { encounter_id { value: "2" } }
+    author { practitioner_id { value: "3" } }
+    title { value: "Note" }
+    type {
+      coding {
+        system { value: "type:system" }
+        code { value: "RADIOLOGY" }
+      }
+    }
+    date {
+      value_us: 4608099660000000
+      timezone: "America/New_York"
+      precision: SECOND
+    }
+    extension {
+      url {
+        value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride"
+      }
+      extension {
+        url { value: "separator" }
+        value { string_value { value: "!" } }
+      }
+      extension {
+        url { value: "stride" }
+        value { positive_int { value: 5 } }
+      }
+    }
+    extension {
+      url {
+        value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride"
+      }
+      extension {
+        url { value: "separator" }
+        value { string_value { value: "*" } }
+      }
+      extension {
+        url { value: "stride" }
+        value { positive_int { value: 6 } }
+      }
+    }
+  )pb");
+
+  StatusOr<Base64BinarySeparatorStride> extracted =
+      ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(composition);
+
+  EXPECT_FALSE(extracted.status().ok());
 }
 
 }  // namespace

@@ -41,6 +41,7 @@ cc_library(
         ":proto_util",
         ":util",
         "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
         "//proto/stu3:annotations_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/strings",

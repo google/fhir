@@ -26,10 +26,11 @@
 #include "google/protobuf/reflection.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/status/statusor.h"
+#include "google/fhir/stu3/util.h"
 #include "proto/stu3/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
-#include "tensorflow/core/lib/core/status.h"
 
 namespace google {
 namespace fhir {
@@ -37,20 +38,20 @@ namespace stu3 {
 
 using std::string;
 
-tensorflow::Status ExtensionToMessage(const stu3::proto::Extension& extension,
-                                      ::google::protobuf::Message* message);
+Status ExtensionToMessage(const stu3::proto::Extension& extension,
+                          ::google::protobuf::Message* message);
 
-tensorflow::Status ConvertToExtension(const ::google::protobuf::Message& message,
-                                      stu3::proto::Extension* extension);
+Status ConvertToExtension(const ::google::protobuf::Message& message,
+                          stu3::proto::Extension* extension);
 
 // Given a datatype message (E.g., String, Code, Boolean, etc.),
 // finds the appropriate field on the target extension and sets it.
 // Returns InvalidArgument if there's no matching oneof type on the extension
 // for the message.
-tensorflow::Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
-                                          stu3::proto::Extension* extension);
+Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
+                              stu3::proto::Extension* extension);
 
-tensorflow::Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor);
+Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor);
 
 // Extract all matching extensions from a container into a vector, and parse
 // them into protos. Example usage:
@@ -58,24 +59,36 @@ tensorflow::Status ValidateExtension(const ::google::protobuf::Descriptor* descr
 // std::vector<MyExtension> my_extensions;
 // auto status = GetRepeatedFromExtension(patient.extension(), &my_extension);
 template <class C, class T>
-tensorflow::Status GetRepeatedFromExtension(const C& extension_container,
-                                            std::vector<T>* result) {
+Status GetRepeatedFromExtension(const C& extension_container,
+                                std::vector<T>* result) {
   const ::google::protobuf::Descriptor* descriptor = T::descriptor();
-  TF_RETURN_IF_ERROR(ValidateExtension(descriptor));
+  FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
   const string url = descriptor->options().GetExtension(
       stu3::proto::fhir_structure_definition_url);
   for (const auto& extension : extension_container) {
     if (extension.url().value() == url) {
       T message;
-      TF_RETURN_IF_ERROR(ExtensionToMessage(extension, &message));
+      FHIR_RETURN_IF_ERROR(ExtensionToMessage(extension, &message));
       result->emplace_back(message);
     }
   }
-  return tensorflow::Status::OK();
+  return Status::OK();
 }
 
-tensorflow::Status ClearTypedExtensions(const ::google::protobuf::Descriptor* descriptor,
-                                        ::google::protobuf::Message* message);
+template <class T, class C>
+StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
+  std::vector<T> result;
+  FHIR_RETURN_IF_ERROR(GetRepeatedFromExtension(entity.extension(), &result));
+  if (result.size() != 1) {
+    return ::tensorflow::errors::InvalidArgument(
+        "Expected exactly 1 extension with url: ",
+        GetStructureDefinitionUrl(T::descriptor()), ". Found: ", result.size());
+  }
+  return result.front();
+}
+
+Status ClearTypedExtensions(const ::google::protobuf::Descriptor* descriptor,
+                            ::google::protobuf::Message* message);
 
 string GetInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* field);
 
