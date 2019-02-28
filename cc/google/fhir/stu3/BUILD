@@ -339,6 +339,20 @@ cc_library(
     ],
 )
 
+cc_test(
+    name = "codeable_concepts_test",
+    srcs = ["codeable_concepts_test.cc"],
+    data = [
+        "//testdata/stu3/profiles:testdata",
+    ],
+    deps = [
+        ":codeable_concepts",
+        ":test_helper",
+        "//testdata/stu3/profiles:test_cc_proto",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
 cc_library(
     name = "annotations",
     srcs = ["annotations.cc"],

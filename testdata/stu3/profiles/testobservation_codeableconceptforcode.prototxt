@@ -1,0 +1,63 @@
+sys_a {
+  code {
+    value: "acode"
+  }
+  display {
+    value: "A Display"
+  }
+},
+sys_b {
+  code {
+    value: "bcode1"
+  }
+  display {
+    value: "BDisplay1"
+  }
+},
+sys_b {
+  code {
+    value: "bcode2"
+  }
+  display {
+    value: "BDisplay2"
+  }
+},
+sys_c {},
+sys_d {
+  display {
+    value: "display d"
+  }
+},
+coding {
+  system {
+    value: "http://sysf.org"
+  }
+  code {
+    value: "fcode"
+  }
+  display {
+    value: "FDisplay"
+  }
+}
+coding {
+  system {
+    value: "http://sysg.org"
+  }
+  code {
+    value: "gcode1"
+  }
+  display {
+    value: "GDisplay1"
+  }
+}
+coding {
+  system {
+    value: "http://sysg.org"
+  }
+  code {
+    value: "gcode2"
+  }
+  display {
+    value: "GDisplay2"
+  }
+}

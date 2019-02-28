@@ -1,3 +1,17 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
 syntax = "proto3";
 
 package google.fhir.stu3.testing;
@@ -328,9 +342,19 @@ message TestObservation {
         [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
              "http://sysa.org"];
 
-    google.fhir.stu3.proto.CodingWithFixedSystem sys_b = 6
+    repeated google.fhir.stu3.proto.CodingWithFixedSystem sys_b = 6
         [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
              "http://sysb.org"];
+
+    google.fhir.stu3.proto.CodingWithFixedCode sys_c = 7 [
+      (.google.fhir.stu3.proto.fhir_inlined_coding_system) = "http://sysc.org",
+      (.google.fhir.stu3.proto.fhir_inlined_coding_code) = "8472"
+    ];
+
+    google.fhir.stu3.proto.CodingWithFixedCode sys_d = 8 [
+      (.google.fhir.stu3.proto.fhir_inlined_coding_system) = "http://sysd.org",
+      (.google.fhir.stu3.proto.fhir_inlined_coding_code) = "8675329"
+    ];
   }
   CodeableConceptForCode code = 13
       [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];

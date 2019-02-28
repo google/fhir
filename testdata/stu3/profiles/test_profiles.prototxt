@@ -42,10 +42,32 @@ profile {
       element_data {
         name: "sysB"
         description: "SysB Code"
-        size_restriction: OPTIONAL
+        size_restriction: REPEATED
       }
       code_data {
         system: "http://sysb.org"
+      }
+    }
+    coding_slice {
+      element_data {
+        name: "sysC"
+        description: "SysC Code"
+        size_restriction: OPTIONAL
+      }
+      code_data {
+        system: "http://sysc.org"
+        fixed_value: "8472"
+      }
+    }
+    coding_slice {
+      element_data {
+        name: "sysD"
+        description: "SysD Code"
+        size_restriction: OPTIONAL
+      }
+      code_data {
+        system: "http://sysd.org"
+        fixed_value: "8675329"
       }
     }
     field_id: "Observation.code"

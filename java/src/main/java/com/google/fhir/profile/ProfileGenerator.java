@@ -35,6 +35,7 @@ import com.google.fhir.stu3.DateTimeWrapper;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.BindingStrengthCode;
 import com.google.fhir.stu3.proto.Bundle;
+import com.google.fhir.stu3.proto.Code;
 import com.google.fhir.stu3.proto.CodeableConcept;
 import com.google.fhir.stu3.proto.Coding;
 import com.google.fhir.stu3.proto.ContactDetail;
@@ -557,7 +558,7 @@ final class ProfileGenerator {
     // Code Element
     ElementDefinition.Builder codeElement = getElementBuilderById("Coding.code", codingElements);
     if (!codingSlice.getCodeData().getFixedValue().isEmpty()) {
-      codeElement.getFixedBuilder().setUri(fhirUri(codeData.getFixedValue()));
+      codeElement.getFixedBuilder().setCode(fhirCode(codeData.getFixedValue()));
     }
     codeElement.setBinding(buildCodeBinding(codeData));
 
@@ -755,6 +756,10 @@ final class ProfileGenerator {
 
   private static Uri fhirUri(String value) {
     return Uri.newBuilder().setValue(value).build();
+  }
+
+  private static Code fhirCode(String value) {
+    return Code.newBuilder().setValue(value).build();
   }
 
   private static DateTime buildCreationDateTime(LocalDate localDate) {

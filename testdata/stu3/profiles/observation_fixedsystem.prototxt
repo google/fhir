@@ -91,10 +91,29 @@ code {
       value: "http://sysc.org"
     }
     code {
-      value: "ccode"
+      value: "8472"
+    }
+  },
+  coding {
+    system {
+      value: "http://sysd.org"
+    }
+    code {
+      value: "8675329"
     }
     display {
-      value: "CDisplay"
+      value: "display d"
+    }
+  },
+  coding {
+    system {
+      value: "http://sysf.org"
+    }
+    code {
+      value: "fcode"
+    }
+    display {
+      value: "FDisplay"
     }
   }
 }

@@ -23,6 +23,7 @@
 #include "google/protobuf/descriptor.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/stu3/annotations.h"
 #include "google/fhir/stu3/codes.h"
 #include "google/fhir/stu3/extensions.h"
 #include "google/fhir/stu3/proto_util.h"
@@ -319,8 +320,7 @@ Status PerformExtensionUnslicing(const google::protobuf::Message& profiled_messa
             base_message, base_descriptor->FindFieldByName("extension")));
     const Message& extension_as_message =
         profiled_reflection->GetMessage(profiled_message, field);
-    if (GetFhirProfileBase(extension_as_message.GetDescriptor()) ==
-        GetStructureDefinitionUrl(Extension::descriptor())) {
+    if (IsProfileOf<Extension>(extension_as_message)) {
       // This a profile on extension, and therefore a complex extension
       FHIR_RETURN_IF_ERROR(
           ConvertToExtension(extension_as_message, raw_extension));
@@ -345,9 +345,9 @@ Status UnsliceCodingsWithinCodeableConcept(
         GetStructureDefinitionUrl(Coding::descriptor())) {
       // This is a specialization of Coding.
       // Convert it to a normal coding and add it to the base message.
-      for (int i = 0;
-           i < PotentiallyRepeatedFieldSize(profiled_concept, profiled_field);
-           i++) {
+      const int field_size =
+          PotentiallyRepeatedFieldSize(profiled_concept, profiled_field);
+      for (int i = 0; i < field_size; i++) {
         const Message& profiled_coding =
             GetPotentiallyRepeatedMessage(profiled_concept, profiled_field, i);
         Coding* new_coding = target_concept->add_coding();
@@ -357,17 +357,25 @@ Status UnsliceCodingsWithinCodeableConcept(
         new_coding->DiscardUnknownFields();
 
         // If we see an inlined system or code, copy that over.
-        const string& inlined_system = profiled_field->options().GetExtension(
-            proto::fhir_inlined_coding_system);
+        const string& inlined_system = GetInlinedCodingSystem(profiled_field);
         if (!inlined_system.empty()) {
           new_coding->mutable_system()->set_value(inlined_system);
         }
 
-        const string& inlined_code = profiled_field->options().GetExtension(
-            proto::fhir_inlined_coding_code);
+        const string& inlined_code = GetInlinedCodingCode(profiled_field);
         if (!inlined_code.empty()) {
           new_coding->mutable_code()->set_value(inlined_code);
         }
+      }
+      if (field_size == 0 &&
+          IsMessageType<CodingWithFixedCode>(profiled_field->message_type())) {
+        // This is a Fixed-Code field with no additional information provided.
+        // Just add the Code and System.
+        Coding* new_coding = target_concept->add_coding();
+        new_coding->mutable_system()->set_value(
+            GetInlinedCodingSystem(profiled_field));
+        new_coding->mutable_code()->set_value(
+            GetInlinedCodingCode(profiled_field));
       }
     }
   }

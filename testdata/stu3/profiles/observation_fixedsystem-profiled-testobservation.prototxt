@@ -71,15 +71,21 @@ code {
       value: "BDisplay"
     }
   },
+  sys_c {},
+  sys_d {
+    display {
+      value: "display d"
+    }
+  },
   coding {
     system {
-      value: "http://sysc.org"
+      value: "http://sysf.org"
     }
     code {
-      value: "ccode"
+      value: "fcode"
     }
     display {
-      value: "CDisplay"
+      value: "FDisplay"
     }
   }
 }
