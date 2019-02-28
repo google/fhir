@@ -17,6 +17,7 @@
 #ifndef GOOGLE_FHIR_STU3_PROTO_UTIL_H_
 #define GOOGLE_FHIR_STU3_PROTO_UTIL_H_
 
+#include <functional>
 #include <string>
 
 #include "google/protobuf/descriptor.h"
@@ -141,6 +142,33 @@ const ::google::protobuf::Message& GetPotentiallyRepeatedMessage(
 ::google::protobuf::Message* MutablePotentiallyRepeatedMessage(
     ::google::protobuf::Message* message, const ::google::protobuf::FieldDescriptor* field,
     const int index);
+
+// Performs a function once on each message within a potentially repeated field
+// on a proto, halting the first time the function returns true.
+template <typename FieldType>
+bool ForEachMessageHalting(const ::google::protobuf::Message* message,
+                           const ::google::protobuf::FieldDescriptor* field,
+                           std::function<bool(const FieldType& message)> func) {
+  for (int i = 0; i < PotentiallyRepeatedFieldSize(*message, field); i++) {
+    bool stop = func(static_cast<const FieldType&>(
+        GetPotentiallyRepeatedMessage(*message, field, i)));
+    if (stop) return true;
+  }
+  return false;
+}
+
+// Performs a function once on each message within a potentially repeated field
+// on a proto.
+template <typename FieldType>
+void ForEachMessage(const ::google::protobuf::Message* message,
+                    const ::google::protobuf::FieldDescriptor* field,
+                    std::function<void(const FieldType& message)> func) {
+  ForEachMessageHalting(message, [&func](const FieldType& message) {
+    func(message);
+    return false;  // The halting function always returns false, so it doesn't
+                   // stop before visiting every message.
+  });
+}
 
 template <typename T>
 bool IsMessageType(const ::google::protobuf::Descriptor* descriptor) {

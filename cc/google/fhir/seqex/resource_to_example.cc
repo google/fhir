@@ -30,6 +30,7 @@
 #include "absl/time/time.h"
 #include "google/fhir/seqex/text_tokenizer.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/stu3/codeable_concepts.h"
 #include "google/fhir/stu3/util.h"
 #include "google/fhir/systems/systems.h"
 #include "proto/stu3/annotations.pb.h"
@@ -248,7 +249,7 @@ void AddCodeableConceptToExample(
         *tokenize_feature_set, add_tokenize_feature_set, full_name,
         concept.text().value(), example, enable_attribution);
   }
-  for (const auto& coding : concept.coding()) {
+  stu3::ForEachCoding(concept, [&](const Coding& coding) {
     CHECK(coding.has_system() && coding.has_code());
     const string system = systems::ToShortSystemName(coding.system().value());
     (*example->mutable_features()
@@ -265,7 +266,7 @@ void AddCodeableConceptToExample(
           absl::StrCat(name, ".", system, ".display"), coding.display().value(),
           example, enable_attribution);
     }
-  }
+  });
 }
 
 void MessageToExample(const google::protobuf::Message& message, const string& prefix,

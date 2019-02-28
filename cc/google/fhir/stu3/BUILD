@@ -14,6 +14,7 @@ cc_library(
         "//proto/stu3:annotations_cc_proto",
         "//proto/stu3:codes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
+        "@org_tensorflow//tensorflow/core:lib",
         "@protobuf_archive//:protobuf",
     ],
 )
@@ -73,6 +74,7 @@ cc_library(
     hdrs = ["profiles.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":annotations",
         ":codes",
         ":extensions",
         ":proto_util",
@@ -113,6 +115,8 @@ cc_library(
     hdrs = ["util.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":annotations",
+        ":codeable_concepts",
         ":proto_util",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
@@ -314,5 +318,34 @@ cc_test(
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@org_tensorflow//tensorflow/core:test",
+    ],
+)
+
+cc_library(
+    name = "codeable_concepts",
+    srcs = ["codeable_concepts.cc"],
+    hdrs = ["codeable_concepts.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":annotations",
+        ":proto_util",
+        "//cc/google/fhir/status:statusor",
+        "//proto/stu3:annotations_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/types:optional",
+        "@org_tensorflow//tensorflow/core:lib",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_library(
+    name = "annotations",
+    srcs = ["annotations.cc"],
+    hdrs = ["annotations.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "//proto/stu3:annotations_cc_proto",
+        "@protobuf_archive//:protobuf",
     ],
 )

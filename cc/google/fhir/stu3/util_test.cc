@@ -30,6 +30,7 @@ namespace stu3 {
 
 namespace {
 
+using ::google::fhir::stu3::proto::CodeableConcept;
 using ::google::fhir::stu3::proto::ContainedResource;
 using ::google::fhir::stu3::proto::Date;
 using ::google::fhir::stu3::proto::DateTime;

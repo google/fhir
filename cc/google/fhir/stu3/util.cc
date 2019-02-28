@@ -24,8 +24,8 @@
 #include "absl/time/time.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/stu3/annotations.h"
 #include "google/fhir/systems/systems.h"
-#include "proto/stu3/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
@@ -82,86 +82,6 @@ string ToSnakeCase(absl::string_view input) {
 }
 
 }  // namespace
-
-StatusOr<string> ExtractCodeBySystem(
-    const stu3::proto::CodeableConcept& codeable_concept,
-    absl::string_view system_value) {
-  for (int i = 0; i < codeable_concept.coding_size(); i++) {
-    auto coding = codeable_concept.coding(i);
-    if (coding.has_system() && coding.has_code() &&
-        coding.system().value() == system_value) {
-      return coding.code().value();
-    }
-  }
-
-  return ::tensorflow::errors::NotFound(
-      "Cannot find a value for the corresponding system code.");
-}
-
-StatusOr<string> ExtractIcdCode(
-    const stu3::proto::CodeableConcept& codeable_concept,
-    const std::vector<string>& schemes) {
-  bool found_response = false;
-  StatusOr<string> result;
-  for (size_t i = 0; i < schemes.size(); i++) {
-    StatusOr<string> s = ExtractCodeBySystem(codeable_concept, schemes[i]);
-
-    if (s.status().code() == ::tensorflow::errors::Code::ALREADY_EXISTS) {
-      // Multiple codes, so we can return an error already.
-      return s;
-    } else if (s.ok()) {
-      if (found_response) {
-        // We found _another_ code. That shouldn't have happened.
-        return ::tensorflow::errors::AlreadyExists("Found more than one code");
-      } else {
-        result = s;
-        found_response = true;
-      }
-    }
-  }
-  if (found_response) {
-    return result;
-  } else {
-    return ::tensorflow::errors::NotFound(
-        "No ICD code with the provided schemes in concept.");
-  }
-}
-
-bool IsPrimitive(const google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().GetExtension(
-             stu3::proto::structure_definition_kind) ==
-         stu3::proto::StructureDefinitionKindValue::KIND_PRIMITIVE_TYPE;
-}
-
-bool IsResource(const google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().GetExtension(
-             stu3::proto::structure_definition_kind) ==
-         stu3::proto::StructureDefinitionKindValue::KIND_RESOURCE;
-}
-
-bool IsReference(const google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().ExtensionSize(stu3::proto::fhir_reference_type) >
-         0;
-}
-
-bool HasValueset(const google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().HasExtension(stu3::proto::fhir_valueset_url);
-}
-
-bool IsChoiceType(const google::protobuf::FieldDescriptor* field) {
-  return field->type() == google::protobuf::FieldDescriptor::Type::TYPE_MESSAGE &&
-         field->message_type()->options().GetExtension(
-             stu3::proto::is_choice_type);
-}
-
-const string GetFhirProfileBase(const google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().GetExtension(stu3::proto::fhir_profile_base);
-}
-
-const string GetStructureDefinitionUrl(const google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().GetExtension(
-      stu3::proto::fhir_structure_definition_url);
-}
 
 StatusOr<string> ReferenceProtoToString(const Reference& reference) {
   if (reference.has_uri()) {

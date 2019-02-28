@@ -28,10 +28,11 @@
 #include "absl/time/time.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/stu3/annotations.h"
+#include "google/fhir/stu3/codeable_concepts.h"
 #include "google/fhir/stu3/proto_util.h"
 #include "google/fhir/systems/systems.h"
 #include "proto/stu3/annotations.pb.h"
-
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
@@ -41,17 +42,56 @@ namespace fhir {
 namespace stu3 {
 
 using std::string;
-using ::google::fhir::stu3::proto::CodeableConcept;
+using ::google::fhir::stu3::proto::CodingWithFixedCode;
+using ::google::fhir::stu3::proto::CodingWithFixedSystem;
 using ::google::fhir::stu3::proto::Extension;
 using ::google::fhir::stu3::proto::Reference;
 
-// Extract code value for a given system code. Return as soon as we find one.
-StatusOr<string> ExtractCodeBySystem(const CodeableConcept& codeable_concept,
-                                     absl::string_view system_value);
+// Extract first code value with a given system.
+// Returns NOT_FOUND if none exists.
+// TODO: use GetOnlyCodeWithSystem, making this return
+// ALREADY_EXISTS if more than one code exists in that system.
+template <typename CodeableConceptLike>
+StatusOr<string> ExtractCodeBySystem(
+    const CodeableConceptLike& codeable_concept,
+    absl::string_view system_value) {
+  const std::vector<string>& codes =
+      GetCodesWithSystem(codeable_concept, system_value);
+  if (codes.size() == 0) {
+    return tensorflow::errors::NotFound("No code from system: ", system_value);
+  }
+  return codes.front();
+}
 
 // Extract the icd code for the given schemes.
-StatusOr<string> ExtractIcdCode(const CodeableConcept& codeable_concept,
-                                const std::vector<string>& schemes);
+template <typename CodeableConceptLike>
+StatusOr<string> ExtractIcdCode(const CodeableConceptLike& codeable_concept,
+                                const std::vector<string>& schemes) {
+  bool found_response = false;
+  StatusOr<string> result;
+  for (size_t i = 0; i < schemes.size(); i++) {
+    StatusOr<string> s = ExtractCodeBySystem(codeable_concept, schemes[i]);
+
+    if (s.status().code() == ::tensorflow::errors::Code::ALREADY_EXISTS) {
+      // Multiple codes, so we can return an error already.
+      return s;
+    } else if (s.ok()) {
+      if (found_response) {
+        // We found _another_ code. That shouldn't have happened.
+        return ::tensorflow::errors::AlreadyExists("Found more than one code");
+      } else {
+        result = s;
+        found_response = true;
+      }
+    }
+  }
+  if (found_response) {
+    return result;
+  } else {
+    return ::tensorflow::errors::NotFound(
+        "No ICD code with the provided schemes in concept.");
+  }
+}
 
 template <typename R>
 stu3::proto::Meta* MutableMetadataFromResource(R* resource) {
@@ -158,20 +198,6 @@ Status GetPatient(const BundleLike& bundle, const PatientLike** patient) {
     return ::tensorflow::errors::NotFound("No patient in bundle.");
   }
 }
-
-bool IsChoiceType(const ::google::protobuf::FieldDescriptor* field);
-
-const string GetFhirProfileBase(const ::google::protobuf::Descriptor* descriptor);
-
-const string GetStructureDefinitionUrl(const ::google::protobuf::Descriptor* descriptor);
-
-bool IsPrimitive(const ::google::protobuf::Descriptor* descriptor);
-
-bool IsResource(const ::google::protobuf::Descriptor* descriptor);
-
-bool IsReference(const ::google::protobuf::Descriptor* descriptor);
-
-bool HasValueset(const ::google::protobuf::Descriptor* descriptor);
 
 // Returns a reference, e.g. "Encounter/1234" for a FHIR resource.
 string GetReferenceToResource(const ::google::protobuf::Message& message);
