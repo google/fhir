@@ -23,18 +23,27 @@ namespace fhir {
 namespace stu3 {
 
 using std::string;
-
 const string& GetFhirProfileBase(const ::google::protobuf::Descriptor* descriptor);
 
 const string& GetStructureDefinitionUrl(const ::google::protobuf::Descriptor* descriptor);
 
-// Check that returns a FailedPrecondition status if the passed-in message is
-// a profile of the template type.
+// Returns true if the passed-in message is a profile of the template FHIR type
 template <typename B>
 const bool IsProfileOf(const ::google::protobuf::Message& message) {
   const string& actual_base = GetFhirProfileBase(message.GetDescriptor());
   return !actual_base.empty() &&
          actual_base == GetStructureDefinitionUrl(B::descriptor());
+}
+
+// Returns true if the passed-in message is either of the template FHIR type,
+// or a profile of that type.
+template <typename B>
+const bool IsTypeOrProfileOf(const ::google::protobuf::Message& message) {
+  const string& actual_type =
+      GetStructureDefinitionUrl(message.GetDescriptor());
+  return (!actual_type.empty() &&
+          actual_type == GetStructureDefinitionUrl(B::descriptor())) ||
+         IsProfileOf<B>(message);
 }
 
 const bool IsChoiceType(const ::google::protobuf::FieldDescriptor* field);

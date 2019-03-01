@@ -193,6 +193,18 @@ const bool FindSystemCodeStringPair(const CodeableConceptLike& concept,
       });
 }
 
+// Variant of FindSystemCodeStringPair that does not explicitly set return
+// pointers.
+// This can be used when the actual result is unused, or when the coding is used
+// to set a return pointers in the function closure itself.
+template <typename CodeableConceptLike>
+const bool FindSystemCodeStringPair(const CodeableConceptLike& concept,
+                                    const CodeBoolFunc& func) {
+  const string* found_system;
+  const string* found_code;
+  return FindSystemCodeStringPair(concept, func, &found_system, &found_code);
+}
+
 // Performs a function on all System/Code pairs, where all codes are treated
 // like strings.  Visits all codings.
 template <typename CodeableConceptLike>

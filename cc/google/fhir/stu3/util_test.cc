@@ -30,6 +30,7 @@ namespace stu3 {
 
 namespace {
 
+using ::google::fhir::stu3::proto::Bundle;
 using ::google::fhir::stu3::proto::CodeableConcept;
 using ::google::fhir::stu3::proto::ContainedResource;
 using ::google::fhir::stu3::proto::Date;
@@ -162,6 +163,17 @@ TEST(ExtractIcdCodeTest, ExtractIcd9_MultiCode) {
   auto result = ExtractIcdCode(concept, *kIcd9Schemes);
   ASSERT_FALSE(result.ok());
   EXPECT_EQ(::tensorflow::errors::Code::ALREADY_EXISTS, result.status().code());
+}
+
+TEST(GetPatient, StatusOr) {
+  Bundle bundle;
+  bundle.add_entry()
+      ->mutable_resource()
+      ->mutable_patient()
+      ->mutable_id()
+      ->set_value("5");
+
+  EXPECT_EQ(GetPatient(bundle).ValueOrDie()->id().value(), "5");
 }
 
 }  // namespace

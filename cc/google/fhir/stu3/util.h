@@ -37,6 +37,15 @@
 #include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
 
+// Macro for specifying a type contained within a bundle-like object, given
+// the Bundle-like type, and a field on the contained resource from that bundle.
+// E.g., in a template with a BundleLike type,
+// BUNDLE_TYPE(BundleLike, observation)
+// will return the Observation type from that bundle.
+#define BUNDLE_TYPE(b, r)                  \
+  typename std::remove_reference<decltype( \
+      std::declval<b>().entry(0).resource().r())>::type
+
 namespace google {
 namespace fhir {
 namespace stu3 {
@@ -197,6 +206,14 @@ Status GetPatient(const BundleLike& bundle, const PatientLike** patient) {
   } else {
     return ::tensorflow::errors::NotFound("No patient in bundle.");
   }
+}
+
+template <typename BundleLike,
+          typename PatientLike = BUNDLE_TYPE(BundleLike, patient)>
+StatusOr<const PatientLike*> GetPatient(const BundleLike& bundle) {
+  const PatientLike* patient;
+  FHIR_RETURN_IF_ERROR(GetPatient(bundle, &patient));
+  return patient;
 }
 
 // Returns a reference, e.g. "Encounter/1234" for a FHIR resource.
