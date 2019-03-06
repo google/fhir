@@ -1,0 +1,29 @@
+code {
+  sys_a {
+    code {
+      value: "acode"
+    }
+    display {
+      value: "A Display"
+    }
+  }
+  coding {
+    system { value: "unprofiled.com" }
+    code { value: "anything" }
+  }
+  coding {
+    system { value: "http://newonprofiled.org" }
+    code { value: "newone" }
+  }
+}
+
+my_complex_extension {
+  simple_subfield {
+    value: "foobar"
+  }
+}
+
+extension {
+  url { value: "http://test/url/base/SimpleDecimalExt" }
+  value { decimal { value: "3.1415" } }
+}

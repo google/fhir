@@ -104,6 +104,12 @@ TEST(ProfilesTest, ComplexExtension) {
       "testdata/stu3/profiles/observation_complexextension");
 }
 
+TEST(ProfilesTest, ProfileOfProfile) {
+  TestPair<::google::fhir::stu3::testing::TestObservation,
+           ::google::fhir::stu3::testing::TestObservationLvl2>(
+      "testdata/stu3/profiles/testobservation_lvl2");
+}
+
 }  // namespace
 
 }  // namespace stu3

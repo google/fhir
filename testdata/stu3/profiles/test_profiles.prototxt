@@ -116,3 +116,30 @@ profile {
     field_id: "Observation.component.interpretation"
   }
 }
+
+profile {
+  element_data {
+    name: "TestObservationLvl2"
+  }
+  base_url: "http://test/url/base/TestObservation"
+
+  extension_slice {
+    element_data {
+      name: "newExt"
+    }
+    url: "http://test/url/base/SimpleDecimalExt"
+  }
+
+  codeable_concept_slice {
+    coding_slice {
+      element_data {
+        name: "newCodeOnProfiled"
+        size_restriction: OPTIONAL
+      }
+      code_data {
+        system: "http://newonprofiled.org"
+      }
+    }
+    field_id: "Observation.code"
+  }
+}

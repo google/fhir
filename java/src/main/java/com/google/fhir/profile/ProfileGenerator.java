@@ -116,10 +116,11 @@ final class ProfileGenerator {
   Bundle generateProfiles() {
     Bundle.Builder bundle = Bundle.newBuilder();
     for (Profile profile : profiles.getProfileList()) {
+      StructureDefinition structDef = makeProfile(profile);
       bundle.addEntry(
           Bundle.Entry.newBuilder()
-              .setResource(
-                  ContainedResource.newBuilder().setStructureDefinition(makeProfile(profile))));
+              .setResource(ContainedResource.newBuilder().setStructureDefinition(structDef)));
+      urlToStructDefMap.put(structDef.getUrl().getValue(), structDef);
     }
     return bundle.build();
   }

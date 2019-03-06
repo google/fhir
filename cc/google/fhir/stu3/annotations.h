@@ -27,12 +27,19 @@ const string& GetFhirProfileBase(const ::google::protobuf::Descriptor* descripto
 
 const string& GetStructureDefinitionUrl(const ::google::protobuf::Descriptor* descriptor);
 
+// Returns true if the passed-in descriptor is a profile of the template FHIR
+// type
+template <typename B>
+const bool IsProfileOf(const ::google::protobuf::Descriptor* descriptor) {
+  const string& actual_base = GetFhirProfileBase(descriptor);
+  return !actual_base.empty() &&
+         actual_base == GetStructureDefinitionUrl(B::descriptor());
+}
+
 // Returns true if the passed-in message is a profile of the template FHIR type
 template <typename B>
 const bool IsProfileOf(const ::google::protobuf::Message& message) {
-  const string& actual_base = GetFhirProfileBase(message.GetDescriptor());
-  return !actual_base.empty() &&
-         actual_base == GetStructureDefinitionUrl(B::descriptor());
+  return IsProfileOf<B>(message.GetDescriptor());
 }
 
 // Returns true if the passed-in message is either of the template FHIR type,

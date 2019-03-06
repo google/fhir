@@ -313,6 +313,11 @@ Status PerformExtensionUnslicing(const google::protobuf::Message& profiled_messa
       // We only care about present fields with inlined extension urls.
       continue;
     }
+    // Check if the extension slice exists on the base message.
+    if (base_descriptor->FindFieldByNumber(field->number()) != nullptr) {
+      // The field exists on both.  No special handling is needed.
+      continue;
+    }
     // We've found a profiled extension field.
     // Convert it into a vanilla extension on the base message.
     Extension* raw_extension =
@@ -336,13 +341,23 @@ Status PerformExtensionUnslicing(const google::protobuf::Message& profiled_messa
   return Status::OK();
 }
 
+Coding* AddRawCoding(Message* concept) {
+  return dynamic_cast<Coding*>(concept->GetReflection()->AddMessage(
+      concept, concept->GetDescriptor()->FindFieldByName("coding")));
+}
+
 Status UnsliceCodingsWithinCodeableConcept(
-    const google::protobuf::Message& profiled_concept, CodeableConcept* target_concept) {
+    const google::protobuf::Message& profiled_concept, Message* target_concept) {
   const Descriptor* profiled_descriptor = profiled_concept.GetDescriptor();
   for (int i = 0; i < profiled_descriptor->field_count(); i++) {
     const FieldDescriptor* profiled_field = profiled_descriptor->field(i);
+    // Check if this is a newly profiled coding we need to handle.
+    // This is the case if the field is a Profile of Coding AND
+    // there is no corresonding profiled field in the base proto.
     if (GetFhirProfileBase(profiled_field->message_type()) ==
-        GetStructureDefinitionUrl(Coding::descriptor())) {
+            GetStructureDefinitionUrl(Coding::descriptor()) &&
+        target_concept->GetDescriptor()->FindFieldByNumber(
+            profiled_field->number()) == nullptr) {
       // This is a specialization of Coding.
       // Convert it to a normal coding and add it to the base message.
       const int field_size =
@@ -350,8 +365,7 @@ Status UnsliceCodingsWithinCodeableConcept(
       for (int i = 0; i < field_size; i++) {
         const Message& profiled_coding =
             GetPotentiallyRepeatedMessage(profiled_concept, profiled_field, i);
-        Coding* new_coding = target_concept->add_coding();
-
+        Coding* new_coding = AddRawCoding(target_concept);
         // Copy over as many fields as we can.
         new_coding->ParseFromString(profiled_coding.SerializeAsString());
         new_coding->DiscardUnknownFields();
@@ -371,7 +385,7 @@ Status UnsliceCodingsWithinCodeableConcept(
           IsMessageType<CodingWithFixedCode>(profiled_field->message_type())) {
         // This is a Fixed-Code field with no additional information provided.
         // Just add the Code and System.
-        Coding* new_coding = target_concept->add_coding();
+        Coding* new_coding = AddRawCoding(target_concept);
         new_coding->mutable_system()->set_value(
             GetInlinedCodingSystem(profiled_field));
         new_coding->mutable_code()->set_value(
@@ -397,15 +411,13 @@ Status PerformCodeableConceptUnslicing(const google::protobuf::Message& profiled
     if (!FieldHasValue(profiled_message, profiled_field)) {
       continue;
     }
-    if (IsMessageType<CodeableConcept>(base_field->message_type()) &&
-        !IsMessageType<CodeableConcept>(profiled_field->message_type())) {
+    if (IsProfileOf<CodeableConcept>(profiled_field->message_type())) {
       for (int j = 0;
            j < PotentiallyRepeatedFieldSize(profiled_message, profiled_field);
            j++) {
         FHIR_RETURN_IF_ERROR(UnsliceCodingsWithinCodeableConcept(
             GetPotentiallyRepeatedMessage(profiled_message, profiled_field, j),
-            dynamic_cast<CodeableConcept*>(MutablePotentiallyRepeatedMessage(
-                base_message, base_field, j))));
+            MutablePotentiallyRepeatedMessage(base_message, base_field, j)));
       }
     }
   }

@@ -1,0 +1,29 @@
+code {
+  sys_a {
+    code {
+      value: "acode"
+    }
+    display {
+      value: "A Display"
+    }
+  }
+  new_code_on_profiled {
+    code {
+      value: "newone"
+    }
+  }
+  coding {
+    system { value: "unprofiled.com" }
+    code { value: "anything" }
+  }
+}
+
+my_complex_extension {
+  simple_subfield {
+    value: "foobar"
+  }
+}
+
+new_ext {
+ value: "3.1415"
+}

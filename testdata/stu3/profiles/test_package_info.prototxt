@@ -5,3 +5,4 @@ go_proto_package: "google/fhir/stu3/testing"
 publisher: "Testington Inc."
 fhir_version: STU3
 telcom_url: "http://www.testington.com"
+license: APACHE

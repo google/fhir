@@ -587,3 +587,366 @@ message TestObservation {
       [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
            "http://test/url/base/ComplexExt"];
 }
+
+// Auto-generated from StructureDefinition for TestObservationLvl2.
+// Measurements and simple assertions.
+// See http://test/url/base/TestObservationLvl2
+message TestObservationLvl2 {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://test/url/base/TestObservation";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://test/url/base/TestObservationLvl2";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Text summary of the resource, for human interpretation
+  proto.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated proto.ContainedResource contained = 6;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 7;
+
+  // Extensions that cannot be ignored
+  repeated proto.Extension modifier_extension = 8;
+
+  // Business Identifier for observation
+  repeated proto.Identifier identifier = 9;
+
+  // Fulfills plan, proposal or order
+  repeated proto.Reference based_on = 10 [
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/CarePlan",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+  ];
+
+  // registered | preliminary | final | amended +
+  proto.ObservationStatusCode status = 11
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  message CodeableConceptForCategory {
+    option (.google.fhir.stu3.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
+
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Code defined by a terminology system
+    repeated proto.Coding coding = 3;
+
+    // Plain text representation of the concept
+    proto.String text = 4;
+
+    repeated google.fhir.stu3.proto.CodingWithFixedSystem cat_a = 5
+        [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
+             "http://catA.org"];
+  }
+  repeated CodeableConceptForCategory category = 12;
+
+  // Type of observation (code / type)
+  message CodeableConceptForCode {
+    option (.google.fhir.stu3.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
+
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Code defined by a terminology system
+    repeated proto.Coding coding = 3;
+
+    // Plain text representation of the concept
+    proto.String text = 4;
+
+    google.fhir.stu3.proto.CodingWithFixedSystem sys_a = 5
+        [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
+             "http://sysa.org"];
+
+    repeated google.fhir.stu3.proto.CodingWithFixedSystem sys_b = 6
+        [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
+             "http://sysb.org"];
+
+    google.fhir.stu3.proto.CodingWithFixedCode sys_c = 7 [
+      (.google.fhir.stu3.proto.fhir_inlined_coding_system) = "http://sysc.org",
+      (.google.fhir.stu3.proto.fhir_inlined_coding_code) = "8472"
+    ];
+
+    google.fhir.stu3.proto.CodingWithFixedCode sys_d = 8 [
+      (.google.fhir.stu3.proto.fhir_inlined_coding_system) = "http://sysd.org",
+      (.google.fhir.stu3.proto.fhir_inlined_coding_code) = "8675329"
+    ];
+
+    google.fhir.stu3.proto.CodingWithFixedSystem new_code_on_profiled = 9
+        [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
+             "http://newonprofiled.org"];
+  }
+  CodeableConceptForCode code = 13
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  proto.Reference subject = 14 [
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Patient",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Group",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Device",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Location"
+  ];
+
+  // Healthcare event during which this observation is made
+  proto.Reference context = 15 [
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Encounter",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+  ];
+
+  // Clinically relevant time/time-period for observation
+  message Effective {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
+    oneof effective {
+      proto.DateTime date_time = 1;
+      proto.Period period = 2;
+    }
+  }
+  Effective effective = 16;
+
+  // Date/Time this was made available
+  proto.Instant issued = 17;
+
+  // Who is responsible for the observation
+  repeated proto.Reference performer = 18 [
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Practitioner",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Organization",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Patient",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  ];
+
+  // Actual result
+  message Value {
+    option (.google.fhir.stu3.proto.is_choice_type) = true;
+
+    oneof value {
+      proto.Quantity quantity = 1;
+      proto.CodeableConcept codeable_concept = 2;
+      proto.String string_value = 3 [json_name = "string"];
+      proto.Boolean boolean = 4;
+      proto.Range range = 5;
+      proto.Ratio ratio = 6;
+      proto.SampledData sampled_data = 7;
+      proto.Attachment attachment = 8;
+      proto.Time time = 9;
+      proto.DateTime date_time = 10;
+      proto.Period period = 11;
+    }
+  }
+  Value value = 19;
+
+  // Why the result is missing
+  proto.CodeableConcept data_absent_reason = 20;
+
+  // High, low, normal, etc.
+  proto.CodeableConcept interpretation = 21;
+
+  // Comments about result
+  proto.String comment = 22;
+
+  // Observed body part
+  proto.CodeableConcept body_site = 23;
+
+  // How it was done
+  proto.CodeableConcept method = 24;
+
+  // Specimen used for this observation
+  proto.Reference specimen = 25
+      [(.google.fhir.stu3.proto.valid_reference_type) =
+           "http://hl7.org/fhir/StructureDefinition/Specimen"];
+
+  // (Measurement) Device
+  proto.Reference device = 26 [
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/Device",
+    (.google.fhir.stu3.proto.valid_reference_type) =
+        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+  ];
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    proto.SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    proto.SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    proto.CodeableConcept type = 6;
+
+    // Reference range population
+    repeated proto.CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    proto.Range age = 8;
+
+    // Text based reference range in an observation
+    proto.String text = 9;
+  }
+  repeated ReferenceRange reference_range = 27;
+
+  // Resource related to this observation
+  message Related {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // has-member | derived-from | sequel-to | replaces | qualified-by |
+    // interfered-by
+    proto.ObservationRelationshipTypeCode type = 4;
+
+    // Resource that is related to this one
+    proto.Reference target = 5 [
+      (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.stu3.proto.valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Observation",
+      (.google.fhir.stu3.proto.valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse",
+      (.google.fhir.stu3.proto.valid_reference_type) =
+          "http://hl7.org/fhir/StructureDefinition/Sequence"
+    ];
+  }
+  repeated Related related = 28;
+
+  // Component results
+  message Component {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    proto.CodeableConcept code = 4
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Actual component result
+    message Value {
+      option (.google.fhir.stu3.proto.is_choice_type) = true;
+
+      oneof value {
+        proto.Quantity quantity = 1;
+        proto.CodeableConcept codeable_concept = 2;
+        proto.String string_value = 3 [json_name = "string"];
+        proto.Range range = 4;
+        proto.Ratio ratio = 5;
+        proto.SampledData sampled_data = 6;
+        proto.Attachment attachment = 7;
+        proto.Time time = 8;
+        proto.DateTime date_time = 9;
+        proto.Period period = 10;
+      }
+    }
+    Value value = 5;
+
+    // Why the component result is missing
+    proto.CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    message CodeableConceptForInterpretation {
+      option (.google.fhir.stu3.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
+
+      // xml:id (or equivalent in JSON)
+      proto.String id = 1;
+
+      // Additional Content defined by implementations
+      repeated proto.Extension extension = 2;
+
+      // Code defined by a terminology system
+      repeated proto.Coding coding = 3;
+
+      // Plain text representation of the concept
+      proto.String text = 4;
+
+      google.fhir.stu3.proto.CodingWithFixedSystem on_nested_concept = 5
+          [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
+               "http://nestedconcept.org"];
+    }
+    CodeableConceptForInterpretation interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+
+    //
+    proto.Decimal on_nested = 9
+        [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+             "http://test/url/base/SimpleDecimalExt"];
+  }
+  repeated Component component = 29;
+
+  //
+  ComplexExt my_complex_extension = 30
+      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+           "http://test/url/base/ComplexExt"];
+
+  //
+  ComplexExt simple_extension = 31
+      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+           "http://test/url/base/ComplexExt"];
+
+  //
+  proto.Decimal new_ext = 32
+      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+           "http://test/url/base/SimpleDecimalExt"];
+}
