@@ -20,8 +20,10 @@ import static org.junit.Assert.assertTrue;
 import com.google.fhir.stu3.proto.Base64Binary;
 import com.google.fhir.stu3.proto.Boolean;
 import com.google.fhir.stu3.proto.Code;
+import com.google.fhir.stu3.proto.Observation;
 import com.google.fhir.stu3.proto.Patient;
 import com.google.fhir.stu3.proto.Reference;
+import com.google.fhir.stu3.uscore.UsCorePatient;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,5 +72,12 @@ public final class AnnotationUtilsTest {
     assertFalse(AnnotationUtils.isReference(Code.getDescriptor().toProto()));
     assertTrue(AnnotationUtils.isReference(Reference.getDefaultInstance()));
     assertTrue(AnnotationUtils.isReference(Reference.getDescriptor().toProto()));
+  }
+
+  @Test
+  public void isProfileOf() {
+    assertTrue(AnnotationUtils.isProfileOf(Patient.getDescriptor(), UsCorePatient.getDescriptor()));
+    assertFalse(
+        AnnotationUtils.isProfileOf(Observation.getDescriptor(), UsCorePatient.getDescriptor()));
   }
 }

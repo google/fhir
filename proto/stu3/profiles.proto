@@ -33,6 +33,8 @@ message Bmi {
   option (structure_definition_kind) = KIND_RESOURCE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/bmi";
 
@@ -288,6 +290,8 @@ message Bodyheight {
   option (structure_definition_kind) = KIND_RESOURCE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/bodyheight";
 
@@ -543,6 +547,8 @@ message Bodylength {
   option (structure_definition_kind) = KIND_RESOURCE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/bodylength";
 
@@ -798,6 +804,8 @@ message Bodytemp {
   option (structure_definition_kind) = KIND_RESOURCE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/bodytemp";
 
@@ -1053,6 +1061,8 @@ message Bodyweight {
   option (structure_definition_kind) = KIND_RESOURCE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/bodyweight";
 
@@ -1308,6 +1318,8 @@ message Bp {
   option (structure_definition_kind) = KIND_RESOURCE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/bp";
 
@@ -3203,6 +3215,8 @@ message Headcircum {
   option (structure_definition_kind) = KIND_RESOURCE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/headcircum";
 
@@ -3458,6 +3472,8 @@ message Heartrate {
   option (structure_definition_kind) = KIND_RESOURCE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/heartrate";
 
@@ -4720,6 +4736,8 @@ message Oxygensat {
   option (structure_definition_kind) = KIND_RESOURCE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/oxygensat";
 
@@ -5178,6 +5196,8 @@ message Resprate {
   option (structure_definition_kind) = KIND_RESOURCE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/resprate";
 
@@ -6397,6 +6417,8 @@ message Vitalspanel {
   option (structure_definition_kind) = KIND_RESOURCE;
   option (fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+  option (fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
   option (fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/vitalspanel";
 

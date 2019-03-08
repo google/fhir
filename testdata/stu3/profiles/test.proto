@@ -595,6 +595,8 @@ message TestObservationLvl2 {
   option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.stu3.proto.fhir_profile_base) =
       "http://test/url/base/TestObservation";
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
   option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
       "http://test/url/base/TestObservationLvl2";
 
@@ -941,12 +943,7 @@ message TestObservationLvl2 {
            "http://test/url/base/ComplexExt"];
 
   //
-  ComplexExt simple_extension = 31
-      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
-           "http://test/url/base/ComplexExt"];
-
-  //
-  proto.Decimal new_ext = 32
+  proto.Decimal new_ext = 31
       [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
            "http://test/url/base/SimpleDecimalExt"];
 }

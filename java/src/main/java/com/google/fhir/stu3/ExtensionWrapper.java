@@ -14,6 +14,7 @@
 
 package com.google.fhir.stu3;
 
+import com.google.common.collect.ImmutableList;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.Extension;
 import com.google.fhir.stu3.proto.Uri;
@@ -24,7 +25,6 @@ import com.google.protobuf.Descriptors.OneofDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -96,20 +96,11 @@ public final class ExtensionWrapper {
    */
   private void validateFhirExtension(MessageOrBuilder message) {
     MessageOptions options = message.getDescriptorForType().getOptions();
-    // Note that this method checks proto extensions, which are different from FHIR extensions.
-    String baseUrl = options.getExtension(Annotations.fhirProfileBase);
-    // TODO: This would reject profiles on profiles on extensions (and so on).
-    // If we want to support that, we'll probably need a "fhir_is_extension" annotation,
-    // or else load the structure definitions and walk back.
-    if (!baseUrl.equals(
-        Extension.getDescriptor()
-            .getOptions()
-            .getExtension(Annotations.fhirStructureDefinitionUrl))) {
+    if (!AnnotationUtils.isProfileOf(Extension.getDescriptor(), message.getDescriptorForType())) {
       throw new IllegalArgumentException(
           "Message type "
               + message.getDescriptorForType().getFullName()
-              + " is not a FHIR extension.  Base Profile: "
-              + baseUrl);
+              + " is not a FHIR extension.");
     }
     if (!options.hasExtension(Annotations.fhirStructureDefinitionUrl)) {
       throw new IllegalArgumentException(
@@ -164,12 +155,12 @@ public final class ExtensionWrapper {
    * protobuf representation.
    */
   @SuppressWarnings("unchecked")
-  public <T extends Message> List<T> getMatchingExtensions(T template) {
+  public <T extends Message> ImmutableList<T> getMatchingExtensions(T template) {
     validateFhirExtension(template);
     if (content.isEmpty()) {
-      return Collections.<T>emptyList();
+      return ImmutableList.of();
     }
-    List<T> result = new ArrayList<T>();
+    ImmutableList.Builder<T> result = ImmutableList.builder();
     String type =
         template
             .getDescriptorForType()
@@ -182,7 +173,7 @@ public final class ExtensionWrapper {
         result.add((T) builder.build());
       }
     }
-    return result;
+    return result.build();
   }
 
   // Internal implementation details from here on.

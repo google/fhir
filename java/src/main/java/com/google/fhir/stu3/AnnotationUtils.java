@@ -88,4 +88,15 @@ public final class AnnotationUtils {
   public static String getStructureDefinitionUrl(Descriptor descriptor) {
     return descriptor.getOptions().getExtension(Annotations.fhirStructureDefinitionUrl);
   }
+
+  public static boolean isProfileOf(Descriptor base, Descriptor test) {
+    for (int i = 0; i < test.getOptions().getExtensionCount(Annotations.fhirProfileBase); i++) {
+      if (test.getOptions()
+          .getExtension(Annotations.fhirProfileBase, i)
+          .equals(base.getOptions().getExtension(Annotations.fhirStructureDefinitionUrl))) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

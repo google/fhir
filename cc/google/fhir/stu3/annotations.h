@@ -16,24 +16,31 @@
 #define GOOGLE_FHIR_STU3_ANNOTATIONS_H_
 
 
+#include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/message.h"
+#include "proto/stu3/annotations.pb.h"
 
 namespace google {
 namespace fhir {
 namespace stu3 {
 
 using std::string;
-const string& GetFhirProfileBase(const ::google::protobuf::Descriptor* descriptor);
-
 const string& GetStructureDefinitionUrl(const ::google::protobuf::Descriptor* descriptor);
 
 // Returns true if the passed-in descriptor is a profile of the template FHIR
 // type
 template <typename B>
 const bool IsProfileOf(const ::google::protobuf::Descriptor* descriptor) {
-  const string& actual_base = GetFhirProfileBase(descriptor);
-  return !actual_base.empty() &&
-         actual_base == GetStructureDefinitionUrl(B::descriptor());
+  const string& base_url = GetStructureDefinitionUrl(B::descriptor());
+  for (int i = 0;
+       i < descriptor->options().ExtensionSize(stu3::proto::fhir_profile_base);
+       i++) {
+    if (descriptor->options().GetExtension(stu3::proto::fhir_profile_base, i) ==
+        base_url) {
+      return true;
+    }
+  }
+  return false;
 }
 
 // Returns true if the passed-in message is a profile of the template FHIR type
@@ -52,6 +59,8 @@ const bool IsTypeOrProfileOf(const ::google::protobuf::Message& message) {
           actual_type == GetStructureDefinitionUrl(B::descriptor())) ||
          IsProfileOf<B>(message);
 }
+
+const bool IsProfile(const ::google::protobuf::Descriptor* descriptor);
 
 const bool IsChoiceType(const ::google::protobuf::FieldDescriptor* field);
 

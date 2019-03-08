@@ -205,6 +205,7 @@ java_test(
         "//proto/stu3:annotations_java_proto",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:resources_java_proto",
+        "//proto/stu3:uscore_java_proto",
         "@com_google_protobuf//:protobuf_java",
         "@com_google_truth_truth//jar",
         "@junit_junit//jar",

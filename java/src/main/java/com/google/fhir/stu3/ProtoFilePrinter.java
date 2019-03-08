@@ -196,13 +196,13 @@ public class ProtoFilePrinter {
           .append("\";\n");
       printedField = true;
     }
-    if (options.hasExtension(Annotations.fhirProfileBase)) {
+    for (int i = 0; i < options.getExtensionCount(Annotations.fhirProfileBase); i++) {
       message
           .append(fieldIndent)
           .append("option (")
           .append(optionPackage)
           .append("fhir_profile_base) = \"")
-          .append(options.getExtension(Annotations.fhirProfileBase))
+          .append(options.getExtension(Annotations.fhirProfileBase, i))
           .append("\";\n");
       printedField = true;
     }

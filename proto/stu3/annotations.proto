@@ -18,10 +18,11 @@
 syntax = "proto3";
 
 package google.fhir.stu3.proto;
-option java_outer_classname = "Annotations";
-option java_package = "com.google.fhir.stu3.proto";
 
 import "google/protobuf/descriptor.proto";
+
+option java_outer_classname = "Annotations";
+option java_package = "com.google.fhir.stu3.proto";
 
 // TODO: Unify with StructureDefinitionKindCode
 enum StructureDefinitionKindValue {
@@ -39,7 +40,6 @@ enum Requirement {
 }
 
 extend google.protobuf.MessageOptions {
-
   // If this message is a Code constrained to a specific valueset, this is the
   // valueset identifier.
   string fhir_valueset_url = 180887441;
@@ -60,8 +60,11 @@ extend google.protobuf.MessageOptions {
   // Url for the structure definition this message was built from.
   string fhir_structure_definition_url = 207562726;
 
-  // This element is a profile version of the base resource named here.
-  string fhir_profile_base = 206336851;
+  // A list of structure definitions of elements that this element is a
+  // profile of.
+  // In the case of a profile of a profile, this will have the Structure
+  // definition of all elements in this profile's inheritence chain.
+  repeated string fhir_profile_base = 206336851;
 
   // This message refers to an abstract type in FHIR
   bool is_abstract_type = 228208334;
@@ -69,7 +72,7 @@ extend google.protobuf.MessageOptions {
   // Is this message a wrapper around a choice type?
   bool is_choice_type = 228595764;
 
-  // DEPRECATED: use fhir_base_profile to identify extension, and
+  // DEPRECATED: use fhir_profile_base to identify extension, and
   // fhir_structure_definition_url to get the extension url.
   string fhir_extension_url = 177048773 [deprecated = true];
 }

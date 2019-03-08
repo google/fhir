@@ -24,39 +24,41 @@ namespace google {
 namespace fhir {
 namespace stu3 {
 
-const string& GetFhirProfileBase(const google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().GetExtension(stu3::proto::fhir_profile_base);
-}
-
-const string& GetStructureDefinitionUrl(const google::protobuf::Descriptor* descriptor) {
+const string& GetStructureDefinitionUrl(
+    const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().GetExtension(
       stu3::proto::fhir_structure_definition_url);
 }
 
-const bool IsChoiceType(const google::protobuf::FieldDescriptor* field) {
+const bool IsProfile(const ::google::protobuf::Descriptor* descriptor) {
+  return descriptor->options().ExtensionSize(stu3::proto::fhir_profile_base) >
+         0;
+}
+
+const bool IsChoiceType(const ::google::protobuf::FieldDescriptor* field) {
   return field->type() == google::protobuf::FieldDescriptor::Type::TYPE_MESSAGE &&
          field->message_type()->options().GetExtension(
              stu3::proto::is_choice_type);
 }
 
-const bool IsPrimitive(const google::protobuf::Descriptor* descriptor) {
+const bool IsPrimitive(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().GetExtension(
              stu3::proto::structure_definition_kind) ==
          stu3::proto::StructureDefinitionKindValue::KIND_PRIMITIVE_TYPE;
 }
 
-const bool IsResource(const google::protobuf::Descriptor* descriptor) {
+const bool IsResource(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().GetExtension(
              stu3::proto::structure_definition_kind) ==
          stu3::proto::StructureDefinitionKindValue::KIND_RESOURCE;
 }
 
-const bool IsReference(const google::protobuf::Descriptor* descriptor) {
+const bool IsReference(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().ExtensionSize(stu3::proto::fhir_reference_type) >
          0;
 }
 
-const bool HasValueset(const google::protobuf::Descriptor* descriptor) {
+const bool HasValueset(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().HasExtension(stu3::proto::fhir_valueset_url);
 }
 

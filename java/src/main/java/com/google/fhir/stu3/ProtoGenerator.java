@@ -117,7 +117,7 @@ public class ProtoGenerator {
 
   // Mapping from urls for StructureDefinition to data about that StructureDefinition.
   private final ImmutableMap<String, StructureDefinitionData> structDefDataByUrl;
-  // Mapping from urls for StructureDefinition to data about that StructureDefinition.
+  // Mapping from id to StructureDefinition data about all known base (i.e., not profile) types.
   private final ImmutableMap<String, StructureDefinition> baseStructDefsById;
   // Mapping from ValueSet url to Descriptor for the message type it should be inlined as.
   private final ImmutableMap<String, Descriptor> valueSetTypesByUrl;
@@ -365,10 +365,15 @@ public class ProtoGenerator {
       // This is a profile on a pre-existing type.
       // Make sure any nested subtypes use the profile name, not the base name
       replaceType(builder, def.getType().getValue(), name);
-      builder
-          .setName(name)
-          .getOptionsBuilder()
-          .setExtension(Annotations.fhirProfileBase, def.getBaseDefinition().getValue());
+      StructureDefinition defInChain = def;
+      while (isProfile(defInChain)) {
+        String baseUrl = defInChain.getBaseDefinition().getValue();
+        builder
+            .setName(name)
+            .getOptionsBuilder()
+            .addExtension(Annotations.fhirProfileBase, baseUrl);
+        defInChain = structDefDataByUrl.get(baseUrl).structDef;
+      }
     }
     return builder.build();
   }
@@ -672,7 +677,7 @@ public class ProtoGenerator {
         .getOptionsBuilder()
         .clearExtension(Annotations.structureDefinitionKind)
         .clearExtension(Annotations.fhirStructureDefinitionUrl)
-        .setExtension(Annotations.fhirProfileBase, codeableConceptStructDefUrl);
+        .addExtension(Annotations.fhirProfileBase, codeableConceptStructDefUrl);
 
     for (ElementDefinition codingSlice : codingSlices) {
       String fixedSystem = null;

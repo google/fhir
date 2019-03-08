@@ -240,9 +240,7 @@ Status SetDatatypeOnExtension(const Message& message, Extension* extension) {
 }
 
 Status ValidateExtension(const Descriptor* descriptor) {
-  if (descriptor->options().GetExtension(stu3::proto::fhir_profile_base) !=
-      Extension::descriptor()->options().GetExtension(
-          stu3::proto::fhir_structure_definition_url)) {
+  if (!IsProfileOf<Extension>(descriptor)) {
     return InvalidArgument(descriptor->full_name(),
                            " is not a FHIR extension type");
   }

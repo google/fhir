@@ -227,9 +227,7 @@ Status PerformCodeableConceptSlicing(Message* message) {
       return InvalidArgument("Encountered unexpected primitive field: ",
                              field->full_name());
     }
-    if (field_type->options().HasExtension(proto::fhir_profile_base) &&
-        field_type->options().GetExtension(proto::fhir_profile_base) ==
-            GetStructureDefinitionUrl(CodeableConcept::descriptor())) {
+    if (IsProfileOf<CodeableConcept>(field_type)) {
       if (field->is_repeated()) {
         for (int i = 0; i < reflection->FieldSize(*message, field); i++) {
           FHIR_RETURN_IF_ERROR(SliceCodingsInCodeableConcept(
@@ -254,11 +252,9 @@ bool CanHaveSlicing(const FieldDescriptor* field) {
   // 1) Types that are themselves profiles
   // 2) "Backbone" i.e. nested types defined on this message
   const Descriptor* field_type = field->message_type();
-  const string& profile_base = GetFhirProfileBase(field_type);
-  if (!profile_base.empty()) {
-    if (profile_base ==
-            GetStructureDefinitionUrl(CodeableConcept::descriptor()) ||
-        profile_base == GetStructureDefinitionUrl(Extension::descriptor())) {
+  if (IsProfile(field_type)) {
+    if (IsProfileOf<CodeableConcept>(field_type) ||
+        IsProfileOf<Extension>(field_type)) {
       // Profiles on Extensions and CodeableConcepts are the slices themselves,
       // rather than elements that *have* slices.
       return false;
@@ -354,8 +350,7 @@ Status UnsliceCodingsWithinCodeableConcept(
     // Check if this is a newly profiled coding we need to handle.
     // This is the case if the field is a Profile of Coding AND
     // there is no corresonding profiled field in the base proto.
-    if (GetFhirProfileBase(profiled_field->message_type()) ==
-            GetStructureDefinitionUrl(Coding::descriptor()) &&
+    if (IsProfileOf<Coding>(profiled_field->message_type()) &&
         target_concept->GetDescriptor()->FindFieldByNumber(
             profiled_field->number()) == nullptr) {
       // This is a specialization of Coding.
