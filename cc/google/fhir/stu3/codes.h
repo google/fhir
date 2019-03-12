@@ -33,7 +33,7 @@ namespace stu3 {
     const google::protobuf::Message& typed_code,
     ::google::fhir::stu3::proto::Code* generic_code);
 
-::google::fhir::StatusOr<::google::fhir::stu3::proto::FHIRAllTypesCode::Value>
+::google::fhir::StatusOr<::google::fhir::stu3::proto::ResourceTypeCode::Value>
 GetCodeForResourceType(const google::protobuf::Message& resource);
 
 }  // namespace stu3

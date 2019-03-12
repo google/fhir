@@ -27,7 +27,7 @@ namespace fhir {
 namespace stu3 {
 
 using ::google::fhir::stu3::proto::Code;
-using ::google::fhir::stu3::proto::FHIRAllTypesCode;
+using ::google::fhir::stu3::proto::ResourceTypeCode;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::EnumDescriptor;
 using ::google::protobuf::EnumValueDescriptor;
@@ -205,15 +205,15 @@ string TitleCaseToUpperUnderscores(const string& src) {
   return Status::OK();
 }
 
-::google::fhir::StatusOr<FHIRAllTypesCode::Value> GetCodeForResourceType(
+::google::fhir::StatusOr<ResourceTypeCode::Value> GetCodeForResourceType(
     const google::protobuf::Message& resource) {
   const string& enum_string =
       TitleCaseToUpperUnderscores(resource.GetDescriptor()->name());
-  FHIRAllTypesCode::Value value;
-  if (FHIRAllTypesCode::Value_Parse(enum_string, &value)) {
+  ResourceTypeCode::Value value;
+  if (ResourceTypeCode::Value_Parse(enum_string, &value)) {
     return value;
   }
-  return InvalidArgument("No FHIRAllTypesCode found for type: ",
+  return InvalidArgument("No ResourceTypeCode found for type: ",
                          resource.GetDescriptor()->name());
 }
 

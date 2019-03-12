@@ -27,12 +27,12 @@ namespace stu3 {
 namespace {
 
 using proto::ContainedResource;
-using proto::FHIRAllTypesCode;
+using proto::ResourceTypeCode;
 
 using ::testing::Test;
 
 void TestCodeForResourceType(const google::protobuf::Message& resource,
-                             const FHIRAllTypesCode::Value value) {
+                             const ResourceTypeCode::Value value) {
   const auto& statusOrValue = GetCodeForResourceType(resource);
   EXPECT_TRUE(statusOrValue.ok())
       << "failed getting code for " << resource.GetTypeName();
@@ -41,17 +41,14 @@ void TestCodeForResourceType(const google::protobuf::Message& resource,
 
 TEST(CodesTest, GetCodeForResourceType) {
   TestCodeForResourceType(
-      proto::Boolean(),
-      FHIRAllTypesCode::Value::FHIRAllTypesCode_Value_BOOLEAN);
-  TestCodeForResourceType(
-      proto::DateTime(),
-      FHIRAllTypesCode::Value::FHIRAllTypesCode_Value_DATE_TIME);
+      proto::Encounter(),
+      ResourceTypeCode::Value::ResourceTypeCode_Value_ENCOUNTER);
   TestCodeForResourceType(
       proto::Patient(),
-      FHIRAllTypesCode::Value::FHIRAllTypesCode_Value_PATIENT);
+      ResourceTypeCode::Value::ResourceTypeCode_Value_PATIENT);
   TestCodeForResourceType(
       proto::FamilyMemberHistory(),
-      FHIRAllTypesCode::Value::FHIRAllTypesCode_Value_FAMILY_MEMBER_HISTORY);
+      ResourceTypeCode::Value::ResourceTypeCode_Value_FAMILY_MEMBER_HISTORY);
 }
 
 TEST(CodesTest, GetCodeForResourceType_AllContainedTypesValid) {
