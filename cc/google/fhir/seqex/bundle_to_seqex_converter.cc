@@ -21,7 +21,6 @@
 #include <utility>
 
 #include "gflags/gflags.h"
-#include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
@@ -40,6 +39,8 @@
 #include "proto/stu3/google_extensions.pb.h"
 #include "proto/stu3/resources.pb.h"
 #include "proto/stu3/version_config.pb.h"
+#include "tensorflow/core/lib/core/errors.h"
+#include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/platform/env.h"
 
 DEFINE_int32(max_sequence_length, 1000000,
@@ -75,10 +76,11 @@ using ::tensorflow::Feature;
 using ::tensorflow::Features;
 using ::tensorflow::Status;
 
-namespace {
+namespace internal {
 
 // From http://hl7.org/fhir/v3/ActCode
 const char kClassInpatient[] = "IMP";
+
 bool FeaturePrefixMatch(const string& feature,
                         const std::set<string>& prefix_set) {
   string name = feature;
@@ -388,9 +390,7 @@ Status BuildLabelsFromTriggerLabelPair(
   return Status::OK();
 }
 
-}  // namespace
-
-BundleToSeqexConverter::BundleToSeqexConverter(
+BaseBundleToSeqexConverter::BaseBundleToSeqexConverter(
     const stu3::proto::VersionConfig& fhir_version_config,
     const bool enable_attribution, const bool generate_sequence_label)
     : version_config_(fhir_version_config),
@@ -403,45 +403,7 @@ BundleToSeqexConverter::BundleToSeqexConverter(
   current_label_ = label_map_.end();
 }
 
-bool BundleToSeqexConverter::Begin(
-    const string& patient_id, const stu3::proto::Bundle& bundle,
-    const std::map<struct ExampleKey, ::tensorflow::Features>& label_map,
-    std::map<string, int>* counter_stats) {
-  examples_.clear();
-  encounter_start_times_.clear();
-  context_.Clear();
-  label_map_.clear();
-  redacted_features_for_example_.clear();
-  feature_types_.Clear();
-  patient_id_ = patient_id;
-  seqex_.Clear();
-  cached_offset_ = 0;
-  init_done_ = false;
-  label_map_ = label_map;
-  counter_stats_ = counter_stats;
-  if (label_map_.empty()) {
-    current_label_ = label_map_.end();  // mark done
-    init_done_ = true;
-    return false;
-  }
-  const stu3::proto::Bundle versioned_bundle =
-      stu3::BundleToVersionedBundle(bundle, version_config_, counter_stats_);
-  BundleToExamples(versioned_bundle);
-  BundleToContext(versioned_bundle);
-  return Next();
-}
-
-bool BundleToSeqexConverter::Begin(const string& patient_id,
-                                   const stu3::proto::Bundle& bundle,
-                                   const std::vector<TriggerLabelsPair>& labels,
-                                   std::map<string, int>* counter_stats) {
-  std::map<struct ExampleKey, ::tensorflow::Features> label_map;
-  // TODO: Fail gracefully.
-  CHECK(BuildLabelsFromTriggerLabelPair(patient_id, labels, &label_map).ok());
-  return Begin(patient_id, bundle, label_map, counter_stats);
-}
-
-bool BundleToSeqexConverter::Next() {
+bool BaseBundleToSeqexConverter::Next() {
   // We emit multiple examples per bundle, one per label. Examples with
   // timestamps before or at the label timestamp may be included in the sample
   // sequence; we keep the most recent --max_sequence_length ones.
@@ -516,116 +478,29 @@ bool BundleToSeqexConverter::Next() {
   return true;
 }
 
-// Get a list of non-overlapping encounter boundaries. For now, we use only
-// inpatient encounters, and merge any encounters that overlap.
-void BundleToSeqexConverter::GetEncounterBoundaries(
-    const stu3::proto::Bundle& bundle,
-    std::map<absl::Time, absl::Time>* encounter_boundaries) {
-  // List inpatient encounter start and end times.
-  std::map<absl::Time, absl::Time> inpatient_encounters;
-  for (const auto& entry : bundle.entry()) {
-    if (entry.resource().has_encounter()) {
-      const auto& encounter = entry.resource().encounter();
-      if (encounter.class_value().code().value() != kClassInpatient) {
-        (*counter_stats_)["num-encounter-id-not-inpatient"]++;
-      } else if (!encounter.period().has_start() ||
-                 !encounter.period().has_end()) {
-        (*counter_stats_)["num-encounter-id-missing-times"]++;
-      } else {
-        // Keep.
-        (*counter_stats_)["num-encounter-id-valid"]++;
-        absl::Time start =
-            absl::FromUnixMicros(encounter.period().start().value_us());
-        absl::Time end =
-            absl::FromUnixMicros(encounter.period().end().value_us());
-        inpatient_encounters[start] = end;
-      }
-    }
-  }
-  // Merge overlapping encounters.
-  if (!inpatient_encounters.empty()) {
-    absl::Time current_start, current_end;
-    // Note that the standard guarantees the iteration order of std:map.
-    for (const auto& e : inpatient_encounters) {
-      if (!encounter_boundaries->empty() && current_end > e.first) {
-        (*counter_stats_)["num-encounter-id-merged"]++;
-        current_end = std::max(current_end, e.second);
-      } else {
-        (*counter_stats_)["num-encounter-id-kept"]++;
-        current_start = e.first;
-        current_end = e.second;
-      }
-      (*encounter_boundaries)[current_start] = current_end;
-    }
-  }
+bool BaseBundleToSeqexConverter::Done() {
+  return current_label_ == label_map_.end();
 }
 
-void BundleToSeqexConverter::BundleToExamples(
-    const stu3::proto::Bundle& bundle) {
-  // Make a sequence sorted by timestamp.
-  std::vector<std::pair<std::pair<absl::Time, string>, tensorflow::Example>>
-      event_sequence;
-  for (const auto& entry : bundle.entry()) {
-    if (entry.resource().has_claim()) {
-      ConvertResourceToExamples(entry.resource().claim(), bundle,
-                                &event_sequence);
-    }
-    if (entry.resource().has_composition()) {
-      ConvertResourceToExamples(entry.resource().composition(), bundle,
-                                &event_sequence);
-    }
-    if (entry.resource().has_condition()) {
-      ConvertResourceToExamples(entry.resource().condition(), bundle,
-                                &event_sequence);
-    }
-    if (entry.resource().has_encounter()) {
-      ConvertResourceToExamples(entry.resource().encounter(), bundle,
-                                &event_sequence);
-    }
-    if (entry.resource().has_medication_administration()) {
-      ConvertResourceToExamples(entry.resource().medication_administration(),
-                                bundle, &event_sequence);
-    }
-    if (entry.resource().has_medication_request()) {
-      ConvertResourceToExamples(entry.resource().medication_request(), bundle,
-                                &event_sequence);
-    }
-    if (entry.resource().has_observation()) {
-      ConvertResourceToExamples(entry.resource().observation(), bundle,
-                                &event_sequence);
-    }
-    if (entry.resource().has_procedure()) {
-      ConvertResourceToExamples(entry.resource().procedure(), bundle,
-                                &event_sequence);
-    }
-    if (entry.resource().has_procedure_request()) {
-      ConvertResourceToExamples(entry.resource().procedure_request(), bundle,
-                                &event_sequence);
-    }
-  }
+void BaseBundleToSeqexConverter::Reset() {
+  examples_.clear();
+  encounter_start_times_.clear();
+  context_.Clear();
+  label_map_.clear();
+  redacted_features_for_example_.clear();
+  feature_types_.Clear();
+  seqex_.Clear();
+  cached_offset_ = 0;
+  init_done_ = false;
+  patient_id_ = "";
+  label_map_.clear();
+  counter_stats_ = nullptr;
+}
 
-  if (generate_sequence_label_) {
-    // TODO: Either delete or fix seconds_until_label.
-    for (auto entry : label_map_) {
-      tensorflow::Example example;
-      *example.mutable_features() = entry.second;
-      event_sequence.push_back(std::make_pair(
-          std::make_pair(entry.first.trigger_timestamp, "label"), example));
-    }
-  }
-
-  // Sort in time order, and then in case of a tie, sort by resource-id.
-  // Note: we need the sorting to be deterministic so that we can do a
-  // meaningful diff in data across different runs of the binary.
-  std::sort(
-      event_sequence.begin(), event_sequence.end(),
-      [](const std::pair<std::pair<absl::Time, string>, tensorflow::Example>& a,
-         const std::pair<std::pair<absl::Time, string>, tensorflow::Example>&
-             b) { return a.first < b.first; });
-
-  // Get a list of encounter boundary times.
-  std::map<absl::Time, absl::Time> encounter_boundaries;
-  GetEncounterBoundaries(bundle, &encounter_boundaries);
+void BaseBundleToSeqexConverter::EventSequenceToExamples(
+    const std::map<absl::Time, absl::Time>& encounter_boundaries,
+    const std::vector<std::pair<std::pair<absl::Time, string>,
+                                tensorflow::Example>>& event_sequence) {
   // We use the encounter start times to split the patient timeline.
   if (!event_sequence.empty()) {
     // Keep track of the earliest event time seen in the data.
@@ -642,7 +517,8 @@ void BundleToSeqexConverter::BundleToExamples(
   // Emit features.
   for (const auto& event : event_sequence) {
     tensorflow::Example example = event.second;
-    AddBaggingFeatures(event.first.first, encounter_start_times_, &example);
+    internal::AddBaggingFeatures(event.first.first, encounter_start_times_,
+                                 &example);
 
     (*counter_stats_)["num-examples"]++;
     examples_.push_back(std::make_pair(event.first.first, example));
@@ -663,36 +539,14 @@ void BundleToSeqexConverter::BundleToExamples(
         LOG(FATAL) << "Invalid feature " << feature.second.DebugString();
       }
 
-      if (FeaturePrefixMatch(feature.first, redacted_features_)) {
+      if (internal::FeaturePrefixMatch(feature.first, redacted_features_)) {
         redacted_features_for_example_.insert(feature.first);
       }
     }
   }
 }
 
-void BundleToSeqexConverter::BundleToContext(
-    const stu3::proto::Bundle& bundle) {
-  // Add patient features to the context.
-  for (const auto& entry : bundle.entry()) {
-    if (entry.resource().has_patient()) {
-      stu3::proto::Patient patient = entry.resource().patient();
-      if (google::fhir::stu3::GetMetadataFromResource(patient)
-              .version_id()
-              .value() != "0") {
-        // We're only interested in the V0 patient for the context.
-        continue;
-      }
-      patient.clear_meta();
-      patient.clear_deceased();
-      ResourceToExample(patient, &context_, enable_attribution_);
-      CHECK(patient.has_id());
-      // Add patientId to context feature for cross validation.
-      (*context_.mutable_features()->mutable_feature())[kPatientIdFeatureKey]
-          .mutable_bytes_list()
-          ->add_value(patient.id().value());
-    }
-  }
-}
+}  // namespace internal
 
 }  // namespace seqex
 }  // namespace fhir

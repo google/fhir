@@ -14,9 +14,9 @@
 
 #include "google/fhir/seqex/bundle_to_seqex_util.h"
 
+#include <sys/types.h>
 #include <map>
 #include <memory>
-#include <unordered_set>
 #include <utility>
 
 #include "google/protobuf/reflection.h"
@@ -42,7 +42,8 @@ namespace seqex {
 
 using std::string;
 
-namespace {
+namespace internal {
+
 StatusOr<std::vector<EventLabel>> ExtractLabelsFromExtensions(
     const std::set<string>& label_names,
     google::protobuf::RepeatedFieldRef<Extension> extensions) {
@@ -57,7 +58,42 @@ StatusOr<std::vector<EventLabel>> ExtractLabelsFromExtensions(
   }
   return target_labels;
 }
-}  // namespace
+
+void GetTriggerLabelsPairFromExtensions(
+    const ::google::protobuf::RepeatedFieldRef<stu3::proto::Extension> extensions,
+    const std::set<string>& label_names, const string& trigger_event_name,
+    std::vector<TriggerLabelsPair>* trigger_labels_pair,
+    int* num_triggers_filtered) {
+  std::vector<stu3::google::EventTrigger> triggers;
+  TF_CHECK_OK(
+      google::fhir::stu3::GetRepeatedFromExtension(extensions, &triggers));
+  // Note that this only joins triggers and labels within the same resource.
+  auto labels_result = ExtractLabelsFromExtensions(label_names, extensions);
+  std::vector<EventLabel> labels = labels_result.ValueOrDie();
+  for (const auto& trigger : triggers) {
+    if (trigger.type().code().value() != trigger_event_name) {
+      continue;
+    }
+    absl::Time trigger_time =
+        google::fhir::stu3::GetTimeFromTimelikeElement(trigger.event_time());
+    bool should_keep = true;
+    for (const EventLabel& label : labels) {
+      if (label.has_event_time() &&
+          google::fhir::stu3::GetTimeFromTimelikeElement(label.event_time()) <
+              trigger_time) {
+        should_keep = false;
+        break;
+      }
+    }
+    if (should_keep) {
+      trigger_labels_pair->push_back(std::make_pair(trigger, labels));
+    } else {
+      ++(*num_triggers_filtered);
+    }
+  }
+}
+
+}  // namespace internal
 
 void GetTriggerLabelsPairFromInputLabels(
     const std::vector<EventLabel>& input_labels,
@@ -93,67 +129,6 @@ void GetTriggerLabelsPairFromInputLabels(
     (*trigger_labels_pair)[trigger_index_for_time[time]].second.push_back(
         label);
   }
-}
-
-void GetTriggerLabelsPair(const Bundle& bundle,
-                          const std::set<string>& label_names,
-                          const string& trigger_event_name,
-                          std::vector<TriggerLabelsPair>* trigger_labels_pair,
-                          int* num_triggers_filtered) {
-  for (const auto& entry : bundle.entry()) {
-    auto result = stu3::GetResourceExtensionsFromBundleEntry(entry);
-    if (!result.ok()) {
-      continue;
-    }
-    auto extensions = result.ValueOrDie();
-
-    std::vector<EventTrigger> triggers;
-    TF_CHECK_OK(
-        google::fhir::stu3::GetRepeatedFromExtension(extensions, &triggers));
-    // Note that this only joins triggers and labels within the same resource.
-    auto labels_result = ExtractLabelsFromExtensions(label_names, extensions);
-    std::vector<EventLabel> labels = labels_result.ValueOrDie();
-    for (const auto& trigger : triggers) {
-      if (trigger.type().code().value() != trigger_event_name) {
-        continue;
-      }
-      absl::Time trigger_time =
-          google::fhir::stu3::GetTimeFromTimelikeElement(trigger.event_time());
-      bool should_keep = true;
-      for (const EventLabel& label : labels) {
-        if (label.has_event_time() &&
-            google::fhir::stu3::GetTimeFromTimelikeElement(label.event_time()) <
-                trigger_time) {
-          should_keep = false;
-          break;
-        }
-      }
-      if (should_keep) {
-        trigger_labels_pair->push_back(std::make_pair(trigger, labels));
-      } else {
-        ++(*num_triggers_filtered);
-      }
-    }
-  }
-}
-
-std::vector<EventLabel> ExtractLabelsFromBundle(
-    const Bundle& bundle, const std::set<string>& label_names) {
-  std::vector<EventLabel> labels;
-  for (const auto& entry : bundle.entry()) {
-    auto result = stu3::GetResourceExtensionsFromBundleEntry(entry);
-    if (!result.ok()) {
-      continue;
-    }
-    auto extensions = result.ValueOrDie();
-    auto labels_result = ExtractLabelsFromExtensions(label_names, extensions);
-    if (!labels_result.ok()) {
-      continue;
-    }
-    std::vector<EventLabel>& new_labels = labels_result.ValueOrDie();
-    labels.insert(labels.end(), new_labels.begin(), new_labels.end());
-  }
-  return labels;
 }
 
 }  // namespace seqex

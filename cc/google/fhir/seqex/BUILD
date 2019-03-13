@@ -21,10 +21,12 @@ cc_library(
         "//proto/stu3:extensions_cc_proto",
         "//proto/stu3:resources_cc_proto",
         "//proto/stu3:version_config_cc_proto",
+        "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
         "@org_tensorflow//tensorflow/core:lib",
         "@org_tensorflow//tensorflow/core:protos_all_cc",
+        "@protobuf_archive//:protobuf",
     ],
 )
 
@@ -54,7 +56,7 @@ cc_library(
     hdrs = ["bundle_to_seqex_util.h"],
     strip_include_prefix = "//cc/",
     deps = [
-        "//cc/google/fhir/seqex:bundle_to_seqex_converter",
+        ":bundle_to_seqex_converter",
         "//cc/google/fhir/status:statusor",
         "//cc/google/fhir/stu3:extensions",
         "//cc/google/fhir/stu3:util",

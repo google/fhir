@@ -20,7 +20,7 @@ from tensorflow.core.example import example_pb2
 
 cdef class PyBundleToSeqexConverter:
 
-  cdef unique_ptr[BundleToSeqexConverter] _thisptr
+  cdef unique_ptr[UnprofiledBundleToSeqexConverter] _thisptr
 
   def __init__(self, version_config,
                enable_attribution, generate_sequence_label):
@@ -40,7 +40,7 @@ cdef class PyBundleToSeqexConverter:
     cdef VersionConfig c_version_config
     assert c_version_config.ParseFromString(
       version_config.SerializeToString())
-    self._thisptr.reset(new BundleToSeqexConverter(
+    self._thisptr.reset(new UnprofiledBundleToSeqexConverter(
       c_version_config, enable_attribution,
       generate_sequence_label))
 

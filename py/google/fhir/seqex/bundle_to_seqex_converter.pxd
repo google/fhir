@@ -48,9 +48,9 @@ cdef extern from "proto/stu3/version_config.pb.h" namespace "google::fhir::stu3:
 ctypedef pair[EventTrigger, vector[EventLabel]] TriggerLabelsPair
 
 cdef extern from "google/fhir/seqex/bundle_to_seqex_converter.h" namespace "google::fhir::seqex" nogil:
-  cdef cppclass BundleToSeqexConverter:
+  cdef cppclass UnprofiledBundleToSeqexConverter:
 
-    BundleToSeqexConverter(const VersionConfig&, const bool, const bool),
+    UnprofiledBundleToSeqexConverter(const VersionConfig&, const bool, const bool),
 
     bool Begin(const string& patient_id, const Bundle& bundle,
                const vector[TriggerLabelsPair]& labels,
