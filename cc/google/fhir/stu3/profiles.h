@@ -37,8 +37,6 @@ Status ConvertToProfile(const google::protobuf::Message& base_message,
                         google::protobuf::Message* profiled_message);
 
 // Identical to ConvertToProfile, except does not run the validation step.
-// TODO: delete this method, and instead use a different status
-// code in this case, that can be handled on the caller side.
 Status ConvertToProfileLenient(const google::protobuf::Message& base_message,
                                google::protobuf::Message* profiled_message);
 

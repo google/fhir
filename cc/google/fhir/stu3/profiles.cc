@@ -455,7 +455,11 @@ Status PerformUnslicing(const google::protobuf::Message& profiled_message,
 Status ConvertToProfile(const Message& base_message,
                         Message* profiled_message) {
   FHIR_RETURN_IF_ERROR(ConvertToProfileLenient(base_message, profiled_message));
-  return ValidateResource(*profiled_message);
+  Status validation = ValidateResource(*profiled_message);
+  if (validation.ok()) {
+    return Status::OK();
+  }
+  return tensorflow::errors::FailedPrecondition(validation.error_message());
 }
 
 Status ConvertToProfileLenient(const Message& base_message,
@@ -475,13 +479,17 @@ Status ConvertToProfileLenient(const Message& base_message,
     // request to begin with.  This is non-trivial though, because we only have
     // base by URL, and no way to go from URL to proto in order to get the next
     // level of parent.
-    return InvalidArgument(
-        "Unable to convert ", base_descriptor->full_name(), " to ",
-        profiled_descriptor->full_name(),
-        ".  They are not binary compatible.  This could mean the profile ",
-        "applies constraints that the resource does not meet.");
+    return InvalidArgument("Unable to convert ", base_descriptor->full_name(),
+                           " to ", profiled_descriptor->full_name(),
+                           ".  They are not binary compatible.");
   }
-  return PerformSlicing(profiled_message);
+  Status slicing_status = PerformSlicing(profiled_message);
+  if (!slicing_status.ok()) {
+    return InvalidArgument("Unable to slice ", base_descriptor->full_name(),
+                           " to ", profiled_descriptor->full_name(), ": ",
+                           slicing_status.error_message());
+  }
+  return Status::OK();
 }
 
 Status ConvertToBaseResource(const google::protobuf::Message& profiled_message,

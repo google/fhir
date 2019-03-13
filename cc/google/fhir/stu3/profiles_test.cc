@@ -34,6 +34,8 @@ namespace stu3 {
 
 namespace {
 
+using ::google::fhir::stu3::proto::Observation;
+using ::google::fhir::stu3::proto::Patient;
 using ::google::fhir::testutil::EqualsProto;
 using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
 
@@ -80,27 +82,27 @@ void TestPair(const string& filename) {
 }
 
 TEST(ProfilesTest, SimpleExtensions) {
-  TestPair<proto::Observation, proto::ObservationGenetics>(
+  TestPair<Observation, proto::ObservationGenetics>(
       "testdata/stu3/examples/Observation-example-genetics-1");
 }
 
 TEST(ProfilesTest, FixedCoding) {
-  TestPair<proto::Observation, proto::Bodyheight>(
+  TestPair<Observation, proto::Bodyheight>(
       "testdata/stu3/examples/Observation-body-height");
 }
 
 TEST(ProfilesTest, VitalSigns) {
-  TestPair<proto::Observation, proto::Vitalsigns>(
+  TestPair<Observation, proto::Vitalsigns>(
       "testdata/stu3/examples/Observation-body-height");
 }
 
 TEST(ProfilesTest, FixedSystem) {
-  TestPair<proto::Observation, ::google::fhir::stu3::testing::TestObservation>(
+  TestPair<Observation, ::google::fhir::stu3::testing::TestObservation>(
       "testdata/stu3/profiles/observation_fixedsystem");
 }
 
 TEST(ProfilesTest, ComplexExtension) {
-  TestPair<proto::Observation, ::google::fhir::stu3::testing::TestObservation>(
+  TestPair<Observation, ::google::fhir::stu3::testing::TestObservation>(
       "testdata/stu3/profiles/observation_complexextension");
 }
 
@@ -108,6 +110,30 @@ TEST(ProfilesTest, ProfileOfProfile) {
   TestPair<::google::fhir::stu3::testing::TestObservation,
            ::google::fhir::stu3::testing::TestObservationLvl2>(
       "testdata/stu3/profiles/testobservation_lvl2");
+}
+
+TEST(ProfilesTest, UnableToProfile) {
+  const Observation unprofiled = ReadProto<Observation>(
+      "testdata/stu3/examples/Observation-example-genetics-1.prototxt");
+  Patient patient;
+
+  auto lenient_status = ConvertToProfileLenient(unprofiled, &patient);
+  ASSERT_EQ(tensorflow::error::INVALID_ARGUMENT, lenient_status.code());
+
+  auto strict_status = ConvertToProfile(unprofiled, &patient);
+  ASSERT_EQ(tensorflow::error::INVALID_ARGUMENT, strict_status.code());
+}
+
+TEST(ProfilesTest, MissingRequiredFields) {
+  const Observation unprofiled = ReadProto<Observation>(
+      "testdata/stu3/profiles/observation_fixedsystem.prototxt");
+  ::google::fhir::stu3::testing::TestObservation profiled;
+
+  auto lenient_status = ConvertToProfileLenient(unprofiled, &profiled);
+  ASSERT_EQ(tensorflow::error::OK, lenient_status.code());
+
+  auto strict_status = ConvertToProfile(unprofiled, &profiled);
+  ASSERT_EQ(tensorflow::error::FAILED_PRECONDITION, strict_status.code());
 }
 
 }  // namespace
