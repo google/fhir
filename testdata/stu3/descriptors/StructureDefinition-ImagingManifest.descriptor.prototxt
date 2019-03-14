@@ -98,7 +98,7 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Patient of the selected objects"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
   }
 }
 field {
@@ -119,11 +119,11 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Author (human or machine)"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "Device"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
   }
 }
 field {
@@ -198,7 +198,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Reference to ImagingStudy"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ImagingStudy"
+      [google.fhir.stu3.proto.valid_reference_type]: "ImagingStudy"
     }
   }
   field {
@@ -209,7 +209,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Study access service endpoint"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Endpoint"
+      [google.fhir.stu3.proto.valid_reference_type]: "Endpoint"
     }
   }
   field {
@@ -274,7 +274,7 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
         [google.fhir.stu3.proto.field_description]: "Series access endpoint"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Endpoint"
+        [google.fhir.stu3.proto.valid_reference_type]: "Endpoint"
       }
     }
     field {

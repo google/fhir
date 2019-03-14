@@ -97,8 +97,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Instantiates protocol or definition"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/PlanDefinition"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ActivityDefinition"
+    [google.fhir.stu3.proto.valid_reference_type]: "PlanDefinition"
+    [google.fhir.stu3.proto.valid_reference_type]: "ActivityDefinition"
   }
 }
 field {
@@ -109,7 +109,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Request fulfilled by this communication"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -120,7 +120,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Part of this action"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -182,8 +182,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Focus of message"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Group"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Group"
   }
 }
 field {
@@ -194,12 +194,12 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Message recipient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Group"
+    [google.fhir.stu3.proto.valid_reference_type]: "Device"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+    [google.fhir.stu3.proto.valid_reference_type]: "Group"
   }
 }
 field {
@@ -210,7 +210,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Focal resources"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -221,8 +221,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Encounter or episode leading to message"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
+    [google.fhir.stu3.proto.valid_reference_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -253,11 +253,11 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Message sender"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+    [google.fhir.stu3.proto.valid_reference_type]: "Device"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
   }
 }
 field {
@@ -278,8 +278,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Why was communication done?"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Condition"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Observation"
+    [google.fhir.stu3.proto.valid_reference_type]: "Condition"
+    [google.fhir.stu3.proto.valid_reference_type]: "Observation"
   }
 }
 field {
@@ -371,7 +371,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+        [google.fhir.stu3.proto.valid_reference_type]: "Resource"
       }
       oneof_index: 0
     }

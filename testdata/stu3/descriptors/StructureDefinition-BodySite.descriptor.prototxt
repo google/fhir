@@ -148,7 +148,7 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Who this is about"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
   }
 }
 options {

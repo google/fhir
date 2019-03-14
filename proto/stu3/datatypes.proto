@@ -493,12 +493,9 @@ message Annotation {
 
     oneof author {
       Reference reference = 1 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Practitioner",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Patient",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+        (valid_reference_type) = "Practitioner",
+        (valid_reference_type) = "Patient",
+        (valid_reference_type) = "RelatedPerson"
       ];
       String string_value = 2 [json_name = "string"];
     }
@@ -871,9 +868,7 @@ message Identifier {
   Period period = 7;
 
   // Organization that issued id (may be just text)
-  Reference assigner = 8
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Organization"];
+  Reference assigner = 8 [(valid_reference_type) = "Organization"];
 }
 
 // Auto-generated from StructureDefinition for Meta, last updated
@@ -1093,16 +1088,11 @@ message Signature {
     oneof who {
       Uri uri = 1;
       Reference reference = 2 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Practitioner",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Patient",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Device",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Organization"
+        (valid_reference_type) = "Practitioner",
+        (valid_reference_type) = "RelatedPerson",
+        (valid_reference_type) = "Patient",
+        (valid_reference_type) = "Device",
+        (valid_reference_type) = "Organization"
       ];
     }
   }
@@ -1115,16 +1105,11 @@ message Signature {
     oneof on_behalf_of {
       Uri uri = 1;
       Reference reference = 2 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Practitioner",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Patient",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Device",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Organization"
+        (valid_reference_type) = "Practitioner",
+        (valid_reference_type) = "RelatedPerson",
+        (valid_reference_type) = "Patient",
+        (valid_reference_type) = "Device",
+        (valid_reference_type) = "Organization"
       ];
     }
   }
@@ -1531,6 +1516,7 @@ message Reference {
 
 message ReferenceId {
   option (structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+
   // Primitive value for id
   string value = 1;
 

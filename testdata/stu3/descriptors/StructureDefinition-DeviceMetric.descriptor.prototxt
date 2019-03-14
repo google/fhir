@@ -119,7 +119,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Describes the link to the source Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
+    [google.fhir.stu3.proto.valid_reference_type]: "Device"
   }
 }
 field {
@@ -130,7 +130,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Describes the link to the parent DeviceComponent"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/DeviceComponent"
+    [google.fhir.stu3.proto.valid_reference_type]: "DeviceComponent"
   }
 }
 field {

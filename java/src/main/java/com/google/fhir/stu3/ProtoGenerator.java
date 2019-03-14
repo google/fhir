@@ -1127,7 +1127,7 @@ public class ProtoGenerator {
       for (ElementDefinition.TypeRef type : element.getTypeList()) {
         String referenceType = type.getTargetProfile().getValue();
         if (!referenceType.isEmpty()) {
-          options.addExtension(Annotations.validReferenceType, referenceType);
+          addReferenceType(options, referenceType);
         }
       }
     }
@@ -1289,7 +1289,7 @@ public class ProtoGenerator {
       FieldOptions.Builder options = FieldOptions.newBuilder();
       if (fieldName.equals("Reference")) {
         for (String referenceType : referenceTypes) {
-          options.addExtension(Annotations.validReferenceType, referenceType);
+          addReferenceType(options, referenceType);
         }
       }
       FieldDescriptorProto.Builder fieldBuilder =
@@ -1309,6 +1309,23 @@ public class ProtoGenerator {
       choiceType.addField(fieldBuilder);
     }
     return choiceType.build();
+  }
+
+  private void addReferenceType(FieldOptions.Builder options, String referenceUrl) {
+    options.addExtension(
+        Annotations.validReferenceType, getBaseStructureDefinitionData(referenceUrl).inlineType);
+  }
+
+  /**
+   * Given a structure definition url, returns the base (FHIR) structure definition data for that
+   * type.
+   */
+  private StructureDefinitionData getBaseStructureDefinitionData(String url) {
+    StructureDefinitionData defData = structDefDataByUrl.get(url);
+    while (isProfile(defData.structDef)) {
+      defData = structDefDataByUrl.get(defData.structDef.getBaseDefinition().getValue());
+    }
+    return defData;
   }
 
   private FieldDescriptorProto.Builder buildFieldInternal(

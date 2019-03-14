@@ -107,7 +107,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Request reference"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -118,7 +118,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Response reference"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -149,7 +149,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Insurer or Regulatory body"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -160,7 +160,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Responsible practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -171,7 +171,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Responsible organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
   }
 }
 field {

@@ -150,10 +150,10 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Who/what is the subject of the document"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Group"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "Group"
+    [google.fhir.stu3.proto.valid_reference_type]: "Device"
   }
 }
 field {
@@ -185,11 +185,11 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Who and/or what authored the document"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Device"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
   }
 }
 field {
@@ -200,8 +200,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Who/what authenticated the document"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -212,7 +212,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Organization which maintains the document"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -318,7 +318,7 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Target of the relationship"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/DocumentReference"
+      [google.fhir.stu3.proto.valid_reference_type]: "DocumentReference"
     }
   }
 }
@@ -416,7 +416,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Context of the document  content"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Encounter"
+      [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
     }
   }
   field {
@@ -467,7 +467,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Patient demographics from source"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
+      [google.fhir.stu3.proto.valid_reference_type]: "Patient"
     }
   }
   field {
@@ -530,7 +530,7 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
         [google.fhir.stu3.proto.field_description]: "Related Resource"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+        [google.fhir.stu3.proto.valid_reference_type]: "Resource"
       }
     }
   }

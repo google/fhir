@@ -97,12 +97,12 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "What was requested"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/CarePlan"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/MedicationRequest"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/NutritionOrder"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "CarePlan"
+    [google.fhir.stu3.proto.valid_reference_type]: "ImmunizationRecommendation"
+    [google.fhir.stu3.proto.valid_reference_type]: "MedicationRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "NutritionOrder"
+    [google.fhir.stu3.proto.valid_reference_type]: "ProcedureRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "ReferralRequest"
   }
 }
 field {
@@ -145,10 +145,10 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "The subject of the report - usually, but not always, the patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Group"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Location"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Group"
+    [google.fhir.stu3.proto.valid_reference_type]: "Device"
+    [google.fhir.stu3.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -159,8 +159,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Health care event when test ordered"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
+    [google.fhir.stu3.proto.valid_reference_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -201,7 +201,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Specimens this report is based on"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Specimen"
+    [google.fhir.stu3.proto.valid_reference_type]: "Specimen"
   }
 }
 field {
@@ -212,7 +212,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Observations - simple, or complex nested groups"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Observation"
+    [google.fhir.stu3.proto.valid_reference_type]: "Observation"
   }
 }
 field {
@@ -223,8 +223,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Reference to full details of imaging associated with the diagnostic report"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ImagingStudy"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ImagingManifest"
+    [google.fhir.stu3.proto.valid_reference_type]: "ImagingStudy"
+    [google.fhir.stu3.proto.valid_reference_type]: "ImagingManifest"
   }
 }
 field {
@@ -366,8 +366,8 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Practitioner or Organization  participant"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
     }
   }
 }
@@ -422,7 +422,7 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Reference to the image source"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Media"
+      [google.fhir.stu3.proto.valid_reference_type]: "Media"
     }
   }
 }

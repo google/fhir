@@ -127,7 +127,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "The subject of the Products and Services"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
   }
 }
 field {
@@ -158,7 +158,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Author"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -169,7 +169,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Insurer responsible for the EOB"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -180,7 +180,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Responsible provider for the claim"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -191,7 +191,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Responsible organization for the claim"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -202,7 +202,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Treatment Referral"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "ReferralRequest"
   }
 }
 field {
@@ -213,7 +213,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Servicing Facility"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Location"
+    [google.fhir.stu3.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -224,7 +224,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Claim reference"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Claim"
+    [google.fhir.stu3.proto.valid_reference_type]: "Claim"
   }
 }
 field {
@@ -235,7 +235,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Claim response reference"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ClaimResponse"
+    [google.fhir.stu3.proto.valid_reference_type]: "ClaimResponse"
   }
 }
 field {
@@ -276,8 +276,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Prescription authorizing services or products"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/MedicationRequest"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/VisionPrescription"
+    [google.fhir.stu3.proto.valid_reference_type]: "MedicationRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "VisionPrescription"
   }
 }
 field {
@@ -288,7 +288,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Original prescription if superceded by fulfiller"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/MedicationRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "MedicationRequest"
   }
 }
 field {
@@ -521,7 +521,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Reference to the related claim"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Claim"
+      [google.fhir.stu3.proto.valid_reference_type]: "Claim"
     }
   }
   field {
@@ -605,10 +605,10 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Party to receive the payable"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+      [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+      [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
     }
   }
 }
@@ -765,7 +765,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+        [google.fhir.stu3.proto.valid_reference_type]: "Resource"
       }
       oneof_index: 0
     }
@@ -829,8 +829,8 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Member of the Care Team"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
     }
   }
   field {
@@ -955,7 +955,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Condition"
+        [google.fhir.stu3.proto.valid_reference_type]: "Condition"
       }
       oneof_index: 0
     }
@@ -1048,7 +1048,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Procedure"
+        [google.fhir.stu3.proto.valid_reference_type]: "Procedure"
       }
       oneof_index: 0
     }
@@ -1100,7 +1100,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Insurance information"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Coverage"
+      [google.fhir.stu3.proto.valid_reference_type]: "Coverage"
     }
   }
   field {
@@ -1193,7 +1193,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Location"
+        [google.fhir.stu3.proto.valid_reference_type]: "Location"
       }
       oneof_index: 0
     }
@@ -1406,7 +1406,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Unique Device Identifier"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
+      [google.fhir.stu3.proto.valid_reference_type]: "Device"
     }
   }
   field {
@@ -1437,7 +1437,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Encounters related to this billed item"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Encounter"
+      [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
     }
   }
   field {
@@ -1520,7 +1520,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Location"
+        [google.fhir.stu3.proto.valid_reference_type]: "Location"
       }
       oneof_index: 0
     }
@@ -1757,7 +1757,7 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
         [google.fhir.stu3.proto.field_description]: "Unique Device Identifier"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
+        [google.fhir.stu3.proto.valid_reference_type]: "Device"
       }
     }
     field {
@@ -1942,7 +1942,7 @@ nested_type {
         type_name: ".google.fhir.stu3.proto.Reference"
         options {
           [google.fhir.stu3.proto.field_description]: "Unique Device Identifier"
-          [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
+          [google.fhir.stu3.proto.valid_reference_type]: "Device"
         }
       }
       field {

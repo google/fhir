@@ -37,11 +37,11 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Condition"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Procedure"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/MedicationAdministration"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Immunization"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/MedicationStatement"
+      [google.fhir.stu3.proto.valid_reference_type]: "Condition"
+      [google.fhir.stu3.proto.valid_reference_type]: "Procedure"
+      [google.fhir.stu3.proto.valid_reference_type]: "MedicationAdministration"
+      [google.fhir.stu3.proto.valid_reference_type]: "Immunization"
+      [google.fhir.stu3.proto.valid_reference_type]: "MedicationStatement"
     }
     oneof_index: 0
   }

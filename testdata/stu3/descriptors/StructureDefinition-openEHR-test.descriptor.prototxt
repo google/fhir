@@ -29,8 +29,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Observation"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"
+      [google.fhir.stu3.proto.valid_reference_type]: "Observation"
+      [google.fhir.stu3.proto.valid_reference_type]: "DiagnosticReport"
     }
     oneof_index: 0
   }

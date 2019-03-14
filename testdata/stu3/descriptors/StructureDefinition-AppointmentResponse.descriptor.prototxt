@@ -98,7 +98,7 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Appointment this response relates to"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Appointment"
+    [google.fhir.stu3.proto.valid_reference_type]: "Appointment"
   }
 }
 field {
@@ -139,12 +139,12 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Person, Location/HealthcareService or Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/HealthcareService"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Location"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+    [google.fhir.stu3.proto.valid_reference_type]: "Device"
+    [google.fhir.stu3.proto.valid_reference_type]: "HealthcareService"
+    [google.fhir.stu3.proto.valid_reference_type]: "Location"
   }
 }
 field {

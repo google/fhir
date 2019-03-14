@@ -128,7 +128,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Associated patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
   }
 }
 field {
@@ -149,8 +149,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "The provider or device that identified the issue"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "Device"
   }
 }
 field {
@@ -161,7 +161,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Problem resource"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -255,7 +255,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Who is committing?"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
+      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
     }
   }
 }

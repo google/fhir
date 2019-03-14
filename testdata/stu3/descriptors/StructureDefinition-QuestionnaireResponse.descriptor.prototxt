@@ -97,9 +97,9 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Request fulfilled by this QuestionnaireResponse"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/CarePlan"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "ReferralRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "CarePlan"
+    [google.fhir.stu3.proto.valid_reference_type]: "ProcedureRequest"
   }
 }
 field {
@@ -110,8 +110,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Part of this action"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Observation"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Procedure"
+    [google.fhir.stu3.proto.valid_reference_type]: "Observation"
+    [google.fhir.stu3.proto.valid_reference_type]: "Procedure"
   }
 }
 field {
@@ -122,7 +122,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Form being answered"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Questionnaire"
+    [google.fhir.stu3.proto.valid_reference_type]: "Questionnaire"
   }
 }
 field {
@@ -144,7 +144,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "The subject of the questions"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -155,8 +155,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Encounter or Episode during which questionnaire was completed"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
+    [google.fhir.stu3.proto.valid_reference_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -177,10 +177,10 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Person who received and recorded the answers"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+    [google.fhir.stu3.proto.valid_reference_type]: "Device"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
   }
 }
 field {
@@ -191,9 +191,9 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "The person who answered the questions"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
   }
 }
 field {
@@ -277,7 +277,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "The subject this group\'s answers are about"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+      [google.fhir.stu3.proto.valid_reference_type]: "Resource"
     }
   }
   field {
@@ -450,7 +450,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Reference"
         options {
-          [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+          [google.fhir.stu3.proto.valid_reference_type]: "Resource"
         }
         oneof_index: 0
       }

@@ -442,7 +442,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Valueset containing permitted answers"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ValueSet"
+      [google.fhir.stu3.proto.valid_reference_type]: "ValueSet"
     }
   }
   field {
@@ -637,7 +637,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Reference"
         options {
-          [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+          [google.fhir.stu3.proto.valid_reference_type]: "Resource"
         }
         oneof_index: 0
       }
@@ -841,7 +841,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+        [google.fhir.stu3.proto.valid_reference_type]: "Resource"
       }
       oneof_index: 0
     }

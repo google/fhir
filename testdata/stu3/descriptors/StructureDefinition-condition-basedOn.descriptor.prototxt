@@ -29,9 +29,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/CarePlan"
+      [google.fhir.stu3.proto.valid_reference_type]: "ReferralRequest"
+      [google.fhir.stu3.proto.valid_reference_type]: "ProcedureRequest"
+      [google.fhir.stu3.proto.valid_reference_type]: "CarePlan"
     }
     oneof_index: 0
   }

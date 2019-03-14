@@ -97,7 +97,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Fulfills plan, proposal or order"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/SupplyRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "SupplyRequest"
   }
 }
 field {
@@ -108,8 +108,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Part of referenced event"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/SupplyDelivery"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Contract"
+    [google.fhir.stu3.proto.valid_reference_type]: "SupplyDelivery"
+    [google.fhir.stu3.proto.valid_reference_type]: "Contract"
   }
 }
 field {
@@ -130,7 +130,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Patient for whom the item is supplied"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
   }
 }
 field {
@@ -171,8 +171,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Dispenser"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -183,7 +183,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Where the Supply was sent"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Location"
+    [google.fhir.stu3.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -194,7 +194,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Who collected the Supply"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
   }
 }
 nested_type {
@@ -266,9 +266,9 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Medication"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Substance"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
+        [google.fhir.stu3.proto.valid_reference_type]: "Medication"
+        [google.fhir.stu3.proto.valid_reference_type]: "Substance"
+        [google.fhir.stu3.proto.valid_reference_type]: "Device"
       }
       oneof_index: 0
     }

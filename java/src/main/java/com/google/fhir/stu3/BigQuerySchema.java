@@ -103,11 +103,7 @@ public final class BigQuerySchema {
       }
       Set<String> fieldReferences =
           new HashSet<>(fieldDescriptor.getOptions().getExtension(Annotations.validReferenceType));
-      if (fieldReferences.size() == 1
-          && fieldReferences
-              .iterator()
-              .next()
-              .equals("http://hl7.org/fhir/StructureDefinition/Resource")) {
+      if (fieldReferences.size() == 1 && fieldReferences.iterator().next().equals("Resource")) {
         return descriptor.getFields();
       }
 
@@ -118,11 +114,9 @@ public final class BigQuerySchema {
       for (FieldDescriptor field : descriptor.getFields()) {
         String resourceFieldName =
             CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, field.getName());
+        String fieldType = resourceFieldName.substring(0, resourceFieldName.length() - 2);
         if (resourceFieldName.endsWith("Id")) {
-          String url =
-              "http://hl7.org/fhir/StructureDefinition/"
-                  + resourceFieldName.substring(0, resourceFieldName.length() - 2);
-          if (fieldReferences.contains(url)) {
+          if (fieldReferences.contains(fieldType)) {
             fields.add(field);
           }
         } else if (staticNames.contains(field.getName())) {

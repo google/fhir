@@ -107,7 +107,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "The subject of the Products and Services"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
   }
 }
 field {
@@ -128,7 +128,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Insurance issuing organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -139,7 +139,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Responsible practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -150,7 +150,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Responsible organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -161,7 +161,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Id of resource triggering adjudication"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Claim"
+    [google.fhir.stu3.proto.valid_reference_type]: "Claim"
   }
 }
 field {
@@ -302,7 +302,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Request for additional information"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/CommunicationRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "CommunicationRequest"
   }
 }
 field {
@@ -1130,7 +1130,7 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Insurance information"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Coverage"
+      [google.fhir.stu3.proto.valid_reference_type]: "Coverage"
     }
   }
   field {
@@ -1161,7 +1161,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Adjudication results"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ClaimResponse"
+      [google.fhir.stu3.proto.valid_reference_type]: "ClaimResponse"
     }
   }
 }

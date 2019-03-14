@@ -29,8 +29,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/PlanDefinition"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ActivityDefinition"
+      [google.fhir.stu3.proto.valid_reference_type]: "PlanDefinition"
+      [google.fhir.stu3.proto.valid_reference_type]: "ActivityDefinition"
     }
     oneof_index: 0
   }

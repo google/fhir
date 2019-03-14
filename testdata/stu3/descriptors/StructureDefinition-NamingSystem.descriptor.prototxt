@@ -222,7 +222,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Use this instead"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/NamingSystem"
+    [google.fhir.stu3.proto.valid_reference_type]: "NamingSystem"
   }
 }
 nested_type {

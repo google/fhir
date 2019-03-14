@@ -167,7 +167,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Who is intended to fulfill the request"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -188,8 +188,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "The origin of the supply"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Location"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -200,9 +200,9 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "The destination of the supply"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Location"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Location"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
   }
 }
 nested_type {
@@ -275,9 +275,9 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Medication"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Substance"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
+        [google.fhir.stu3.proto.valid_reference_type]: "Medication"
+        [google.fhir.stu3.proto.valid_reference_type]: "Substance"
+        [google.fhir.stu3.proto.valid_reference_type]: "Device"
       }
       oneof_index: 0
     }
@@ -363,11 +363,11 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Individual making the request"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
+      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+      [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+      [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+      [google.fhir.stu3.proto.valid_reference_type]: "Device"
     }
   }
   field {
@@ -378,7 +378,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Organization agent is acting for"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
     }
   }
 }
@@ -399,7 +399,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+      [google.fhir.stu3.proto.valid_reference_type]: "Resource"
     }
     oneof_index: 0
   }

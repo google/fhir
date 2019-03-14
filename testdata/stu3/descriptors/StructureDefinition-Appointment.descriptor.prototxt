@@ -158,8 +158,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Reason the appointment is to takes place (resource)"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Condition"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Procedure"
+    [google.fhir.stu3.proto.valid_reference_type]: "Condition"
+    [google.fhir.stu3.proto.valid_reference_type]: "Procedure"
   }
 }
 field {
@@ -190,7 +190,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Additional information to support the appointment"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -231,7 +231,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "The slots that this appointment is filling"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Slot"
+    [google.fhir.stu3.proto.valid_reference_type]: "Slot"
   }
 }
 field {
@@ -262,7 +262,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "The ReferralRequest provided as information to allocate to the Encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "ReferralRequest"
   }
 }
 field {
@@ -336,12 +336,12 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Person, Location/HealthcareService or Device"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/HealthcareService"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Location"
+      [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+      [google.fhir.stu3.proto.valid_reference_type]: "Device"
+      [google.fhir.stu3.proto.valid_reference_type]: "HealthcareService"
+      [google.fhir.stu3.proto.valid_reference_type]: "Location"
     }
   }
   field {

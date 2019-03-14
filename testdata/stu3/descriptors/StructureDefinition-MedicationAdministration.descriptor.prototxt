@@ -97,8 +97,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Instantiates protocol or definition"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/PlanDefinition"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ActivityDefinition"
+    [google.fhir.stu3.proto.valid_reference_type]: "PlanDefinition"
+    [google.fhir.stu3.proto.valid_reference_type]: "ActivityDefinition"
   }
 }
 field {
@@ -109,8 +109,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Part of referenced event"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/MedicationAdministration"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Procedure"
+    [google.fhir.stu3.proto.valid_reference_type]: "MedicationAdministration"
+    [google.fhir.stu3.proto.valid_reference_type]: "Procedure"
   }
 }
 field {
@@ -154,8 +154,8 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Who received medication"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Group"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Group"
   }
 }
 field {
@@ -166,8 +166,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Encounter or Episode of Care administered as part of"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
+    [google.fhir.stu3.proto.valid_reference_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -178,7 +178,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Additional information to support administration"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -240,8 +240,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Condition or Observation that supports why the medication was administered"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Condition"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Observation"
+    [google.fhir.stu3.proto.valid_reference_type]: "Condition"
+    [google.fhir.stu3.proto.valid_reference_type]: "Observation"
   }
 }
 field {
@@ -252,7 +252,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Request administration performed against"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/MedicationRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "MedicationRequest"
   }
 }
 field {
@@ -263,7 +263,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Device used to administer"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
+    [google.fhir.stu3.proto.valid_reference_type]: "Device"
   }
 }
 field {
@@ -294,7 +294,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "A list of events of interest in the lifecycle"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Provenance"
+    [google.fhir.stu3.proto.valid_reference_type]: "Provenance"
   }
 }
 nested_type {
@@ -314,7 +314,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Medication"
+      [google.fhir.stu3.proto.valid_reference_type]: "Medication"
     }
     oneof_index: 0
   }
@@ -391,10 +391,10 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Individual who was performing"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
+      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+      [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+      [google.fhir.stu3.proto.valid_reference_type]: "Device"
     }
   }
   field {
@@ -405,7 +405,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Organization organization was acting for"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
     }
   }
 }

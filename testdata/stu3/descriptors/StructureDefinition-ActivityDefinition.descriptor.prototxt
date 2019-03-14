@@ -308,7 +308,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Logic used by the asset"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Library"
+    [google.fhir.stu3.proto.valid_reference_type]: "Library"
   }
 }
 field {
@@ -349,7 +349,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Where it should happen"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Location"
+    [google.fhir.stu3.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -410,7 +410,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Transform to apply the template"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/StructureMap"
+    [google.fhir.stu3.proto.valid_reference_type]: "StructureMap"
   }
 }
 field {
@@ -528,8 +528,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Medication"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Substance"
+      [google.fhir.stu3.proto.valid_reference_type]: "Medication"
+      [google.fhir.stu3.proto.valid_reference_type]: "Substance"
     }
     oneof_index: 0
   }

@@ -106,9 +106,7 @@ message DataElementDocumentReference {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/DocumentReference"];
+  Reference value_reference = 3 [(valid_reference_type) = "DocumentReference"];
 }
 
 // Auto-generated from StructureDefinition for effective-period.
@@ -159,9 +157,7 @@ message DataElementRegistryOrg {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Organization"];
+  Reference value_reference = 3 [(valid_reference_type) = "Organization"];
 }
 
 // Auto-generated from StructureDefinition for submitter-org.
@@ -178,9 +174,7 @@ message DataElementSubmitterOrg {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Organization"];
+  Reference value_reference = 3 [(valid_reference_type) = "Organization"];
 }
 
 // Auto-generated from StructureDefinition for objectClass.
@@ -231,9 +225,7 @@ message PermittedValueConceptmap {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/ConceptMap"];
+  Reference value_reference = 3 [(valid_reference_type) = "ConceptMap"];
 }
 
 // Auto-generated from StructureDefinition for permitted-value-valueset.
@@ -250,9 +242,7 @@ message PermittedValueValueset {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/ValueSet"];
+  Reference value_reference = 3 [(valid_reference_type) = "ValueSet"];
 }
 
 // Auto-generated from StructureDefinition for certainty.
@@ -482,9 +472,7 @@ message AuditEventSOPClass {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/ImagingStudy"];
+  Reference value_reference = 3 [(valid_reference_type) = "ImagingStudy"];
 }
 
 // Auto-generated from StructureDefinition for Birth Place.
@@ -518,9 +506,7 @@ message BodySiteInstance {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/BodySite"];
+  Reference value_reference = 3 [(valid_reference_type) = "BodySite"];
 }
 
 // Auto-generated from StructureDefinition for expectation.
@@ -848,9 +834,7 @@ message CodeSystemMap {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/ConceptMap"];
+  Reference value_reference = 3 [(valid_reference_type) = "ConceptMap"];
 }
 
 // Auto-generated from StructureDefinition for ordinalValue.
@@ -1105,10 +1089,8 @@ message CommunicationRequestDefinition {
 
     oneof value {
       Reference reference = 1 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/PlanDefinition",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/ActivityDefinition"
+        (valid_reference_type) = "PlanDefinition",
+        (valid_reference_type) = "ActivityDefinition"
       ];
     }
   }
@@ -1134,14 +1116,10 @@ message CommunicationRequestOrderedBy {
 
     oneof value {
       Reference reference = 1 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Practitioner",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Organization",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Device",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Patient"
+        (valid_reference_type) = "Practitioner",
+        (valid_reference_type) = "Organization",
+        (valid_reference_type) = "Device",
+        (valid_reference_type) = "Patient"
       ];
     }
   }
@@ -1181,9 +1159,7 @@ message CommunicationRequestRelevantHistory {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Provenance"];
+  Reference value_reference = 3 [(valid_reference_type) = "Provenance"];
 }
 
 // Auto-generated from StructureDefinition for supportingInfo.
@@ -1201,9 +1177,7 @@ message CommunicationRequestSupportingInfo {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Resource"];
+  Reference value_reference = 3 [(valid_reference_type) = "Resource"];
 }
 
 // Auto-generated from StructureDefinition for otherConfidentiality.
@@ -1260,12 +1234,9 @@ message ConditionBasedOn {
 
     oneof value {
       Reference reference = 1 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/ReferralRequest",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/CarePlan"
+        (valid_reference_type) = "ReferralRequest",
+        (valid_reference_type) = "ProcedureRequest",
+        (valid_reference_type) = "CarePlan"
       ];
     }
   }
@@ -1303,9 +1274,7 @@ message ConditionDefinition {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/PlanDefinition"];
+  Reference value_reference = 3 [(valid_reference_type) = "PlanDefinition"];
 }
 
 // Auto-generated from StructureDefinition for dueTo.
@@ -1328,16 +1297,11 @@ message ConditionDueTo {
     oneof value {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Condition",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Procedure",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/MedicationAdministration",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Immunization",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/MedicationStatement"
+        (valid_reference_type) = "Condition",
+        (valid_reference_type) = "Procedure",
+        (valid_reference_type) = "MedicationAdministration",
+        (valid_reference_type) = "Immunization",
+        (valid_reference_type) = "MedicationStatement"
       ];
     }
   }
@@ -1364,16 +1328,11 @@ message ConditionOccurredFollowing {
     oneof value {
       CodeableConcept codeable_concept = 1;
       Reference reference = 2 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Condition",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Procedure",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/MedicationAdministration",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Immunization",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/MedicationStatement"
+        (valid_reference_type) = "Condition",
+        (valid_reference_type) = "Procedure",
+        (valid_reference_type) = "MedicationAdministration",
+        (valid_reference_type) = "Immunization",
+        (valid_reference_type) = "MedicationStatement"
       ];
     }
   }
@@ -1416,12 +1375,9 @@ message ConditionPartOf {
 
     oneof value {
       Reference reference = 1 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Observation",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Procedure",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Condition"
+        (valid_reference_type) = "Observation",
+        (valid_reference_type) = "Procedure",
+        (valid_reference_type) = "Condition"
       ];
     }
   }
@@ -1442,9 +1398,7 @@ message ConditionRuledOut {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Condition"];
+  Reference value_reference = 3 [(valid_reference_type) = "Condition"];
 }
 
 // Auto-generated from StructureDefinition for targetBodySite.
@@ -1461,9 +1415,7 @@ message ConditionTargetBodySite {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/BodySite"];
+  Reference value_reference = 3 [(valid_reference_type) = "BodySite"];
 }
 
 // Auto-generated from StructureDefinition for location.
@@ -1480,9 +1432,7 @@ message ConsentLocation {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Location"];
+  Reference value_reference = 3 [(valid_reference_type) = "Location"];
 }
 
 // Auto-generated from StructureDefinition for NotificationEndpoint.
@@ -1521,14 +1471,10 @@ message ConsentWitness {
 
     oneof value {
       Reference reference = 1 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Organization",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Patient",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Practitioner",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+        (valid_reference_type) = "Organization",
+        (valid_reference_type) = "Patient",
+        (valid_reference_type) = "Practitioner",
+        (valid_reference_type) = "RelatedPerson"
       ];
     }
   }
@@ -1669,9 +1615,7 @@ message BasicInitiatingOrganization {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Organization"];
+  Reference value_reference = 3 [(valid_reference_type) = "Organization"];
 }
 
 // Auto-generated from StructureDefinition for initiatingPerson.
@@ -1693,14 +1637,10 @@ message BasicInitiatingPerson {
 
     oneof value {
       Reference reference = 1 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Person",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Patient",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Practitioner",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+        (valid_reference_type) = "Person",
+        (valid_reference_type) = "Patient",
+        (valid_reference_type) = "Practitioner",
+        (valid_reference_type) = "RelatedPerson"
       ];
     }
   }
@@ -1722,9 +1662,7 @@ message BasicReceivingOrganization {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Organization"];
+  Reference value_reference = 3 [(valid_reference_type) = "Organization"];
 }
 
 // Auto-generated from StructureDefinition for receivingPerson.
@@ -1746,14 +1684,10 @@ message BasicReceivingPerson {
 
     oneof value {
       Reference reference = 1 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Person",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Patient",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Practitioner",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+        (valid_reference_type) = "Person",
+        (valid_reference_type) = "Patient",
+        (valid_reference_type) = "Practitioner",
+        (valid_reference_type) = "RelatedPerson"
       ];
     }
   }
@@ -1877,9 +1811,7 @@ message CqifLibrary {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Library"];
+  Reference value_reference = 3 [(valid_reference_type) = "Library"];
 }
 
 // Auto-generated from StructureDefinition for measureInfo.
@@ -2098,9 +2030,7 @@ message DiagnosticReportAddendumOf {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"];
+  Reference value_reference = 3 [(valid_reference_type) = "DiagnosticReport"];
 }
 
 // Auto-generated from StructureDefinition for extends.
@@ -2117,9 +2047,7 @@ message DiagnosticReportExtends {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"];
+  Reference value_reference = 3 [(valid_reference_type) = "DiagnosticReport"];
 }
 
 // Auto-generated from StructureDefinition for Analysis.
@@ -2160,9 +2088,7 @@ message DiagnosticReportAssessedCondition {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Condition"];
+  Reference value_reference = 3 [(valid_reference_type) = "Condition"];
 }
 
 // Auto-generated from StructureDefinition for FamilyMemberHistory.
@@ -2181,8 +2107,7 @@ message DiagnosticReportFamilyMemberHistory {
 
   // Value of extension
   Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory"];
+      [(valid_reference_type) = "FamilyMemberHistory"];
 }
 
 // Auto-generated from StructureDefinition for locationPerformed.
@@ -2200,9 +2125,7 @@ message DiagnosticReportLocationPerformed {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Location"];
+  Reference value_reference = 3 [(valid_reference_type) = "Location"];
 }
 
 // Auto-generated from StructureDefinition for replaces.
@@ -2219,9 +2142,7 @@ message DiagnosticReportReplaces {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"];
+  Reference value_reference = 3 [(valid_reference_type) = "DiagnosticReport"];
 }
 
 // Auto-generated from StructureDefinition for summaryOf.
@@ -2238,9 +2159,7 @@ message DiagnosticReportSummaryOf {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"];
+  Reference value_reference = 3 [(valid_reference_type) = "DiagnosticReport"];
 }
 
 // Auto-generated from StructureDefinition for allowedUnits.
@@ -2262,9 +2181,7 @@ message ElementDefinitionAllowedUnits {
 
     oneof value {
       CodeableConcept codeable_concept = 1;
-      Reference reference = 2
-          [(valid_reference_type) =
-               "http://hl7.org/fhir/StructureDefinition/ValueSet"];
+      Reference reference = 2 [(valid_reference_type) = "ValueSet"];
     }
   }
   Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -2367,9 +2284,7 @@ message ElementDefinitionInheritedExtensibleValueSet {
 
     oneof value {
       Uri uri = 1;
-      Reference reference = 2
-          [(valid_reference_type) =
-               "http://hl7.org/fhir/StructureDefinition/ValueSet"];
+      Reference reference = 2 [(valid_reference_type) = "ValueSet"];
     }
   }
   Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -2411,9 +2326,7 @@ message ElementDefinitionMaxValueSet {
 
     oneof value {
       Uri uri = 1;
-      Reference reference = 2
-          [(valid_reference_type) =
-               "http://hl7.org/fhir/StructureDefinition/ValueSet"];
+      Reference reference = 2 [(valid_reference_type) = "ValueSet"];
     }
   }
   Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -2438,9 +2351,7 @@ message ElementDefinitionMinValueSet {
 
     oneof value {
       Uri uri = 1;
-      Reference reference = 2
-          [(valid_reference_type) =
-               "http://hl7.org/fhir/StructureDefinition/ValueSet"];
+      Reference reference = 2 [(valid_reference_type) = "ValueSet"];
     }
   }
   Value value = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -2528,9 +2439,7 @@ message EncounterAssociatedEncounter {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Encounter"];
+  Reference value_reference = 3 [(valid_reference_type) = "Encounter"];
 }
 
 // Auto-generated from StructureDefinition for modeOfArrival.
@@ -2620,10 +2529,8 @@ message Definition {
 
     oneof value {
       Reference reference = 1 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/ActivityDefinition",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/PlanDefinition"
+        (valid_reference_type) = "ActivityDefinition",
+        (valid_reference_type) = "PlanDefinition"
       ];
     }
   }
@@ -2661,9 +2568,7 @@ message OnBehalfOf {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Organization"];
+  Reference value_reference = 3 [(valid_reference_type) = "Organization"];
 }
 
 // Auto-generated from StructureDefinition for partOf.
@@ -2680,9 +2585,7 @@ message PartOf {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Resource"];
+  Reference value_reference = 3 [(valid_reference_type) = "Resource"];
 }
 
 // Auto-generated from StructureDefinition for performerRole.
@@ -2738,10 +2641,8 @@ message ReasonReference {
 
     oneof value {
       Reference reference = 1 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Condition",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Observation"
+        (valid_reference_type) = "Condition",
+        (valid_reference_type) = "Observation"
       ];
     }
   }
@@ -2763,9 +2664,7 @@ message FamilyMemberHistoryObservation {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Observation"];
+  Reference value_reference = 3 [(valid_reference_type) = "Observation"];
 }
 
 // Auto-generated from StructureDefinition for parent.
@@ -2857,9 +2756,7 @@ message FamilyMemberHistoryPatientRecord {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Patient"];
+  Reference value_reference = 3 [(valid_reference_type) = "Patient"];
 }
 
 // Auto-generated from StructureDefinition for severity.
@@ -2910,9 +2807,7 @@ message FlagDetail {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Resource"];
+  Reference value_reference = 3 [(valid_reference_type) = "Resource"];
 }
 
 // Auto-generated from StructureDefinition for priority.
@@ -2995,8 +2890,7 @@ message ResourcePertainsToGoal {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Goal"];
+  Reference value_reference = 3 [(valid_reference_type) = "Goal"];
 }
 
 // Auto-generated from StructureDefinition for reasonRejected.
@@ -4038,9 +3932,7 @@ message MedicationStatementPrescriber {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Practitioner"];
+  Reference value_reference = 3 [(valid_reference_type) = "Practitioner"];
 }
 
 // Auto-generated from StructureDefinition for messageheader-response-request.
@@ -4425,9 +4317,7 @@ message ObservationInterpretation {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Observation"];
+  Reference value_reference = 3 [(valid_reference_type) = "Observation"];
 }
 
 // Auto-generated from StructureDefinition for PhaseSet.
@@ -4461,9 +4351,7 @@ message ObservationSequence {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Sequence"];
+  Reference value_reference = 3 [(valid_reference_type) = "Sequence"];
 }
 
 // Auto-generated from StructureDefinition for time-offset.
@@ -4498,8 +4386,7 @@ message AllergyIntoleranceAdministration {
 
   // Value of extension
   Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/MedicationAdministration"];
+      [(valid_reference_type) = "MedicationAdministration"];
 }
 
 // Auto-generated from StructureDefinition for careplan.
@@ -4516,9 +4403,7 @@ message AllergyIntoleranceCareplan {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/CarePlan"];
+  Reference value_reference = 3 [(valid_reference_type) = "CarePlan"];
 }
 
 // Auto-generated from StructureDefinition for exposureDate.
@@ -4625,10 +4510,8 @@ message AllergyIntoleranceTest {
 
     oneof value {
       Reference reference = 1 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Observation",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"
+        (valid_reference_type) = "Observation",
+        (valid_reference_type) = "DiagnosticReport"
       ];
     }
   }
@@ -4666,9 +4549,7 @@ message OperationOutcomeDetectedIssue {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/DetectedIssue"];
+  Reference value_reference = 3 [(valid_reference_type) = "DetectedIssue"];
 }
 
 // Auto-generated from StructureDefinition for issue-source.
@@ -5186,9 +5067,7 @@ message ProcedureApproachBodySite {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/BodySite"];
+  Reference value_reference = 3 [(valid_reference_type) = "BodySite"];
 }
 
 // Auto-generated from StructureDefinition for causedBy.
@@ -5210,28 +5089,17 @@ message ProcedureCausedBy {
 
     oneof value {
       Reference reference = 1 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/AllergyIntolerance",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/DiagnosticReport",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/ImagingStudy",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Immunization",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/MedicationAdministration",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/MedicationStatement",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Observation",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Procedure"
+        (valid_reference_type) = "AllergyIntolerance",
+        (valid_reference_type) = "DiagnosticReport",
+        (valid_reference_type) = "FamilyMemberHistory",
+        (valid_reference_type) = "ImagingStudy",
+        (valid_reference_type) = "Immunization",
+        (valid_reference_type) = "ImmunizationRecommendation",
+        (valid_reference_type) = "MedicationAdministration",
+        (valid_reference_type) = "MedicationRequest",
+        (valid_reference_type) = "MedicationStatement",
+        (valid_reference_type) = "Observation",
+        (valid_reference_type) = "Procedure"
       ];
     }
   }
@@ -5320,9 +5188,7 @@ message ProcedureTargetBodySite {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/BodySite"];
+  Reference value_reference = 3 [(valid_reference_type) = "BodySite"];
 }
 
 // Auto-generated from StructureDefinition for approachBodySite.
@@ -5339,9 +5205,7 @@ message ProcedureRequestApproachBodySite {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/BodySite"];
+  Reference value_reference = 3 [(valid_reference_type) = "BodySite"];
 }
 
 // Auto-generated from StructureDefinition for authorizedBy.
@@ -5358,9 +5222,7 @@ message ProcedureRequestAuthorizedBy {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Practitioner"];
+  Reference value_reference = 3 [(valid_reference_type) = "Practitioner"];
 }
 
 // Auto-generated from StructureDefinition for Item.
@@ -5425,9 +5287,7 @@ message ProcedureRequestQuestionnaireRequest {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Questionnaire"];
+  Reference value_reference = 3 [(valid_reference_type) = "Questionnaire"];
 }
 
 // Auto-generated from StructureDefinition for reasonRefused.
@@ -5478,9 +5338,7 @@ message ProcedureRequestTargetBodySite {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/BodySite"];
+  Reference value_reference = 3 [(valid_reference_type) = "BodySite"];
 }
 
 // Auto-generated from StructureDefinition for allowedProfile.
@@ -5498,8 +5356,7 @@ message QuestionnaireAllowedProfile {
 
   // Value of extension
   Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/StructureDefinition"];
+      [(valid_reference_type) = "StructureDefinition"];
 }
 
 // Auto-generated from StructureDefinition for allowedResource.
@@ -5567,9 +5424,7 @@ message QuestionnaireDeMap {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/ConceptMap"];
+  Reference value_reference = 3 [(valid_reference_type) = "ConceptMap"];
 }
 
 // Auto-generated from StructureDefinition for displayCategory.
@@ -5773,9 +5628,7 @@ message QuestionnaireSourceStructureMap {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/StructureMap"];
+  Reference value_reference = 3 [(valid_reference_type) = "StructureMap"];
 }
 
 // Auto-generated from StructureDefinition for studyprotocolIdentifier.
@@ -5827,9 +5680,7 @@ message QuestionnaireTargetStructureMap {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/StructureMap"];
+  Reference value_reference = 3 [(valid_reference_type) = "StructureMap"];
 }
 
 // Auto-generated from StructureDefinition for unit.
@@ -5886,14 +5737,10 @@ message QuestionnaireResponseAuthor {
 
     oneof value {
       Reference reference = 1 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Patient",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Device",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Practitioner"
+        (valid_reference_type) = "Patient",
+        (valid_reference_type) = "RelatedPerson",
+        (valid_reference_type) = "Device",
+        (valid_reference_type) = "Practitioner"
       ];
     }
   }
@@ -5948,9 +5795,7 @@ message QuestionnaireResponseReviewer {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Practitioner"];
+  Reference value_reference = 3 [(valid_reference_type) = "Practitioner"];
 }
 
 // Auto-generated from StructureDefinition for reasonRefused.
@@ -6510,16 +6355,11 @@ message TaskCandidateList {
 
     oneof value {
       Reference reference = 1 [
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Device",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Organization",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Patient",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Practitioner",
-        (valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+        (valid_reference_type) = "Device",
+        (valid_reference_type) = "Organization",
+        (valid_reference_type) = "Patient",
+        (valid_reference_type) = "Practitioner",
+        (valid_reference_type) = "RelatedPerson"
       ];
     }
   }
@@ -6540,8 +6380,7 @@ message TaskReplaces {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) = "http://hl7.org/fhir/StructureDefinition/Task"];
+  Reference value_reference = 3 [(valid_reference_type) = "Task"];
 }
 
 // Auto-generated from StructureDefinition for daysOfCycle.
@@ -6878,9 +6717,7 @@ message ValueSetMap {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/ConceptMap"];
+  Reference value_reference = 3 [(valid_reference_type) = "ConceptMap"];
 }
 
 // Auto-generated from StructureDefinition for ordinalValue.
@@ -6971,9 +6808,7 @@ message ValueSetSystem {
   String id = 1;
 
   // Value of extension
-  Reference value_reference = 3
-      [(valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/CodeSystem"];
+  Reference value_reference = 3 [(valid_reference_type) = "CodeSystem"];
 }
 
 // Auto-generated from StructureDefinition for systemName.

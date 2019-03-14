@@ -129,8 +129,8 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Patient or group assessed"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Group"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Group"
   }
 }
 field {
@@ -141,8 +141,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Encounter or Episode created from"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
+    [google.fhir.stu3.proto.valid_reference_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -173,7 +173,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "The clinician performing the assessment"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
+    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -184,7 +184,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Reference to last assessment"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ClinicalImpression"
+    [google.fhir.stu3.proto.valid_reference_type]: "ClinicalImpression"
   }
 }
 field {
@@ -195,8 +195,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Relevant impressions of patient state"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Condition"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/AllergyIntolerance"
+    [google.fhir.stu3.proto.valid_reference_type]: "Condition"
+    [google.fhir.stu3.proto.valid_reference_type]: "AllergyIntolerance"
   }
 }
 field {
@@ -257,7 +257,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "RiskAssessment expressing likely outcome"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+    [google.fhir.stu3.proto.valid_reference_type]: "RiskAssessment"
   }
 }
 field {
@@ -268,11 +268,11 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Action taken as part of assessment procedure"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Procedure"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/MedicationRequest"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Appointment"
+    [google.fhir.stu3.proto.valid_reference_type]: "ReferralRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "ProcedureRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "Procedure"
+    [google.fhir.stu3.proto.valid_reference_type]: "MedicationRequest"
+    [google.fhir.stu3.proto.valid_reference_type]: "Appointment"
   }
 }
 field {
@@ -361,12 +361,12 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
       [google.fhir.stu3.proto.field_description]: "Record of a specific investigation"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Observation"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ImagingStudy"
+      [google.fhir.stu3.proto.valid_reference_type]: "Observation"
+      [google.fhir.stu3.proto.valid_reference_type]: "QuestionnaireResponse"
+      [google.fhir.stu3.proto.valid_reference_type]: "FamilyMemberHistory"
+      [google.fhir.stu3.proto.valid_reference_type]: "DiagnosticReport"
+      [google.fhir.stu3.proto.valid_reference_type]: "RiskAssessment"
+      [google.fhir.stu3.proto.valid_reference_type]: "ImagingStudy"
     }
   }
 }
@@ -440,8 +440,8 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Condition"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Observation"
+        [google.fhir.stu3.proto.valid_reference_type]: "Condition"
+        [google.fhir.stu3.proto.valid_reference_type]: "Observation"
       }
       oneof_index: 0
     }

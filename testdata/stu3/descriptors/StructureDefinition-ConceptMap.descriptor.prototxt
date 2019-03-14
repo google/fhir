@@ -277,7 +277,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ValueSet"
+      [google.fhir.stu3.proto.valid_reference_type]: "ValueSet"
     }
     oneof_index: 0
   }
@@ -305,7 +305,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/ValueSet"
+      [google.fhir.stu3.proto.valid_reference_type]: "ValueSet"
     }
     oneof_index: 0
   }

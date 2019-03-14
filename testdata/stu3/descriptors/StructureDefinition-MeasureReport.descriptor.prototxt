@@ -120,7 +120,7 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "What measure was evaluated"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Measure"
+    [google.fhir.stu3.proto.valid_reference_type]: "Measure"
   }
 }
 field {
@@ -131,7 +131,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "What patient the report is for"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
+    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
   }
 }
 field {
@@ -152,7 +152,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Who is reporting the data"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -184,7 +184,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "What data was evaluated to produce the measure score"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Bundle"
+    [google.fhir.stu3.proto.valid_reference_type]: "Bundle"
   }
 }
 nested_type {
@@ -330,7 +330,7 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
         [google.fhir.stu3.proto.field_description]: "For patient-list reports, the patients in this population"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/List"
+        [google.fhir.stu3.proto.valid_reference_type]: "List"
       }
     }
   }
@@ -519,7 +519,7 @@ nested_type {
           type_name: ".google.fhir.stu3.proto.Reference"
           options {
             [google.fhir.stu3.proto.field_description]: "For patient-list reports, the patients in this population"
-            [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/List"
+            [google.fhir.stu3.proto.valid_reference_type]: "List"
           }
         }
       }

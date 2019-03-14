@@ -86,8 +86,7 @@ message UsCoreAllergyintolerance {
   // Who the sensitivity is for
   proto.Reference patient = 16 [
     (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient"
   ];
 
   // When allergy or intolerance was identified
@@ -109,20 +108,15 @@ message UsCoreAllergyintolerance {
 
   // Who recorded the sensitivity
   proto.Reference recorder = 19 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Practitioner",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Patient"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient"
   ];
 
   // Source of the information about the allergy
   proto.Reference asserter = 20 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Patient",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Practitioner"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
+    (.google.fhir.stu3.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner"
   ];
 
   // Date(/time) of last known occurrence of a reaction
@@ -229,26 +223,21 @@ message UsCoreCareplan {
 
   // Protocol or definition
   repeated proto.Reference definition = 10 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/PlanDefinition",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Questionnaire"
+    (.google.fhir.stu3.proto.valid_reference_type) = "PlanDefinition",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Questionnaire"
   ];
 
   // Fulfills care plan
   repeated proto.Reference based_on = 11
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/CarePlan"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "CarePlan"];
 
   // CarePlan replaced by this CarePlan
   repeated proto.Reference replaces = 12
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/CarePlan"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "CarePlan"];
 
   // Part of referenced CarePlan
   repeated proto.Reference part_of = 13
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/CarePlan"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "CarePlan"];
 
   // draft | active | suspended | completed | entered-in-error | cancelled |
   // unknown
@@ -272,16 +261,13 @@ message UsCoreCareplan {
   // Who care plan is for
   proto.Reference subject = 19 [
     (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient"
   ];
 
   // Created in context of
   proto.Reference context = 20 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Encounter",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Encounter",
+    (.google.fhir.stu3.proto.valid_reference_type) = "EpisodeOfCare"
   ];
 
   // Time period plan covers
@@ -289,37 +275,28 @@ message UsCoreCareplan {
 
   // Who is responsible for contents of the plan
   repeated proto.Reference author = 22 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Patient",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Practitioner",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Organization",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/CareTeam"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.stu3.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Organization",
+    (.google.fhir.stu3.proto.valid_reference_type) = "CareTeam"
   ];
 
   // Who's involved in plan?
   repeated proto.Reference care_team = 23
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/CareTeam"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "CareTeam"];
 
   // Health issues this plan addresses
   repeated proto.Reference addresses = 24
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Condition"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Condition"];
 
   // Information considered as part of plan
   repeated proto.Reference supporting_info = 25
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Resource"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Resource"];
 
   // Desired outcome of plan
   repeated proto.Reference goal = 26
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Goal"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Goal"];
 
   // Action to occur as part of plan
   message Activity {
@@ -337,34 +314,23 @@ message UsCoreCareplan {
 
     // Appointment, Encounter, Procedure, etc.
     repeated proto.Reference outcome_reference = 5
-        [(.google.fhir.stu3.proto.valid_reference_type) =
-             "http://hl7.org/fhir/StructureDefinition/Resource"];
+        [(.google.fhir.stu3.proto.valid_reference_type) = "Resource"];
 
     // Comments about the activity status/progress
     repeated proto.Annotation progress = 6;
 
     // Activity details defined in specific resource
     proto.Reference reference = 7 [
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Appointment",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/CommunicationRequest",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Task",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/ReferralRequest",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/VisionPrescription",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/RequestGroup"
+      (.google.fhir.stu3.proto.valid_reference_type) = "Appointment",
+      (.google.fhir.stu3.proto.valid_reference_type) = "CommunicationRequest",
+      (.google.fhir.stu3.proto.valid_reference_type) = "DeviceRequest",
+      (.google.fhir.stu3.proto.valid_reference_type) = "MedicationRequest",
+      (.google.fhir.stu3.proto.valid_reference_type) = "NutritionOrder",
+      (.google.fhir.stu3.proto.valid_reference_type) = "Task",
+      (.google.fhir.stu3.proto.valid_reference_type) = "ProcedureRequest",
+      (.google.fhir.stu3.proto.valid_reference_type) = "ReferralRequest",
+      (.google.fhir.stu3.proto.valid_reference_type) = "VisionPrescription",
+      (.google.fhir.stu3.proto.valid_reference_type) = "RequestGroup"
     ];
 
     // In-line definition of activity
@@ -383,12 +349,9 @@ message UsCoreCareplan {
 
       // Protocol or definition
       proto.Reference definition = 5 [
-        (.google.fhir.stu3.proto.valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/PlanDefinition",
-        (.google.fhir.stu3.proto.valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/ActivityDefinition",
-        (.google.fhir.stu3.proto.valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Questionnaire"
+        (.google.fhir.stu3.proto.valid_reference_type) = "PlanDefinition",
+        (.google.fhir.stu3.proto.valid_reference_type) = "ActivityDefinition",
+        (.google.fhir.stu3.proto.valid_reference_type) = "Questionnaire"
       ];
 
       // Detail type of activity
@@ -399,13 +362,11 @@ message UsCoreCareplan {
 
       // Condition triggering need for activity
       repeated proto.Reference reason_reference = 8
-          [(.google.fhir.stu3.proto.valid_reference_type) =
-               "http://hl7.org/fhir/StructureDefinition/Condition"];
+          [(.google.fhir.stu3.proto.valid_reference_type) = "Condition"];
 
       // Goals this activity relates to
       repeated proto.Reference goal = 9
-          [(.google.fhir.stu3.proto.valid_reference_type) =
-               "http://hl7.org/fhir/StructureDefinition/Goal"];
+          [(.google.fhir.stu3.proto.valid_reference_type) = "Goal"];
 
       // not-started | scheduled | in-progress | on-hold | completed | cancelled
       // | unknown
@@ -432,21 +393,15 @@ message UsCoreCareplan {
 
       // Where it should happen
       proto.Reference location = 14
-          [(.google.fhir.stu3.proto.valid_reference_type) =
-               "http://hl7.org/fhir/StructureDefinition/Location"];
+          [(.google.fhir.stu3.proto.valid_reference_type) = "Location"];
 
       // Who will be responsible?
       repeated proto.Reference performer = 15 [
-        (.google.fhir.stu3.proto.valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Practitioner",
-        (.google.fhir.stu3.proto.valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Organization",
-        (.google.fhir.stu3.proto.valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
-        (.google.fhir.stu3.proto.valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/Patient",
-        (.google.fhir.stu3.proto.valid_reference_type) =
-            "http://hl7.org/fhir/StructureDefinition/CareTeam"
+        (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner",
+        (.google.fhir.stu3.proto.valid_reference_type) = "Organization",
+        (.google.fhir.stu3.proto.valid_reference_type) = "RelatedPerson",
+        (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
+        (.google.fhir.stu3.proto.valid_reference_type) = "CareTeam"
       ];
 
       // What is to be administered/supplied
@@ -456,10 +411,8 @@ message UsCoreCareplan {
         oneof product {
           proto.CodeableConcept codeable_concept = 1;
           proto.Reference reference = 2 [
-            (.google.fhir.stu3.proto.valid_reference_type) =
-                "http://hl7.org/fhir/StructureDefinition/Medication",
-            (.google.fhir.stu3.proto.valid_reference_type) =
-                "http://hl7.org/fhir/StructureDefinition/Substance"
+            (.google.fhir.stu3.proto.valid_reference_type) = "Medication",
+            (.google.fhir.stu3.proto.valid_reference_type) = "Substance"
           ];
         }
       }
@@ -532,16 +485,13 @@ message UsCoreCareteam {
   // Who care team is for
   proto.Reference subject = 13 [
     (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient"
   ];
 
   // Encounter or episode associated with CareTeam
   proto.Reference context = 14 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Encounter",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Encounter",
+    (.google.fhir.stu3.proto.valid_reference_type) = "EpisodeOfCare"
   ];
 
   // Time period team covers
@@ -565,20 +515,15 @@ message UsCoreCareteam {
     // Who is involved
     proto.Reference member = 5 [
       (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/us/core/StructureDefinition/us-core-organization",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+      (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
+      (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.stu3.proto.valid_reference_type) = "Organization",
+      (.google.fhir.stu3.proto.valid_reference_type) = "RelatedPerson"
     ];
 
     // Organization of the practitioner
     proto.Reference on_behalf_of = 6
-        [(.google.fhir.stu3.proto.valid_reference_type) =
-             "http://hl7.org/fhir/StructureDefinition/Organization"];
+        [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
 
     // Time period of participant
     proto.Period period = 7;
@@ -591,13 +536,11 @@ message UsCoreCareteam {
 
   // Why the care team exists
   repeated proto.Reference reason_reference = 18
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Condition"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Condition"];
 
   // Organization responsible for the care team
   repeated proto.Reference managing_organization = 19
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Organization"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
 
   // Comments made about the CareTeam
   repeated proto.Annotation note = 20;
@@ -665,16 +608,13 @@ message UsCoreCondition {
   // Who has the condition?
   proto.Reference subject = 16 [
     (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient"
   ];
 
   // Encounter or episode when condition first asserted
   proto.Reference context = 17 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Encounter",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Encounter",
+    (.google.fhir.stu3.proto.valid_reference_type) = "EpisodeOfCare"
   ];
 
   // Estimated or actual date,  date-time, or age
@@ -711,12 +651,9 @@ message UsCoreCondition {
 
   // Person who asserts this condition
   proto.Reference asserter = 21 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Practitioner",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Patient",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
+    (.google.fhir.stu3.proto.valid_reference_type) = "RelatedPerson"
   ];
 
   // Stage/grade, usually assessed formally
@@ -735,12 +672,9 @@ message UsCoreCondition {
 
     // Formal record of assessment
     repeated proto.Reference assessment = 5 [
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/ClinicalImpression",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/DiagnosticReport",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Observation"
+      (.google.fhir.stu3.proto.valid_reference_type) = "ClinicalImpression",
+      (.google.fhir.stu3.proto.valid_reference_type) = "DiagnosticReport",
+      (.google.fhir.stu3.proto.valid_reference_type) = "Observation"
     ];
   }
   Stage stage = 22;
@@ -761,8 +695,7 @@ message UsCoreCondition {
 
     // Supporting information found elsewhere
     repeated proto.Reference detail = 5
-        [(.google.fhir.stu3.proto.valid_reference_type) =
-             "http://hl7.org/fhir/StructureDefinition/Resource"];
+        [(.google.fhir.stu3.proto.valid_reference_type) = "Resource"];
   }
   repeated Evidence evidence = 23;
 
@@ -870,22 +803,19 @@ message UsCoreDevice {
   // Patient to whom Device is affixed
   proto.Reference patient = 19 [
     (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient"
   ];
 
   // Organization responsible for device
   proto.Reference owner = 20
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Organization"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
 
   // Details for human/organization for support
   repeated proto.ContactPoint contact = 21;
 
   // Where the resource is found
   proto.Reference location = 22
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Location"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Location"];
 
   // Network address to contact device
   proto.Uri url = 23;
@@ -936,18 +866,13 @@ message UsCoreDiagnosticreport {
 
   // What was requested
   repeated proto.Reference based_on = 10 [
+    (.google.fhir.stu3.proto.valid_reference_type) = "CarePlan",
     (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/CarePlan",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+        "ImmunizationRecommendation",
+    (.google.fhir.stu3.proto.valid_reference_type) = "MedicationRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) = "NutritionOrder",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ProcedureRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ReferralRequest"
   ];
 
   // registered | partial | preliminary | final +
@@ -965,16 +890,13 @@ message UsCoreDiagnosticreport {
   // The subject of the report - usually, but not always, the patient
   proto.Reference subject = 14 [
     (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient"
   ];
 
   // Health care event when test ordered
   proto.Reference context = 15 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Encounter",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Encounter",
+    (.google.fhir.stu3.proto.valid_reference_type) = "EpisodeOfCare"
   ];
 
   // Specimen Collection Datetime or Period
@@ -1010,31 +932,24 @@ message UsCoreDiagnosticreport {
     // Practitioner or Organization  participant
     proto.Reference actor = 5 [
       (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/us/core/StructureDefinition/us-core-organization"
+      (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.stu3.proto.valid_reference_type) = "Organization"
     ];
   }
   repeated Performer performer = 18;
 
   // Specimens this report is based on
   repeated proto.Reference specimen = 19
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Specimen"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Specimen"];
 
   // Observations - simple, or complex nested groups
-  repeated proto.Reference result = 20 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observationresults"
-  ];
+  repeated proto.Reference result = 20
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Observation"];
 
   // Reference to full details of imaging associated with the diagnostic report
   repeated proto.Reference imaging_study = 21 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ImagingStudy",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ImagingManifest"
+    (.google.fhir.stu3.proto.valid_reference_type) = "ImagingStudy",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ImagingManifest"
   ];
 
   // Key images associated with this report
@@ -1054,8 +969,7 @@ message UsCoreDiagnosticreport {
     // Reference to the image source
     proto.Reference link = 5 [
       (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Media"
+      (.google.fhir.stu3.proto.valid_reference_type) = "Media"
     ];
   }
   repeated Image image = 22;
@@ -1175,8 +1089,7 @@ message UsCoreGoal {
   // Who this goal is intended for
   proto.Reference subject = 14 [
     (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient"
   ];
 
   // When goal pursuit begins
@@ -1237,28 +1150,19 @@ message UsCoreGoal {
 
   // Who's responsible for creating Goal?
   proto.Reference expressed_by = 19 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Patient",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Practitioner",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.stu3.proto.valid_reference_type) = "RelatedPerson"
   ];
 
   // Issues addressed by this goal
   repeated proto.Reference addresses = 20 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Condition",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Observation",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/MedicationStatement",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Condition",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Observation",
+    (.google.fhir.stu3.proto.valid_reference_type) = "MedicationStatement",
+    (.google.fhir.stu3.proto.valid_reference_type) = "NutritionOrder",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ProcedureRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) = "RiskAssessment"
   ];
 
   // Comments about the goal
@@ -1269,8 +1173,7 @@ message UsCoreGoal {
 
   // Observation that resulted from goal
   repeated proto.Reference outcome_reference = 23
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Observation"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Observation"];
 }
 
 // Auto-generated from StructureDefinition for US  Core Immunization Profile.
@@ -1325,14 +1228,12 @@ message UsCoreImmunization {
   // Who was immunized
   proto.Reference patient = 13 [
     (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient"
   ];
 
   // Encounter administered as part of
   proto.Reference encounter = 14
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Encounter"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Encounter"];
 
   // Vaccination administration date
   proto.DateTime date = 15
@@ -1347,13 +1248,11 @@ message UsCoreImmunization {
 
   // Where vaccination occurred
   proto.Reference location = 18
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Location"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Location"];
 
   // Vaccine manufacturer
   proto.Reference manufacturer = 19
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Organization"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
 
   // Vaccine lot number
   proto.String lot_number = 20;
@@ -1387,8 +1286,7 @@ message UsCoreImmunization {
     // Individual who was performing
     proto.Reference actor = 5 [
       (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Practitioner"
+      (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner"
     ];
   }
   repeated Practitioner practitioner = 25;
@@ -1431,8 +1329,7 @@ message UsCoreImmunization {
 
     // Additional information on reaction
     proto.Reference detail = 5
-        [(.google.fhir.stu3.proto.valid_reference_type) =
-             "http://hl7.org/fhir/StructureDefinition/Observation"];
+        [(.google.fhir.stu3.proto.valid_reference_type) = "Observation"];
 
     // Indicates self-reported reaction
     proto.Boolean reported = 6;
@@ -1458,8 +1355,7 @@ message UsCoreImmunization {
 
     // Who is responsible for protocol
     proto.Reference authority = 6
-        [(.google.fhir.stu3.proto.valid_reference_type) =
-             "http://hl7.org/fhir/StructureDefinition/Organization"];
+        [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
 
     // Name of vaccine series
     proto.String series = 7;
@@ -1576,20 +1472,16 @@ message UsCoreLocation {
   Position position = 20;
 
   // Organization responsible for provisioning and upkeep
-  proto.Reference managing_organization = 21 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-organization"
-  ];
+  proto.Reference managing_organization = 21
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
 
   // Another Location this one is physically part of
   proto.Reference part_of = 22
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Location"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Location"];
 
   // Technical endpoints providing access to services operated for the location
   repeated proto.Reference endpoint = 23
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Endpoint"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Endpoint"];
 }
 
 // Auto-generated from StructureDefinition for US  Core Medication Profile.
@@ -1641,8 +1533,7 @@ message UsCoreMedication {
 
   // Manufacturer of the item
   proto.Reference manufacturer = 13
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Organization"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
 
   // powder | tablets | capsule +
   proto.CodeableConcept form = 14;
@@ -1665,10 +1556,8 @@ message UsCoreMedication {
       oneof item {
         proto.CodeableConcept codeable_concept = 1;
         proto.Reference reference = 2 [
-          (.google.fhir.stu3.proto.valid_reference_type) =
-              "http://hl7.org/fhir/StructureDefinition/Substance",
-          (.google.fhir.stu3.proto.valid_reference_type) =
-              "http://hl7.org/fhir/StructureDefinition/Medication"
+          (.google.fhir.stu3.proto.valid_reference_type) = "Substance",
+          (.google.fhir.stu3.proto.valid_reference_type) = "Medication"
         ];
       }
     }
@@ -1715,8 +1604,7 @@ message UsCoreMedication {
         oneof item {
           proto.CodeableConcept codeable_concept = 1;
           proto.Reference reference = 2
-              [(.google.fhir.stu3.proto.valid_reference_type) =
-                   "http://hl7.org/fhir/StructureDefinition/Medication"];
+              [(.google.fhir.stu3.proto.valid_reference_type) = "Medication"];
         }
       }
       Item item = 4
@@ -1791,22 +1679,16 @@ message UsCoreMedicationrequest {
 
   // Protocol or definition
   repeated proto.Reference definition = 10 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ActivityDefinition",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/PlanDefinition"
+    (.google.fhir.stu3.proto.valid_reference_type) = "ActivityDefinition",
+    (.google.fhir.stu3.proto.valid_reference_type) = "PlanDefinition"
   ];
 
   // What request fulfills
   repeated proto.Reference based_on = 11 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/CarePlan",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+    (.google.fhir.stu3.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.stu3.proto.valid_reference_type) = "MedicationRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ProcedureRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ReferralRequest"
   ];
 
   // Composite request this is part of
@@ -1834,8 +1716,7 @@ message UsCoreMedicationrequest {
     oneof medication {
       proto.CodeableConcept codeable_concept = 1;
       proto.Reference reference = 2
-          [(.google.fhir.stu3.proto.valid_reference_type) =
-               "http://hl7.org/fhir/StructureDefinition/Medication"];
+          [(.google.fhir.stu3.proto.valid_reference_type) = "Medication"];
     }
   }
   Medication medication = 17
@@ -1844,22 +1725,18 @@ message UsCoreMedicationrequest {
   // Who or group medication request is for
   proto.Reference subject = 18 [
     (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient"
   ];
 
   // Created during encounter/admission/stay
   proto.Reference context = 19 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Encounter",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Encounter",
+    (.google.fhir.stu3.proto.valid_reference_type) = "EpisodeOfCare"
   ];
 
   // Information to support ordering of the medication
   repeated proto.Reference supporting_information = 20
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Resource"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Resource"];
 
   // When request was initially authored
   proto.DateTime authored_on = 21
@@ -1879,22 +1756,19 @@ message UsCoreMedicationrequest {
     // Who ordered the initial medication(s)
     proto.Reference agent = 4 [
       (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner"
+      (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner"
     ];
 
     // Organization agent is acting for
     proto.Reference on_behalf_of = 5
-        [(.google.fhir.stu3.proto.valid_reference_type) =
-             "http://hl7.org/fhir/StructureDefinition/Organization"];
+        [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
   }
   Requester requester = 22
       [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Person who entered the request
   proto.Reference recorder = 23
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Practitioner"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Practitioner"];
 
   // Reason or indication for writing the prescription
   repeated proto.CodeableConcept reason_code = 24;
@@ -1902,10 +1776,8 @@ message UsCoreMedicationrequest {
   // Condition or Observation that supports why the prescription is being
   // written
   repeated proto.Reference reason_reference = 25 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Condition",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Observation"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Condition",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Observation"
   ];
 
   // Information about the prescription
@@ -1939,8 +1811,7 @@ message UsCoreMedicationrequest {
 
     // Intended dispenser
     proto.Reference performer = 8
-        [(.google.fhir.stu3.proto.valid_reference_type) =
-             "http://hl7.org/fhir/StructureDefinition/Organization"];
+        [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
   }
   DispenseRequest dispense_request = 28;
 
@@ -1966,18 +1837,15 @@ message UsCoreMedicationrequest {
 
   // An order/prescription that is being replaced
   proto.Reference prior_prescription = 30
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/MedicationRequest"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "MedicationRequest"];
 
   // Clinical Issue with action
   repeated proto.Reference detected_issue = 31
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/DetectedIssue"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "DetectedIssue"];
 
   // A list of events of interest in the lifecycle
   repeated proto.Reference event_history = 32
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Provenance"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Provenance"];
 }
 
 // Auto-generated from StructureDefinition for US  Core MedicationStatement
@@ -2019,36 +1887,25 @@ message UsCoreMedicationstatement {
 
   // Fulfils plan, proposal or order
   repeated proto.Reference based_on = 10 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/CarePlan",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+    (.google.fhir.stu3.proto.valid_reference_type) = "MedicationRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ProcedureRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ReferralRequest"
   ];
 
   // Part of referenced event
   repeated proto.Reference part_of = 11 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/MedicationAdministration",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/MedicationDispense",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/MedicationStatement",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Procedure",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Observation"
+    (.google.fhir.stu3.proto.valid_reference_type) = "MedicationAdministration",
+    (.google.fhir.stu3.proto.valid_reference_type) = "MedicationDispense",
+    (.google.fhir.stu3.proto.valid_reference_type) = "MedicationStatement",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Procedure",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Observation"
   ];
 
   // Encounter / Episode associated with MedicationStatement
   proto.Reference context = 12 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Encounter",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Encounter",
+    (.google.fhir.stu3.proto.valid_reference_type) = "EpisodeOfCare"
   ];
 
   // active | completed | entered-in-error | intended | stopped | on-hold
@@ -2065,8 +1922,7 @@ message UsCoreMedicationstatement {
     oneof medication {
       proto.CodeableConcept codeable_concept = 1;
       proto.Reference reference = 2
-          [(.google.fhir.stu3.proto.valid_reference_type) =
-               "http://hl7.org/fhir/StructureDefinition/Medication"];
+          [(.google.fhir.stu3.proto.valid_reference_type) = "Medication"];
     }
   }
   Medication medication = 15
@@ -2090,27 +1946,21 @@ message UsCoreMedicationstatement {
   // Person or organization that provided the information about the taking of
   // this medication
   proto.Reference information_source = 18 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Patient",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Practitioner",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Organization"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.stu3.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Organization"
   ];
 
   // Who is/was taking  the medication
   proto.Reference subject = 19 [
     (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient"
   ];
 
   // Additional supporting information
   repeated proto.Reference derived_from = 20
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Resource"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Resource"];
 
   // y | n | unk | na
   proto.MedicationStatementTakenCode taken = 21
@@ -2125,10 +1975,8 @@ message UsCoreMedicationstatement {
   // Condition or observation that supports why the medication is being/was
   // taken
   repeated proto.Reference reason_reference = 24 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Condition",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Observation"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Condition",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Observation"
   ];
 
   // Further information about the statement
@@ -2178,20 +2026,14 @@ message UsCoreObservationresults {
 
   // Fulfills plan, proposal or order
   repeated proto.Reference based_on = 10 [
+    (.google.fhir.stu3.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.stu3.proto.valid_reference_type) = "DeviceRequest",
     (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/CarePlan",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+        "ImmunizationRecommendation",
+    (.google.fhir.stu3.proto.valid_reference_type) = "MedicationRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) = "NutritionOrder",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ProcedureRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ReferralRequest"
   ];
 
   // registered | preliminary | final | amended +
@@ -2209,16 +2051,13 @@ message UsCoreObservationresults {
   // Who and/or what this is about
   proto.Reference subject = 14 [
     (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient"
   ];
 
   // Healthcare event during which this observation is made
   proto.Reference context = 15 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Encounter",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Encounter",
+    (.google.fhir.stu3.proto.valid_reference_type) = "EpisodeOfCare"
   ];
 
   // Clinically relevant time/time-period for observation
@@ -2237,14 +2076,10 @@ message UsCoreObservationresults {
 
   // Who is responsible for the observation
   repeated proto.Reference performer = 18 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Practitioner",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Organization",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Patient",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Organization",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
+    (.google.fhir.stu3.proto.valid_reference_type) = "RelatedPerson"
   ];
 
   // Result Value
@@ -2284,15 +2119,12 @@ message UsCoreObservationresults {
 
   // Specimen used for this observation
   proto.Reference specimen = 25
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Specimen"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Specimen"];
 
   // (Measurement) Device
   proto.Reference device = 26 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Device",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Device",
+    (.google.fhir.stu3.proto.valid_reference_type) = "DeviceMetric"
   ];
 
   // Provides guide for interpretation
@@ -2344,12 +2176,9 @@ message UsCoreObservationresults {
     // Resource that is related to this one
     proto.Reference target = 5 [
       (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Observation",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Sequence"
+      (.google.fhir.stu3.proto.valid_reference_type) = "Observation",
+      (.google.fhir.stu3.proto.valid_reference_type) = "QuestionnaireResponse",
+      (.google.fhir.stu3.proto.valid_reference_type) = "Sequence"
     ];
   }
   repeated Related related = 28;
@@ -2463,8 +2292,7 @@ message UsCoreOrganization {
 
   // The organization of which this organization forms a part
   proto.Reference part_of = 16
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Organization"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
 
   // Contact for the organization for a certain purpose
   message Contact {
@@ -2494,8 +2322,7 @@ message UsCoreOrganization {
   // Technical endpoints providing access to services operated for the
   // organization
   repeated proto.Reference endpoint = 18
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Endpoint"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Endpoint"];
 }
 
 // Auto-generated from StructureDefinition for US Core Patient Profile.
@@ -2612,8 +2439,7 @@ message UsCorePatient {
 
     // Organization that is associated with the contact
     proto.Reference organization = 9
-        [(.google.fhir.stu3.proto.valid_reference_type) =
-             "http://hl7.org/fhir/StructureDefinition/Organization"];
+        [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
 
     // The period during which this contact person or organization is valid to
     // be contacted relating to this patient
@@ -2645,16 +2471,13 @@ message UsCorePatient {
 
   // Patient's nominated primary care provider
   repeated proto.Reference general_practitioner = 23 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Organization",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Practitioner"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Organization",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner"
   ];
 
   // Organization that is the custodian of the patient record
   proto.Reference managing_organization = 24
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Organization"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
 
   // Link to another patient resource that concerns the same actual person
   message Link {
@@ -2670,10 +2493,8 @@ message UsCorePatient {
     // The other patient or related person resource that the link refers to
     proto.Reference other = 4 [
       (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Patient",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+      (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
+      (.google.fhir.stu3.proto.valid_reference_type) = "RelatedPerson"
     ];
 
     // replaced-by | replaces | refer | seealso - type of link
@@ -2782,8 +2603,7 @@ message UsCorePractitioner {
 
     // Organization that regulates and issues the qualification
     proto.Reference issuer = 7
-        [(.google.fhir.stu3.proto.valid_reference_type) =
-             "http://hl7.org/fhir/StructureDefinition/Organization"];
+        [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
   }
   repeated Qualification qualification = 17;
 
@@ -2830,32 +2650,23 @@ message UsCoreProcedure {
 
   // Instantiates protocol or definition
   repeated proto.Reference definition = 10 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/PlanDefinition",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ActivityDefinition",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/HealthcareService"
+    (.google.fhir.stu3.proto.valid_reference_type) = "PlanDefinition",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ActivityDefinition",
+    (.google.fhir.stu3.proto.valid_reference_type) = "HealthcareService"
   ];
 
   // A request for this procedure
   repeated proto.Reference based_on = 11 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/CarePlan",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+    (.google.fhir.stu3.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ProcedureRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ReferralRequest"
   ];
 
   // Part of referenced event
   repeated proto.Reference part_of = 12 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Procedure",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Observation",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/MedicationAdministration"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Procedure",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Observation",
+    (.google.fhir.stu3.proto.valid_reference_type) = "MedicationAdministration"
   ];
 
   // preparation | in-progress | suspended | aborted | completed |
@@ -2879,16 +2690,13 @@ message UsCoreProcedure {
   // Who the procedure was performed on
   proto.Reference subject = 18 [
     (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient"
   ];
 
   // Encounter or episode associated with the procedure
   proto.Reference context = 19 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Encounter",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Encounter",
+    (.google.fhir.stu3.proto.valid_reference_type) = "EpisodeOfCare"
   ];
 
   // Date/Period the procedure was performed
@@ -2920,39 +2728,30 @@ message UsCoreProcedure {
     // The reference to the practitioner
     proto.Reference actor = 5 [
       (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Practitioner",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Organization",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Patient",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Device"
+      (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.stu3.proto.valid_reference_type) = "Organization",
+      (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
+      (.google.fhir.stu3.proto.valid_reference_type) = "RelatedPerson",
+      (.google.fhir.stu3.proto.valid_reference_type) = "Device"
     ];
 
     // Organization the device or practitioner was acting for
     proto.Reference on_behalf_of = 6
-        [(.google.fhir.stu3.proto.valid_reference_type) =
-             "http://hl7.org/fhir/StructureDefinition/Organization"];
+        [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
   }
   repeated Performer performer = 21;
 
   // Where the procedure happened
   proto.Reference location = 22
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Location"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Location"];
 
   // Coded reason procedure performed
   repeated proto.CodeableConcept reason_code = 23;
 
   // Condition that is the reason the procedure performed
   repeated proto.Reference reason_reference = 24 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Condition",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Observation"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Condition",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Observation"
   ];
 
   // Target body sites
@@ -2963,16 +2762,14 @@ message UsCoreProcedure {
 
   // Any report resulting from the procedure
   repeated proto.Reference report = 27
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "DiagnosticReport"];
 
   // Complication following the procedure
   repeated proto.CodeableConcept complication = 28;
 
   // A condition that is a result of the procedure
   repeated proto.Reference complication_detail = 29
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Condition"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Condition"];
 
   // Instructions for follow up
   repeated proto.CodeableConcept follow_up = 30;
@@ -2997,20 +2794,16 @@ message UsCoreProcedure {
     // Device that was changed
     proto.Reference manipulated = 5 [
       (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Device"
+      (.google.fhir.stu3.proto.valid_reference_type) = "Device"
     ];
   }
   repeated FocalDevice focal_device = 32;
 
   // Items used during procedure
   repeated proto.Reference used_reference = 33 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Device",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Medication",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Substance"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Device",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Medication",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Substance"
   ];
 
   // Coded items used during the procedure
@@ -3106,20 +2899,14 @@ message UsCoreSmokingstatus {
 
   // Fulfills plan, proposal or order
   repeated proto.Reference based_on = 10 [
+    (.google.fhir.stu3.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.stu3.proto.valid_reference_type) = "DeviceRequest",
     (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/CarePlan",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/DeviceRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/NutritionOrder",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+        "ImmunizationRecommendation",
+    (.google.fhir.stu3.proto.valid_reference_type) = "MedicationRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) = "NutritionOrder",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ProcedureRequest",
+    (.google.fhir.stu3.proto.valid_reference_type) = "ReferralRequest"
   ];
 
   // registered | preliminary | final | amended +
@@ -3136,16 +2923,13 @@ message UsCoreSmokingstatus {
   // Who and/or what this is about
   proto.Reference subject = 14 [
     (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient"
   ];
 
   // Healthcare event during which this observation is made
   proto.Reference context = 15 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Encounter",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Encounter",
+    (.google.fhir.stu3.proto.valid_reference_type) = "EpisodeOfCare"
   ];
 
   // Clinically relevant time/time-period for observation
@@ -3165,14 +2949,10 @@ message UsCoreSmokingstatus {
 
   // Who is responsible for the observation
   repeated proto.Reference performer = 18 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Practitioner",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Organization",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Patient",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Organization",
+    (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
+    (.google.fhir.stu3.proto.valid_reference_type) = "RelatedPerson"
   ];
 
   // Coded Responses from Smoking Status Value Set
@@ -3203,15 +2983,12 @@ message UsCoreSmokingstatus {
 
   // Specimen used for this observation
   proto.Reference specimen = 25
-      [(.google.fhir.stu3.proto.valid_reference_type) =
-           "http://hl7.org/fhir/StructureDefinition/Specimen"];
+      [(.google.fhir.stu3.proto.valid_reference_type) = "Specimen"];
 
   // (Measurement) Device
   proto.Reference device = 26 [
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/Device",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+    (.google.fhir.stu3.proto.valid_reference_type) = "Device",
+    (.google.fhir.stu3.proto.valid_reference_type) = "DeviceMetric"
   ];
 
   // Provides guide for interpretation
@@ -3263,12 +3040,9 @@ message UsCoreSmokingstatus {
     // Resource that is related to this one
     proto.Reference target = 5 [
       (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Observation",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse",
-      (.google.fhir.stu3.proto.valid_reference_type) =
-          "http://hl7.org/fhir/StructureDefinition/Sequence"
+      (.google.fhir.stu3.proto.valid_reference_type) = "Observation",
+      (.google.fhir.stu3.proto.valid_reference_type) = "QuestionnaireResponse",
+      (.google.fhir.stu3.proto.valid_reference_type) = "Sequence"
     ];
   }
   repeated Related related = 28;

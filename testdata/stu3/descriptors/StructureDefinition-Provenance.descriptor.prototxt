@@ -88,7 +88,7 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Target Reference(s) (usually version specific)"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -130,7 +130,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
     [google.fhir.stu3.proto.field_description]: "Where the activity occurred, if relevant"
-    [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Location"
+    [google.fhir.stu3.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -274,11 +274,11 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+        [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+        [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+        [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+        [google.fhir.stu3.proto.valid_reference_type]: "Device"
+        [google.fhir.stu3.proto.valid_reference_type]: "Organization"
       }
       oneof_index: 0
     }
@@ -306,11 +306,11 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Patient"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Device"
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Organization"
+        [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+        [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+        [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+        [google.fhir.stu3.proto.valid_reference_type]: "Device"
+        [google.fhir.stu3.proto.valid_reference_type]: "Organization"
       }
       oneof_index: 0
     }
@@ -403,7 +403,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "http://hl7.org/fhir/StructureDefinition/Resource"
+        [google.fhir.stu3.proto.valid_reference_type]: "Resource"
       }
       oneof_index: 0
     }
