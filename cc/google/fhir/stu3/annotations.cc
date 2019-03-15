@@ -70,10 +70,6 @@ const string& GetInlinedCodingCode(const ::google::protobuf::FieldDescriptor* fi
   return field->options().GetExtension(stu3::proto::fhir_inlined_coding_code);
 }
 
-const string& GetValueRegex(const ::google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().GetExtension(stu3::proto::value_regex);
-}
-
 }  // namespace stu3
 }  // namespace fhir
 }  // namespace google
