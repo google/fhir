@@ -265,6 +265,7 @@ cc_library(
     ],
     strip_include_prefix = "//cc/",
     deps = [
+        ":annotations",
         ":codes",
         ":extensions",
         ":util",

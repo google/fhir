@@ -35,6 +35,7 @@
 #include "absl/strings/string_view.h"
 #include "absl/strings/strip.h"
 #include "absl/time/time.h"
+#include "google/fhir/stu3/annotations.h"
 #include "google/fhir/stu3/codes.h"
 #include "google/fhir/stu3/extensions.h"
 #include "google/fhir/stu3/util.h"
@@ -212,14 +213,22 @@ class SpecificWrapper : public PrimitiveWrapper {
   T wrapped_;
   static StatusOr<T> BuildNullValue();
 
-  // TODO: Use the regex compiled into the protos
-  static Status ValidateString(const string& input, const LazyRE2& pattern) {
-    return (RE2::FullMatch(input, *pattern))
+  static Status ValidateString(const string& input) {
+    return regex_pattern == nullptr || RE2::FullMatch(input, *regex_pattern)
                ? Status::OK()
                : InvalidArgument("Invalid input for ",
                                  T::descriptor()->full_name(), ": ", input);
   }
+
+  static const RE2* regex_pattern;
 };
+
+template <class T>
+const RE2* SpecificWrapper<T>::regex_pattern = [] {
+  const string value_regex_string = GetValueRegex(T::descriptor());
+  return value_regex_string.empty() ? nullptr
+                                    : new RE2(value_regex_string);
+}();
 
 template <class T>
 bool SpecificWrapper<T>::HasValue() const {
@@ -347,8 +356,7 @@ class TimeTypeWrapper : public SpecificWrapper<T> {
                              ": it is not a string value.");
     }
     const string& json_string = json.asString();
-    FHIR_RETURN_IF_ERROR(
-        this->ValidateString(json_string, GetValidationPattern()));
+    FHIR_RETURN_IF_ERROR(this->ValidateString(json_string));
     // Note that this will handle any level of precision - it's up to various
     // wrappers' validation pattern to ensure that the precision of the value
     // is valid.  There's no risk of accidentally using an invalid precision
@@ -394,8 +402,6 @@ class TimeTypeWrapper : public SpecificWrapper<T> {
     return InvalidArgument("Invalid ", T::descriptor()->full_name(), ": ",
                            json_string);
   }
-
-  virtual const LazyRE2& GetValidationPattern() = 0;
 
  private:
   Status SetValue(absl::Time time, const string& timezone_string,
@@ -503,8 +509,7 @@ class CodeWrapper : public StringTypeWrapper<Code> {
 
  protected:
   Status ParseString(const string& json_string) override {
-    static LazyRE2 PATTERN{"[^\\s]+([\\s]?[^\\s]+)*"};
-    FHIR_RETURN_IF_ERROR(ValidateString(json_string, PATTERN));
+    FHIR_RETURN_IF_ERROR(ValidateString(json_string));
     SetValue(json_string);
     return Status::OK();
   }
@@ -587,25 +592,9 @@ class BooleanWrapper : public SpecificWrapper<Boolean> {
   }
 };
 
-class DateWrapper : public TimeTypeWrapper<Date> {
- private:
-  const LazyRE2& GetValidationPattern() override {
-    static LazyRE2 PATTERN{
-        "-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?"};
-    return PATTERN;
-  }
-};
+class DateWrapper : public TimeTypeWrapper<Date> {};
 
-class DateTimeWrapper : public TimeTypeWrapper<DateTime> {
- private:
-  const LazyRE2& GetValidationPattern() override {
-    static LazyRE2 PATTERN{
-        "-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2["
-        "0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-"
-        "5][0-9]|14:00)))?)?)?"};
-    return PATTERN;
-  }
-};
+class DateTimeWrapper : public TimeTypeWrapper<DateTime> {};
 
 // Note: This extends StringInputWrapper, but Parse is overridden to also accept
 // integer types.
@@ -642,8 +631,7 @@ class DecimalWrapper : public StringInputWrapper<Decimal> {
   }
 
   Status ParseString(const string& json_string) override {
-    static LazyRE2 PATTERN{"[-\\+]?(0|[1-9][0-9]*)(\\.[0-9]+)?"};
-    FHIR_RETURN_IF_ERROR(ValidateString(json_string, PATTERN));
+    FHIR_RETURN_IF_ERROR(ValidateString(json_string));
     // TODO: range check
     this->GetWrapped().set_value(json_string);
     return Status::OK();
@@ -653,23 +641,13 @@ class DecimalWrapper : public StringInputWrapper<Decimal> {
 class IdWrapper : public StringTypeWrapper<Id> {
  private:
   Status ParseString(const string& json_string) override {
-    static LazyRE2 PATTERN{"[A-Za-z0-9\\-\\.]{1,64}"};
-    FHIR_RETURN_IF_ERROR(ValidateString(json_string, PATTERN));
+    FHIR_RETURN_IF_ERROR(ValidateString(json_string));
     SetValue(json_string);
     return Status::OK();
   }
 };
 
-class InstantWrapper : public TimeTypeWrapper<Instant> {
- private:
-  const LazyRE2& GetValidationPattern() override {
-    static LazyRE2 PATTERN{
-        "-?[0-9]{4}-(0[1-9]|1[0-2])-(0[0-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-"
-        "3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5]["
-        "0-9]|14:00))"};
-    return PATTERN;
-  }
-};
+class InstantWrapper : public TimeTypeWrapper<Instant> {};
 
 class IntegerWrapper : public IntegerInputWrapper<Integer> {
  protected:
@@ -687,8 +665,7 @@ class MarkdownWrapper : public StringTypeWrapper<Markdown> {
 class OidWrapper : public StringTypeWrapper<Oid> {
  private:
   Status ParseString(const string& json_string) override {
-    static LazyRE2 PATTERN{"urn:oid:[0-2](\\.[1-9]\\d*)+"};
-    FHIR_RETURN_IF_ERROR(ValidateString(json_string, PATTERN));
+    FHIR_RETURN_IF_ERROR(ValidateString(json_string));
     SetValue(json_string);
     return Status::OK();
   }
