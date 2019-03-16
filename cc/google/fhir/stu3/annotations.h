@@ -76,6 +76,8 @@ const string& GetInlinedCodingSystem(const ::google::protobuf::FieldDescriptor* 
 
 const string& GetInlinedCodingCode(const ::google::protobuf::FieldDescriptor* field);
 
+const string& GetValueRegex(const ::google::protobuf::Descriptor* descriptor);
+
 }  // namespace stu3
 }  // namespace fhir
 }  // namespace google
