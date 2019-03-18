@@ -30,27 +30,31 @@ using std::string;
 // standard, either at the resource level or in the code system listing found
 // at https://www.hl7.org/fhir/terminologies-systems.html.
 const char kAdmitSource[] = "http://hl7.org/fhir/admit-source";
+const char kClaimCategory[] = "http://hl7.org/fhir/claiminformationcategory";
+const char kConditionCategory[] =
+    "http://hl7.org/fhir/ValueSet/condition-category";
+const char kConditionVerStatus[] =
+    "http://hl7.org/fhir/ValueSet/condition-ver-status";
+const char kCpt[] = "http://www.ama-assn.org/go/cpt";
 const char kDiagnosisRole[] = "http://hl7.org/fhir/diagnosis-role";
 const char kDischargeDisposition[] =
     "http://hl7.org/fhir/discharge-disposition";
-const char kEncounterType[] = "http://hl7.org/fhir/encounter-type";
 const char kEncounterClass[] = "http://hl7.org/fhir/v3/ActCode";
-const char kLocationType[] = "http://hl7.org/fhir/v3/RoleCode";
-const char kIcd9[] = "http://hl7.org/fhir/sid/icd-9-cm";
+const char kEncounterType[] = "http://hl7.org/fhir/encounter-type";
+const char kIcd10Diagnosis[] = "http://hl7.org/fhir/sid/icd-10";
 const char kIcd9Diagnosis[] = "http://hl7.org/fhir/sid/icd-9-cm/diagnosis";
 const char kIcd9Procedure[] = "http://hl7.org/fhir/sid/icd-9-cm/procedure";
-const char kIcd10Diagnosis[] = "http://hl7.org/fhir/sid/icd-10";
+const char kIcd9[] = "http://hl7.org/fhir/sid/icd-9-cm";
+const char kLanguage[] = "urn:ietf:bcp:47";
+const char kLocationType[] = "http://hl7.org/fhir/v3/RoleCode";
 const char kLoinc[] = "http://loinc.org";
-const char kUnitsOfMeasure[] = "http://unitsofmeasure.org";
-const char kCpt[] = "http://www.ama-assn.org/go/cpt";
-const char kRxNorm[] = "http://www.nlm.nih.gov/research/umls/rxnorm";
-const char kNdc[] = "http://hl7.org/fhir/sid/ndc";
-const char kSnomed[] = "http://snomed.info/sct";
-const char kObservationCategory[] = "http://hl7.org/fhir/observation-category";
-const char kClaimCategory[] = "http://hl7.org/fhir/claiminformationcategory";
 const char kMaritalStatus[] = "http://hl7.org/fhir/v3/MaritalStatus";
 const char kNUBCDischarge[] = "http://www.nubc.org/patient-discharge";
-const char kLanguage[] = "urn:ietf:bcp:47";
+const char kNdc[] = "http://hl7.org/fhir/sid/ndc";
+const char kObservationCategory[] = "http://hl7.org/fhir/observation-category";
+const char kRxNorm[] = "http://www.nlm.nih.gov/research/umls/rxnorm";
+const char kSnomed[] = "http://snomed.info/sct";
+const char kUnitsOfMeasure[] = "http://unitsofmeasure.org";
 
 // Format ICD9 Diagnosis code according to
 // http://www.icd9data.com/2015/Volume1/default.htm.

@@ -203,6 +203,12 @@ Status GetPreferredCode(const CodeableConcept& concept, string* result) {
   } else if (ExtractCodeBySystem(concept, systems::kEncounterClass, &code)
                  .ok()) {
     *result = absl::StrCat("actcode:" + code);
+  } else if (ExtractCodeBySystem(concept, systems::kConditionCategory, &code)
+                 .ok()) {
+    *result = absl::StrCat("condition_category:" + code);
+  } else if (ExtractCodeBySystem(concept, systems::kConditionVerStatus, &code)
+                 .ok()) {
+    *result = absl::StrCat("condition_ver_status:" + code);
   } else {
     return ::tensorflow::errors::NotFound(
         absl::StrCat("No known coding system found in CodeableConcept: ",
