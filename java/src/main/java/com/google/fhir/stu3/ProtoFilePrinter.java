@@ -361,15 +361,32 @@ public class ProtoFilePrinter {
       List<String> typeNameParts = Splitter.on('.').splitToList(field.getTypeName());
       List<String> containingTypeParts = Splitter.on('.').splitToList(containingType);
       int numCommon = 0;
-      while (numCommon < typeNameParts.size() - 1
+      while (numCommon < typeNameParts.size()
           && numCommon < containingTypeParts.size()
           && typeNameParts.get(numCommon).equals(containingTypeParts.get(numCommon))) {
         numCommon++;
       }
+
+      // never drop the last token.
+      // E.g., foo.baz.Quux on foo.baz.Quux (recursively) shortens to Quux.
+      int tokensToDrop = numCommon == typeNameParts.size() ? numCommon - 1 : numCommon;
+
+      // Make sure the first token that is not dropped in the shortened name is not a token
+      // somewhere else in non-common part of the containing type.
+      // E.g., if "abc.foo.baz.Quux" is a type used in "abc.foo.bar.baz.Bleh",
+      // and we try to shorten it to baz.Quux, it will look for Quux on abc.foor.bar.baz,
+      // and will error. In this case, just print the fully-qualified name.
+      if (containingTypeParts
+          .subList(numCommon, containingTypeParts.size())
+          .contains(typeNameParts.get(tokensToDrop))) {
+        tokensToDrop = 0;
+      }
+
       // Since absolute namespaces start with ".", the first token is is empty (and thus common).
       // If this is the only common token, don't drop anything
-      if (numCommon > 1) {
-        message.append(Joiner.on('.').join(typeNameParts.subList(numCommon, typeNameParts.size())));
+      if (tokensToDrop > 1) {
+        message.append(
+            Joiner.on('.').join(typeNameParts.subList(tokensToDrop, typeNameParts.size())));
       } else {
         message.append(field.getTypeName());
       }

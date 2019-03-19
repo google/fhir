@@ -302,9 +302,8 @@ public class ProtoGenerator {
       throw new IllegalArgumentException(
           "No StructureDefinition data found for: " + def.getUrl().getValue());
     }
-    if (!(structDefData.protoPackage.equals(packageInfo.getProtoPackage())
-        || (isSingleTypedExtensionDefinition(structDefData.structDef)
-            && structDefData.protoPackage.equals(fhirVersion.coreFhirPackage)))) {
+    if (!structDefData.protoPackage.equals(packageInfo.getProtoPackage())
+        && !isSingleTypedExtensionDefinition(structDefData.structDef)) {
       throw new IllegalArgumentException(
           "Inconsistent package name for "
               + def.getUrl().getValue()
