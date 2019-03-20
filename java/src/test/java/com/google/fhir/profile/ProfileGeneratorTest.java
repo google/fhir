@@ -30,6 +30,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,6 +48,7 @@ public final class ProfileGeneratorTest {
   private final LocalDate creationDate = LocalDate.of(2018, 9, 22);
 
   private static final String TESTDATA_DIR = "testdata/stu3/profilegenerator/";
+  private static final boolean GENERATE_GOLDEN = false;
 
   // TODO: consolidate these proto loading functions across test files.
   private static Extensions loadExtensionsProto(String filename) throws IOException {
@@ -116,8 +118,16 @@ public final class ProfileGeneratorTest {
     for (Bundle.Entry entry : extensions.getEntryList()) {
       StructureDefinition structDef = entry.getResource().getStructureDefinition();
       String testDefinition =
-          loadTestStructureDefinitionJson(structDef.getId().getValue() + ".extension.json");
-      assertThat(jsonPrinter.print(structDef).trim()).isEqualTo(testDefinition.trim());
+          loadTestStructureDefinitionJson(structDef.getId().getValue() + ".extension.json").trim();
+      String output = jsonPrinter.print(structDef).trim();
+      if (GENERATE_GOLDEN) {
+        if (!testDefinition.equals(output)) {
+          System.out.println("GOLDEN:\n" + output);
+          Assert.fail();
+        }
+      } else {
+        assertThat(output).isEqualTo(testDefinition);
+      }
     }
   }
 
@@ -127,8 +137,16 @@ public final class ProfileGeneratorTest {
     for (Bundle.Entry entry : profiles.getEntryList()) {
       StructureDefinition structDef = entry.getResource().getStructureDefinition();
       String testDefinition =
-          loadTestStructureDefinitionJson(structDef.getId().getValue() + ".profile.json");
-      assertThat(jsonPrinter.print(structDef).trim()).isEqualTo(testDefinition.trim());
+          loadTestStructureDefinitionJson(structDef.getId().getValue() + ".profile.json").trim();
+      String output = jsonPrinter.print(structDef).trim();
+      if (GENERATE_GOLDEN) {
+        if (!testDefinition.equals(output)) {
+          System.out.println("GOLDEN:\n" + output);
+          Assert.fail();
+        }
+      } else {
+        assertThat(output).isEqualTo(testDefinition);
+      }
     }
   }
 }

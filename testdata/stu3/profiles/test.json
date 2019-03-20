@@ -7,7 +7,7 @@
         "id": "TestPatient",
         "url": "http://test/url/base/TestPatient",
         "name": "TestPatient",
-        "date": "2019-03-05",
+        "date": "2019-03-12",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1874,7 +1874,7 @@
         "id": "TestObservation",
         "url": "http://test/url/base/TestObservation",
         "name": "TestObservation",
-        "date": "2019-03-05",
+        "date": "2019-03-12",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -6231,7 +6231,7 @@
         "id": "TestObservationLvl2",
         "url": "http://test/url/base/TestObservationLvl2",
         "name": "TestObservationLvl2",
-        "date": "2019-03-05",
+        "date": "2019-03-12",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -10203,47 +10203,6 @@
               ]
             },
             {
-              "id": "Observation.extension:simpleExtension",
-              "path": "Observation.extension",
-              "sliceName": "simpleExtension",
-              "short": "",
-              "definition": "",
-              "min": 0,
-              "max": "1",
-              "base": {
-                "path": "Extension",
-                "min": 0,
-                "max": "*"
-              },
-              "type": [
-                {
-                  "code": "Extension",
-                  "profile": "http://test/url/base/ComplexExt"
-                }
-              ],
-              "condition": [
-                "ele-1"
-              ],
-              "constraint": [
-                {
-                  "key": "ele-1",
-                  "severity": "error",
-                  "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
-                  "xpath": "@value|f:*|h:div",
-                  "source": "Element"
-                },
-                {
-                  "key": "ext-1",
-                  "severity": "error",
-                  "human": "Must have either extensions or value[x], not both",
-                  "expression": "extension.exists() != value.exists()",
-                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
-                  "source": "Extension"
-                }
-              ]
-            },
-            {
               "id": "Observation.extension:newExt",
               "path": "Observation.extension",
               "sliceName": "newExt",
@@ -11163,42 +11122,6 @@
             {
               "id": "Observation.component.interpretation.coding:onNestedConcept.userSelected",
               "path": "Observation.component.interpretation.coding.userSelected"
-            },
-            {
-              "id": "Observation.extension:simpleExtension",
-              "path": "Observation.extension",
-              "sliceName": "simpleExtension",
-              "short": "",
-              "definition": "",
-              "comment": "",
-              "max": "1",
-              "type": [
-                {
-                  "code": "Extension",
-                  "profile": "http://test/url/base/ComplexExt"
-                }
-              ],
-              "condition": [
-                "ele-1"
-              ],
-              "constraint": [
-                {
-                  "key": "ele-1",
-                  "severity": "error",
-                  "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
-                  "xpath": "@value|f:*|h:div",
-                  "source": "Element"
-                },
-                {
-                  "key": "ext-1",
-                  "severity": "error",
-                  "human": "Must have either extensions or value[x], not both",
-                  "expression": "extension.exists() != value.exists()",
-                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
-                  "source": "Extension"
-                }
-              ]
             },
             {
               "id": "Observation.extension:newExt",

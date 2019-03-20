@@ -60,4 +60,26 @@ profile {
     }
     field_id: "Observation.code"
   }
+  restriction {
+    field_id: "Observation.effective[x]"
+    size_restriction: REQUIRED
+    choice_type_restriction {
+      allowed: "dateTime"
+    }
+  }
+  restriction {
+    field_id: "Observation.value[x]"
+    size_restriction: REQUIRED
+    choice_type_restriction {
+      allowed: "Quantity"
+      allowed: "boolean"
+    }
+  }
+  restriction {
+    field_id: "Observation.subject"
+    size_restriction: REQUIRED
+    reference_restriction {
+      allowed: "http://test/url/base/TestPatient"
+    }
+  }
 }

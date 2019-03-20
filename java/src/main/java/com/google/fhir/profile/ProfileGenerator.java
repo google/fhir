@@ -18,6 +18,7 @@ import com.google.common.base.Ascii;
 import com.google.common.base.Splitter;
 import com.google.common.collect.MoreCollectors;
 import com.google.fhir.common.FhirVersion;
+import com.google.fhir.proto.ChoiceTypeRestriction;
 import com.google.fhir.proto.CodeData;
 import com.google.fhir.proto.CodeableConceptSlice;
 import com.google.fhir.proto.CodeableConceptSlice.CodingSlice;
@@ -29,6 +30,7 @@ import com.google.fhir.proto.FieldRestriction;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.Profile;
 import com.google.fhir.proto.Profiles;
+import com.google.fhir.proto.ReferenceRestriction;
 import com.google.fhir.proto.SimpleExtension;
 import com.google.fhir.proto.SizeRestriction;
 import com.google.fhir.stu3.DateTimeWrapper;
@@ -69,9 +71,11 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -483,7 +487,7 @@ final class ProfileGenerator {
     }
   }
 
-  private static void applyFieldRestriction(
+  private void applyFieldRestriction(
       FieldRestriction restriction, List<ElementDefinition> elementList, ElementData elementData) {
     ElementDefinition elementToModify =
         getOptionalElementById(restriction.getFieldId(), elementList)
@@ -494,6 +498,7 @@ final class ProfileGenerator {
                             + elementData.getName()
                             + ": No base element with id "
                             + restriction.getFieldId()));
+    ElementDefinition.Builder modifiedElement = elementToModify.toBuilder();
     SizeRestriction newSize = restriction.getSizeRestriction();
     if (newSize != SizeRestriction.UNKNOWN) {
       if (!validateSizeChange(restriction.getSizeRestriction(), elementToModify)) {
@@ -505,10 +510,114 @@ final class ProfileGenerator {
                 + ". Original Element:\n"
                 + elementToModify);
       }
-      elementList.set(
-          elementList.indexOf(elementToModify),
-          elementToModify.toBuilder().setMin(minSize(newSize)).setMax(maxSize(newSize)).build());
+      modifiedElement.setMin(minSize(newSize)).setMax(maxSize(newSize));
     }
+    if (restriction.hasReferenceRestriction() || restriction.hasChoiceTypeRestriction()) {
+      List<ElementDefinition.TypeRef> newTypes =
+          applyChoiceTypeRestriction(
+              elementToModify.getTypeList(),
+              restriction.getChoiceTypeRestriction(),
+              elementToModify.getId().getValue());
+      newTypes =
+          applyReferenceRestriction(
+              newTypes, restriction.getReferenceRestriction(), elementToModify.getId().getValue());
+      modifiedElement.clearType().addAllType(newTypes);
+    }
+    elementList.set(elementList.indexOf(elementToModify), modifiedElement.build());
+  }
+
+  private List<ElementDefinition.TypeRef> applyChoiceTypeRestriction(
+      List<ElementDefinition.TypeRef> originalTypes,
+      ChoiceTypeRestriction restriction,
+      String fieldId) {
+    if (restriction.getAllowedList().isEmpty()) {
+      return originalTypes;
+    }
+    Set<String> restrictionSet = new HashSet<>(restriction.getAllowedList());
+    List<ElementDefinition.TypeRef> finalTypes =
+        originalTypes.stream()
+            .filter(type -> restrictionSet.contains(type.getCode().getValue()))
+            .collect(Collectors.toList());
+
+    List<String> invalidTypes = new ArrayList<>(restrictionSet);
+    invalidTypes.removeAll(
+        finalTypes.stream().map(type -> type.getCode().getValue()).collect(Collectors.toList()));
+
+    if (!invalidTypes.isEmpty()) {
+      throw new IllegalArgumentException(
+          "Invalid ChoiceType restriction for "
+              + fieldId
+              + ". The following types are not allowed by the parent:"
+              + invalidTypes
+              + ".  Allowed types: "
+              + originalTypes.stream()
+                  .map(type -> type.getCode().getValue())
+                  .collect(Collectors.toList()));
+    }
+    return finalTypes;
+  }
+
+  private List<ElementDefinition.TypeRef> applyReferenceRestriction(
+      List<ElementDefinition.TypeRef> originalTypes,
+      ReferenceRestriction restriction,
+      String fieldId) {
+    if (restriction.getAllowedList().isEmpty()) {
+      return originalTypes;
+    }
+    Set<String> originalReferenceTargets =
+        originalTypes.stream()
+            .filter(type -> type.getCode().getValue().equals("Reference"))
+            .map(type -> type.getTargetProfile().getValue())
+            .collect(Collectors.toSet());
+    if (originalReferenceTargets.isEmpty()) {
+      throw new IllegalArgumentException(
+          "Invalid FieldRestriction for "
+              + fieldId
+              + ". It contains reference restrictions, but references are not a valid type for"
+              + " that field.");
+    }
+    List<ElementDefinition.TypeRef> newTypes =
+        originalTypes.stream()
+            .filter(type -> !type.getCode().getValue().equals("Reference"))
+            .collect(Collectors.toList());
+    Set<String> newReferenceTargets = new HashSet<>(restriction.getAllowedList());
+    Set<String> invalidReferenceTargets = new HashSet<>();
+    for (String referenceTarget : newReferenceTargets) {
+      if (isAllowedReferenceTarget(referenceTarget, originalReferenceTargets)) {
+        newTypes.add(
+            ElementDefinition.TypeRef.newBuilder()
+                .setCode(Uri.newBuilder().setValue("Reference"))
+                .setTargetProfile(Uri.newBuilder().setValue(referenceTarget))
+                .build());
+      } else {
+        invalidReferenceTargets.add(referenceTarget);
+      }
+    }
+    if (!invalidReferenceTargets.isEmpty()) {
+      throw new IllegalArgumentException(
+          "Invalid ReferenceRestriction for "
+              + fieldId
+              + ". The following types are not allowed by the parent:"
+              + invalidReferenceTargets
+              + ".  Allowed types: "
+              + originalReferenceTargets);
+    }
+    return newTypes;
+  }
+
+  private boolean isAllowedReferenceTarget(String url, Set<String> allowedReferenceTargets) {
+    if (allowedReferenceTargets.contains(url)) {
+      return true;
+    }
+    StructureDefinition structDef = getStructDefForUrl(url);
+    while (structDef.getDerivation().getValue() == TypeDerivationRuleCode.Value.CONSTRAINT) {
+      String parentUrl = structDef.getBaseDefinition().getValue();
+      if (allowedReferenceTargets.contains(parentUrl)) {
+        return true;
+      }
+      structDef = getStructDefForUrl(parentUrl);
+    }
+    return false;
   }
 
   private ElementDefinition buildExtensionSliceElement(
