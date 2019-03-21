@@ -21,9 +21,13 @@
 #include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_split.h"
+#include "google/fhir/stu3/annotations.h"
 #include "google/fhir/stu3/json_format.h"
+#include "google/fhir/stu3/primitive_wrapper.h"
 #include "google/fhir/stu3/test_helper.h"
+#include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
+#include "proto/stu3/google_extensions.pb.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
 
 namespace google {
@@ -63,7 +67,7 @@ std::vector<string> ReadLines(const string& filename) {
 }
 
 template <class W>
-void TestValidation() {
+void TestJsonValidation() {
   const string file_base =
       absl::StrCat("testdata/stu3/validation/",
                    CamelCaseToLowerUnderscores(W::descriptor()->name()));
@@ -84,41 +88,168 @@ void TestValidation() {
   }
 }
 
-TEST(PrimitiveValidationTest, Base64Binary) { TestValidation<Base64Binary>(); }
+template <class W>
+void AddPrimitiveHasNoValue(W* primitive) {
+  Extension* e = primitive->add_extension();
+  e->mutable_url()->set_value(
+      GetStructureDefinitionUrl(google::PrimitiveHasNoValue::descriptor()));
+  e->mutable_value()->mutable_boolean()->set_value(true);
+}
 
-TEST(PrimitiveValidationTest, Boolean) { TestValidation<Boolean>(); }
+template <class W>
+void TestBadProto(const W& w) {
+  Status status = ValidatePrimitive(w);
+  ASSERT_FALSE(status.ok()) << "Should have failed: " << w.DebugString();
+}
 
-TEST(PrimitiveValidationTest, Code) { TestValidation<Code>(); }
+template <class W>
+void TestProtoValidationsFromFile(const string& file_base,
+                                  const bool has_invalid) {
+  const std::vector<string> valid_proto_strings = absl::StrSplit(
+      ReadFile(absl::StrCat(file_base, ".valid.prototxt")), "\n---\n");
 
-TEST(PrimitiveValidationTest, Date) { TestValidation<Date>(); }
+  for (auto proto_string_iter : valid_proto_strings) {
+    W w = PARSE_STU3_PROTO(proto_string_iter);
+    TF_ASSERT_OK(ValidatePrimitive(w)) << w.DebugString();
+  }
 
-TEST(PrimitiveValidationTest, DateTime) { TestValidation<DateTime>(); }
+  if (has_invalid) {
+    const std::vector<string> invalid_proto_strings = absl::StrSplit(
+        ReadFile(absl::StrCat(file_base, ".invalid.prototxt")), "\n---\n");
 
-TEST(PrimitiveValidationTest, Decimal) { TestValidation<Decimal>(); }
+    for (auto proto_string_iter : invalid_proto_strings) {
+      W w = PARSE_STU3_PROTO(proto_string_iter);
+      TestBadProto(w);
+    }
+  }
+}
 
-TEST(PrimitiveValidationTest, Id) { TestValidation<Id>(); }
+template <class W>
+void TestProtoValidation(const bool has_invalid = true) {
+  // Test cases that are common to all primitives
 
-TEST(PrimitiveValidationTest, Instant) { TestValidation<Instant>(); }
+  // It's ok to have no value if there's another extension present
+  W only_extensions;
+  AddPrimitiveHasNoValue(&only_extensions);
+  Extension* e = only_extensions.add_extension();
+  e->mutable_url()->set_value("abcd");
+  e->mutable_value()->mutable_boolean()->set_value(true);
+  TF_ASSERT_OK(ValidatePrimitive(only_extensions));
 
-TEST(PrimitiveValidationTest, Integer) { TestValidation<Integer>(); }
+  // It's not ok to JUST have a no value extension.
+  W just_no_value;
+  AddPrimitiveHasNoValue(&just_no_value);
+  TestBadProto(just_no_value);
 
-TEST(PrimitiveValidationTest, Markdown) { TestValidation<Markdown>(); }
+  const string file_base =
+      absl::StrCat("testdata/stu3/validation/",
+                   CamelCaseToLowerUnderscores(W::descriptor()->name()));
+  TestProtoValidationsFromFile<W>(file_base, has_invalid);
+}
 
-TEST(PrimitiveValidationTest, Oid) { TestValidation<Oid>(); }
+TEST(PrimitiveValidationTestJson, Base64Binary) {
+  TestJsonValidation<Base64Binary>();
+}
 
-TEST(PrimitiveValidationTest, PositiveInt) { TestValidation<PositiveInt>(); }
+TEST(PrimitiveValidationTestJson, Boolean) { TestJsonValidation<Boolean>(); }
 
-TEST(PrimitiveValidationTest, Reference) { TestValidation<Reference>(); }
+TEST(PrimitiveValidationTestJson, Code) { TestJsonValidation<Code>(); }
 
-TEST(PrimitiveValidationTest, String) { TestValidation<String>(); }
+TEST(PrimitiveValidationTestJson, Date) { TestJsonValidation<Date>(); }
 
-TEST(PrimitiveValidationTest, Time) { TestValidation<Time>(); }
+TEST(PrimitiveValidationTestJson, DateTime) { TestJsonValidation<DateTime>(); }
 
-TEST(PrimitiveValidationTest, UnsignedInt) { TestValidation<UnsignedInt>(); }
+TEST(PrimitiveValidationTestJson, Decimal) { TestJsonValidation<Decimal>(); }
 
-TEST(PrimitiveValidationTest, Uri) { TestValidation<Uri>(); }
+TEST(PrimitiveValidationTestJson, Id) { TestJsonValidation<Id>(); }
 
-TEST(PrimitiveValidationTest, Xhtml) { TestValidation<Xhtml>(); }
+TEST(PrimitiveValidationTestJson, Instant) { TestJsonValidation<Instant>(); }
+
+TEST(PrimitiveValidationTestJson, Integer) { TestJsonValidation<Integer>(); }
+
+TEST(PrimitiveValidationTestJson, Markdown) { TestJsonValidation<Markdown>(); }
+
+TEST(PrimitiveValidationTestJson, Oid) { TestJsonValidation<Oid>(); }
+
+TEST(PrimitiveValidationTestJson, PositiveInt) {
+  TestJsonValidation<PositiveInt>();
+}
+
+TEST(PrimitiveValidationTestJson, Reference) {
+  TestJsonValidation<Reference>();
+}
+
+TEST(PrimitiveValidationTestJson, String) { TestJsonValidation<String>(); }
+
+TEST(PrimitiveValidationTestJson, Time) { TestJsonValidation<Time>(); }
+
+TEST(PrimitiveValidationTestJson, UnsignedInt) {
+  TestJsonValidation<UnsignedInt>();
+}
+
+TEST(PrimitiveValidationTestJson, Uri) { TestJsonValidation<Uri>(); }
+
+TEST(PrimitiveValidationTestJson, Xhtml) { TestJsonValidation<Xhtml>(); }
+
+TEST(PrimitiveValidationTestProto, Base64Binary) {
+  TestProtoValidation<Base64Binary>(false);
+}
+
+TEST(PrimitiveValidationTestProto, Boolean) {
+  TestProtoValidation<Boolean>(false);
+}
+
+TEST(PrimitiveValidationTestProto, Code) { TestProtoValidation<Code>(); }
+
+TEST(PrimitiveValidationTestProto, Date) { TestProtoValidation<Date>(); }
+
+TEST(PrimitiveValidationTestProto, DateTime) {
+  TestProtoValidation<DateTime>();
+}
+
+TEST(PrimitiveValidationTestProto, Decimal) { TestProtoValidation<Decimal>(); }
+
+TEST(PrimitiveValidationTestProto, Id) { TestProtoValidation<Id>(); }
+
+TEST(PrimitiveValidationTestProto, Instant) { TestProtoValidation<Instant>(); }
+
+TEST(PrimitiveValidationTestProto, Integer) {
+  TestProtoValidation<Integer>(false);
+}
+
+TEST(PrimitiveValidationTestProto, Markdown) {
+  TestProtoValidation<Markdown>(false);
+}
+
+TEST(PrimitiveValidationTestProto, Oid) { TestProtoValidation<Oid>(); }
+
+TEST(PrimitiveValidationTestProto, PositiveInt) {
+  TestProtoValidation<PositiveInt>();
+}
+
+TEST(PrimitiveValidationTestProto, String) {
+  TestProtoValidation<String>(false);
+}
+
+TEST(PrimitiveValidationTestProto, Time) { TestProtoValidation<Time>(); }
+
+TEST(PrimitiveValidationTestProto, UnsignedInt) {
+  TestProtoValidation<UnsignedInt>(false);
+}
+
+TEST(PrimitiveValidationTestProto, Uri) { TestProtoValidation<Uri>(false); }
+
+TEST(PrimitiveValidationTestProto, Xhtml) {
+  // XHTML can't have extensions - skip over extension tests.
+  const string file_base =
+      absl::StrCat("testdata/stu3/validation/",
+                   CamelCaseToLowerUnderscores(Xhtml::descriptor()->name()));
+  TestProtoValidationsFromFile<Xhtml>(file_base, false);
+}
+
+TEST(PrimitiveValidationTestProto, TypedCode) {
+  TestProtoValidation<AdministrativeGenderCode>();
+}
 
 }  // namespace
 

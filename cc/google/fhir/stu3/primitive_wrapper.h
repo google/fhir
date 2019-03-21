@@ -39,16 +39,18 @@ const google::fhir::stu3::proto::Extension* const
 
 struct JsonPrimitive {
   string value;
-  std::unique_ptr<google::protobuf::Message> element;
+  std::unique_ptr<::google::protobuf::Message> element;
 
   const bool is_non_null() const { return value != "null"; }
 };
 
 ::google::fhir::Status ParseInto(const Json::Value& json, absl::TimeZone tz,
-                                 google::protobuf::Message* target);
+                                 ::google::protobuf::Message* target);
 
 ::google::fhir::StatusOr<JsonPrimitive> WrapPrimitiveProto(
-    const google::protobuf::Message& proto);
+    const ::google::protobuf::Message& proto);
+
+::google::fhir::Status ValidatePrimitive(const ::google::protobuf::Message& primitive);
 
 }  // namespace stu3
 }  // namespace fhir

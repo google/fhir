@@ -1,0 +1,4 @@
+
+value_us: 43200123000
+timezone: "Z"
+precision: MILLISECOND

@@ -61,9 +61,15 @@ Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor);
 template <class C, class T>
 Status GetRepeatedFromExtension(const C& extension_container,
                                 std::vector<T>* result) {
+  // This function will be called a huge number of times, usually when no
+  // extensions are present.  Return early in this case to keep overhead as low
+  // as possible.
+  if (extension_container.empty()) {
+    return Status::OK();
+  }
   const ::google::protobuf::Descriptor* descriptor = T::descriptor();
   FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
-  const string url = descriptor->options().GetExtension(
+  const string& url = descriptor->options().GetExtension(
       stu3::proto::fhir_structure_definition_url);
   for (const auto& extension : extension_container) {
     if (extension.url().value() == url) {
@@ -82,7 +88,8 @@ StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
   if (result.size() != 1) {
     return ::tensorflow::errors::InvalidArgument(
         "Expected exactly 1 extension with url: ",
-        GetStructureDefinitionUrl(T::descriptor()), ". Found: ", result.size());
+        GetStructureDefinitionUrl(T::descriptor()), " on ",
+        C::descriptor()->full_name(), ". Found: ", result.size());
   }
   return result.front();
 }

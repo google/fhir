@@ -1,0 +1,3 @@
+
+value: 0
+# Note that negative numbers are impossible because the value type is uint32

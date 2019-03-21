@@ -35,14 +35,17 @@
 #include "absl/strings/string_view.h"
 #include "absl/strings/strip.h"
 #include "absl/time/time.h"
+#include "google/fhir/status/status.h"
 #include "google/fhir/stu3/annotations.h"
 #include "google/fhir/stu3/codes.h"
 #include "google/fhir/stu3/extensions.h"
+#include "google/fhir/stu3/proto_util.h"
 #include "google/fhir/stu3/util.h"
 #include "proto/stu3/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "include/json/json.h"
+#include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
 
 namespace google {
@@ -83,6 +86,7 @@ using ::google::protobuf::EnumValueDescriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
+using ::tensorflow::errors::FailedPrecondition;
 using ::tensorflow::errors::InvalidArgument;
 
 StatusOr<const Extension*> BuildHasNoValueExtension() {
@@ -108,6 +112,14 @@ class PrimitiveWrapper {
   virtual Status Wrap(const ::google::protobuf::Message&) = 0;
   virtual bool HasElement() const = 0;
   virtual StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement() const = 0;
+
+  // This is used to validate arbitrary protos - not necessarily the one being
+  // wrapped. This allows validation logic to be shared with things besides
+  // JSON parsing/printing with minimal memory and code overhead.
+  // TODO: Refactor this class to not do a copy when wrapping a
+  // proto.  Then, we can make this operate on the wrapped proto without doing
+  // extra copies.
+  virtual Status ValidateProto(const Message& message) const = 0;
 
   StatusOr<string> ToValueString() const {
     static const char* kNullString = "null";
@@ -151,7 +163,16 @@ class SpecificWrapper : public PrimitiveWrapper {
 
   const T& GetWrapped() const { return wrapped_; }
 
-  bool HasValue() const override;
+  bool HasValue() const override {
+    for (const Extension& extension : GetWrapped().extension()) {
+      if (extension.url().value() ==
+              GetPrimitiveHasNoValueExtension()->url().value() &&
+          extension.value().boolean().value()) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   bool HasElement() const override {
     if (GetWrapped().has_id()) return true;
@@ -209,9 +230,40 @@ class SpecificWrapper : public PrimitiveWrapper {
     return absl::WrapUnique(copy);
   }
 
+  Status ValidateProto(const Message& message) const override {
+    if (message.GetDescriptor()->full_name() != T::descriptor()->full_name()) {
+      return InvalidArgument("Error: Mismatch validating message of type ",
+                             message.GetDescriptor()->full_name(), " against ",
+                             T::descriptor()->full_name(),
+                             ".  This indicates an error in validation, rather "
+                             "than a problem with data.");
+    }
+    const T& typed = dynamic_cast<const T&>(message);
+
+    std::vector<PrimitiveHasNoValue> no_value_extensions;
+    FHIR_RETURN_IF_ERROR(
+        GetRepeatedFromExtension(typed.extension(), &no_value_extensions));
+    if (no_value_extensions.size() > 1) {
+      return FailedPrecondition(
+          T::descriptor()->full_name(),
+          " has multiple PrimitiveHasNoValue extensions.");
+    }
+    const bool has_no_value_extension =
+        no_value_extensions.size() == 1 &&
+        no_value_extensions.at(0).value_boolean().value();
+    if (typed.extension_size() == 1 && has_no_value_extension) {
+      return FailedPrecondition(T::descriptor()->full_name(),
+                                " must have either extensions or value.");
+    }
+    return ValidateTypeSpecific(typed, has_no_value_extension);
+  }
+
  protected:
   T wrapped_;
   static StatusOr<T> BuildNullValue();
+
+  virtual Status ValidateTypeSpecific(
+      const T& message, const bool has_no_value_extension) const = 0;
 
   static Status ValidateString(const string& input) {
     static const RE2* regex_pattern = [] {
@@ -226,22 +278,14 @@ class SpecificWrapper : public PrimitiveWrapper {
   }
 };
 
-
-template <class T>
-bool SpecificWrapper<T>::HasValue() const {
-  for (const Extension& extension : GetWrapped().extension()) {
-    if (extension.url().value() ==
-            GetPrimitiveHasNoValueExtension()->url().value() &&
-        extension.value().boolean().value()) {
-      return false;
-    }
-  }
+template <>
+bool SpecificWrapper<Xhtml>::HasValue() const {
   return true;
 }
 
 template <>
-bool SpecificWrapper<Xhtml>::HasValue() const {
-  return !GetWrapped().value().empty();
+bool SpecificWrapper<Xhtml>::HasElement() const {
+  return GetWrapped().has_id();
 }
 
 template <class T>
@@ -254,6 +298,12 @@ StatusOr<T> SpecificWrapper<T>::BuildNullValue() {
 template <>
 StatusOr<Xhtml> SpecificWrapper<Xhtml>::BuildNullValue() {
   return InvalidArgument("Unexpected null xhtml");
+}
+
+// Xhtml can't have extensions, it's always valid.
+template <>
+Status SpecificWrapper<Xhtml>::ValidateProto(const Message& message) const {
+  return Status::OK();
 }
 
 // Template for wrappers that expect the input to be a JSON string type,
@@ -276,7 +326,7 @@ class StringInputWrapper : public SpecificWrapper<T> {
   }
 
  protected:
-  virtual Status ParseString(const string& string) = 0;
+  virtual Status ParseString(const string& json_string) = 0;
 };
 
 // Template for wrappers that represent data as a string.
@@ -288,9 +338,26 @@ class StringTypeWrapper : public StringInputWrapper<T> {
         Json::valueToQuotedString(this->GetWrapped().value().c_str()));
   }
 
+  Status ValidateTypeSpecific(
+      const T& message, const bool has_no_value_extension) const override {
+    if (has_no_value_extension) {
+      return message.value().empty()
+                 ? Status::OK()
+                 : FailedPrecondition(T::descriptor()->full_name(),
+                                      " has both a value, and a "
+                                      "PrimitiveHasNoValueExtension.");
+    }
+    Status string_validation = this->ValidateString(message.value());
+    return string_validation.ok()
+               ? Status::OK()
+               : FailedPrecondition(string_validation.error_message());
+  }
+
  protected:
-  void SetValue(const string& json_string) {
+  Status ParseString(const string& json_string) override {
+    FHIR_RETURN_IF_ERROR(this->ValidateString(json_string));
     this->GetWrapped().set_value(json_string);
+    return Status::OK();
   }
 };
 
@@ -338,6 +405,34 @@ class TimeTypeWrapper : public SpecificWrapper<T> {
                ? ::tensorflow::str_util::StringReplace(
                      value, "+00:00", "Z", /* replace_all = */ false)
                : value;
+  }
+
+  Status ValidateTypeSpecific(
+      const T& message, const bool has_no_value_extension) const override {
+    if (has_no_value_extension) {
+      if (message.value_us() != 0) {
+        return FailedPrecondition(
+            T::descriptor()->full_name(),
+            " has PrimitiveNoValueExtension but has a value.");
+      }
+      if (message.precision() != T::PRECISION_UNSPECIFIED) {
+        return FailedPrecondition(
+            T::descriptor()->full_name(),
+            " has PrimitiveNoValueExtension but has a specified precision.");
+      }
+      if (!message.timezone().empty()) {
+        return FailedPrecondition(
+            T::descriptor()->full_name(),
+            " has PrimitiveNoValueExtension but has a specified timezone.");
+      }
+    } else if (message.precision() == T::PRECISION_UNSPECIFIED) {
+      return FailedPrecondition(T::descriptor()->full_name(),
+                                " is missing precision.");
+    } else if (message.timezone().empty()) {
+      return FailedPrecondition(T::descriptor()->full_name(),
+                                " is missing TimeZone.");
+    }
+    return Status::OK();
   }
 
  protected:
@@ -467,7 +562,7 @@ class TimeTypeWrapper : public SpecificWrapper<T> {
 
 // Template for Wrappers that expect integers as json input.
 template <typename T>
-class IntegerInputWrapper : public SpecificWrapper<T> {
+class IntegerTypeWrapper : public SpecificWrapper<T> {
  public:
   Status Parse(const Json::Value& json,
                const absl::TimeZone& default_time_zone) override {
@@ -491,8 +586,64 @@ class IntegerInputWrapper : public SpecificWrapper<T> {
   }
 
  protected:
-  virtual Status ValidateInteger(const int int_value) = 0;
+  virtual Status ValidateInteger(const int int_value) const {
+    return Status::OK();
+  }
+
+  Status ValidateTypeSpecific(
+      const T& message, const bool has_no_value_extension) const override {
+    if (has_no_value_extension) {
+      if (message.value() != 0) {
+        return FailedPrecondition(
+            T::descriptor()->full_name(),
+            " has both a value, and a PrimitiveHasNoValueExtension.");
+      }
+      return Status::OK();
+    }
+    Status int_validation = this->ValidateInteger(message.value());
+    return int_validation.ok()
+               ? Status::OK()
+               : FailedPrecondition(int_validation.error_message());
+  }
 };
+
+Status ValidateCodelike(const Message& message) {
+  const Descriptor* descriptor = message.GetDescriptor();
+  const Reflection* reflection = message.GetReflection();
+  const FieldDescriptor* value_field = descriptor->FindFieldByName("value");
+  const FieldDescriptor* extension_field =
+      descriptor->FindFieldByName("extension");
+
+  std::vector<PrimitiveHasNoValue> no_value_extensions;
+  const auto& extensions =
+      reflection->GetRepeatedFieldRef<Extension>(message, extension_field);
+  FHIR_RETURN_IF_ERROR(
+      GetRepeatedFromExtension(extensions, &no_value_extensions));
+  if (no_value_extensions.size() > 1) {
+    return FailedPrecondition(descriptor->full_name(),
+                              " has multiple PrimitiveHasNoValue extensions.");
+  }
+  const bool has_no_value_extension =
+      no_value_extensions.size() == 1 &&
+      no_value_extensions.at(0).value_boolean().value();
+  if (extensions.size() == 1 && has_no_value_extension) {
+    return FailedPrecondition(descriptor->full_name(),
+                              " must have either extensions or value.");
+  }
+  const bool has_enum_value =
+      reflection->GetEnumValue(message, value_field) != 0;
+  if (has_no_value_extension && has_enum_value) {
+    return FailedPrecondition(
+        descriptor->full_name(),
+        " has both PrimitiveHasNoValue extension and an enum value.");
+  }
+  if (!has_no_value_extension && !has_enum_value) {
+    return FailedPrecondition(
+        descriptor->full_name(),
+        " has no enum value, and no PrimitiveHasNoValue extension.");
+  }
+  return Status::OK();
+}
 
 class CodeWrapper : public StringTypeWrapper<Code> {
  public:
@@ -504,11 +655,12 @@ class CodeWrapper : public StringTypeWrapper<Code> {
     return ConvertToTypedCode(this->GetWrapped(), target);
   }
 
- protected:
-  Status ParseString(const string& json_string) override {
-    FHIR_RETURN_IF_ERROR(ValidateString(json_string));
-    SetValue(json_string);
-    return Status::OK();
+  Status ValidateProto(const Message& message) const override {
+    if (IsMessageType<Code>(message)) {
+      return SpecificWrapper::ValidateProto(message);
+    } else {
+      return ValidateCodelike(message);
+    }
   }
 };
 
@@ -541,6 +693,22 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64Binary> {
     return std::move(extension_message);
   }
 
+ protected:
+  Status ValidateTypeSpecific(
+      const Base64Binary& message,
+      const bool has_no_value_extension) const override {
+    if (has_no_value_extension) {
+      return message.value().empty() ? Status::OK()
+                                     : FailedPrecondition(
+                                           "Base64Binary has both a value, and "
+                                           "a PrimitiveHasNoValueExtension.");
+    }
+    Status string_validation = this->ValidateString(message.value());
+    return string_validation.ok()
+               ? Status::OK()
+               : FailedPrecondition(string_validation.error_message());
+  }
+
  private:
   Status ParseString(const string& json_string) override {
     size_t stride = json_string.find(' ');
@@ -568,6 +736,17 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64Binary> {
 };
 
 class BooleanWrapper : public SpecificWrapper<Boolean> {
+ protected:
+  Status ValidateTypeSpecific(
+      const Boolean& message,
+      const bool has_no_value_extension) const override {
+    if (has_no_value_extension && message.value()) {
+      return FailedPrecondition(
+          "Boolean has both a value, and a PrimitiveHasNoValueExtension.");
+    }
+    return Status::OK();
+  }
+
  private:
   Status Parse(const Json::Value& json,
                const absl::TimeZone& default_time_zone) override {
@@ -589,10 +768,6 @@ class BooleanWrapper : public SpecificWrapper<Boolean> {
   }
 };
 
-class DateWrapper : public TimeTypeWrapper<Date> {};
-
-class DateTimeWrapper : public TimeTypeWrapper<DateTime> {};
-
 // Note: This extends StringInputWrapper, but Parse is overridden to also accept
 // integer types.
 // This is necessary because we cannot use true decimal JSON types without
@@ -605,6 +780,22 @@ class DecimalWrapper : public StringInputWrapper<Decimal> {
  public:
   StatusOr<string> ToNonNullValueString() const override {
     return absl::StrCat(GetWrapped().value());
+  }
+
+ protected:
+  Status ValidateTypeSpecific(
+      const Decimal& message,
+      const bool has_no_value_extension) const override {
+    if (has_no_value_extension) {
+      return message.value().empty() ? Status::OK()
+                                     : FailedPrecondition(
+                                           "Decimal has both a value, and a "
+                                           "PrimitiveHasNoValueExtension.");
+    }
+    Status string_validation = this->ValidateString(message.value());
+    return string_validation.ok()
+               ? Status::OK()
+               : FailedPrecondition(string_validation.error_message());
   }
 
  private:
@@ -635,56 +826,16 @@ class DecimalWrapper : public StringInputWrapper<Decimal> {
   }
 };
 
-class IdWrapper : public StringTypeWrapper<Id> {
- private:
-  Status ParseString(const string& json_string) override {
-    FHIR_RETURN_IF_ERROR(ValidateString(json_string));
-    SetValue(json_string);
-    return Status::OK();
-  }
-};
+template <>
+Status IntegerTypeWrapper<PositiveInt>::ValidateInteger(
+    const int int_value) const {
+  return int_value > 0
+             ? Status::OK()
+             : InvalidArgument("Cannot parse ", int_value,
+                               " as PositiveInt: must be greater than zero.");
+}
 
-class InstantWrapper : public TimeTypeWrapper<Instant> {};
-
-class IntegerWrapper : public IntegerInputWrapper<Integer> {
- protected:
-  Status ValidateInteger(const int int_value) override { return Status::OK(); }
-};
-
-class MarkdownWrapper : public StringTypeWrapper<Markdown> {
- private:
-  Status ParseString(const string& json_string) override {
-    SetValue(json_string);
-    return Status::OK();
-  }
-};
-
-class OidWrapper : public StringTypeWrapper<Oid> {
- private:
-  Status ParseString(const string& json_string) override {
-    FHIR_RETURN_IF_ERROR(ValidateString(json_string));
-    SetValue(json_string);
-    return Status::OK();
-  }
-};
-
-class PositiveIntWrapper : public IntegerInputWrapper<PositiveInt> {
- protected:
-  Status ValidateInteger(const int int_value) override {
-    return int_value > 0
-               ? Status::OK()
-               : InvalidArgument("Cannot parse ", int_value,
-                                 " as PositiveInt: must be greater than zero.");
-  }
-};
-
-class StringWrapper : public StringTypeWrapper<String> {
- private:
-  Status ParseString(const string& json_string) override {
-    SetValue(json_string);
-    return Status::OK();
-  }
-};
+constexpr uint64_t DAY_IN_US = 24L * 60 * 60 * 1000 * 1000;
 
 class TimeWrapper : public StringInputWrapper<Time> {
  public:
@@ -707,6 +858,31 @@ class TimeWrapper : public StringInputWrapper<Time> {
         "\"",
         absl::FormatTime(format_iter->second, absolute_t, absl::UTCTimeZone()),
         "\"");
+  }
+
+ protected:
+  Status ValidateTypeSpecific(
+      const Time& message, const bool has_no_value_extension) const override {
+    if (has_no_value_extension) {
+      if (message.value_us() != 0) {
+        return FailedPrecondition(
+            "Time has PrimitiveNoValueExtension but has a value.");
+      }
+      if (message.precision() != Time::PRECISION_UNSPECIFIED) {
+        return FailedPrecondition(
+            "Time has PrimitiveNoValueExtension but has a specified "
+            "precision.");
+      }
+      return Status::OK();
+    } else if (message.precision() == Time::PRECISION_UNSPECIFIED) {
+      return FailedPrecondition("Time is missing precision.");
+    }
+    if (message.value_us() >= DAY_IN_US) {
+      return FailedPrecondition(
+          "Time has value out of range: must be less than a day in "
+          "microseconds.");
+    }
+    return Status::OK();
   }
 
  private:
@@ -742,34 +918,15 @@ class TimeWrapper : public StringInputWrapper<Time> {
   }
 };
 
-class UnsignedIntWrapper : public IntegerInputWrapper<UnsignedInt> {
- protected:
-  Status ValidateInteger(const int int_value) override {
-    return int_value >= 0
-               ? Status::OK()
-               : InvalidArgument(
-                     "Cannot parse ", int_value,
-                     " as PositiveInt: must be greater than or equal to zero.");
-  }
-};
-
-class UriWrapper : public StringTypeWrapper<Uri> {
- private:
-  Status ParseString(const string& json_string) override {
-    SetValue(json_string);
-    return Status::OK();
-  }
-};
-
-class XhtmlWrapper : public StringTypeWrapper<Xhtml> {
- private:
-  Status ParseString(const string& json_string) override {
-    SetValue(json_string);
-    return Status::OK();
-  }
-
-  bool HasElement() const override { return GetWrapped().has_id(); }
-};
+template <>
+Status IntegerTypeWrapper<UnsignedInt>::ValidateInteger(
+    const int int_value) const {
+  return int_value >= 0
+             ? Status::OK()
+             : InvalidArgument(
+                   "Cannot parse ", int_value,
+                   " as PositiveInt: must be greater than or equal to zero.");
+}
 
 StatusOr<std::unique_ptr<PrimitiveWrapper>> GetWrapper(
     const Descriptor* target_descriptor) {
@@ -781,33 +938,35 @@ StatusOr<std::unique_ptr<PrimitiveWrapper>> GetWrapper(
   } else if (target_name == "Boolean") {
     return std::unique_ptr<PrimitiveWrapper>(new BooleanWrapper());
   } else if (target_name == "Date") {
-    return std::unique_ptr<PrimitiveWrapper>(new DateWrapper());
+    return std::unique_ptr<PrimitiveWrapper>(new TimeTypeWrapper<Date>());
   } else if (target_name == "DateTime") {
-    return std::unique_ptr<PrimitiveWrapper>(new DateTimeWrapper());
+    return std::unique_ptr<PrimitiveWrapper>(new TimeTypeWrapper<DateTime>());
   } else if (target_name == "Decimal") {
     return std::unique_ptr<PrimitiveWrapper>(new DecimalWrapper());
   } else if (target_name == "Id") {
-    return std::unique_ptr<PrimitiveWrapper>(new IdWrapper());
+    return std::unique_ptr<PrimitiveWrapper>(new StringTypeWrapper<Id>());
   } else if (target_name == "Instant") {
-    return std::unique_ptr<PrimitiveWrapper>(new InstantWrapper());
+    return std::unique_ptr<PrimitiveWrapper>(new TimeTypeWrapper<Instant>());
   } else if (target_name == "Integer") {
-    return std::unique_ptr<PrimitiveWrapper>(new IntegerWrapper());
+    return std::unique_ptr<PrimitiveWrapper>(new IntegerTypeWrapper<Integer>());
   } else if (target_name == "Markdown") {
-    return std::unique_ptr<PrimitiveWrapper>(new MarkdownWrapper());
+    return std::unique_ptr<PrimitiveWrapper>(new StringTypeWrapper<Markdown>());
   } else if (target_name == "Oid") {
-    return std::unique_ptr<PrimitiveWrapper>(new OidWrapper());
+    return std::unique_ptr<PrimitiveWrapper>(new StringTypeWrapper<Oid>());
   } else if (target_name == "PositiveInt") {
-    return std::unique_ptr<PrimitiveWrapper>(new PositiveIntWrapper());
+    return std::unique_ptr<PrimitiveWrapper>(
+        new IntegerTypeWrapper<PositiveInt>());
   } else if (target_name == "String") {
-    return std::unique_ptr<PrimitiveWrapper>(new StringWrapper());
+    return std::unique_ptr<PrimitiveWrapper>(new StringTypeWrapper<String>());
   } else if (target_name == "Time") {
     return std::unique_ptr<PrimitiveWrapper>(new TimeWrapper());
   } else if (target_name == "UnsignedInt") {
-    return std::unique_ptr<PrimitiveWrapper>(new UnsignedIntWrapper());
+    return std::unique_ptr<PrimitiveWrapper>(
+        new IntegerTypeWrapper<UnsignedInt>());
   } else if (target_name == "Uri") {
-    return std::unique_ptr<PrimitiveWrapper>(new UriWrapper());
+    return std::unique_ptr<PrimitiveWrapper>(new StringTypeWrapper<Uri>());
   } else if (target_name == "Xhtml") {
-    return std::unique_ptr<PrimitiveWrapper>(new XhtmlWrapper());
+    return std::unique_ptr<PrimitiveWrapper>(new StringTypeWrapper<Xhtml>());
   } else {
     return InvalidArgument("Unexpected primitive FHIR type: ",
                            target_descriptor->name());
@@ -847,6 +1006,20 @@ StatusOr<JsonPrimitive> WrapPrimitiveProto(const ::google::protobuf::Message& pr
     return JsonPrimitive{value, std::move(wrapped)};
   }
   return JsonPrimitive{value, nullptr};
+}
+
+Status ValidatePrimitive(const ::google::protobuf::Message& primitive) {
+  if (!IsPrimitive(primitive.GetDescriptor())) {
+    return InvalidArgument("Not a primitive type: ",
+                           primitive.GetDescriptor()->full_name());
+  }
+
+  const ::google::protobuf::Descriptor* descriptor = primitive.GetDescriptor();
+  // TODO: Once wrapping a proto doesn't involve a copy,
+  // wrap directly here.
+  FHIR_ASSIGN_OR_RETURN(std::unique_ptr<PrimitiveWrapper> wrapper,
+                        GetWrapper(descriptor));
+  return wrapper->ValidateProto(primitive);
 }
 
 }  // namespace stu3

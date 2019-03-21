@@ -51,8 +51,7 @@ filegroup(
 filegroup(
     name = "validation",
     srcs = glob([
-        "validation/*.valid.ndjson",
-        "validation/*.invalid.ndjson",
+        "validation/*",
     ]),
 )
 

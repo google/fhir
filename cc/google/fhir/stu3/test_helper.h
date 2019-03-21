@@ -36,10 +36,15 @@
 // final patient bundles. On the other hand, there are cases where the input
 // data is missing critical information and should indeed be dropped. These
 // macros let you specify which situation applies to any given test case.
-#define PARSE_VALID_STU3_PROTO(asciipb) \
-  ::google::fhir::stu3::FhirProtoParseHelper(asciipb, true, __FILE__, __LINE__)
-#define PARSE_INVALID_STU3_PROTO(asciipb) \
-  ::google::fhir::stu3::FhirProtoParseHelper(asciipb, false, __FILE__, __LINE__)
+#define PARSE_VALID_STU3_PROTO(asciipb)       \
+  ::google::fhir::stu3::FhirProtoParseHelper( \
+      asciipb, ::google::fhir::stu3::VALID, __FILE__, __LINE__)
+#define PARSE_INVALID_STU3_PROTO(asciipb)     \
+  ::google::fhir::stu3::FhirProtoParseHelper( \
+      asciipb, ::google::fhir::stu3::INVALID, __FILE__, __LINE__)
+#define PARSE_STU3_PROTO(asciipb)     \
+  ::google::fhir::stu3::FhirProtoParseHelper( \
+      asciipb, ::google::fhir::stu3::NO_EXPECTATION, __FILE__, __LINE__)
 
 namespace google {
 namespace fhir {
@@ -47,11 +52,13 @@ namespace stu3 {
 
 using std::string;
 
+enum ValidityExpectation { VALID, INVALID, NO_EXPECTATION };
+
 class FhirProtoParseHelper {
  public:
-  FhirProtoParseHelper(absl::string_view asciipb, bool valid,
+  FhirProtoParseHelper(absl::string_view asciipb, ValidityExpectation validity,
                        absl::string_view file, int line)
-      : asciipb_(asciipb), valid_(valid), file_(file), line_(line) {}
+      : asciipb_(asciipb), validity_(validity), file_(file), line_(line) {}
 
   template <class T>
   operator T() {
@@ -64,12 +71,12 @@ class FhirProtoParseHelper {
       return T();
     }
     Status status = ValidateFhirConstraints(tmp);
-    if (valid_) {
+    if (validity_ == VALID) {
       EXPECT_TRUE(status.ok())
-          << "Invalid FHIR resource of type " << T::descriptor()->name()
+          << "Invalid FHIR resource of type " << T::descriptor()->full_name()
           << " on line " << line_ << " in file " << file_ << " : "
           << status.error_message();
-    } else {
+    } else if (validity_ == INVALID) {
       EXPECT_FALSE(status.ok())
           << "Unexpected valid FHIR resource of type "
           << T::descriptor()->name() << " on line " << line_ << " in file "
@@ -80,7 +87,7 @@ class FhirProtoParseHelper {
 
  private:
   std::string asciipb_;
-  bool valid_;
+  ValidityExpectation validity_;
   std::string file_;
   int line_;
 };
