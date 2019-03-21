@@ -126,6 +126,9 @@ extend google.protobuf.FieldOptions {
 
   // Indicates which resource types can be valid references.
   repeated string valid_reference_type = 218884094;
+
+  // Indicates the base FHIR resource type a ReferenceId field points to.
+  string referenced_fhir_type = 239446062;
 }
 
 extend google.protobuf.OneofOptions {
