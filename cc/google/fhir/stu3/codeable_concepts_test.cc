@@ -16,7 +16,9 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "google/fhir/stu3/test_helper.h"
+#include "google/fhir/testutil/proto_matchers.h"
 #include "testdata/stu3/profiles/test.pb.h"
+#include "tensorflow/core/lib/core/status_test_util.h"
 
 namespace google {
 namespace fhir {
@@ -24,6 +26,7 @@ namespace stu3 {
 
 namespace {
 
+using ::google::fhir::stu3::proto::CodeableConcept;
 using ::google::fhir::stu3::proto::Coding;
 using ::google::fhir::stu3::testing::TestObservation;
 using ::testing::ElementsAre;
@@ -338,6 +341,79 @@ TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedSystem) {
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedCode) {
   auto concept = GetConcept();
   EXPECT_FALSE(ClearAllCodingsWithSystem(&concept, "http://sysc.org").ok());
+}
+
+TEST(CodeableConceptsTest, CopyCodeableConcept) {
+  CodeableConcept concept = PARSE_STU3_PROTO(R"proto(
+    coding {
+      system { value: "foo" },
+      code { value: "bar" }
+    },
+    coding {
+      system { value: "http://catA.org" },
+      code { value: "bar" }
+    }
+    coding {
+      system { value: "http://sysa.org" }
+      code { value: "acode" }
+      display { value: "A Display" }
+    },
+    coding {
+      system { value: "http://sysc.org" },
+      code { value: "8472" }
+    },
+  )proto");
+  TestObservation::CodeableConceptForCode concept_for_code =
+      PARSE_STU3_PROTO(R"proto(
+        # inlined system
+        sys_a {
+          code { value: "acode" },
+          display { value: "A Display" }
+        },
+        # inlined system & code
+        sys_c {},
+              coding {
+                system { value: "foo" },
+                code { value: "bar" }
+              },
+              coding {
+                system { value: "http://catA.org" },
+                code { value: "bar" }
+              }
+      )proto");
+  TestObservation::CodeableConceptForCategory concept_for_cat =
+      PARSE_STU3_PROTO(R"proto(
+        coding {
+          system { value: "http://sysa.org" }
+          code { value: "acode" }
+          display { value: "A Display" }
+        },
+        coding {
+          system { value: "http://sysc.org" },
+          code { value: "8472" }
+        },
+        coding {
+          system { value: "foo" },
+          code { value: "bar" }
+        },
+        # inlined system
+        cat_a { code { value: "bar" } }
+      )proto");
+
+  CodeableConcept profiled_to_unprofiled;
+  CopyCodeableConcept(concept_for_code, &profiled_to_unprofiled);
+  ASSERT_THAT(concept,
+              testutil::EqualsProtoIgnoringReordering(profiled_to_unprofiled));
+
+  TestObservation::CodeableConceptForCode unprofiled_to_profiled;
+  CopyCodeableConcept(concept, &unprofiled_to_profiled);
+  ASSERT_THAT(concept_for_code,
+              testutil::EqualsProtoIgnoringReordering(unprofiled_to_profiled));
+
+  TestObservation::CodeableConceptForCategory profiled_to_profiled;
+  CopyCodeableConcept(concept_for_code, &profiled_to_profiled);
+  ASSERT_THAT(concept_for_cat,
+              testutil::EqualsProtoIgnoringReordering(profiled_to_profiled));
 }
 
 }  // namespace

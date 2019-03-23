@@ -353,8 +353,10 @@ cc_test(
     deps = [
         ":codeable_concepts",
         ":test_helper",
+        "//cc/google/fhir/testutil:proto_matchers",
         "//testdata/stu3/profiles:test_cc_proto",
         "@com_google_googletest//:gtest_main",
+        "@org_tensorflow//tensorflow/core:test",
     ],
 )
 

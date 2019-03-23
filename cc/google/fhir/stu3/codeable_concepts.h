@@ -416,6 +416,19 @@ Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
   return Status::OK();
 }
 
+template <typename CodeableConceptLikeSource,
+          typename CodeableConceptLikeTarget>
+void CopyCodeableConcept(const CodeableConceptLikeSource& source,
+                         CodeableConceptLikeTarget* target) {
+  if (IsMessageType<CodeableConceptLikeSource>(*target)) {
+    target->CopyFrom(source);
+    return;
+  }
+  ForEachCoding(source, [&target](const proto::Coding& coding) {
+    AddCoding(target, coding);
+  });
+}
+
 }  // namespace stu3
 }  // namespace fhir
 }  // namespace google
