@@ -40,7 +40,7 @@ using ::google::fhir::testutil::EqualsProto;
 using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
 
 template <class B, class P>
-void TestProfile(const string& filename) {
+void TestDownConvert(const string& filename) {
   const B unprofiled = ReadProto<B>(absl::StrCat(filename, ".prototxt"));
   P profiled;
 
@@ -60,13 +60,13 @@ void TestProfile(const string& filename) {
 }
 
 template <class B, class P>
-void TestConvertToBaseResource(const string& filename) {
+void TestUpConvert(const string& filename) {
   const P profiled = ReadProto<P>(absl::StrCat(
       filename, "-profiled-", absl::AsciiStrToLower(P::descriptor()->name()),
       ".prototxt"));
   B unprofiled;
 
-  auto status = ConvertToBaseResource(profiled, &unprofiled);
+  auto status = ConvertToProfileLenient(profiled, &unprofiled);
   if (!status.ok()) {
     LOG(ERROR) << status.error_message();
     ASSERT_TRUE(status.ok());
@@ -77,8 +77,14 @@ void TestConvertToBaseResource(const string& filename) {
 
 template <class B, class P>
 void TestPair(const string& filename) {
-  TestProfile<B, P>(filename);
-  TestConvertToBaseResource<B, P>(filename);
+  TestDownConvert<B, P>(filename);
+  TestUpConvert<B, P>(filename);
+}
+
+TEST(ProfilesTest, InvalidInputs) {
+  Patient patient;
+  Observation observation;
+  ASSERT_FALSE(ConvertToProfileLenient(patient, &observation).ok());
 }
 
 TEST(ProfilesTest, SimpleExtensions) {

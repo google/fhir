@@ -27,20 +27,14 @@ namespace stu3 {
 using std::string;
 const string& GetStructureDefinitionUrl(const ::google::protobuf::Descriptor* descriptor);
 
+const bool IsProfileOf(const ::google::protobuf::Descriptor* descriptor,
+                       const ::google::protobuf::Descriptor* potential_base);
+
 // Returns true if the passed-in descriptor is a profile of the template FHIR
 // type
 template <typename B>
 const bool IsProfileOf(const ::google::protobuf::Descriptor* descriptor) {
-  const string& base_url = GetStructureDefinitionUrl(B::descriptor());
-  for (int i = 0;
-       i < descriptor->options().ExtensionSize(stu3::proto::fhir_profile_base);
-       i++) {
-    if (descriptor->options().GetExtension(stu3::proto::fhir_profile_base, i) ==
-        base_url) {
-      return true;
-    }
-  }
-  return false;
+  return IsProfileOf(descriptor, B::descriptor());
 }
 
 // Returns true if the passed-in message is a profile of the template FHIR type
@@ -49,15 +43,21 @@ const bool IsProfileOf(const ::google::protobuf::Message& message) {
   return IsProfileOf<B>(message.GetDescriptor());
 }
 
+// Returns true if the passed-in descriptor is either of the template FHIR type,
+// or a profile of that type.
+template <typename B>
+const bool IsTypeOrProfileOf(const ::google::protobuf::Descriptor* descriptor) {
+  const string& actual_type = GetStructureDefinitionUrl(descriptor);
+  return (!actual_type.empty() &&
+          actual_type == GetStructureDefinitionUrl(B::descriptor())) ||
+         IsProfileOf<B>(descriptor);
+}
+
 // Returns true if the passed-in message is either of the template FHIR type,
 // or a profile of that type.
 template <typename B>
 const bool IsTypeOrProfileOf(const ::google::protobuf::Message& message) {
-  const string& actual_type =
-      GetStructureDefinitionUrl(message.GetDescriptor());
-  return (!actual_type.empty() &&
-          actual_type == GetStructureDefinitionUrl(B::descriptor())) ||
-         IsProfileOf<B>(message);
+  return IsTypeOrProfileOf<B>(message.GetDescriptor());
 }
 
 const bool IsProfile(const ::google::protobuf::Descriptor* descriptor);

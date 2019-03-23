@@ -30,6 +30,20 @@ const string& GetStructureDefinitionUrl(
       stu3::proto::fhir_structure_definition_url);
 }
 
+const bool IsProfileOf(const ::google::protobuf::Descriptor* descriptor,
+                       const ::google::protobuf::Descriptor* potential_base) {
+  const string& base_url = GetStructureDefinitionUrl(potential_base);
+  for (int i = 0;
+       i < descriptor->options().ExtensionSize(stu3::proto::fhir_profile_base);
+       i++) {
+    if (descriptor->options().GetExtension(stu3::proto::fhir_profile_base, i) ==
+        base_url) {
+      return true;
+    }
+  }
+  return false;
+}
+
 const bool IsProfile(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().ExtensionSize(stu3::proto::fhir_profile_base) >
          0;

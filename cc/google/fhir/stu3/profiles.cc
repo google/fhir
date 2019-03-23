@@ -416,7 +416,6 @@ Status PerformCodeableConceptUnslicing(const google::protobuf::Message& profiled
       }
     }
   }
-
   return Status::OK();
 }
 
@@ -450,20 +449,8 @@ Status PerformUnslicing(const google::protobuf::Message& profiled_message,
   return Status::OK();
 }
 
-}  // namespace
-
-Status ConvertToProfile(const Message& base_message,
-                        Message* profiled_message) {
-  FHIR_RETURN_IF_ERROR(ConvertToProfileLenient(base_message, profiled_message));
-  Status validation = ValidateResource(*profiled_message);
-  if (validation.ok()) {
-    return Status::OK();
-  }
-  return tensorflow::errors::FailedPrecondition(validation.error_message());
-}
-
-Status ConvertToProfileLenient(const Message& base_message,
-                               Message* profiled_message) {
+// Converts from something less specialized to something more specialized
+Status DownConvert(const Message& base_message, Message* profiled_message) {
   const Descriptor* base_descriptor = base_message.GetDescriptor();
   const Descriptor* profiled_descriptor = profiled_message->GetDescriptor();
 
@@ -492,8 +479,9 @@ Status ConvertToProfileLenient(const Message& base_message,
   return Status::OK();
 }
 
-Status ConvertToBaseResource(const google::protobuf::Message& profiled_message,
-                             google::protobuf::Message* base_message) {
+// Converts from something more specialized to something less specialized
+Status UpConvert(const google::protobuf::Message& profiled_message,
+                 google::protobuf::Message* base_message) {
   const Descriptor* profiled_descriptor = profiled_message.GetDescriptor();
   const Descriptor* base_descriptor = base_message->GetDescriptor();
 
@@ -515,6 +503,37 @@ Status ConvertToBaseResource(const google::protobuf::Message& profiled_message,
   // profiled message by reading annotations.
   base_message->DiscardUnknownFields();
   return PerformUnslicing(profiled_message, base_message);
+}
+
+}  // namespace
+
+Status ConvertToProfile(const Message& source, Message* target) {
+  FHIR_RETURN_IF_ERROR(ConvertToProfileLenient(source, target));
+  Status validation = ValidateResource(*target);
+  if (validation.ok()) {
+    return Status::OK();
+  }
+  return tensorflow::errors::FailedPrecondition(validation.error_message());
+}
+
+Status ConvertToProfileLenient(const Message& source, Message* target) {
+  const Descriptor* source_descriptor = source.GetDescriptor();
+  const Descriptor* target_descriptor = target->GetDescriptor();
+  if (IsProfileOf(source_descriptor, target_descriptor)) {
+    LOG(WARNING) << source_descriptor->full_name() << " is profile of "
+                 << target_descriptor->full_name();
+    // Source is a profile of Target, we want to go from more specialized
+    // to less specialized.
+    return UpConvert(source, target);
+  }
+  if (IsProfileOf(target_descriptor, source_descriptor)) {
+    // Target is a profile of Source, we want to go from less specialized
+    // to more specialized.
+    return DownConvert(source, target);
+  }
+  // TODO: Side convert if possible, through a common ancestor.
+  return InvalidArgument("Unable to convert ", source_descriptor->full_name(),
+                         " to ", target_descriptor->full_name());
 }
 
 }  // namespace stu3

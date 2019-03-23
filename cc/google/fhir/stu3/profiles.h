@@ -26,6 +26,7 @@ namespace stu3 {
 
 using std::string;
 
+// If <target> is a profiled type of <source>:
 // Converts a resource to a profiled version of that resource.
 // If the profile adds new inlined fields for Extensions or Codings within
 // CodeableConcepts, and those extensions or codings are present on the base
@@ -33,19 +34,18 @@ using std::string;
 // Finally, this runs the Fhir resource validation code on the resulting
 // message, to ensure the result complies with the requirements of the profile
 // (e.g., fields that are considered required by the profile).
-Status ConvertToProfile(const google::protobuf::Message& base_message,
-                        google::protobuf::Message* profiled_message);
-
-// Identical to ConvertToProfile, except does not run the validation step.
-Status ConvertToProfileLenient(const google::protobuf::Message& base_message,
-                               google::protobuf::Message* profiled_message);
-
-// Performs the inverse operation to ConvertToProfile.
+//
+// If <target> is a base type of <source>:
+// Performs the inverse operation to the above.
 // Any data that is in an inlined field in the profiled message,
 // that does not exists in the base message will be converted back to the
 // original format (e.g., extension).
-Status ConvertToBaseResource(const google::protobuf::Message& profiled_message,
-                             google::protobuf::Message* base_message);
+Status ConvertToProfile(const ::google::protobuf::Message& source,
+                        ::google::protobuf::Message* target);
+
+// Identical to ConvertToProfile, except does not run the validation step.
+Status ConvertToProfileLenient(const ::google::protobuf::Message& source,
+                               ::google::protobuf::Message* target);
 
 }  // namespace stu3
 }  // namespace fhir
