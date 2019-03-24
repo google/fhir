@@ -202,6 +202,11 @@ bool FieldHasValue(const Message& message,
   return PotentiallyRepeatedFieldSize(message, field) > 0;
 }
 
+bool FieldHasValue(const Message& message, const string& field_name) {
+  return FieldHasValue(message,
+                       message.GetDescriptor()->FindFieldByName(field_name));
+}
+
 int PotentiallyRepeatedFieldSize(const google::protobuf::Message& message,
                                  const google::protobuf::FieldDescriptor* field) {
   if (field->is_repeated()) {
@@ -231,6 +236,11 @@ google::protobuf::Message* MutablePotentiallyRepeatedMessage(
   DCHECK_EQ(index, 0) << "MutablePotentiallyRepeatedMessage called on singular "
                          "field with index > 0";
   return message->GetReflection()->MutableMessage(message, field);
+}
+
+bool AreSameMessageType(const ::google::protobuf::Message& a,
+                        const ::google::protobuf::Message& b) {
+  return a.GetDescriptor()->full_name() == b.GetDescriptor()->full_name();
 }
 
 }  // namespace stu3

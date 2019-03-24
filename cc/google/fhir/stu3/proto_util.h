@@ -132,12 +132,22 @@ string StripIndex(const string& field_path);
 bool FieldHasValue(const ::google::protobuf::Message& message,
                    const ::google::protobuf::FieldDescriptor* field);
 
+bool FieldHasValue(const ::google::protobuf::Message& message, const string& field);
+
 int PotentiallyRepeatedFieldSize(const ::google::protobuf::Message& message,
                                  const ::google::protobuf::FieldDescriptor* field);
 
 const ::google::protobuf::Message& GetPotentiallyRepeatedMessage(
     const ::google::protobuf::Message& message, const ::google::protobuf::FieldDescriptor* field,
     const int index);
+
+template <typename T>
+const T& GetPotentiallyRepeatedMessage(const ::google::protobuf::Message& message,
+                                       const ::google::protobuf::FieldDescriptor* field,
+                                       const int index) {
+  return dynamic_cast<const T&>(
+      GetPotentiallyRepeatedMessage(message, field, index));
+}
 
 ::google::protobuf::Message* MutablePotentiallyRepeatedMessage(
     ::google::protobuf::Message* message, const ::google::protobuf::FieldDescriptor* field,
@@ -146,12 +156,12 @@ const ::google::protobuf::Message& GetPotentiallyRepeatedMessage(
 // Performs a function once on each message within a potentially repeated field
 // on a proto, halting the first time the function returns true.
 template <typename FieldType>
-bool ForEachMessageHalting(const ::google::protobuf::Message* message,
+bool ForEachMessageHalting(const ::google::protobuf::Message& message,
                            const ::google::protobuf::FieldDescriptor* field,
                            std::function<bool(const FieldType& message)> func) {
-  for (int i = 0; i < PotentiallyRepeatedFieldSize(*message, field); i++) {
+  for (int i = 0; i < PotentiallyRepeatedFieldSize(message, field); i++) {
     bool stop = func(static_cast<const FieldType&>(
-        GetPotentiallyRepeatedMessage(*message, field, i)));
+        GetPotentiallyRepeatedMessage(message, field, i)));
     if (stop) return true;
   }
   return false;
@@ -160,7 +170,7 @@ bool ForEachMessageHalting(const ::google::protobuf::Message* message,
 // Performs a function once on each message within a potentially repeated field
 // on a proto.
 template <typename FieldType>
-void ForEachMessage(const ::google::protobuf::Message* message,
+void ForEachMessage(const ::google::protobuf::Message& message,
                     const ::google::protobuf::FieldDescriptor* field,
                     std::function<void(const FieldType& message)> func) {
   ForEachMessageHalting(message, [&func](const FieldType& message) {
@@ -179,6 +189,35 @@ template <typename T>
 bool IsMessageType(const ::google::protobuf::Message& message) {
   return IsMessageType<T>(message.GetDescriptor());
 }
+
+template <typename T>
+StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
+                              const ::google::protobuf::FieldDescriptor* field) {
+  if (field->message_type()->full_name() != T::descriptor()->full_name()) {
+    return tensorflow::errors::InvalidArgument(
+        "Invalid arguments to GetMessageInField: ", field->full_name(),
+        " is of type ", field->message_type()->full_name(), " but ",
+        T::descriptor()->full_name(), " was requested.");
+  }
+  return dynamic_cast<const T&>(
+      message.GetReflection()->GetMessage(message, field));
+}
+
+template <typename T>
+StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
+                              const string& field_name) {
+  const ::google::protobuf::FieldDescriptor* field =
+      message.GetDescriptor()->FindFieldByName(field_name);
+  if (!field) {
+    return tensorflow::errors::InvalidArgument(
+        "Invalid arguments to GetMessageInField: No field ", field_name,
+        " in type ", message.GetDescriptor()->full_name());
+  }
+  return GetMessageInField<T>(
+      message, message.GetDescriptor()->FindFieldByName(field_name));
+}
+
+bool AreSameMessageType(const ::google::protobuf::Message& a, const ::google::protobuf::Message& b);
 
 }  // namespace stu3
 }  // namespace fhir

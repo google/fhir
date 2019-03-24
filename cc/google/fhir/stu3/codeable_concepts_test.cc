@@ -401,17 +401,17 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
       )proto");
 
   CodeableConcept profiled_to_unprofiled;
-  CopyCodeableConcept(concept_for_code, &profiled_to_unprofiled);
+  TF_ASSERT_OK(CopyCodeableConcept(concept_for_code, &profiled_to_unprofiled));
   ASSERT_THAT(concept,
               testutil::EqualsProtoIgnoringReordering(profiled_to_unprofiled));
 
   TestObservation::CodeableConceptForCode unprofiled_to_profiled;
-  CopyCodeableConcept(concept, &unprofiled_to_profiled);
+  TF_ASSERT_OK(CopyCodeableConcept(concept, &unprofiled_to_profiled));
   ASSERT_THAT(concept_for_code,
               testutil::EqualsProtoIgnoringReordering(unprofiled_to_profiled));
 
   TestObservation::CodeableConceptForCategory profiled_to_profiled;
-  CopyCodeableConcept(concept_for_code, &profiled_to_profiled);
+  TF_ASSERT_OK(CopyCodeableConcept(concept_for_code, &profiled_to_profiled));
   ASSERT_THAT(concept_for_cat,
               testutil::EqualsProtoIgnoringReordering(profiled_to_profiled));
 }
