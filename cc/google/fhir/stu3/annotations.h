@@ -15,7 +15,6 @@
 #ifndef GOOGLE_FHIR_STU3_ANNOTATIONS_H_
 #define GOOGLE_FHIR_STU3_ANNOTATIONS_H_
 
-
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/message.h"
 #include "proto/stu3/annotations.pb.h"

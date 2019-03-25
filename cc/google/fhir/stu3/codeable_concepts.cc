@@ -14,7 +14,6 @@
 
 #include "google/fhir/stu3/codeable_concepts.h"
 
-
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
 #include "google/fhir/status/statusor.h"

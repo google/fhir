@@ -96,7 +96,7 @@ template <class T>
 T ReadProto(const string& filename) {
   T result;
   TF_CHECK_OK(::tensorflow::ReadTextProto(
-      tensorflow::Env::Default(),
+      ::tensorflow::Env::Default(),
       filename,
       &result));
   return result;
@@ -110,7 +110,9 @@ T ReadStu3Proto(const string& filename) {
 string ReadFile(const string& filename) {
   string result;
   TF_CHECK_OK(::tensorflow::ReadFileToString(
-      tensorflow::Env::Default(), filename, &result));
+      ::tensorflow::Env::Default(),
+      filename,
+      &result));
   return result;
 }
 

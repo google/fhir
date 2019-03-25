@@ -50,7 +50,7 @@ class BundleToSeqexConverterTest : public ::testing::Test {
  public:
   void SetUp() override {
     TF_CHECK_OK(::tensorflow::ReadTextProto(
-        tensorflow::Env::Default(),
+        ::tensorflow::Env::Default(),
         "proto/stu3/version_config.textproto",
         &fhir_version_config_));
     parser_.AllowPartialMessage(true);

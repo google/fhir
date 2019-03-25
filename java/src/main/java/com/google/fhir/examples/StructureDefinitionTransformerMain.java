@@ -11,6 +11,7 @@
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
+
 // bazel build //java:StructureDefinitionTransformer
 // bazel-bin/java/StructureDefinitionTransformer \
 //     --input_directory spec/hl7.fhir.core/1.0.2/package/ \

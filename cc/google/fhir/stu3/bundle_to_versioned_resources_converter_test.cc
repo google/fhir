@@ -45,9 +45,9 @@ void AssertCounter(const std::map<string, int>& counter_stats,
 const stu3::proto::VersionConfig GetConfig() {
   stu3::proto::VersionConfig result;
   TF_CHECK_OK(::tensorflow::ReadTextProto(
-        tensorflow::Env::Default(),
-        "proto/stu3/version_config.textproto",
-        &result));
+      ::tensorflow::Env::Default(),
+      "proto/stu3/version_config.textproto",
+      &result));
   return result;
 }
 

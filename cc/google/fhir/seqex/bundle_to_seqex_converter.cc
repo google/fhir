@@ -148,6 +148,7 @@ void GetSequenceFeatures(
   // We deal with these three cases in turn.
   auto iter = begin;
   int sequence_length = 0;
+
   // Case 1: no updates needed.
   const int64 now = absl::ToUnixSeconds(trigger_timestamp);
   while (sequence_length < event_id_feature->feature_size() &&
