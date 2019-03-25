@@ -362,6 +362,16 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
       system { value: "http://sysc.org" },
       code { value: "8472" }
     },
+    text { value: "some text to copy" }
+    id { value: "2134" }
+    extension {
+      url { value: "foo" }
+      value { string_value { value: "bar" } }
+    }
+    extension {
+      url { value: "baz" }
+      value { integer { value: 5 } }
+    }
   )proto");
   TestObservation::CodeableConceptForCode concept_for_code =
       PARSE_STU3_PROTO(R"proto(
@@ -369,17 +379,27 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
         sys_a {
           code { value: "acode" },
           display { value: "A Display" }
-        },
-        # inlined system & code
-        sys_c {},
-              coding {
-                system { value: "foo" },
-                code { value: "bar" }
-              },
-              coding {
-                system { value: "http://catA.org" },
-                code { value: "bar" }
-              }
+        }
+        # inlined system and code
+        sys_c {}
+        coding {
+          system { value: "foo" },
+          code { value: "bar" }
+        }
+        coding {
+          system { value: "http://catA.org" },
+          code { value: "bar" }
+        }
+        text { value: "some text to copy" }
+        id { value: "2134" }
+        extension {
+          url { value: "foo" }
+          value { string_value { value: "bar" } }
+        }
+        extension {
+          url { value: "baz" }
+          value { integer { value: 5 } }
+        }
       )proto");
   TestObservation::CodeableConceptForCategory concept_for_cat =
       PARSE_STU3_PROTO(R"proto(
@@ -398,6 +418,16 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
         },
         # inlined system
         cat_a { code { value: "bar" } }
+        text { value: "some text to copy" }
+        id { value: "2134" }
+        extension {
+          url { value: "foo" }
+          value { string_value { value: "bar" } }
+        }
+        extension {
+          url { value: "baz" }
+          value { integer { value: 5 } }
+        }
       )proto");
 
   CodeableConcept profiled_to_unprofiled;

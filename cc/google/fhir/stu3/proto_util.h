@@ -173,11 +173,12 @@ template <typename FieldType>
 void ForEachMessage(const ::google::protobuf::Message& message,
                     const ::google::protobuf::FieldDescriptor* field,
                     std::function<void(const FieldType& message)> func) {
-  ForEachMessageHalting(message, [&func](const FieldType& message) {
-    func(message);
-    return false;  // The halting function always returns false, so it doesn't
-                   // stop before visiting every message.
-  });
+  ForEachMessageHalting<FieldType>(
+      message, field, [&func](const FieldType& message) {
+        func(message);
+        return false;  // The halting function always returns false, so it
+                       // doesn't stop before visiting every message.
+      });
 }
 
 template <typename T>
@@ -218,6 +219,12 @@ StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
 }
 
 bool AreSameMessageType(const ::google::protobuf::Message& a, const ::google::protobuf::Message& b);
+
+// If both |source| and |target| contain a field with the given name, and the
+// fields are of the same type, copies over the value.
+// Otherwise, returns InvalidArgument.
+Status CopyCommonField(const ::google::protobuf::Message& source,
+                       ::google::protobuf::Message* target, const string& field_name);
 
 }  // namespace stu3
 }  // namespace fhir

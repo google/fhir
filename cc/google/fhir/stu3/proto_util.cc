@@ -31,8 +31,11 @@ namespace stu3 {
 using std::string;
 
 using ::google::fhir::StatusOr;
+using ::google::protobuf::Descriptor;
+using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::tensorflow::Status;
+using ::tensorflow::errors::InvalidArgument;
 
 namespace {
 
@@ -50,9 +53,9 @@ StatusOr<Message*> GetSubmessageByPathInternal(
   const string& message_name = message->GetDescriptor()->name();
   std::vector<string> tokens = absl::StrSplit(field_path, '.');
   if (message_name != tokens[0]) {
-    return ::tensorflow::errors::InvalidArgument(
-        absl::StrCat("Cannot find ", field_path, " in ", message_name,
-                     ": invalid top-level resource."));
+    return InvalidArgument(absl::StrCat("Cannot find ", field_path, " in ",
+                                        message_name,
+                                        ": invalid top-level resource."));
   }
 
   Message* submessage = message;
@@ -63,13 +66,13 @@ StatusOr<Message*> GetSubmessageByPathInternal(
         submessage->GetDescriptor()->FindFieldByCamelcaseName(*token_iter);
     if (subfield != nullptr) {
       // We found a field with this name.
-      if (subfield->cpp_type() != google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
-        return ::tensorflow::errors::InvalidArgument(
+      if (subfield->cpp_type() != FieldDescriptor::CPPTYPE_MESSAGE) {
+        return InvalidArgument(
             absl::StrCat("Cannot resolve field path ", field_path, ": field ",
                          subfield->full_name(), " is not a message."));
       }
       if (subfield->is_repeated()) {
-        return ::tensorflow::errors::InvalidArgument(
+        return InvalidArgument(
             absl::StrCat("Found repeated field with no index: ", field_path));
       }
 
@@ -91,18 +94,18 @@ StatusOr<Message*> GetSubmessageByPathInternal(
       if (!EndsInIndex(*token_iter, &index)) {
         // The field was not found, either as a singular or indexed repeated
         // field.
-        return ::tensorflow::errors::InvalidArgument(
+        return InvalidArgument(
             absl::StrCat("Cannot find field ", *token_iter, " in ",
                          submessage->GetDescriptor()->full_name()));
       }
       subfield = submessage->GetDescriptor()->FindFieldByCamelcaseName(
           StripIndex(*token_iter));
       if (subfield == nullptr) {
-        return ::tensorflow::errors::InvalidArgument(
+        return InvalidArgument(
             absl::StrCat("Invalid field path: ", field_path));
       }
       if (!subfield->is_repeated()) {
-        return ::tensorflow::errors::InvalidArgument(absl::StrCat(
+        return InvalidArgument(absl::StrCat(
             "Tried to index into non-repeated field: ", field_path));
       }
       const auto* submessage_reflection = submessage->GetReflection();
@@ -160,7 +163,7 @@ StatusOr<const Message*> GetSubmessageByPath(const Message& message,
 
 Status ClearFieldByPath(Message* message, const string& field_path) {
   if (EndsInIndex(field_path)) {
-    return ::tensorflow::errors::InvalidArgument(
+    return InvalidArgument(
         absl::StrCat("Cannot clear indexed repeated field: ", field_path));
   }
   // Get parent message, so we can clear the leaf field from it.
@@ -182,23 +185,20 @@ Status ClearFieldByPath(Message* message, const string& field_path) {
   const auto* field_descriptor =
       parent_message->GetDescriptor()->FindFieldByCamelcaseName(field_name);
   if (field_descriptor == nullptr) {
-    return ::tensorflow::errors::InvalidArgument(
-        absl::StrCat("Invalid field path: ", field_path));
+    return InvalidArgument(absl::StrCat("Invalid field path: ", field_path));
   }
   parent_reflection->ClearField(parent_message, field_descriptor);
   return Status::OK();
 }
 
-Message* MutableOrAddMessage(Message* message,
-                             const google::protobuf::FieldDescriptor* field) {
+Message* MutableOrAddMessage(Message* message, const FieldDescriptor* field) {
   if (field->is_repeated()) {
     return message->GetReflection()->AddMessage(message, field);
   }
   return message->GetReflection()->MutableMessage(message, field);
 }
 
-bool FieldHasValue(const Message& message,
-                   const google::protobuf::FieldDescriptor* field) {
+bool FieldHasValue(const Message& message, const FieldDescriptor* field) {
   return PotentiallyRepeatedFieldSize(message, field) > 0;
 }
 
@@ -207,17 +207,17 @@ bool FieldHasValue(const Message& message, const string& field_name) {
                        message.GetDescriptor()->FindFieldByName(field_name));
 }
 
-int PotentiallyRepeatedFieldSize(const google::protobuf::Message& message,
-                                 const google::protobuf::FieldDescriptor* field) {
+int PotentiallyRepeatedFieldSize(const Message& message,
+                                 const FieldDescriptor* field) {
   if (field->is_repeated()) {
     return message.GetReflection()->FieldSize(message, field);
   }
   return message.GetReflection()->HasField(message, field) ? 1 : 0;
 }
 
-const google::protobuf::Message& GetPotentiallyRepeatedMessage(
-    const google::protobuf::Message& message, const google::protobuf::FieldDescriptor* field,
-    const int index) {
+const Message& GetPotentiallyRepeatedMessage(const Message& message,
+                                             const FieldDescriptor* field,
+                                             const int index) {
   if (field->is_repeated()) {
     return message.GetReflection()->GetRepeatedMessage(message, field, index);
   }
@@ -226,9 +226,9 @@ const google::protobuf::Message& GetPotentiallyRepeatedMessage(
   return message.GetReflection()->GetMessage(message, field);
 }
 
-google::protobuf::Message* MutablePotentiallyRepeatedMessage(
-    google::protobuf::Message* message, const google::protobuf::FieldDescriptor* field,
-    const int index) {
+Message* MutablePotentiallyRepeatedMessage(Message* message,
+                                           const FieldDescriptor* field,
+                                           const int index) {
   if (field->is_repeated()) {
     return message->GetReflection()->MutableRepeatedMessage(message, field,
                                                             index);
@@ -238,9 +238,35 @@ google::protobuf::Message* MutablePotentiallyRepeatedMessage(
   return message->GetReflection()->MutableMessage(message, field);
 }
 
-bool AreSameMessageType(const ::google::protobuf::Message& a,
-                        const ::google::protobuf::Message& b) {
+bool AreSameMessageType(const Message& a, const Message& b) {
   return a.GetDescriptor()->full_name() == b.GetDescriptor()->full_name();
+}
+
+Status CopyCommonField(const Message& source, Message* target,
+                       const string& field_name) {
+  const Descriptor* source_descriptor = source.GetDescriptor();
+  const Descriptor* target_descriptor = target->GetDescriptor();
+
+  const FieldDescriptor* source_field =
+      source_descriptor->FindFieldByName(field_name);
+  const FieldDescriptor* target_field =
+      target_descriptor->FindFieldByName(field_name);
+
+  if (!source_field || !target_field ||
+      source_field->message_type()->full_name() !=
+          target_field->message_type()->full_name() ||
+      (source_field->is_repeated() != target_field->is_repeated())) {
+    return InvalidArgument("Error in CopyCommonField: Field ", field_name,
+                           " is not present in both ",
+                           source_descriptor->full_name(), " and ",
+                           target_descriptor->full_name(),
+                           ", or they are not the same type and size.");
+  }
+
+  ForEachMessage<Message>(source, source_field, [&](const Message& message) {
+    MutableOrAddMessage(target, target_field)->CopyFrom(message);
+  });
+  return Status::OK();
 }
 
 }  // namespace stu3

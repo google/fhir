@@ -14,10 +14,12 @@
 
 #include "google/fhir/stu3/codeable_concepts.h"
 
+#include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/proto_util.h"
+#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
@@ -25,14 +27,21 @@ namespace stu3 {
 
 namespace {
 
+using ::google::fhir::stu3::proto::CodeableConcept;
+using ::google::protobuf::FieldDescriptor;
+using ::google::protobuf::Message;
+using ::tensorflow::errors::AlreadyExists;
+using ::tensorflow::errors::InvalidArgument;
+using ::tensorflow::errors::NotFound;
+
 // Utility functions for working with potentially profiled CodeableConcepts.
 // These use a visitor pattern to allow operations on all Codings within a
 // CodeableConcept, regardless of how they are internally stored.
 
-typedef std::function<bool(const ::google::protobuf::FieldDescriptor*,
+typedef std::function<bool(const FieldDescriptor*,
                            const proto::CodingWithFixedSystem&)>
     FixedSystemFieldBoolFunc;
-typedef std::function<bool(const ::google::protobuf::FieldDescriptor*,
+typedef std::function<bool(const FieldDescriptor*,
                            const proto::CodingWithFixedCode&)>
     FixedCodeFieldBoolFunc;
 
@@ -80,11 +89,11 @@ std::unique_ptr<proto::Coding> CodingFromFixedCodeCoding(
 // This is internal-only, as outside callers shouldn't care about profiled vs
 // unprofiled fields, and should only care about Codings and Codes.
 const bool ForEachInternalCodingHalting(
-    const ::google::protobuf::Message& concept, const CodingBoolFunc& coding_func,
+    const Message& concept, const CodingBoolFunc& coding_func,
     const FixedSystemFieldBoolFunc& fixed_system_func,
     const FixedCodeFieldBoolFunc& fixed_code_func) {
   // Check base Coding fields.
-  const ::google::protobuf::FieldDescriptor* coding_field =
+  const FieldDescriptor* coding_field =
       concept.GetDescriptor()->FindFieldByName("coding");
   if (ForEachMessageHalting<proto::Coding>(concept, coding_field,
                                            coding_func)) {
@@ -92,13 +101,13 @@ const bool ForEachInternalCodingHalting(
   }
 
   // If there are no profiled fields to check, return.
-  if (IsMessageType<proto::CodeableConcept>(concept)) return false;
+  if (IsMessageType<CodeableConcept>(concept)) return false;
 
   // Check for profiled fields.
   const ::google::protobuf::Descriptor* descriptor = concept.GetDescriptor();
   for (int i = 0; i < descriptor->field_count(); i++) {
-    const ::google::protobuf::FieldDescriptor* field = descriptor->field(i);
-    if (field->type() != ::google::protobuf::FieldDescriptor::TYPE_MESSAGE) continue;
+    const FieldDescriptor* field = descriptor->field(i);
+    if (field->type() != FieldDescriptor::TYPE_MESSAGE) continue;
 
     if (IsMessageType<proto::CodingWithFixedSystem>(field->message_type())) {
       const bool stop = ForEachMessageHalting<proto::CodingWithFixedSystem>(
@@ -122,6 +131,22 @@ const bool ForEachInternalCodingHalting(
   return false;
 }
 
+// Copies a field from source to target if it is present on source.
+// Fails if the field is present and populated on the source, but does not have
+// an identical field on the target.
+// Notably, this will *not* fail if the field is present on the target but not
+// the source, or present on the source but not the target but the field is not
+// set, since no information will be lost in these cases.
+Status CopyFieldIfPresent(const Message& source, Message* target,
+                          const string& field_name) {
+  const FieldDescriptor* field =
+      source.GetDescriptor()->FindFieldByName(field_name);
+  if (!field && FieldHasValue(source, field)) {
+    return Status::OK();
+  }
+  return CopyCommonField(source, target, field_name);
+}
+
 }  // namespace
 
 namespace internal {
@@ -129,13 +154,13 @@ namespace internal {
 // Gets a profiled field for a given system, or nullptr if none is found.
 // This is internal, since outside callers shouldn't care about profiled vs
 // unprofiled.
-const ::google::protobuf::FieldDescriptor* ProfiledFieldForSystem(
-    const ::google::protobuf::Message& concept, const string& system) {
-  if (IsMessageType<proto::CodeableConcept>(concept)) return nullptr;
+const FieldDescriptor* ProfiledFieldForSystem(const Message& concept,
+                                              const string& system) {
+  if (IsMessageType<CodeableConcept>(concept)) return nullptr;
 
   const ::google::protobuf::Descriptor* descriptor = concept.GetDescriptor();
   for (int i = 0; i < descriptor->field_count(); i++) {
-    const ::google::protobuf::FieldDescriptor* field = descriptor->field(i);
+    const FieldDescriptor* field = descriptor->field(i);
     if (field->options().GetExtension(
             stu3::proto::fhir_inlined_coding_system) == system) {
       return field;
@@ -146,7 +171,7 @@ const ::google::protobuf::FieldDescriptor* ProfiledFieldForSystem(
 
 }  // namespace internal
 
-const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
+const bool FindSystemCodeStringPair(const Message& concept,
                                     const CodeBoolFunc& func,
                                     const string** found_system,
                                     const string** found_code) {
@@ -163,7 +188,7 @@ const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
         return false;
       },
       [&func, &found_system, &found_code](
-          const ::google::protobuf::FieldDescriptor* field,
+          const FieldDescriptor* field,
           const proto::CodingWithFixedSystem& coding) {
         const string& system = GetInlinedCodingSystem(field);
         const string& code = coding.code().value();
@@ -175,7 +200,7 @@ const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
         return false;
       },
       [&func, &found_system, &found_code](
-          const ::google::protobuf::FieldDescriptor* field,
+          const FieldDescriptor* field,
           const proto::CodingWithFixedCode& coding) {
         const string& system = GetInlinedCodingSystem(field);
         const string& code = GetInlinedCodingCode(field);
@@ -188,15 +213,14 @@ const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
       });
 }
 
-const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
+const bool FindSystemCodeStringPair(const Message& concept,
                                     const CodeBoolFunc& func) {
   const string* found_system;
   const string* found_code;
   return FindSystemCodeStringPair(concept, func, &found_system, &found_code);
 }
 
-void ForEachSystemCodeStringPair(const ::google::protobuf::Message& concept,
-                                 const CodeFunc& func) {
+void ForEachSystemCodeStringPair(const Message& concept, const CodeFunc& func) {
   FindSystemCodeStringPair(
       concept,
       [&func](const string& system, const string& code) {
@@ -209,7 +233,7 @@ void ForEachSystemCodeStringPair(const ::google::protobuf::Message& concept,
 }
 
 const std::vector<string> GetCodesWithSystem(
-    const ::google::protobuf::Message& concept, const absl::string_view target_system) {
+    const Message& concept, const absl::string_view target_system) {
   std::vector<string> codes;
   ForEachSystemCodeStringPair(
       concept,
@@ -221,7 +245,7 @@ const std::vector<string> GetCodesWithSystem(
   return codes;
 }
 
-StatusOr<const string> GetOnlyCodeWithSystem(const ::google::protobuf::Message& concept,
+StatusOr<const string> GetOnlyCodeWithSystem(const Message& concept,
                                              const absl::string_view system) {
   const std::vector<string>& codes = GetCodesWithSystem(concept, system);
   if (codes.empty()) {
@@ -233,10 +257,15 @@ StatusOr<const string> GetOnlyCodeWithSystem(const ::google::protobuf::Message& 
   return codes.front();
 }
 
-Status AddCoding(::google::protobuf::Message* concept, const proto::Coding& coding) {
+Status AddCoding(Message* concept, const proto::Coding& coding) {
+  if (!IsTypeOrProfileOf<CodeableConcept>(*concept)) {
+    return InvalidArgument(
+        "Error adding coding: ", concept->GetDescriptor()->full_name(),
+        " is not CodeableConcept-like.");
+  }
   const string& system = coding.system().value();
-  if (IsProfileOf<proto::CodeableConcept>(*concept)) {
-    const ::google::protobuf::FieldDescriptor* profiled_field =
+  if (IsProfileOf<CodeableConcept>(*concept)) {
+    const FieldDescriptor* profiled_field =
         internal::ProfiledFieldForSystem(*concept, system);
     if (profiled_field != nullptr) {
       if (IsMessageType<proto::CodingWithFixedSystem>(
@@ -248,8 +277,7 @@ Status AddCoding(::google::protobuf::Message* concept, const proto::Coding& codi
               "already populated.  Field: ",
               profiled_field->full_name(), ", System: ", system);
         }
-        ::google::protobuf::Message* target_coding =
-            MutableOrAddMessage(concept, profiled_field);
+        Message* target_coding = MutableOrAddMessage(concept, profiled_field);
         proto::CodingWithFixedSystem* fixed_system_coding =
             static_cast<proto::CodingWithFixedSystem*>(target_coding);
         CopyCommonCodingFields(coding, fixed_system_coding);
@@ -268,8 +296,7 @@ Status AddCoding(::google::protobuf::Message* concept, const proto::Coding& codi
                 profiled_field->full_name(), ", System: ", system,
                 ", Code:", fixed_code);
           }
-          ::google::protobuf::Message* target_coding =
-              MutableOrAddMessage(concept, profiled_field);
+          Message* target_coding = MutableOrAddMessage(concept, profiled_field);
           proto::CodingWithFixedCode* fixed_system_code =
               static_cast<proto::CodingWithFixedCode*>(target_coding);
           CopyCommonCodingFields(coding, fixed_system_code);
@@ -284,16 +311,15 @@ Status AddCoding(::google::protobuf::Message* concept, const proto::Coding& codi
   return Status::OK();
 }
 
-Status AddCoding(::google::protobuf::Message* concept, const string& system,
-                 const string& code) {
+Status AddCoding(Message* concept, const string& system, const string& code) {
   proto::Coding coding;
   coding.mutable_system()->set_value(system);
   coding.mutable_code()->set_value(code);
   return AddCoding(concept, coding);
 }
 
-std::shared_ptr<const proto::Coding> FindCoding(
-    const ::google::protobuf::Message& concept, const CodingBoolFunc& func) {
+std::shared_ptr<const proto::Coding> FindCoding(const Message& concept,
+                                                const CodingBoolFunc& func) {
   std::shared_ptr<const proto::Coding> found_coding = nullptr;
   ForEachInternalCodingHalting(
       concept,
@@ -307,7 +333,7 @@ std::shared_ptr<const proto::Coding> FindCoding(
         }
         return false;
       },
-      [&func, &found_coding](const ::google::protobuf::FieldDescriptor* field,
+      [&func, &found_coding](const FieldDescriptor* field,
                              const proto::CodingWithFixedSystem& coding) {
         std::shared_ptr<proto::Coding> synth_coding =
             CodingFromFixedSystemCoding(field, coding);
@@ -317,7 +343,7 @@ std::shared_ptr<const proto::Coding> FindCoding(
         }
         return false;
       },
-      [&func, &found_coding](const ::google::protobuf::FieldDescriptor* field,
+      [&func, &found_coding](const FieldDescriptor* field,
                              const proto::CodingWithFixedCode& coding) {
         std::shared_ptr<proto::Coding> synth_coding =
             CodingFromFixedCodeCoding(field, coding);
@@ -330,7 +356,7 @@ std::shared_ptr<const proto::Coding> FindCoding(
   return found_coding;
 }
 
-void ForEachCoding(const ::google::protobuf::Message& concept, const CodingFunc& func) {
+void ForEachCoding(const Message& concept, const CodingFunc& func) {
   FindCoding(concept, [&func](const proto::Coding& coding) {
     func(coding);
     // Return false for all codings, to ensure this iterates over all codings
@@ -339,7 +365,7 @@ void ForEachCoding(const ::google::protobuf::Message& concept, const CodingFunc&
   });
 }
 
-Status ForEachCodingWithStatus(const ::google::protobuf::Message& concept,
+Status ForEachCodingWithStatus(const Message& concept,
                                const CodingStatusFunc& func) {
   Status return_status = Status::OK();
   FindCoding(concept, [&func, &return_status](const proto::Coding& coding) {
@@ -353,12 +379,19 @@ Status ForEachCodingWithStatus(const ::google::protobuf::Message& concept,
   return return_status;
 }
 
-Status CopyCodeableConcept(const ::google::protobuf::Message& source,
-                           ::google::protobuf::Message* target) {
+Status CopyCodeableConcept(const Message& source, Message* target) {
   if (AreSameMessageType(source, *target)) {
     target->CopyFrom(source);
     return Status::OK();
   }
+  // Copy common fields.
+  // These will fail if the field is present & populated on the source,
+  // but does not have an identical field on the target.
+  FHIR_RETURN_IF_ERROR(CopyFieldIfPresent(source, target, "id"));
+  FHIR_RETURN_IF_ERROR(CopyFieldIfPresent(source, target, "text"));
+  FHIR_RETURN_IF_ERROR(CopyFieldIfPresent(source, target, "extension"));
+
+  // Copy all codings.
   return ForEachCodingWithStatus(source,
                                  [&target](const proto::Coding& coding) {
                                    return AddCoding(target, coding);
@@ -366,10 +399,10 @@ Status CopyCodeableConcept(const ::google::protobuf::Message& source,
 }
 
 bool IsCodeableConceptLike(const ::google::protobuf::Descriptor* descriptor) {
-  return IsTypeOrProfileOf<proto::CodeableConcept>(descriptor);
+  return IsTypeOrProfileOf<CodeableConcept>(descriptor);
 }
 
-bool IsCodeableConceptLike(const ::google::protobuf::Message& message) {
+bool IsCodeableConceptLike(const Message& message) {
   return IsCodeableConceptLike(message.GetDescriptor());
 }
 
