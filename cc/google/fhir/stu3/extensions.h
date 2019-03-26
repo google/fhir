@@ -81,11 +81,20 @@ Status GetRepeatedFromExtension(const C& extension_container,
   return Status::OK();
 }
 
+// Extracts a single extension of type T from 'entity'. Returns a NotFound error
+// if there are zero extensions of that type. Returns an InvalidArgument error
+// if there are more than one.
 template <class T, class C>
 StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
   std::vector<T> result;
   FHIR_RETURN_IF_ERROR(GetRepeatedFromExtension(entity.extension(), &result));
-  if (result.size() != 1) {
+  if (result.empty()) {
+    return ::tensorflow::errors::NotFound(
+        "Did not find any extension with url: ",
+        GetStructureDefinitionUrl(T::descriptor()), " on ",
+        C::descriptor()->full_name(), ".");
+  }
+  if (result.size() > 1) {
     return ::tensorflow::errors::InvalidArgument(
         "Expected exactly 1 extension with url: ",
         GetStructureDefinitionUrl(T::descriptor()), " on ",

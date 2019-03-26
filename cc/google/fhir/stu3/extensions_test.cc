@@ -224,6 +224,7 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionNoneFound) {
       ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(composition);
 
   EXPECT_FALSE(extracted.status().ok());
+  EXPECT_EQ(tensorflow::error::NOT_FOUND, extracted.status().code());
 }
 
 TEST(ExtensionsTest, ExtractOnlyMatchingExtensionMultipleFound) {
@@ -277,6 +278,7 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionMultipleFound) {
       ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(composition);
 
   EXPECT_FALSE(extracted.status().ok());
+  EXPECT_EQ(tensorflow::error::INVALID_ARGUMENT, extracted.status().code());
 }
 
 }  // namespace
