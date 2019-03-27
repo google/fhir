@@ -81,6 +81,28 @@ string ToSnakeCase(absl::string_view input) {
   return result;
 }
 
+StatusOr<Reference> GetReferenceForResourceIdAndType(
+    const string& resource_id, const string& resource_type,
+    const string& version = "") {
+  const string field_name = absl::StrCat(ToSnakeCase(resource_type), "_id");
+  const google::protobuf::FieldDescriptor* field =
+      Reference::descriptor()->FindFieldByName(field_name);
+  if (field == nullptr) {
+    return ::tensorflow::errors::InvalidArgument(
+        absl::StrCat("Resource type ", resource_type,
+                     " is not valid for a reference (field ", field_name,
+                     " does not exist)."));
+  }
+  Reference reference;
+  ReferenceId* reference_id = dynamic_cast<ReferenceId*>(
+      reference.GetReflection()->MutableMessage(&reference, field));
+  reference_id->set_value(resource_id);
+  if (!version.empty()) {
+    reference_id->mutable_history()->set_value(version);
+  }
+  return reference;
+}
+
 }  // namespace
 
 StatusOr<string> ReferenceProtoToString(const Reference& reference) {
@@ -207,23 +229,8 @@ StatusOr<Reference> ReferenceStringToProto(const string& input) {
   string version;
   if (RE2::FullMatch(input, *kInternalReferenceRegex, &resource_type,
                      &resource_id, &version)) {
-    const string field_name = absl::StrCat(ToSnakeCase(resource_type), "_id");
-    const google::protobuf::FieldDescriptor* field =
-        Reference::descriptor()->FindFieldByName(field_name);
-    if (field == nullptr) {
-      return ::tensorflow::errors::InvalidArgument(
-          absl::StrCat("Resource type ", resource_type,
-                       " is not valid for a reference (field ", field_name,
-                       " does not exist)."));
-    }
-    Reference reference;
-    ReferenceId* reference_id = dynamic_cast<ReferenceId*>(
-        reference.GetReflection()->MutableMessage(&reference, field));
-    reference_id->set_value(resource_id);
-    if (!version.empty()) {
-      reference_id->mutable_history()->set_value(version);
-    }
-    return reference;
+    return GetReferenceForResourceIdAndType(resource_id, resource_type,
+                                            version);
   }
 
   static const LazyRE2 kFragmentReferenceRegex{"#[A-Za-z0-9.-]{1,64}"};
@@ -247,6 +254,12 @@ StatusOr<Reference> ReferenceStringToProto(const string& input) {
 string GetReferenceToResource(const Message& message) {
   return absl::StrCat(message.GetDescriptor()->name(), "/",
                       GetResourceId(message).ValueOrDie());
+}
+
+StatusOr<Reference> GetTypedReferenceToResource(const Message& message) {
+  FHIR_ASSIGN_OR_RETURN(const string resource_id, GetResourceId(message));
+  const string& resource_type = message.GetDescriptor()->name();
+  return GetReferenceForResourceIdAndType(resource_id, resource_type);
 }
 
 Status GetDecimalValue(const stu3::proto::Decimal& decimal, double* value) {

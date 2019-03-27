@@ -225,6 +225,11 @@ StatusOr<const PatientLike*> GetPatient(const BundleLike& bundle) {
 // Returns a reference, e.g. "Encounter/1234" for a FHIR resource.
 string GetReferenceToResource(const ::google::protobuf::Message& message);
 
+// Returns a typed Reference for a FHIR resource.  If the message is not a FHIR
+// resource, an error will be returned.
+StatusOr<Reference> GetTypedReferenceToResource(
+    const ::google::protobuf::Message& message);
+
 // Extract the value of a Decimal field as a double.
 Status GetDecimalValue(const stu3::proto::Decimal& decimal, double* value);
 
