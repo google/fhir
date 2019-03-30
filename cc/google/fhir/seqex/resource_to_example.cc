@@ -31,6 +31,7 @@
 #include "google/fhir/seqex/text_tokenizer.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/stu3/codeable_concepts.h"
+#include "google/fhir/stu3/proto_util.h"
 #include "google/fhir/stu3/util.h"
 #include "google/fhir/systems/systems.h"
 #include "proto/stu3/annotations.pb.h"
@@ -78,6 +79,7 @@ using ::google::fhir::stu3::proto::String;
 using ::google::fhir::stu3::proto::Time;
 using ::google::fhir::stu3::proto::Uri;
 using ::google::fhir::stu3::proto::Xhtml;
+using ::google::protobuf::Message;
 using ::tensorflow::Status;
 
 namespace {
@@ -142,7 +144,7 @@ void AddValueAndOrTokensToExample(
 
 // Extract code value for a given system code. Return as soon as we find one.
 
-Status ExtractCodeBySystem(const CodeableConcept& codeable_concept,
+Status ExtractCodeBySystem(const Message& codeable_concept,
                            absl::string_view system_value, string* result) {
   auto status_or_result =
       stu3::ExtractCodeBySystem(codeable_concept, system_value);
@@ -153,7 +155,7 @@ Status ExtractCodeBySystem(const CodeableConcept& codeable_concept,
   return status_or_result.status();
 }
 
-Status ExtractIcdCode(const CodeableConcept& codeable_concept,
+Status ExtractIcdCode(const Message& codeable_concept,
                       const std::vector<string>& schemes, string* result) {
   auto status_or_result = stu3::ExtractIcdCode(codeable_concept, schemes);
   if (status_or_result.ok()) {
@@ -163,58 +165,83 @@ Status ExtractIcdCode(const CodeableConcept& codeable_concept,
   return status_or_result.status();
 }
 
-Status GetPreferredCode(const CodeableConcept& concept, string* result) {
+absl::optional<string> GetCodeFromConceptText(const Message& concept) {
+  if (stu3::CodingSize(concept) > 0) {
+    return absl::nullopt;
+  }
+  const google::protobuf::FieldDescriptor* text_field =
+      concept.GetDescriptor()->FindFieldByName("text");
+  if (!text_field) {
+    return absl::nullopt;
+  }
+  if (!stu3::FieldHasValue(concept, text_field)) {
+    return absl::nullopt;
+  }
+  const auto& statusor_text =
+      stu3::GetMessageInField<stu3::proto::String>(concept, text_field);
+  if (!statusor_text.ok()) {
+    return absl::nullopt;
+  }
+  return absl::StrCat("text:" + statusor_text.ValueOrDie().value());
+}
+
+StatusOr<string> GetPreferredCode(const Message& concept) {
   string code;
   if (ExtractCodeBySystem(concept, systems::kLoinc, &code).ok()) {
-    *result = absl::StrCat("loinc:" + code);
-  } else if (ExtractIcdCode(concept, *systems::kIcd9Schemes, &code).ok()) {
-    *result = absl::StrCat("icd9:" + code);
-  } else if (ExtractIcdCode(concept, *systems::kIcd10Schemes, &code).ok()) {
-    *result = absl::StrCat("icd10:" + code);
-  } else if (ExtractCodeBySystem(concept, systems::kCpt, &code).ok()) {
-    *result = absl::StrCat("cpt:" + code);
-  } else if (ExtractCodeBySystem(concept, systems::kNdc, &code).ok()) {
-    *result = absl::StrCat("ndc:" + code);
-  } else if (ExtractCodeBySystem(concept, systems::kRxNorm, &code).ok()) {
-    *result = absl::StrCat("rxnorm:" + code);
-  } else if (ExtractCodeBySystem(concept, systems::kSnomed, &code).ok()) {
-    *result = absl::StrCat("snomed:" + code);
-  } else if (ExtractCodeBySystem(concept, systems::kObservationCategory, &code)
-                 .ok()) {
-    *result = absl::StrCat("observation_category:" + code);
-  } else if (ExtractCodeBySystem(concept, systems::kClaimCategory, &code)
-                 .ok()) {
-    *result = absl::StrCat("claim_category:" + code);
-  } else if (ExtractCodeBySystem(concept, systems::kMaritalStatus, &code)
-                 .ok()) {
-    *result = absl::StrCat("marital_status:" + code);
-  } else if (ExtractCodeBySystem(concept, systems::kNUBCDischarge, &code)
-                 .ok()) {
-    *result = absl::StrCat("nubc_discharge:" + code);
-  } else if (ExtractCodeBySystem(concept, systems::kLanguage, &code)
-                 .ok()) {
-    *result = absl::StrCat("language:" + code);
-  } else if (ExtractCodeBySystem(concept, systems::kDischargeDisposition, &code)
-                 .ok()) {
-    *result = absl::StrCat("discharge_disposition:" + code);
-  } else if (ExtractCodeBySystem(concept, systems::kDiagnosisRole, &code)
-                 .ok()) {
-    *result = absl::StrCat("diagnosis_role:" + code);
-  } else if (ExtractCodeBySystem(concept, systems::kEncounterClass, &code)
-                 .ok()) {
-    *result = absl::StrCat("actcode:" + code);
-  } else if (ExtractCodeBySystem(concept, systems::kConditionCategory, &code)
-                 .ok()) {
-    *result = absl::StrCat("condition_category:" + code);
-  } else if (ExtractCodeBySystem(concept, systems::kConditionVerStatus, &code)
-                 .ok()) {
-    *result = absl::StrCat("condition_ver_status:" + code);
-  } else {
-    return ::tensorflow::errors::NotFound(
-        absl::StrCat("No known coding system found in CodeableConcept: ",
-                     concept.DebugString()));
+    return absl::StrCat("loinc:" + code);
   }
-  return Status::OK();
+  if (ExtractIcdCode(concept, *systems::kIcd9Schemes, &code).ok()) {
+    return absl::StrCat("icd9:" + code);
+  }
+  if (ExtractIcdCode(concept, *systems::kIcd10Schemes, &code).ok()) {
+    return absl::StrCat("icd10:" + code);
+  }
+  if (ExtractCodeBySystem(concept, systems::kCpt, &code).ok()) {
+    return absl::StrCat("cpt:" + code);
+  }
+  if (ExtractCodeBySystem(concept, systems::kNdc, &code).ok()) {
+    return absl::StrCat("ndc:" + code);
+  }
+  if (ExtractCodeBySystem(concept, systems::kRxNorm, &code).ok()) {
+    return absl::StrCat("rxnorm:" + code);
+  }
+  if (ExtractCodeBySystem(concept, systems::kSnomed, &code).ok()) {
+    return absl::StrCat("snomed:" + code);
+  }
+  if (ExtractCodeBySystem(concept, systems::kObservationCategory, &code).ok()) {
+    return absl::StrCat("observation_category:" + code);
+  }
+  if (ExtractCodeBySystem(concept, systems::kClaimCategory, &code).ok()) {
+    return absl::StrCat("claim_category:" + code);
+  }
+  if (ExtractCodeBySystem(concept, systems::kMaritalStatus, &code).ok()) {
+    return absl::StrCat("marital_status:" + code);
+  }
+  if (ExtractCodeBySystem(concept, systems::kNUBCDischarge, &code).ok()) {
+    return absl::StrCat("nubc_discharge:" + code);
+  }
+  if (ExtractCodeBySystem(concept, systems::kLanguage, &code).ok()) {
+    return absl::StrCat("language:" + code);
+  }
+  if (ExtractCodeBySystem(concept, systems::kDischargeDisposition, &code)
+          .ok()) {
+    return absl::StrCat("discharge_disposition:" + code);
+  }
+  if (ExtractCodeBySystem(concept, systems::kDiagnosisRole, &code).ok()) {
+    return absl::StrCat("diagnosis_role:" + code);
+  }
+  if (ExtractCodeBySystem(concept, systems::kEncounterClass, &code).ok()) {
+    return absl::StrCat("actcode:" + code);
+  }
+  if (ExtractCodeBySystem(concept, systems::kConditionCategory, &code).ok()) {
+    return absl::StrCat("condition_category:" + code);
+  }
+  if (ExtractCodeBySystem(concept, systems::kConditionVerStatus, &code).ok()) {
+    return absl::StrCat("condition_ver_status:" + code);
+  }
+  return ::tensorflow::errors::NotFound(
+      absl::StrCat("No known coding system found in CodeableConcept: ",
+                   concept.DebugString()));
 }
 
 }  // namespace
@@ -222,38 +249,40 @@ Status GetPreferredCode(const CodeableConcept& concept, string* result) {
 string GetCode(const Coding& coding) {
   CodeableConcept concept;
   *concept.add_coding() = coding;
-  string code;
-  if (GetPreferredCode(concept, &code).ok()) {
-    return code;
+  const auto& statusor_code = GetPreferredCode(concept);
+  if (statusor_code.ok()) {
+    return statusor_code.ValueOrDie();
   } else {
     return coding.code().value();
   }
 }
 
 void AddCodeableConceptToExample(
-    const CodeableConcept& concept, const string& name,
-    ::tensorflow::Example* example, std::set<string>* tokenize_feature_set,
+    const Message& concept, const string& name, ::tensorflow::Example* example,
+    std::set<string>* tokenize_feature_set,
     const std::set<string>& add_tokenize_feature_set, bool enable_attribution) {
-  string code;
-  Status code_status = GetPreferredCode(concept, &code);
-  if (!code_status.ok()) {
+  const auto& statusor_code = GetPreferredCode(concept);
+  if (!statusor_code.ok()) {
     // Ignore the code that we do not recognize.
     LOG(INFO) << "Unable to handle the codeable concept: "
-              << code_status.error_message();
+              << statusor_code.status().error_message();
     return;
   }
+  const string& code = statusor_code.ValueOrDie();
   // Codeable concepts are emitted using the preferred coding systems.
   (*example->mutable_features()->mutable_feature())[name]
       .mutable_bytes_list()
       ->add_value(code);
-  if (concept.has_text()) {
+  const StatusOr<String>& statusor_text =
+      stu3::GetMessageInField<String>(concept, "text");
+  if (statusor_text.ok() && !statusor_text.ValueOrDie().value().empty()) {
     const string full_name = absl::StrCat(name, ".text");
     if (FLAGS_tokenize_code_text_features) {
       tokenize_feature_set->insert(full_name);
     }
     AddValueAndOrTokensToExample(
         *tokenize_feature_set, add_tokenize_feature_set, full_name,
-        concept.text().value(), example, enable_attribution);
+        statusor_text.ValueOrDie().value(), example, enable_attribution);
   }
   stu3::ForEachCoding(concept, [&](const Coding& coding) {
     CHECK(coding.has_system() && coding.has_code());
@@ -410,13 +439,10 @@ void MessageToExample(const google::protobuf::Message& message, const string& pr
           (*example->mutable_features()->mutable_feature())[name]
               .mutable_float_list()
               ->add_value(value_as_double);
-        } else if (field->message_type()->full_name() ==
-                   CodeableConcept::descriptor()->full_name()) {
+        } else if (stu3::IsCodeableConceptLike(field->message_type())) {
           // Codeable concepts are emitted using the preferred coding systems.
-          CodeableConcept concept;
-          concept.CopyFrom(child);
           AddCodeableConceptToExample(
-              concept, name, example, &tokenize_feature_set,
+              child, name, example, &tokenize_feature_set,
               add_tokenize_feature_set, enable_attribution);
         } else if (field->message_type()->full_name() ==
                    Coding::descriptor()->full_name()) {

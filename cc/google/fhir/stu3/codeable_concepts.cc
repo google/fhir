@@ -406,6 +406,13 @@ bool IsCodeableConceptLike(const Message& message) {
   return IsCodeableConceptLike(message.GetDescriptor());
 }
 
+int CodingSize(const ::google::protobuf::Message& concept) {
+  int size = 0;
+  ForEachSystemCodeStringPair(
+      concept, [&size](const string& system, const string& code) { size++; });
+  return size;
+}
+
 }  // namespace stu3
 }  // namespace fhir
 }  // namespace google

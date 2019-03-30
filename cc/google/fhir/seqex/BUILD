@@ -128,6 +128,7 @@ cc_library(
         "@com_google_absl//absl/time",
         "//cc/google/fhir/status",
         "//cc/google/fhir/stu3:codeable_concepts",
+        "//cc/google/fhir/stu3:proto_util",
         "//cc/google/fhir/stu3:util",
         "//cc/google/fhir/systems",
         "//proto/stu3:annotations_cc_proto",

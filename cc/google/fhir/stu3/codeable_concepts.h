@@ -161,6 +161,8 @@ bool IsCodeableConceptLike(const ::google::protobuf::Descriptor* descriptor);
 
 bool IsCodeableConceptLike(const ::google::protobuf::Message& message);
 
+int CodingSize(const ::google::protobuf::Message& concept);
+
 }  // namespace stu3
 }  // namespace fhir
 }  // namespace google
