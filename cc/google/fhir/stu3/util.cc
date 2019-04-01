@@ -202,7 +202,10 @@ StatusOr<string> GetResourceId(const Message& message) {
   const auto* desc = message.GetDescriptor();
   const google::protobuf::Reflection* ref = message.GetReflection();
   const google::protobuf::FieldDescriptor* field = desc->FindFieldByName("id");
-  const Message* entry_message = &message;
+  if (!field) {
+    return ::tensorflow::errors::InvalidArgument(
+        "Error calling GetResourceId: ", desc->full_name(), " has no Id field");
+  }
   if (field->is_repeated()) {
     return ::tensorflow::errors::InvalidArgument(
         "Unexpected repeated id field");
@@ -216,7 +219,7 @@ StatusOr<string> GetResourceId(const Message& message) {
         "id field is not a singular STU3 String: ", desc->full_name()));
   }
   const auto* id_message =
-      dynamic_cast<const Id*>(&ref->GetMessage(*entry_message, field));
+      dynamic_cast<const Id*>(&ref->GetMessage(message, field));
   return id_message->value();
 }
 

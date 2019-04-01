@@ -49,6 +49,7 @@ TEST_F(ResourceToExampleTest, Patient) {
     birth_date {
       value_us: 2167084800000000  # "2038-09-02T20:00:00-04:00"
       precision: DAY
+      timezone: "UTC"
     }
     deceased { date_time {
       value_us: 4915468800000000  # "2125-10-06T20:00:00-04:00"
