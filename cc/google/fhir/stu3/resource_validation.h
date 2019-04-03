@@ -19,21 +19,21 @@
 
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/stu3/annotations.h"
+#include "google/fhir/stu3/proto_util.h"
+#include "google/fhir/systems/systems.h"
+#include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
 
 namespace google {
 namespace fhir {
 namespace stu3 {
 
-// Run basic FHIR validation on a single FHIR resource.
-Status ValidateFhirConstraints(const google::protobuf::Message& resource);
+Status ValidateFhirConstraints(const ::google::protobuf::Message& message);
 
 // Run resource-specific validation on a single FHIR resource. One could
 // override this function to impose additional resource-specific constraints.
-template <typename Resource>
-Status ValidateResource(const Resource& resource) {
-  return ValidateFhirConstraints(resource);
-}
+Status ValidateResource(const ::google::protobuf::Message& resource);
 
 }  // namespace stu3
 }  // namespace fhir

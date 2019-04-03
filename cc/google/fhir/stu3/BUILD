@@ -154,8 +154,12 @@ cc_library(
     hdrs = ["resource_validation.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":annotations",
+        ":json_format",
+        ":proto_util",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
+        "//cc/google/fhir/systems",
         "//proto/stu3:annotations_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",
@@ -169,9 +173,12 @@ cc_test(
     srcs = ["resource_validation_test.cc"],
     deps = [
         ":resource_validation",
+        ":test_helper",
+        "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",
         "@com_google_googletest//:gtest_main",
         "@org_tensorflow//tensorflow/core:lib",
+        "@org_tensorflow//tensorflow/core:test",
         "@protobuf_archive//:protobuf",
     ],
 )
