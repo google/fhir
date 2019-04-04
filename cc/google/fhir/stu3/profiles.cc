@@ -519,17 +519,18 @@ Status ConvertToProfile(const Message& source, Message* target) {
 Status ConvertToProfileLenient(const Message& source, Message* target) {
   const Descriptor* source_descriptor = source.GetDescriptor();
   const Descriptor* target_descriptor = target->GetDescriptor();
+  if (source_descriptor->full_name() == target_descriptor->full_name() ||
+      IsProfileOf(target_descriptor, source_descriptor)) {
+    // If Target is a profile of Source, we want to go from less specialized
+    // to more specialized.
+    // If they are the same type, Down convert to make sure all profiled fields
+    // get normalized.
+    return DownConvert(source, target);
+  }
   if (IsProfileOf(source_descriptor, target_descriptor)) {
-    LOG(WARNING) << source_descriptor->full_name() << " is profile of "
-                 << target_descriptor->full_name();
     // Source is a profile of Target, we want to go from more specialized
     // to less specialized.
     return UpConvert(source, target);
-  }
-  if (IsProfileOf(target_descriptor, source_descriptor)) {
-    // Target is a profile of Source, we want to go from less specialized
-    // to more specialized.
-    return DownConvert(source, target);
   }
   // TODO: Side convert if possible, through a common ancestor.
   return InvalidArgument("Unable to convert ", source_descriptor->full_name(),
