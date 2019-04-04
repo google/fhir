@@ -31,7 +31,6 @@
 #include "google/fhir/stu3/util.h"
 #include "proto/stu3/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/resources.pb.h"
 #include "include/json/json.h"
 
 namespace google {
@@ -46,7 +45,6 @@ using ::google::fhir::stu3::IsChoiceType;
 using ::google::fhir::stu3::IsPrimitive;
 using ::google::fhir::stu3::IsReference;
 using ::google::fhir::stu3::ReferenceProtoToString;
-using ::google::fhir::stu3::proto::ContainedResource;
 using ::google::fhir::stu3::proto::Reference;
 using ::google::fhir::stu3::proto::ReferenceId;
 using ::google::protobuf::Descriptor;
@@ -115,8 +113,8 @@ class Printer {
     std::vector<const FieldDescriptor*> set_fields;
     reflection->ListFields(proto, &set_fields);
 
-    if (descriptor->full_name() ==
-        ContainedResource::descriptor()->full_name()) {
+    // TODO: Use an annotation here.
+    if (descriptor->name() == "ContainedResource") {
       for (const FieldDescriptor* field : set_fields) {
         const Message& field_value = reflection->GetMessage(proto, field);
         if (for_analytics_) {

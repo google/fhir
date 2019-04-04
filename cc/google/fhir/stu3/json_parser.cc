@@ -54,7 +54,6 @@ using ::google::fhir::stu3::IsReference;
 using ::google::fhir::stu3::IsResource;
 using ::google::fhir::stu3::ReferenceProtoToString;
 using ::google::fhir::stu3::ReferenceStringToProto;
-using ::google::fhir::stu3::proto::ContainedResource;
 using ::google::fhir::stu3::proto::Extension;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
@@ -95,20 +94,40 @@ std::unordered_map<string, const FieldDescriptor*> GetFieldMap(
   return field_map;
 }
 
-// Builds a map from ContainedResource field name to FieldDescriptor for that
+typedef std::unordered_map<string, const FieldDescriptor*> FieldMap;
+
+// Builds a map from ContainedResource field type to FieldDescriptor for that
 // field.
-std::unordered_map<string, const FieldDescriptor*>* BuildResourceTypeMap() {
-  std::unordered_map<string, const FieldDescriptor*>* map =
-      new std::unordered_map<string, const FieldDescriptor*>;
-  for (int i = 0; i < ContainedResource::descriptor()->field_count(); i++) {
-    const FieldDescriptor* field = ContainedResource::descriptor()->field(i);
+std::unique_ptr<FieldMap> BuildResourceTypeMap(const Descriptor* descriptor) {
+  std::unique_ptr<FieldMap> map = absl::make_unique<FieldMap>();
+  for (int i = 0; i < descriptor->field_count(); i++) {
+    const FieldDescriptor* field = descriptor->field(i);
     (*map)[field->message_type()->name()] = field;
   }
   return map;
 }
 
-static const std::unordered_map<string, const FieldDescriptor*>*
-    kResourceTypeMap = BuildResourceTypeMap();
+StatusOr<const FieldDescriptor*> GetContainedResourceField(
+    const Descriptor* contained_resource_desc, const string& resource_type) {
+  static std::unordered_map<string, std::unique_ptr<FieldMap>>* field_table =
+      new std::unordered_map<string, std::unique_ptr<FieldMap>>;
+
+  const string& contained_resource_name = contained_resource_desc->full_name();
+  auto field_table_iter = field_table->find(contained_resource_name);
+  const FieldDescriptor* field;
+  if (field_table_iter == field_table->end()) {
+    auto field_map = BuildResourceTypeMap(contained_resource_desc);
+    field = (*field_map)[resource_type];
+    (*field_table)[contained_resource_name] = std::move(field_map);
+  } else {
+    field = (*field_table_iter->second)[resource_type];
+  }
+  if (!field) {
+    return InvalidArgument("No field on ", contained_resource_name,
+                           " with type ", resource_type);
+  }
+  return field;
+}
 
 class Parser {
  public:
@@ -117,8 +136,8 @@ class Parser {
 
   Status MergeMessage(const Json::Value& value, Message* target) {
     const Descriptor* target_descriptor = target->GetDescriptor();
-    if (target_descriptor->full_name() ==
-        ContainedResource::descriptor()->full_name()) {
+    // TODO: handle this with an annotation
+    if (target_descriptor->name() == "ContainedResource") {
       // We handle contained resources in a special way, because despite
       // internally being a Oneof, it is not acually a choice-type in FHIR. The
       // JSON field name is just "resource", which doesn't give us any clues
@@ -127,12 +146,11 @@ class Parser {
       // field in the resource Oneof.
       string resource_type =
           value.get("resourceType", Json::Value::null).asString();
-      auto resource_field_iter = kResourceTypeMap->find(resource_type);
-      if (resource_field_iter == kResourceTypeMap->end()) {
-        return InvalidArgument("Unsupported resource type: ", resource_type);
-      }
+      FHIR_ASSIGN_OR_RETURN(
+          const FieldDescriptor* contained_field,
+          GetContainedResourceField(target_descriptor, resource_type));
       return MergeMessage(value, target->GetReflection()->MutableMessage(
-                                     target, resource_field_iter->second));
+                                     target, contained_field));
     }
 
     const std::unordered_map<string, const FieldDescriptor*> field_map =
