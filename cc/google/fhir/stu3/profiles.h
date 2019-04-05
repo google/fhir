@@ -19,6 +19,8 @@
 
 #include "google/protobuf/message.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/status/statusor.h"
+#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
@@ -46,6 +48,18 @@ Status ConvertToProfile(const ::google::protobuf::Message& source,
 // Identical to ConvertToProfile, except does not run the validation step.
 Status ConvertToProfileLenient(const ::google::protobuf::Message& source,
                                ::google::protobuf::Message* target);
+
+// Given a Message, returns a copy with all data is stored in typed fields where
+// possible.
+// E.g., if the message contains an extension in the raw extension field that
+// has a corresponding typed field, the return copy will have the data in the
+// typed field.
+template <typename T>
+StatusOr<T> Normalize(const T& message) {
+  T normalized;
+  FHIR_RETURN_IF_ERROR(ConvertToProfileLenient(message, &normalized));
+  return normalized;
+}
 
 }  // namespace stu3
 }  // namespace fhir

@@ -23,6 +23,8 @@
 #include "absl/time/time.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/stu3/annotations.h"
+#include "google/fhir/stu3/profiles.h"
 #include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
@@ -46,7 +48,7 @@ template <typename R>
   R resource;
   FHIR_RETURN_IF_ERROR(
       MergeJsonFhirStringIntoProto(raw_json, &resource, default_timezone));
-  return resource;
+  return IsProfile(R::descriptor()) ? Normalize(resource) : resource;
 }
 
 ::google::fhir::StatusOr<string> PrettyPrintFhirToJsonString(

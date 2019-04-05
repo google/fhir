@@ -20,6 +20,8 @@
 #include "gtest/gtest.h"
 #include "absl/strings/ascii.h"
 #include "absl/strings/str_cat.h"
+#include "google/fhir/status/status.h"
+#include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/datatypes.pb.h"
@@ -110,6 +112,23 @@ TEST(ProfilesTest, FixedSystem) {
 TEST(ProfilesTest, ComplexExtension) {
   TestPair<Observation, ::google::fhir::stu3::testing::TestObservation>(
       "testdata/stu3/profiles/observation_complexextension");
+}
+
+TEST(ProfilesTest, Normalize) {
+  const testing::TestObservation unnormalized =
+      ReadProto<testing::TestObservation>(absl::StrCat(
+          "testdata/stu3/profiles/observation_complexextension.prototxt"));
+  StatusOr<testing::TestObservation> normalized = Normalize(unnormalized);
+  if (!normalized.status().ok()) {
+    LOG(ERROR) << normalized.status().error_message();
+    ASSERT_TRUE(normalized
+                .status().ok());
+  }
+  EXPECT_THAT(
+      normalized.ValueOrDie(),
+      EqualsProto(ReadProto<testing::TestObservation>(absl::StrCat(
+          "testdata/stu3/profiles/"
+          "observation_complexextension-profiled-testobservation.prototxt"))));
 }
 
 TEST(ProfilesTest, ProfileOfProfile) {

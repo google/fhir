@@ -82,6 +82,7 @@ cc_library(
         ":resource_validation",
         ":util",
         "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
         "//proto/stu3:annotations_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/strings",
@@ -99,6 +100,8 @@ cc_test(
     deps = [
         ":profiles",
         ":test_helper",
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:extensions_cc_proto",
@@ -155,7 +158,7 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":annotations",
-        ":json_format",
+        ":primitive_wrapper",
         ":proto_util",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
@@ -264,11 +267,40 @@ cc_library(
     srcs = [
         "json_parser.cc",
         "json_printer.cc",
+    ],
+    hdrs = [
+        "json_format.h",
+    ],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":annotations",
+        ":extensions",
+        ":primitive_wrapper",
+        ":profiles",
+        ":util",
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
+        "//proto/stu3:annotations_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:extensions_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@com_googlesource_code_re2//:re2",
+        "@jsoncpp_git//:jsoncpp",
+        "@org_tensorflow//tensorflow/core:lib",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_library(
+    name = "primitive_wrapper",
+    srcs = [
         "primitive_wrapper.cc",
         "primitive_wrapper.h",
     ],
     hdrs = [
-        "json_format.h",
         "primitive_wrapper.h",
     ],
     strip_include_prefix = "//cc/",
@@ -324,6 +356,7 @@ cc_test(
     deps = [
         ":annotations",
         ":json_format",
+        ":primitive_wrapper",
         ":test_helper",
         "//proto/stu3:codes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
