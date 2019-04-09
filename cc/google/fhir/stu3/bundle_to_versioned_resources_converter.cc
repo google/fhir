@@ -100,7 +100,7 @@ const DateTime GetDefaultDateTime(const ResourceConfig& config,
   }
 
   LOG(FATAL) << "default_timestamp_field does not resolve.\nConfig: "
-             << config.DebugString() << "\nMessage: " << message.DebugString();
+             << config.DebugString();
 }
 
 // Expands a TimestampOverride config for a repeated field.
