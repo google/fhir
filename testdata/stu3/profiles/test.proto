@@ -20,11 +20,172 @@ import "proto/stu3/annotations.proto";
 import "proto/stu3/codes.proto";
 import "proto/stu3/datatypes.proto";
 import "proto/stu3/metadatatypes.proto";
-import "proto/stu3/resources.proto";
 import "testdata/stu3/profiles/test_extensions.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.testing";
+
+// Auto-generated from StructureDefinition for Bundle.
+// Contains a collection of resources.
+// See http://test/url/base/Bundle
+message Bundle {
+  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.stu3.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Bundle";
+  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+      "http://test/url/base/Bundle";
+
+  // Logical id of this artifact
+  proto.Id id = 1;
+
+  // Metadata about the resource
+  proto.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  proto.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  proto.LanguageCode language = 4;
+
+  // Persistent identifier for the bundle
+  proto.Identifier identifier = 5;
+
+  // document | message | transaction | transaction-response | batch |
+  // batch-response | history | searchset | collection
+  proto.BundleTypeCode type = 6
+      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // If search, the total number of matches
+  proto.UnsignedInt total = 7;
+
+  // Links related to this Bundle
+  message Link {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // See
+    // http://www.iana.org/assignments/link-relations/link-relations.xhtml#link-relations-1
+    proto.String relation = 4
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Reference details for the link
+    proto.Uri url = 5
+        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Link link = 8;
+
+  // Entry in the bundle - will have a resource, or information
+  message Entry {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Additional Content defined by implementations
+    repeated proto.Extension extension = 2;
+
+    // Extensions that cannot be ignored
+    repeated proto.Extension modifier_extension = 3;
+
+    // Links related to this entry
+    repeated Link link = 4;
+
+    // Absolute URL for resource (server address, or UUID/OID)
+    proto.Uri full_url = 5;
+
+    // A resource in the bundle
+    ContainedResource resource = 6;
+
+    // Search related information
+    message Search {
+      // xml:id (or equivalent in JSON)
+      proto.String id = 1;
+
+      // Additional Content defined by implementations
+      repeated proto.Extension extension = 2;
+
+      // Extensions that cannot be ignored
+      repeated proto.Extension modifier_extension = 3;
+
+      // match | include | outcome - why this is in the result set
+      proto.SearchEntryModeCode mode = 4;
+
+      // Search ranking (between 0 and 1)
+      proto.Decimal score = 5;
+    }
+    Search search = 7;
+
+    // Transaction Related Information
+    message Request {
+      // xml:id (or equivalent in JSON)
+      proto.String id = 1;
+
+      // Additional Content defined by implementations
+      repeated proto.Extension extension = 2;
+
+      // Extensions that cannot be ignored
+      repeated proto.Extension modifier_extension = 3;
+
+      // GET | POST | PUT | DELETE
+      proto.HTTPVerbCode method = 4
+          [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // URL for HTTP equivalent of this entry
+      proto.Uri url = 5
+          [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // For managing cache currency
+      proto.String if_none_match = 6;
+
+      // For managing update contention
+      proto.Instant if_modified_since = 7;
+
+      // For managing update contention
+      proto.String if_match = 8;
+
+      // For conditional creates
+      proto.String if_none_exist = 9;
+    }
+    Request request = 8;
+
+    // Transaction Related Information
+    message Response {
+      // xml:id (or equivalent in JSON)
+      proto.String id = 1;
+
+      // Additional Content defined by implementations
+      repeated proto.Extension extension = 2;
+
+      // Extensions that cannot be ignored
+      repeated proto.Extension modifier_extension = 3;
+
+      // Status response code (text optional)
+      proto.String status = 4
+          [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // The location, if the operation returns a location
+      proto.Uri location = 5;
+
+      // The etag for the resource (if relevant)
+      proto.String etag = 6;
+
+      // Server's date time modified
+      proto.Instant last_modified = 7;
+
+      // OperationOutcome with hints and warnings (for batch/transaction)
+      ContainedResource outcome = 8;
+    }
+    Response response = 9;
+  }
+  repeated Entry entry = 9;
+
+  // Digital Signature
+  proto.Signature signature = 10;
+}
 
 // Auto-generated from StructureDefinition for TestPatient.
 // Information about an individual or animal receiving health care services.
@@ -52,7 +213,7 @@ message TestPatient {
   proto.Narrative text = 5;
 
   // Contained, inline Resources
-  repeated proto.ContainedResource contained = 6;
+  repeated ContainedResource contained = 6;
 
   // Additional Content defined by implementations
   repeated proto.Extension extension = 7;
@@ -259,7 +420,7 @@ message TestObservation {
   proto.Narrative text = 5;
 
   // Contained, inline Resources
-  repeated proto.ContainedResource contained = 6;
+  repeated ContainedResource contained = 6;
 
   // Additional Content defined by implementations
   repeated proto.Extension extension = 7;
@@ -588,7 +749,7 @@ message TestObservationLvl2 {
   proto.Narrative text = 5;
 
   // Contained, inline Resources
-  repeated proto.ContainedResource contained = 6;
+  repeated ContainedResource contained = 6;
 
   // Additional Content defined by implementations
   repeated proto.Extension extension = 7;
@@ -896,4 +1057,13 @@ message TestObservationLvl2 {
   proto.Decimal new_ext = 31
       [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
            "http://test/url/base/SimpleDecimalExt"];
+}
+
+message ContainedResource {
+  oneof oneof_resource {
+    Bundle bundle = 11;
+    TestPatient test_patient = 118;
+    TestObservation test_observation = 119;
+    TestObservationLvl2 test_observation_lvl2 = 120;
+  }
 }

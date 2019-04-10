@@ -4,10 +4,1167 @@
     {
       "resource": {
         "resourceType": "StructureDefinition",
+        "id": "Bundle",
+        "url": "http://test/url/base/Bundle",
+        "name": "Bundle",
+        "date": "2019-04-05",
+        "publisher": "Testington Inc.",
+        "contact": [
+          {
+            "telecom": [
+              {
+                "system": "url",
+                "value": "http://www.testington.com"
+              }
+            ]
+          }
+        ],
+        "description": "",
+        "fhirVersion": "3.0.1",
+        "kind": "resource",
+        "abstract": false,
+        "contextType": "resource",
+        "type": "Bundle",
+        "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Bundle",
+        "derivation": "constraint",
+        "snapshot": {
+          "element": [
+            {
+              "id": "Bundle",
+              "path": "Bundle",
+              "short": "Contains a collection of resources",
+              "definition": "A container for a collection of resources.",
+              "min": 0,
+              "max": "*",
+              "constraint": [
+                {
+                  "key": "bdl-7",
+                  "severity": "error",
+                  "human": "FullUrl must be unique in a bundle, or else entries with the same fullUrl must have different meta.versionId",
+                  "expression": "entry.where(fullUrl).select(fullUrl&resource.meta.versionId).isDistinct()",
+                  "xpath": "count(for $entry in f:entry[f:resource] return $entry[count(parent::f:Bundle/f:entry[f:fullUrl/@value=$entry/f:fullUrl/@value and ((not(f:resource/*/f:meta/f:versionId/@value) and not($entry/f:resource/*/f:meta/f:versionId/@value)) or f:resource/*/f:meta/f:versionId/@value=$entry/f:resource/*/f:meta/f:versionId/@value)])!=1])=0"
+                },
+                {
+                  "key": "bdl-9",
+                  "severity": "error",
+                  "human": "A document must have an identifier with a system and a value",
+                  "expression": "type = 'document' implies (identifier.system.exists() and identifier.value.exists())",
+                  "xpath": "not(f:type/@value = 'document') or exists(f:identifier/f:system) or exists(f:identifier/f:value)"
+                },
+                {
+                  "key": "bdl-3",
+                  "severity": "error",
+                  "human": "entry.request only for some types of bundles",
+                  "expression": "entry.request.empty() or type = 'batch' or type = 'transaction' or type = 'history'",
+                  "xpath": "not(f:entry/f:request) or (f:type/@value = 'batch') or (f:type/@value = 'transaction') or (f:type/@value = 'history')"
+                },
+                {
+                  "key": "bdl-4",
+                  "severity": "error",
+                  "human": "entry.response only for some types of bundles",
+                  "expression": "entry.response.empty() or type = 'batch-response' or type = 'transaction-response'",
+                  "xpath": "not(f:entry/f:response) or (f:type/@value = 'batch-response') or (f:type/@value = 'transaction-response')"
+                },
+                {
+                  "key": "bdl-1",
+                  "severity": "error",
+                  "human": "total only when a search or history",
+                  "expression": "total.empty() or (type = 'searchset') or (type = 'history')",
+                  "xpath": "not(f:total) or (f:type/@value = 'searchset') or (f:type/@value = 'history')"
+                },
+                {
+                  "key": "bdl-2",
+                  "severity": "error",
+                  "human": "entry.search only when a search",
+                  "expression": "entry.search.empty() or (type = 'searchset')",
+                  "xpath": "not(f:entry/f:search) or (f:type/@value = 'searchset')"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "Entity. Role, or Act"
+                },
+                {
+                  "identity": "v2",
+                  "map": "N/A"
+                },
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                },
+                {
+                  "identity": "w5",
+                  "map": "infrastructure.structure"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.id",
+              "path": "Bundle.id",
+              "short": "Logical id of this artifact",
+              "definition": "The logical id of the resource, as used in the URL for the resource. Once assigned, this value never changes.",
+              "comment": "The only time that a resource does not have an id is when it is being submitted to the server using a create operation.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Resource.id",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "id"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.meta",
+              "path": "Bundle.meta",
+              "short": "Metadata about the resource",
+              "definition": "The metadata about the resource. This is content that is maintained by the infrastructure. Changes to the content may not always be associated with version changes to the resource.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Resource.meta",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "Meta"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.implicitRules",
+              "path": "Bundle.implicitRules",
+              "short": "A set of rules under which this content was created",
+              "definition": "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content.",
+              "comment": "Asserting this rule set restricts the content to be only understood by a limited set of trading partners. This inherently limits the usefulness of the data in the long term. However, the existing health eco-system is highly fractured, and not yet ready to define, collect, and exchange data in a generally computable sense. Wherever possible, implementers and/or specification writers should avoid using this element. \n\nThis element is labelled as a modifier because the implicit rules may provide additional knowledge about the resource that modifies it's meaning or interpretation.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Resource.implicitRules",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "uri"
+                }
+              ],
+              "isModifier": true,
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.language",
+              "path": "Bundle.language",
+              "short": "Language of the resource content",
+              "definition": "The base language in which the resource is written.",
+              "comment": "Language is provided to support indexing and accessibility (typically, services such as text to speech use the language tag). The html language tag in the narrative applies  to the narrative. The language tag on the resource may be used to specify the language of other presentations generated from the data in the resource  Not all the content has to be in the base language. The Resource.language should not be assumed to apply to the narrative automatically. If a language is specified, it should it also be specified on the div element in the html (see rules in HTML5 for information about the relationship between xml:lang and the html lang attribute).",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Resource.language",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "code"
+                }
+              ],
+              "binding": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet",
+                    "valueReference": {
+                      "reference": "http://hl7.org/fhir/ValueSet/all-languages"
+                    }
+                  },
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                    "valueString": "Language"
+                  },
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                    "valueBoolean": true
+                  }
+                ],
+                "strength": "extensible",
+                "description": "A human language.",
+                "valueSetReference": {
+                  "reference": "http://hl7.org/fhir/ValueSet/languages"
+                }
+              }
+            },
+            {
+              "id": "Bundle.identifier",
+              "path": "Bundle.identifier",
+              "short": "Persistent identifier for the bundle",
+              "definition": "A persistent identifier for the batch that won't change as a batch is copied from server to server.",
+              "comment": "Persistent identity generally only matters for batches of type Document, Message, and Collection. It would not normally be populated for search and history results, and servers ignore Bundle.identifier when processing batches and transactions. For Documents  the .identifier SHALL be populated such that the .identifier is globally unique.",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "Identifier"
+                }
+              ],
+              "isSummary": true,
+              "mapping": [
+                {
+                  "identity": "w5",
+                  "map": "id"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.type",
+              "path": "Bundle.type",
+              "short": "document | message | transaction | transaction-response | batch | batch-response | history | searchset | collection",
+              "definition": "Indicates the purpose of this bundle - how it was intended to be used.",
+              "comment": "It's possible to use a bundle for other purposes (e.g. a document can be accepted as a transaction). This is primarily defined so that there can be specific rules for some of the bundle types.",
+              "min": 1,
+              "max": "1",
+              "type": [
+                {
+                  "code": "code"
+                }
+              ],
+              "isSummary": true,
+              "binding": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                    "valueString": "BundleType"
+                  }
+                ],
+                "strength": "required",
+                "description": "Indicates the purpose of a bundle - how it was intended to be used.",
+                "valueSetReference": {
+                  "reference": "http://hl7.org/fhir/ValueSet/bundle-type"
+                }
+              },
+              "mapping": [
+                {
+                  "identity": "w5",
+                  "map": "class"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.total",
+              "path": "Bundle.total",
+              "short": "If search, the total number of matches",
+              "definition": "If a set of search matches, this is the total number of matches for the search (as opposed to the number of results in this bundle).",
+              "comment": "Only used if the bundle is a search result set. The total does not include resources such as OperationOutcome and included resources, only the total number of matching resources.",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "unsignedInt"
+                }
+              ],
+              "condition": [
+                "bdl-1"
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.link",
+              "path": "Bundle.link",
+              "short": "Links related to this Bundle",
+              "definition": "A series of links that provide context to this bundle.",
+              "min": 0,
+              "max": "*",
+              "type": [
+                {
+                  "code": "BackboneElement"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.link.id",
+              "path": "Bundle.link.id",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "xml:id (or equivalent in JSON)",
+              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Element.id",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.link.extension",
+              "path": "Bundle.link.extension",
+              "short": "Additional Content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content"
+              ],
+              "min": 0,
+              "max": "*",
+              "base": {
+                "path": "Element.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.link.modifierExtension",
+              "path": "Bundle.link.modifierExtension",
+              "short": "Extensions that cannot be ignored",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content",
+                "modifiers"
+              ],
+              "min": 0,
+              "max": "*",
+              "base": {
+                "path": "BackboneElement.modifierExtension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "isModifier": true,
+              "isSummary": true,
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.link.relation",
+              "path": "Bundle.link.relation",
+              "short": "See http://www.iana.org/assignments/link-relations/link-relations.xhtml#link-relations-1",
+              "definition": "A name which details the functional use for this link - see [http://www.iana.org/assignments/link-relations/link-relations.xhtml#link-relations-1](http://www.iana.org/assignments/link-relations/link-relations.xhtml#link-relations-1).",
+              "min": 1,
+              "max": "1",
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.link.url",
+              "path": "Bundle.link.url",
+              "short": "Reference details for the link",
+              "definition": "The reference details for the link.",
+              "min": 1,
+              "max": "1",
+              "type": [
+                {
+                  "code": "uri"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry",
+              "path": "Bundle.entry",
+              "short": "Entry in the bundle - will have a resource, or information",
+              "definition": "An entry in a bundle resource - will either contain a resource, or information about a resource (transactions and history only).",
+              "min": 0,
+              "max": "*",
+              "type": [
+                {
+                  "code": "BackboneElement"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                },
+                {
+                  "key": "bdl-8",
+                  "severity": "error",
+                  "human": "fullUrl cannot be a version specific reference",
+                  "expression": "fullUrl.contains('/_history/').not()",
+                  "xpath": "not(exists(f:fullUrl[contains(string(@value), '/_history/')]))"
+                },
+                {
+                  "key": "bdl-5",
+                  "severity": "error",
+                  "human": "must be a resource unless there's a request or response",
+                  "expression": "resource.exists() or request.exists() or response.exists()",
+                  "xpath": "exists(f:resource) or exists(f:request) or exists(f:response)"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.id",
+              "path": "Bundle.entry.id",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "xml:id (or equivalent in JSON)",
+              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Element.id",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.entry.extension",
+              "path": "Bundle.entry.extension",
+              "short": "Additional Content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content"
+              ],
+              "min": 0,
+              "max": "*",
+              "base": {
+                "path": "Element.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.entry.modifierExtension",
+              "path": "Bundle.entry.modifierExtension",
+              "short": "Extensions that cannot be ignored",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content",
+                "modifiers"
+              ],
+              "min": 0,
+              "max": "*",
+              "base": {
+                "path": "BackboneElement.modifierExtension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "isModifier": true,
+              "isSummary": true,
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.entry.link",
+              "path": "Bundle.entry.link",
+              "short": "Links related to this entry",
+              "definition": "A series of links that provide context to this entry.",
+              "min": 0,
+              "max": "*",
+              "contentReference": "#Bundle.link",
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.fullUrl",
+              "path": "Bundle.entry.fullUrl",
+              "short": "Absolute URL for resource (server address, or UUID/OID)",
+              "definition": "The Absolute URL for the resource.  The fullUrl SHALL not disagree with the id in the resource. The fullUrl is a version independent reference to the resource. The fullUrl element SHALL have a value except that: \n* fullUrl can be empty on a POST (although it does not need to when specifying a temporary id for reference in the bundle)\n* Results from operations might involve resources that are not identified.",
+              "comment": "fullUrl may not be [unique in the context of a resource](bundle.html#bundle-unique). Note that since [FHIR resources do not need to be served through the FHIR API](references.html), the absolute URL may not end with the logical id of the resource (Resource.id), but if the fullUrl does look like a RESTful server URL (e.g. meets the [regex](references.html#regex), then it SHALL end with the Resource.id.",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "uri"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.resource",
+              "path": "Bundle.entry.resource",
+              "short": "A resource in the bundle",
+              "definition": "The Resources for the entry.",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "Resource"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.search",
+              "path": "Bundle.entry.search",
+              "short": "Search related information",
+              "definition": "Information about the search process that lead to the creation of this entry.",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "BackboneElement"
+                }
+              ],
+              "condition": [
+                "bdl-2"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.search.id",
+              "path": "Bundle.entry.search.id",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "xml:id (or equivalent in JSON)",
+              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Element.id",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.entry.search.extension",
+              "path": "Bundle.entry.search.extension",
+              "short": "Additional Content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content"
+              ],
+              "min": 0,
+              "max": "*",
+              "base": {
+                "path": "Element.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.entry.search.modifierExtension",
+              "path": "Bundle.entry.search.modifierExtension",
+              "short": "Extensions that cannot be ignored",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content",
+                "modifiers"
+              ],
+              "min": 0,
+              "max": "*",
+              "base": {
+                "path": "BackboneElement.modifierExtension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "isModifier": true,
+              "isSummary": true,
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.entry.search.mode",
+              "path": "Bundle.entry.search.mode",
+              "short": "match | include | outcome - why this is in the result set",
+              "definition": "Why this entry is in the result set - whether it's included as a match or because of an _include requirement.",
+              "comment": "There is only one mode. In some corner cases, a resource may be included because it is both a match and an include. In these circumstances, 'match' takes precedence.",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "code"
+                }
+              ],
+              "isSummary": true,
+              "binding": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                    "valueString": "SearchEntryMode"
+                  }
+                ],
+                "strength": "required",
+                "description": "Why an entry is in the result set - whether it's included as a match or because of an _include requirement.",
+                "valueSetReference": {
+                  "reference": "http://hl7.org/fhir/ValueSet/search-entry-mode"
+                }
+              }
+            },
+            {
+              "id": "Bundle.entry.search.score",
+              "path": "Bundle.entry.search.score",
+              "short": "Search ranking (between 0 and 1)",
+              "definition": "When searching, the server's search ranking score for the entry.",
+              "comment": "Servers are not required to return a ranking score. 1 is most relevant, and 0 is least relevant. Often, search results are sorted by score, but the client may specify a different sort order.",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "decimal"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.request",
+              "path": "Bundle.entry.request",
+              "short": "Transaction Related Information",
+              "definition": "Additional information about how this entry should be processed as part of a transaction.",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "BackboneElement"
+                }
+              ],
+              "condition": [
+                "bdl-3"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.request.id",
+              "path": "Bundle.entry.request.id",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "xml:id (or equivalent in JSON)",
+              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Element.id",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.entry.request.extension",
+              "path": "Bundle.entry.request.extension",
+              "short": "Additional Content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content"
+              ],
+              "min": 0,
+              "max": "*",
+              "base": {
+                "path": "Element.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.entry.request.modifierExtension",
+              "path": "Bundle.entry.request.modifierExtension",
+              "short": "Extensions that cannot be ignored",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content",
+                "modifiers"
+              ],
+              "min": 0,
+              "max": "*",
+              "base": {
+                "path": "BackboneElement.modifierExtension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "isModifier": true,
+              "isSummary": true,
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.entry.request.method",
+              "path": "Bundle.entry.request.method",
+              "short": "GET | POST | PUT | DELETE",
+              "definition": "The HTTP verb for this entry in either a change history, or a transaction/ transaction response.",
+              "min": 1,
+              "max": "1",
+              "type": [
+                {
+                  "code": "code"
+                }
+              ],
+              "isSummary": true,
+              "binding": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                    "valueString": "HTTPVerb"
+                  }
+                ],
+                "strength": "required",
+                "description": "HTTP verbs (in the HTTP command line).",
+                "valueSetReference": {
+                  "reference": "http://hl7.org/fhir/ValueSet/http-verb"
+                }
+              }
+            },
+            {
+              "id": "Bundle.entry.request.url",
+              "path": "Bundle.entry.request.url",
+              "short": "URL for HTTP equivalent of this entry",
+              "definition": "The URL for this entry, relative to the root (the address to which the request is posted).",
+              "comment": "E.g. for a Patient Create, the method would be \"POST\" and the URL would be \"Patient\". For a Patient Update, the method would be PUT, and the URL would be \"Patient/[id]\".",
+              "min": 1,
+              "max": "1",
+              "type": [
+                {
+                  "code": "uri"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.request.ifNoneMatch",
+              "path": "Bundle.entry.request.ifNoneMatch",
+              "short": "For managing cache currency",
+              "definition": "If the ETag values match, return a 304 Not Modified status. See the API documentation for [\"Conditional Read\"](http.html#cread).",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.request.ifModifiedSince",
+              "path": "Bundle.entry.request.ifModifiedSince",
+              "short": "For managing update contention",
+              "definition": "Only perform the operation if the last updated date matches. See the API documentation for [\"Conditional Read\"](http.html#cread).",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "instant"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.request.ifMatch",
+              "path": "Bundle.entry.request.ifMatch",
+              "short": "For managing update contention",
+              "definition": "Only perform the operation if the Etag value matches. For more information, see the API section [\"Managing Resource Contention\"](http.html#concurrency).",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.request.ifNoneExist",
+              "path": "Bundle.entry.request.ifNoneExist",
+              "short": "For conditional creates",
+              "definition": "Instruct the server not to perform the create if a specified resource already exists. For further information, see the API documentation for [\"Conditional Create\"](http.html#ccreate). This is just the query portion of the URL - what follows the \"?\" (not including the \"?\").",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.response",
+              "path": "Bundle.entry.response",
+              "short": "Transaction Related Information",
+              "definition": "Additional information about how this entry should be processed as part of a transaction.",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "BackboneElement"
+                }
+              ],
+              "condition": [
+                "bdl-4"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() | (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "Element"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.response.id",
+              "path": "Bundle.entry.response.id",
+              "representation": [
+                "xmlAttr"
+              ],
+              "short": "xml:id (or equivalent in JSON)",
+              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Element.id",
+                "min": 0,
+                "max": "1"
+              },
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.entry.response.extension",
+              "path": "Bundle.entry.response.extension",
+              "short": "Additional Content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content"
+              ],
+              "min": 0,
+              "max": "*",
+              "base": {
+                "path": "Element.extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "n/a"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.entry.response.modifierExtension",
+              "path": "Bundle.entry.response.modifierExtension",
+              "short": "Extensions that cannot be ignored",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.",
+              "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+              "alias": [
+                "extensions",
+                "user content",
+                "modifiers"
+              ],
+              "min": 0,
+              "max": "*",
+              "base": {
+                "path": "BackboneElement.modifierExtension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension"
+                }
+              ],
+              "isModifier": true,
+              "isSummary": true,
+              "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "N/A"
+                }
+              ]
+            },
+            {
+              "id": "Bundle.entry.response.status",
+              "path": "Bundle.entry.response.status",
+              "short": "Status response code (text optional)",
+              "definition": "The status code returned by processing this entry. The status SHALL start with a 3 digit HTTP code (e.g. 404) and may contain the standard HTTP description associated with the status code.",
+              "min": 1,
+              "max": "1",
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.response.location",
+              "path": "Bundle.entry.response.location",
+              "short": "The location, if the operation returns a location",
+              "definition": "The location header created by processing this operation.",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "uri"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.response.etag",
+              "path": "Bundle.entry.response.etag",
+              "short": "The etag for the resource (if relevant)",
+              "definition": "The etag for the resource, it the operation for the entry produced a versioned resource (see [Resource Metadata and Versioning](http.html#versioning) and [Managing Resource Contention](http.html#concurrency)).",
+              "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included.",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "string"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.response.lastModified",
+              "path": "Bundle.entry.response.lastModified",
+              "short": "Server's date time modified",
+              "definition": "The date/time that the resource was modified on the server.",
+              "comment": "This has to match the same time in the meta header if a resource is included.",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "instant"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.entry.response.outcome",
+              "path": "Bundle.entry.response.outcome",
+              "short": "OperationOutcome with hints and warnings (for batch/transaction)",
+              "definition": "An OperationOutcome containing hints and warnings produced as part of processing this entry in a batch or transaction.",
+              "comment": "For a POST/PUT operation, this is the equivalent outcome that would be returned for prefer = operationoutcome - except that the resource is always returned whether or not the outcome is returned.",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "Resource"
+                }
+              ],
+              "isSummary": true
+            },
+            {
+              "id": "Bundle.signature",
+              "path": "Bundle.signature",
+              "short": "Digital Signature",
+              "definition": "Digital Signature - base64 encoded. XML-DSIg or a JWT.",
+              "comment": "The signature could be created by the \"author\" of the bundle or by the originating device.   Requirements around inclusion of a signature, verification of signatures and treatment of signed/non-signed bundles is implementation-environment specific.",
+              "requirements": "This element allows capturing signatures on documents. It also allows signatures on messages, transactions or even query responses. It may support content-authentication, non-repudiation or other business cases. This is primarily relevant where the bundle may travel through multiple hops or via other mechanisms where HTTPS non-repudiation is insufficient.",
+              "min": 0,
+              "max": "1",
+              "type": [
+                {
+                  "code": "Signature"
+                }
+              ],
+              "isSummary": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "StructureDefinition",
         "id": "TestPatient",
         "url": "http://test/url/base/TestPatient",
         "name": "TestPatient",
-        "date": "2019-03-12",
+        "date": "2019-04-05",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1874,7 +3031,7 @@
         "id": "TestObservation",
         "url": "http://test/url/base/TestObservation",
         "name": "TestObservation",
-        "date": "2019-03-12",
+        "date": "2019-04-05",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -6231,7 +7388,7 @@
         "id": "TestObservationLvl2",
         "url": "http://test/url/base/TestObservationLvl2",
         "name": "TestObservationLvl2",
-        "date": "2019-03-12",
+        "date": "2019-04-05",
         "publisher": "Testington Inc.",
         "contact": [
           {

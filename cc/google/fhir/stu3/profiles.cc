@@ -248,10 +248,19 @@ bool CanHaveSlicing(const FieldDescriptor* field) {
   if (IsChoiceType(field)) {
     return false;
   }
-  // There are two kinds of subfields that could potentially have slices:
+  // There are three kinds of subfields that could potentially have slices:
   // 1) Types that are themselves profiles
   // 2) "Backbone" i.e. nested types defined on this message
+  // 3) Contained resources of profiled bundles.  These are basically "profiles"
+  //    of the base contained resources, but are not actually fhir elements.
   const Descriptor* field_type = field->message_type();
+  // TODO: Use an annotation for this.
+  if (field->message_type()->name() == "ContainedResource" &&
+      field->message_type()->full_name() !=
+          google::fhir::stu3::proto::ContainedResource::descriptor()
+              ->full_name()) {
+    return true;
+  }
   if (IsProfile(field_type)) {
     if (IsProfileOf<CodeableConcept>(field_type) ||
         IsProfileOf<Extension>(field_type)) {
@@ -402,8 +411,9 @@ Status PerformCodeableConceptUnslicing(const google::protobuf::Message& profiled
   // on the profiled message, and add them as raw codings on the base message.
   for (int i = 0; i < base_descriptor->field_count(); i++) {
     const FieldDescriptor* base_field = base_descriptor->field(i);
-    const FieldDescriptor* profiled_field = profiled_descriptor->field(i);
-    if (!FieldHasValue(profiled_message, profiled_field)) {
+    const FieldDescriptor* profiled_field =
+        profiled_descriptor->FindFieldByNumber(base_field->number());
+    if (!profiled_field || !FieldHasValue(profiled_message, profiled_field)) {
       continue;
     }
     if (IsProfileOf<CodeableConcept>(profiled_field->message_type())) {
@@ -430,7 +440,8 @@ Status PerformUnslicing(const google::protobuf::Message& profiled_message,
   const Descriptor* base_descriptor = base_message->GetDescriptor();
   for (int i = 0; i < profiled_descriptor->field_count(); i++) {
     const FieldDescriptor* profiled_field = profiled_descriptor->field(i);
-    const FieldDescriptor* base_field = base_descriptor->field(i);
+    const FieldDescriptor* base_field =
+        base_descriptor->FindFieldByNumber(profiled_field->number());
     const Descriptor* field_type = profiled_field->message_type();
     if (!field_type) {
       return InvalidArgument("Encountered unexpected primitive type on field: ",

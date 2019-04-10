@@ -41,9 +41,21 @@ using ::google::fhir::stu3::proto::Patient;
 using ::google::fhir::testutil::EqualsProto;
 using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
 
+template <class B>
+B GetUnprofiled(const string& filename) {
+  return ReadProto<B>(absl::StrCat(filename, ".prototxt"));
+}
+
+template <class P>
+P GetProfiled(const string& filename) {
+  return ReadProto<P>(absl::StrCat(
+      filename, "-profiled-", absl::AsciiStrToLower(P::descriptor()->name()),
+      ".prototxt"));
+}
+
 template <class B, class P>
 void TestDownConvert(const string& filename) {
-  const B unprofiled = ReadProto<B>(absl::StrCat(filename, ".prototxt"));
+  const B unprofiled = GetUnprofiled<B>(filename);
   P profiled;
 
   auto status = ConvertToProfileLenient(unprofiled, &profiled);
@@ -51,21 +63,12 @@ void TestDownConvert(const string& filename) {
     LOG(ERROR) << status.error_message();
     ASSERT_TRUE(status.ok());
   }
-  EXPECT_THAT(
-      profiled,
-      EqualsProto(ReadProto<P>(
-          absl::StrCat(
-              filename,
-              "-profiled-",
-              absl::AsciiStrToLower(P::descriptor()->name()),
-              ".prototxt"))));
+  EXPECT_THAT(profiled, EqualsProto(GetProfiled<P>(filename)));
 }
 
 template <class B, class P>
 void TestUpConvert(const string& filename) {
-  const P profiled = ReadProto<P>(absl::StrCat(
-      filename, "-profiled-", absl::AsciiStrToLower(P::descriptor()->name()),
-      ".prototxt"));
+  const P profiled = GetProfiled<P>(filename);
   B unprofiled;
 
   auto status = ConvertToProfileLenient(profiled, &unprofiled);
@@ -121,14 +124,42 @@ TEST(ProfilesTest, Normalize) {
   StatusOr<testing::TestObservation> normalized = Normalize(unnormalized);
   if (!normalized.status().ok()) {
     LOG(ERROR) << normalized.status().error_message();
-    ASSERT_TRUE(normalized
-                .status().ok());
+    ASSERT_TRUE(normalized.status().ok());
   }
   EXPECT_THAT(
       normalized.ValueOrDie(),
       EqualsProto(ReadProto<testing::TestObservation>(absl::StrCat(
           "testdata/stu3/profiles/"
           "observation_complexextension-profiled-testobservation.prototxt"))));
+}
+
+TEST(ProfilesTest, NormalizeBundle) {
+  testing::Bundle unnormalized_bundle;
+
+  *unnormalized_bundle.add_entry()
+       ->mutable_resource()
+       ->mutable_test_observation() = GetUnprofiled<testing::TestObservation>(
+      "testdata/stu3/profiles/observation_complexextension");
+  *unnormalized_bundle.add_entry()
+       ->mutable_resource()
+       ->mutable_test_observation_lvl2() =
+      GetUnprofiled<testing::TestObservationLvl2>(
+          "testdata/stu3/profiles/testobservation_lvl2");
+
+  testing::Bundle expected_normalized;
+  *expected_normalized.add_entry()
+       ->mutable_resource()
+       ->mutable_test_observation() = GetProfiled<testing::TestObservation>(
+      "testdata/stu3/profiles/observation_complexextension");
+  *expected_normalized.add_entry()
+       ->mutable_resource()
+       ->mutable_test_observation_lvl2() =
+      GetProfiled<testing::TestObservationLvl2>(
+          "testdata/stu3/profiles/testobservation_lvl2");
+
+  StatusOr<testing::Bundle> normalized = Normalize(unnormalized_bundle);
+  EXPECT_THAT(normalized.ValueOrDie(),
+              EqualsProtoIgnoringReordering(expected_normalized));
 }
 
 TEST(ProfilesTest, ProfileOfProfile) {

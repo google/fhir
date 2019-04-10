@@ -488,18 +488,36 @@ public class ProtoGenerator {
         }
       }
     } else {
-      // For derived contained resources, make sure to keep the tag numbers from the base file.
+      // For derived contained resources, make sure to keep the tag numbers from the base file for
+      // resources that keep the same name.
+      // In other words, if there is a profiled resource called "Patient", it will keep the tag
+      // number of the field in the base contained resources for Patient.
+      // Resources with no exact name matches are assigned field numbers that are greater than
+      // the max used by the base ContainedResource.
       Descriptor baseContainedResources =
           fhirVersion.coreTypeMap.get("resources.proto").findMessageTypeByName("ContainedResource");
-      Set<String> resourcesToInclude =
+      List<String> resourcesToInclude =
           fileDescriptor.getMessageTypeList().stream()
+              .filter(desc -> !desc.getOptions().getExtension(Annotations.isAbstractType))
               .map(desc -> desc.getName())
-              .collect(Collectors.toSet());
+              .collect(Collectors.toList());
       for (FieldDescriptor field : baseContainedResources.getFields()) {
-        if (resourcesToInclude.contains(field.getMessageType().getName())) {
-          contained.addField(
-              field.toProto().toBuilder().setTypeName(field.getMessageType().getName()));
+        String typename = field.getMessageType().getName();
+        if (resourcesToInclude.contains(typename)) {
+          contained.addField(field.toProto().toBuilder().setTypeName(typename));
+          resourcesToInclude.remove(typename);
         }
+      }
+      int tagNumber = Iterables.getLast(baseContainedResources.getFields()).getNumber() + 1;
+      for (String resourceType : resourcesToInclude) {
+        contained.addField(
+            FieldDescriptorProto.newBuilder()
+                .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, resourceType))
+                .setNumber(tagNumber++)
+                .setTypeName(resourceType)
+                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                .setOneofIndex(0 /* the oneof_resource */)
+                .build());
       }
     }
 

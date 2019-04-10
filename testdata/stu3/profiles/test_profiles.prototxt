@@ -1,5 +1,12 @@
 profile {
   element_data {
+    name: "Bundle",
+  }
+  base_url: "http://hl7.org/fhir/StructureDefinition/Bundle"
+}
+
+profile {
+  element_data {
     name: "TestPatient"
     description: "Patient with some fields changed for test."
   }

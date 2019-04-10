@@ -6,3 +6,5 @@ publisher: "Testington Inc."
 fhir_version: STU3
 telcom_url: "http://www.testington.com"
 license: APACHE
+
+local_contained_resource: true
