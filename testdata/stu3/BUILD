@@ -75,3 +75,8 @@ filegroup(
         "profilegenerator/*",
     ]),
 )
+
+alias(
+    name = "profiles",
+    actual = "//testdata/stu3/profiles:testdata",
+)

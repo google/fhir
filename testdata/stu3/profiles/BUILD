@@ -38,5 +38,8 @@ fhir_proto_library(
 
 filegroup(
     name = "testdata",
-    srcs = glob(["*.prototxt"]),
+    srcs = glob([
+        "*.prototxt",
+        "*.json",
+    ]),
 )

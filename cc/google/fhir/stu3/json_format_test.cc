@@ -23,6 +23,7 @@
 #include "google/fhir/stu3/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/resources.pb.h"
+#include "testdata/stu3/profiles/test.pb.h"
 #include "include/json/json.h"
 
 namespace google {
@@ -39,19 +40,23 @@ using google::fhir::stu3::proto::Condition;
 
 static const char* const kTimeZoneString = "Australia/Sydney";
 
+// json_path should be relative to fhir root
 template <typename R>
-R LoadProto(const string& filename) {
-  return ReadStu3Proto<R>(absl::StrCat("examples/", filename));
-}
-
-template <typename R>
-void TestParseWithJsonFilepath(const string& proto_name,
-                               const string& json_path) {
+R ParseJsonToProto(const string& json_path) {
   string json = ReadFile(json_path);
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
-  R from_json = JsonFhirStringToProto<R>(json, tz).ValueOrDie();
-  R from_disk = LoadProto<R>(proto_name + ".prototxt");
+  return JsonFhirStringToProto<R>(json, tz).ValueOrDie();
+}
+
+// proto_path should be relative to //testdata/stu3
+// json_path should be relative to fhir root
+// This difference is because we read most json test data from the spec package,
+// rather than the testdata directory.
+template <typename R>
+void TestParseWithFilepaths(const string& proto_path, const string& json_path) {
+  R from_json = ParseJsonToProto<R>(json_path);
+  R from_disk = ReadStu3Proto<R>(proto_path);
 
   ::google::protobuf::util::MessageDifferencer differencer;
   string differences;
@@ -61,8 +66,9 @@ void TestParseWithJsonFilepath(const string& proto_name,
 
 template <typename R>
 void TestParse(const string& name) {
-  TestParseWithJsonFilepath<R>(
-      name, absl::StrCat("spec/hl7.fhir.core/3.0.1/package/", name + ".json"));
+  TestParseWithFilepaths<R>(
+      absl::StrCat("examples/", name, ".prototxt"),
+      absl::StrCat("spec/hl7.fhir.core/3.0.1/package/", name + ".json"));
 }
 
 Json::Value ParseJsonStringToValue(const string& raw_json) {
@@ -74,7 +80,8 @@ Json::Value ParseJsonStringToValue(const string& raw_json) {
 
 template <typename R>
 void TestPrint(const string& name) {
-  const R proto = LoadProto<R>(name + ".prototxt");
+  const R proto =
+      ReadStu3Proto<R>(absl::StrCat("examples/", name, ".prototxt"));
   string from_proto = PrettyPrintFhirToJsonString(proto).ValueOrDie();
   string from_json = ReadFile(
       absl::StrCat("spec/hl7.fhir.core/3.0.1/package/", name + ".json"));
@@ -88,7 +95,8 @@ void TestPrint(const string& name) {
 
 template <typename R>
 void TestPrintForAnalytics(const string& name) {
-  const R proto = LoadProto<R>(name + ".prototxt");
+  const R proto =
+      ReadStu3Proto<R>(absl::StrCat("examples/", name, ".prototxt"));
   auto result = PrettyPrintFhirToJsonStringForAnalytics(proto);
   ASSERT_TRUE(result.ok()) << result.status();
   string from_proto = result.ValueOrDie();
@@ -109,8 +117,25 @@ TEST(JsonFormatTest, EdgeCasesParse) { TestParse<Patient>("Patient-null"); }
 
 /** Test parsing of FHIR edge casers from ndjson. */
 TEST(JsonFormatTest, EdgeCasesNdjsonParse) {
-  TestParseWithJsonFilepath<Patient>(
-      "Patient-null", "testdata/stu3/ndjson/Patient-null.ndjson");
+  TestParseWithFilepaths<Patient>("examples/Patient-null.prototxt",
+                                  "testdata/stu3/ndjson/Patient-null.ndjson");
+}
+
+/** Test parsing to a profile */
+TEST(JsonFormatTest, ParseSingleArrayElementIntoSingularField) {
+  TestParseWithFilepaths<testing::TestPatient>(
+      "profiles/test_patient-profiled-testpatient.prototxt",
+      "testdata/stu3/profiles/test_patient.json");
+  // This test is only meaningful because Patient.name is singular in the
+  // profile, unlike in the unprofiled resource.  This means it has array
+  // syntax in json, but singular syntax in proto.
+  // Access the proto field directly, so it will be a compile-time failure if
+  // that changes.
+  ASSERT_EQ("Duck", ParseJsonToProto<testing::TestPatient>(
+                        "testdata/stu3/profiles/test_patient.json")
+                        .name()
+                        .given(0)
+                        .value());
 }
 
 /** Test printing of FHIR edge cases. */

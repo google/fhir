@@ -355,11 +355,17 @@ class Parser {
     }
     // Must be another FHIR element.
     if (!json.isObject()) {
+      if (json.isArray() && json.size() == 1) {
+        // The target field is non-repeated, and we're trying to populate it
+        // with a single element array.
+        // This is considered valid, and occurs when a profiled resource reduces
+        // the size of a repeated FHIR field to max of 1.
+        return MergeMessage(json.get(0u, Json::Value::null), target);
+      }
       return InvalidArgument("Expected JsonObject for field of type ",
                              target->GetDescriptor()->full_name());
     }
-    FHIR_RETURN_IF_ERROR(MergeMessage(json, target));
-    return Status::OK();
+    return MergeMessage(json, target);
   }
 
  private:
