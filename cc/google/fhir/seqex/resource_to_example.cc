@@ -486,7 +486,6 @@ void ResourceToExample(const google::protobuf::Message& message,
   const google::protobuf::Descriptor* descriptor = message.GetDescriptor();
   MessageToExample(message, descriptor->name(), example, enable_attribution);
 }
-
 }  // namespace seqex
 }  // namespace fhir
 }  // namespace google
