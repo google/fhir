@@ -41,6 +41,7 @@ using ::google::protobuf::Message;
 using ::google::protobuf::OneofDescriptor;
 using ::google::protobuf::Reflection;
 using ::tensorflow::errors::FailedPrecondition;
+using ::tensorflow::errors::InvalidArgument;
 
 namespace {
 
