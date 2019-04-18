@@ -44,6 +44,7 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProtoOrBuilder;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
@@ -970,5 +971,13 @@ public final class JsonFormat {
         && !(json.isJsonPrimitive() && json.getAsJsonPrimitive().isString())) {
       throw new IllegalArgumentException("Invalid JSON element for string-like: " + json);
     }
+  }
+
+  public static String getOriginalCode(EnumValueDescriptorProtoOrBuilder codeEnum) {
+    return CodeWrapper.getOriginalCode(codeEnum);
+  }
+
+  public static String enumCodeToFhirCase(String enumCase) {
+    return CodeWrapper.enumCodeToFhirCase(enumCase);
   }
 }

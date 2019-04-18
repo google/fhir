@@ -69,7 +69,7 @@ public class ProtoGenerator {
 
   // The path for annotation definition of proto options.
   // TODO: Move the annotation to a general location.
-  private static final String ANNOTATION_PATH = "proto/stu3";
+  static final String ANNOTATION_PATH = "proto/stu3";
 
   // Map of time-like primitive type ids to supported granularity
   private static final ImmutableMap<String, List<String>> TIME_LIKE_PRECISION_MAP =
@@ -262,7 +262,7 @@ public class ProtoGenerator {
             .collect(ImmutableMap.toImmutableMap(def -> def.getId().getValue(), def -> def));
   }
 
-  private static Map<String, Descriptor> loadCodeTypesFromFile(FileDescriptor file) {
+  static Map<String, Descriptor> loadCodeTypesFromFile(FileDescriptor file) {
     return file.getMessageTypes().stream()
         .filter(d -> d.getOptions().hasExtension(Annotations.fhirValuesetUrl))
         .collect(
@@ -285,7 +285,12 @@ public class ProtoGenerator {
     }
     return isExtensionProfile(def)
         ? getProfileTypeName(def)
-        : toFieldTypeCase(def.getId().getValue());
+        : getTypeNameFromId(def.getId().getValue());
+  }
+
+  // Given an id string, gets the name of the top-level message that will be generated.
+  public static String getTypeNameFromId(String id) {
+    return toFieldTypeCase(id);
   }
 
   /**

@@ -14,9 +14,11 @@
 
 package com.google.fhir.stu3;
 
+import com.google.common.base.Ascii;
 import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.Code;
 import com.google.fhir.stu3.proto.Extension;
+import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProtoOrBuilder;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -73,15 +75,7 @@ public class CodeWrapper extends PrimitiveWrapper<Code> {
       throw new IllegalArgumentException("Invalid source message: " + descriptor.getFullName());
     }
     EnumValueDescriptor enumValue = (EnumValueDescriptor) code.getField(valueField);
-    if (enumValue.getOptions().hasExtension(Annotations.fhirOriginalCode)) {
-      return new CodeWrapper(
-          builder
-              .setValue(enumValue.getOptions().getExtension(Annotations.fhirOriginalCode))
-              .build());
-    } else {
-      return new CodeWrapper(
-          builder.setValue(enumValue.getName().toLowerCase().replace('_', '-')).build());
-    }
+    return new CodeWrapper(builder.setValue(getOriginalCode(enumValue.toProto())).build());
   }
 
   @Override
@@ -152,5 +146,15 @@ public class CodeWrapper extends PrimitiveWrapper<Code> {
   @Override
   protected String printValue() {
     return getWrapped().getValue();
+  }
+
+  static String getOriginalCode(EnumValueDescriptorProtoOrBuilder codeEnum) {
+    return codeEnum.getOptions().hasExtension(Annotations.fhirOriginalCode)
+        ? codeEnum.getOptions().getExtension(Annotations.fhirOriginalCode)
+        : enumCodeToFhirCase(codeEnum.getName());
+  }
+
+  static String enumCodeToFhirCase(String enumCase) {
+    return Ascii.toLowerCase(enumCase).replace('_', '-');
   }
 }

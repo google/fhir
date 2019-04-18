@@ -25,6 +25,7 @@ import com.google.fhir.stu3.proto.Annotations;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
+import com.google.protobuf.DescriptorProtos.EnumValueOptions;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
@@ -176,6 +177,16 @@ public class ProtoFilePrinter {
           .append(";\n");
       printedField = true;
     }
+    if (options.hasExtension(Annotations.fhirValuesetUrl)) {
+      message
+          .append(fieldIndent)
+          .append("option (")
+          .append(optionPackage)
+          .append("fhir_valueset_url) = \"")
+          .append(options.getExtension(Annotations.fhirValuesetUrl))
+          .append("\";\n");
+      printedField = true;
+    }
     if (options.hasExtension(Annotations.isAbstractType)) {
       message
           .append(fieldIndent)
@@ -275,6 +286,17 @@ public class ProtoFilePrinter {
       message.append(fieldIndent).append("}\n");
     }
 
+    // Print any enums that weren't already printed (i.e., enums that aren't used by any fields)
+    for (EnumDescriptorProto enumProto : descriptor.getEnumTypeList()) {
+      if (printedField) {
+        message.append("\n");
+      }
+      String fullTypeName = fullName + "." + enumProto.getName();
+      if (printedNestedTypeDefinitions.add(fullTypeName)) {
+        message.append(printEnum(enumProto, fullTypeName, packageName));
+      }
+    }
+
     // Close the main message.
     message.append(indent).append("}\n");
 
@@ -297,12 +319,23 @@ public class ProtoFilePrinter {
 
     // Loop over the elements.
     for (EnumValueDescriptorProto field : descriptor.getValueList()) {
-      message
-          .append(fieldIndent)
-          .append(field.getName())
-          .append(" = ")
-          .append(field.getNumber())
-          .append(";\n");
+      message.append(fieldIndent).append(field.getName()).append(" = ").append(field.getNumber());
+
+      boolean hasFieldOption = false;
+      EnumValueOptions options = field.getOptions();
+      if (options.hasExtension(Annotations.fhirOriginalCode)) {
+        hasFieldOption =
+            addFieldOption(
+                "(fhir_original_code)",
+                "\"" + options.getExtension(Annotations.fhirOriginalCode) + "\"",
+                hasFieldOption,
+                message);
+      }
+      if (hasFieldOption) {
+        message.append("]");
+      }
+
+      message.append(";\n");
     }
 
     // Close the enum.
@@ -316,24 +349,24 @@ public class ProtoFilePrinter {
       FieldDescriptorProto field,
       String typePrefix,
       String packageName,
-      Set<String> alreadyPrinted) {
+      Set<String> printedNestedTypeDefinitions) {
     String prefix = typePrefix + "." + descriptor.getName();
     if (field.hasTypeName()
         && field.getTypeName().startsWith(prefix + ".")
-        && !alreadyPrinted.contains(field.getTypeName())) {
+        && !printedNestedTypeDefinitions.contains(field.getTypeName())) {
       List<String> typeNameParts = Splitter.on('.').splitToList(field.getTypeName());
       String typeName = typeNameParts.get(typeNameParts.size() - 1);
       if (field.getType() == FieldDescriptorProto.Type.TYPE_MESSAGE) {
         for (DescriptorProto nested : descriptor.getNestedTypeList()) {
           if (nested.getName().equals(typeName)) {
-            alreadyPrinted.add(field.getTypeName());
+            printedNestedTypeDefinitions.add(field.getTypeName());
             return printMessage(nested, prefix, packageName);
           }
         }
       } else if (field.getType() == FieldDescriptorProto.Type.TYPE_ENUM) {
         for (EnumDescriptorProto nested : descriptor.getEnumTypeList()) {
           if (nested.getName().equals(typeName)) {
-            alreadyPrinted.add(field.getTypeName());
+            printedNestedTypeDefinitions.add(field.getTypeName());
             return printEnum(nested, prefix, packageName);
           }
         }
