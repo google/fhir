@@ -447,8 +447,10 @@ TEST(BundleToVersionedResourcesConverterTest, DefaultTimestampOnlyEmpty) {
                                                   &input));
 
   std::map<string, int> counter_stats;
-  EXPECT_DEATH(RunBundleToVersionedResources(input, &counter_stats),
-               ".*default_timestamp_field.*");
+  ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
+              testing::ElementsAre());
+  AssertCounter(counter_stats, "split-failed-no-default_timestamp_field-Claim",
+                1);
 }
 
 TEST(BundleToVersionedResourcesConverterTest, WithPopulatedOverride) {
@@ -663,8 +665,10 @@ TEST(BundleToVersionedResourcesConverterTest,
     })proto", &input));
 
   std::map<string, int> counter_stats;
-  EXPECT_DEATH(RunBundleToVersionedResources(input, &counter_stats),
-               "default_timestamp_field does not resolve.*");
+  ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
+              testing::ElementsAre());
+  AssertCounter(counter_stats,
+                "split-failed-no-default_timestamp_field-Condition", 1);
 }
 
 TEST(BundleToVersionedResourcesConverterTest,
@@ -940,8 +944,10 @@ TEST(BundleToVersionedResourcesConverterTest, TimestampOverrideDefaultEmpty) {
     })proto", &input));
 
   std::map<string, int> counter_stats;
-  EXPECT_DEATH(RunBundleToVersionedResources(input, &counter_stats),
-               ".*default_timestamp_field.*");
+  ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
+              testing::ElementsAre());
+  AssertCounter(counter_stats,
+                "split-failed-no-default_timestamp_field-Encounter", 1);
 }
 
 TEST(BundleToVersionedResourcesConverterTest, ExpandRepeatedTargets) {

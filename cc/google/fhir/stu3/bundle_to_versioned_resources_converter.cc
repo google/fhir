@@ -82,8 +82,8 @@ struct DateTimeEquiv {
 // Gets the default date time to use for fields in this message.
 // Any fields that aren't present in a TimestampOverride config will be entered
 // at this default time.
-const DateTime GetDefaultDateTime(const ResourceConfig& config,
-                                  const Message& message) {
+StatusOr<DateTime> GetDefaultDateTime(const ResourceConfig& config,
+                                      const Message& message) {
   // Try to find a field indicated by default_timestamp_field.
   if (config.default_timestamp_fields_size() > 0) {
     // Find default datetime from default_timestamp_field in config
@@ -98,9 +98,9 @@ const DateTime GetDefaultDateTime(const ResourceConfig& config,
       }
     }
   }
-
-  LOG(FATAL) << "default_timestamp_field does not resolve.\nConfig: "
-             << config.DebugString();
+  return ::tensorflow::errors::InvalidArgument(
+      "split-failed-no-default_timestamp_field-",
+      message.GetDescriptor()->name());
 }
 
 // Expands a TimestampOverride config for a repeated field.

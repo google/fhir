@@ -146,12 +146,13 @@ void StampWrapAndAdd(std::vector<ContainedResourceLike>* versioned_resources,
 // Gets the default date time to use for fields in this message.
 // Any fields that aren't present in a TimestampOverride config will be entered
 // at this default time.
-const proto::DateTime GetDefaultDateTime(const proto::ResourceConfig& config,
-                                         const ::google::protobuf::Message& message);
+StatusOr<proto::DateTime> GetDefaultDateTime(
+    const proto::ResourceConfig& config, const ::google::protobuf::Message& message);
 
 template <typename R, typename ContainedResourceLike>
 void SplitResource(const R& resource, const proto::VersionConfig& config,
-                   std::vector<ContainedResourceLike>* versioned_resources) {
+                   std::vector<ContainedResourceLike>* versioned_resources,
+                   std::map<string, int>* counter_stats) {
   // Make a mutable copy of the resource, that we will modify and copy into
   // the result vector along the way.
   std::unique_ptr<R> current_resource(resource.New());
@@ -161,11 +162,19 @@ void SplitResource(const R& resource, const proto::VersionConfig& config,
   const string& resource_name = descriptor->name();
 
   const auto& iter = config.resource_config().find(resource_name);
-  CHECK(iter != config.resource_config().end())
-      << "Missing resource config for resource type " << resource_name;
+  if (iter == config.resource_config().end()) {
+    (*counter_stats)[absl::StrCat("split-failed-no-config-", resource_name)]++;
+    return;
+  }
   const auto& resource_config = iter->second;
 
-  proto::DateTime default_time = GetDefaultDateTime(resource_config, resource);
+  StatusOr<proto::DateTime> default_time_status =
+      GetDefaultDateTime(resource_config, resource);
+  if (!default_time_status.ok()) {
+    (*counter_stats)[default_time_status.status().error_message()]++;
+    return;
+  }
+  proto::DateTime default_time = default_time_status.ValueOrDie();
 
   if (resource_config.timestamp_override_size() == 0) {
     // If there are no per-field timestamp overrides, we can just enter the
@@ -383,31 +392,32 @@ std::vector<ContainedResourceLike> BundleToVersionedResources(
       internal::SplitPatient(resource.patient(), bundle, config,
                              &versioned_resources, counter_stats);
     } else if (resource.has_claim()) {
-      internal::SplitResource(resource.claim(), config, &versioned_resources);
+      internal::SplitResource(resource.claim(), config, &versioned_resources,
+                              counter_stats);
     } else if (resource.has_composition()) {
       internal::SplitResource(resource.composition(), config,
-                              &versioned_resources);
+                              &versioned_resources, counter_stats);
     } else if (resource.has_condition()) {
       internal::SplitResource(resource.condition(), config,
-                              &versioned_resources);
+                              &versioned_resources, counter_stats);
     } else if (resource.has_encounter()) {
       internal::SplitResource(resource.encounter(), config,
-                              &versioned_resources);
+                              &versioned_resources, counter_stats);
     } else if (resource.has_medication_administration()) {
       internal::SplitResource(resource.medication_administration(), config,
-                              &versioned_resources);
+                              &versioned_resources, counter_stats);
     } else if (resource.has_medication_request()) {
       internal::SplitResource(resource.medication_request(), config,
-                              &versioned_resources);
+                              &versioned_resources, counter_stats);
     } else if (resource.has_observation()) {
       internal::SplitResource(resource.observation(), config,
-                              &versioned_resources);
+                              &versioned_resources, counter_stats);
     } else if (resource.has_procedure()) {
       internal::SplitResource(resource.procedure(), config,
-                              &versioned_resources);
+                              &versioned_resources, counter_stats);
     } else if (resource.has_procedure_request()) {
       internal::SplitResource(resource.procedure_request(), config,
-                              &versioned_resources);
+                              &versioned_resources, counter_stats);
     }
     const int new_size = versioned_resources.size();
     const string resource_name =
