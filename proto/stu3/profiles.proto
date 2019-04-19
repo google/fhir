@@ -2755,7 +2755,7 @@ message FamilymemberhistoryGenetic {
     option (is_choice_type) = true;
 
     oneof age {
-      Age age_value = 1 [json_name = "age"];
+      .google.fhir.stu3.proto.Age age_value = 1 [json_name = "age"];
       Range range = 2;
       String string_value = 3 [json_name = "string"];
     }
