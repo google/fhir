@@ -228,6 +228,7 @@ field {
   type_name: ".google.fhir.stu3.proto.DataElement.Mapping"
   options {
     [google.fhir.stu3.proto.field_description]: "External specification mapped to"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "uri.exists() or name.exists()"
   }
 }
 field {
@@ -239,6 +240,8 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Definition of element"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "base.empty()"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "slicing.empty()"
   }
 }
 nested_type {

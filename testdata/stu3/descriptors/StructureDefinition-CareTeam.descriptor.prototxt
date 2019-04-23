@@ -161,6 +161,7 @@ field {
   type_name: ".google.fhir.stu3.proto.CareTeam.Participant"
   options {
     [google.fhir.stu3.proto.field_description]: "Members of the team"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "onBehalfOf.exists() implies (member.resolve() is Practitioner)"
   }
 }
 field {

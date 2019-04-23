@@ -181,6 +181,7 @@ field {
   type_name: ".google.fhir.stu3.proto.AuditEvent.Entity"
   options {
     [google.fhir.stu3.proto.field_description]: "Data or objects used"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "name.empty() or query.empty()"
   }
 }
 nested_type {

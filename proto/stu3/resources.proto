@@ -753,8 +753,10 @@ message Appointment {
     ParticipationStatusCode status = 7
         [(validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Participant participant = 27
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated Participant participant = 27 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) = "type.exists() or actor.exists()"
+  ];
 
   // Potential date/time interval(s) requested to allocate the appointment
   // within
@@ -1031,7 +1033,8 @@ message AuditEvent {
     }
     repeated Detail detail = 13;
   }
-  repeated Entity entity = 18;
+  repeated Entity entity = 18
+      [(fhir_path_constraint) = "name.empty() or query.empty()"];
 }
 
 // Auto-generated from StructureDefinition for Basic, last updated
@@ -1321,7 +1324,11 @@ message Bundle {
     }
     Response response = 9;
   }
-  repeated Entry entry = 9;
+  repeated Entry entry = 9 [
+    (fhir_path_constraint) = "fullUrl.contains('/_history/').not()",
+    (fhir_path_constraint) =
+        "resource.exists() or request.exists() or response.exists()"
+  ];
 
   // Digital Signature
   Signature signature = 10;
@@ -1629,7 +1636,8 @@ message CapabilityStatement {
       }
       repeated SearchParam search_param = 18;
     }
-    repeated Resource resource = 7;
+    repeated Resource resource = 7
+        [(fhir_path_constraint) = "searchParam.select(name).isDistinct()"];
 
     // What operations are supported?
     message SystemInteraction {
@@ -1679,7 +1687,8 @@ message CapabilityStatement {
     // Compartments served/used by system
     repeated Uri compartment = 11;
   }
-  repeated Rest rest = 33;
+  repeated Rest rest = 33
+      [(fhir_path_constraint) = "resource.select(type).isDistinct()"];
 
   // If messaging is supported
   message Messaging {
@@ -1781,7 +1790,8 @@ message CapabilityStatement {
     }
     repeated Event event = 8;
   }
-  repeated Messaging messaging = 34;
+  repeated Messaging messaging = 34
+      [(fhir_path_constraint) = "supportedMessage.empty() != event.empty()"];
 
   // Document definition
   message Document {
@@ -2041,7 +2051,8 @@ message CarePlan {
     }
     Detail detail = 8;
   }
-  repeated Activity activity = 27;
+  repeated Activity activity = 27
+      [(fhir_path_constraint) = "detail.empty() or reference.empty()"];
 
   // Comments about the plan
   repeated Annotation note = 28;
@@ -2134,7 +2145,9 @@ message CareTeam {
     // Time period of participant
     Period period = 7;
   }
-  repeated Participant participant = 16;
+  repeated Participant participant = 16
+      [(fhir_path_constraint) =
+           "onBehalfOf.exists() implies (member.resolve() is Practitioner)"];
 
   // Why the care team exists
   repeated CodeableConcept reason_code = 17;
@@ -3911,7 +3924,10 @@ message CommunicationRequest {
     // Organization agent is acting for
     Reference on_behalf_of = 5 [(valid_reference_type) = "Organization"];
   }
-  Requester requester = 25;
+  Requester requester = 25 [
+    (fhir_path_constraint) =
+        "(agent.resolve() is Practitioner) or (agent.resolve() is Device) or onBehalfOf.exists().not()"
+  ];
 
   // Why is communication needed?
   repeated CodeableConcept reason_code = 26;
@@ -4212,7 +4228,11 @@ message Composition {
     // Nested Section
     repeated Section section = 11;
   }
-  repeated Section section = 23;
+  repeated Section section = 23 [
+    (fhir_path_constraint) =
+        "text.exists() or entry.exists() or section.exists()",
+    (fhir_path_constraint) = "emptyReason.empty() or entry.empty()"
+  ];
 }
 
 // Auto-generated from StructureDefinition for ConceptMap, last updated
@@ -4407,7 +4427,10 @@ message ConceptMap {
         // Other concepts that this mapping also produces
         repeated OtherElement product = 9;
       }
-      repeated TargetElement target = 6;
+      repeated TargetElement target = 6 [
+        (fhir_path_constraint) =
+            "comment.exists() or equivalence.empty() or ((equivalence != 'narrower') and (equivalence != 'inexact'))"
+      ];
     }
     repeated SourceElement element = 8
         [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -4436,7 +4459,10 @@ message ConceptMap {
       // Canonical URL for other concept map
       Uri url = 7;
     }
-    Unmapped unmapped = 9;
+    Unmapped unmapped = 9 [
+      (fhir_path_constraint) = "(mode = 'other-map') implies url.exists()",
+      (fhir_path_constraint) = "(mode = 'fixed') implies code.exists()"
+    ];
   }
   repeated Group group = 26;
 }
@@ -4568,7 +4594,8 @@ message Condition {
       (valid_reference_type) = "Observation"
     ];
   }
-  Stage stage = 22;
+  Stage stage = 22
+      [(fhir_path_constraint) = "summary.exists() or assessment.exists()"];
 
   // Supporting evidence
   message Evidence {
@@ -4587,7 +4614,8 @@ message Condition {
     // Supporting information found elsewhere
     repeated Reference detail = 5 [(valid_reference_type) = "Resource"];
   }
-  repeated Evidence evidence = 23;
+  repeated Evidence evidence = 23
+      [(fhir_path_constraint) = "code.exists() or detail.exists()"];
 
   // Additional information about the Condition
   repeated Annotation note = 24;
@@ -5489,11 +5517,15 @@ message DataElement {
     // Versions, issues, scope limitations, etc.
     String comment = 7;
   }
-  repeated Mapping mapping = 23;
+  repeated Mapping mapping = 23
+      [(fhir_path_constraint) = "uri.exists() or name.exists()"];
 
   // Definition of element
-  repeated ElementDefinition element = 24
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated ElementDefinition element = 24 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) = "base.empty()",
+    (fhir_path_constraint) = "slicing.empty()"
+  ];
 }
 
 // Auto-generated from StructureDefinition for DetectedIssue, last updated
@@ -7537,7 +7569,8 @@ message ExpansionProfile {
         // What kind of Designation to include
         Coding use = 5;
       }
-      repeated DesignationIncludeDesignation designation = 4;
+      repeated DesignationIncludeDesignation designation = 4
+          [(fhir_path_constraint) = "language.exists() or use.exists()"];
     }
     DesignationInclude include = 4;
 
@@ -7569,7 +7602,8 @@ message ExpansionProfile {
         // What kind of Designation to exclude
         Coding use = 5;
       }
-      repeated DesignationExcludeDesignation designation = 4;
+      repeated DesignationExcludeDesignation designation = 4
+          [(fhir_path_constraint) = "language.exists() or use.exists()"];
     }
     DesignationExclude exclude = 5;
   }
@@ -8731,7 +8765,9 @@ message Goal {
     }
     Due due = 6;
   }
-  Target target = 16;
+  Target target = 16
+      [(fhir_path_constraint) =
+           "(detail.exists() and measure.exists()) or detail.exists().not()"];
 
   // When goal status took effect
   Date status_date = 17;
@@ -9879,8 +9915,10 @@ message ImmunizationRecommendation {
       (valid_reference_type) = "AllergyIntolerance"
     ];
   }
-  repeated Recommendation recommendation = 11
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated Recommendation recommendation = 11 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) = "vaccineCode.exists() or targetDisease.exists()"
+  ];
 }
 
 // Auto-generated from StructureDefinition for ImplementationGuide, last updated
@@ -11325,7 +11363,8 @@ message MedicationAdministration {
     }
     Rate rate = 9;
   }
-  Dosage dosage = 27;
+  Dosage dosage = 27
+      [(fhir_path_constraint) = "dose.exists() or rate.exists()"];
 
   // A list of events of interest in the lifecycle
   repeated Reference event_history = 28 [(valid_reference_type) = "Provenance"];
@@ -11632,7 +11671,10 @@ message MedicationRequest {
     // Organization agent is acting for
     Reference on_behalf_of = 5 [(valid_reference_type) = "Organization"];
   }
-  Requester requester = 22;
+  Requester requester = 22 [
+    (fhir_path_constraint) =
+        "(agent.resolve().empty()) or (agent.resolve() is Device) or (agent.resolve() is Practitioner) or onBehalfOf.exists().not()"
+  ];
 
   // Person who entered the request
   Reference recorder = 23 [(valid_reference_type) = "Practitioner"];
@@ -11966,7 +12008,8 @@ message MessageDefinition {
     // Maximum number of focuses of this type
     String max = 7;
   }
-  repeated Focus focus = 29;
+  repeated Focus focus = 29
+      [(fhir_path_constraint) = "max='*' or (max.toInteger() > 0)"];
 
   // Is a response required?
   Boolean response_required = 30;
@@ -12629,7 +12672,9 @@ message Observation {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Resource related to this observation
   message Related {
@@ -12864,7 +12909,10 @@ message OperationDefinition {
     // Parts of a nested Parameter
     repeated Parameter part = 13;
   }
-  repeated Parameter parameter = 30;
+  repeated Parameter parameter = 30 [
+    (fhir_path_constraint) = "type.exists() or part.exists()",
+    (fhir_path_constraint) = "searchType implies type = 'string'"
+  ];
 
   // Define overloaded variants for when  generating code
   message Overload {
@@ -13000,10 +13048,12 @@ message Organization {
   repeated String alias = 13;
 
   // A contact detail for the organization
-  repeated ContactPoint telecom = 14;
+  repeated ContactPoint telecom = 14
+      [(fhir_path_constraint) = "where(use = 'home').empty()"];
 
   // An address for the organization
-  repeated Address address = 15;
+  repeated Address address = 15
+      [(fhir_path_constraint) = "where(use = 'home').empty()"];
 
   // The organization of which this organization forms a part
   Reference part_of = 16 [(valid_reference_type) = "Organization"];
@@ -13125,7 +13175,10 @@ message Parameters {
     // Named part of a multi-part parameter
     repeated Parameter part = 7;
   }
-  repeated Parameter parameter = 5;
+  repeated Parameter parameter = 5 [
+    (fhir_path_constraint) =
+        "(part.exists() and value.empty() and resource.empty()) or (part.empty() and (value.exists() xor resource.exists()))"
+  ];
 }
 
 // Auto-generated from StructureDefinition for Patient, last updated
@@ -13243,7 +13296,10 @@ message Patient {
     // be contacted relating to this patient
     Period period = 10;
   }
-  repeated Contact contact = 20;
+  repeated Contact contact = 20 [
+    (fhir_path_constraint) =
+        "name.exists() or telecom.exists() or address.exists() or organization.exists()"
+  ];
 
   // This patient is known to be an animal (non-human)
   message Animal {
@@ -15013,7 +15069,8 @@ message Questionnaire {
       }
       Answer answer = 6;
     }
-    repeated EnableWhen enable_when = 10;
+    repeated EnableWhen enable_when = 10
+        [(fhir_path_constraint) = "hasAnswer.exists() xor answer.exists()"];
 
     // Whether the item must be included in data results
     Boolean required = 11;
@@ -15081,7 +15138,21 @@ message Questionnaire {
     // Nested questionnaire items
     repeated Item item = 18;
   }
-  repeated Item item = 29;
+  repeated Item item = 29 [
+    (fhir_path_constraint) = "type!='display' or readOnly.empty()",
+    (fhir_path_constraint) =
+        "(type!='group' and type!='display') or initial.empty()",
+    (fhir_path_constraint) =
+        "type!='display' or (required.empty() and repeats.empty())",
+    (fhir_path_constraint) =
+        "(type ='choice' or type = 'open-choice') or (options.empty() and option.empty())",
+    (fhir_path_constraint) = "option.empty() or options.empty()",
+    (fhir_path_constraint) = "type!='display' or code.empty()",
+    (fhir_path_constraint) =
+        "(type in ('boolean' | 'decimal' | 'integer' | 'string' | 'text' | 'url')) or maxLength.empty()",
+    (fhir_path_constraint) =
+        "(type='group' implies item.empty().not()) and (type.trace('type')='display' implies item.trace('item').empty())"
+  ];
 }
 
 // Auto-generated from StructureDefinition for QuestionnaireResponse, last
@@ -15230,7 +15301,8 @@ message QuestionnaireResponse {
     // Nested questionnaire response items
     repeated Item item = 9;
   }
-  repeated Item item = 19;
+  repeated Item item = 19
+      [(fhir_path_constraint) = "(answer.exists() and item.exists()).not()"];
 }
 
 // Auto-generated from StructureDefinition for ReferralRequest, last updated
@@ -15354,7 +15426,10 @@ message ReferralRequest {
     // Organization agent is acting for
     Reference on_behalf_of = 5 [(valid_reference_type) = "Organization"];
   }
-  Requester requester = 23;
+  Requester requester = 23 [
+    (fhir_path_constraint) =
+        "(agent.resolve() is Device) or (agent.resolve() is Practitioner) or onBehalfOf.exists().not()"
+  ];
 
   // The clinical specialty (discipline) that the referral is requested for
   CodeableConcept specialty = 24;
@@ -15683,7 +15758,8 @@ message RequestGroup {
     // Sub action
     repeated Action action = 21;
   }
-  repeated Action action = 23;
+  repeated Action action = 23
+      [(fhir_path_constraint) = "resource.exists() != action.exists()"];
 }
 
 // Auto-generated from StructureDefinition for ResearchStudy, last updated
@@ -15984,7 +16060,10 @@ message RiskAssessment {
         Range range = 2;
       }
     }
-    Probability probability = 5;
+    Probability probability = 5 [
+      (fhir_path_constraint) =
+          "(low.empty() or ((low.code = '%') and (low.system = %ucum))) and (high.empty() or ((high.code = '%') and (high.system = %ucum)))"
+    ];
 
     // Likelihood of specified outcome as a qualitative value
     CodeableConcept qualitative_risk = 6;
@@ -16006,7 +16085,9 @@ message RiskAssessment {
     // Explanation of prediction
     String rationale = 9;
   }
-  repeated Prediction prediction = 22;
+  repeated Prediction prediction = 22
+      [(fhir_path_constraint) =
+           "probability is decimal implies probability.as(decimal) <= 100"];
 
   // How to reduce risk
   String mitigation = 23;
@@ -16312,7 +16393,13 @@ message Sequence {
     // End position of the window on the reference sequence
     Integer window_end = 11 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
-  ReferenceSeq reference_seq = 17;
+  ReferenceSeq reference_seq = 17 [
+    (fhir_path_constraint) = "strand.empty() or strand = 1 or strand = -1",
+    (fhir_path_constraint) =
+        "(chromosome.empty() and genomeBuild.empty()) or (chromosome.exists() and genomeBuild.exists())",
+    (fhir_path_constraint) =
+        "(genomeBuild.count()+referenceSeqId.count()+ referenceSeqPointer.count()+ referenceSeqString.count()) = 1"
+  ];
 
   // Variant in sequence
   message Variant {
@@ -16915,7 +17002,8 @@ message StructureDefinition {
     // Versions, Issues, Scope limitations etc.
     String comment = 7;
   }
-  repeated Mapping mapping = 26;
+  repeated Mapping mapping = 26
+      [(fhir_path_constraint) = "name.exists() or uri.exists()"];
 
   // primitive-type | complex-type | resource | logical
   StructureDefinitionKindCode kind = 27
@@ -16958,7 +17046,12 @@ message StructureDefinition {
     repeated ElementDefinition element = 4
         [(validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Snapshot snapshot = 35;
+  Snapshot snapshot = 35 [
+    (fhir_path_constraint) = "element.first().type.empty()",
+    (fhir_path_constraint) =
+        "element.first().path = %resource.type and element.tail().all(path.startsWith(%resource.type&'.'))",
+    (fhir_path_constraint) = "element.all(definition and min and max)"
+  ];
 
   // Differential view of the structure
   message Differential {
@@ -16975,7 +17068,13 @@ message StructureDefinition {
     repeated ElementDefinition element = 4
         [(validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Differential differential = 36;
+  Differential differential = 36 [
+    (fhir_path_constraint) =
+        "element.first().path.contains('.').not() implies element.first().type.empty()",
+    (fhir_path_constraint) = "element.first().slicing.empty()",
+    (fhir_path_constraint) =
+        "element.first().path.startsWith(%resource.type) and element.tail().all(path.startsWith(%resource.type&'.'))"
+  ];
 }
 
 // Auto-generated from StructureDefinition for StructureMap, last updated
@@ -17297,7 +17396,11 @@ message StructureMap {
         }
         repeated Parameter parameter = 11;
       }
-      repeated Target target = 6;
+      repeated Target target = 6 [
+        (fhir_path_constraint) =
+            "context.exists() implies contextType.exists()",
+        (fhir_path_constraint) = "element.exists() implies context.exists()"
+      ];
 
       // Rules contained in this rule
       repeated Rule rule = 7;
@@ -18219,8 +18322,10 @@ message TestReport {
       }
       Assert assert_value = 5 [json_name = "assert"];
     }
-    repeated SetupAction action = 4
-        [(validation_requirement) = REQUIRED_BY_FHIR];
+    repeated SetupAction action = 4 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (fhir_path_constraint) = "operation.exists() xor assert.exists()"
+    ];
   }
   Setup setup = 18;
 
@@ -18258,8 +18363,10 @@ message TestReport {
       // The assertion performed
       Setup.SetupAction.Assert assert_value = 5 [json_name = "assert"];
     }
-    repeated TestAction action = 6
-        [(validation_requirement) = REQUIRED_BY_FHIR];
+    repeated TestAction action = 6 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (fhir_path_constraint) = "operation.exists() xor assert.exists()"
+    ];
   }
   repeated Test test = 19;
 
@@ -18483,7 +18590,9 @@ message TestScript {
     repeated Capability capability = 5
         [(validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Metadata metadata = 26;
+  Metadata metadata = 26
+      [(fhir_path_constraint) =
+           "capability.required.exists() or capability.validated.exists()"];
 
   // Fixture in the test script - by reference (uri)
   message Fixture {
@@ -18545,7 +18654,9 @@ message TestScript {
     // Fixture Id of source expression or headerField within this variable
     Id source_id = 11;
   }
-  repeated Variable variable = 29;
+  repeated Variable variable = 29
+      [(fhir_path_constraint) =
+           "expression.empty() or headerField.empty() or path.empty()"];
 
   // Assert rule used within the test script
   message Rule {
@@ -18737,7 +18848,10 @@ message TestScript {
         // Request URL
         String url = 19;
       }
-      Operation operation = 4;
+      Operation operation = 4 [
+        (fhir_path_constraint) =
+            "sourceId.exists() or (targetId.count() + url.count() + params.count() = 1) or (type.code in ('capabilities' |'search' | 'transaction' | 'history'))"
+      ];
 
       // The assertion to perform
       message Assert {
@@ -18905,10 +19019,20 @@ message TestScript {
         // Will this assert produce a warning only on error?
         Boolean warning_only = 27;
       }
-      Assert assert_value = 5 [json_name = "assert"];
+      Assert assert_value = 5 [
+        json_name = "assert",
+        (fhir_path_constraint) =
+            "contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count() + rule.count() + ruleset.count() + validateProfileId.count() <=1",
+        (fhir_path_constraint) =
+            "compareToSourceId.empty() xor (compareToSourceExpression.exists() or compareToSourcePath.exists())",
+        (fhir_path_constraint) =
+            "(response.empty() and responseCode.empty() and direction = 'request') or direction.empty() or direction = 'response'"
+      ];
     }
-    repeated SetupAction action = 4
-        [(validation_requirement) = REQUIRED_BY_FHIR];
+    repeated SetupAction action = 4 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (fhir_path_constraint) = "operation.exists() xor assert.exists()"
+    ];
   }
   Setup setup = 32;
 
@@ -18941,13 +19065,26 @@ message TestScript {
       repeated Extension modifier_extension = 3;
 
       // The setup operation to perform
-      Setup.SetupAction.Operation operation = 4;
+      Setup.SetupAction.Operation operation = 4 [
+        (fhir_path_constraint) =
+            "sourceId.exists() or (targetId.count() + url.count() + params.count() = 1) or (type.code in ('capabilities' | 'search' | 'transaction' | 'history'))"
+      ];
 
       // The setup assertion to perform
-      Setup.SetupAction.Assert assert_value = 5 [json_name = "assert"];
+      Setup.SetupAction.Assert assert_value = 5 [
+        json_name = "assert",
+        (fhir_path_constraint) =
+            "contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count() + rule.count() + ruleset.count() + validateProfileId.count() <=1",
+        (fhir_path_constraint) =
+            "compareToSourceId.empty() xor (compareToSourceExpression.exists() or compareToSourcePath.exists())",
+        (fhir_path_constraint) =
+            "(response.empty() and responseCode.empty() and direction = 'request') or direction.empty() or direction = 'response'"
+      ];
     }
-    repeated TestAction action = 6
-        [(validation_requirement) = REQUIRED_BY_FHIR];
+    repeated TestAction action = 6 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (fhir_path_constraint) = "operation.exists() xor assert.exists()"
+    ];
   }
   repeated Test test = 33;
 
@@ -18974,8 +19111,11 @@ message TestScript {
       repeated Extension modifier_extension = 3;
 
       // The teardown operation to perform
-      Setup.SetupAction.Operation operation = 4
-          [(validation_requirement) = REQUIRED_BY_FHIR];
+      Setup.SetupAction.Operation operation = 4 [
+        (validation_requirement) = REQUIRED_BY_FHIR,
+        (fhir_path_constraint) =
+            "sourceId.exists() or (targetId.count() + url.count() + params.count() = 1) or (type.code in ('capabilities' | 'search' | 'transaction' | 'history'))"
+      ];
     }
     repeated TeardownAction action = 4
         [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -19169,8 +19309,13 @@ message ValueSet {
       // Select only contents included in this value set
       repeated Uri value_set = 8;
     }
-    repeated ConceptSet include = 6
-        [(validation_requirement) = REQUIRED_BY_FHIR];
+    repeated ConceptSet include = 6 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (fhir_path_constraint) =
+          "(concept.exists() or filter.exists()) implies system.exists()",
+      (fhir_path_constraint) = "concept.empty() or filter.empty()",
+      (fhir_path_constraint) = "valueSet.exists() or system.exists()"
+    ];
 
     // Explicitly exclude codes from a code system or other value sets
     repeated ConceptSet exclude = 7;
@@ -19266,7 +19411,11 @@ message ValueSet {
       // Codes contained under this entry
       repeated Contains contains = 11;
     }
-    repeated Contains contains = 9;
+    repeated Contains contains = 9 [
+      (fhir_path_constraint) = "code.exists() or display.exists()",
+      (fhir_path_constraint) = "code.exists() or abstract = true",
+      (fhir_path_constraint) = "code.empty() or system.exists()"
+    ];
   }
   Expansion expansion = 27;
 }

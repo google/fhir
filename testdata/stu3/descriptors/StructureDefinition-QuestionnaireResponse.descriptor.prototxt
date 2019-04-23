@@ -204,6 +204,7 @@ field {
   type_name: ".google.fhir.stu3.proto.QuestionnaireResponse.Item"
   options {
     [google.fhir.stu3.proto.field_description]: "Groups and questions"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "(answer.exists() and item.exists()).not()"
   }
 }
 nested_type {

@@ -172,6 +172,9 @@ field {
   type_name: ".google.fhir.stu3.proto.Sequence.ReferenceSeq"
   options {
     [google.fhir.stu3.proto.field_description]: "A sequence used as reference"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "strand.empty() or strand = 1 or strand = -1"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "(chromosome.empty() and genomeBuild.empty()) or (chromosome.exists() and genomeBuild.exists())"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "(genomeBuild.count()+referenceSeqId.count()+ referenceSeqPointer.count()+ referenceSeqString.count()) = 1"
   }
 }
 field {

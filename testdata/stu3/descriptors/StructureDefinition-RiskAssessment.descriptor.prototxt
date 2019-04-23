@@ -228,6 +228,7 @@ field {
   type_name: ".google.fhir.stu3.proto.RiskAssessment.Prediction"
   options {
     [google.fhir.stu3.proto.field_description]: "Outcome predicted"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "probability is decimal implies probability.as(decimal) <= 100"
   }
 }
 field {
@@ -354,6 +355,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.RiskAssessment.Prediction.Probability"
     options {
       [google.fhir.stu3.proto.field_description]: "Likelihood of specified outcome"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "(low.empty() or ((low.code = \'%\') and (low.system = %ucum))) and (high.empty() or ((high.code = \'%\') and (high.system = %ucum)))"
     }
   }
   field {

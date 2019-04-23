@@ -290,6 +290,7 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "low.exists() or high.exists() or text.exists()"
   }
 }
 field {
@@ -385,6 +386,8 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "A fixed quantity (no comparator)"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "code.empty() or system.exists()"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "comparator.empty()"
     }
   }
   field {

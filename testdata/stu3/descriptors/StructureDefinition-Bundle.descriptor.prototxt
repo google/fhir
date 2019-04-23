@@ -88,6 +88,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Bundle.Entry"
   options {
     [google.fhir.stu3.proto.field_description]: "Entry in the bundle - will have a resource, or information"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "fullUrl.contains(\'/_history/\').not()"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "resource.exists() or request.exists() or response.exists()"
   }
 }
 field {

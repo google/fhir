@@ -290,6 +290,7 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "low.exists() or high.exists() or text.exists()"
   }
 }
 field {

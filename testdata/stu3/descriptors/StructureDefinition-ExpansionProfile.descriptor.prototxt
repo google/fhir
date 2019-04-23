@@ -522,6 +522,7 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.ExpansionProfile.Designation.DesignationInclude.DesignationIncludeDesignation"
       options {
         [google.fhir.stu3.proto.field_description]: "The designation to be included"
+        [google.fhir.stu3.proto.fhir_path_constraint]: "language.exists() or use.exists()"
       }
     }
     nested_type {
@@ -618,6 +619,7 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.ExpansionProfile.Designation.DesignationExclude.DesignationExcludeDesignation"
       options {
         [google.fhir.stu3.proto.field_description]: "The designation to be excluded"
+        [google.fhir.stu3.proto.fhir_path_constraint]: "language.exists() or use.exists()"
       }
     }
     nested_type {

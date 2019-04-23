@@ -571,6 +571,8 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.StructureMap.Group.Rule.Target"
       options {
         [google.fhir.stu3.proto.field_description]: "Content to create because of this mapping rule"
+        [google.fhir.stu3.proto.fhir_path_constraint]: "context.exists() implies contextType.exists()"
+        [google.fhir.stu3.proto.fhir_path_constraint]: "element.exists() implies context.exists()"
       }
     }
     field {

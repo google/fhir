@@ -118,6 +118,7 @@ field {
   type_name: ".google.fhir.stu3.proto.String"
   options {
     [google.fhir.stu3.proto.field_description]: "Maximum Cardinality (a number or *)"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "empty() or ($this = \'*\') or (toInteger() >= 0)"
   }
 }
 field {
@@ -138,6 +139,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.TypeRef"
   options {
     [google.fhir.stu3.proto.field_description]: "Data type and Profile for this element"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "aggregation.empty() or (code = \'Reference\')"
   }
 }
 field {
@@ -248,6 +250,8 @@ field {
   type_name: ".google.fhir.stu3.proto.ElementdefinitionDe.ElementDefinitionBinding"
   options {
     [google.fhir.stu3.proto.field_description]: "ValueSet details if this is coded"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "valueSet.exists() or description.exists()"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "valueSet.is(uri).not() or valueSet.as(uri).startsWith(\'http:\') or valueSet.as(uri).startsWith(\'https\') or valueSet.as(uri).startsWith(\'urn:\')"
   }
 }
 field {

@@ -249,7 +249,8 @@ message ElementDefinition {
     // closed | open | openAtEnd
     SlicingRulesCode rules = 6 [(validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Slicing slicing = 8;
+  Slicing slicing = 8 [(fhir_path_constraint) =
+                           "discriminator.exists() or description.exists()"];
 
   // Concise definition for space-constrained presentation
   String short = 9;
@@ -270,7 +271,8 @@ message ElementDefinition {
   UnsignedInt min = 14;
 
   // Maximum Cardinality (a number or *)
-  String max = 15;
+  String max = 15 [(fhir_path_constraint) =
+                       "empty() or ($this = '*') or (toInteger() >= 0)"];
 
   // Base definition information for tools
   message Base {
@@ -317,7 +319,8 @@ message ElementDefinition {
     // either | independent | specific
     ReferenceVersionRulesCode versioning = 7;
   }
-  repeated TypeRef type = 18;
+  repeated TypeRef type = 18
+      [(fhir_path_constraint) = "aggregation.empty() or (code = 'Reference')"];
 
   // Specified value if missing from instance
   message DefaultValue {
@@ -635,7 +638,11 @@ message ElementDefinition {
     }
     ValueSet value_set = 5;
   }
-  ElementDefinitionBinding binding = 33;
+  ElementDefinitionBinding binding = 33 [
+    (fhir_path_constraint) = "valueSet.exists() or description.exists()",
+    (fhir_path_constraint) =
+        "valueSet.is(uri).not() or valueSet.as(uri).startsWith('http:') or valueSet.as(uri).startsWith('https') or valueSet.as(uri).startsWith('urn:')"
+  ];
 
   // Map element to another set of definitions
   message Mapping {
@@ -678,7 +685,11 @@ message Narrative {
   NarrativeStatusCode status = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Limited xhtml content
-  Xhtml div = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+  Xhtml div = 4 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) = "htmlchecks()",
+    (fhir_path_constraint) = "htmlchecks()"
+  ];
 }
 
 // Auto-generated from StructureDefinition for ParameterDefinition, last updated

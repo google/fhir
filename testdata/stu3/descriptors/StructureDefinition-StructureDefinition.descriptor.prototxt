@@ -260,6 +260,7 @@ field {
   type_name: ".google.fhir.stu3.proto.StructureDefinition.Mapping"
   options {
     [google.fhir.stu3.proto.field_description]: "External specification that the content is mapped to"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "name.exists() or uri.exists()"
   }
 }
 field {
@@ -353,6 +354,9 @@ field {
   type_name: ".google.fhir.stu3.proto.StructureDefinition.Snapshot"
   options {
     [google.fhir.stu3.proto.field_description]: "Snapshot view of the structure"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "element.first().type.empty()"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "element.first().path = %resource.type and element.tail().all(path.startsWith(%resource.type&\'.\'))"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "element.all(definition and min and max)"
   }
 }
 field {
@@ -363,6 +367,9 @@ field {
   type_name: ".google.fhir.stu3.proto.StructureDefinition.Differential"
   options {
     [google.fhir.stu3.proto.field_description]: "Differential view of the structure"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "element.first().path.contains(\'.\').not() implies element.first().type.empty()"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "element.first().slicing.empty()"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "element.first().path.startsWith(%resource.type) and element.tail().all(path.startsWith(%resource.type&\'.\'))"
   }
 }
 nested_type {

@@ -288,6 +288,14 @@ field {
   type_name: ".google.fhir.stu3.proto.Questionnaire.Item"
   options {
     [google.fhir.stu3.proto.field_description]: "Questions and sections within the Questionnaire"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "type!=\'display\' or readOnly.empty()"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "(type!=\'group\' and type!=\'display\') or initial.empty()"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "type!=\'display\' or (required.empty() and repeats.empty())"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "(type =\'choice\' or type = \'open-choice\') or (options.empty() and option.empty())"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "option.empty() or options.empty()"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "type!=\'display\' or code.empty()"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "(type in (\'boolean\' | \'decimal\' | \'integer\' | \'string\' | \'text\' | \'url\')) or maxLength.empty()"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "(type=\'group\' implies item.empty().not()) and (type.trace(\'type\')=\'display\' implies item.trace(\'item\').empty())"
   }
 }
 nested_type {
@@ -392,6 +400,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Questionnaire.Item.EnableWhen"
     options {
       [google.fhir.stu3.proto.field_description]: "Only allow data when"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "hasAnswer.exists() xor answer.exists()"
     }
   }
   field {

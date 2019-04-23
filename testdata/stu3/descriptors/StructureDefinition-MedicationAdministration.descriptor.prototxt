@@ -284,6 +284,7 @@ field {
   type_name: ".google.fhir.stu3.proto.MedicationAdministration.Dosage"
   options {
     [google.fhir.stu3.proto.field_description]: "Details of how medication was taken"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "dose.exists() or rate.exists()"
   }
 }
 field {

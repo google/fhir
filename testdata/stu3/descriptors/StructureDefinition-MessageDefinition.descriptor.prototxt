@@ -294,6 +294,7 @@ field {
   type_name: ".google.fhir.stu3.proto.MessageDefinition.Focus"
   options {
     [google.fhir.stu3.proto.field_description]: "Resource(s) that are the subject of the event"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "max=\'*\' or (max.toInteger() > 0)"
   }
 }
 field {

@@ -112,6 +112,11 @@ public class ProtoGenerator {
           "positiveInt", FieldDescriptorProto.Type.TYPE_UINT32,
           "unsignedInt", FieldDescriptorProto.Type.TYPE_UINT32);
 
+  // FHIR elements may have core constraint definitions that do not add
+  // value to protocol buffers, so we exclude them.
+  private static final ImmutableSet<String> EXCLUDED_FHIR_CONSTRAINTS =
+      ImmutableSet.of("hasValue() | (children().count() > id.count())");
+
   // Should we use custom types for constrained references?
   private static final boolean USE_TYPED_REFERENCES = false;
 
@@ -1152,6 +1157,18 @@ public class ProtoGenerator {
           addReferenceType(options, referenceType);
         }
       }
+    }
+
+    // Add any FHIRPath constraints from the definition.
+    List<String> expressions =
+        element.getConstraintList().stream()
+            .filter(constraint -> constraint.hasExpression())
+            .map(constraint -> constraint.getExpression().getValue())
+            .filter(expression -> !EXCLUDED_FHIR_CONSTRAINTS.contains(expression))
+            .collect(Collectors.toList());
+
+    if (!expressions.isEmpty()) {
+      options.setExtension(Annotations.fhirPathConstraint, expressions);
     }
 
     return buildFieldInternal(

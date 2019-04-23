@@ -288,6 +288,7 @@ field {
   type_name: ".google.fhir.stu3.proto.CarePlan.Activity"
   options {
     [google.fhir.stu3.proto.field_description]: "Action to occur as part of plan"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "detail.empty() or reference.empty()"
   }
 }
 field {

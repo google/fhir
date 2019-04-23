@@ -289,6 +289,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Observation.ReferenceRange"
   options {
     [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "low.exists() or high.exists() or text.exists()"
   }
 }
 field {

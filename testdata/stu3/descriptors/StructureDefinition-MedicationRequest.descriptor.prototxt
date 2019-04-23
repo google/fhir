@@ -231,6 +231,7 @@ field {
   type_name: ".google.fhir.stu3.proto.MedicationRequest.Requester"
   options {
     [google.fhir.stu3.proto.field_description]: "Who/What requested the Request"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "(agent.resolve().empty()) or (agent.resolve() is Device) or (agent.resolve() is Practitioner) or onBehalfOf.exists().not()"
   }
 }
 field {

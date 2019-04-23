@@ -81,8 +81,11 @@ message Bmi {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated CodeableConcept category = 12
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated CodeableConcept category = 12 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) =
+        "where(coding.system='http://hl7.org/fhir/observation-category' and coding.code='vital-signs').exists()"
+  ];
 
   // Body Mass Index (BMI)
   message CodeableConceptForCode {
@@ -206,7 +209,9 @@ message Bmi {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Used when reporting vital signs panel components
   message Related {
@@ -265,7 +270,8 @@ message Bmi {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 29;
+  repeated Component component = 29
+      [(fhir_path_constraint) = "value.exists() or dataAbsentReason.exists()"];
 }
 
 // Auto-generated from StructureDefinition for Vital Signs Profile.
@@ -323,8 +329,11 @@ message Bodyheight {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated CodeableConcept category = 12
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated CodeableConcept category = 12 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) =
+        "where(coding.system='http://hl7.org/fhir/observation-category' and coding.code='vital-signs').exists()"
+  ];
 
   // Body Height
   message CodeableConceptForCode {
@@ -448,7 +457,9 @@ message Bodyheight {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Used when reporting vital signs panel components
   message Related {
@@ -507,7 +518,8 @@ message Bodyheight {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 29;
+  repeated Component component = 29
+      [(fhir_path_constraint) = "value.exists() or dataAbsentReason.exists()"];
 }
 
 // Auto-generated from StructureDefinition for Vital Signs Profile.
@@ -565,8 +577,11 @@ message Bodylength {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated CodeableConcept category = 12
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated CodeableConcept category = 12 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) =
+        "where(coding.system='http://hl7.org/fhir/observation-category' and coding.code='vital-signs').exists()"
+  ];
 
   // Body Length
   message CodeableConceptForCode {
@@ -690,7 +705,9 @@ message Bodylength {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Used when reporting vital signs panel components
   message Related {
@@ -749,7 +766,8 @@ message Bodylength {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 29;
+  repeated Component component = 29
+      [(fhir_path_constraint) = "value.exists() or dataAbsentReason.exists()"];
 }
 
 // Auto-generated from StructureDefinition for Vital Signs Profile.
@@ -807,8 +825,11 @@ message Bodytemp {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated CodeableConcept category = 12
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated CodeableConcept category = 12 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) =
+        "where(coding.system='http://hl7.org/fhir/observation-category' and coding.code='vital-signs').exists()"
+  ];
 
   // Body Temperature
   message CodeableConceptForCode {
@@ -932,7 +953,9 @@ message Bodytemp {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Used when reporting vital signs panel components
   message Related {
@@ -991,7 +1014,8 @@ message Bodytemp {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 29;
+  repeated Component component = 29
+      [(fhir_path_constraint) = "value.exists() or dataAbsentReason.exists()"];
 }
 
 // Auto-generated from StructureDefinition for Vital Signs Profile.
@@ -1049,8 +1073,11 @@ message Bodyweight {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated CodeableConcept category = 12
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated CodeableConcept category = 12 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) =
+        "where(coding.system='http://hl7.org/fhir/observation-category' and coding.code='vital-signs').exists()"
+  ];
 
   // Body Weight
   message CodeableConceptForCode {
@@ -1174,7 +1201,9 @@ message Bodyweight {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Used when reporting vital signs panel components
   message Related {
@@ -1233,7 +1262,8 @@ message Bodyweight {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 29;
+  repeated Component component = 29
+      [(fhir_path_constraint) = "value.exists() or dataAbsentReason.exists()"];
 }
 
 // Auto-generated from StructureDefinition for Vital Signs Profile.
@@ -1291,8 +1321,11 @@ message Bp {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated CodeableConcept category = 12
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated CodeableConcept category = 12 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) =
+        "where(coding.system='http://hl7.org/fhir/observation-category' and coding.code='vital-signs').exists()"
+  ];
 
   // Blood Pressure
   message CodeableConceptForCode {
@@ -1406,7 +1439,9 @@ message Bp {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Used when reporting vital signs panel components
   message Related {
@@ -1434,7 +1469,8 @@ message Bp {
 
   // Used when reporting systolic and diastolic blood pressure.
   message Component {}
-  repeated Component component = 29;
+  repeated Component component = 29
+      [(fhir_path_constraint) = "value.exists() or dataAbsentReason.exists()"];
 
   // Used when reporting systolic and diastolic blood pressure.
   message SystolicBP {
@@ -1491,7 +1527,8 @@ message Bp {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated SystolicBP systolic_b_p = 30;
+  repeated SystolicBP systolic_b_p = 30
+      [(fhir_path_constraint) = "value.exists() or dataAbsentReason.exists()"];
 
   // Used when reporting systolic and diastolic blood pressure.
   message DiastolicBP {
@@ -1548,7 +1585,8 @@ message Bp {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated DiastolicBP diastolic_b_p = 31;
+  repeated DiastolicBP diastolic_b_p = 31
+      [(fhir_path_constraint) = "value.exists() or dataAbsentReason.exists()"];
 }
 
 // Auto-generated from StructureDefinition for Example Lipid Profile.
@@ -1691,13 +1729,19 @@ message Cholesterol {
     repeated Extension modifier_extension = 3;
 
     // A fixed quantity (no comparator)
-    SimpleQuantity high = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    SimpleQuantity high = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (fhir_path_constraint) = "code.empty() or system.exists()",
+      (fhir_path_constraint) = "comparator.empty()"
+    ];
 
     // Text based reference range in an observation
     String text = 9;
   }
-  ReferenceRange reference_range = 27
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  ReferenceRange reference_range = 27 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) = "low.exists() or high.exists() or text.exists()"
+  ];
 
   // Component results
   message Component {
@@ -1938,7 +1982,11 @@ message Clinicaldocument {
     // Nested Section
     repeated Section section = 11;
   }
-  repeated Section section = 23;
+  repeated Section section = 23 [
+    (fhir_path_constraint) =
+        "text.exists() or entry.exists() or section.exists()",
+    (fhir_path_constraint) = "emptyReason.empty() or entry.empty()"
+  ];
 }
 
 // Auto-generated from StructureDefinition for Device Metric Observation
@@ -2090,7 +2138,9 @@ message Devicemetricobservation {
     // Text based reference range in an observation
     String text = 9;
   }
-  ReferenceRange reference_range = 27;
+  ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Resource related to this observation
   message Related {
@@ -2372,7 +2422,8 @@ message ElementdefinitionDe {
   UnsignedInt min = 14;
 
   // Maximum Cardinality (a number or *)
-  String max = 15;
+  String max = 15 [(fhir_path_constraint) =
+                       "empty() or ($this = '*') or (toInteger() >= 0)"];
 
   // Base definition information for tools
   message Base {
@@ -2410,7 +2461,8 @@ message ElementdefinitionDe {
     // either | independent | specific
     ReferenceVersionRulesCode versioning = 7;
   }
-  repeated TypeRef type = 18;
+  repeated TypeRef type = 18
+      [(fhir_path_constraint) = "aggregation.empty() or (code = 'Reference')"];
 
   // Specified value if missing from instance
   message DefaultValue {
@@ -2628,7 +2680,11 @@ message ElementdefinitionDe {
     }
     ValueSet value_set = 5;
   }
-  ElementDefinitionBinding binding = 33;
+  ElementDefinitionBinding binding = 33 [
+    (fhir_path_constraint) = "valueSet.exists() or description.exists()",
+    (fhir_path_constraint) =
+        "valueSet.is(uri).not() or valueSet.as(uri).startsWith('http:') or valueSet.as(uri).startsWith('https') or valueSet.as(uri).startsWith('urn:')"
+  ];
 
   // Map element to another set of definitions
   message Mapping {
@@ -2987,13 +3043,19 @@ message Hdlcholesterol {
     repeated Extension modifier_extension = 3;
 
     // A fixed quantity (no comparator)
-    SimpleQuantity low = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
+    SimpleQuantity low = 4 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (fhir_path_constraint) = "code.empty() or system.exists()",
+      (fhir_path_constraint) = "comparator.empty()"
+    ];
 
     // Text based reference range in an observation
     String text = 9;
   }
-  ReferenceRange reference_range = 27
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  ReferenceRange reference_range = 27 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) = "low.exists() or high.exists() or text.exists()"
+  ];
 
   // Component results
   message Component {
@@ -3095,8 +3157,11 @@ message Headcircum {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated CodeableConcept category = 12
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated CodeableConcept category = 12 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) =
+        "where(coding.system='http://hl7.org/fhir/observation-category' and coding.code='vital-signs').exists()"
+  ];
 
   // Head Circumference
   message CodeableConceptForCode {
@@ -3220,7 +3285,9 @@ message Headcircum {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Used when reporting vital signs panel components
   message Related {
@@ -3279,7 +3346,8 @@ message Headcircum {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 29;
+  repeated Component component = 29
+      [(fhir_path_constraint) = "value.exists() or dataAbsentReason.exists()"];
 }
 
 // Auto-generated from StructureDefinition for Vital Signs Profile.
@@ -3337,8 +3405,11 @@ message Heartrate {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated CodeableConcept category = 12
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated CodeableConcept category = 12 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) =
+        "where(coding.system='http://hl7.org/fhir/observation-category' and coding.code='vital-signs').exists()"
+  ];
 
   // Heart Rate
   message CodeableConceptForCode {
@@ -3462,7 +3533,9 @@ message Heartrate {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Used when reporting vital signs panel components
   message Related {
@@ -3521,7 +3594,8 @@ message Heartrate {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 29;
+  repeated Component component = 29
+      [(fhir_path_constraint) = "value.exists() or dataAbsentReason.exists()"];
 }
 
 // Auto-generated from StructureDefinition for Profile for HLA Genotyping
@@ -3842,13 +3916,19 @@ message Ldlcholesterol {
     repeated Extension modifier_extension = 3;
 
     // A fixed quantity (no comparator)
-    SimpleQuantity high = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+    SimpleQuantity high = 5 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (fhir_path_constraint) = "code.empty() or system.exists()",
+      (fhir_path_constraint) = "comparator.empty()"
+    ];
 
     // Text based reference range in an observation
     String text = 9;
   }
-  ReferenceRange reference_range = 27
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  ReferenceRange reference_range = 27 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) = "low.exists() or high.exists() or text.exists()"
+  ];
 
   // Component results
   message Component {
@@ -4302,7 +4382,9 @@ message ObservationGenetics {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Resource related to this observation
   message Related {
@@ -4520,8 +4602,11 @@ message Oxygensat {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated CodeableConcept category = 12
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated CodeableConcept category = 12 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) =
+        "where(coding.system='http://hl7.org/fhir/observation-category' and coding.code='vital-signs').exists()"
+  ];
 
   // Oxygen Saturation
   message CodeableConceptForCode {
@@ -4645,7 +4730,9 @@ message Oxygensat {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Used when reporting vital signs panel components
   message Related {
@@ -4704,7 +4791,8 @@ message Oxygensat {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 29;
+  repeated Component component = 29
+      [(fhir_path_constraint) = "value.exists() or dataAbsentReason.exists()"];
 }
 
 // Auto-generated from StructureDefinition for ProcedureRequest-Genetics.
@@ -4942,8 +5030,11 @@ message Resprate {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated CodeableConcept category = 12
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated CodeableConcept category = 12 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) =
+        "where(coding.system='http://hl7.org/fhir/observation-category' and coding.code='vital-signs').exists()"
+  ];
 
   // Respiratory Rate
   message CodeableConceptForCode {
@@ -5067,7 +5158,9 @@ message Resprate {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Used when reporting vital signs panel components
   message Related {
@@ -5126,7 +5219,8 @@ message Resprate {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 29;
+  repeated Component component = 29
+      [(fhir_path_constraint) = "value.exists() or dataAbsentReason.exists()"];
 }
 
 // Auto-generated from StructureDefinition for Shareable CodeSystem.
@@ -5551,8 +5645,13 @@ message Shareablevalueset {
       // Select only contents included in this value set
       repeated Uri value_set = 8;
     }
-    repeated ConceptSet include = 6
-        [(validation_requirement) = REQUIRED_BY_FHIR];
+    repeated ConceptSet include = 6 [
+      (validation_requirement) = REQUIRED_BY_FHIR,
+      (fhir_path_constraint) =
+          "(concept.exists() or filter.exists()) implies system.exists()",
+      (fhir_path_constraint) = "concept.empty() or filter.empty()",
+      (fhir_path_constraint) = "valueSet.exists() or system.exists()"
+    ];
 
     // Explicitly exclude codes from a code system or other value sets
     repeated ConceptSet exclude = 7;
@@ -5648,7 +5747,11 @@ message Shareablevalueset {
       // Codes contained under this entry
       repeated Contains contains = 11;
     }
-    repeated Contains contains = 9;
+    repeated Contains contains = 9 [
+      (fhir_path_constraint) = "code.exists() or display.exists()",
+      (fhir_path_constraint) = "code.exists() or abstract = true",
+      (fhir_path_constraint) = "code.empty() or system.exists()"
+    ];
   }
   Expansion expansion = 27;
 }
@@ -5798,8 +5901,10 @@ message Triglyceride {
     // Text based reference range in an observation
     String text = 9;
   }
-  ReferenceRange reference_range = 27
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  ReferenceRange reference_range = 27 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) = "low.exists() or high.exists() or text.exists()"
+  ];
 
   // Component results
   message Component {
@@ -5899,8 +6004,11 @@ message Vitalsigns {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated CodeableConcept category = 12
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated CodeableConcept category = 12 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) =
+        "where(coding.system='http://hl7.org/fhir/observation-category' and coding.code='vital-signs').exists()"
+  ];
 
   // Coded Responses from C-CDA Vital Sign Results
   CodeableConcept code = 13 [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -6002,7 +6110,9 @@ message Vitalsigns {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Used when reporting vital signs panel components
   message Related {
@@ -6061,7 +6171,8 @@ message Vitalsigns {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 29;
+  repeated Component component = 29
+      [(fhir_path_constraint) = "value.exists() or dataAbsentReason.exists()"];
 }
 
 // Auto-generated from StructureDefinition for Vital Signs Profile.
@@ -6119,8 +6230,11 @@ message Vitalspanel {
       [(validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated CodeableConcept category = 12
-      [(validation_requirement) = REQUIRED_BY_FHIR];
+  repeated CodeableConcept category = 12 [
+    (validation_requirement) = REQUIRED_BY_FHIR,
+    (fhir_path_constraint) =
+        "where(coding.system='http://hl7.org/fhir/observation-category' and coding.code='vital-signs').exists()"
+  ];
 
   // Vital Signs Panel
   message CodeableConceptForCode {
@@ -6234,7 +6348,9 @@ message Vitalspanel {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Used when reporting vital signs panel components
   message Related {
@@ -6293,5 +6409,6 @@ message Vitalspanel {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 29;
+  repeated Component component = 29
+      [(fhir_path_constraint) = "value.exists() or dataAbsentReason.exists()"];
 }

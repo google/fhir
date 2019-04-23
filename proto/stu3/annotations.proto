@@ -124,6 +124,11 @@ extend google.protobuf.FieldOptions {
   // this also sets a fixed code.
   string fhir_inlined_coding_code = 212122564;
 
+  // FHIRPath-based constraints that apply to the field in question.
+  // These constraints are propagated from the constraint.expression
+  // field on the FHIR ElementDefinition and may be used for data validation.
+  repeated string fhir_path_constraint = 244450286;
+
   // Indicates which resource types can be valid references.
   repeated string valid_reference_type = 218884094;
 

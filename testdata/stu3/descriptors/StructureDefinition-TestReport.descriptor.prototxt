@@ -309,6 +309,7 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "A setup operation or assert that was executed"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "operation.exists() xor assert.exists()"
     }
   }
   nested_type {
@@ -555,6 +556,7 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "A test operation or assert that was performed"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "operation.exists() xor assert.exists()"
     }
   }
   nested_type {

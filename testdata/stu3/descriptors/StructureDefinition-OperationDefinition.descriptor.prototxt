@@ -305,6 +305,8 @@ field {
   type_name: ".google.fhir.stu3.proto.OperationDefinition.Parameter"
   options {
     [google.fhir.stu3.proto.field_description]: "Parameters for the operation/query"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "type.exists() or part.exists()"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "searchType implies type = \'string\'"
   }
 }
 field {

@@ -331,6 +331,9 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "Include one or more codes from a code system or other value set(s)"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "(concept.exists() or filter.exists()) implies system.exists()"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "concept.empty() or filter.empty()"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "valueSet.exists() or system.exists()"
     }
   }
   field {
@@ -713,6 +716,9 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.ValueSet.Expansion.Contains"
     options {
       [google.fhir.stu3.proto.field_description]: "Codes in the value set"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "code.exists() or display.exists()"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "code.exists() or abstract = true"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "code.empty() or system.exists()"
     }
   }
   nested_type {

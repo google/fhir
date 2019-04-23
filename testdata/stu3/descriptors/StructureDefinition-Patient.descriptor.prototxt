@@ -197,6 +197,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Patient.Contact"
   options {
     [google.fhir.stu3.proto.field_description]: "A contact party (e.g. guardian, partner, friend) for the patient"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "name.exists() or telecom.exists() or address.exists() or organization.exists()"
   }
 }
 field {

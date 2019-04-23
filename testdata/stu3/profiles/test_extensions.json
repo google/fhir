@@ -7,7 +7,7 @@
         "id": "SimpleDecimalExt",
         "url": "http://test/url/base/SimpleDecimalExt",
         "name": "SimpleDecimalExt",
-        "date": "2019-01-11",
+        "date": "2019-04-22",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -236,7 +236,7 @@
         "id": "SimpleCodeableConceptExtension",
         "url": "http://test/url/base/SimpleCodeableConceptExtension",
         "name": "SimpleCodeableConceptExtension",
-        "date": "2019-01-11",
+        "date": "2019-04-22",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -495,7 +495,7 @@
         "id": "DigitalMediaType",
         "url": "http://test/url/base/DigitalMediaType",
         "name": "DigitalMediaType",
-        "date": "2019-01-11",
+        "date": "2019-04-22",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -754,7 +754,7 @@
         "id": "ComplexExt",
         "url": "http://test/url/base/ComplexExt",
         "name": "ComplexExt",
-        "date": "2019-01-11",
+        "date": "2019-04-22",
         "publisher": "Testington Inc.",
         "contact": [
           {

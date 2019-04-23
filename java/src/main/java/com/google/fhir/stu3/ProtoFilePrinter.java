@@ -480,6 +480,17 @@ public class ProtoFilePrinter {
       hasFieldOption =
           addFieldOption("json_name", "\"" + field.getJsonName() + "\"", hasFieldOption, message);
     }
+
+    for (int i = 0; i < options.getExtensionCount(Annotations.fhirPathConstraint); i++) {
+      String fhirPathConstraint = options.getExtension(Annotations.fhirPathConstraint, i);
+      hasFieldOption =
+          addFieldOption(
+              "(" + optionPackage + "fhir_path_constraint)",
+              "\"" + fhirPathConstraint + "\"",
+              hasFieldOption,
+              message);
+    }
+
     if (hasFieldOption) {
       message.append("]");
     }

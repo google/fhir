@@ -249,8 +249,11 @@ message UsCoreCareplan {
       [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Type of plan
-  repeated proto.CodeableConcept category = 16
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  repeated proto.CodeableConcept category = 16 [
+    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.stu3.proto.fhir_path_constraint) =
+        "where(coding.system='http://hl7.org/fhir/us/core/CodeSystem/careplan-category' and coding.code='assess-plan').exists()"
+  ];
 
   // Human-friendly name for the CarePlan
   proto.String title = 17;
@@ -429,7 +432,9 @@ message UsCoreCareplan {
     }
     Detail detail = 8;
   }
-  repeated Activity activity = 27;
+  repeated Activity activity = 27
+      [(.google.fhir.stu3.proto.fhir_path_constraint) =
+           "detail.empty() or reference.empty()"];
 
   // Comments about the plan
   repeated proto.Annotation note = 28;
@@ -528,8 +533,11 @@ message UsCoreCareteam {
     // Time period of participant
     proto.Period period = 7;
   }
-  repeated Participant participant = 16
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  repeated Participant participant = 16 [
+    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.stu3.proto.fhir_path_constraint) =
+        "onBehalfOf.exists() implies (member.resolve() is Practitioner)"
+  ];
 
   // Why the care team exists
   repeated proto.CodeableConcept reason_code = 17;
@@ -677,7 +685,8 @@ message UsCoreCondition {
       (.google.fhir.stu3.proto.valid_reference_type) = "Observation"
     ];
   }
-  Stage stage = 22;
+  Stage stage = 22 [(.google.fhir.stu3.proto.fhir_path_constraint) =
+                        "summary.exists() or assessment.exists()"];
 
   // Supporting evidence
   message Evidence {
@@ -697,7 +706,9 @@ message UsCoreCondition {
     repeated proto.Reference detail = 5
         [(.google.fhir.stu3.proto.valid_reference_type) = "Resource"];
   }
-  repeated Evidence evidence = 23;
+  repeated Evidence evidence = 23
+      [(.google.fhir.stu3.proto.fhir_path_constraint) =
+           "code.exists() or detail.exists()"];
 
   // Additional information about the Condition
   repeated proto.Annotation note = 24;
@@ -1140,7 +1151,9 @@ message UsCoreGoal {
     }
     Due due = 6;
   }
-  Target target = 16;
+  Target target = 16
+      [(.google.fhir.stu3.proto.fhir_path_constraint) =
+           "(detail.exists() and measure.exists()) or detail.exists().not()"];
 
   // When goal status took effect
   proto.Date status_date = 17;
@@ -1222,8 +1235,11 @@ message UsCoreImmunization {
       [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Vaccine Product Type (bind to CVX)
-  proto.CodeableConcept vaccine_code = 12
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  proto.CodeableConcept vaccine_code = 12 [
+    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.stu3.proto.fhir_path_constraint) =
+        "coding.where(system='http://hl7.org/fhir/sid/ndc').empty()"
+  ];
 
   // Who was immunized
   proto.Reference patient = 13 [
@@ -1763,8 +1779,11 @@ message UsCoreMedicationrequest {
     proto.Reference on_behalf_of = 5
         [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
   }
-  Requester requester = 22
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  Requester requester = 22 [
+    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.stu3.proto.fhir_path_constraint) =
+        "(agent.resolve().empty()) or (agent.resolve() is Device) or (agent.resolve() is Practitioner) or onBehalfOf.exists().not()"
+  ];
 
   // Person who entered the request
   proto.Reference recorder = 23
@@ -2041,8 +2060,11 @@ message UsCoreObservationresults {
       [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
-  repeated proto.CodeableConcept category = 12
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  repeated proto.CodeableConcept category = 12 [
+    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.stu3.proto.fhir_path_constraint) =
+        "where(coding.system='http://hl7.org/fhir/observation-category' and coding.code='laboratory').exists()"
+  ];
 
   // Laboratory Test Name
   proto.CodeableConcept code = 13
@@ -2156,7 +2178,9 @@ message UsCoreObservationresults {
     // Text based reference range in an observation
     proto.String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(.google.fhir.stu3.proto.fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Resource related to this observation
   message Related {
@@ -2283,12 +2307,18 @@ message UsCoreOrganization {
   repeated proto.String alias = 13;
 
   // A contact detail for the organization
-  repeated proto.ContactPoint telecom = 14
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  repeated proto.ContactPoint telecom = 14 [
+    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.stu3.proto.fhir_path_constraint) =
+        "where(use = 'home').empty()"
+  ];
 
   // An address for the organization
-  repeated proto.Address address = 15
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  repeated proto.Address address = 15 [
+    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.stu3.proto.fhir_path_constraint) =
+        "where(use = 'home').empty()"
+  ];
 
   // The organization of which this organization forms a part
   proto.Reference part_of = 16
@@ -2445,7 +2475,10 @@ message UsCorePatient {
     // be contacted relating to this patient
     proto.Period period = 10;
   }
-  repeated Contact contact = 20;
+  repeated Contact contact = 20 [
+    (.google.fhir.stu3.proto.fhir_path_constraint) =
+        "name.exists() or telecom.exists() or address.exists() or organization.exists()"
+  ];
 
   // A list of Languages which may be used to communicate with the patient about
   // his or her health
@@ -3020,7 +3053,9 @@ message UsCoreSmokingstatus {
     // Text based reference range in an observation
     proto.String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(.google.fhir.stu3.proto.fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Resource related to this observation
   message Related {

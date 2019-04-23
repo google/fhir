@@ -260,6 +260,7 @@ field {
   type_name: ".google.fhir.stu3.proto.TestScript.Metadata"
   options {
     [google.fhir.stu3.proto.field_description]: "Required capability that is assumed to function correctly on the FHIR server being tested"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "capability.required.exists() or capability.validated.exists()"
   }
 }
 field {
@@ -291,6 +292,7 @@ field {
   type_name: ".google.fhir.stu3.proto.TestScript.Variable"
   options {
     [google.fhir.stu3.proto.field_description]: "Placeholder for evaluated elements"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "expression.empty() or headerField.empty() or path.empty()"
   }
 }
 field {
@@ -1158,6 +1160,7 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "A setup operation or assert to perform"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "operation.exists() xor assert.exists()"
     }
   }
   nested_type {
@@ -1200,6 +1203,7 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.TestScript.Setup.SetupAction.Operation"
       options {
         [google.fhir.stu3.proto.field_description]: "The setup operation to perform"
+        [google.fhir.stu3.proto.fhir_path_constraint]: "sourceId.exists() or (targetId.count() + url.count() + params.count() = 1) or (type.code in (\'capabilities\' |\'search\' | \'transaction\' | \'history\'))"
       }
     }
     field {
@@ -1210,6 +1214,9 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.TestScript.Setup.SetupAction.Assert"
       options {
         [google.fhir.stu3.proto.field_description]: "The assertion to perform"
+        [google.fhir.stu3.proto.fhir_path_constraint]: "contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count() + rule.count() + ruleset.count() + validateProfileId.count() <=1"
+        [google.fhir.stu3.proto.fhir_path_constraint]: "compareToSourceId.empty() xor (compareToSourceExpression.exists() or compareToSourcePath.exists())"
+        [google.fhir.stu3.proto.fhir_path_constraint]: "(response.empty() and responseCode.empty() and direction = \'request\') or direction.empty() or direction = \'response\'"
       }
       json_name: "assert"
     }
@@ -2069,6 +2076,7 @@ nested_type {
     options {
       [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.stu3.proto.field_description]: "A test operation or assert to perform"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "operation.exists() xor assert.exists()"
     }
   }
   nested_type {
@@ -2111,6 +2119,7 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.TestScript.Setup.SetupAction.Operation"
       options {
         [google.fhir.stu3.proto.field_description]: "The setup operation to perform"
+        [google.fhir.stu3.proto.fhir_path_constraint]: "sourceId.exists() or (targetId.count() + url.count() + params.count() = 1) or (type.code in (\'capabilities\' | \'search\' | \'transaction\' | \'history\'))"
       }
     }
     field {
@@ -2121,6 +2130,9 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.TestScript.Setup.SetupAction.Assert"
       options {
         [google.fhir.stu3.proto.field_description]: "The setup assertion to perform"
+        [google.fhir.stu3.proto.fhir_path_constraint]: "contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count() + rule.count() + ruleset.count() + validateProfileId.count() <=1"
+        [google.fhir.stu3.proto.fhir_path_constraint]: "compareToSourceId.empty() xor (compareToSourceExpression.exists() or compareToSourcePath.exists())"
+        [google.fhir.stu3.proto.fhir_path_constraint]: "(response.empty() and responseCode.empty() and direction = \'request\') or direction.empty() or direction = \'response\'"
       }
       json_name: "assert"
     }
@@ -2210,6 +2222,7 @@ nested_type {
       options {
         [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.stu3.proto.field_description]: "The teardown operation to perform"
+        [google.fhir.stu3.proto.fhir_path_constraint]: "sourceId.exists() or (targetId.count() + url.count() + params.count() = 1) or (type.code in (\'capabilities\' | \'search\' | \'transaction\' | \'history\'))"
       }
     }
   }

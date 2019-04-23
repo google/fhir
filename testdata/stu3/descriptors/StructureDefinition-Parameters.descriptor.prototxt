@@ -47,6 +47,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Parameters.Parameter"
   options {
     [google.fhir.stu3.proto.field_description]: "Operation Parameter"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "(part.exists() and value.empty() and resource.empty()) or (part.empty() and (value.exists() xor resource.exists()))"
   }
 }
 nested_type {

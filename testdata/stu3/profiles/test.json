@@ -7,7 +7,7 @@
         "id": "Bundle",
         "url": "http://test/url/base/Bundle",
         "name": "Bundle",
-        "date": "2019-04-05",
+        "date": "2019-04-22",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1164,7 +1164,7 @@
         "id": "TestPatient",
         "url": "http://test/url/base/TestPatient",
         "name": "TestPatient",
-        "date": "2019-04-05",
+        "date": "2019-04-22",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -3031,7 +3031,7 @@
         "id": "TestObservation",
         "url": "http://test/url/base/TestObservation",
         "name": "TestObservation",
-        "date": "2019-04-05",
+        "date": "2019-04-22",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -7388,7 +7388,7 @@
         "id": "TestObservationLvl2",
         "url": "http://test/url/base/TestObservationLvl2",
         "name": "TestObservationLvl2",
-        "date": "2019-04-05",
+        "date": "2019-04-22",
         "publisher": "Testington Inc.",
         "contact": [
           {

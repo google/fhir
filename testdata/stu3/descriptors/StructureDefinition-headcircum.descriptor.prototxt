@@ -126,6 +126,7 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Classification of  type of observation"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "where(coding.system=\'http://hl7.org/fhir/observation-category\' and coding.code=\'vital-signs\').exists()"
   }
 }
 field {
@@ -289,6 +290,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Headcircum.ReferenceRange"
   options {
     [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "low.exists() or high.exists() or text.exists()"
   }
 }
 field {
@@ -309,6 +311,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Headcircum.Component"
   options {
     [google.fhir.stu3.proto.field_description]: "Used when reporting systolic and diastolic blood pressure."
+    [google.fhir.stu3.proto.fhir_path_constraint]: "value.exists() or dataAbsentReason.exists()"
   }
 }
 nested_type {

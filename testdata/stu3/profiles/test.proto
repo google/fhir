@@ -181,7 +181,12 @@ message Bundle {
     }
     Response response = 9;
   }
-  repeated Entry entry = 9;
+  repeated Entry entry = 9 [
+    (.google.fhir.stu3.proto.fhir_path_constraint) =
+        "fullUrl.contains('/_history/').not()",
+    (.google.fhir.stu3.proto.fhir_path_constraint) =
+        "resource.exists() or request.exists() or response.exists()"
+  ];
 
   // Digital Signature
   proto.Signature signature = 10;
@@ -305,7 +310,10 @@ message TestPatient {
     // be contacted relating to this patient
     proto.Period period = 10;
   }
-  repeated Contact contact = 20;
+  repeated Contact contact = 20 [
+    (.google.fhir.stu3.proto.fhir_path_constraint) =
+        "name.exists() or telecom.exists() or address.exists() or organization.exists()"
+  ];
 
   // This patient is known to be an animal (non-human)
   message Animal {
@@ -618,7 +626,9 @@ message TestObservation {
     // Text based reference range in an observation
     proto.String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(.google.fhir.stu3.proto.fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Resource related to this observation
   message Related {
@@ -951,7 +961,9 @@ message TestObservationLvl2 {
     // Text based reference range in an observation
     proto.String text = 9;
   }
-  repeated ReferenceRange reference_range = 27;
+  repeated ReferenceRange reference_range = 27
+      [(.google.fhir.stu3.proto.fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Resource related to this observation
   message Related {

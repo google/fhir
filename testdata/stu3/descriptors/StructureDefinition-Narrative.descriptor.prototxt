@@ -39,6 +39,8 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Limited xhtml content"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "htmlchecks()"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "htmlchecks()"
   }
 }
 options {

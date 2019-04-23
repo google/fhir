@@ -334,6 +334,7 @@ field {
   type_name: ".google.fhir.stu3.proto.CapabilityStatement.Rest"
   options {
     [google.fhir.stu3.proto.field_description]: "If the endpoint is a RESTful one"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "resource.select(type).isDistinct()"
   }
 }
 field {
@@ -344,6 +345,7 @@ field {
   type_name: ".google.fhir.stu3.proto.CapabilityStatement.Messaging"
   options {
     [google.fhir.stu3.proto.field_description]: "If messaging is supported"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "supportedMessage.empty() != event.empty()"
   }
 }
 field {
@@ -545,6 +547,7 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.CapabilityStatement.Rest.Resource"
     options {
       [google.fhir.stu3.proto.field_description]: "Resource served on the REST interface"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "searchParam.select(name).isDistinct()"
     }
   }
   field {

@@ -95,7 +95,9 @@ message ComplexExt {
   proto.String id = 1;
 
   // simple subfield
-  proto.String simple_subfield = 4;
+  proto.String simple_subfield = 4
+      [(.google.fhir.stu3.proto.fhir_path_constraint) =
+           "extension.exists() != value.exists()"];
 
   // complex subfield
   message ComplexSubfield {
@@ -112,11 +114,18 @@ message ComplexExt {
         proto.Boolean boolean = 3;
       }
     }
-    SimpleSubSubFieldA simple_sub_sub_field_a = 4;
+    SimpleSubSubFieldA simple_sub_sub_field_a = 4
+        [(.google.fhir.stu3.proto.fhir_path_constraint) =
+             "extension.exists() != value.exists()"];
 
     // simple sub sub field b
-    repeated proto.UnsignedInt simple_sub_sub_field_b = 5;
+    repeated proto.UnsignedInt simple_sub_sub_field_b = 5
+        [(.google.fhir.stu3.proto.fhir_path_constraint) =
+             "extension.exists() != value.exists()"];
   }
-  ComplexSubfield complex_subfield = 5
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  ComplexSubfield complex_subfield = 5 [
+    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.stu3.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
 }

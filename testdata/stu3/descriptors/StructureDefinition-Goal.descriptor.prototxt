@@ -162,6 +162,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Goal.Target"
   options {
     [google.fhir.stu3.proto.field_description]: "Target outcome for the goal"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "(detail.exists() and measure.exists()) or detail.exists().not()"
   }
 }
 field {

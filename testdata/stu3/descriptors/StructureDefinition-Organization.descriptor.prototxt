@@ -137,6 +137,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ContactPoint"
   options {
     [google.fhir.stu3.proto.field_description]: "A contact detail for the organization"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "where(use = \'home\').empty()"
   }
 }
 field {
@@ -147,6 +148,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Address"
   options {
     [google.fhir.stu3.proto.field_description]: "An address for the organization"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "where(use = \'home\').empty()"
   }
 }
 field {

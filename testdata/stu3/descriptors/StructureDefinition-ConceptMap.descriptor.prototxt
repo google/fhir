@@ -407,6 +407,8 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.ConceptMap.Group.Unmapped"
     options {
       [google.fhir.stu3.proto.field_description]: "When no match in the mappings"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "(mode = \'other-map\') implies url.exists()"
+      [google.fhir.stu3.proto.fhir_path_constraint]: "(mode = \'fixed\') implies code.exists()"
     }
   }
   nested_type {
@@ -469,6 +471,7 @@ nested_type {
       type_name: ".google.fhir.stu3.proto.ConceptMap.Group.SourceElement.TargetElement"
       options {
         [google.fhir.stu3.proto.field_description]: "Concept in target system for element"
+        [google.fhir.stu3.proto.fhir_path_constraint]: "comment.exists() or equivalence.empty() or ((equivalence != \'narrower\') and (equivalence != \'inexact\'))"
       }
     }
     nested_type {

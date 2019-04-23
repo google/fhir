@@ -225,6 +225,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Condition.Stage"
   options {
     [google.fhir.stu3.proto.field_description]: "Stage/grade, usually assessed formally"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "summary.exists() or assessment.exists()"
   }
 }
 field {
@@ -235,6 +236,7 @@ field {
   type_name: ".google.fhir.stu3.proto.Condition.Evidence"
   options {
     [google.fhir.stu3.proto.field_description]: "Supporting evidence"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "code.exists() or detail.exists()"
   }
 }
 field {

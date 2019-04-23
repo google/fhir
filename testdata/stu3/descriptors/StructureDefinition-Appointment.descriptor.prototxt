@@ -274,6 +274,7 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Participants involved in appointment"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "type.exists() or actor.exists()"
   }
 }
 field {

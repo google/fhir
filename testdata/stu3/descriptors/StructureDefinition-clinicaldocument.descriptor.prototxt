@@ -245,6 +245,8 @@ field {
   type_name: ".google.fhir.stu3.proto.Clinicaldocument.Section"
   options {
     [google.fhir.stu3.proto.field_description]: "Composition is broken into sections"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "text.exists() or entry.exists() or section.exists()"
+    [google.fhir.stu3.proto.fhir_path_constraint]: "emptyReason.empty() or entry.empty()"
   }
 }
 nested_type {

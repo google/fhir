@@ -1230,7 +1230,18 @@ message Timing {
     // Minutes from event (before or after)
     UnsignedInt offset = 17;
   }
-  Repeat repeat = 4;
+  Repeat repeat = 4 [
+    (fhir_path_constraint) =
+        "offset.empty() or (when.exists() and ((when in ('C' | 'CM' | 'CD' | 'CV')).not()))",
+    (fhir_path_constraint) = "period.exists() implies period >= 0",
+    (fhir_path_constraint) = "periodMax.empty() or period.exists()",
+    (fhir_path_constraint) = "durationMax.empty() or duration.exists()",
+    (fhir_path_constraint) = "countMax.empty() or count.exists()",
+    (fhir_path_constraint) = "duration.empty() or durationUnit.exists()",
+    (fhir_path_constraint) = "timeOfDay.empty() or when.empty()",
+    (fhir_path_constraint) = "period.empty() or periodUnit.exists()",
+    (fhir_path_constraint) = "duration.exists() implies duration >= 0"
+  ];
 
   // BID | TID | QID | AM | PM | QD | QOD | Q4H | Q6H +
   CodeableConcept code = 5;
