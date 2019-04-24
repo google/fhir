@@ -13,6 +13,7 @@ load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 py_binary(
     name = "bulkload",
     srcs = ["bulkload.py"],
+    python_version = "PY2",
     deps = [
         "@absl_py//absl:app",
         "@absl_py//absl/flags",

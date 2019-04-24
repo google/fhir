@@ -35,6 +35,7 @@ py_test(
     data = [
         "//testdata/stu3:labels",
     ],
+    python_version = "PY2",
     deps = [
         ":encounter",
         "//proto/stu3:resources_py_pb2",
@@ -64,6 +65,7 @@ py_test(
     data = [
         "//testdata/stu3:labels",
     ],
+    python_version = "PY2",
     deps = [
         ":label",
         "//proto/stu3:datatypes_py_pb2",
@@ -78,6 +80,7 @@ py_test(
 py_binary(
     name = "bundle_to_label",
     srcs = ["bundle_to_label.py"],
+    python_version = "PY2",
     deps = [":bundle_to_label_lib"],
 )
 
@@ -106,6 +109,7 @@ py_test(
     data = [
         "//testdata/stu3:labels",
     ],
+    python_version = "PY2",
     deps = [
         ":bundle_to_label_lib",
         ":label",

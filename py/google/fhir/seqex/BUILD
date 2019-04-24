@@ -41,6 +41,7 @@ py_test(
     data = [
         "//proto/stu3:version_config.textproto",
     ],
+    python_version = "PY2",
     deps = [
         ":bundle_seqex_converter",
         "//proto/stu3:extensions_py_pb2",
@@ -73,6 +74,7 @@ pyx_library(
 py_test(
     name = "bundle_to_seqex_util_test",
     srcs = ["bundle_to_seqex_util_test.py"],
+    python_version = "PY2",
     deps = [
         ":bundle_to_seqex_util",
         "//proto/stu3:extensions_py_pb2",
@@ -107,6 +109,7 @@ py_test(
     data = [
         "//proto/stu3:version_config.textproto",
     ],
+    python_version = "PY2",
     deps = [
         ":bundle_to_seqex",
         ":bundle_seqex_converter",
@@ -129,6 +132,7 @@ py_binary(
     srcs = [
         "bundle_to_seqex_main.py",
     ],
+    python_version = "PY2",
     deps = [
         ":bundle_to_seqex",
         "@protobuf_archive//:protobuf_python",

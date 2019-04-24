@@ -42,6 +42,7 @@ py_library(
 py_binary(
     name = "mle_task",
     srcs = ["mle_task.py"],
+    python_version = "PY2",
     deps = [":mle_task_main_lib"],
 )
 
@@ -61,6 +62,7 @@ py_binary(
     srcs = [
         "run_locally.py",
     ],
+    python_version = "PY2",
     deps = [
         ":model",
         "@absl_py//absl/flags",
@@ -77,6 +79,7 @@ py_test(
     data = [
         "//testdata/stu3:tensorflow",
     ],
+    python_version = "PY2",
     deps = [
         ":model_lib",
         ":test_utils",
@@ -95,6 +98,7 @@ py_test(
     data = [
         "//testdata/stu3:tensorflow",
     ],
+    python_version = "PY2",
     deps = [
         ":mle_task_main_lib",
         ":test_utils",

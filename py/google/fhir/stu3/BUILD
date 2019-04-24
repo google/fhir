@@ -17,6 +17,7 @@ py_test(
     srcs = [
         "util_test.py",
     ],
+    python_version = "PY2",
     deps = [
         ":util",
         "//proto/stu3:resources_py_pb2",
