@@ -27,7 +27,7 @@ import org.junit.runners.JUnit4;
 public class StructureDefinitionTransformerTest {
 
   private void runTransformTest(JsonObject input, JsonObject expected) throws Exception {
-    JsonObject output = StructureDefinitionTransformer.transform(input);
+    JsonObject output = StructureDefinitionTransformer.transformDstu2ToStu3(input);
     assertThat(output).isEqualTo(expected);
   }
 

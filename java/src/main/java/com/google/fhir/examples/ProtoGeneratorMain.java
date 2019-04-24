@@ -179,7 +179,7 @@ class ProtoGeneratorMain {
       return FileUtils.loadStructureDefinition(new File(fullFilename));
     }
     String json = Files.asCharSource(new File(fullFilename), StandardCharsets.UTF_8).read();
-    String transformed = StructureDefinitionTransformer.transform(json);
+    String transformed = StructureDefinitionTransformer.transformDstu2ToStu3(json);
     StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
     JsonFormat.Parser.newBuilder().build().merge(transformed, structDefBuilder);
     return structDefBuilder.build();
@@ -190,6 +190,9 @@ class ProtoGeneratorMain {
   }
 
   void run(Args args) throws IOException {
+    PackageInfo packageInfo =
+        FileUtils.mergeText(new File(args.packageInfo), PackageInfo.newBuilder()).build();
+
     // Read all structure definitions that should be inlined into the
     // output protos.  This will not generate proto definitions for these extensions -
     // that must be done separately.
@@ -197,9 +200,8 @@ class ProtoGeneratorMain {
     Map<StructureDefinition, String> knownTypes = new HashMap<>();
     for (Map.Entry<String, String> dirPackagePair : args.getDependencyPackagesMap().entrySet()) {
       List<StructureDefinition> structDefs =
-          new File(dirPackagePair.getKey()).isDirectory()
-              ? FileUtils.loadStructureDefinitionsInDir(dirPackagePair.getKey())
-              : FileUtils.loadStructureDefinitionsInZip(dirPackagePair.getKey());
+          FileUtils.loadStructureDefinitionsInZip(
+              dirPackagePair.getKey(), packageInfo.getFhirVersion());
       PackageInfo depPackageInfo =
           FileUtils.mergeText(new File(dirPackagePair.getValue()), PackageInfo.newBuilder())
               .build();
@@ -211,9 +213,6 @@ class ProtoGeneratorMain {
         knownTypes.put(structDef, depPackageInfo.getProtoPackage());
       }
     }
-
-    PackageInfo packageInfo =
-        FileUtils.mergeText(new File(args.packageInfo), PackageInfo.newBuilder()).build();
     if (packageInfo.getProtoPackage().isEmpty()) {
       throw new IllegalArgumentException("package_info must contain at least a proto_package.");
     }

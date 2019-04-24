@@ -18,6 +18,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
+import com.google.fhir.dstu2.StructureDefinitionTransformer;
+import com.google.fhir.proto.FhirVersion;
 import com.google.fhir.stu3.proto.Bundle;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.protobuf.Message;
@@ -26,10 +28,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -47,23 +47,13 @@ public final class FileUtils {
     return (StructureDefinition) loadFhir(file, StructureDefinition.newBuilder());
   }
 
-  public static List<StructureDefinition> loadStructureDefinitionsInDir(String dir)
-      throws IOException {
-    List<File> files =
-        Arrays.stream(new File(dir).listFiles())
-            .filter(file -> file.getName().endsWith(".json"))
-            .sorted()
-            .collect(Collectors.toList());
-
-    List<StructureDefinition> structDefs = new ArrayList<>(files.size());
-    for (File file : files) {
-      structDefs.add(loadStructureDefinition(file));
-    }
-    return structDefs;
-  }
-
   public static List<StructureDefinition> loadStructureDefinitionsInZip(String zip)
       throws IOException {
+    return loadStructureDefinitionsInZip(zip, FhirVersion.STU3);
+  }
+
+  public static List<StructureDefinition> loadStructureDefinitionsInZip(
+      String zip, FhirVersion fhirVersion) throws IOException {
     JsonFormat.Parser parser = JsonFormat.Parser.newBuilder().build();
     List<StructureDefinition> structDefs = new ArrayList<>();
     ZipFile zipFile = new ZipFile(new File(zip));
@@ -73,6 +63,15 @@ public final class FileUtils {
           new String(ByteStreams.toByteArray(zipFile.getInputStream(entries.nextElement())), UTF_8);
       try {
         StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
+        switch (fhirVersion) {
+          case DSTU2:
+            json = StructureDefinitionTransformer.transformDstu2ToStu3(json);
+            break;
+          case STU3:
+            break;
+          default:
+            throw new IllegalArgumentException("Unrecognized FhirVersion: " + fhirVersion);
+        }
         parser.merge(json, structDefBuilder);
         structDefs.add(structDefBuilder.build());
       } catch (IllegalArgumentException e) {

@@ -319,7 +319,7 @@ public class StructureDefinitionTransformer {
   }
 
   /** Returns the transformed structure definition in JSONObject. */
-  public static JsonObject transform(JsonObject input) {
+  public static JsonObject transformDstu2ToStu3(JsonObject input) {
     if (!getString(input, RESOURCE_TYPE_KEY).equals(STRUCTURE_DEFINITION_VALUE)) {
       throw new IllegalArgumentException("the input must be a StructureDefinition");
     }
@@ -336,9 +336,9 @@ public class StructureDefinitionTransformer {
   }
 
   /** Returns the transformed structure definition in JSON String. */
-  public static String transform(String input) {
+  public static String transformDstu2ToStu3(String input) {
     JsonObject json = PARSER.parse(input).getAsJsonObject();
-    JsonObject output = transform(json);
+    JsonObject output = transformDstu2ToStu3(json);
     return GSON.toJson(output);
   }
 }

@@ -12,6 +12,7 @@ java_library(
     srcs = glob(["src/main/java/com/google/fhir/stu3/*.java"]),
     deps = [
         ":fhir_common",
+        ":structure_definition_transformer",
         "//external:gson",
         "//external:guava",
         "//proto/stu3:annotations_java_proto",

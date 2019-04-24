@@ -68,11 +68,6 @@ public class ProfileGeneratorMain {
     private List<String> profiles = new ArrayList<>();
 
     @Parameter(
-        names = {"--struct_def_dep_dir"},
-        description = "Directory containing structure definitions that profiles might depend on.")
-    private List<String> structDefDepDirs = new ArrayList<>();
-
-    @Parameter(
         names = {"--struct_def_dep_zip"},
         description = "Zip file containing structure definitions that profiles might depend on.")
     private List<String> structDefDepZips = new ArrayList<>();
@@ -116,10 +111,6 @@ public class ProfileGeneratorMain {
     }
 
     List<StructureDefinition> baseStructDefPool = new ArrayList<>();
-    for (String dir : args.structDefDepDirs) {
-      baseStructDefPool.addAll(FileUtils.loadStructureDefinitionsInDir(dir));
-    }
-
     for (String zip : args.structDefDepZips) {
       baseStructDefPool.addAll(FileUtils.loadStructureDefinitionsInZip(zip));
     }

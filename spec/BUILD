@@ -16,6 +16,20 @@ filegroup(
     ]),
 )
 
+# Structure Definitions for the DSTU2 core types.
+filegroup(
+    name = "fhir_dstu2_structure_definitions_filegroup",
+    srcs = glob(
+        ["hl7.fhir.core/1.0.2/package/StructureDefinition-*.json"],
+        exclude = ["hl7.fhir.core/1.0.2/package/StructureDefinition-example.json"],
+    ),
+)
+
+zip_file(
+    name = "fhir_dstu2_structure_definitions.zip",
+    filegroup = ":fhir_dstu2_structure_definitions_filegroup",
+)
+
 # Current STU3 package
 filegroup(
     name = "stu3",

@@ -55,7 +55,7 @@ class StructureDefinitionTransformerMain {
 
   private static void transform(String inputFilename, String outputFilename) throws IOException {
     String input = Files.asCharSource(new File(inputFilename), StandardCharsets.UTF_8).read();
-    String output = StructureDefinitionTransformer.transform(input);
+    String output = StructureDefinitionTransformer.transformDstu2ToStu3(input);
     try (BufferedWriter writer =
         Files.newWriter(new File(outputFilename), StandardCharsets.UTF_8)) {
       writer.write(output);
