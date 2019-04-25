@@ -16,7 +16,7 @@ syntax = "proto3";
 
 package google.fhir.stu3.google;
 
-import "proto/stu3/annotations.proto";
+import "proto/annotations.proto";
 import "proto/stu3/datatypes.proto";
 
 option java_multiple_files = true;

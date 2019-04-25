@@ -8,17 +8,9 @@ load("//bazel:proto.bzl", "fhir_proto_library")
 load("//bazel:protogen.bzl", "gen_fhir_protos")
 
 fhir_proto_library(
-    srcs = ["annotations.proto"],
-    proto_deps = [
-        "@protobuf_archive//:descriptor_proto",
-    ],
-    proto_library_prefix = "annotations",
-)
-
-fhir_proto_library(
     srcs = ["datatypes.proto"],
     proto_deps = [
-        ":annotations_proto",
+        "//proto:annotations_proto",
     ],
     proto_library_prefix = "datatypes",
 )
@@ -26,8 +18,8 @@ fhir_proto_library(
 fhir_proto_library(
     srcs = ["codes.proto"],
     proto_deps = [
-        ":annotations_proto",
         ":datatypes_proto",
+        "//proto:annotations_proto",
     ],
     proto_library_prefix = "codes",
 )
@@ -35,9 +27,9 @@ fhir_proto_library(
 fhir_proto_library(
     srcs = ["metadatatypes.proto"],
     proto_deps = [
-        ":annotations_proto",
         ":codes_proto",
         ":datatypes_proto",
+        "//proto:annotations_proto",
     ],
     proto_library_prefix = "metadatatypes",
 )
@@ -48,9 +40,9 @@ fhir_proto_library(
         "google_extensions.proto",
     ],
     proto_deps = [
-        ":annotations_proto",
         ":codes_proto",
         ":datatypes_proto",
+        "//proto:annotations_proto",
     ],
     proto_library_prefix = "extensions",
 )
@@ -60,10 +52,10 @@ fhir_proto_library(
         "resources.proto",
     ],
     proto_deps = [
-        ":annotations_proto",
         ":codes_proto",
         ":datatypes_proto",
         ":metadatatypes_proto",
+        "//proto:annotations_proto",
     ],
     proto_library_prefix = "resources",
 )
@@ -73,12 +65,12 @@ fhir_proto_library(
         "profiles.proto",
     ],
     proto_deps = [
-        ":annotations_proto",
         ":codes_proto",
         ":datatypes_proto",
         ":extensions_proto",
         ":metadatatypes_proto",
         ":resources_proto",
+        "//proto:annotations_proto",
     ],
     proto_library_prefix = "profiles",
 )
@@ -96,12 +88,12 @@ fhir_proto_library(
         "uscore.proto",
     ],
     proto_deps = [
-        ":annotations_proto",
         ":codes_proto",
         ":datatypes_proto",
         ":metadatatypes_proto",
         ":resources_proto",
         ":uscore_codes_proto",
+        "//proto:annotations_proto",
     ],
     proto_library_prefix = "uscore",
 )
@@ -111,8 +103,8 @@ fhir_proto_library(
         "uscore_codes.proto",
     ],
     proto_deps = [
-        ":annotations_proto",
         ":datatypes_proto",
+        "//proto:annotations_proto",
     ],
     proto_library_prefix = "uscore_codes",
 )

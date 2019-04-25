@@ -33,7 +33,7 @@
 #include "google/fhir/stu3/bundle_to_versioned_resources_converter.h"
 #include "google/fhir/stu3/util.h"
 #include "google/fhir/systems/systems.h"
-#include "proto/stu3/annotations.pb.h"
+#include "proto/annotations.pb.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"

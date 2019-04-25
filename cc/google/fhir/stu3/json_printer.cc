@@ -15,6 +15,7 @@
  */
 
 #include <ctype.h>
+
 #include <memory>
 #include <string>
 #include <unordered_set>
@@ -29,7 +30,7 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/primitive_wrapper.h"
 #include "google/fhir/stu3/util.h"
-#include "proto/stu3/annotations.pb.h"
+#include "proto/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "include/json/json.h"
 

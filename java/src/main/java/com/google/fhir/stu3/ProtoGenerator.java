@@ -69,7 +69,7 @@ public class ProtoGenerator {
 
   // The path for annotation definition of proto options.
   // TODO: Move the annotation to a general location.
-  static final String ANNOTATION_PATH = "proto/stu3";
+  static final String ANNOTATION_PATH = "proto";
 
   // Map of time-like primitive type ids to supported granularity
   private static final ImmutableMap<String, List<String>> TIME_LIKE_PRECISION_MAP =

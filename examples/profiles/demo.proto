@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package company.fhir.stu3.demo;
 
-import "proto/stu3/annotations.proto";
+import "proto/annotations.proto";
 import "proto/stu3/codes.proto";
 import "proto/stu3/datatypes.proto";
 import "proto/stu3/metadatatypes.proto";

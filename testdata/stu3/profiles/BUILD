@@ -26,7 +26,7 @@ fhir_proto_library(
         "test_extensions.proto",
     ],
     proto_deps = [
-        "//proto/stu3:annotations_proto",
+        "//proto:annotations_proto",
         "//proto/stu3:codes_proto",
         "//proto/stu3:datatypes_proto",
         "//proto/stu3:extensions_proto",

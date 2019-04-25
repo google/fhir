@@ -29,7 +29,7 @@
 #include "google/fhir/stu3/proto_util.h"
 #include "google/fhir/stu3/resource_validation.h"
 #include "google/fhir/stu3/util.h"
-#include "proto/stu3/annotations.pb.h"
+#include "proto/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "tensorflow/core/lib/core/status.h"
