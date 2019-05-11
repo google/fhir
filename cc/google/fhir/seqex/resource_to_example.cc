@@ -236,6 +236,9 @@ StatusOr<string> GetPreferredCode(const Message& concept) {
   if (ExtractCodeBySystem(concept, systems::kConditionCategory, &code).ok()) {
     return absl::StrCat("condition_category:" + code);
   }
+  if (ExtractCodeBySystem(concept, systems::kProcedureCategory, &code).ok()) {
+    return absl::StrCat("procedure_category:" + code);
+  }
   if (ExtractCodeBySystem(concept, systems::kConditionVerStatus, &code).ok()) {
     return absl::StrCat("condition_ver_status:" + code);
   }

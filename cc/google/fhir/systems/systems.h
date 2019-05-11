@@ -52,6 +52,8 @@ const char kMaritalStatus[] = "http://hl7.org/fhir/v3/MaritalStatus";
 const char kNUBCDischarge[] = "http://www.nubc.org/patient-discharge";
 const char kNdc[] = "http://hl7.org/fhir/sid/ndc";
 const char kObservationCategory[] = "http://hl7.org/fhir/observation-category";
+const char kProcedureCategory[] =
+    "http://hl7.org/fhir/ValueSet/procedure-category";
 const char kRxNorm[] = "http://www.nlm.nih.gov/research/umls/rxnorm";
 const char kSnomed[] = "http://snomed.info/sct";
 const char kUnitsOfMeasure[] = "http://unitsofmeasure.org";
