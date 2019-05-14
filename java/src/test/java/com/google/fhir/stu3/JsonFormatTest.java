@@ -135,6 +135,7 @@ import com.google.fhir.stu3.proto.TestReport;
 import com.google.fhir.stu3.proto.TestScript;
 import com.google.fhir.stu3.proto.ValueSet;
 import com.google.fhir.stu3.proto.VisionPrescription;
+import com.google.fhir.stu3.testing.TestPatient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -271,6 +272,25 @@ public class JsonFormatTest {
     testConvertForAnalytics("Encounter-home", Encounter.newBuilder());
     testConvertForAnalytics("Observation-example-genetics-1", Observation.newBuilder());
     testConvertForAnalytics("patient-example", Patient.newBuilder());
+  }
+
+  /** Test parsing to a profile */
+  @Test
+  public void testParseSingleArrayElementIntoSingularField() throws Exception {
+    TestPatient.Builder testPatient = TestPatient.newBuilder();
+    jsonParser.merge(loadJson("testdata/stu3/profiles/test_patient.json"), testPatient);
+
+    // Parse the proto text version of the input.
+    TestPatient.Builder textBuilder = TestPatient.newBuilder();
+    mergeText("profiles/test_patient-profiled-testpatient.prototxt", textBuilder);
+    assertThat(testPatient.build().toString()).isEqualTo(textBuilder.build().toString());
+
+    // This test is only meaningful because Patient.name is singular in the
+    // profile, unlike in the unprofiled resource.  This means it has array
+    // syntax in json, but singular syntax in proto.
+    // Access the proto field directly, so it will be a compile-time failure if
+    // that changes.
+    assertThat(testPatient.getName().getGiven(0).getValue()).isEqualTo("Duck");
   }
 
   /* Resource tests start here. */

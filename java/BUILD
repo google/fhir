@@ -318,6 +318,7 @@ java_test(
         "//spec:stu3",
         "//testdata/stu3:bigquery",
         "//testdata/stu3:examples",
+        "//testdata/stu3:profiles",
     ],
     test_class = "com.google.fhir.stu3.JsonFormatTest",
     deps = [
@@ -325,6 +326,7 @@ java_test(
         "//external:gson",
         "//external:guava",
         "//proto/stu3:resources_java_proto",
+        "//testdata/stu3/profiles:test_java_proto",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
         "@com_google_truth_truth//jar",

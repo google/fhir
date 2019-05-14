@@ -816,10 +816,17 @@ public final class JsonFormat {
         }
       }
 
-      if (!(json instanceof JsonObject)) {
+      if (!json.isJsonObject()) {
+        if (json.isJsonArray() && json.getAsJsonArray().size() == 1) {
+          JsonElement soleElement = json.getAsJsonArray().get(0);
+          if (soleElement.isJsonObject()) {
+            mergeMessage(soleElement.getAsJsonObject(), subBuilder);
+            return subBuilder.build();
+          }
+        }
         throw new IllegalArgumentException("Expected JsonObject for field " + field);
       } else {
-        mergeMessage((JsonObject) json, subBuilder);
+        mergeMessage(json.getAsJsonObject(), subBuilder);
         return subBuilder.build();
       }
     }
