@@ -18,7 +18,7 @@ import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableSchema;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableSet;
-import com.google.fhir.stu3.proto.Annotations;
+import com.google.fhir.proto.Annotations;
 import com.google.fhir.stu3.proto.ContainedResource;
 import com.google.fhir.stu3.proto.Decimal;
 import com.google.fhir.stu3.proto.Extension;

@@ -22,7 +22,7 @@ package google.fhir.stu3.proto;
 import "google/protobuf/descriptor.proto";
 
 option java_outer_classname = "Annotations";
-option java_package = "com.google.fhir.stu3.proto";
+option java_package = "com.google.fhir.proto";
 
 // TODO: Unify with StructureDefinitionKindCode
 enum StructureDefinitionKindValue {

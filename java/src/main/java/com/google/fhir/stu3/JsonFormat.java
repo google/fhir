@@ -16,8 +16,8 @@ package com.google.fhir.stu3;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableMap;
+import com.google.fhir.proto.Annotations;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;
-import com.google.fhir.stu3.proto.Annotations;
 import com.google.fhir.stu3.proto.Base64Binary;
 import com.google.fhir.stu3.proto.Boolean;
 import com.google.fhir.stu3.proto.Code;

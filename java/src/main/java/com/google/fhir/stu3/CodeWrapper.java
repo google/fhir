@@ -15,7 +15,7 @@
 package com.google.fhir.stu3;
 
 import com.google.common.base.Ascii;
-import com.google.fhir.stu3.proto.Annotations;
+import com.google.fhir.proto.Annotations;
 import com.google.fhir.stu3.proto.Code;
 import com.google.fhir.stu3.proto.Extension;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProtoOrBuilder;

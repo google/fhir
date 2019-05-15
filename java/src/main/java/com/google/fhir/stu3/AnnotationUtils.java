@@ -14,8 +14,8 @@
 
 package com.google.fhir.stu3;
 
-import com.google.fhir.stu3.proto.Annotations;
-import com.google.fhir.stu3.proto.Annotations.StructureDefinitionKindValue;
+import com.google.fhir.proto.Annotations;
+import com.google.fhir.proto.Annotations.StructureDefinitionKindValue;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
