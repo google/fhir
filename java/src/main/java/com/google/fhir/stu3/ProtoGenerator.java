@@ -913,8 +913,20 @@ public class ProtoGenerator {
     return lastIdToken(element.getId().getValue()).isChoiceType;
   }
 
+  private final Map<String, String> containerTypeCache = new HashMap<>();
+
+  private String addToContainerTypeCache(String id, String containerType) {
+    containerTypeCache.put(id, containerType);
+    return containerType;
+  }
+
   /** Extract the type of a container field, possibly by reference. */
   private String getContainerType(ElementDefinition element, List<ElementDefinition> elementList) {
+    String id = element.getId().getValue();
+    if (containerTypeCache.containsKey(id)) {
+      return containerTypeCache.get(id);
+    }
+
     if (element.hasContentReference()) {
       // Find the named element which was referenced. We'll use the type of that element.
       // Strip the first character from the content reference since it is a '#'
@@ -925,46 +937,43 @@ public class ProtoGenerator {
         throw new IllegalArgumentException(
             "ContentReference does not reference a container: " + element.getContentReference());
       }
-      return getContainerType(referencedElement, elementList);
+      return addToContainerTypeCache(id, getContainerType(referencedElement, elementList));
     }
 
     // The container type is the full type of the message that will be generated (minus package).
     // It is derived from the id (e.g., Medication.package.content), and these are usually equal
     // other than casing (e.g., Medication.Package.Content).
-    // However, any parent in the path could have been renamed via  a explicit type name extensions.
-    // So, starting with the root, we need to check every element in the path, and append either the
-    // name based on the path token, or an explicit renaming if present.
+    // However, any parent in the path could have been renamed via a explicit type name extensions.
 
-    // List we'll build up of actual id parts from the original id, starting from root
-    List<String> idParts = new ArrayList<>();
-    // Final result we'll build up with one type name part for each id part, starting from root
-    List<String> typeNameParts = new ArrayList<>();
-    for (String idPart : Splitter.on('.').split(element.getId().getValue())) {
-      idParts.add(idPart);
-      // Find the element corresponding to this chunk of the id.
-      ElementDefinition idChunkElement =
-          getElementDefinitionById(Joiner.on('.').join(idParts), elementList);
-      // Check for explicit renamings on that element.
-      List<ElementDefinitionExplicitTypeName> explicitTypeNames =
-          ExtensionWrapper.fromExtensionsIn(idChunkElement)
-              .getMatchingExtensions(ElementDefinitionExplicitTypeName.getDefaultInstance());
+    // Check for explicit renamings on this element.
+    List<ElementDefinitionExplicitTypeName> explicitTypeNames =
+        ExtensionWrapper.fromExtensionsIn(element)
+            .getMatchingExtensions(ElementDefinitionExplicitTypeName.getDefaultInstance());
 
-      // Add explicit type name if present.  Otherwise, use the field_name, converted to FieldType
-      // casing, as the submessage name.
-      String typeNamePart =
-          explicitTypeNames.isEmpty()
-              ? toFieldTypeCase(getJsonNameForElement(idChunkElement))
-              : explicitTypeNames.get(0).getValueString().getValue();
+    // Use explicit type name if present.  Otherwise, use the field_name, converted to FieldType
+    // casing, as the submessage name.
+    String typeName =
+        explicitTypeNames.isEmpty()
+            ? toFieldTypeCase(getJsonNameForElement(element))
+            : explicitTypeNames.get(0).getValueString().getValue();
 
-      // We can't reuse field names in multiple parts in the path (e.g., Foo.bar.bar.baz)
-      if (typeNameParts.contains(typeNamePart)
-          || (!typeNameParts.isEmpty()
-              && (typeNamePart.equals("Timing") || typeNamePart.equals("Age")))) {
-        typeNamePart = typeNamePart + "Type";
+    int lastDotIndex = id.lastIndexOf('.');
+    if (lastDotIndex != -1) {
+      String packageString =
+          getContainerType(
+                  getElementDefinitionById(id.substring(0, lastDotIndex), elementList), elementList)
+              + ".";
+      // TODO: better renaming logic.  Using ChoiceTypeX (with an X at the end)
+      // will get rid of the vast majority of the necessary renamings without changing much else
+      if (packageString.startsWith(typeName + ".")
+          || packageString.contains("." + typeName + ".")
+          || typeName.equals("Timing")
+          || typeName.equals("Age")) {
+        typeName = typeName + "Type";
       }
-      typeNameParts.add(typeNamePart);
+      return addToContainerTypeCache(id, packageString + typeName);
     }
-    return Joiner.on('.').join(typeNameParts);
+    return addToContainerTypeCache(id, typeName);
   }
 
   /**
