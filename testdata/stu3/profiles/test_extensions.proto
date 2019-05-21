@@ -22,6 +22,7 @@ import "proto/stu3/datatypes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.testing";
+option (.google.fhir.stu3.proto.fhir_version) = STU3;
 
 // Auto-generated from StructureDefinition for SimpleDecimalExt.
 // This is the A-Extension.
@@ -103,6 +104,12 @@ message ComplexExt {
   message ComplexSubfield {
     // xml:id (or equivalent in JSON)
     proto.String id = 1;
+
+    // Extension.extension.extension not present on profile.
+    reserved 2;
+
+    // Extension.extension.value[x] not present on profile.
+    reserved 3;
 
     // choice type
     message SimpleSubSubFieldA {

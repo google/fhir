@@ -23,6 +23,7 @@ import "proto/stu3/metadatatypes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.proto";
+option (fhir_version) = STU3;
 
 // Auto-generated from StructureDefinition for Account, last updated
 // 2017-04-19T07:44:43.294+10:00. Tracks balance, charges, for patient or cost

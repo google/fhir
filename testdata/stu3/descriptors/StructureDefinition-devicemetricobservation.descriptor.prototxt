@@ -152,6 +152,12 @@ field {
   }
 }
 field {
+  number: 15
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "Observation.context not present on profile."
+  }
+}
+field {
   name: "effective"
   number: 16
   label: LABEL_OPTIONAL
@@ -160,6 +166,12 @@ field {
   options {
     [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.stu3.proto.field_description]: "Clinically relevant time/time-period for observation"
+  }
+}
+field {
+  number: 17
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "Observation.issued not present on profile."
   }
 }
 field {
@@ -184,6 +196,12 @@ field {
   type_name: ".google.fhir.stu3.proto.Devicemetricobservation.Value"
   options {
     [google.fhir.stu3.proto.field_description]: "Actual result"
+  }
+}
+field {
+  number: 20
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "Observation.dataAbsentReason not present on profile."
   }
 }
 field {
@@ -224,6 +242,12 @@ field {
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
     [google.fhir.stu3.proto.field_description]: "How it was done"
+  }
+}
+field {
+  number: 25
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "Observation.specimen not present on profile."
   }
 }
 field {

@@ -200,6 +200,12 @@ field {
   }
 }
 field {
+  number: 19
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "Observation.valueQuantity not present on profile."
+  }
+}
+field {
   name: "data_absent_reason"
   number: 20
   label: LABEL_OPTIONAL

@@ -712,7 +712,7 @@ final class ProfileGenerator {
         .setDescription(Markdown.newBuilder().setValue(elementData.getDescription()))
         .setFhirVersion(
             Id.newBuilder()
-                .setValue(FhirVersion.fromPackageInfo(packageInfo.getFhirVersion()).minorVersion))
+                .setValue(FhirVersion.fromAnnotation(packageInfo.getFhirVersion()).minorVersion))
         .setKind(StructureDefinitionKindCode.newBuilder().setValue(structureDefinitionKind))
         .setAbstract(fhirBoolean(false))
         .setContextType(

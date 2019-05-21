@@ -30,6 +30,12 @@ field {
   }
 }
 field {
+  number: 4
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "Quantity.comparator not present on profile."
+  }
+}
+field {
   name: "unit"
   number: 5
   label: LABEL_OPTIONAL

@@ -294,6 +294,12 @@ field {
   }
 }
 field {
+  number: 28
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "Observation.related not present on profile."
+  }
+}
+field {
   name: "component"
   number: 29
   label: LABEL_REPEATED
@@ -378,6 +384,12 @@ nested_type {
     }
   }
   field {
+    number: 4
+    options {
+      [google.fhir.stu3.proto.reserved_reason]: "Observation.referenceRange.low not present on profile."
+    }
+  }
+  field {
     name: "high"
     number: 5
     label: LABEL_OPTIONAL
@@ -388,6 +400,24 @@ nested_type {
       [google.fhir.stu3.proto.field_description]: "A fixed quantity (no comparator)"
       [google.fhir.stu3.proto.fhir_path_constraint]: "code.empty() or system.exists()"
       [google.fhir.stu3.proto.fhir_path_constraint]: "comparator.empty()"
+    }
+  }
+  field {
+    number: 6
+    options {
+      [google.fhir.stu3.proto.reserved_reason]: "Observation.referenceRange.type not present on profile."
+    }
+  }
+  field {
+    number: 7
+    options {
+      [google.fhir.stu3.proto.reserved_reason]: "Observation.referenceRange.appliesTo not present on profile."
+    }
+  }
+  field {
+    number: 8
+    options {
+      [google.fhir.stu3.proto.reserved_reason]: "Observation.referenceRange.age not present on profile."
     }
   }
   field {

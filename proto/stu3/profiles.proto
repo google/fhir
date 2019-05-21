@@ -25,6 +25,7 @@ import "proto/stu3/resources.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.proto";
+option (fhir_version) = STU3;
 
 // Auto-generated from StructureDefinition for Vital Signs Profile.
 // FHIR Body Mass Index (BMI) Profile.
@@ -1386,6 +1387,9 @@ message Bp {
     (valid_reference_type) = "RelatedPerson"
   ];
 
+  // Observation.valueQuantity not present on profile.
+  reserved 19;
+
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;
 
@@ -1728,12 +1732,24 @@ message Cholesterol {
     // Extensions that cannot be ignored
     repeated Extension modifier_extension = 3;
 
+    // Observation.referenceRange.low not present on profile.
+    reserved 4;
+
     // A fixed quantity (no comparator)
     SimpleQuantity high = 5 [
       (validation_requirement) = REQUIRED_BY_FHIR,
       (fhir_path_constraint) = "code.empty() or system.exists()",
       (fhir_path_constraint) = "comparator.empty()"
     ];
+
+    // Observation.referenceRange.type not present on profile.
+    reserved 6;
+
+    // Observation.referenceRange.appliesTo not present on profile.
+    reserved 7;
+
+    // Observation.referenceRange.age not present on profile.
+    reserved 8;
 
     // Text based reference range in an observation
     String text = 9;
@@ -1742,6 +1758,9 @@ message Cholesterol {
     (validation_requirement) = REQUIRED_BY_FHIR,
     (fhir_path_constraint) = "low.exists() or high.exists() or text.exists()"
   ];
+
+  // Observation.related not present on profile.
+  reserved 28;
 
   // Component results
   message Component {
@@ -2054,6 +2073,9 @@ message Devicemetricobservation {
     (valid_reference_type) = "Device"
   ];
 
+  // Observation.context not present on profile.
+  reserved 15;
+
   // Clinically relevant time/time-period for observation
   message Effective {
     option (is_choice_type) = true;
@@ -2063,6 +2085,9 @@ message Devicemetricobservation {
     }
   }
   Effective effective = 16 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Observation.issued not present on profile.
+  reserved 17;
 
   // Who is responsible for the observation
   repeated Reference performer = 18 [
@@ -2091,6 +2116,9 @@ message Devicemetricobservation {
   }
   Value value = 19;
 
+  // Observation.dataAbsentReason not present on profile.
+  reserved 20;
+
   // High, low, normal, etc.
   CodeableConcept interpretation = 21;
 
@@ -2102,6 +2130,9 @@ message Devicemetricobservation {
 
   // How it was done
   CodeableConcept method = 24;
+
+  // Observation.specimen not present on profile.
+  reserved 25;
 
   // (Measurement) Device
   Reference device = 26 [
@@ -2356,6 +2387,9 @@ message DiagnosticreportGenetics {
   // Clinical Interpretation of test results
   String conclusion = 23;
 
+  // DiagnosticReport.codedDiagnosis not present on profile.
+  reserved 24;
+
   // Entire report as issued
   repeated Attachment presented_form = 25;
 
@@ -2397,6 +2431,9 @@ message ElementdefinitionDe {
   // Path of the element in the hierarchy of elements
   String path = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 
+  // ElementDefinition.representation not present on profile.
+  reserved 4;
+
   // Name for this particular element (in a set of slices)
   String slice_name = 5;
 
@@ -2405,6 +2442,12 @@ message ElementdefinitionDe {
 
   // Corresponding codes in terminologies
   repeated Coding code = 7;
+
+  // ElementDefinition.slicing not present on profile.
+  reserved 8;
+
+  // ElementDefinition.short not present on profile.
+  reserved 9;
 
   // Full formal definition as narrative text
   Markdown definition = 10;
@@ -2444,6 +2487,9 @@ message ElementdefinitionDe {
   }
   Base base = 16;
 
+  // ElementDefinition.contentReference not present on profile.
+  reserved 17;
+
   // Data type and Profile for this element
   message TypeRef {
     // xml:id (or equivalent in JSON)
@@ -2455,8 +2501,14 @@ message ElementdefinitionDe {
     // Data type or Resource (reference to definition)
     Uri code = 3 [(validation_requirement) = REQUIRED_BY_FHIR];
 
+    // ElementDefinition.type.profile not present on profile.
+    reserved 4;
+
     // Profile (StructureDefinition) to apply to reference target (or IG)
     Uri target_profile = 5;
+
+    // ElementDefinition.type.aggregation not present on profile.
+    reserved 6;
 
     // either | independent | specific
     ReferenceVersionRulesCode versioning = 7;
@@ -2516,6 +2568,12 @@ message ElementdefinitionDe {
 
   // What the order of the elements means
   String order_meaning = 21;
+
+  // ElementDefinition.fixed[x] not present on profile.
+  reserved 22;
+
+  // ElementDefinition.pattern[x] not present on profile.
+  reserved 23;
 
   // Example value (as defined for type)
   message Example {
@@ -2653,6 +2711,12 @@ message ElementdefinitionDe {
 
   // If the element must supported
   Boolean must_support = 30;
+
+  // ElementDefinition.isModifier not present on profile.
+  reserved 31;
+
+  // ElementDefinition.isSummary not present on profile.
+  reserved 32;
 
   // ValueSet details if this is coded
   message ElementDefinitionBinding {
@@ -3049,6 +3113,18 @@ message Hdlcholesterol {
       (fhir_path_constraint) = "comparator.empty()"
     ];
 
+    // Observation.referenceRange.high not present on profile.
+    reserved 5;
+
+    // Observation.referenceRange.type not present on profile.
+    reserved 6;
+
+    // Observation.referenceRange.appliesTo not present on profile.
+    reserved 7;
+
+    // Observation.referenceRange.age not present on profile.
+    reserved 8;
+
     // Text based reference range in an observation
     String text = 9;
   }
@@ -3056,6 +3132,9 @@ message Hdlcholesterol {
     (validation_requirement) = REQUIRED_BY_FHIR,
     (fhir_path_constraint) = "low.exists() or high.exists() or text.exists()"
   ];
+
+  // Observation.related not present on profile.
+  reserved 28;
 
   // Component results
   message Component {
@@ -3915,12 +3994,24 @@ message Ldlcholesterol {
     // Extensions that cannot be ignored
     repeated Extension modifier_extension = 3;
 
+    // Observation.referenceRange.low not present on profile.
+    reserved 4;
+
     // A fixed quantity (no comparator)
     SimpleQuantity high = 5 [
       (validation_requirement) = REQUIRED_BY_FHIR,
       (fhir_path_constraint) = "code.empty() or system.exists()",
       (fhir_path_constraint) = "comparator.empty()"
     ];
+
+    // Observation.referenceRange.type not present on profile.
+    reserved 6;
+
+    // Observation.referenceRange.appliesTo not present on profile.
+    reserved 7;
+
+    // Observation.referenceRange.age not present on profile.
+    reserved 8;
 
     // Text based reference range in an observation
     String text = 9;
@@ -3929,6 +4020,9 @@ message Ldlcholesterol {
     (validation_requirement) = REQUIRED_BY_FHIR,
     (fhir_path_constraint) = "low.exists() or high.exists() or text.exists()"
   ];
+
+  // Observation.related not present on profile.
+  reserved 28;
 
   // Component results
   message Component {
@@ -4119,6 +4213,9 @@ message Lipidprofile {
 
   // Clinical Interpretation of Lipid Panel
   String conclusion = 23;
+
+  // DiagnosticReport.codedDiagnosis not present on profile.
+  reserved 24;
 
   // Entire report as issued
   repeated Attachment presented_form = 25;
@@ -5895,8 +5992,20 @@ message Triglyceride {
     // Extensions that cannot be ignored
     repeated Extension modifier_extension = 3;
 
+    // Observation.referenceRange.low not present on profile.
+    reserved 4;
+
     // High Range, if relevant
     SimpleQuantity high = 5 [(validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Observation.referenceRange.type not present on profile.
+    reserved 6;
+
+    // Observation.referenceRange.appliesTo not present on profile.
+    reserved 7;
+
+    // Observation.referenceRange.age not present on profile.
+    reserved 8;
 
     // Text based reference range in an observation
     String text = 9;
@@ -5905,6 +6014,9 @@ message Triglyceride {
     (validation_requirement) = REQUIRED_BY_FHIR,
     (fhir_path_constraint) = "low.exists() or high.exists() or text.exists()"
   ];
+
+  // Observation.related not present on profile.
+  reserved 28;
 
   // Component results
   message Component {
@@ -6294,6 +6406,9 @@ message Vitalspanel {
     (valid_reference_type) = "Patient",
     (valid_reference_type) = "RelatedPerson"
   ];
+
+  // Observation.valueQuantity not present on profile.
+  reserved 19;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 20;

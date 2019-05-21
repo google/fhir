@@ -215,7 +215,7 @@ public class ProtoGenerator {
       Map<StructureDefinition, String> knownTypes) {
     this.packageInfo = packageInfo;
     this.fhirProtoRootPath = fhirProtoRootPath;
-    this.fhirVersion = FhirVersion.fromPackageInfo(packageInfo.getFhirVersion());
+    this.fhirVersion = FhirVersion.fromAnnotation(packageInfo.getFhirVersion());
 
     // TODO: Do this with ValueSet resources once we have them.
     ImmutableMap.Builder<String, Descriptor> valueSetTypesByUrlBuilder =
@@ -402,6 +402,7 @@ public class ProtoGenerator {
     if (!packageInfo.getGoProtoPackage().isEmpty()) {
       options.setGoPackage(packageInfo.getGoProtoPackage());
     }
+    options.setExtension(Annotations.fhirVersion, fhirVersion.toAnnotation());
     builder.setOptions(options);
     for (StructureDefinition def : defs) {
       DescriptorProto proto = generateProto(def);
@@ -615,9 +616,18 @@ public class ProtoGenerator {
                 .build();
       }
       builder.addField(field);
+    } else if (!element.getPath().getValue().equals("Extension.extension")
+        && !element.getPath().getValue().equals("Extension.value[x]")) {
+      // Don't bother adding reserved messages for Extension.extension or Extension.value[x]
+      // since that's part of the extension definition, and adds a lot of unhelpful noise.
+      builder
+          .addFieldBuilder()
+          .setNumber(tag)
+          .getOptionsBuilder()
+          .setExtension(
+              Annotations.reservedReason,
+              element.getPath().getValue() + " not present on profile.");
     }
-    // TODO: for null fields, emit an "empty" field that just has a comment about the
-    // dropped field, to make it more obvious why numbers are skipped
   }
 
   private Optional<DescriptorProto> buildNestedTypeIfNeeded(

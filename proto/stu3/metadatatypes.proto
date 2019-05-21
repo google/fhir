@@ -22,6 +22,7 @@ import "proto/stu3/datatypes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.proto";
+option (fhir_version) = STU3;
 
 // Auto-generated from StructureDefinition for BackboneElement, last updated
 // 2017-04-19T07:44:43.294+10:00. Base for elements defined inside a resource.

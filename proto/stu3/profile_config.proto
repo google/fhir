@@ -2,20 +2,14 @@ syntax = "proto3";
 
 package google.fhir.proto;
 
+import "proto/annotations.proto";
 import "proto/stu3/codes.proto";
 
 option java_package = "com.google.fhir.proto";
 option java_multiple_files = true;
 
-enum FhirVersion {
-  FHIR_VERSION_UNKNOWN = 0;
-  DSTU2 = 1;
-  STU3 = 2;
-  R4 = 4;
-}
-
 message PackageInfo {
-  FhirVersion fhir_version = 1;
+  stu3.proto.FhirVersion fhir_version = 1;
   // Base url to use for all profiles defined here.
   // e.g., g.co/fhir/profiles
   string base_url = 2;

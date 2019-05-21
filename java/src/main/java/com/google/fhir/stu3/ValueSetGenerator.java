@@ -70,7 +70,7 @@ public class ValueSetGenerator {
             .map(e -> e.getResource().getValueSet())
             .collect(Collectors.toList());
 
-    FhirVersion fhirVersion = FhirVersion.fromPackageInfo(packageInfo.getFhirVersion());
+    FhirVersion fhirVersion = FhirVersion.fromAnnotation(packageInfo.getFhirVersion());
     valueSetsToSkip =
         includeCodesInDatatypes
             ? new HashSet<>()

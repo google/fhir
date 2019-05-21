@@ -20,6 +20,7 @@ import "proto/annotations.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.proto";
+option (fhir_version) = STU3;
 
 // Auto-generated from StructureDefinition for base64Binary, last updated
 // 2017-04-19T07:44:43.294+10:00. Primitive Type base64Binary. See
@@ -395,6 +396,9 @@ message Xhtml {
 
   // xml:id (or equivalent in JSON)
   String id = 2;
+
+  // xhtml.extension not present on profile.
+  reserved 3;
 }
 
 // Auto-generated from StructureDefinition for Address, last updated
@@ -1140,6 +1144,9 @@ message SimpleQuantity {
 
   // Numerical value (with implicit precision)
   Decimal value = 3;
+
+  // Quantity.comparator not present on profile.
+  reserved 4;
 
   // Unit representation
   String unit = 5;

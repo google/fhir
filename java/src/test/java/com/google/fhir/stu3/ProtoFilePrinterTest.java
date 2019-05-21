@@ -24,7 +24,6 @@ import com.google.common.collect.PeekingIterator;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.proto.Annotations;
-import com.google.fhir.proto.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.stu3.proto.ContactDetail;
 import com.google.fhir.stu3.proto.ContainedResource;
@@ -239,13 +238,13 @@ public final class ProtoFilePrinterTest {
     jsonParser = JsonFormat.getParser();
     runfiles = Runfiles.create();
     PackageInfo packageInfo =
-            PackageInfo.newBuilder()
-                .setProtoPackage(packageName)
-                .setJavaProtoPackage("com.google.fhir.stu3.proto")
-                .setFhirVersion(FhirVersion.STU3)
-                .setLicense(PackageInfo.License.APACHE)
-                .setLicenseDate("2018")
-                .build();
+        PackageInfo.newBuilder()
+            .setProtoPackage(packageName)
+            .setJavaProtoPackage("com.google.fhir.stu3.proto")
+            .setFhirVersion(Annotations.FhirVersion.STU3)
+            .setLicense(PackageInfo.License.APACHE)
+            .setLicenseDate("2018")
+            .build();
     protoGenerator =
         new ProtoGenerator(
             packageInfo,

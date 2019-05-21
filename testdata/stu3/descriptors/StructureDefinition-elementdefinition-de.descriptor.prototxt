@@ -31,6 +31,12 @@ field {
   }
 }
 field {
+  number: 4
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "ElementDefinition.representation not present on profile."
+  }
+}
+field {
   name: "slice_name"
   number: 5
   label: LABEL_OPTIONAL
@@ -58,6 +64,18 @@ field {
   type_name: ".google.fhir.stu3.proto.Coding"
   options {
     [google.fhir.stu3.proto.field_description]: "Corresponding codes in terminologies"
+  }
+}
+field {
+  number: 8
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "ElementDefinition.slicing not present on profile."
+  }
+}
+field {
+  number: 9
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "ElementDefinition.short not present on profile."
   }
 }
 field {
@@ -132,6 +150,12 @@ field {
   }
 }
 field {
+  number: 17
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "ElementDefinition.contentReference not present on profile."
+  }
+}
+field {
   name: "type"
   number: 18
   label: LABEL_REPEATED
@@ -170,6 +194,18 @@ field {
   type_name: ".google.fhir.stu3.proto.String"
   options {
     [google.fhir.stu3.proto.field_description]: "What the order of the elements means"
+  }
+}
+field {
+  number: 22
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "ElementDefinition.fixed[x] not present on profile."
+  }
+}
+field {
+  number: 23
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "ElementDefinition.pattern[x] not present on profile."
   }
 }
 field {
@@ -240,6 +276,18 @@ field {
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
     [google.fhir.stu3.proto.field_description]: "If the element must supported"
+  }
+}
+field {
+  number: 31
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "ElementDefinition.isModifier not present on profile."
+  }
+}
+field {
+  number: 32
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "ElementDefinition.isSummary not present on profile."
   }
 }
 field {
@@ -376,6 +424,12 @@ nested_type {
     }
   }
   field {
+    number: 4
+    options {
+      [google.fhir.stu3.proto.reserved_reason]: "ElementDefinition.type.profile not present on profile."
+    }
+  }
+  field {
     name: "target_profile"
     number: 5
     label: LABEL_OPTIONAL
@@ -383,6 +437,12 @@ nested_type {
     type_name: ".google.fhir.stu3.proto.Uri"
     options {
       [google.fhir.stu3.proto.field_description]: "Profile (StructureDefinition) to apply to reference target (or IG)"
+    }
+  }
+  field {
+    number: 6
+    options {
+      [google.fhir.stu3.proto.reserved_reason]: "ElementDefinition.type.aggregation not present on profile."
     }
   }
   field {

@@ -46,6 +46,7 @@ java_library(
         "//proto/stu3:extensions_java_proto",
         "//proto/stu3:profile_config_java_proto",
         "//proto/stu3:resources_java_proto",
+        "//proto:annotations_java_proto",
         "@com_beust_jcommander//jar",
         "@com_google_apis_google_api_services_bigquery//jar",
         "@com_google_http_client_google_http_client//jar",
@@ -139,9 +140,9 @@ java_library(
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
         "//proto/stu3:metadatatypes_java_proto",
-        "//proto/stu3:profile_config_java_proto",
         "//proto/stu3:resources_java_proto",
         "//proto/stu3:uscore_codes_java_proto",
+        "//proto:annotations_java_proto",
         "@com_google_protobuf//:protobuf_java",
     ],
 )

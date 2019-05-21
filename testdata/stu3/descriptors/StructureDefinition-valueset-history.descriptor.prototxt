@@ -52,6 +52,18 @@ nested_type {
     }
   }
   field {
+    number: 2
+    options {
+      [google.fhir.stu3.proto.reserved_reason]: "Extension.extension.extension not present on profile."
+    }
+  }
+  field {
+    number: 3
+    options {
+      [google.fhir.stu3.proto.reserved_reason]: "Extension.extension.value[x] not present on profile."
+    }
+  }
+  field {
     name: "date"
     number: 4
     label: LABEL_OPTIONAL

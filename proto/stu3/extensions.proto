@@ -22,6 +22,7 @@ import "proto/stu3/datatypes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.proto";
+option (fhir_version) = STU3;
 
 // Auto-generated from StructureDefinition for administrative-status.
 // Status of internal processing.
@@ -767,6 +768,12 @@ message CodeSystemHistory {
   message Revision {
     // xml:id (or equivalent in JSON)
     String id = 1;
+
+    // Extension.extension.extension not present on profile.
+    reserved 2;
+
+    // Extension.extension.value[x] not present on profile.
+    reserved 3;
 
     // Date the change was made
     DateTime date = 4 [(validation_requirement) = REQUIRED_BY_FHIR];
@@ -6650,6 +6657,12 @@ message ValueSetHistory {
   message Revision {
     // xml:id (or equivalent in JSON)
     String id = 1;
+
+    // Extension.extension.extension not present on profile.
+    reserved 2;
+
+    // Extension.extension.value[x] not present on profile.
+    reserved 3;
 
     // Date the change was made
     DateTime date = 4 [(validation_requirement) = REQUIRED_BY_FHIR];

@@ -248,6 +248,12 @@ field {
   }
 }
 field {
+  number: 24
+  options {
+    [google.fhir.stu3.proto.reserved_reason]: "DiagnosticReport.codedDiagnosis not present on profile."
+  }
+}
+field {
   name: "presented_form"
   number: 25
   label: LABEL_REPEATED

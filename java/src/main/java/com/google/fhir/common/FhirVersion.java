@@ -16,6 +16,7 @@ package com.google.fhir.common;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.fhir.proto.Annotations;
 import com.google.fhir.stu3.proto.AbstractTypeCode;
 import com.google.fhir.stu3.proto.AddressTypeCode;
 import com.google.fhir.stu3.proto.Decimal;
@@ -61,13 +62,22 @@ public enum FhirVersion {
     this.minorVersion = minorVersion;
   }
 
-  /** Converts from a String value. */
-  public static FhirVersion fromPackageInfo(com.google.fhir.proto.FhirVersion protoEnum) {
+  /** Converts from a proto enum value. */
+  public static FhirVersion fromAnnotation(Annotations.FhirVersion protoEnum) {
     switch (protoEnum) {
       case STU3:
         return STU3;
       default:
         throw new IllegalArgumentException("FHIR version unknown or unsupported: " + protoEnum);
     }
+  }
+
+  /** Converts to a proto enum value. */
+  public Annotations.FhirVersion toAnnotation() {
+    switch (this) {
+      case STU3:
+        return Annotations.FhirVersion.STU3;
+    }
+    throw new IllegalArgumentException("Unhandled FHIR version: " + this);
   }
 }

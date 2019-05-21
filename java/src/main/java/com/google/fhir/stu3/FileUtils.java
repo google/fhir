@@ -19,7 +19,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 import com.google.fhir.dstu2.StructureDefinitionTransformer;
-import com.google.fhir.proto.FhirVersion;
+import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.stu3.proto.Bundle;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.protobuf.Message;

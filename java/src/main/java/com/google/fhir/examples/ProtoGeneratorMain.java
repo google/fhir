@@ -23,7 +23,7 @@ import com.beust.jcommander.ParameterException;
 import com.google.common.base.Splitter;
 import com.google.common.io.Files;
 import com.google.fhir.dstu2.StructureDefinitionTransformer;
-import com.google.fhir.proto.FhirVersion;
+import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.stu3.AnnotationUtils;
 import com.google.fhir.stu3.FileUtils;

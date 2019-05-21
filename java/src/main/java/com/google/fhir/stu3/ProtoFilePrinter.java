@@ -87,7 +87,7 @@ public class ProtoFilePrinter {
     }
     contents.append(printHeader(fileDescriptor)).append("\n");
     contents.append(printImports(fileDescriptor)).append("\n");
-    contents.append(printOptions(fileDescriptor)).append("\n");
+    contents.append(printOptions(fileDescriptor, fullyQualifiedPackageName)).append("\n");
     for (DescriptorProto descriptor : fileDescriptor.getMessageTypeList()) {
       contents
           .append(printMessage(descriptor, fullyQualifiedPackageName, fullyQualifiedPackageName))
@@ -115,7 +115,7 @@ public class ProtoFilePrinter {
     return imports.toString();
   }
 
-  private String printOptions(FileDescriptorProto fileDescriptor) {
+  private String printOptions(FileDescriptorProto fileDescriptor, String packageName) {
     StringBuilder options = new StringBuilder();
     FileOptions fileOptions = fileDescriptor.getOptions();
     if (fileOptions.hasJavaMultipleFiles()) {
@@ -129,6 +129,14 @@ public class ProtoFilePrinter {
           .append("option java_package = \"")
           .append(fileOptions.getJavaPackage())
           .append("\";\n");
+    }
+    if (fileOptions.hasExtension(Annotations.fhirVersion)) {
+      options
+          .append("option (")
+          .append(getOptionsPackage(packageName))
+          .append("fhir_version) = ")
+          .append(fileOptions.getExtension(Annotations.fhirVersion))
+          .append(";\n");
     }
     return options.toString();
   }
@@ -163,10 +171,9 @@ public class ProtoFilePrinter {
     boolean printedField = false;
 
     // Add options.
-    // For fhir options, only fully type the package name if we are not writing to the core FHIR
-    // package.
-    String optionPackage =
-        packageName.equals("." + ANNOTATION_PACKAGE) ? "" : "." + ANNOTATION_PACKAGE + ".";
+    // For fhir options, fully type the package name if we are not writing to the same package
+    // as the annotations
+    String optionPackage = getOptionsPackage(packageName);
     if (options.hasExtension(Annotations.structureDefinitionKind)) {
       message
           .append(fieldIndent)
@@ -247,6 +254,19 @@ public class ProtoFilePrinter {
           message.append("\n");
         }
 
+        if (field.getOptions().hasExtension(Annotations.reservedReason)) {
+          message
+              .append(fieldIndent)
+              .append("// ")
+              .append(field.getOptions().getExtension(Annotations.reservedReason))
+              .append("\n")
+              .append(fieldIndent)
+              .append("reserved ")
+              .append(field.getNumber())
+              .append(";\n");
+          continue;
+        }
+
         if (field.getOptions().hasExtension(Annotations.fieldDescription)) {
           // Add a comment describing the field.
           String description = field.getOptions().getExtension(Annotations.fieldDescription);
@@ -317,6 +337,7 @@ public class ProtoFilePrinter {
 
     String fieldIndent = indent + "  ";
 
+    String optionPackage = getOptionsPackage(packageName);
     // Loop over the elements.
     for (EnumValueDescriptorProto field : descriptor.getValueList()) {
       message.append(fieldIndent).append(field.getName()).append(" = ").append(field.getNumber());
@@ -326,7 +347,7 @@ public class ProtoFilePrinter {
       if (options.hasExtension(Annotations.fhirOriginalCode)) {
         hasFieldOption =
             addFieldOption(
-                "(fhir_original_code)",
+                "(" + optionPackage + "fhir_original_code)",
                 "\"" + options.getExtension(Annotations.fhirOriginalCode) + "\"",
                 hasFieldOption,
                 message);
@@ -376,13 +397,12 @@ public class ProtoFilePrinter {
     return "";
   }
 
-  // Build the field.
   private String printField(
       FieldDescriptorProto field, String containingType, String indent, String optionPackage) {
     StringBuilder message = new StringBuilder();
+    message.append(indent);
 
     // Add the "repeated" keyword, if necessary.
-    message.append(indent);
     if (field.getLabel() == FieldDescriptorProto.Label.LABEL_REPEATED) {
       message.append("repeated ");
     }
@@ -508,5 +528,11 @@ public class ProtoFilePrinter {
     }
     message.append(option).append(" = ").append(value);
     return true;
+  }
+
+  // For fhir options, fully type the package name if we are not writing to the same package
+  // as the annotations
+  private String getOptionsPackage(String packageName) {
+    return packageName.equals("." + ANNOTATION_PACKAGE) ? "" : "." + ANNOTATION_PACKAGE + ".";
   }
 }

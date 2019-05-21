@@ -24,6 +24,13 @@ import "google/protobuf/descriptor.proto";
 option java_outer_classname = "Annotations";
 option java_package = "com.google.fhir.proto";
 
+enum FhirVersion {
+  FHIR_VERSION_UNKNOWN = 0;
+  DSTU2 = 1;
+  STU3 = 2;
+  R4 = 4;
+}
+
 // TODO: Unify with StructureDefinitionKindCode
 enum StructureDefinitionKindValue {
   KIND_UNKNOWN = 0;
@@ -87,9 +94,6 @@ extend google.protobuf.FieldOptions {
   // Is this field required?
   Requirement validation_requirement = 162282766;
 
-  // A brief description of the intended use of this field.
-  string field_description = 190357977;
-
   // If this field has slices on it, this indicates the subfield to slice it by
   // (slicing.discriminator.path in the structure definition).
   string fhir_slice_by = 211855060;
@@ -134,6 +138,14 @@ extend google.protobuf.FieldOptions {
 
   // Indicates the base FHIR resource type a ReferenceId field points to.
   string referenced_fhir_type = 239446062;
+
+  // A brief description of the intended use of this field.
+  // For use by proto generator only.
+  string field_description = 190357977;
+
+  // Directive to reserve the field with this comment.
+  // For use by proto generator only.
+  string reserved_reason = 248408866;
 }
 
 extend google.protobuf.OneofOptions {
@@ -142,4 +154,9 @@ extend google.protobuf.OneofOptions {
   // set. The most common case of oneofs is choice types, where the requirements
   // should be applied to the containing message.
   bool fhir_oneof_is_optional = 214472422;
+}
+
+extend google.protobuf.FileOptions {
+  // What version of FHIR the protos in this file use (e.g., STU3, R4)
+  proto.FhirVersion fhir_version = 248874083;
 }

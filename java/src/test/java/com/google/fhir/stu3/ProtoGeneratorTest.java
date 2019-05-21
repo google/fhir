@@ -19,7 +19,7 @@ import static com.google.common.truth.Truth.assertThat;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.proto.Annotations;
-import com.google.fhir.proto.FhirVersion;
+import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
@@ -215,6 +215,8 @@ public class ProtoGeneratorTest {
     registry.add(Annotations.validReferenceType);
     registry.add(Annotations.referencedFhirType);
     registry.add(Annotations.fhirPathConstraint);
+    registry.add(Annotations.reservedReason);
+    registry.add(Annotations.fhirVersion);
   }
 
   // Test the primitive FHIR data types individually. */
