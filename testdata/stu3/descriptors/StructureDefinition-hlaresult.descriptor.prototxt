@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extension"
+    [google.fhir.proto.field_description]: "Extension"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Business identifier for report"
+    [google.fhir.proto.field_description]: "Business identifier for report"
   }
 }
 field {
@@ -96,13 +96,13 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "What was requested"
-    [google.fhir.stu3.proto.valid_reference_type]: "CarePlan"
-    [google.fhir.stu3.proto.valid_reference_type]: "ImmunizationRecommendation"
-    [google.fhir.stu3.proto.valid_reference_type]: "MedicationRequest"
-    [google.fhir.stu3.proto.valid_reference_type]: "NutritionOrder"
-    [google.fhir.stu3.proto.valid_reference_type]: "ProcedureRequest"
-    [google.fhir.stu3.proto.valid_reference_type]: "ReferralRequest"
+    [google.fhir.proto.field_description]: "What was requested"
+    [google.fhir.proto.valid_reference_type]: "CarePlan"
+    [google.fhir.proto.valid_reference_type]: "ImmunizationRecommendation"
+    [google.fhir.proto.valid_reference_type]: "MedicationRequest"
+    [google.fhir.proto.valid_reference_type]: "NutritionOrder"
+    [google.fhir.proto.valid_reference_type]: "ProcedureRequest"
+    [google.fhir.proto.valid_reference_type]: "ReferralRequest"
   }
 }
 field {
@@ -112,8 +112,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DiagnosticReportStatusCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "registered | partial | preliminary | final +"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "registered | partial | preliminary | final +"
   }
 }
 field {
@@ -123,7 +123,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Service category"
+    [google.fhir.proto.field_description]: "Service category"
   }
 }
 field {
@@ -133,8 +133,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Name/Code for this diagnostic report"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Name/Code for this diagnostic report"
   }
 }
 field {
@@ -144,11 +144,11 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "The subject of the report - usually, but not always, the patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "Group"
-    [google.fhir.stu3.proto.valid_reference_type]: "Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "Location"
+    [google.fhir.proto.field_description]: "The subject of the report - usually, but not always, the patient"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Group"
+    [google.fhir.proto.valid_reference_type]: "Device"
+    [google.fhir.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -158,9 +158,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Health care event when test ordered"
-    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "EpisodeOfCare"
+    [google.fhir.proto.field_description]: "Health care event when test ordered"
+    [google.fhir.proto.valid_reference_type]: "Encounter"
+    [google.fhir.proto.valid_reference_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -170,7 +170,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Hlaresult.Effective"
   options {
-    [google.fhir.stu3.proto.field_description]: "Clinically relevant time/time-period for report"
+    [google.fhir.proto.field_description]: "Clinically relevant time/time-period for report"
   }
 }
 field {
@@ -180,7 +180,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Instant"
   options {
-    [google.fhir.stu3.proto.field_description]: "DateTime this version was released"
+    [google.fhir.proto.field_description]: "DateTime this version was released"
   }
 }
 field {
@@ -190,7 +190,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Hlaresult.Performer"
   options {
-    [google.fhir.stu3.proto.field_description]: "Participants in producing the report"
+    [google.fhir.proto.field_description]: "Participants in producing the report"
   }
 }
 field {
@@ -200,8 +200,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Specimens this report is based on"
-    [google.fhir.stu3.proto.valid_reference_type]: "Specimen"
+    [google.fhir.proto.field_description]: "Specimens this report is based on"
+    [google.fhir.proto.valid_reference_type]: "Specimen"
   }
 }
 field {
@@ -211,8 +211,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Observations - simple, or complex nested groups"
-    [google.fhir.stu3.proto.valid_reference_type]: "Observation"
+    [google.fhir.proto.field_description]: "Observations - simple, or complex nested groups"
+    [google.fhir.proto.valid_reference_type]: "Observation"
   }
 }
 field {
@@ -222,9 +222,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Reference to full details of imaging associated with the diagnostic report"
-    [google.fhir.stu3.proto.valid_reference_type]: "ImagingStudy"
-    [google.fhir.stu3.proto.valid_reference_type]: "ImagingManifest"
+    [google.fhir.proto.field_description]: "Reference to full details of imaging associated with the diagnostic report"
+    [google.fhir.proto.valid_reference_type]: "ImagingStudy"
+    [google.fhir.proto.valid_reference_type]: "ImagingManifest"
   }
 }
 field {
@@ -234,7 +234,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Hlaresult.Image"
   options {
-    [google.fhir.stu3.proto.field_description]: "Key images associated with this report"
+    [google.fhir.proto.field_description]: "Key images associated with this report"
   }
 }
 field {
@@ -244,7 +244,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Clinical Interpretation of test results"
+    [google.fhir.proto.field_description]: "Clinical Interpretation of test results"
   }
 }
 field {
@@ -254,7 +254,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Codes for the conclusion"
+    [google.fhir.proto.field_description]: "Codes for the conclusion"
   }
 }
 field {
@@ -264,7 +264,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Attachment"
   options {
-    [google.fhir.stu3.proto.field_description]: "Entire report as issued"
+    [google.fhir.proto.field_description]: "Entire report as issued"
   }
 }
 field {
@@ -274,8 +274,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Allele Database"
-    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-allele-database"
+    [google.fhir.proto.field_description]: "Allele Database"
+    [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-allele-database"
   }
 }
 field {
@@ -285,8 +285,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DiagnosticReportGlstring"
   options {
-    [google.fhir.stu3.proto.field_description]: "Glstring"
-    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-glstring"
+    [google.fhir.proto.field_description]: "Glstring"
+    [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-glstring"
   }
 }
 field {
@@ -296,8 +296,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DiagnosticReportHaploid"
   options {
-    [google.fhir.stu3.proto.field_description]: "Haploid"
-    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-haploid"
+    [google.fhir.proto.field_description]: "Haploid"
+    [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-haploid"
   }
 }
 field {
@@ -307,8 +307,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "The platform, methodology and software applied at the time of the\rgenotyping"
-    [google.fhir.stu3.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-method"
+    [google.fhir.proto.field_description]: "The platform, methodology and software applied at the time of the\rgenotyping"
+    [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-method"
   }
 }
 nested_type {
@@ -330,7 +330,7 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "effective"
@@ -345,7 +345,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -355,7 +355,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -365,7 +365,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -375,7 +375,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Type of performer"
+      [google.fhir.proto.field_description]: "Type of performer"
     }
   }
   field {
@@ -385,10 +385,10 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Practitioner or Organization  participant"
-      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Practitioner or Organization  participant"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "Organization"
     }
   }
 }
@@ -401,7 +401,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -411,7 +411,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -421,7 +421,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -431,7 +431,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Comment about the image (e.g. explanation)"
+      [google.fhir.proto.field_description]: "Comment about the image (e.g. explanation)"
     }
   }
   field {
@@ -441,15 +441,15 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Reference to the image source"
-      [google.fhir.stu3.proto.valid_reference_type]: "Media"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Reference to the image source"
+      [google.fhir.proto.valid_reference_type]: "Media"
     }
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Profile for HLA Genotyping Results.\nA Diagnostic report - a combination of request information, atomic results, images, interpretation, as well as formatted reports.\nSee http://hl7.org/fhir/StructureDefinition/hlaresult"
-  [google.fhir.stu3.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/hlaresult"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Profile for HLA Genotyping Results.\nA Diagnostic report - a combination of request information, atomic results, images, interpretation, as well as formatted reports.\nSee http://hl7.org/fhir/StructureDefinition/hlaresult"
+  [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/hlaresult"
 }

@@ -22,21 +22,19 @@
 
 namespace google {
 namespace fhir {
-namespace stu3 {
 
 const string& GetStructureDefinitionUrl(
     const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().GetExtension(
-      stu3::proto::fhir_structure_definition_url);
+      proto::fhir_structure_definition_url);
 }
 
 const bool IsProfileOf(const ::google::protobuf::Descriptor* descriptor,
                        const ::google::protobuf::Descriptor* potential_base) {
   const string& base_url = GetStructureDefinitionUrl(potential_base);
   for (int i = 0;
-       i < descriptor->options().ExtensionSize(stu3::proto::fhir_profile_base);
-       i++) {
-    if (descriptor->options().GetExtension(stu3::proto::fhir_profile_base, i) ==
+       i < descriptor->options().ExtensionSize(proto::fhir_profile_base); i++) {
+    if (descriptor->options().GetExtension(proto::fhir_profile_base, i) ==
         base_url) {
       return true;
     }
@@ -45,49 +43,51 @@ const bool IsProfileOf(const ::google::protobuf::Descriptor* descriptor,
 }
 
 const bool IsProfile(const ::google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().ExtensionSize(stu3::proto::fhir_profile_base) >
-         0;
+  return descriptor->options().ExtensionSize(proto::fhir_profile_base) > 0;
 }
 
 const bool IsChoiceType(const ::google::protobuf::FieldDescriptor* field) {
   return field->type() == google::protobuf::FieldDescriptor::Type::TYPE_MESSAGE &&
-         field->message_type()->options().GetExtension(
-             stu3::proto::is_choice_type);
+         field->message_type()->options().GetExtension(proto::is_choice_type);
 }
 
 const bool IsPrimitive(const ::google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().GetExtension(
-             stu3::proto::structure_definition_kind) ==
-         stu3::proto::StructureDefinitionKindValue::KIND_PRIMITIVE_TYPE;
+  return descriptor->options().GetExtension(proto::structure_definition_kind) ==
+         proto::StructureDefinitionKindValue::KIND_PRIMITIVE_TYPE;
 }
 
 const bool IsResource(const ::google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().GetExtension(
-             stu3::proto::structure_definition_kind) ==
-         stu3::proto::StructureDefinitionKindValue::KIND_RESOURCE;
+  return descriptor->options().GetExtension(proto::structure_definition_kind) ==
+         proto::StructureDefinitionKindValue::KIND_RESOURCE;
 }
 
 const bool IsReference(const ::google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().ExtensionSize(stu3::proto::fhir_reference_type) >
-         0;
+  return descriptor->options().ExtensionSize(proto::fhir_reference_type) > 0;
 }
 
 const bool HasValueset(const ::google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().HasExtension(stu3::proto::fhir_valueset_url);
+  return descriptor->options().HasExtension(proto::fhir_valueset_url);
 }
 
 const string& GetInlinedCodingSystem(const ::google::protobuf::FieldDescriptor* field) {
-  return field->options().GetExtension(stu3::proto::fhir_inlined_coding_system);
+  return field->options().GetExtension(proto::fhir_inlined_coding_system);
 }
 
 const string& GetInlinedCodingCode(const ::google::protobuf::FieldDescriptor* field) {
-  return field->options().GetExtension(stu3::proto::fhir_inlined_coding_code);
+  return field->options().GetExtension(proto::fhir_inlined_coding_code);
 }
 
 const string& GetValueRegex(const ::google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().GetExtension(stu3::proto::value_regex);
+  return descriptor->options().GetExtension(proto::value_regex);
 }
 
-}  // namespace stu3
+const bool HasInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* field) {
+  return field->options().HasExtension(proto::fhir_inlined_extension_url);
+}
+
+const string GetInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* field) {
+  return field->options().GetExtension(proto::fhir_inlined_extension_url);
+}
+
 }  // namespace fhir
 }  // namespace google

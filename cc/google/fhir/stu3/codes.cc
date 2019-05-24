@@ -124,9 +124,9 @@ string TitleCaseToUpperUnderscores(const string& src) {
   for (int i = 0; i < target_enum_descriptor->value_count(); i++) {
     const EnumValueDescriptor* target_value = target_enum_descriptor->value(i);
     if (target_value->options().HasExtension(
-            ::google::fhir::stu3::proto::fhir_original_code) &&
+            ::google::fhir::proto::fhir_original_code) &&
         target_value->options().GetExtension(
-            ::google::fhir::stu3::proto::fhir_original_code) ==
+            ::google::fhir::proto::fhir_original_code) ==
             generic_code.value()) {
       target_reflection->SetEnum(target, target_value_field, target_value);
       return Status::OK();
@@ -191,9 +191,9 @@ string TitleCaseToUpperUnderscores(const string& src) {
   const ::google::protobuf::EnumValueDescriptor* enum_descriptor =
       reflection->GetEnum(typed_code, value_field);
   if (enum_descriptor->options().HasExtension(
-          ::google::fhir::stu3::proto::fhir_original_code)) {
+          ::google::fhir::proto::fhir_original_code)) {
     generic_code->set_value(enum_descriptor->options().GetExtension(
-        ::google::fhir::stu3::proto::fhir_original_code));
+        ::google::fhir::proto::fhir_original_code));
     return Status::OK();
   }
 

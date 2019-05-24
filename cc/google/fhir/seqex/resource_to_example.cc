@@ -356,7 +356,7 @@ void MessageToExample(const google::protobuf::Message& message, const string& pr
               .mutable_bytes_list()
               ->add_value(code.value());
         } else if (field->message_type()->options().HasExtension(
-                       stu3::proto::fhir_valueset_url)) {
+                       proto::fhir_valueset_url)) {
           // Valueset-constrained codes are emitted without tokenization.
           const google::protobuf::Reflection* reflection = child.GetReflection();
           const google::protobuf::FieldDescriptor* enum_field =
@@ -465,7 +465,7 @@ void MessageToExample(const google::protobuf::Message& message, const string& pr
         } else if (field->message_type()->full_name() ==
                        Reference::descriptor()->full_name() ||
                    field->message_type()->options().ExtensionSize(
-                       stu3::proto::fhir_reference_type) > 0 ||
+                       proto::fhir_reference_type) > 0 ||
                    field->message_type()->full_name() ==
                        Uri::descriptor()->full_name()) {
           // We don't emit any stu3 references or URIs.

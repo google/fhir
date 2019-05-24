@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Identifiers assigned to this order"
+    [google.fhir.proto.field_description]: "Identifiers assigned to this order"
   }
 }
 field {
@@ -96,7 +96,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.NutritionOrderStatusCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "proposed | draft | planned | requested | active | on-hold | completed | cancelled | entered-in-error"
+    [google.fhir.proto.field_description]: "proposed | draft | planned | requested | active | on-hold | completed | cancelled | entered-in-error"
   }
 }
 field {
@@ -106,9 +106,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "The person who requires the diet, formula or nutritional supplement"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "The person who requires the diet, formula or nutritional supplement"
+    [google.fhir.proto.valid_reference_type]: "Patient"
   }
 }
 field {
@@ -118,8 +118,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "The encounter associated with this nutrition order"
-    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
+    [google.fhir.proto.field_description]: "The encounter associated with this nutrition order"
+    [google.fhir.proto.valid_reference_type]: "Encounter"
   }
 }
 field {
@@ -129,8 +129,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Date and time the nutrition order was requested"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Date and time the nutrition order was requested"
   }
 }
 field {
@@ -140,8 +140,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Who ordered the diet, formula or nutritional supplement"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.field_description]: "Who ordered the diet, formula or nutritional supplement"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -151,8 +151,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "List of the patient\'s food and nutrition-related allergies and intolerances"
-    [google.fhir.stu3.proto.valid_reference_type]: "AllergyIntolerance"
+    [google.fhir.proto.field_description]: "List of the patient\'s food and nutrition-related allergies and intolerances"
+    [google.fhir.proto.valid_reference_type]: "AllergyIntolerance"
   }
 }
 field {
@@ -162,7 +162,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Order-specific modifier about the type of food that should be given"
+    [google.fhir.proto.field_description]: "Order-specific modifier about the type of food that should be given"
   }
 }
 field {
@@ -172,7 +172,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Order-specific modifier about the type of food that should not be given"
+    [google.fhir.proto.field_description]: "Order-specific modifier about the type of food that should not be given"
   }
 }
 field {
@@ -182,7 +182,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.NutritionOrder.OralDiet"
   options {
-    [google.fhir.stu3.proto.field_description]: "Oral diet components"
+    [google.fhir.proto.field_description]: "Oral diet components"
   }
 }
 field {
@@ -192,7 +192,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.NutritionOrder.Supplement"
   options {
-    [google.fhir.stu3.proto.field_description]: "Supplement components"
+    [google.fhir.proto.field_description]: "Supplement components"
   }
 }
 field {
@@ -202,7 +202,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.NutritionOrder.EnteralFormula"
   options {
-    [google.fhir.stu3.proto.field_description]: "Enteral formula components"
+    [google.fhir.proto.field_description]: "Enteral formula components"
   }
 }
 nested_type {
@@ -214,7 +214,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -224,7 +224,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -234,7 +234,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -244,7 +244,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Type of oral diet or diet restrictions that describe what can be consumed orally"
+      [google.fhir.proto.field_description]: "Type of oral diet or diet restrictions that describe what can be consumed orally"
     }
   }
   field {
@@ -254,7 +254,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Timing"
     options {
-      [google.fhir.stu3.proto.field_description]: "Scheduled frequency of diet"
+      [google.fhir.proto.field_description]: "Scheduled frequency of diet"
     }
   }
   field {
@@ -264,7 +264,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.NutritionOrder.OralDiet.Nutrient"
     options {
-      [google.fhir.stu3.proto.field_description]: "Required  nutrient modifications"
+      [google.fhir.proto.field_description]: "Required  nutrient modifications"
     }
   }
   field {
@@ -274,7 +274,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.NutritionOrder.OralDiet.Texture"
     options {
-      [google.fhir.stu3.proto.field_description]: "Required  texture modifications"
+      [google.fhir.proto.field_description]: "Required  texture modifications"
     }
   }
   field {
@@ -284,7 +284,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "The required consistency of fluids and liquids provided to the patient"
+      [google.fhir.proto.field_description]: "The required consistency of fluids and liquids provided to the patient"
     }
   }
   field {
@@ -294,7 +294,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Instructions or additional information about the oral diet"
+      [google.fhir.proto.field_description]: "Instructions or additional information about the oral diet"
     }
   }
   nested_type {
@@ -306,7 +306,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -316,7 +316,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -326,7 +326,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -336,7 +336,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "Type of nutrient that is being modified"
+        [google.fhir.proto.field_description]: "Type of nutrient that is being modified"
       }
     }
     field {
@@ -346,7 +346,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.SimpleQuantity"
       options {
-        [google.fhir.stu3.proto.field_description]: "Quantity of the specified nutrient"
+        [google.fhir.proto.field_description]: "Quantity of the specified nutrient"
       }
     }
   }
@@ -359,7 +359,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -369,7 +369,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -379,7 +379,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -389,7 +389,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "Code to indicate how to alter the texture of the foods, e.g. pureed"
+        [google.fhir.proto.field_description]: "Code to indicate how to alter the texture of the foods, e.g. pureed"
       }
     }
     field {
@@ -399,7 +399,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "Concepts that are used to identify an entity that is ingested for nutritional purposes"
+        [google.fhir.proto.field_description]: "Concepts that are used to identify an entity that is ingested for nutritional purposes"
       }
     }
   }
@@ -413,7 +413,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -423,7 +423,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -433,7 +433,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -443,7 +443,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Type of supplement product requested"
+      [google.fhir.proto.field_description]: "Type of supplement product requested"
     }
   }
   field {
@@ -453,7 +453,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Product or brand name of the nutritional supplement"
+      [google.fhir.proto.field_description]: "Product or brand name of the nutritional supplement"
     }
   }
   field {
@@ -463,7 +463,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Timing"
     options {
-      [google.fhir.stu3.proto.field_description]: "Scheduled frequency of supplement"
+      [google.fhir.proto.field_description]: "Scheduled frequency of supplement"
     }
   }
   field {
@@ -473,7 +473,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
-      [google.fhir.stu3.proto.field_description]: "Amount of the nutritional supplement"
+      [google.fhir.proto.field_description]: "Amount of the nutritional supplement"
     }
   }
   field {
@@ -483,7 +483,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Instructions or additional information about the oral supplement"
+      [google.fhir.proto.field_description]: "Instructions or additional information about the oral supplement"
     }
   }
 }
@@ -496,7 +496,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -506,7 +506,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -516,7 +516,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -526,7 +526,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Type of enteral or infant formula"
+      [google.fhir.proto.field_description]: "Type of enteral or infant formula"
     }
   }
   field {
@@ -536,7 +536,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Product or brand name of the enteral or infant formula"
+      [google.fhir.proto.field_description]: "Product or brand name of the enteral or infant formula"
     }
   }
   field {
@@ -546,7 +546,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Type of modular component to add to the feeding"
+      [google.fhir.proto.field_description]: "Type of modular component to add to the feeding"
     }
   }
   field {
@@ -556,7 +556,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Product or brand name of the modular additive"
+      [google.fhir.proto.field_description]: "Product or brand name of the modular additive"
     }
   }
   field {
@@ -566,7 +566,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
-      [google.fhir.stu3.proto.field_description]: "Amount of energy per specified volume that is required"
+      [google.fhir.proto.field_description]: "Amount of energy per specified volume that is required"
     }
   }
   field {
@@ -576,7 +576,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "How the formula should enter the patient\'s gastrointestinal tract"
+      [google.fhir.proto.field_description]: "How the formula should enter the patient\'s gastrointestinal tract"
     }
   }
   field {
@@ -586,7 +586,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.NutritionOrder.EnteralFormula.Administration"
     options {
-      [google.fhir.stu3.proto.field_description]: "Formula feeding instruction as structured data"
+      [google.fhir.proto.field_description]: "Formula feeding instruction as structured data"
     }
   }
   field {
@@ -596,7 +596,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
-      [google.fhir.stu3.proto.field_description]: "Upper limit on formula volume per unit of time"
+      [google.fhir.proto.field_description]: "Upper limit on formula volume per unit of time"
     }
   }
   field {
@@ -606,7 +606,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Formula feeding instructions expressed as text"
+      [google.fhir.proto.field_description]: "Formula feeding instructions expressed as text"
     }
   }
   nested_type {
@@ -618,7 +618,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -628,7 +628,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -638,7 +638,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -648,7 +648,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Timing"
       options {
-        [google.fhir.stu3.proto.field_description]: "Scheduled frequency of enteral feeding"
+        [google.fhir.proto.field_description]: "Scheduled frequency of enteral feeding"
       }
     }
     field {
@@ -658,7 +658,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.SimpleQuantity"
       options {
-        [google.fhir.stu3.proto.field_description]: "The volume of formula to provide"
+        [google.fhir.proto.field_description]: "The volume of formula to provide"
       }
     }
     field {
@@ -668,7 +668,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.NutritionOrder.EnteralFormula.Administration.Rate"
       options {
-        [google.fhir.stu3.proto.field_description]: "Speed with which the formula is provided per period of time"
+        [google.fhir.proto.field_description]: "Speed with which the formula is provided per period of time"
       }
     }
     nested_type {
@@ -690,7 +690,7 @@ nested_type {
         oneof_index: 0
       }
       options {
-        [google.fhir.stu3.proto.is_choice_type]: true
+        [google.fhir.proto.is_choice_type]: true
       }
       oneof_decl {
         name: "rate"
@@ -699,7 +699,7 @@ nested_type {
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for NutritionOrder, last updated 2017-04-19T07:44:43.294+10:00.\nDiet, formula or nutritional supplement request.\nSee http://hl7.org/fhir/StructureDefinition/NutritionOrder"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/NutritionOrder"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for NutritionOrder, last updated 2017-04-19T07:44:43.294+10:00.\nDiet, formula or nutritional supplement request.\nSee http://hl7.org/fhir/StructureDefinition/NutritionOrder"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/NutritionOrder"
 }

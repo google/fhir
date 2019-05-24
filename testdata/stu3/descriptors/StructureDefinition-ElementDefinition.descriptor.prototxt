@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -26,8 +26,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Path of the element in the hierarchy of elements"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Path of the element in the hierarchy of elements"
   }
 }
 field {
@@ -37,7 +37,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.PropertyRepresentationCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "xmlAttr | xmlText | typeAttr | cdaText | xhtml"
+    [google.fhir.proto.field_description]: "xmlAttr | xmlText | typeAttr | cdaText | xhtml"
   }
 }
 field {
@@ -47,7 +47,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Name for this particular element (in a set of slices)"
+    [google.fhir.proto.field_description]: "Name for this particular element (in a set of slices)"
   }
 }
 field {
@@ -57,7 +57,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Name for element to display with or prompt for element"
+    [google.fhir.proto.field_description]: "Name for element to display with or prompt for element"
   }
 }
 field {
@@ -67,7 +67,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Coding"
   options {
-    [google.fhir.stu3.proto.field_description]: "Corresponding codes in terminologies"
+    [google.fhir.proto.field_description]: "Corresponding codes in terminologies"
   }
 }
 field {
@@ -77,8 +77,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementDefinition.Slicing"
   options {
-    [google.fhir.stu3.proto.field_description]: "This element is sliced - slices follow"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "discriminator.exists() or description.exists()"
+    [google.fhir.proto.field_description]: "This element is sliced - slices follow"
+    [google.fhir.proto.fhir_path_constraint]: "discriminator.exists() or description.exists()"
   }
 }
 field {
@@ -88,7 +88,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Concise definition for space-constrained presentation"
+    [google.fhir.proto.field_description]: "Concise definition for space-constrained presentation"
   }
 }
 field {
@@ -98,7 +98,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Markdown"
   options {
-    [google.fhir.stu3.proto.field_description]: "Full formal definition as narrative text"
+    [google.fhir.proto.field_description]: "Full formal definition as narrative text"
   }
 }
 field {
@@ -108,7 +108,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Markdown"
   options {
-    [google.fhir.stu3.proto.field_description]: "Comments about the use of this element"
+    [google.fhir.proto.field_description]: "Comments about the use of this element"
   }
 }
 field {
@@ -118,7 +118,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Markdown"
   options {
-    [google.fhir.stu3.proto.field_description]: "Why this resource has been created"
+    [google.fhir.proto.field_description]: "Why this resource has been created"
   }
 }
 field {
@@ -128,7 +128,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Other names"
+    [google.fhir.proto.field_description]: "Other names"
   }
 }
 field {
@@ -138,7 +138,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.UnsignedInt"
   options {
-    [google.fhir.stu3.proto.field_description]: "Minimum Cardinality"
+    [google.fhir.proto.field_description]: "Minimum Cardinality"
   }
 }
 field {
@@ -148,8 +148,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Maximum Cardinality (a number or *)"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "empty() or ($this = \'*\') or (toInteger() >= 0)"
+    [google.fhir.proto.field_description]: "Maximum Cardinality (a number or *)"
+    [google.fhir.proto.fhir_path_constraint]: "empty() or ($this = \'*\') or (toInteger() >= 0)"
   }
 }
 field {
@@ -159,7 +159,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementDefinition.Base"
   options {
-    [google.fhir.stu3.proto.field_description]: "Base definition information for tools"
+    [google.fhir.proto.field_description]: "Base definition information for tools"
   }
 }
 field {
@@ -169,7 +169,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "Reference to definition of content for the element"
+    [google.fhir.proto.field_description]: "Reference to definition of content for the element"
   }
 }
 field {
@@ -179,8 +179,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementDefinition.TypeRef"
   options {
-    [google.fhir.stu3.proto.field_description]: "Data type and Profile for this element"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "aggregation.empty() or (code = \'Reference\')"
+    [google.fhir.proto.field_description]: "Data type and Profile for this element"
+    [google.fhir.proto.fhir_path_constraint]: "aggregation.empty() or (code = \'Reference\')"
   }
 }
 field {
@@ -190,7 +190,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementDefinition.DefaultValue"
   options {
-    [google.fhir.stu3.proto.field_description]: "Specified value if missing from instance"
+    [google.fhir.proto.field_description]: "Specified value if missing from instance"
   }
 }
 field {
@@ -200,7 +200,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Markdown"
   options {
-    [google.fhir.stu3.proto.field_description]: "Implicit meaning when this element is missing"
+    [google.fhir.proto.field_description]: "Implicit meaning when this element is missing"
   }
 }
 field {
@@ -210,7 +210,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "What the order of the elements means"
+    [google.fhir.proto.field_description]: "What the order of the elements means"
   }
 }
 field {
@@ -220,7 +220,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementDefinition.Fixed"
   options {
-    [google.fhir.stu3.proto.field_description]: "Value must be exactly this"
+    [google.fhir.proto.field_description]: "Value must be exactly this"
   }
 }
 field {
@@ -230,7 +230,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementDefinition.Pattern"
   options {
-    [google.fhir.stu3.proto.field_description]: "Value must have at least these property values"
+    [google.fhir.proto.field_description]: "Value must have at least these property values"
   }
 }
 field {
@@ -240,7 +240,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementDefinition.Example"
   options {
-    [google.fhir.stu3.proto.field_description]: "Example value (as defined for type)"
+    [google.fhir.proto.field_description]: "Example value (as defined for type)"
   }
 }
 field {
@@ -250,7 +250,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementDefinition.MinValue"
   options {
-    [google.fhir.stu3.proto.field_description]: "Minimum Allowed Value (for some types)"
+    [google.fhir.proto.field_description]: "Minimum Allowed Value (for some types)"
   }
 }
 field {
@@ -260,7 +260,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementDefinition.MaxValue"
   options {
-    [google.fhir.stu3.proto.field_description]: "Maximum Allowed Value (for some types)"
+    [google.fhir.proto.field_description]: "Maximum Allowed Value (for some types)"
   }
 }
 field {
@@ -270,7 +270,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Integer"
   options {
-    [google.fhir.stu3.proto.field_description]: "Max length for strings"
+    [google.fhir.proto.field_description]: "Max length for strings"
   }
 }
 field {
@@ -280,7 +280,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Reference to invariant about presence"
+    [google.fhir.proto.field_description]: "Reference to invariant about presence"
   }
 }
 field {
@@ -290,7 +290,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementDefinition.Constraint"
   options {
-    [google.fhir.stu3.proto.field_description]: "Condition that must evaluate to true"
+    [google.fhir.proto.field_description]: "Condition that must evaluate to true"
   }
 }
 field {
@@ -300,7 +300,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "If the element must supported"
+    [google.fhir.proto.field_description]: "If the element must supported"
   }
 }
 field {
@@ -310,7 +310,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "If this modifies the meaning of other elements"
+    [google.fhir.proto.field_description]: "If this modifies the meaning of other elements"
   }
 }
 field {
@@ -320,7 +320,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "Include when _summary = true?"
+    [google.fhir.proto.field_description]: "Include when _summary = true?"
   }
 }
 field {
@@ -330,9 +330,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementDefinition.ElementDefinitionBinding"
   options {
-    [google.fhir.stu3.proto.field_description]: "ValueSet details if this is coded"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "valueSet.exists() or description.exists()"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "valueSet.is(uri).not() or valueSet.as(uri).startsWith(\'http:\') or valueSet.as(uri).startsWith(\'https\') or valueSet.as(uri).startsWith(\'urn:\')"
+    [google.fhir.proto.field_description]: "ValueSet details if this is coded"
+    [google.fhir.proto.fhir_path_constraint]: "valueSet.exists() or description.exists()"
+    [google.fhir.proto.fhir_path_constraint]: "valueSet.is(uri).not() or valueSet.as(uri).startsWith(\'http:\') or valueSet.as(uri).startsWith(\'https\') or valueSet.as(uri).startsWith(\'urn:\')"
   }
 }
 field {
@@ -342,7 +342,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ElementDefinition.Mapping"
   options {
-    [google.fhir.stu3.proto.field_description]: "Map element to another set of definitions"
+    [google.fhir.proto.field_description]: "Map element to another set of definitions"
   }
 }
 nested_type {
@@ -354,7 +354,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -364,7 +364,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -374,7 +374,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ElementDefinition.Slicing.Discriminator"
     options {
-      [google.fhir.stu3.proto.field_description]: "Element values that are used to distinguish the slices"
+      [google.fhir.proto.field_description]: "Element values that are used to distinguish the slices"
     }
   }
   field {
@@ -384,7 +384,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Text description of how slicing works (or not)"
+      [google.fhir.proto.field_description]: "Text description of how slicing works (or not)"
     }
   }
   field {
@@ -394,7 +394,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Boolean"
     options {
-      [google.fhir.stu3.proto.field_description]: "If elements must be in same order as slices"
+      [google.fhir.proto.field_description]: "If elements must be in same order as slices"
     }
   }
   field {
@@ -404,8 +404,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SlicingRulesCode"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "closed | open | openAtEnd"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "closed | open | openAtEnd"
     }
   }
   nested_type {
@@ -417,7 +417,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -427,7 +427,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -437,8 +437,8 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.DiscriminatorTypeCode"
       options {
-        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-        [google.fhir.stu3.proto.field_description]: "value | exists | pattern | type | profile"
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "value | exists | pattern | type | profile"
       }
     }
     field {
@@ -448,8 +448,8 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-        [google.fhir.stu3.proto.field_description]: "Path to element value"
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "Path to element value"
       }
     }
   }
@@ -463,7 +463,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -473,7 +473,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -483,8 +483,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Path that identifies the base element"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Path that identifies the base element"
     }
   }
   field {
@@ -494,8 +494,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.UnsignedInt"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Min cardinality of the base element"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Min cardinality of the base element"
     }
   }
   field {
@@ -505,8 +505,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Max cardinality of the base element"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Max cardinality of the base element"
     }
   }
 }
@@ -519,7 +519,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -529,7 +529,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -539,8 +539,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Uri"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Data type or Resource (reference to definition)"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Data type or Resource (reference to definition)"
     }
   }
   field {
@@ -550,7 +550,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Uri"
     options {
-      [google.fhir.stu3.proto.field_description]: "Profile (StructureDefinition) to apply (or IG)"
+      [google.fhir.proto.field_description]: "Profile (StructureDefinition) to apply (or IG)"
     }
   }
   field {
@@ -560,7 +560,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Uri"
     options {
-      [google.fhir.stu3.proto.field_description]: "Profile (StructureDefinition) to apply to reference target (or IG)"
+      [google.fhir.proto.field_description]: "Profile (StructureDefinition) to apply to reference target (or IG)"
     }
   }
   field {
@@ -570,7 +570,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.AggregationModeCode"
     options {
-      [google.fhir.stu3.proto.field_description]: "contained | referenced | bundled - how aggregated"
+      [google.fhir.proto.field_description]: "contained | referenced | bundled - how aggregated"
     }
   }
   field {
@@ -580,7 +580,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ReferenceVersionRulesCode"
     options {
-      [google.fhir.stu3.proto.field_description]: "either | independent | specific"
+      [google.fhir.proto.field_description]: "either | independent | specific"
     }
   }
 }
@@ -892,7 +892,7 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "default_value"
@@ -1206,7 +1206,7 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "fixed"
@@ -1520,7 +1520,7 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "pattern"
@@ -1535,7 +1535,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -1545,7 +1545,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -1555,8 +1555,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Describes the purpose of this example"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Describes the purpose of this example"
     }
   }
   field {
@@ -1566,8 +1566,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ElementDefinition.Example.Value"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Value of Example (one of allowed types)"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Value of Example (one of allowed types)"
     }
   }
   nested_type {
@@ -1878,7 +1878,7 @@ nested_type {
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "value"
@@ -1960,7 +1960,7 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "min_value"
@@ -2041,7 +2041,7 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "max_value"
@@ -2056,7 +2056,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -2066,7 +2066,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -2076,8 +2076,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Id"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Target of \'condition\' reference above"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Target of \'condition\' reference above"
     }
   }
   field {
@@ -2087,7 +2087,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Why this constraint is necessary or appropriate"
+      [google.fhir.proto.field_description]: "Why this constraint is necessary or appropriate"
     }
   }
   field {
@@ -2097,8 +2097,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ConstraintSeverityCode"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "error | warning"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "error | warning"
     }
   }
   field {
@@ -2108,8 +2108,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Human description of constraint"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Human description of constraint"
     }
   }
   field {
@@ -2119,8 +2119,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "FHIRPath expression of constraint"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "FHIRPath expression of constraint"
     }
   }
   field {
@@ -2130,7 +2130,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "XPath expression of constraint"
+      [google.fhir.proto.field_description]: "XPath expression of constraint"
     }
   }
   field {
@@ -2140,7 +2140,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Uri"
     options {
-      [google.fhir.stu3.proto.field_description]: "Reference to original source of constraint"
+      [google.fhir.proto.field_description]: "Reference to original source of constraint"
     }
   }
 }
@@ -2153,7 +2153,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -2163,7 +2163,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -2173,8 +2173,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.BindingStrengthCode"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "required | extensible | preferred | example"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "required | extensible | preferred | example"
     }
   }
   field {
@@ -2184,7 +2184,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Human explanation of the value set"
+      [google.fhir.proto.field_description]: "Human explanation of the value set"
     }
   }
   field {
@@ -2194,7 +2194,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ElementDefinition.ElementDefinitionBinding.ValueSet"
     options {
-      [google.fhir.stu3.proto.field_description]: "Source of value set"
+      [google.fhir.proto.field_description]: "Source of value set"
     }
   }
   nested_type {
@@ -2214,12 +2214,12 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "ValueSet"
+        [google.fhir.proto.valid_reference_type]: "ValueSet"
       }
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "value_set"
@@ -2235,7 +2235,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -2245,7 +2245,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -2255,8 +2255,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Id"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Reference to mapping declaration"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Reference to mapping declaration"
     }
   }
   field {
@@ -2266,7 +2266,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.MimeTypeCode"
     options {
-      [google.fhir.stu3.proto.field_description]: "Computable language of mapping"
+      [google.fhir.proto.field_description]: "Computable language of mapping"
     }
   }
   field {
@@ -2276,8 +2276,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Details of the mapping"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Details of the mapping"
     }
   }
   field {
@@ -2287,12 +2287,12 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Comments about the mapping or its use"
+      [google.fhir.proto.field_description]: "Comments about the mapping or its use"
     }
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for ElementDefinition, last updated 2017-04-19T07:44:43.294+10:00.\nDefinition of an element in a resource or extension.\nSee http://hl7.org/fhir/StructureDefinition/ElementDefinition"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ElementDefinition"
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ElementDefinition, last updated 2017-04-19T07:44:43.294+10:00.\nDefinition of an element in a resource or extension.\nSee http://hl7.org/fhir/StructureDefinition/ElementDefinition"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ElementDefinition"
 }

@@ -17,7 +17,7 @@
 
 syntax = "proto3";
 
-package google.fhir.stu3.proto;
+package google.fhir.proto;
 
 import "google/protobuf/descriptor.proto";
 

@@ -245,7 +245,7 @@ Status ValidateExtension(const Descriptor* descriptor) {
                            " is not a FHIR extension type");
   }
   if (!descriptor->options().HasExtension(
-          stu3::proto::fhir_structure_definition_url)) {
+          ::google::fhir::proto::fhir_structure_definition_url)) {
     return InvalidArgument(descriptor->full_name(),
                            " is not a valid FHIR extension type: No "
                            "fhir_structure_definition_url.");
@@ -257,8 +257,7 @@ Status ConvertToExtension(const Message& message, Extension* extension) {
   const Descriptor* descriptor = message.GetDescriptor();
   FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
 
-  extension->mutable_url()->set_value(descriptor->options().GetExtension(
-      stu3::proto::fhir_structure_definition_url));
+  extension->mutable_url()->set_value(GetStructureDefinitionUrl(descriptor));
 
   // Carry over the id field if present.
   const FieldDescriptor* id_field =
@@ -357,8 +356,7 @@ Status ExtensionToMessage(const Extension& extension, Message* message) {
 
 Status ClearTypedExtensions(const Descriptor* descriptor, Message* message) {
   FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
-  const string url = descriptor->options().GetExtension(
-      stu3::proto::fhir_structure_definition_url);
+  const string url = GetStructureDefinitionUrl(descriptor);
 
   const Reflection* reflection = message->GetReflection();
   const FieldDescriptor* field =
@@ -379,8 +377,10 @@ Status ClearTypedExtensions(const Descriptor* descriptor, Message* message) {
 }
 
 string GetInlinedExtensionUrl(const FieldDescriptor* field) {
-  return field->options().HasExtension(proto::fhir_inlined_extension_url)
-             ? field->options().GetExtension(proto::fhir_inlined_extension_url)
+  return field->options().HasExtension(
+             ::google::fhir::proto::fhir_inlined_extension_url)
+             ? field->options().GetExtension(
+                   ::google::fhir::proto::fhir_inlined_extension_url)
              : field->json_name();
 }
 

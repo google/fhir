@@ -22,17 +22,16 @@ import "proto/stu3/datatypes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.testing";
-option (.google.fhir.stu3.proto.fhir_version) = STU3;
+option (.google.fhir.proto.fhir_version) = STU3;
 
 // Auto-generated from StructureDefinition for SimpleDecimalExt.
 // This is the A-Extension.
 // See http://test/url/base/SimpleDecimalExt
 message SimpleDecimalExt {
-  option (.google.fhir.stu3.proto.structure_definition_kind) =
-      KIND_COMPLEX_TYPE;
-  option (.google.fhir.stu3.proto.fhir_profile_base) =
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
-  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+  option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/SimpleDecimalExt";
 
   // xml:id (or equivalent in JSON)
@@ -49,11 +48,10 @@ message SimpleDecimalExt {
 // SimpleCodeableConcept Extension.
 // See http://test/url/base/SimpleCodeableConceptExtension
 message SimpleCodeableConceptExtension {
-  option (.google.fhir.stu3.proto.structure_definition_kind) =
-      KIND_COMPLEX_TYPE;
-  option (.google.fhir.stu3.proto.fhir_profile_base) =
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
-  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+  option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/SimpleCodeableConceptExtension";
 
   // xml:id (or equivalent in JSON)
@@ -67,11 +65,10 @@ message SimpleCodeableConceptExtension {
 // Extension for Digital Media Type code.
 // See http://test/url/base/DigitalMediaType
 message DigitalMediaType {
-  option (.google.fhir.stu3.proto.structure_definition_kind) =
-      KIND_COMPLEX_TYPE;
-  option (.google.fhir.stu3.proto.fhir_profile_base) =
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
-  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+  option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/DigitalMediaType";
 
   // xml:id (or equivalent in JSON)
@@ -85,20 +82,18 @@ message DigitalMediaType {
 // complex extension.
 // See http://test/url/base/ComplexExt
 message ComplexExt {
-  option (.google.fhir.stu3.proto.structure_definition_kind) =
-      KIND_COMPLEX_TYPE;
-  option (.google.fhir.stu3.proto.fhir_profile_base) =
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
-  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+  option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/ComplexExt";
 
   // xml:id (or equivalent in JSON)
   proto.String id = 1;
 
   // simple subfield
-  proto.String simple_subfield = 4
-      [(.google.fhir.stu3.proto.fhir_path_constraint) =
-           "extension.exists() != value.exists()"];
+  proto.String simple_subfield = 4 [(.google.fhir.proto.fhir_path_constraint) =
+                                        "extension.exists() != value.exists()"];
 
   // complex subfield
   message ComplexSubfield {
@@ -113,7 +108,7 @@ message ComplexExt {
 
     // choice type
     message SimpleSubSubFieldA {
-      option (.google.fhir.stu3.proto.is_choice_type) = true;
+      option (.google.fhir.proto.is_choice_type) = true;
 
       oneof simple_sub_sub_field_a {
         proto.String string_value = 1 [json_name = "string"];
@@ -122,17 +117,17 @@ message ComplexExt {
       }
     }
     SimpleSubSubFieldA simple_sub_sub_field_a = 4
-        [(.google.fhir.stu3.proto.fhir_path_constraint) =
+        [(.google.fhir.proto.fhir_path_constraint) =
              "extension.exists() != value.exists()"];
 
     // simple sub sub field b
     repeated proto.UnsignedInt simple_sub_sub_field_b = 5
-        [(.google.fhir.stu3.proto.fhir_path_constraint) =
+        [(.google.fhir.proto.fhir_path_constraint) =
              "extension.exists() != value.exists()"];
   }
   ComplexSubfield complex_subfield = 5 [
-    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.fhir_path_constraint) =
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 }

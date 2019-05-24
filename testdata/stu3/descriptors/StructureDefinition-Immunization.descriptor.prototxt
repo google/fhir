@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Business identifier"
+    [google.fhir.proto.field_description]: "Business identifier"
   }
 }
 field {
@@ -96,8 +96,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ImmunizationStatusCodesCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "completed | entered-in-error"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "completed | entered-in-error"
   }
 }
 field {
@@ -107,8 +107,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Flag for whether immunization was given"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Flag for whether immunization was given"
   }
 }
 field {
@@ -118,8 +118,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Vaccine product administered"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Vaccine product administered"
   }
 }
 field {
@@ -129,9 +129,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Who was immunized"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Who was immunized"
+    [google.fhir.proto.valid_reference_type]: "Patient"
   }
 }
 field {
@@ -141,8 +141,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Encounter administered as part of"
-    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
+    [google.fhir.proto.field_description]: "Encounter administered as part of"
+    [google.fhir.proto.valid_reference_type]: "Encounter"
   }
 }
 field {
@@ -152,7 +152,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "Vaccination administration date"
+    [google.fhir.proto.field_description]: "Vaccination administration date"
   }
 }
 field {
@@ -162,8 +162,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Indicates context the data was recorded in"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Indicates context the data was recorded in"
   }
 }
 field {
@@ -173,7 +173,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Indicates the source of a secondarily reported record"
+    [google.fhir.proto.field_description]: "Indicates the source of a secondarily reported record"
   }
 }
 field {
@@ -183,8 +183,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Where vaccination occurred"
-    [google.fhir.stu3.proto.valid_reference_type]: "Location"
+    [google.fhir.proto.field_description]: "Where vaccination occurred"
+    [google.fhir.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -194,8 +194,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Vaccine manufacturer"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.field_description]: "Vaccine manufacturer"
+    [google.fhir.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -205,7 +205,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Vaccine lot number"
+    [google.fhir.proto.field_description]: "Vaccine lot number"
   }
 }
 field {
@@ -215,7 +215,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Date"
   options {
-    [google.fhir.stu3.proto.field_description]: "Vaccine expiration date"
+    [google.fhir.proto.field_description]: "Vaccine expiration date"
   }
 }
 field {
@@ -225,7 +225,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Body site vaccine  was administered"
+    [google.fhir.proto.field_description]: "Body site vaccine  was administered"
   }
 }
 field {
@@ -235,7 +235,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "How vaccine entered body"
+    [google.fhir.proto.field_description]: "How vaccine entered body"
   }
 }
 field {
@@ -245,7 +245,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.SimpleQuantity"
   options {
-    [google.fhir.stu3.proto.field_description]: "Amount of vaccine administered"
+    [google.fhir.proto.field_description]: "Amount of vaccine administered"
   }
 }
 field {
@@ -255,7 +255,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Immunization.Practitioner"
   options {
-    [google.fhir.stu3.proto.field_description]: "Who performed event"
+    [google.fhir.proto.field_description]: "Who performed event"
   }
 }
 field {
@@ -265,7 +265,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Annotation"
   options {
-    [google.fhir.stu3.proto.field_description]: "Vaccination notes"
+    [google.fhir.proto.field_description]: "Vaccination notes"
   }
 }
 field {
@@ -275,7 +275,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Immunization.Explanation"
   options {
-    [google.fhir.stu3.proto.field_description]: "Administration/non-administration reasons"
+    [google.fhir.proto.field_description]: "Administration/non-administration reasons"
   }
 }
 field {
@@ -285,7 +285,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Immunization.Reaction"
   options {
-    [google.fhir.stu3.proto.field_description]: "Details of a reaction that follows immunization"
+    [google.fhir.proto.field_description]: "Details of a reaction that follows immunization"
   }
 }
 field {
@@ -295,7 +295,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Immunization.VaccinationProtocol"
   options {
-    [google.fhir.stu3.proto.field_description]: "What protocol was followed"
+    [google.fhir.proto.field_description]: "What protocol was followed"
   }
 }
 nested_type {
@@ -307,7 +307,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -317,7 +317,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -327,7 +327,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -337,7 +337,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "What type of performance was done"
+      [google.fhir.proto.field_description]: "What type of performance was done"
     }
   }
   field {
@@ -347,9 +347,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Individual who was performing"
-      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Individual who was performing"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
     }
   }
 }
@@ -362,7 +362,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -372,7 +372,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -382,7 +382,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -392,7 +392,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Why immunization occurred"
+      [google.fhir.proto.field_description]: "Why immunization occurred"
     }
   }
   field {
@@ -402,7 +402,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Why immunization did not occur"
+      [google.fhir.proto.field_description]: "Why immunization did not occur"
     }
   }
 }
@@ -415,7 +415,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -425,7 +425,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -435,7 +435,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -445,7 +445,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.DateTime"
     options {
-      [google.fhir.stu3.proto.field_description]: "When reaction started"
+      [google.fhir.proto.field_description]: "When reaction started"
     }
   }
   field {
@@ -455,8 +455,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional information on reaction"
-      [google.fhir.stu3.proto.valid_reference_type]: "Observation"
+      [google.fhir.proto.field_description]: "Additional information on reaction"
+      [google.fhir.proto.valid_reference_type]: "Observation"
     }
   }
   field {
@@ -466,7 +466,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Boolean"
     options {
-      [google.fhir.stu3.proto.field_description]: "Indicates self-reported reaction"
+      [google.fhir.proto.field_description]: "Indicates self-reported reaction"
     }
   }
 }
@@ -479,7 +479,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -489,7 +489,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -499,7 +499,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -509,7 +509,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.field_description]: "Dose number within series"
+      [google.fhir.proto.field_description]: "Dose number within series"
     }
   }
   field {
@@ -519,7 +519,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Details of vaccine protocol"
+      [google.fhir.proto.field_description]: "Details of vaccine protocol"
     }
   }
   field {
@@ -529,8 +529,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Who is responsible for protocol"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.field_description]: "Who is responsible for protocol"
+      [google.fhir.proto.valid_reference_type]: "Organization"
     }
   }
   field {
@@ -540,7 +540,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Name of vaccine series"
+      [google.fhir.proto.field_description]: "Name of vaccine series"
     }
   }
   field {
@@ -550,7 +550,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.field_description]: "Recommended number of doses for immunity"
+      [google.fhir.proto.field_description]: "Recommended number of doses for immunity"
     }
   }
   field {
@@ -560,8 +560,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Disease immunized against"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Disease immunized against"
     }
   }
   field {
@@ -571,8 +571,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Indicates if dose counts towards immunity"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Indicates if dose counts towards immunity"
     }
   }
   field {
@@ -582,12 +582,12 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Why dose does (not) count"
+      [google.fhir.proto.field_description]: "Why dose does (not) count"
     }
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Immunization, last updated 2017-04-19T07:44:43.294+10:00.\nImmunization event information.\nSee http://hl7.org/fhir/StructureDefinition/Immunization"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Immunization"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Immunization, last updated 2017-04-19T07:44:43.294+10:00.\nImmunization event information.\nSee http://hl7.org/fhir/StructureDefinition/Immunization"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Immunization"
 }

@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Business Identifier for observation"
+    [google.fhir.proto.field_description]: "Business Identifier for observation"
   }
 }
 field {
@@ -96,14 +96,14 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Fulfills plan, proposal or order"
-    [google.fhir.stu3.proto.valid_reference_type]: "CarePlan"
-    [google.fhir.stu3.proto.valid_reference_type]: "DeviceRequest"
-    [google.fhir.stu3.proto.valid_reference_type]: "ImmunizationRecommendation"
-    [google.fhir.stu3.proto.valid_reference_type]: "MedicationRequest"
-    [google.fhir.stu3.proto.valid_reference_type]: "NutritionOrder"
-    [google.fhir.stu3.proto.valid_reference_type]: "ProcedureRequest"
-    [google.fhir.stu3.proto.valid_reference_type]: "ReferralRequest"
+    [google.fhir.proto.field_description]: "Fulfills plan, proposal or order"
+    [google.fhir.proto.valid_reference_type]: "CarePlan"
+    [google.fhir.proto.valid_reference_type]: "DeviceRequest"
+    [google.fhir.proto.valid_reference_type]: "ImmunizationRecommendation"
+    [google.fhir.proto.valid_reference_type]: "MedicationRequest"
+    [google.fhir.proto.valid_reference_type]: "NutritionOrder"
+    [google.fhir.proto.valid_reference_type]: "ProcedureRequest"
+    [google.fhir.proto.valid_reference_type]: "ReferralRequest"
   }
 }
 field {
@@ -113,8 +113,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ObservationStatusCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "registered | preliminary | final | amended +"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "registered | preliminary | final | amended +"
   }
 }
 field {
@@ -124,9 +124,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Classification of  type of observation"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "where(coding.system=\'http://hl7.org/fhir/observation-category\' and coding.code=\'vital-signs\').exists()"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Classification of  type of observation"
+    [google.fhir.proto.fhir_path_constraint]: "where(coding.system=\'http://hl7.org/fhir/observation-category\' and coding.code=\'vital-signs\').exists()"
   }
 }
 field {
@@ -136,8 +136,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Bodyweight.CodeableConceptForCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Body Weight"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Body Weight"
   }
 }
 field {
@@ -147,9 +147,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Who and/or what this is about"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Who and/or what this is about"
+    [google.fhir.proto.valid_reference_type]: "Patient"
   }
 }
 field {
@@ -159,9 +159,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Healthcare event during which this observation is made"
-    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "EpisodeOfCare"
+    [google.fhir.proto.field_description]: "Healthcare event during which this observation is made"
+    [google.fhir.proto.valid_reference_type]: "Encounter"
+    [google.fhir.proto.valid_reference_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -171,8 +171,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Bodyweight.Effective"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Often just a dateTime for Vital Signs"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Often just a dateTime for Vital Signs"
   }
 }
 field {
@@ -182,7 +182,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Instant"
   options {
-    [google.fhir.stu3.proto.field_description]: "Date/Time this was made available"
+    [google.fhir.proto.field_description]: "Date/Time this was made available"
   }
 }
 field {
@@ -192,11 +192,11 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Who is responsible for the observation"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+    [google.fhir.proto.field_description]: "Who is responsible for the observation"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "RelatedPerson"
   }
 }
 field {
@@ -206,7 +206,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Bodyweight.Value"
   options {
-    [google.fhir.stu3.proto.field_description]: "Vital Sign Value recorded with UCUM"
+    [google.fhir.proto.field_description]: "Vital Sign Value recorded with UCUM"
   }
 }
 field {
@@ -216,7 +216,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Why the result is missing"
+    [google.fhir.proto.field_description]: "Why the result is missing"
   }
 }
 field {
@@ -226,7 +226,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "High, low, normal, etc."
+    [google.fhir.proto.field_description]: "High, low, normal, etc."
   }
 }
 field {
@@ -236,7 +236,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Comments about result"
+    [google.fhir.proto.field_description]: "Comments about result"
   }
 }
 field {
@@ -246,7 +246,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Observed body part"
+    [google.fhir.proto.field_description]: "Observed body part"
   }
 }
 field {
@@ -256,7 +256,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "How it was done"
+    [google.fhir.proto.field_description]: "How it was done"
   }
 }
 field {
@@ -266,8 +266,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Specimen used for this observation"
-    [google.fhir.stu3.proto.valid_reference_type]: "Specimen"
+    [google.fhir.proto.field_description]: "Specimen used for this observation"
+    [google.fhir.proto.valid_reference_type]: "Specimen"
   }
 }
 field {
@@ -277,9 +277,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "(Measurement) Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "DeviceMetric"
+    [google.fhir.proto.field_description]: "(Measurement) Device"
+    [google.fhir.proto.valid_reference_type]: "Device"
+    [google.fhir.proto.valid_reference_type]: "DeviceMetric"
   }
 }
 field {
@@ -289,8 +289,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Bodyweight.ReferenceRange"
   options {
-    [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "low.exists() or high.exists() or text.exists()"
+    [google.fhir.proto.field_description]: "Provides guide for interpretation"
+    [google.fhir.proto.fhir_path_constraint]: "low.exists() or high.exists() or text.exists()"
   }
 }
 field {
@@ -300,7 +300,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Bodyweight.Related"
   options {
-    [google.fhir.stu3.proto.field_description]: "Used when reporting vital signs panel components"
+    [google.fhir.proto.field_description]: "Used when reporting vital signs panel components"
   }
 }
 field {
@@ -310,8 +310,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Bodyweight.Component"
   options {
-    [google.fhir.stu3.proto.field_description]: "Used when reporting systolic and diastolic blood pressure."
-    [google.fhir.stu3.proto.fhir_path_constraint]: "value.exists() or dataAbsentReason.exists()"
+    [google.fhir.proto.field_description]: "Used when reporting systolic and diastolic blood pressure."
+    [google.fhir.proto.fhir_path_constraint]: "value.exists() or dataAbsentReason.exists()"
   }
 }
 nested_type {
@@ -323,7 +323,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -333,7 +333,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -343,7 +343,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Coding"
     options {
-      [google.fhir.stu3.proto.field_description]: "Code defined by a terminology system"
+      [google.fhir.proto.field_description]: "Code defined by a terminology system"
     }
   }
   field {
@@ -353,7 +353,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Plain text representation of the concept"
+      [google.fhir.proto.field_description]: "Plain text representation of the concept"
     }
   }
   field {
@@ -363,12 +363,12 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: "google.fhir.stu3.proto.CodingWithFixedCode"
     options {
-      [google.fhir.stu3.proto.fhir_inlined_coding_system]: "http://loinc.org"
-      [google.fhir.stu3.proto.fhir_inlined_coding_code]: "29463-7"
+      [google.fhir.proto.fhir_inlined_coding_system]: "http://loinc.org"
+      [google.fhir.proto.fhir_inlined_coding_code]: "29463-7"
     }
   }
   options {
-    [google.fhir.stu3.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/CodeableConcept"
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/CodeableConcept"
   }
 }
 nested_type {
@@ -390,7 +390,7 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "effective"
@@ -407,7 +407,7 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "value"
@@ -422,7 +422,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -432,7 +432,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -442,7 +442,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -452,7 +452,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
-      [google.fhir.stu3.proto.field_description]: "Low Range, if relevant"
+      [google.fhir.proto.field_description]: "Low Range, if relevant"
     }
   }
   field {
@@ -462,7 +462,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
-      [google.fhir.stu3.proto.field_description]: "High Range, if relevant"
+      [google.fhir.proto.field_description]: "High Range, if relevant"
     }
   }
   field {
@@ -472,7 +472,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Reference range qualifier"
+      [google.fhir.proto.field_description]: "Reference range qualifier"
     }
   }
   field {
@@ -482,7 +482,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Reference range population"
+      [google.fhir.proto.field_description]: "Reference range population"
     }
   }
   field {
@@ -492,7 +492,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Range"
     options {
-      [google.fhir.stu3.proto.field_description]: "Applicable age range, if relevant"
+      [google.fhir.proto.field_description]: "Applicable age range, if relevant"
     }
   }
   field {
@@ -502,7 +502,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Text based reference range in an observation"
+      [google.fhir.proto.field_description]: "Text based reference range in an observation"
     }
   }
 }
@@ -515,7 +515,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -525,7 +525,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -535,7 +535,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -545,8 +545,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ObservationRelationshipTypeCode"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "has-member | derived-from | sequel-to | replaces | qualified-by | interfered-by"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "has-member | derived-from | sequel-to | replaces | qualified-by | interfered-by"
     }
   }
   field {
@@ -556,9 +556,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Resource that is related to this one"
-      [google.fhir.stu3.proto.valid_reference_type]: "Observation"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Resource that is related to this one"
+      [google.fhir.proto.valid_reference_type]: "Observation"
     }
   }
 }
@@ -571,7 +571,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -581,7 +581,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -591,7 +591,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -601,8 +601,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Type of component observation (code / type)"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Type of component observation (code / type)"
     }
   }
   field {
@@ -612,7 +612,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Bodyweight.Component.Value"
     options {
-      [google.fhir.stu3.proto.field_description]: "Vital Sign Value recorded with UCUM"
+      [google.fhir.proto.field_description]: "Vital Sign Value recorded with UCUM"
     }
   }
   field {
@@ -622,7 +622,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Why the component result is missing"
+      [google.fhir.proto.field_description]: "Why the component result is missing"
     }
   }
   field {
@@ -632,7 +632,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "High, low, normal, etc."
+      [google.fhir.proto.field_description]: "High, low, normal, etc."
     }
   }
   field {
@@ -642,7 +642,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Bodyweight.ReferenceRange"
     options {
-      [google.fhir.stu3.proto.field_description]: "Provides guide for interpretation of component result"
+      [google.fhir.proto.field_description]: "Provides guide for interpretation of component result"
     }
   }
   nested_type {
@@ -656,7 +656,7 @@ nested_type {
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "value"
@@ -664,9 +664,9 @@ nested_type {
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Vital Signs Profile.\nFHIR Body Weight Profile.\nSee http://hl7.org/fhir/StructureDefinition/bodyweight"
-  [google.fhir.stu3.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/vitalsigns"
-  [google.fhir.stu3.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Observation"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/bodyweight"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Vital Signs Profile.\nFHIR Body Weight Profile.\nSee http://hl7.org/fhir/StructureDefinition/bodyweight"
+  [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+  [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Observation"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/bodyweight"
 }

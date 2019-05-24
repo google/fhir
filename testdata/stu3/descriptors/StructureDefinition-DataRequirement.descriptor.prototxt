@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -26,8 +26,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.FHIRAllTypesCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "The type of the required data"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "The type of the required data"
   }
 }
 field {
@@ -37,7 +37,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "The profile of the required data"
+    [google.fhir.proto.field_description]: "The profile of the required data"
   }
 }
 field {
@@ -47,7 +47,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Indicates that specific structure elements are referenced by the knowledge module"
+    [google.fhir.proto.field_description]: "Indicates that specific structure elements are referenced by the knowledge module"
   }
 }
 field {
@@ -57,7 +57,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DataRequirement.CodeFilter"
   options {
-    [google.fhir.stu3.proto.field_description]: "What codes are expected"
+    [google.fhir.proto.field_description]: "What codes are expected"
   }
 }
 field {
@@ -67,7 +67,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DataRequirement.DateFilter"
   options {
-    [google.fhir.stu3.proto.field_description]: "What dates/date ranges are expected"
+    [google.fhir.proto.field_description]: "What dates/date ranges are expected"
   }
 }
 nested_type {
@@ -79,7 +79,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -89,7 +89,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -99,8 +99,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "The code-valued attribute of the filter"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "The code-valued attribute of the filter"
     }
   }
   field {
@@ -110,7 +110,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.DataRequirement.CodeFilter.ValueSet"
     options {
-      [google.fhir.stu3.proto.field_description]: "Valueset for the filter"
+      [google.fhir.proto.field_description]: "Valueset for the filter"
     }
   }
   field {
@@ -120,7 +120,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Code"
     options {
-      [google.fhir.stu3.proto.field_description]: "What code is expected"
+      [google.fhir.proto.field_description]: "What code is expected"
     }
   }
   field {
@@ -130,7 +130,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Coding"
     options {
-      [google.fhir.stu3.proto.field_description]: "What Coding is expected"
+      [google.fhir.proto.field_description]: "What Coding is expected"
     }
   }
   field {
@@ -140,7 +140,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "What CodeableConcept is expected"
+      [google.fhir.proto.field_description]: "What CodeableConcept is expected"
     }
   }
   nested_type {
@@ -161,12 +161,12 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "ValueSet"
+        [google.fhir.proto.valid_reference_type]: "ValueSet"
       }
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "value_set"
@@ -182,7 +182,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -192,7 +192,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -202,8 +202,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "The date-valued attribute of the filter"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "The date-valued attribute of the filter"
     }
   }
   field {
@@ -213,7 +213,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.DataRequirement.DateFilter.Value"
     options {
-      [google.fhir.stu3.proto.field_description]: "The value of the filter, as a Period, DateTime, or Duration value"
+      [google.fhir.proto.field_description]: "The value of the filter, as a Period, DateTime, or Duration value"
     }
   }
   nested_type {
@@ -243,7 +243,7 @@ nested_type {
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "value"
@@ -251,7 +251,7 @@ nested_type {
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for DataRequirement, last updated 2017-04-19T07:44:43.294+10:00.\nDescribes a required data item.\nSee http://hl7.org/fhir/StructureDefinition/DataRequirement"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/DataRequirement"
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for DataRequirement, last updated 2017-04-19T07:44:43.294+10:00.\nDescribes a required data item.\nSee http://hl7.org/fhir/StructureDefinition/DataRequirement"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/DataRequirement"
 }

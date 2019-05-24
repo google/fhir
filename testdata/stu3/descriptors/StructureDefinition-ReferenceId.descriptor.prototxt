@@ -27,5 +27,5 @@ field {
   type_name: ".google.fhir.stu3.proto.Extension"
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+  [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
 }

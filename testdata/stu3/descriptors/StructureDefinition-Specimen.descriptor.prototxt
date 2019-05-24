@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "External Identifier"
+    [google.fhir.proto.field_description]: "External Identifier"
   }
 }
 field {
@@ -96,7 +96,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Identifier assigned by the lab"
+    [google.fhir.proto.field_description]: "Identifier assigned by the lab"
   }
 }
 field {
@@ -106,7 +106,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.SpecimenStatusCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "available | unavailable | unsatisfactory | entered-in-error"
+    [google.fhir.proto.field_description]: "available | unavailable | unsatisfactory | entered-in-error"
   }
 }
 field {
@@ -116,7 +116,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Kind of material that forms the specimen"
+    [google.fhir.proto.field_description]: "Kind of material that forms the specimen"
   }
 }
 field {
@@ -126,12 +126,12 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Where the specimen came from. This may be from the patient(s) or from the environment or a device"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "Group"
-    [google.fhir.stu3.proto.valid_reference_type]: "Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "Substance"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Where the specimen came from. This may be from the patient(s) or from the environment or a device"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Group"
+    [google.fhir.proto.valid_reference_type]: "Device"
+    [google.fhir.proto.valid_reference_type]: "Substance"
   }
 }
 field {
@@ -141,7 +141,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "The time when specimen was received for processing"
+    [google.fhir.proto.field_description]: "The time when specimen was received for processing"
   }
 }
 field {
@@ -151,8 +151,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Specimen from which this specimen originated"
-    [google.fhir.stu3.proto.valid_reference_type]: "Specimen"
+    [google.fhir.proto.field_description]: "Specimen from which this specimen originated"
+    [google.fhir.proto.valid_reference_type]: "Specimen"
   }
 }
 field {
@@ -162,8 +162,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Why the specimen was collected"
-    [google.fhir.stu3.proto.valid_reference_type]: "ProcedureRequest"
+    [google.fhir.proto.field_description]: "Why the specimen was collected"
+    [google.fhir.proto.valid_reference_type]: "ProcedureRequest"
   }
 }
 field {
@@ -173,7 +173,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Specimen.Collection"
   options {
-    [google.fhir.stu3.proto.field_description]: "Collection details"
+    [google.fhir.proto.field_description]: "Collection details"
   }
 }
 field {
@@ -183,7 +183,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Specimen.Processing"
   options {
-    [google.fhir.stu3.proto.field_description]: "Processing and processing step details"
+    [google.fhir.proto.field_description]: "Processing and processing step details"
   }
 }
 field {
@@ -193,7 +193,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Specimen.Container"
   options {
-    [google.fhir.stu3.proto.field_description]: "Direct container of specimen (tube/slide, etc.)"
+    [google.fhir.proto.field_description]: "Direct container of specimen (tube/slide, etc.)"
   }
 }
 field {
@@ -203,7 +203,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Annotation"
   options {
-    [google.fhir.stu3.proto.field_description]: "Comments"
+    [google.fhir.proto.field_description]: "Comments"
   }
 }
 nested_type {
@@ -215,7 +215,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -225,7 +225,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -235,7 +235,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -245,8 +245,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Who collected the specimen"
-      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.field_description]: "Who collected the specimen"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
     }
   }
   field {
@@ -256,7 +256,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Specimen.Collection.Collected"
     options {
-      [google.fhir.stu3.proto.field_description]: "Collection time"
+      [google.fhir.proto.field_description]: "Collection time"
     }
   }
   field {
@@ -266,7 +266,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
-      [google.fhir.stu3.proto.field_description]: "The quantity of specimen collected"
+      [google.fhir.proto.field_description]: "The quantity of specimen collected"
     }
   }
   field {
@@ -276,7 +276,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Technique used to perform collection"
+      [google.fhir.proto.field_description]: "Technique used to perform collection"
     }
   }
   field {
@@ -286,7 +286,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Anatomical collection site"
+      [google.fhir.proto.field_description]: "Anatomical collection site"
     }
   }
   nested_type {
@@ -308,7 +308,7 @@ nested_type {
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "collected"
@@ -324,7 +324,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -334,7 +334,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -344,7 +344,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -354,7 +354,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Textual description of procedure"
+      [google.fhir.proto.field_description]: "Textual description of procedure"
     }
   }
   field {
@@ -364,7 +364,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Indicates the treatment step  applied to the specimen"
+      [google.fhir.proto.field_description]: "Indicates the treatment step  applied to the specimen"
     }
   }
   field {
@@ -374,8 +374,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Material used in the processing step"
-      [google.fhir.stu3.proto.valid_reference_type]: "Substance"
+      [google.fhir.proto.field_description]: "Material used in the processing step"
+      [google.fhir.proto.valid_reference_type]: "Substance"
     }
   }
   field {
@@ -385,7 +385,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Specimen.Processing.Time"
     options {
-      [google.fhir.stu3.proto.field_description]: "Date and time of specimen processing"
+      [google.fhir.proto.field_description]: "Date and time of specimen processing"
     }
   }
   nested_type {
@@ -407,7 +407,7 @@ nested_type {
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "time"
@@ -423,7 +423,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -433,7 +433,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -443,7 +443,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -453,7 +453,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Identifier"
     options {
-      [google.fhir.stu3.proto.field_description]: "Id for the container"
+      [google.fhir.proto.field_description]: "Id for the container"
     }
   }
   field {
@@ -463,7 +463,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Textual description of the container"
+      [google.fhir.proto.field_description]: "Textual description of the container"
     }
   }
   field {
@@ -473,7 +473,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Kind of container directly associated with specimen"
+      [google.fhir.proto.field_description]: "Kind of container directly associated with specimen"
     }
   }
   field {
@@ -483,7 +483,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
-      [google.fhir.stu3.proto.field_description]: "Container volume or size"
+      [google.fhir.proto.field_description]: "Container volume or size"
     }
   }
   field {
@@ -493,7 +493,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
-      [google.fhir.stu3.proto.field_description]: "Quantity of specimen within container"
+      [google.fhir.proto.field_description]: "Quantity of specimen within container"
     }
   }
   field {
@@ -503,7 +503,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Specimen.Container.Additive"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additive associated with container"
+      [google.fhir.proto.field_description]: "Additive associated with container"
     }
   }
   nested_type {
@@ -523,12 +523,12 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "Substance"
+        [google.fhir.proto.valid_reference_type]: "Substance"
       }
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "additive"
@@ -536,7 +536,7 @@ nested_type {
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Specimen, last updated 2017-04-19T07:44:43.294+10:00.\nSample for analysis.\nSee http://hl7.org/fhir/StructureDefinition/Specimen"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Specimen"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Specimen, last updated 2017-04-19T07:44:43.294+10:00.\nSample for analysis.\nSee http://hl7.org/fhir/StructureDefinition/Specimen"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Specimen"
 }

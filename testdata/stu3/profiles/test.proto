@@ -24,16 +24,16 @@ import "testdata/stu3/profiles/test_extensions.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.testing";
-option (.google.fhir.stu3.proto.fhir_version) = STU3;
+option (.google.fhir.proto.fhir_version) = STU3;
 
 // Auto-generated from StructureDefinition for Bundle.
 // Contains a collection of resources.
 // See http://test/url/base/Bundle
 message Bundle {
-  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
-  option (.google.fhir.stu3.proto.fhir_profile_base) =
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Bundle";
-  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+  option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/Bundle";
 
   // Logical id of this artifact
@@ -54,7 +54,7 @@ message Bundle {
   // document | message | transaction | transaction-response | batch |
   // batch-response | history | searchset | collection
   proto.BundleTypeCode type = 6
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // If search, the total number of matches
   proto.UnsignedInt total = 7;
@@ -73,11 +73,11 @@ message Bundle {
     // See
     // http://www.iana.org/assignments/link-relations/link-relations.xhtml#link-relations-1
     proto.String relation = 4
-        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Reference details for the link
     proto.Uri url = 5
-        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Link link = 8;
 
@@ -133,11 +133,11 @@ message Bundle {
 
       // GET | POST | PUT | DELETE
       proto.HTTPVerbCode method = 4
-          [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // URL for HTTP equivalent of this entry
       proto.Uri url = 5
-          [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // For managing cache currency
       proto.String if_none_match = 6;
@@ -166,7 +166,7 @@ message Bundle {
 
       // Status response code (text optional)
       proto.String status = 4
-          [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // The location, if the operation returns a location
       proto.Uri location = 5;
@@ -183,9 +183,9 @@ message Bundle {
     Response response = 9;
   }
   repeated Entry entry = 9 [
-    (.google.fhir.stu3.proto.fhir_path_constraint) =
+    (.google.fhir.proto.fhir_path_constraint) =
         "fullUrl.contains('/_history/').not()",
-    (.google.fhir.stu3.proto.fhir_path_constraint) =
+    (.google.fhir.proto.fhir_path_constraint) =
         "resource.exists() or request.exists() or response.exists()"
   ];
 
@@ -197,10 +197,10 @@ message Bundle {
 // Information about an individual or animal receiving health care services.
 // See http://test/url/base/TestPatient
 message TestPatient {
-  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
-  option (.google.fhir.stu3.proto.fhir_profile_base) =
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Patient";
-  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+  option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/TestPatient";
 
   // Logical id of this artifact
@@ -235,7 +235,7 @@ message TestPatient {
 
   // A name associated with the patient
   proto.HumanName name = 11
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // A contact detail for the individual
   repeated proto.ContactPoint telecom = 12;
@@ -248,7 +248,7 @@ message TestPatient {
 
   // Indicates if the individual is deceased or not
   message Deceased {
-    option (.google.fhir.stu3.proto.is_choice_type) = true;
+    option (.google.fhir.proto.is_choice_type) = true;
 
     oneof deceased {
       proto.Boolean boolean = 1;
@@ -265,7 +265,7 @@ message TestPatient {
 
   // Whether patient is part of a multiple birth
   message MultipleBirth {
-    option (.google.fhir.stu3.proto.is_choice_type) = true;
+    option (.google.fhir.proto.is_choice_type) = true;
 
     oneof multiple_birth {
       proto.Boolean boolean = 1;
@@ -305,14 +305,14 @@ message TestPatient {
 
     // Organization that is associated with the contact
     proto.Reference organization = 9
-        [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
+        [(.google.fhir.proto.valid_reference_type) = "Organization"];
 
     // The period during which this contact person or organization is valid to
     // be contacted relating to this patient
     proto.Period period = 10;
   }
   repeated Contact contact = 20 [
-    (.google.fhir.stu3.proto.fhir_path_constraint) =
+    (.google.fhir.proto.fhir_path_constraint) =
         "name.exists() or telecom.exists() or address.exists() or organization.exists()"
   ];
 
@@ -329,7 +329,7 @@ message TestPatient {
 
     // E.g. Dog, Cow
     proto.CodeableConcept species = 4
-        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // E.g. Poodle, Angus
     proto.CodeableConcept breed = 5;
@@ -354,7 +354,7 @@ message TestPatient {
     // The language which can be used to communicate with the patient about his
     // or her health
     proto.CodeableConcept language = 4
-        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Language preference indicator
     proto.Boolean preferred = 5;
@@ -363,13 +363,13 @@ message TestPatient {
 
   // Patient's nominated primary care provider
   repeated proto.Reference general_practitioner = 23 [
-    (.google.fhir.stu3.proto.valid_reference_type) = "Organization",
-    (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner"
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner"
   ];
 
   // Organization that is the custodian of the patient record
   proto.Reference managing_organization = 24
-      [(.google.fhir.stu3.proto.valid_reference_type) = "Organization"];
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
 
   // Link to another patient resource that concerns the same actual person
   message Link {
@@ -384,21 +384,21 @@ message TestPatient {
 
     // The other patient or related person resource that the link refers to
     proto.Reference other = 4 [
-      (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
-      (.google.fhir.stu3.proto.valid_reference_type) = "RelatedPerson"
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
     ];
 
     // replaced-by | replaces | refer | seealso - type of link
     proto.LinkTypeCode type = 5
-        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Link link = 25;
 
   // Decimal Extension
   proto.Decimal dec_ext = 26 [
-    (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://test/url/base/SimpleDecimalExt"
   ];
 }
@@ -407,10 +407,10 @@ message TestPatient {
 // Measurements and simple assertions.
 // See http://test/url/base/TestObservation
 message TestObservation {
-  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
-  option (.google.fhir.stu3.proto.fhir_profile_base) =
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Observation";
-  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+  option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/TestObservation";
 
   // Logical id of this artifact
@@ -442,23 +442,22 @@ message TestObservation {
 
   // Fulfills plan, proposal or order
   repeated proto.Reference based_on = 10 [
-    (.google.fhir.stu3.proto.valid_reference_type) = "CarePlan",
-    (.google.fhir.stu3.proto.valid_reference_type) = "DeviceRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "ImmunizationRecommendation",
-    (.google.fhir.stu3.proto.valid_reference_type) = "MedicationRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) = "NutritionOrder",
-    (.google.fhir.stu3.proto.valid_reference_type) = "ProcedureRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) = "ReferralRequest"
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "DeviceRequest",
+    (.google.fhir.proto.valid_reference_type) = "ImmunizationRecommendation",
+    (.google.fhir.proto.valid_reference_type) = "MedicationRequest",
+    (.google.fhir.proto.valid_reference_type) = "NutritionOrder",
+    (.google.fhir.proto.valid_reference_type) = "ProcedureRequest",
+    (.google.fhir.proto.valid_reference_type) = "ReferralRequest"
   ];
 
   // registered | preliminary | final | amended +
   proto.ObservationStatusCode status = 11
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
   message CodeableConceptForCategory {
-    option (.google.fhir.stu3.proto.fhir_profile_base) =
+    option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
 
     // xml:id (or equivalent in JSON)
@@ -474,14 +473,13 @@ message TestObservation {
     proto.String text = 4;
 
     repeated google.fhir.stu3.proto.CodingWithFixedSystem cat_a = 5
-        [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
-             "http://catA.org"];
+        [(.google.fhir.proto.fhir_inlined_coding_system) = "http://catA.org"];
   }
   repeated CodeableConceptForCategory category = 12;
 
   // Type of observation (code / type)
   message CodeableConceptForCode {
-    option (.google.fhir.stu3.proto.fhir_profile_base) =
+    option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
 
     // xml:id (or equivalent in JSON)
@@ -497,43 +495,41 @@ message TestObservation {
     proto.String text = 4;
 
     google.fhir.stu3.proto.CodingWithFixedSystem sys_a = 5
-        [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
-             "http://sysa.org"];
+        [(.google.fhir.proto.fhir_inlined_coding_system) = "http://sysa.org"];
 
     repeated google.fhir.stu3.proto.CodingWithFixedSystem sys_b = 6
-        [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
-             "http://sysb.org"];
+        [(.google.fhir.proto.fhir_inlined_coding_system) = "http://sysb.org"];
 
     google.fhir.stu3.proto.CodingWithFixedCode sys_c = 7 [
-      (.google.fhir.stu3.proto.fhir_inlined_coding_system) = "http://sysc.org",
-      (.google.fhir.stu3.proto.fhir_inlined_coding_code) = "8472"
+      (.google.fhir.proto.fhir_inlined_coding_system) = "http://sysc.org",
+      (.google.fhir.proto.fhir_inlined_coding_code) = "8472"
     ];
 
     google.fhir.stu3.proto.CodingWithFixedCode sys_d = 8 [
-      (.google.fhir.stu3.proto.fhir_inlined_coding_system) = "http://sysd.org",
-      (.google.fhir.stu3.proto.fhir_inlined_coding_code) = "8675329"
+      (.google.fhir.proto.fhir_inlined_coding_system) = "http://sysd.org",
+      (.google.fhir.proto.fhir_inlined_coding_code) = "8675329"
     ];
   }
   CodeableConceptForCode code = 13
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
   proto.Reference subject = 14 [
-    (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
-    (.google.fhir.stu3.proto.valid_reference_type) = "Group",
-    (.google.fhir.stu3.proto.valid_reference_type) = "Device",
-    (.google.fhir.stu3.proto.valid_reference_type) = "Location"
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Location"
   ];
 
   // Healthcare event during which this observation is made
   proto.Reference context = 15 [
-    (.google.fhir.stu3.proto.valid_reference_type) = "Encounter",
-    (.google.fhir.stu3.proto.valid_reference_type) = "EpisodeOfCare"
+    (.google.fhir.proto.valid_reference_type) = "Encounter",
+    (.google.fhir.proto.valid_reference_type) = "EpisodeOfCare"
   ];
 
   // Clinically relevant time/time-period for observation
   message Effective {
-    option (.google.fhir.stu3.proto.is_choice_type) = true;
+    option (.google.fhir.proto.is_choice_type) = true;
 
     oneof effective {
       proto.DateTime date_time = 1;
@@ -547,15 +543,15 @@ message TestObservation {
 
   // Who is responsible for the observation
   repeated proto.Reference performer = 18 [
-    (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner",
-    (.google.fhir.stu3.proto.valid_reference_type) = "Organization",
-    (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
-    (.google.fhir.stu3.proto.valid_reference_type) = "RelatedPerson"
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
   ];
 
   // Actual result
   message Value {
-    option (.google.fhir.stu3.proto.is_choice_type) = true;
+    option (.google.fhir.proto.is_choice_type) = true;
 
     oneof value {
       proto.Quantity quantity = 1;
@@ -590,12 +586,12 @@ message TestObservation {
 
   // Specimen used for this observation
   proto.Reference specimen = 25
-      [(.google.fhir.stu3.proto.valid_reference_type) = "Specimen"];
+      [(.google.fhir.proto.valid_reference_type) = "Specimen"];
 
   // (Measurement) Device
   proto.Reference device = 26 [
-    (.google.fhir.stu3.proto.valid_reference_type) = "Device",
-    (.google.fhir.stu3.proto.valid_reference_type) = "DeviceMetric"
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "DeviceMetric"
   ];
 
   // Provides guide for interpretation
@@ -628,7 +624,7 @@ message TestObservation {
     proto.String text = 9;
   }
   repeated ReferenceRange reference_range = 27
-      [(.google.fhir.stu3.proto.fhir_path_constraint) =
+      [(.google.fhir.proto.fhir_path_constraint) =
            "low.exists() or high.exists() or text.exists()"];
 
   // Resource related to this observation
@@ -648,10 +644,10 @@ message TestObservation {
 
     // Resource that is related to this one
     proto.Reference target = 5 [
-      (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.stu3.proto.valid_reference_type) = "Observation",
-      (.google.fhir.stu3.proto.valid_reference_type) = "QuestionnaireResponse",
-      (.google.fhir.stu3.proto.valid_reference_type) = "Sequence"
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Observation",
+      (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse",
+      (.google.fhir.proto.valid_reference_type) = "Sequence"
     ];
   }
   repeated Related related = 28;
@@ -669,11 +665,11 @@ message TestObservation {
 
     // Type of component observation (code / type)
     proto.CodeableConcept code = 4
-        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Actual component result
     message Value {
-      option (.google.fhir.stu3.proto.is_choice_type) = true;
+      option (.google.fhir.proto.is_choice_type) = true;
 
       oneof value {
         proto.Quantity quantity = 1;
@@ -695,7 +691,7 @@ message TestObservation {
 
     // High, low, normal, etc.
     message CodeableConceptForInterpretation {
-      option (.google.fhir.stu3.proto.fhir_profile_base) =
+      option (.google.fhir.proto.fhir_profile_base) =
           "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
 
       // xml:id (or equivalent in JSON)
@@ -711,7 +707,7 @@ message TestObservation {
       proto.String text = 4;
 
       google.fhir.stu3.proto.CodingWithFixedSystem on_nested_concept = 5
-          [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
+          [(.google.fhir.proto.fhir_inlined_coding_system) =
                "http://nestedconcept.org"];
     }
     CodeableConceptForInterpretation interpretation = 7;
@@ -721,14 +717,14 @@ message TestObservation {
 
     //
     proto.Decimal on_nested = 9
-        [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+        [(.google.fhir.proto.fhir_inlined_extension_url) =
              "http://test/url/base/SimpleDecimalExt"];
   }
   repeated Component component = 29;
 
   //
   ComplexExt my_complex_extension = 30
-      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+      [(.google.fhir.proto.fhir_inlined_extension_url) =
            "http://test/url/base/ComplexExt"];
 }
 
@@ -736,12 +732,12 @@ message TestObservation {
 // Measurements and simple assertions.
 // See http://test/url/base/TestObservationLvl2
 message TestObservationLvl2 {
-  option (.google.fhir.stu3.proto.structure_definition_kind) = KIND_RESOURCE;
-  option (.google.fhir.stu3.proto.fhir_profile_base) =
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_profile_base) =
       "http://test/url/base/TestObservation";
-  option (.google.fhir.stu3.proto.fhir_profile_base) =
+  option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Observation";
-  option (.google.fhir.stu3.proto.fhir_structure_definition_url) =
+  option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/TestObservationLvl2";
 
   // Logical id of this artifact
@@ -773,23 +769,22 @@ message TestObservationLvl2 {
 
   // Fulfills plan, proposal or order
   repeated proto.Reference based_on = 10 [
-    (.google.fhir.stu3.proto.valid_reference_type) = "CarePlan",
-    (.google.fhir.stu3.proto.valid_reference_type) = "DeviceRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) =
-        "ImmunizationRecommendation",
-    (.google.fhir.stu3.proto.valid_reference_type) = "MedicationRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) = "NutritionOrder",
-    (.google.fhir.stu3.proto.valid_reference_type) = "ProcedureRequest",
-    (.google.fhir.stu3.proto.valid_reference_type) = "ReferralRequest"
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "DeviceRequest",
+    (.google.fhir.proto.valid_reference_type) = "ImmunizationRecommendation",
+    (.google.fhir.proto.valid_reference_type) = "MedicationRequest",
+    (.google.fhir.proto.valid_reference_type) = "NutritionOrder",
+    (.google.fhir.proto.valid_reference_type) = "ProcedureRequest",
+    (.google.fhir.proto.valid_reference_type) = "ReferralRequest"
   ];
 
   // registered | preliminary | final | amended +
   proto.ObservationStatusCode status = 11
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Classification of  type of observation
   message CodeableConceptForCategory {
-    option (.google.fhir.stu3.proto.fhir_profile_base) =
+    option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
 
     // xml:id (or equivalent in JSON)
@@ -805,14 +800,13 @@ message TestObservationLvl2 {
     proto.String text = 4;
 
     repeated google.fhir.stu3.proto.CodingWithFixedSystem cat_a = 5
-        [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
-             "http://catA.org"];
+        [(.google.fhir.proto.fhir_inlined_coding_system) = "http://catA.org"];
   }
   repeated CodeableConceptForCategory category = 12;
 
   // Type of observation (code / type)
   message CodeableConceptForCode {
-    option (.google.fhir.stu3.proto.fhir_profile_base) =
+    option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
 
     // xml:id (or equivalent in JSON)
@@ -828,47 +822,45 @@ message TestObservationLvl2 {
     proto.String text = 4;
 
     google.fhir.stu3.proto.CodingWithFixedSystem sys_a = 5
-        [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
-             "http://sysa.org"];
+        [(.google.fhir.proto.fhir_inlined_coding_system) = "http://sysa.org"];
 
     repeated google.fhir.stu3.proto.CodingWithFixedSystem sys_b = 6
-        [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
-             "http://sysb.org"];
+        [(.google.fhir.proto.fhir_inlined_coding_system) = "http://sysb.org"];
 
     google.fhir.stu3.proto.CodingWithFixedCode sys_c = 7 [
-      (.google.fhir.stu3.proto.fhir_inlined_coding_system) = "http://sysc.org",
-      (.google.fhir.stu3.proto.fhir_inlined_coding_code) = "8472"
+      (.google.fhir.proto.fhir_inlined_coding_system) = "http://sysc.org",
+      (.google.fhir.proto.fhir_inlined_coding_code) = "8472"
     ];
 
     google.fhir.stu3.proto.CodingWithFixedCode sys_d = 8 [
-      (.google.fhir.stu3.proto.fhir_inlined_coding_system) = "http://sysd.org",
-      (.google.fhir.stu3.proto.fhir_inlined_coding_code) = "8675329"
+      (.google.fhir.proto.fhir_inlined_coding_system) = "http://sysd.org",
+      (.google.fhir.proto.fhir_inlined_coding_code) = "8675329"
     ];
 
     google.fhir.stu3.proto.CodingWithFixedSystem new_code_on_profiled = 9
-        [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
+        [(.google.fhir.proto.fhir_inlined_coding_system) =
              "http://newonprofiled.org"];
   }
   CodeableConceptForCode code = 13
-      [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Who and/or what this is about
   proto.Reference subject = 14 [
-    (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
-    (.google.fhir.stu3.proto.valid_reference_type) = "Group",
-    (.google.fhir.stu3.proto.valid_reference_type) = "Device",
-    (.google.fhir.stu3.proto.valid_reference_type) = "Location"
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Location"
   ];
 
   // Healthcare event during which this observation is made
   proto.Reference context = 15 [
-    (.google.fhir.stu3.proto.valid_reference_type) = "Encounter",
-    (.google.fhir.stu3.proto.valid_reference_type) = "EpisodeOfCare"
+    (.google.fhir.proto.valid_reference_type) = "Encounter",
+    (.google.fhir.proto.valid_reference_type) = "EpisodeOfCare"
   ];
 
   // Clinically relevant time/time-period for observation
   message Effective {
-    option (.google.fhir.stu3.proto.is_choice_type) = true;
+    option (.google.fhir.proto.is_choice_type) = true;
 
     oneof effective {
       proto.DateTime date_time = 1;
@@ -882,15 +874,15 @@ message TestObservationLvl2 {
 
   // Who is responsible for the observation
   repeated proto.Reference performer = 18 [
-    (.google.fhir.stu3.proto.valid_reference_type) = "Practitioner",
-    (.google.fhir.stu3.proto.valid_reference_type) = "Organization",
-    (.google.fhir.stu3.proto.valid_reference_type) = "Patient",
-    (.google.fhir.stu3.proto.valid_reference_type) = "RelatedPerson"
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
   ];
 
   // Actual result
   message Value {
-    option (.google.fhir.stu3.proto.is_choice_type) = true;
+    option (.google.fhir.proto.is_choice_type) = true;
 
     oneof value {
       proto.Quantity quantity = 1;
@@ -925,12 +917,12 @@ message TestObservationLvl2 {
 
   // Specimen used for this observation
   proto.Reference specimen = 25
-      [(.google.fhir.stu3.proto.valid_reference_type) = "Specimen"];
+      [(.google.fhir.proto.valid_reference_type) = "Specimen"];
 
   // (Measurement) Device
   proto.Reference device = 26 [
-    (.google.fhir.stu3.proto.valid_reference_type) = "Device",
-    (.google.fhir.stu3.proto.valid_reference_type) = "DeviceMetric"
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "DeviceMetric"
   ];
 
   // Provides guide for interpretation
@@ -963,7 +955,7 @@ message TestObservationLvl2 {
     proto.String text = 9;
   }
   repeated ReferenceRange reference_range = 27
-      [(.google.fhir.stu3.proto.fhir_path_constraint) =
+      [(.google.fhir.proto.fhir_path_constraint) =
            "low.exists() or high.exists() or text.exists()"];
 
   // Resource related to this observation
@@ -983,10 +975,10 @@ message TestObservationLvl2 {
 
     // Resource that is related to this one
     proto.Reference target = 5 [
-      (.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.stu3.proto.valid_reference_type) = "Observation",
-      (.google.fhir.stu3.proto.valid_reference_type) = "QuestionnaireResponse",
-      (.google.fhir.stu3.proto.valid_reference_type) = "Sequence"
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Observation",
+      (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse",
+      (.google.fhir.proto.valid_reference_type) = "Sequence"
     ];
   }
   repeated Related related = 28;
@@ -1004,11 +996,11 @@ message TestObservationLvl2 {
 
     // Type of component observation (code / type)
     proto.CodeableConcept code = 4
-        [(.google.fhir.stu3.proto.validation_requirement) = REQUIRED_BY_FHIR];
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Actual component result
     message Value {
-      option (.google.fhir.stu3.proto.is_choice_type) = true;
+      option (.google.fhir.proto.is_choice_type) = true;
 
       oneof value {
         proto.Quantity quantity = 1;
@@ -1030,7 +1022,7 @@ message TestObservationLvl2 {
 
     // High, low, normal, etc.
     message CodeableConceptForInterpretation {
-      option (.google.fhir.stu3.proto.fhir_profile_base) =
+      option (.google.fhir.proto.fhir_profile_base) =
           "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
 
       // xml:id (or equivalent in JSON)
@@ -1046,7 +1038,7 @@ message TestObservationLvl2 {
       proto.String text = 4;
 
       google.fhir.stu3.proto.CodingWithFixedSystem on_nested_concept = 5
-          [(.google.fhir.stu3.proto.fhir_inlined_coding_system) =
+          [(.google.fhir.proto.fhir_inlined_coding_system) =
                "http://nestedconcept.org"];
     }
     CodeableConceptForInterpretation interpretation = 7;
@@ -1056,20 +1048,19 @@ message TestObservationLvl2 {
 
     //
     proto.Decimal on_nested = 9
-        [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+        [(.google.fhir.proto.fhir_inlined_extension_url) =
              "http://test/url/base/SimpleDecimalExt"];
   }
   repeated Component component = 29;
 
   //
   ComplexExt my_complex_extension = 30
-      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
+      [(.google.fhir.proto.fhir_inlined_extension_url) =
            "http://test/url/base/ComplexExt"];
 
   //
-  proto.Decimal new_ext = 31
-      [(.google.fhir.stu3.proto.fhir_inlined_extension_url) =
-           "http://test/url/base/SimpleDecimalExt"];
+  proto.Decimal new_ext = 31 [(.google.fhir.proto.fhir_inlined_extension_url) =
+                                  "http://test/url/base/SimpleDecimalExt"];
 }
 
 message ContainedResource {

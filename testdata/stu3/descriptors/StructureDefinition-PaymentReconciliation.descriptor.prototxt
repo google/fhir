@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Business Identifier"
+    [google.fhir.proto.field_description]: "Business Identifier"
   }
 }
 field {
@@ -96,7 +96,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.FinancialResourceStatusCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "active | cancelled | draft | entered-in-error"
+    [google.fhir.proto.field_description]: "active | cancelled | draft | entered-in-error"
   }
 }
 field {
@@ -106,7 +106,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Period"
   options {
-    [google.fhir.stu3.proto.field_description]: "Period covered"
+    [google.fhir.proto.field_description]: "Period covered"
   }
 }
 field {
@@ -116,7 +116,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "Creation date"
+    [google.fhir.proto.field_description]: "Creation date"
   }
 }
 field {
@@ -126,8 +126,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Insurer"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.field_description]: "Insurer"
+    [google.fhir.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -137,8 +137,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Claim reference"
-    [google.fhir.stu3.proto.valid_reference_type]: "ProcessRequest"
+    [google.fhir.proto.field_description]: "Claim reference"
+    [google.fhir.proto.valid_reference_type]: "ProcessRequest"
   }
 }
 field {
@@ -148,7 +148,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "complete | error | partial"
+    [google.fhir.proto.field_description]: "complete | error | partial"
   }
 }
 field {
@@ -158,7 +158,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Disposition Message"
+    [google.fhir.proto.field_description]: "Disposition Message"
   }
 }
 field {
@@ -168,8 +168,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Responsible practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.field_description]: "Responsible practitioner"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -179,8 +179,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Responsible organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.field_description]: "Responsible organization"
+    [google.fhir.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -190,7 +190,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.PaymentReconciliation.Details"
   options {
-    [google.fhir.stu3.proto.field_description]: "List of settlements"
+    [google.fhir.proto.field_description]: "List of settlements"
   }
 }
 field {
@@ -200,7 +200,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Printed Form Identifier"
+    [google.fhir.proto.field_description]: "Printed Form Identifier"
   }
 }
 field {
@@ -210,7 +210,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Money"
   options {
-    [google.fhir.stu3.proto.field_description]: "Total amount of Payment"
+    [google.fhir.proto.field_description]: "Total amount of Payment"
   }
 }
 field {
@@ -220,7 +220,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.PaymentReconciliation.Notes"
   options {
-    [google.fhir.stu3.proto.field_description]: "Processing comments"
+    [google.fhir.proto.field_description]: "Processing comments"
   }
 }
 nested_type {
@@ -232,7 +232,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -242,7 +242,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -252,7 +252,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -262,8 +262,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Type code"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Type code"
     }
   }
   field {
@@ -273,8 +273,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Claim"
-      [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+      [google.fhir.proto.field_description]: "Claim"
+      [google.fhir.proto.valid_reference_type]: "Resource"
     }
   }
   field {
@@ -284,8 +284,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Claim Response"
-      [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+      [google.fhir.proto.field_description]: "Claim Response"
+      [google.fhir.proto.valid_reference_type]: "Resource"
     }
   }
   field {
@@ -295,8 +295,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Organization which submitted the claim"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.field_description]: "Organization which submitted the claim"
+      [google.fhir.proto.valid_reference_type]: "Organization"
     }
   }
   field {
@@ -306,8 +306,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Organization which is receiving the payment"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.field_description]: "Organization which is receiving the payment"
+      [google.fhir.proto.valid_reference_type]: "Organization"
     }
   }
   field {
@@ -317,7 +317,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Date"
     options {
-      [google.fhir.stu3.proto.field_description]: "Invoice date"
+      [google.fhir.proto.field_description]: "Invoice date"
     }
   }
   field {
@@ -327,7 +327,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Money"
     options {
-      [google.fhir.stu3.proto.field_description]: "Amount being paid"
+      [google.fhir.proto.field_description]: "Amount being paid"
     }
   }
 }
@@ -340,7 +340,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -350,7 +350,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -360,7 +360,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -370,7 +370,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "display | print | printoper"
+      [google.fhir.proto.field_description]: "display | print | printoper"
     }
   }
   field {
@@ -380,12 +380,12 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Comment on the processing"
+      [google.fhir.proto.field_description]: "Comment on the processing"
     }
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for PaymentReconciliation, last updated 2017-04-19T07:44:43.294+10:00.\nPaymentReconciliation resource.\nSee http://hl7.org/fhir/StructureDefinition/PaymentReconciliation"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/PaymentReconciliation"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for PaymentReconciliation, last updated 2017-04-19T07:44:43.294+10:00.\nPaymentReconciliation resource.\nSee http://hl7.org/fhir/StructureDefinition/PaymentReconciliation"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/PaymentReconciliation"
 }

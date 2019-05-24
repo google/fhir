@@ -5,7 +5,7 @@ field {
   label: LABEL_OPTIONAL
   type: TYPE_INT64
   options {
-    [google.fhir.stu3.proto.field_description]: "Primitive value for dateTime"
+    [google.fhir.proto.field_description]: "Primitive value for dateTime"
   }
 }
 field {
@@ -28,7 +28,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
   }
 }
 field {
@@ -38,7 +38,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 enum_type {
@@ -73,8 +73,8 @@ enum_type {
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for dateTime, last updated 2017-04-19T07:44:43.294+10:00.\nPrimitive Type dateTime.\nSee http://hl7.org/fhir/StructureDefinition/dateTime"
-  [google.fhir.stu3.proto.value_regex]: "-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/dateTime"
+  [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for dateTime, last updated 2017-04-19T07:44:43.294+10:00.\nPrimitive Type dateTime.\nSee http://hl7.org/fhir/StructureDefinition/dateTime"
+  [google.fhir.proto.value_regex]: "-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/dateTime"
 }

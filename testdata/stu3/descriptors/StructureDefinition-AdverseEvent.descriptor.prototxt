@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Business identifier for the event"
+    [google.fhir.proto.field_description]: "Business identifier for the event"
   }
 }
 field {
@@ -96,7 +96,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.AdverseEventCategoryCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "AE | PAE \rAn adverse event is an event that caused harm to a patient,  an adverse reaction is a something that is a subject-specific event that is a result of an exposure to a medication, food, device or environmental substance, a potential adverse event is something that occurred and that could have caused harm to a patient but did not"
+    [google.fhir.proto.field_description]: "AE | PAE \rAn adverse event is an event that caused harm to a patient,  an adverse reaction is a something that is a subject-specific event that is a result of an exposure to a medication, food, device or environmental substance, a potential adverse event is something that occurred and that could have caused harm to a patient but did not"
   }
 }
 field {
@@ -106,7 +106,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "actual | potential"
+    [google.fhir.proto.field_description]: "actual | potential"
   }
 }
 field {
@@ -116,11 +116,11 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Subject or group impacted by event"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "ResearchSubject"
-    [google.fhir.stu3.proto.valid_reference_type]: "Medication"
-    [google.fhir.stu3.proto.valid_reference_type]: "Device"
+    [google.fhir.proto.field_description]: "Subject or group impacted by event"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "ResearchSubject"
+    [google.fhir.proto.valid_reference_type]: "Medication"
+    [google.fhir.proto.valid_reference_type]: "Device"
   }
 }
 field {
@@ -130,7 +130,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "When the event occurred"
+    [google.fhir.proto.field_description]: "When the event occurred"
   }
 }
 field {
@@ -140,8 +140,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Adverse Reaction Events linked to exposure to substance"
-    [google.fhir.stu3.proto.valid_reference_type]: "Condition"
+    [google.fhir.proto.field_description]: "Adverse Reaction Events linked to exposure to substance"
+    [google.fhir.proto.valid_reference_type]: "Condition"
   }
 }
 field {
@@ -151,8 +151,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Location where adverse event occurred"
-    [google.fhir.stu3.proto.valid_reference_type]: "Location"
+    [google.fhir.proto.field_description]: "Location where adverse event occurred"
+    [google.fhir.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -162,7 +162,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Mild | Moderate | Severe"
+    [google.fhir.proto.field_description]: "Mild | Moderate | Severe"
   }
 }
 field {
@@ -172,7 +172,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "resolved | recovering | ongoing | resolvedWithSequelae | fatal | unknown"
+    [google.fhir.proto.field_description]: "resolved | recovering | ongoing | resolvedWithSequelae | fatal | unknown"
   }
 }
 field {
@@ -182,10 +182,10 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Who recorded the adverse event"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+    [google.fhir.proto.field_description]: "Who recorded the adverse event"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.valid_reference_type]: "RelatedPerson"
   }
 }
 field {
@@ -195,9 +195,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Who  was involved in the adverse event or the potential adverse event"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "Device"
+    [google.fhir.proto.field_description]: "Who  was involved in the adverse event or the potential adverse event"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.valid_reference_type]: "Device"
   }
 }
 field {
@@ -207,7 +207,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Description of the adverse event"
+    [google.fhir.proto.field_description]: "Description of the adverse event"
   }
 }
 field {
@@ -217,7 +217,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.AdverseEvent.SuspectEntity"
   options {
-    [google.fhir.stu3.proto.field_description]: "The suspected agent causing the adverse event"
+    [google.fhir.proto.field_description]: "The suspected agent causing the adverse event"
   }
 }
 field {
@@ -227,13 +227,13 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "AdverseEvent.subjectMedicalHistory"
-    [google.fhir.stu3.proto.valid_reference_type]: "Condition"
-    [google.fhir.stu3.proto.valid_reference_type]: "Observation"
-    [google.fhir.stu3.proto.valid_reference_type]: "AllergyIntolerance"
-    [google.fhir.stu3.proto.valid_reference_type]: "FamilyMemberHistory"
-    [google.fhir.stu3.proto.valid_reference_type]: "Immunization"
-    [google.fhir.stu3.proto.valid_reference_type]: "Procedure"
+    [google.fhir.proto.field_description]: "AdverseEvent.subjectMedicalHistory"
+    [google.fhir.proto.valid_reference_type]: "Condition"
+    [google.fhir.proto.valid_reference_type]: "Observation"
+    [google.fhir.proto.valid_reference_type]: "AllergyIntolerance"
+    [google.fhir.proto.valid_reference_type]: "FamilyMemberHistory"
+    [google.fhir.proto.valid_reference_type]: "Immunization"
+    [google.fhir.proto.valid_reference_type]: "Procedure"
   }
 }
 field {
@@ -243,8 +243,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "AdverseEvent.referenceDocument"
-    [google.fhir.stu3.proto.valid_reference_type]: "DocumentReference"
+    [google.fhir.proto.field_description]: "AdverseEvent.referenceDocument"
+    [google.fhir.proto.valid_reference_type]: "DocumentReference"
   }
 }
 field {
@@ -254,8 +254,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "AdverseEvent.study"
-    [google.fhir.stu3.proto.valid_reference_type]: "ResearchStudy"
+    [google.fhir.proto.field_description]: "AdverseEvent.study"
+    [google.fhir.proto.valid_reference_type]: "ResearchStudy"
   }
 }
 nested_type {
@@ -267,7 +267,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -277,7 +277,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -287,7 +287,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -297,13 +297,13 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Refers to the specific entity that caused the adverse event"
-      [google.fhir.stu3.proto.valid_reference_type]: "Substance"
-      [google.fhir.stu3.proto.valid_reference_type]: "Medication"
-      [google.fhir.stu3.proto.valid_reference_type]: "MedicationAdministration"
-      [google.fhir.stu3.proto.valid_reference_type]: "MedicationStatement"
-      [google.fhir.stu3.proto.valid_reference_type]: "Device"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Refers to the specific entity that caused the adverse event"
+      [google.fhir.proto.valid_reference_type]: "Substance"
+      [google.fhir.proto.valid_reference_type]: "Medication"
+      [google.fhir.proto.valid_reference_type]: "MedicationAdministration"
+      [google.fhir.proto.valid_reference_type]: "MedicationStatement"
+      [google.fhir.proto.valid_reference_type]: "Device"
     }
   }
   field {
@@ -313,7 +313,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.AdverseEventCausalityCode"
     options {
-      [google.fhir.stu3.proto.field_description]: "causality1 | causality2"
+      [google.fhir.proto.field_description]: "causality1 | causality2"
     }
   }
   field {
@@ -323,7 +323,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "assess1 | assess2"
+      [google.fhir.proto.field_description]: "assess1 | assess2"
     }
   }
   field {
@@ -333,7 +333,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "AdverseEvent.suspectEntity.causalityProductRelatedness"
+      [google.fhir.proto.field_description]: "AdverseEvent.suspectEntity.causalityProductRelatedness"
     }
   }
   field {
@@ -343,7 +343,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "method1 | method2"
+      [google.fhir.proto.field_description]: "method1 | method2"
     }
   }
   field {
@@ -353,9 +353,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "AdverseEvent.suspectEntity.causalityAuthor"
-      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "PractitionerRole"
+      [google.fhir.proto.field_description]: "AdverseEvent.suspectEntity.causalityAuthor"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "PractitionerRole"
     }
   }
   field {
@@ -365,12 +365,12 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "result1 | result2"
+      [google.fhir.proto.field_description]: "result1 | result2"
     }
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for AdverseEvent, last updated 2017-04-19T07:44:43.294+10:00.\nMedical care, research study or other healthcare event causing physical injury.\nSee http://hl7.org/fhir/StructureDefinition/AdverseEvent"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/AdverseEvent"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for AdverseEvent, last updated 2017-04-19T07:44:43.294+10:00.\nMedical care, research study or other healthcare event causing physical injury.\nSee http://hl7.org/fhir/StructureDefinition/AdverseEvent"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/AdverseEvent"
 }

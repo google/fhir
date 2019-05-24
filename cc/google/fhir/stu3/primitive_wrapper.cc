@@ -55,12 +55,12 @@ namespace stu3 {
 
 namespace {
 
+using ::google::fhir::HasValueset;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
 using ::google::fhir::stu3::ClearTypedExtensions;
 using ::google::fhir::stu3::ConvertToExtension;
 using ::google::fhir::stu3::GetRepeatedFromExtension;
-using ::google::fhir::stu3::HasValueset;
 using ::google::fhir::stu3::google::Base64BinarySeparatorStride;
 using ::google::fhir::stu3::google::PrimitiveHasNoValue;
 using ::google::fhir::stu3::proto::Base64Binary;
@@ -191,7 +191,7 @@ class SpecificWrapper : public PrimitiveWrapper {
       for (const Descriptor* internal_extension : *kConversionOnlyExtensions) {
         if (extension.url().value() ==
             internal_extension->options().GetExtension(
-                ::google::fhir::stu3::proto::fhir_structure_definition_url)) {
+                ::google::fhir::proto::fhir_structure_definition_url)) {
           is_conversion_only_extension = true;
           break;
         }

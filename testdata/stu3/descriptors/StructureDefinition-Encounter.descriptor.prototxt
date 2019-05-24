@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Identifier(s) by which this encounter is known"
+    [google.fhir.proto.field_description]: "Identifier(s) by which this encounter is known"
   }
 }
 field {
@@ -96,8 +96,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.EncounterStatusCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "planned | arrived | triaged | in-progress | onleave | finished | cancelled +"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "planned | arrived | triaged | in-progress | onleave | finished | cancelled +"
   }
 }
 field {
@@ -107,7 +107,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Encounter.StatusHistory"
   options {
-    [google.fhir.stu3.proto.field_description]: "List of past encounter statuses"
+    [google.fhir.proto.field_description]: "List of past encounter statuses"
   }
 }
 field {
@@ -117,7 +117,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Coding"
   options {
-    [google.fhir.stu3.proto.field_description]: "inpatient | outpatient | ambulatory | emergency +"
+    [google.fhir.proto.field_description]: "inpatient | outpatient | ambulatory | emergency +"
   }
   json_name: "class"
 }
@@ -128,7 +128,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Encounter.ClassHistory"
   options {
-    [google.fhir.stu3.proto.field_description]: "List of past encounter classes"
+    [google.fhir.proto.field_description]: "List of past encounter classes"
   }
 }
 field {
@@ -138,7 +138,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Specific type of encounter"
+    [google.fhir.proto.field_description]: "Specific type of encounter"
   }
 }
 field {
@@ -148,7 +148,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Indicates the urgency of the encounter"
+    [google.fhir.proto.field_description]: "Indicates the urgency of the encounter"
   }
 }
 field {
@@ -158,9 +158,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "The patient ro group present at the encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "Group"
+    [google.fhir.proto.field_description]: "The patient ro group present at the encounter"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Group"
   }
 }
 field {
@@ -170,8 +170,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Episode(s) of care that this encounter should be recorded against"
-    [google.fhir.stu3.proto.valid_reference_type]: "EpisodeOfCare"
+    [google.fhir.proto.field_description]: "Episode(s) of care that this encounter should be recorded against"
+    [google.fhir.proto.valid_reference_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -181,8 +181,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "The ReferralRequest that initiated this encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "ReferralRequest"
+    [google.fhir.proto.field_description]: "The ReferralRequest that initiated this encounter"
+    [google.fhir.proto.valid_reference_type]: "ReferralRequest"
   }
 }
 field {
@@ -192,7 +192,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Encounter.Participant"
   options {
-    [google.fhir.stu3.proto.field_description]: "List of participants involved in the encounter"
+    [google.fhir.proto.field_description]: "List of participants involved in the encounter"
   }
 }
 field {
@@ -202,8 +202,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "The appointment that scheduled this encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "Appointment"
+    [google.fhir.proto.field_description]: "The appointment that scheduled this encounter"
+    [google.fhir.proto.valid_reference_type]: "Appointment"
   }
 }
 field {
@@ -213,7 +213,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Period"
   options {
-    [google.fhir.stu3.proto.field_description]: "The start and end time of the encounter"
+    [google.fhir.proto.field_description]: "The start and end time of the encounter"
   }
 }
 field {
@@ -223,7 +223,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Duration"
   options {
-    [google.fhir.stu3.proto.field_description]: "Quantity of time the encounter lasted (less time absent)"
+    [google.fhir.proto.field_description]: "Quantity of time the encounter lasted (less time absent)"
   }
 }
 field {
@@ -233,7 +233,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Reason the encounter takes place (code)"
+    [google.fhir.proto.field_description]: "Reason the encounter takes place (code)"
   }
 }
 field {
@@ -243,7 +243,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Encounter.Diagnosis"
   options {
-    [google.fhir.stu3.proto.field_description]: "The list of diagnosis relevant to this encounter"
+    [google.fhir.proto.field_description]: "The list of diagnosis relevant to this encounter"
   }
 }
 field {
@@ -253,8 +253,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "The set of accounts that may be used for billing for this Encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "Account"
+    [google.fhir.proto.field_description]: "The set of accounts that may be used for billing for this Encounter"
+    [google.fhir.proto.valid_reference_type]: "Account"
   }
 }
 field {
@@ -264,7 +264,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Encounter.Hospitalization"
   options {
-    [google.fhir.stu3.proto.field_description]: "Details about the admission to a healthcare service"
+    [google.fhir.proto.field_description]: "Details about the admission to a healthcare service"
   }
 }
 field {
@@ -274,7 +274,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Encounter.Location"
   options {
-    [google.fhir.stu3.proto.field_description]: "List of locations where the patient has been"
+    [google.fhir.proto.field_description]: "List of locations where the patient has been"
   }
 }
 field {
@@ -284,8 +284,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "The custodian organization of this Encounter record"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.field_description]: "The custodian organization of this Encounter record"
+    [google.fhir.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -295,8 +295,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Another Encounter this encounter is part of"
-    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
+    [google.fhir.proto.field_description]: "Another Encounter this encounter is part of"
+    [google.fhir.proto.valid_reference_type]: "Encounter"
   }
 }
 nested_type {
@@ -308,7 +308,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -318,7 +318,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -328,7 +328,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -338,8 +338,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.EncounterStatusCode"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "planned | arrived | triaged | in-progress | onleave | finished | cancelled +"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "planned | arrived | triaged | in-progress | onleave | finished | cancelled +"
     }
   }
   field {
@@ -349,8 +349,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Period"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "The time that the episode was in the specified status"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "The time that the episode was in the specified status"
     }
   }
 }
@@ -363,7 +363,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -373,7 +373,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -383,7 +383,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -393,8 +393,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Coding"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "inpatient | outpatient | ambulatory | emergency +"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "inpatient | outpatient | ambulatory | emergency +"
     }
     json_name: "class"
   }
@@ -405,8 +405,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Period"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "The time that the episode was in the specified class"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "The time that the episode was in the specified class"
     }
   }
 }
@@ -419,7 +419,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -429,7 +429,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -439,7 +439,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -449,7 +449,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Role of participant in encounter"
+      [google.fhir.proto.field_description]: "Role of participant in encounter"
     }
   }
   field {
@@ -459,7 +459,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Period"
     options {
-      [google.fhir.stu3.proto.field_description]: "Period of time during the encounter that the participant participated"
+      [google.fhir.proto.field_description]: "Period of time during the encounter that the participant participated"
     }
   }
   field {
@@ -469,9 +469,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Persons involved in the encounter other than the patient"
-      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+      [google.fhir.proto.field_description]: "Persons involved in the encounter other than the patient"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "RelatedPerson"
     }
   }
 }
@@ -484,7 +484,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -494,7 +494,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -504,7 +504,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -514,10 +514,10 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Reason the encounter takes place (resource)"
-      [google.fhir.stu3.proto.valid_reference_type]: "Condition"
-      [google.fhir.stu3.proto.valid_reference_type]: "Procedure"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Reason the encounter takes place (resource)"
+      [google.fhir.proto.valid_reference_type]: "Condition"
+      [google.fhir.proto.valid_reference_type]: "Procedure"
     }
   }
   field {
@@ -527,7 +527,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Role that this diagnosis has within the encounter (e.g. admission, billing, discharge \342\200\246)"
+      [google.fhir.proto.field_description]: "Role that this diagnosis has within the encounter (e.g. admission, billing, discharge \342\200\246)"
     }
   }
   field {
@@ -537,7 +537,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.field_description]: "Ranking of the diagnosis (for each role type)"
+      [google.fhir.proto.field_description]: "Ranking of the diagnosis (for each role type)"
     }
   }
 }
@@ -550,7 +550,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -560,7 +560,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -570,7 +570,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -580,7 +580,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Identifier"
     options {
-      [google.fhir.stu3.proto.field_description]: "Pre-admission identifier"
+      [google.fhir.proto.field_description]: "Pre-admission identifier"
     }
   }
   field {
@@ -590,8 +590,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "The location from which the patient came before admission"
-      [google.fhir.stu3.proto.valid_reference_type]: "Location"
+      [google.fhir.proto.field_description]: "The location from which the patient came before admission"
+      [google.fhir.proto.valid_reference_type]: "Location"
     }
   }
   field {
@@ -601,7 +601,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "From where patient was admitted (physician referral, transfer)"
+      [google.fhir.proto.field_description]: "From where patient was admitted (physician referral, transfer)"
     }
   }
   field {
@@ -611,7 +611,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "The type of hospital re-admission that has occurred (if any). If the value is absent, then this is not identified as a readmission"
+      [google.fhir.proto.field_description]: "The type of hospital re-admission that has occurred (if any). If the value is absent, then this is not identified as a readmission"
     }
   }
   field {
@@ -621,7 +621,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Diet preferences reported by the patient"
+      [google.fhir.proto.field_description]: "Diet preferences reported by the patient"
     }
   }
   field {
@@ -631,7 +631,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Special courtesies (VIP, board member)"
+      [google.fhir.proto.field_description]: "Special courtesies (VIP, board member)"
     }
   }
   field {
@@ -641,7 +641,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Wheelchair, translator, stretcher, etc."
+      [google.fhir.proto.field_description]: "Wheelchair, translator, stretcher, etc."
     }
   }
   field {
@@ -651,8 +651,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Location to which the patient is discharged"
-      [google.fhir.stu3.proto.valid_reference_type]: "Location"
+      [google.fhir.proto.field_description]: "Location to which the patient is discharged"
+      [google.fhir.proto.valid_reference_type]: "Location"
     }
   }
   field {
@@ -662,7 +662,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Category or kind of location after discharge"
+      [google.fhir.proto.field_description]: "Category or kind of location after discharge"
     }
   }
 }
@@ -675,7 +675,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -685,7 +685,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -695,7 +695,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -705,9 +705,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Location the encounter takes place"
-      [google.fhir.stu3.proto.valid_reference_type]: "Location"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Location the encounter takes place"
+      [google.fhir.proto.valid_reference_type]: "Location"
     }
   }
   field {
@@ -717,7 +717,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.EncounterLocationStatusCode"
     options {
-      [google.fhir.stu3.proto.field_description]: "planned | active | reserved | completed"
+      [google.fhir.proto.field_description]: "planned | active | reserved | completed"
     }
   }
   field {
@@ -727,12 +727,12 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Period"
     options {
-      [google.fhir.stu3.proto.field_description]: "Time period during which the patient was present at the location"
+      [google.fhir.proto.field_description]: "Time period during which the patient was present at the location"
     }
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Encounter, last updated 2017-04-19T07:44:43.294+10:00.\nAn interaction during which services are provided to the patient.\nSee http://hl7.org/fhir/StructureDefinition/Encounter"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Encounter"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Encounter, last updated 2017-04-19T07:44:43.294+10:00.\nAn interaction during which services are provided to the patient.\nSee http://hl7.org/fhir/StructureDefinition/Encounter"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Encounter"
 }

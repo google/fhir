@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Identifier for this record (external references)"
+    [google.fhir.proto.field_description]: "Identifier for this record (external references)"
   }
 }
 field {
@@ -96,8 +96,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ConsentStateCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "draft | proposed | active | rejected | inactive | entered-in-error"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "draft | proposed | active | rejected | inactive | entered-in-error"
   }
 }
 field {
@@ -107,7 +107,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Classification of the consent statement - for indexing/retrieval"
+    [google.fhir.proto.field_description]: "Classification of the consent statement - for indexing/retrieval"
   }
 }
 field {
@@ -117,9 +117,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Who the consent applies to"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Who the consent applies to"
+    [google.fhir.proto.valid_reference_type]: "Patient"
   }
 }
 field {
@@ -129,7 +129,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Period"
   options {
-    [google.fhir.stu3.proto.field_description]: "Period that this consent applies"
+    [google.fhir.proto.field_description]: "Period that this consent applies"
   }
 }
 field {
@@ -139,7 +139,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "When this Consent was created or indexed"
+    [google.fhir.proto.field_description]: "When this Consent was created or indexed"
   }
 }
 field {
@@ -149,11 +149,11 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Who is agreeing to the policy and exceptions"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+    [google.fhir.proto.field_description]: "Who is agreeing to the policy and exceptions"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.valid_reference_type]: "RelatedPerson"
   }
 }
 field {
@@ -163,7 +163,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Consent.Actor"
   options {
-    [google.fhir.stu3.proto.field_description]: "Who|what controlled by this consent (or group, by role)"
+    [google.fhir.proto.field_description]: "Who|what controlled by this consent (or group, by role)"
   }
 }
 field {
@@ -173,7 +173,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Actions controlled by this consent"
+    [google.fhir.proto.field_description]: "Actions controlled by this consent"
   }
 }
 field {
@@ -183,8 +183,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Custodian of the consent"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.field_description]: "Custodian of the consent"
+    [google.fhir.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -194,7 +194,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Consent.Source"
   options {
-    [google.fhir.stu3.proto.field_description]: "Source from which this consent is taken"
+    [google.fhir.proto.field_description]: "Source from which this consent is taken"
   }
 }
 field {
@@ -204,7 +204,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Consent.Policy"
   options {
-    [google.fhir.stu3.proto.field_description]: "Policies covered by this consent"
+    [google.fhir.proto.field_description]: "Policies covered by this consent"
   }
 }
 field {
@@ -214,7 +214,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "Policy that this consents to"
+    [google.fhir.proto.field_description]: "Policy that this consents to"
   }
 }
 field {
@@ -224,7 +224,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Coding"
   options {
-    [google.fhir.stu3.proto.field_description]: "Security Labels that define affected resources"
+    [google.fhir.proto.field_description]: "Security Labels that define affected resources"
   }
 }
 field {
@@ -234,7 +234,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Coding"
   options {
-    [google.fhir.stu3.proto.field_description]: "Context of activities for which the agreement is made"
+    [google.fhir.proto.field_description]: "Context of activities for which the agreement is made"
   }
 }
 field {
@@ -244,7 +244,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Period"
   options {
-    [google.fhir.stu3.proto.field_description]: "Timeframe for data controlled by this consent"
+    [google.fhir.proto.field_description]: "Timeframe for data controlled by this consent"
   }
 }
 field {
@@ -254,7 +254,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Consent.Data"
   options {
-    [google.fhir.stu3.proto.field_description]: "Data controlled by this consent"
+    [google.fhir.proto.field_description]: "Data controlled by this consent"
   }
 }
 field {
@@ -264,7 +264,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Consent.Except"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional rule -  addition or removal of permissions"
+    [google.fhir.proto.field_description]: "Additional rule -  addition or removal of permissions"
   }
 }
 nested_type {
@@ -276,7 +276,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -286,7 +286,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -296,7 +296,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -306,8 +306,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "How the actor is involved"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "How the actor is involved"
     }
   }
   field {
@@ -317,15 +317,15 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Resource for the actor (or group, by role)"
-      [google.fhir.stu3.proto.valid_reference_type]: "Device"
-      [google.fhir.stu3.proto.valid_reference_type]: "Group"
-      [google.fhir.stu3.proto.valid_reference_type]: "CareTeam"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
-      [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Resource for the actor (or group, by role)"
+      [google.fhir.proto.valid_reference_type]: "Device"
+      [google.fhir.proto.valid_reference_type]: "Group"
+      [google.fhir.proto.valid_reference_type]: "CareTeam"
+      [google.fhir.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.valid_reference_type]: "Patient"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "RelatedPerson"
     }
   }
 }
@@ -354,15 +354,15 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "Consent"
-      [google.fhir.stu3.proto.valid_reference_type]: "DocumentReference"
-      [google.fhir.stu3.proto.valid_reference_type]: "Contract"
-      [google.fhir.stu3.proto.valid_reference_type]: "QuestionnaireResponse"
+      [google.fhir.proto.valid_reference_type]: "Consent"
+      [google.fhir.proto.valid_reference_type]: "DocumentReference"
+      [google.fhir.proto.valid_reference_type]: "Contract"
+      [google.fhir.proto.valid_reference_type]: "QuestionnaireResponse"
     }
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "source"
@@ -377,7 +377,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -387,7 +387,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -397,7 +397,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -407,7 +407,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Uri"
     options {
-      [google.fhir.stu3.proto.field_description]: "Enforcement source for policy"
+      [google.fhir.proto.field_description]: "Enforcement source for policy"
     }
   }
   field {
@@ -417,7 +417,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Uri"
     options {
-      [google.fhir.stu3.proto.field_description]: "Specific policy covered by this consent"
+      [google.fhir.proto.field_description]: "Specific policy covered by this consent"
     }
   }
 }
@@ -430,7 +430,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -440,7 +440,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -450,7 +450,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -460,8 +460,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ConsentDataMeaningCode"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "instance | related | dependents | authoredby"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "instance | related | dependents | authoredby"
     }
   }
   field {
@@ -471,9 +471,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "The actual data reference"
-      [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "The actual data reference"
+      [google.fhir.proto.valid_reference_type]: "Resource"
     }
   }
 }
@@ -486,7 +486,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -496,7 +496,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -506,7 +506,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -516,8 +516,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ConsentExceptTypeCode"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "deny | permit"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "deny | permit"
     }
   }
   field {
@@ -527,7 +527,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Period"
     options {
-      [google.fhir.stu3.proto.field_description]: "Timeframe for this exception"
+      [google.fhir.proto.field_description]: "Timeframe for this exception"
     }
   }
   field {
@@ -537,7 +537,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Consent.Except.ExceptActor"
     options {
-      [google.fhir.stu3.proto.field_description]: "Who|what controlled by this exception (or group, by role)"
+      [google.fhir.proto.field_description]: "Who|what controlled by this exception (or group, by role)"
     }
   }
   field {
@@ -547,7 +547,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Actions controlled by this exception"
+      [google.fhir.proto.field_description]: "Actions controlled by this exception"
     }
   }
   field {
@@ -557,7 +557,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Coding"
     options {
-      [google.fhir.stu3.proto.field_description]: "Security Labels that define affected resources"
+      [google.fhir.proto.field_description]: "Security Labels that define affected resources"
     }
   }
   field {
@@ -567,7 +567,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Coding"
     options {
-      [google.fhir.stu3.proto.field_description]: "Context of activities covered by this exception"
+      [google.fhir.proto.field_description]: "Context of activities covered by this exception"
     }
   }
   field {
@@ -577,7 +577,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Coding"
     options {
-      [google.fhir.stu3.proto.field_description]: "e.g. Resource Type, Profile, or CDA etc"
+      [google.fhir.proto.field_description]: "e.g. Resource Type, Profile, or CDA etc"
     }
     json_name: "class"
   }
@@ -588,7 +588,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Coding"
     options {
-      [google.fhir.stu3.proto.field_description]: "e.g. LOINC or SNOMED CT code, etc in the content"
+      [google.fhir.proto.field_description]: "e.g. LOINC or SNOMED CT code, etc in the content"
     }
   }
   field {
@@ -598,7 +598,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Period"
     options {
-      [google.fhir.stu3.proto.field_description]: "Timeframe for data controlled by this exception"
+      [google.fhir.proto.field_description]: "Timeframe for data controlled by this exception"
     }
   }
   field {
@@ -608,7 +608,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Consent.Except.ExceptData"
     options {
-      [google.fhir.stu3.proto.field_description]: "Data controlled by this exception"
+      [google.fhir.proto.field_description]: "Data controlled by this exception"
     }
   }
   nested_type {
@@ -620,7 +620,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -630,7 +630,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -640,7 +640,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -650,8 +650,8 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-        [google.fhir.stu3.proto.field_description]: "How the actor is involved"
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "How the actor is involved"
       }
     }
     field {
@@ -661,15 +661,15 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-        [google.fhir.stu3.proto.field_description]: "Resource for the actor (or group, by role)"
-        [google.fhir.stu3.proto.valid_reference_type]: "Device"
-        [google.fhir.stu3.proto.valid_reference_type]: "Group"
-        [google.fhir.stu3.proto.valid_reference_type]: "CareTeam"
-        [google.fhir.stu3.proto.valid_reference_type]: "Organization"
-        [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-        [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-        [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "Resource for the actor (or group, by role)"
+        [google.fhir.proto.valid_reference_type]: "Device"
+        [google.fhir.proto.valid_reference_type]: "Group"
+        [google.fhir.proto.valid_reference_type]: "CareTeam"
+        [google.fhir.proto.valid_reference_type]: "Organization"
+        [google.fhir.proto.valid_reference_type]: "Patient"
+        [google.fhir.proto.valid_reference_type]: "Practitioner"
+        [google.fhir.proto.valid_reference_type]: "RelatedPerson"
       }
     }
   }
@@ -682,7 +682,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -692,7 +692,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -702,7 +702,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -712,8 +712,8 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.ConsentDataMeaningCode"
       options {
-        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-        [google.fhir.stu3.proto.field_description]: "instance | related | dependents | authoredby"
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "instance | related | dependents | authoredby"
       }
     }
     field {
@@ -723,15 +723,15 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-        [google.fhir.stu3.proto.field_description]: "The actual data reference"
-        [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "The actual data reference"
+        [google.fhir.proto.valid_reference_type]: "Resource"
       }
     }
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Consent, last updated 2017-04-19T07:44:43.294+10:00.\nA healthcare consumer\'s policy choices to permits or denies recipients or roles to perform actions for specific purposes and periods of time.\nSee http://hl7.org/fhir/StructureDefinition/Consent"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Consent"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Consent, last updated 2017-04-19T07:44:43.294+10:00.\nA healthcare consumer\'s policy choices to permits or denies recipients or roles to perform actions for specific purposes and periods of time.\nSee http://hl7.org/fhir/StructureDefinition/Consent"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Consent"
 }

@@ -70,7 +70,7 @@ Status GetRepeatedFromExtension(const C& extension_container,
   const ::google::protobuf::Descriptor* descriptor = T::descriptor();
   FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
   const string& url = descriptor->options().GetExtension(
-      stu3::proto::fhir_structure_definition_url);
+      ::google::fhir::proto::fhir_structure_definition_url);
   for (const auto& extension : extension_container) {
     if (extension.url().value() == url) {
       T message;

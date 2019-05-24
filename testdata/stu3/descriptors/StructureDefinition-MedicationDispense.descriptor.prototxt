@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "External identifier"
+    [google.fhir.proto.field_description]: "External identifier"
   }
 }
 field {
@@ -96,8 +96,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Event that dispense is part of"
-    [google.fhir.stu3.proto.valid_reference_type]: "Procedure"
+    [google.fhir.proto.field_description]: "Event that dispense is part of"
+    [google.fhir.proto.valid_reference_type]: "Procedure"
   }
 }
 field {
@@ -107,7 +107,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.MedicationDispenseStatusCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "preparation | in-progress | on-hold | completed | entered-in-error | stopped"
+    [google.fhir.proto.field_description]: "preparation | in-progress | on-hold | completed | entered-in-error | stopped"
   }
 }
 field {
@@ -117,7 +117,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Type of medication dispense"
+    [google.fhir.proto.field_description]: "Type of medication dispense"
   }
 }
 field {
@@ -127,8 +127,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.MedicationDispense.Medication"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "What medication was supplied"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "What medication was supplied"
   }
 }
 field {
@@ -138,9 +138,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Who the dispense is for"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "Group"
+    [google.fhir.proto.field_description]: "Who the dispense is for"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Group"
   }
 }
 field {
@@ -150,9 +150,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Encounter / Episode associated with event"
-    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "EpisodeOfCare"
+    [google.fhir.proto.field_description]: "Encounter / Episode associated with event"
+    [google.fhir.proto.valid_reference_type]: "Encounter"
+    [google.fhir.proto.valid_reference_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -162,8 +162,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Information that supports the dispensing of the medication"
-    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+    [google.fhir.proto.field_description]: "Information that supports the dispensing of the medication"
+    [google.fhir.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -173,7 +173,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.MedicationDispense.Performer"
   options {
-    [google.fhir.stu3.proto.field_description]: "Who performed event"
+    [google.fhir.proto.field_description]: "Who performed event"
   }
 }
 field {
@@ -183,8 +183,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Medication order that authorizes the dispense"
-    [google.fhir.stu3.proto.valid_reference_type]: "MedicationRequest"
+    [google.fhir.proto.field_description]: "Medication order that authorizes the dispense"
+    [google.fhir.proto.valid_reference_type]: "MedicationRequest"
   }
 }
 field {
@@ -194,7 +194,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Trial fill, partial fill, emergency fill, etc."
+    [google.fhir.proto.field_description]: "Trial fill, partial fill, emergency fill, etc."
   }
 }
 field {
@@ -204,7 +204,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.SimpleQuantity"
   options {
-    [google.fhir.stu3.proto.field_description]: "Amount dispensed"
+    [google.fhir.proto.field_description]: "Amount dispensed"
   }
 }
 field {
@@ -214,7 +214,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.SimpleQuantity"
   options {
-    [google.fhir.stu3.proto.field_description]: "Amount of medication expressed as a timing amount"
+    [google.fhir.proto.field_description]: "Amount of medication expressed as a timing amount"
   }
 }
 field {
@@ -224,7 +224,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "When product was packaged and reviewed"
+    [google.fhir.proto.field_description]: "When product was packaged and reviewed"
   }
 }
 field {
@@ -234,7 +234,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "When product was given out"
+    [google.fhir.proto.field_description]: "When product was given out"
   }
 }
 field {
@@ -244,8 +244,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Where the medication was sent"
-    [google.fhir.stu3.proto.valid_reference_type]: "Location"
+    [google.fhir.proto.field_description]: "Where the medication was sent"
+    [google.fhir.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -255,9 +255,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Who collected the medication"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.field_description]: "Who collected the medication"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -267,7 +267,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Annotation"
   options {
-    [google.fhir.stu3.proto.field_description]: "Information about the dispense"
+    [google.fhir.proto.field_description]: "Information about the dispense"
   }
 }
 field {
@@ -277,7 +277,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Dosage"
   options {
-    [google.fhir.stu3.proto.field_description]: "How the medication is to be used by the patient or administered by the caregiver"
+    [google.fhir.proto.field_description]: "How the medication is to be used by the patient or administered by the caregiver"
   }
 }
 field {
@@ -287,7 +287,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.MedicationDispense.Substitution"
   options {
-    [google.fhir.stu3.proto.field_description]: "Whether a substitution was performed on the dispense"
+    [google.fhir.proto.field_description]: "Whether a substitution was performed on the dispense"
   }
 }
 field {
@@ -297,8 +297,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Clinical issue with action"
-    [google.fhir.stu3.proto.valid_reference_type]: "DetectedIssue"
+    [google.fhir.proto.field_description]: "Clinical issue with action"
+    [google.fhir.proto.valid_reference_type]: "DetectedIssue"
   }
 }
 field {
@@ -308,7 +308,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "Whether the dispense was or was not performed"
+    [google.fhir.proto.field_description]: "Whether the dispense was or was not performed"
   }
 }
 field {
@@ -318,7 +318,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.MedicationDispense.NotDoneReason"
   options {
-    [google.fhir.stu3.proto.field_description]: "Why a dispense was not performed"
+    [google.fhir.proto.field_description]: "Why a dispense was not performed"
   }
 }
 field {
@@ -328,8 +328,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "A list of releveant lifecycle events"
-    [google.fhir.stu3.proto.valid_reference_type]: "Provenance"
+    [google.fhir.proto.field_description]: "A list of releveant lifecycle events"
+    [google.fhir.proto.valid_reference_type]: "Provenance"
   }
 }
 nested_type {
@@ -349,12 +349,12 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "Medication"
+      [google.fhir.proto.valid_reference_type]: "Medication"
     }
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "medication"
@@ -369,7 +369,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -379,7 +379,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -389,7 +389,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -399,13 +399,13 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Individual who was performing"
-      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
-      [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-      [google.fhir.stu3.proto.valid_reference_type]: "Device"
-      [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Individual who was performing"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.valid_reference_type]: "Patient"
+      [google.fhir.proto.valid_reference_type]: "Device"
+      [google.fhir.proto.valid_reference_type]: "RelatedPerson"
     }
   }
   field {
@@ -415,8 +415,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Organization organization was acting for"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.field_description]: "Organization organization was acting for"
+      [google.fhir.proto.valid_reference_type]: "Organization"
     }
   }
 }
@@ -429,7 +429,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -439,7 +439,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -449,7 +449,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -459,8 +459,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Boolean"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Whether a substitution was or was not performed on the dispense"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Whether a substitution was or was not performed on the dispense"
     }
   }
   field {
@@ -470,7 +470,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Code signifying whether a different drug was dispensed from what was prescribed"
+      [google.fhir.proto.field_description]: "Code signifying whether a different drug was dispensed from what was prescribed"
     }
   }
   field {
@@ -480,7 +480,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Why was substitution made"
+      [google.fhir.proto.field_description]: "Why was substitution made"
     }
   }
   field {
@@ -490,8 +490,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Who is responsible for the substitution"
-      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.field_description]: "Who is responsible for the substitution"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
     }
   }
 }
@@ -512,19 +512,19 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "DetectedIssue"
+      [google.fhir.proto.valid_reference_type]: "DetectedIssue"
     }
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "not_done_reason"
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for MedicationDispense, last updated 2017-04-19T07:44:43.294+10:00.\nDispensing a medication to a named patient.\nSee http://hl7.org/fhir/StructureDefinition/MedicationDispense"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MedicationDispense"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MedicationDispense, last updated 2017-04-19T07:44:43.294+10:00.\nDispensing a medication to a named patient.\nSee http://hl7.org/fhir/StructureDefinition/MedicationDispense"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MedicationDispense"
 }

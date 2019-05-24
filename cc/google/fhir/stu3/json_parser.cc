@@ -45,13 +45,13 @@ namespace stu3 {
 
 namespace {
 
+using ::google::fhir::IsChoiceType;
+using ::google::fhir::IsPrimitive;
+using ::google::fhir::IsReference;
+using ::google::fhir::IsResource;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
 using ::google::fhir::stu3::ClearTypedExtensions;
-using ::google::fhir::stu3::IsChoiceType;
-using ::google::fhir::stu3::IsPrimitive;
-using ::google::fhir::stu3::IsReference;
-using ::google::fhir::stu3::IsResource;
 using ::google::fhir::stu3::ReferenceProtoToString;
 using ::google::fhir::stu3::ReferenceStringToProto;
 using ::google::fhir::stu3::proto::Extension;

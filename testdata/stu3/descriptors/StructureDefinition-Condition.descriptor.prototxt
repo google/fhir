@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "External Ids for this condition"
+    [google.fhir.proto.field_description]: "External Ids for this condition"
   }
 }
 field {
@@ -96,7 +96,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ConditionClinicalStatusCodesCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "active | recurrence | inactive | remission | resolved"
+    [google.fhir.proto.field_description]: "active | recurrence | inactive | remission | resolved"
   }
 }
 field {
@@ -106,7 +106,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ConditionVerificationStatusCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "provisional | differential | confirmed | refuted | entered-in-error | unknown"
+    [google.fhir.proto.field_description]: "provisional | differential | confirmed | refuted | entered-in-error | unknown"
   }
 }
 field {
@@ -116,7 +116,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "problem-list-item | encounter-diagnosis"
+    [google.fhir.proto.field_description]: "problem-list-item | encounter-diagnosis"
   }
 }
 field {
@@ -126,7 +126,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Subjective severity of condition"
+    [google.fhir.proto.field_description]: "Subjective severity of condition"
   }
 }
 field {
@@ -136,7 +136,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Identification of the condition, problem or diagnosis"
+    [google.fhir.proto.field_description]: "Identification of the condition, problem or diagnosis"
   }
 }
 field {
@@ -146,7 +146,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Anatomical location, if relevant"
+    [google.fhir.proto.field_description]: "Anatomical location, if relevant"
   }
 }
 field {
@@ -156,10 +156,10 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Who has the condition?"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "Group"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Who has the condition?"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Group"
   }
 }
 field {
@@ -169,9 +169,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Encounter or episode when condition first asserted"
-    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "EpisodeOfCare"
+    [google.fhir.proto.field_description]: "Encounter or episode when condition first asserted"
+    [google.fhir.proto.valid_reference_type]: "Encounter"
+    [google.fhir.proto.valid_reference_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -181,7 +181,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Condition.Onset"
   options {
-    [google.fhir.stu3.proto.field_description]: "Estimated or actual date,  date-time, or age"
+    [google.fhir.proto.field_description]: "Estimated or actual date,  date-time, or age"
   }
 }
 field {
@@ -191,7 +191,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Condition.Abatement"
   options {
-    [google.fhir.stu3.proto.field_description]: "If/when in resolution/remission"
+    [google.fhir.proto.field_description]: "If/when in resolution/remission"
   }
 }
 field {
@@ -201,7 +201,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "Date record was believed accurate"
+    [google.fhir.proto.field_description]: "Date record was believed accurate"
   }
 }
 field {
@@ -211,10 +211,10 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Person who asserts this condition"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+    [google.fhir.proto.field_description]: "Person who asserts this condition"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "RelatedPerson"
   }
 }
 field {
@@ -224,8 +224,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Condition.Stage"
   options {
-    [google.fhir.stu3.proto.field_description]: "Stage/grade, usually assessed formally"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "summary.exists() or assessment.exists()"
+    [google.fhir.proto.field_description]: "Stage/grade, usually assessed formally"
+    [google.fhir.proto.fhir_path_constraint]: "summary.exists() or assessment.exists()"
   }
 }
 field {
@@ -235,8 +235,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Condition.Evidence"
   options {
-    [google.fhir.stu3.proto.field_description]: "Supporting evidence"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "code.exists() or detail.exists()"
+    [google.fhir.proto.field_description]: "Supporting evidence"
+    [google.fhir.proto.fhir_path_constraint]: "code.exists() or detail.exists()"
   }
 }
 field {
@@ -246,7 +246,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Annotation"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional information about the Condition"
+    [google.fhir.proto.field_description]: "Additional information about the Condition"
   }
 }
 nested_type {
@@ -293,7 +293,7 @@ nested_type {
     json_name: "string"
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "onset"
@@ -351,7 +351,7 @@ nested_type {
     json_name: "string"
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "abatement"
@@ -366,7 +366,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -376,7 +376,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -386,7 +386,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -396,7 +396,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Simple summary (disease specific)"
+      [google.fhir.proto.field_description]: "Simple summary (disease specific)"
     }
   }
   field {
@@ -406,10 +406,10 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Formal record of assessment"
-      [google.fhir.stu3.proto.valid_reference_type]: "ClinicalImpression"
-      [google.fhir.stu3.proto.valid_reference_type]: "DiagnosticReport"
-      [google.fhir.stu3.proto.valid_reference_type]: "Observation"
+      [google.fhir.proto.field_description]: "Formal record of assessment"
+      [google.fhir.proto.valid_reference_type]: "ClinicalImpression"
+      [google.fhir.proto.valid_reference_type]: "DiagnosticReport"
+      [google.fhir.proto.valid_reference_type]: "Observation"
     }
   }
 }
@@ -422,7 +422,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -432,7 +432,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -442,7 +442,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -452,7 +452,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Manifestation/symptom"
+      [google.fhir.proto.field_description]: "Manifestation/symptom"
     }
   }
   field {
@@ -462,13 +462,13 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Supporting information found elsewhere"
-      [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+      [google.fhir.proto.field_description]: "Supporting information found elsewhere"
+      [google.fhir.proto.valid_reference_type]: "Resource"
     }
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Condition, last updated 2017-04-19T07:44:43.294+10:00.\nDetailed information about conditions, problems or diagnoses.\nSee http://hl7.org/fhir/StructureDefinition/Condition"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Condition"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Condition, last updated 2017-04-19T07:44:43.294+10:00.\nDetailed information about conditions, problems or diagnoses.\nSee http://hl7.org/fhir/StructureDefinition/Condition"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Condition"
 }

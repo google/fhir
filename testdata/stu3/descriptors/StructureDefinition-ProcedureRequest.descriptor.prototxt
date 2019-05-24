@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Identifiers assigned to this order"
+    [google.fhir.proto.field_description]: "Identifiers assigned to this order"
   }
 }
 field {
@@ -96,9 +96,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Protocol or definition"
-    [google.fhir.stu3.proto.valid_reference_type]: "ActivityDefinition"
-    [google.fhir.stu3.proto.valid_reference_type]: "PlanDefinition"
+    [google.fhir.proto.field_description]: "Protocol or definition"
+    [google.fhir.proto.valid_reference_type]: "ActivityDefinition"
+    [google.fhir.proto.valid_reference_type]: "PlanDefinition"
   }
 }
 field {
@@ -108,8 +108,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "What request fulfills"
-    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+    [google.fhir.proto.field_description]: "What request fulfills"
+    [google.fhir.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -119,8 +119,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "What request replaces"
-    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+    [google.fhir.proto.field_description]: "What request replaces"
+    [google.fhir.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -130,7 +130,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Composite Request ID"
+    [google.fhir.proto.field_description]: "Composite Request ID"
   }
 }
 field {
@@ -140,8 +140,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.RequestStatusCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "draft | active | suspended | completed | entered-in-error | cancelled"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "draft | active | suspended | completed | entered-in-error | cancelled"
   }
 }
 field {
@@ -151,8 +151,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.RequestIntentCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "proposal | plan | order +"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "proposal | plan | order +"
   }
 }
 field {
@@ -162,7 +162,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.RequestPriorityCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "routine | urgent | asap | stat"
+    [google.fhir.proto.field_description]: "routine | urgent | asap | stat"
   }
 }
 field {
@@ -172,7 +172,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "True if procedure should not be performed"
+    [google.fhir.proto.field_description]: "True if procedure should not be performed"
   }
 }
 field {
@@ -182,7 +182,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Classification of procedure"
+    [google.fhir.proto.field_description]: "Classification of procedure"
   }
 }
 field {
@@ -192,8 +192,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "What is being requested/ordered"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "What is being requested/ordered"
   }
 }
 field {
@@ -203,12 +203,12 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Individual the service is ordered for"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "Group"
-    [google.fhir.stu3.proto.valid_reference_type]: "Location"
-    [google.fhir.stu3.proto.valid_reference_type]: "Device"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Individual the service is ordered for"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Group"
+    [google.fhir.proto.valid_reference_type]: "Location"
+    [google.fhir.proto.valid_reference_type]: "Device"
   }
 }
 field {
@@ -218,9 +218,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Encounter or Episode during which request was created"
-    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "EpisodeOfCare"
+    [google.fhir.proto.field_description]: "Encounter or Episode during which request was created"
+    [google.fhir.proto.valid_reference_type]: "Encounter"
+    [google.fhir.proto.valid_reference_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -230,7 +230,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ProcedureRequest.Occurrence"
   options {
-    [google.fhir.stu3.proto.field_description]: "When procedure should occur"
+    [google.fhir.proto.field_description]: "When procedure should occur"
   }
 }
 field {
@@ -240,7 +240,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ProcedureRequest.AsNeeded"
   options {
-    [google.fhir.stu3.proto.field_description]: "Preconditions for procedure or diagnostic"
+    [google.fhir.proto.field_description]: "Preconditions for procedure or diagnostic"
   }
 }
 field {
@@ -250,7 +250,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "Date request signed"
+    [google.fhir.proto.field_description]: "Date request signed"
   }
 }
 field {
@@ -260,7 +260,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ProcedureRequest.Requester"
   options {
-    [google.fhir.stu3.proto.field_description]: "Who/what is requesting procedure or diagnostic"
+    [google.fhir.proto.field_description]: "Who/what is requesting procedure or diagnostic"
   }
 }
 field {
@@ -270,7 +270,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Performer role"
+    [google.fhir.proto.field_description]: "Performer role"
   }
 }
 field {
@@ -280,13 +280,13 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Requested perfomer"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
-    [google.fhir.stu3.proto.valid_reference_type]: "HealthcareService"
+    [google.fhir.proto.field_description]: "Requested perfomer"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Device"
+    [google.fhir.proto.valid_reference_type]: "RelatedPerson"
+    [google.fhir.proto.valid_reference_type]: "HealthcareService"
   }
 }
 field {
@@ -296,7 +296,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Explanation/Justification for test"
+    [google.fhir.proto.field_description]: "Explanation/Justification for test"
   }
 }
 field {
@@ -306,9 +306,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Explanation/Justification for test"
-    [google.fhir.stu3.proto.valid_reference_type]: "Condition"
-    [google.fhir.stu3.proto.valid_reference_type]: "Observation"
+    [google.fhir.proto.field_description]: "Explanation/Justification for test"
+    [google.fhir.proto.valid_reference_type]: "Condition"
+    [google.fhir.proto.valid_reference_type]: "Observation"
   }
 }
 field {
@@ -318,8 +318,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional clinical information"
-    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+    [google.fhir.proto.field_description]: "Additional clinical information"
+    [google.fhir.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -329,8 +329,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Procedure Samples"
-    [google.fhir.stu3.proto.valid_reference_type]: "Specimen"
+    [google.fhir.proto.field_description]: "Procedure Samples"
+    [google.fhir.proto.valid_reference_type]: "Specimen"
   }
 }
 field {
@@ -340,7 +340,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Location on Body"
+    [google.fhir.proto.field_description]: "Location on Body"
   }
 }
 field {
@@ -350,7 +350,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Annotation"
   options {
-    [google.fhir.stu3.proto.field_description]: "Comments"
+    [google.fhir.proto.field_description]: "Comments"
   }
 }
 field {
@@ -360,8 +360,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Request provenance"
-    [google.fhir.stu3.proto.valid_reference_type]: "Provenance"
+    [google.fhir.proto.field_description]: "Request provenance"
+    [google.fhir.proto.valid_reference_type]: "Provenance"
   }
 }
 nested_type {
@@ -391,7 +391,7 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "occurrence"
@@ -416,7 +416,7 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "as_needed"
@@ -431,7 +431,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -441,7 +441,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -451,7 +451,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -461,11 +461,11 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Individual making the request"
-      [google.fhir.stu3.proto.valid_reference_type]: "Device"
-      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Individual making the request"
+      [google.fhir.proto.valid_reference_type]: "Device"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "Organization"
     }
   }
   field {
@@ -475,13 +475,13 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Organization agent is acting for"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.field_description]: "Organization agent is acting for"
+      [google.fhir.proto.valid_reference_type]: "Organization"
     }
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for ProcedureRequest, last updated 2017-04-19T07:44:43.294+10:00.\nA request for a procedure or diagnostic to be performed.\nSee http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ProcedureRequest, last updated 2017-04-19T07:44:43.294+10:00.\nA request for a procedure or diagnostic to be performed.\nSee http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
 }

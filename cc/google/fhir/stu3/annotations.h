@@ -12,16 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GOOGLE_FHIR_STU3_ANNOTATIONS_H_
-#define GOOGLE_FHIR_STU3_ANNOTATIONS_H_
+#ifndef GOOGLE_FHIR_ANNOTATIONS_H_
+#define GOOGLE_FHIR_ANNOTATIONS_H_
 
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/message.h"
 #include "proto/annotations.pb.h"
 
+// TODO: move out of stu3 directory
+
 namespace google {
 namespace fhir {
-namespace stu3 {
 
 using std::string;
 const string& GetStructureDefinitionUrl(const ::google::protobuf::Descriptor* descriptor);
@@ -77,8 +78,11 @@ const string& GetInlinedCodingCode(const ::google::protobuf::FieldDescriptor* fi
 
 const string& GetValueRegex(const ::google::protobuf::Descriptor* descriptor);
 
-}  // namespace stu3
+const bool HasInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* field);
+
+const string GetInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* field);
+
 }  // namespace fhir
 }  // namespace google
 
-#endif  // GOOGLE_FHIR_STU3_ANNOTATIONS_H_
+#endif  // GOOGLE_FHIR_ANNOTATIONS_H_

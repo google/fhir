@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical URI to reference this expansion profile (globally unique)"
+    [google.fhir.proto.field_description]: "Logical URI to reference this expansion profile (globally unique)"
   }
 }
 field {
@@ -96,7 +96,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional identifier for the expansion profile"
+    [google.fhir.proto.field_description]: "Additional identifier for the expansion profile"
   }
 }
 field {
@@ -106,7 +106,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Business version of the expansion profile"
+    [google.fhir.proto.field_description]: "Business version of the expansion profile"
   }
 }
 field {
@@ -116,7 +116,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Name for this expansion profile (computer friendly)"
+    [google.fhir.proto.field_description]: "Name for this expansion profile (computer friendly)"
   }
 }
 field {
@@ -126,8 +126,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.PublicationStatusCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "draft | active | retired | unknown"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "draft | active | retired | unknown"
   }
 }
 field {
@@ -137,7 +137,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "For testing purposes, not real usage"
+    [google.fhir.proto.field_description]: "For testing purposes, not real usage"
   }
 }
 field {
@@ -147,7 +147,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "Date this was last changed"
+    [google.fhir.proto.field_description]: "Date this was last changed"
   }
 }
 field {
@@ -157,7 +157,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Name of the publisher (organization or individual)"
+    [google.fhir.proto.field_description]: "Name of the publisher (organization or individual)"
   }
 }
 field {
@@ -167,7 +167,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContactDetail"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contact details for the publisher"
+    [google.fhir.proto.field_description]: "Contact details for the publisher"
   }
 }
 field {
@@ -177,7 +177,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Markdown"
   options {
-    [google.fhir.stu3.proto.field_description]: "Natural language description of the expansion profile"
+    [google.fhir.proto.field_description]: "Natural language description of the expansion profile"
   }
 }
 field {
@@ -187,7 +187,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.UsageContext"
   options {
-    [google.fhir.stu3.proto.field_description]: "Context the content is intended to support"
+    [google.fhir.proto.field_description]: "Context the content is intended to support"
   }
 }
 field {
@@ -197,7 +197,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Intended jurisdiction for expansion profile (if applicable)"
+    [google.fhir.proto.field_description]: "Intended jurisdiction for expansion profile (if applicable)"
   }
 }
 field {
@@ -207,7 +207,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExpansionProfile.FixedVersion"
   options {
-    [google.fhir.stu3.proto.field_description]: "Fix use of a code system to a particular version"
+    [google.fhir.proto.field_description]: "Fix use of a code system to a particular version"
   }
 }
 field {
@@ -217,7 +217,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExpansionProfile.ExcludedSystem"
   options {
-    [google.fhir.stu3.proto.field_description]: "Systems/Versions to be exclude"
+    [google.fhir.proto.field_description]: "Systems/Versions to be exclude"
   }
 }
 field {
@@ -227,7 +227,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "Whether the expansion should include concept designations"
+    [google.fhir.proto.field_description]: "Whether the expansion should include concept designations"
   }
 }
 field {
@@ -237,7 +237,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExpansionProfile.Designation"
   options {
-    [google.fhir.stu3.proto.field_description]: "When the expansion profile imposes designation contraints"
+    [google.fhir.proto.field_description]: "When the expansion profile imposes designation contraints"
   }
 }
 field {
@@ -247,7 +247,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "Include or exclude the value set definition in the expansion"
+    [google.fhir.proto.field_description]: "Include or exclude the value set definition in the expansion"
   }
 }
 field {
@@ -257,7 +257,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "Include or exclude inactive concepts in the expansion"
+    [google.fhir.proto.field_description]: "Include or exclude inactive concepts in the expansion"
   }
 }
 field {
@@ -267,7 +267,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "Nested codes in the expansion or not"
+    [google.fhir.proto.field_description]: "Nested codes in the expansion or not"
   }
 }
 field {
@@ -277,7 +277,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "Include or exclude codes which cannot be rendered in user interfaces in the value set expansion"
+    [google.fhir.proto.field_description]: "Include or exclude codes which cannot be rendered in user interfaces in the value set expansion"
   }
 }
 field {
@@ -287,7 +287,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "Include or exclude codes which are post coordinated expressions in the value set expansion"
+    [google.fhir.proto.field_description]: "Include or exclude codes which are post coordinated expressions in the value set expansion"
   }
 }
 field {
@@ -297,7 +297,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Specify the language for the display element of codes in the value set expansion"
+    [google.fhir.proto.field_description]: "Specify the language for the display element of codes in the value set expansion"
   }
 }
 field {
@@ -307,7 +307,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "Controls behaviour of the value set expand operation when value sets are too large to be completely expanded"
+    [google.fhir.proto.field_description]: "Controls behaviour of the value set expand operation when value sets are too large to be completely expanded"
   }
 }
 nested_type {
@@ -319,7 +319,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -329,7 +329,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -339,7 +339,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -349,8 +349,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Uri"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "System to have its version fixed"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "System to have its version fixed"
     }
   }
   field {
@@ -360,8 +360,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Specific version of the code system referred to"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Specific version of the code system referred to"
     }
   }
   field {
@@ -371,8 +371,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SystemVersionProcessingModeCode"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "default | check | override"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "default | check | override"
     }
   }
 }
@@ -385,7 +385,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -395,7 +395,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -405,7 +405,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -415,8 +415,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Uri"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "The specific code system to be excluded"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "The specific code system to be excluded"
     }
   }
   field {
@@ -426,7 +426,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Specific version of the code system referred to"
+      [google.fhir.proto.field_description]: "Specific version of the code system referred to"
     }
   }
 }
@@ -439,7 +439,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -449,7 +449,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -459,7 +459,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -469,7 +469,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ExpansionProfile.Designation.DesignationInclude"
     options {
-      [google.fhir.stu3.proto.field_description]: "Designations to be included"
+      [google.fhir.proto.field_description]: "Designations to be included"
     }
   }
   field {
@@ -479,7 +479,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ExpansionProfile.Designation.DesignationExclude"
     options {
-      [google.fhir.stu3.proto.field_description]: "Designations to be excluded"
+      [google.fhir.proto.field_description]: "Designations to be excluded"
     }
   }
   nested_type {
@@ -491,7 +491,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -501,7 +501,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -511,7 +511,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -521,8 +521,8 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.ExpansionProfile.Designation.DesignationInclude.DesignationIncludeDesignation"
       options {
-        [google.fhir.stu3.proto.field_description]: "The designation to be included"
-        [google.fhir.stu3.proto.fhir_path_constraint]: "language.exists() or use.exists()"
+        [google.fhir.proto.field_description]: "The designation to be included"
+        [google.fhir.proto.fhir_path_constraint]: "language.exists() or use.exists()"
       }
     }
     nested_type {
@@ -534,7 +534,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.String"
         options {
-          [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+          [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
         }
       }
       field {
@@ -544,7 +544,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Extension"
         options {
-          [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+          [google.fhir.proto.field_description]: "Additional Content defined by implementations"
         }
       }
       field {
@@ -554,7 +554,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Extension"
         options {
-          [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+          [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
         }
       }
       field {
@@ -564,7 +564,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.LanguageCode"
         options {
-          [google.fhir.stu3.proto.field_description]: "Human language of the designation to be included"
+          [google.fhir.proto.field_description]: "Human language of the designation to be included"
         }
       }
       field {
@@ -574,7 +574,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Coding"
         options {
-          [google.fhir.stu3.proto.field_description]: "What kind of Designation to include"
+          [google.fhir.proto.field_description]: "What kind of Designation to include"
         }
       }
     }
@@ -588,7 +588,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -598,7 +598,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -608,7 +608,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -618,8 +618,8 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.ExpansionProfile.Designation.DesignationExclude.DesignationExcludeDesignation"
       options {
-        [google.fhir.stu3.proto.field_description]: "The designation to be excluded"
-        [google.fhir.stu3.proto.fhir_path_constraint]: "language.exists() or use.exists()"
+        [google.fhir.proto.field_description]: "The designation to be excluded"
+        [google.fhir.proto.fhir_path_constraint]: "language.exists() or use.exists()"
       }
     }
     nested_type {
@@ -631,7 +631,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.String"
         options {
-          [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+          [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
         }
       }
       field {
@@ -641,7 +641,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Extension"
         options {
-          [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+          [google.fhir.proto.field_description]: "Additional Content defined by implementations"
         }
       }
       field {
@@ -651,7 +651,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Extension"
         options {
-          [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+          [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
         }
       }
       field {
@@ -661,7 +661,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.LanguageCode"
         options {
-          [google.fhir.stu3.proto.field_description]: "Human language of the designation to be excluded"
+          [google.fhir.proto.field_description]: "Human language of the designation to be excluded"
         }
       }
       field {
@@ -671,14 +671,14 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Coding"
         options {
-          [google.fhir.stu3.proto.field_description]: "What kind of Designation to exclude"
+          [google.fhir.proto.field_description]: "What kind of Designation to exclude"
         }
       }
     }
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for ExpansionProfile, last updated 2017-04-19T07:44:43.294+10:00.\nDefines behaviour and contraints on the ValueSet Expansion operation.\nSee http://hl7.org/fhir/StructureDefinition/ExpansionProfile"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ExpansionProfile"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ExpansionProfile, last updated 2017-04-19T07:44:43.294+10:00.\nDefines behaviour and contraints on the ValueSet Expansion operation.\nSee http://hl7.org/fhir/StructureDefinition/ExpansionProfile"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ExpansionProfile"
 }

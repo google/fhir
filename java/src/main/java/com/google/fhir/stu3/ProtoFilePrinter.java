@@ -56,8 +56,7 @@ public class ProtoFilePrinter {
           + "//    limitations under the License.\n";
 
   // The proto package that contains the annotation definitions for proto options.
-  // TODO: Move the annotation to a general location.
-  static final String ANNOTATION_PACKAGE = "google.fhir.stu3.proto";
+  static final String ANNOTATION_PACKAGE = "google.fhir.proto";
 
   private final PackageInfo packageInfo;
 

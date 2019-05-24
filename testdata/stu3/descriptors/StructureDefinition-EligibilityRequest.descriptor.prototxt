@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Business Identifier"
+    [google.fhir.proto.field_description]: "Business Identifier"
   }
 }
 field {
@@ -96,7 +96,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.FinancialResourceStatusCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "active | cancelled | draft | entered-in-error"
+    [google.fhir.proto.field_description]: "active | cancelled | draft | entered-in-error"
   }
 }
 field {
@@ -106,7 +106,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Desired processing priority"
+    [google.fhir.proto.field_description]: "Desired processing priority"
   }
 }
 field {
@@ -116,8 +116,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "The subject of the Products and Services"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.field_description]: "The subject of the Products and Services"
+    [google.fhir.proto.valid_reference_type]: "Patient"
   }
 }
 field {
@@ -127,7 +127,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.EligibilityRequest.Serviced"
   options {
-    [google.fhir.stu3.proto.field_description]: "Estimated date or dates of Service"
+    [google.fhir.proto.field_description]: "Estimated date or dates of Service"
   }
 }
 field {
@@ -137,7 +137,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "Creation date"
+    [google.fhir.proto.field_description]: "Creation date"
   }
 }
 field {
@@ -147,8 +147,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Author"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.field_description]: "Author"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -158,8 +158,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Responsible practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.field_description]: "Responsible practitioner"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -169,8 +169,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Responsible organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.field_description]: "Responsible organization"
+    [google.fhir.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -180,8 +180,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Target"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.field_description]: "Target"
+    [google.fhir.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -191,8 +191,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Servicing Facility"
-    [google.fhir.stu3.proto.valid_reference_type]: "Location"
+    [google.fhir.proto.field_description]: "Servicing Facility"
+    [google.fhir.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -202,8 +202,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Insurance or medical plan"
-    [google.fhir.stu3.proto.valid_reference_type]: "Coverage"
+    [google.fhir.proto.field_description]: "Insurance or medical plan"
+    [google.fhir.proto.valid_reference_type]: "Coverage"
   }
 }
 field {
@@ -213,7 +213,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Business agreement"
+    [google.fhir.proto.field_description]: "Business agreement"
   }
 }
 field {
@@ -223,7 +223,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Type of services covered"
+    [google.fhir.proto.field_description]: "Type of services covered"
   }
 }
 field {
@@ -233,7 +233,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Detailed services covered within the type"
+    [google.fhir.proto.field_description]: "Detailed services covered within the type"
   }
 }
 nested_type {
@@ -255,14 +255,14 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "serviced"
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for EligibilityRequest, last updated 2017-04-19T07:44:43.294+10:00.\nDetermine insurance validity and scope of coverage.\nSee http://hl7.org/fhir/StructureDefinition/EligibilityRequest"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/EligibilityRequest"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for EligibilityRequest, last updated 2017-04-19T07:44:43.294+10:00.\nDetermine insurance validity and scope of coverage.\nSee http://hl7.org/fhir/StructureDefinition/EligibilityRequest"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/EligibilityRequest"
 }

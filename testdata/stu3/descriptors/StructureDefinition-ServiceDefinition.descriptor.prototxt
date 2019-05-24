@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical URI to reference this service definition (globally unique)"
+    [google.fhir.proto.field_description]: "Logical URI to reference this service definition (globally unique)"
   }
 }
 field {
@@ -96,7 +96,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional identifier for the service definition"
+    [google.fhir.proto.field_description]: "Additional identifier for the service definition"
   }
 }
 field {
@@ -106,7 +106,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Business version of the service definition"
+    [google.fhir.proto.field_description]: "Business version of the service definition"
   }
 }
 field {
@@ -116,7 +116,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Name for this service definition (computer friendly)"
+    [google.fhir.proto.field_description]: "Name for this service definition (computer friendly)"
   }
 }
 field {
@@ -126,7 +126,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Name for this service definition (human friendly)"
+    [google.fhir.proto.field_description]: "Name for this service definition (human friendly)"
   }
 }
 field {
@@ -136,8 +136,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.PublicationStatusCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "draft | active | retired | unknown"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "draft | active | retired | unknown"
   }
 }
 field {
@@ -147,7 +147,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "For testing purposes, not real usage"
+    [google.fhir.proto.field_description]: "For testing purposes, not real usage"
   }
 }
 field {
@@ -157,7 +157,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "Date this was last changed"
+    [google.fhir.proto.field_description]: "Date this was last changed"
   }
 }
 field {
@@ -167,7 +167,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Name of the publisher (organization or individual)"
+    [google.fhir.proto.field_description]: "Name of the publisher (organization or individual)"
   }
 }
 field {
@@ -177,7 +177,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Markdown"
   options {
-    [google.fhir.stu3.proto.field_description]: "Natural language description of the service definition"
+    [google.fhir.proto.field_description]: "Natural language description of the service definition"
   }
 }
 field {
@@ -187,7 +187,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Markdown"
   options {
-    [google.fhir.stu3.proto.field_description]: "Why this service definition is defined"
+    [google.fhir.proto.field_description]: "Why this service definition is defined"
   }
 }
 field {
@@ -197,7 +197,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Describes the clinical usage of the module"
+    [google.fhir.proto.field_description]: "Describes the clinical usage of the module"
   }
 }
 field {
@@ -207,7 +207,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Date"
   options {
-    [google.fhir.stu3.proto.field_description]: "When the service definition was approved by publisher"
+    [google.fhir.proto.field_description]: "When the service definition was approved by publisher"
   }
 }
 field {
@@ -217,7 +217,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Date"
   options {
-    [google.fhir.stu3.proto.field_description]: "When the service definition was last reviewed"
+    [google.fhir.proto.field_description]: "When the service definition was last reviewed"
   }
 }
 field {
@@ -227,7 +227,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Period"
   options {
-    [google.fhir.stu3.proto.field_description]: "When the service definition is expected to be used"
+    [google.fhir.proto.field_description]: "When the service definition is expected to be used"
   }
 }
 field {
@@ -237,7 +237,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.UsageContext"
   options {
-    [google.fhir.stu3.proto.field_description]: "Context the content is intended to support"
+    [google.fhir.proto.field_description]: "Context the content is intended to support"
   }
 }
 field {
@@ -247,7 +247,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Intended jurisdiction for service definition (if applicable)"
+    [google.fhir.proto.field_description]: "Intended jurisdiction for service definition (if applicable)"
   }
 }
 field {
@@ -257,7 +257,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "E.g. Education, Treatment, Assessment, etc"
+    [google.fhir.proto.field_description]: "E.g. Education, Treatment, Assessment, etc"
   }
 }
 field {
@@ -267,7 +267,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Contributor"
   options {
-    [google.fhir.stu3.proto.field_description]: "A content contributor"
+    [google.fhir.proto.field_description]: "A content contributor"
   }
 }
 field {
@@ -277,7 +277,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContactDetail"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contact details for the publisher"
+    [google.fhir.proto.field_description]: "Contact details for the publisher"
   }
 }
 field {
@@ -287,7 +287,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Markdown"
   options {
-    [google.fhir.stu3.proto.field_description]: "Use and/or publishing restrictions"
+    [google.fhir.proto.field_description]: "Use and/or publishing restrictions"
   }
 }
 field {
@@ -297,7 +297,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.RelatedArtifact"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional documentation, citations, etc"
+    [google.fhir.proto.field_description]: "Additional documentation, citations, etc"
   }
 }
 field {
@@ -307,7 +307,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.TriggerDefinition"
   options {
-    [google.fhir.stu3.proto.field_description]: "\"when\" the module should be invoked"
+    [google.fhir.proto.field_description]: "\"when\" the module should be invoked"
   }
 }
 field {
@@ -317,7 +317,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DataRequirement"
   options {
-    [google.fhir.stu3.proto.field_description]: "What data is used by the module"
+    [google.fhir.proto.field_description]: "What data is used by the module"
   }
 }
 field {
@@ -327,12 +327,12 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Operation to invoke"
-    [google.fhir.stu3.proto.valid_reference_type]: "OperationDefinition"
+    [google.fhir.proto.field_description]: "Operation to invoke"
+    [google.fhir.proto.valid_reference_type]: "OperationDefinition"
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for ServiceDefinition, last updated 2017-04-19T07:44:43.294+10:00.\nA description of decision support service functionality.\nSee http://hl7.org/fhir/StructureDefinition/ServiceDefinition"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ServiceDefinition"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ServiceDefinition, last updated 2017-04-19T07:44:43.294+10:00.\nA description of decision support service functionality.\nSee http://hl7.org/fhir/StructureDefinition/ServiceDefinition"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ServiceDefinition"
 }

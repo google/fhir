@@ -38,7 +38,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Account"
+    [google.fhir.proto.referenced_fhir_type]: "Account"
   }
 }
 field {
@@ -49,7 +49,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ActivityDefinition"
+    [google.fhir.proto.referenced_fhir_type]: "ActivityDefinition"
   }
 }
 field {
@@ -60,7 +60,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "AdverseEvent"
+    [google.fhir.proto.referenced_fhir_type]: "AdverseEvent"
   }
 }
 field {
@@ -71,7 +71,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "AllergyIntolerance"
+    [google.fhir.proto.referenced_fhir_type]: "AllergyIntolerance"
   }
 }
 field {
@@ -82,7 +82,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Appointment"
+    [google.fhir.proto.referenced_fhir_type]: "Appointment"
   }
 }
 field {
@@ -93,7 +93,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "AppointmentResponse"
+    [google.fhir.proto.referenced_fhir_type]: "AppointmentResponse"
   }
 }
 field {
@@ -104,7 +104,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "AuditEvent"
+    [google.fhir.proto.referenced_fhir_type]: "AuditEvent"
   }
 }
 field {
@@ -115,7 +115,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Basic"
+    [google.fhir.proto.referenced_fhir_type]: "Basic"
   }
 }
 field {
@@ -126,7 +126,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Binary"
+    [google.fhir.proto.referenced_fhir_type]: "Binary"
   }
 }
 field {
@@ -137,7 +137,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "BodySite"
+    [google.fhir.proto.referenced_fhir_type]: "BodySite"
   }
 }
 field {
@@ -148,7 +148,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Bundle"
+    [google.fhir.proto.referenced_fhir_type]: "Bundle"
   }
 }
 field {
@@ -159,7 +159,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "CapabilityStatement"
+    [google.fhir.proto.referenced_fhir_type]: "CapabilityStatement"
   }
 }
 field {
@@ -170,7 +170,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "CarePlan"
+    [google.fhir.proto.referenced_fhir_type]: "CarePlan"
   }
 }
 field {
@@ -181,7 +181,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "CareTeam"
+    [google.fhir.proto.referenced_fhir_type]: "CareTeam"
   }
 }
 field {
@@ -192,7 +192,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ChargeItem"
+    [google.fhir.proto.referenced_fhir_type]: "ChargeItem"
   }
 }
 field {
@@ -203,7 +203,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Claim"
+    [google.fhir.proto.referenced_fhir_type]: "Claim"
   }
 }
 field {
@@ -214,7 +214,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ClaimResponse"
+    [google.fhir.proto.referenced_fhir_type]: "ClaimResponse"
   }
 }
 field {
@@ -225,7 +225,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ClinicalImpression"
+    [google.fhir.proto.referenced_fhir_type]: "ClinicalImpression"
   }
 }
 field {
@@ -236,7 +236,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "CodeSystem"
+    [google.fhir.proto.referenced_fhir_type]: "CodeSystem"
   }
 }
 field {
@@ -247,7 +247,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Communication"
+    [google.fhir.proto.referenced_fhir_type]: "Communication"
   }
 }
 field {
@@ -258,7 +258,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "CommunicationRequest"
+    [google.fhir.proto.referenced_fhir_type]: "CommunicationRequest"
   }
 }
 field {
@@ -269,7 +269,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "CompartmentDefinition"
+    [google.fhir.proto.referenced_fhir_type]: "CompartmentDefinition"
   }
 }
 field {
@@ -280,7 +280,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Composition"
+    [google.fhir.proto.referenced_fhir_type]: "Composition"
   }
 }
 field {
@@ -291,7 +291,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ConceptMap"
+    [google.fhir.proto.referenced_fhir_type]: "ConceptMap"
   }
 }
 field {
@@ -302,7 +302,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Condition"
+    [google.fhir.proto.referenced_fhir_type]: "Condition"
   }
 }
 field {
@@ -313,7 +313,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Consent"
+    [google.fhir.proto.referenced_fhir_type]: "Consent"
   }
 }
 field {
@@ -324,7 +324,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Contract"
+    [google.fhir.proto.referenced_fhir_type]: "Contract"
   }
 }
 field {
@@ -335,7 +335,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Coverage"
+    [google.fhir.proto.referenced_fhir_type]: "Coverage"
   }
 }
 field {
@@ -346,7 +346,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "DataElement"
+    [google.fhir.proto.referenced_fhir_type]: "DataElement"
   }
 }
 field {
@@ -357,7 +357,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "DetectedIssue"
+    [google.fhir.proto.referenced_fhir_type]: "DetectedIssue"
   }
 }
 field {
@@ -368,7 +368,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Device"
+    [google.fhir.proto.referenced_fhir_type]: "Device"
   }
 }
 field {
@@ -379,7 +379,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "DeviceComponent"
+    [google.fhir.proto.referenced_fhir_type]: "DeviceComponent"
   }
 }
 field {
@@ -390,7 +390,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "DeviceMetric"
+    [google.fhir.proto.referenced_fhir_type]: "DeviceMetric"
   }
 }
 field {
@@ -401,7 +401,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "DeviceRequest"
+    [google.fhir.proto.referenced_fhir_type]: "DeviceRequest"
   }
 }
 field {
@@ -412,7 +412,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "DeviceUseStatement"
+    [google.fhir.proto.referenced_fhir_type]: "DeviceUseStatement"
   }
 }
 field {
@@ -423,7 +423,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "DiagnosticReport"
+    [google.fhir.proto.referenced_fhir_type]: "DiagnosticReport"
   }
 }
 field {
@@ -434,7 +434,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "DocumentManifest"
+    [google.fhir.proto.referenced_fhir_type]: "DocumentManifest"
   }
 }
 field {
@@ -445,7 +445,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "DocumentReference"
+    [google.fhir.proto.referenced_fhir_type]: "DocumentReference"
   }
 }
 field {
@@ -456,7 +456,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "EligibilityRequest"
+    [google.fhir.proto.referenced_fhir_type]: "EligibilityRequest"
   }
 }
 field {
@@ -467,7 +467,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "EligibilityResponse"
+    [google.fhir.proto.referenced_fhir_type]: "EligibilityResponse"
   }
 }
 field {
@@ -478,7 +478,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Encounter"
+    [google.fhir.proto.referenced_fhir_type]: "Encounter"
   }
 }
 field {
@@ -489,7 +489,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Endpoint"
+    [google.fhir.proto.referenced_fhir_type]: "Endpoint"
   }
 }
 field {
@@ -500,7 +500,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "EnrollmentRequest"
+    [google.fhir.proto.referenced_fhir_type]: "EnrollmentRequest"
   }
 }
 field {
@@ -511,7 +511,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "EnrollmentResponse"
+    [google.fhir.proto.referenced_fhir_type]: "EnrollmentResponse"
   }
 }
 field {
@@ -522,7 +522,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "EpisodeOfCare"
+    [google.fhir.proto.referenced_fhir_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -533,7 +533,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ExpansionProfile"
+    [google.fhir.proto.referenced_fhir_type]: "ExpansionProfile"
   }
 }
 field {
@@ -544,7 +544,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ExplanationOfBenefit"
+    [google.fhir.proto.referenced_fhir_type]: "ExplanationOfBenefit"
   }
 }
 field {
@@ -555,7 +555,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "FamilyMemberHistory"
+    [google.fhir.proto.referenced_fhir_type]: "FamilyMemberHistory"
   }
 }
 field {
@@ -566,7 +566,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Flag"
+    [google.fhir.proto.referenced_fhir_type]: "Flag"
   }
 }
 field {
@@ -577,7 +577,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Goal"
+    [google.fhir.proto.referenced_fhir_type]: "Goal"
   }
 }
 field {
@@ -588,7 +588,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "GraphDefinition"
+    [google.fhir.proto.referenced_fhir_type]: "GraphDefinition"
   }
 }
 field {
@@ -599,7 +599,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Group"
+    [google.fhir.proto.referenced_fhir_type]: "Group"
   }
 }
 field {
@@ -610,7 +610,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "GuidanceResponse"
+    [google.fhir.proto.referenced_fhir_type]: "GuidanceResponse"
   }
 }
 field {
@@ -621,7 +621,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "HealthcareService"
+    [google.fhir.proto.referenced_fhir_type]: "HealthcareService"
   }
 }
 field {
@@ -632,7 +632,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ImagingManifest"
+    [google.fhir.proto.referenced_fhir_type]: "ImagingManifest"
   }
 }
 field {
@@ -643,7 +643,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ImagingStudy"
+    [google.fhir.proto.referenced_fhir_type]: "ImagingStudy"
   }
 }
 field {
@@ -654,7 +654,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Immunization"
+    [google.fhir.proto.referenced_fhir_type]: "Immunization"
   }
 }
 field {
@@ -665,7 +665,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ImmunizationRecommendation"
+    [google.fhir.proto.referenced_fhir_type]: "ImmunizationRecommendation"
   }
 }
 field {
@@ -676,7 +676,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ImplementationGuide"
+    [google.fhir.proto.referenced_fhir_type]: "ImplementationGuide"
   }
 }
 field {
@@ -687,7 +687,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Library"
+    [google.fhir.proto.referenced_fhir_type]: "Library"
   }
 }
 field {
@@ -698,7 +698,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Linkage"
+    [google.fhir.proto.referenced_fhir_type]: "Linkage"
   }
 }
 field {
@@ -709,7 +709,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "List"
+    [google.fhir.proto.referenced_fhir_type]: "List"
   }
 }
 field {
@@ -720,7 +720,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Location"
+    [google.fhir.proto.referenced_fhir_type]: "Location"
   }
 }
 field {
@@ -731,7 +731,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Measure"
+    [google.fhir.proto.referenced_fhir_type]: "Measure"
   }
 }
 field {
@@ -742,7 +742,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "MeasureReport"
+    [google.fhir.proto.referenced_fhir_type]: "MeasureReport"
   }
 }
 field {
@@ -753,7 +753,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Media"
+    [google.fhir.proto.referenced_fhir_type]: "Media"
   }
 }
 field {
@@ -764,7 +764,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Medication"
+    [google.fhir.proto.referenced_fhir_type]: "Medication"
   }
 }
 field {
@@ -775,7 +775,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "MedicationAdministration"
+    [google.fhir.proto.referenced_fhir_type]: "MedicationAdministration"
   }
 }
 field {
@@ -786,7 +786,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "MedicationDispense"
+    [google.fhir.proto.referenced_fhir_type]: "MedicationDispense"
   }
 }
 field {
@@ -797,7 +797,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "MedicationRequest"
+    [google.fhir.proto.referenced_fhir_type]: "MedicationRequest"
   }
 }
 field {
@@ -808,7 +808,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "MedicationStatement"
+    [google.fhir.proto.referenced_fhir_type]: "MedicationStatement"
   }
 }
 field {
@@ -819,7 +819,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "MessageDefinition"
+    [google.fhir.proto.referenced_fhir_type]: "MessageDefinition"
   }
 }
 field {
@@ -830,7 +830,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "MessageHeader"
+    [google.fhir.proto.referenced_fhir_type]: "MessageHeader"
   }
 }
 field {
@@ -841,7 +841,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "NamingSystem"
+    [google.fhir.proto.referenced_fhir_type]: "NamingSystem"
   }
 }
 field {
@@ -852,7 +852,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "NutritionOrder"
+    [google.fhir.proto.referenced_fhir_type]: "NutritionOrder"
   }
 }
 field {
@@ -863,7 +863,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Observation"
+    [google.fhir.proto.referenced_fhir_type]: "Observation"
   }
 }
 field {
@@ -874,7 +874,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "OperationDefinition"
+    [google.fhir.proto.referenced_fhir_type]: "OperationDefinition"
   }
 }
 field {
@@ -885,7 +885,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "OperationOutcome"
+    [google.fhir.proto.referenced_fhir_type]: "OperationOutcome"
   }
 }
 field {
@@ -896,7 +896,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Organization"
+    [google.fhir.proto.referenced_fhir_type]: "Organization"
   }
 }
 field {
@@ -907,7 +907,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Parameters"
+    [google.fhir.proto.referenced_fhir_type]: "Parameters"
   }
 }
 field {
@@ -918,7 +918,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Patient"
+    [google.fhir.proto.referenced_fhir_type]: "Patient"
   }
 }
 field {
@@ -929,7 +929,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "PaymentNotice"
+    [google.fhir.proto.referenced_fhir_type]: "PaymentNotice"
   }
 }
 field {
@@ -940,7 +940,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "PaymentReconciliation"
+    [google.fhir.proto.referenced_fhir_type]: "PaymentReconciliation"
   }
 }
 field {
@@ -951,7 +951,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Person"
+    [google.fhir.proto.referenced_fhir_type]: "Person"
   }
 }
 field {
@@ -962,7 +962,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "PlanDefinition"
+    [google.fhir.proto.referenced_fhir_type]: "PlanDefinition"
   }
 }
 field {
@@ -973,7 +973,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Practitioner"
+    [google.fhir.proto.referenced_fhir_type]: "Practitioner"
   }
 }
 field {
@@ -984,7 +984,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "PractitionerRole"
+    [google.fhir.proto.referenced_fhir_type]: "PractitionerRole"
   }
 }
 field {
@@ -995,7 +995,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Procedure"
+    [google.fhir.proto.referenced_fhir_type]: "Procedure"
   }
 }
 field {
@@ -1006,7 +1006,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ProcedureRequest"
+    [google.fhir.proto.referenced_fhir_type]: "ProcedureRequest"
   }
 }
 field {
@@ -1017,7 +1017,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ProcessRequest"
+    [google.fhir.proto.referenced_fhir_type]: "ProcessRequest"
   }
 }
 field {
@@ -1028,7 +1028,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ProcessResponse"
+    [google.fhir.proto.referenced_fhir_type]: "ProcessResponse"
   }
 }
 field {
@@ -1039,7 +1039,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Provenance"
+    [google.fhir.proto.referenced_fhir_type]: "Provenance"
   }
 }
 field {
@@ -1050,7 +1050,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Questionnaire"
+    [google.fhir.proto.referenced_fhir_type]: "Questionnaire"
   }
 }
 field {
@@ -1061,7 +1061,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "QuestionnaireResponse"
+    [google.fhir.proto.referenced_fhir_type]: "QuestionnaireResponse"
   }
 }
 field {
@@ -1072,7 +1072,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ReferralRequest"
+    [google.fhir.proto.referenced_fhir_type]: "ReferralRequest"
   }
 }
 field {
@@ -1083,7 +1083,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "RelatedPerson"
+    [google.fhir.proto.referenced_fhir_type]: "RelatedPerson"
   }
 }
 field {
@@ -1094,7 +1094,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "RequestGroup"
+    [google.fhir.proto.referenced_fhir_type]: "RequestGroup"
   }
 }
 field {
@@ -1105,7 +1105,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ResearchStudy"
+    [google.fhir.proto.referenced_fhir_type]: "ResearchStudy"
   }
 }
 field {
@@ -1116,7 +1116,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ResearchSubject"
+    [google.fhir.proto.referenced_fhir_type]: "ResearchSubject"
   }
 }
 field {
@@ -1127,7 +1127,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "RiskAssessment"
+    [google.fhir.proto.referenced_fhir_type]: "RiskAssessment"
   }
 }
 field {
@@ -1138,7 +1138,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Schedule"
+    [google.fhir.proto.referenced_fhir_type]: "Schedule"
   }
 }
 field {
@@ -1149,7 +1149,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "SearchParameter"
+    [google.fhir.proto.referenced_fhir_type]: "SearchParameter"
   }
 }
 field {
@@ -1160,7 +1160,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Sequence"
+    [google.fhir.proto.referenced_fhir_type]: "Sequence"
   }
 }
 field {
@@ -1171,7 +1171,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ServiceDefinition"
+    [google.fhir.proto.referenced_fhir_type]: "ServiceDefinition"
   }
 }
 field {
@@ -1182,7 +1182,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Slot"
+    [google.fhir.proto.referenced_fhir_type]: "Slot"
   }
 }
 field {
@@ -1193,7 +1193,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Specimen"
+    [google.fhir.proto.referenced_fhir_type]: "Specimen"
   }
 }
 field {
@@ -1204,7 +1204,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "StructureDefinition"
+    [google.fhir.proto.referenced_fhir_type]: "StructureDefinition"
   }
 }
 field {
@@ -1215,7 +1215,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "StructureMap"
+    [google.fhir.proto.referenced_fhir_type]: "StructureMap"
   }
 }
 field {
@@ -1226,7 +1226,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Subscription"
+    [google.fhir.proto.referenced_fhir_type]: "Subscription"
   }
 }
 field {
@@ -1237,7 +1237,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Substance"
+    [google.fhir.proto.referenced_fhir_type]: "Substance"
   }
 }
 field {
@@ -1248,7 +1248,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "SupplyDelivery"
+    [google.fhir.proto.referenced_fhir_type]: "SupplyDelivery"
   }
 }
 field {
@@ -1259,7 +1259,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "SupplyRequest"
+    [google.fhir.proto.referenced_fhir_type]: "SupplyRequest"
   }
 }
 field {
@@ -1270,7 +1270,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "Task"
+    [google.fhir.proto.referenced_fhir_type]: "Task"
   }
 }
 field {
@@ -1281,7 +1281,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "TestReport"
+    [google.fhir.proto.referenced_fhir_type]: "TestReport"
   }
 }
 field {
@@ -1292,7 +1292,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "TestScript"
+    [google.fhir.proto.referenced_fhir_type]: "TestScript"
   }
 }
 field {
@@ -1303,7 +1303,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "ValueSet"
+    [google.fhir.proto.referenced_fhir_type]: "ValueSet"
   }
 }
 field {
@@ -1314,7 +1314,7 @@ field {
   type_name: ".google.fhir.stu3.proto.ReferenceId"
   oneof_index: 0
   options: {
-    [google.fhir.stu3.proto.referenced_fhir_type]: "VisionPrescription"
+    [google.fhir.proto.referenced_fhir_type]: "VisionPrescription"
   }
 }
 field {
@@ -1332,12 +1332,12 @@ field {
   type_name: ".google.fhir.stu3.proto.String"
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.fhir_reference_type]: "Resource"
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.fhir_reference_type]: "Resource"
 }
 oneof_decl {
   name: "reference"
   options {
-    [google.fhir.stu3.proto.fhir_oneof_is_optional]: true
+    [google.fhir.proto.fhir_oneof_is_optional]: true
   }
 }

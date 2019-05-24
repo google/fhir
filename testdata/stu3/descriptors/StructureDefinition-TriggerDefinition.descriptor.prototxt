@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -26,8 +26,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.TriggerTypeCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "named-event | periodic | data-added | data-modified | data-removed | data-accessed | data-access-ended"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "named-event | periodic | data-added | data-modified | data-removed | data-accessed | data-access-ended"
   }
 }
 field {
@@ -37,7 +37,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Triggering event name"
+    [google.fhir.proto.field_description]: "Triggering event name"
   }
 }
 field {
@@ -47,7 +47,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.TriggerDefinition.EventTiming"
   options {
-    [google.fhir.stu3.proto.field_description]: "Timing of the event"
+    [google.fhir.proto.field_description]: "Timing of the event"
   }
 }
 field {
@@ -57,7 +57,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DataRequirement"
   options {
-    [google.fhir.stu3.proto.field_description]: "Triggering data of the event"
+    [google.fhir.proto.field_description]: "Triggering data of the event"
   }
 }
 nested_type {
@@ -77,7 +77,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "Schedule"
+      [google.fhir.proto.valid_reference_type]: "Schedule"
     }
     oneof_index: 0
   }
@@ -98,14 +98,14 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "event_timing"
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for TriggerDefinition, last updated 2017-04-19T07:44:43.294+10:00.\nDefines an expected trigger for a module.\nSee http://hl7.org/fhir/StructureDefinition/TriggerDefinition"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/TriggerDefinition"
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for TriggerDefinition, last updated 2017-04-19T07:44:43.294+10:00.\nDefines an expected trigger for a module.\nSee http://hl7.org/fhir/StructureDefinition/TriggerDefinition"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/TriggerDefinition"
 }

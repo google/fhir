@@ -40,11 +40,11 @@ namespace stu3 {
 
 namespace {
 
+using ::google::fhir::IsChoiceType;
+using ::google::fhir::IsPrimitive;
+using ::google::fhir::IsReference;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
-using ::google::fhir::stu3::IsChoiceType;
-using ::google::fhir::stu3::IsPrimitive;
-using ::google::fhir::stu3::IsReference;
 using ::google::fhir::stu3::ReferenceProtoToString;
 using ::google::fhir::stu3::proto::Reference;
 using ::google::fhir::stu3::proto::ReferenceId;
@@ -120,10 +120,9 @@ class Printer {
         const Message& field_value = reflection->GetMessage(proto, field);
         if (for_analytics_) {
           // Only print resource url if in analytic mode.
-          absl::StrAppend(&output_, "\"",
-                          field_value.GetDescriptor()->options().GetExtension(
-                              stu3::proto::fhir_structure_definition_url),
-                          "\"");
+          absl::StrAppend(
+              &output_, "\"",
+              GetStructureDefinitionUrl(field_value.GetDescriptor()), "\"");
         } else {
           FHIR_RETURN_IF_ERROR(PrintNonPrimitive(field_value));
         }

@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "External identifiers for this item"
+    [google.fhir.proto.field_description]: "External identifiers for this item"
   }
 }
 field {
@@ -96,7 +96,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "Whether this healthcareservice is in active use"
+    [google.fhir.proto.field_description]: "Whether this healthcareservice is in active use"
   }
 }
 field {
@@ -106,8 +106,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Organization that provides this service"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.field_description]: "Organization that provides this service"
+    [google.fhir.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -117,7 +117,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Broad category of service being performed or delivered"
+    [google.fhir.proto.field_description]: "Broad category of service being performed or delivered"
   }
 }
 field {
@@ -127,7 +127,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Type of service that may be delivered or performed"
+    [google.fhir.proto.field_description]: "Type of service that may be delivered or performed"
   }
 }
 field {
@@ -137,7 +137,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Specialties handled by the HealthcareService"
+    [google.fhir.proto.field_description]: "Specialties handled by the HealthcareService"
   }
 }
 field {
@@ -147,8 +147,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Location(s) where service may be provided"
-    [google.fhir.stu3.proto.valid_reference_type]: "Location"
+    [google.fhir.proto.field_description]: "Location(s) where service may be provided"
+    [google.fhir.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -158,7 +158,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Description of service as presented to a consumer while searching"
+    [google.fhir.proto.field_description]: "Description of service as presented to a consumer while searching"
   }
 }
 field {
@@ -168,7 +168,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional description and/or any specific issues not covered elsewhere"
+    [google.fhir.proto.field_description]: "Additional description and/or any specific issues not covered elsewhere"
   }
 }
 field {
@@ -178,7 +178,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extra details about the service that can\'t be placed in the other fields"
+    [google.fhir.proto.field_description]: "Extra details about the service that can\'t be placed in the other fields"
   }
 }
 field {
@@ -188,7 +188,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Attachment"
   options {
-    [google.fhir.stu3.proto.field_description]: "Facilitates quick identification of the service"
+    [google.fhir.proto.field_description]: "Facilitates quick identification of the service"
   }
 }
 field {
@@ -198,7 +198,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContactPoint"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contacts related to the healthcare service"
+    [google.fhir.proto.field_description]: "Contacts related to the healthcare service"
   }
 }
 field {
@@ -208,8 +208,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Location(s) service is inteded for/available to"
-    [google.fhir.stu3.proto.valid_reference_type]: "Location"
+    [google.fhir.proto.field_description]: "Location(s) service is inteded for/available to"
+    [google.fhir.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -219,7 +219,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Conditions under which service is available/offered"
+    [google.fhir.proto.field_description]: "Conditions under which service is available/offered"
   }
 }
 field {
@@ -229,7 +229,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Specific eligibility requirements required to use the service"
+    [google.fhir.proto.field_description]: "Specific eligibility requirements required to use the service"
   }
 }
 field {
@@ -239,7 +239,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Describes the eligibility conditions for the service"
+    [google.fhir.proto.field_description]: "Describes the eligibility conditions for the service"
   }
 }
 field {
@@ -249,7 +249,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Program Names that categorize the service"
+    [google.fhir.proto.field_description]: "Program Names that categorize the service"
   }
 }
 field {
@@ -259,7 +259,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Collection of characteristics (attributes)"
+    [google.fhir.proto.field_description]: "Collection of characteristics (attributes)"
   }
 }
 field {
@@ -269,7 +269,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Ways that the service accepts referrals"
+    [google.fhir.proto.field_description]: "Ways that the service accepts referrals"
   }
 }
 field {
@@ -279,7 +279,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "If an appointment is required for access to this service"
+    [google.fhir.proto.field_description]: "If an appointment is required for access to this service"
   }
 }
 field {
@@ -289,7 +289,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.HealthcareService.AvailableTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "Times the Service Site is available"
+    [google.fhir.proto.field_description]: "Times the Service Site is available"
   }
 }
 field {
@@ -299,7 +299,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.HealthcareService.NotAvailable"
   options {
-    [google.fhir.stu3.proto.field_description]: "Not available during this time due to provided reason"
+    [google.fhir.proto.field_description]: "Not available during this time due to provided reason"
   }
 }
 field {
@@ -309,7 +309,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Description of availability exceptions"
+    [google.fhir.proto.field_description]: "Description of availability exceptions"
   }
 }
 field {
@@ -319,8 +319,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Technical endpoints providing access to services operated for the location"
-    [google.fhir.stu3.proto.valid_reference_type]: "Endpoint"
+    [google.fhir.proto.field_description]: "Technical endpoints providing access to services operated for the location"
+    [google.fhir.proto.valid_reference_type]: "Endpoint"
   }
 }
 nested_type {
@@ -332,7 +332,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -342,7 +342,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -352,7 +352,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -362,7 +362,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.DaysOfWeekCode"
     options {
-      [google.fhir.stu3.proto.field_description]: "mon | tue | wed | thu | fri | sat | sun"
+      [google.fhir.proto.field_description]: "mon | tue | wed | thu | fri | sat | sun"
     }
   }
   field {
@@ -372,7 +372,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Boolean"
     options {
-      [google.fhir.stu3.proto.field_description]: "Always available? e.g. 24 hour service"
+      [google.fhir.proto.field_description]: "Always available? e.g. 24 hour service"
     }
   }
   field {
@@ -382,7 +382,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Time"
     options {
-      [google.fhir.stu3.proto.field_description]: "Opening time of day (ignored if allDay = true)"
+      [google.fhir.proto.field_description]: "Opening time of day (ignored if allDay = true)"
     }
   }
   field {
@@ -392,7 +392,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Time"
     options {
-      [google.fhir.stu3.proto.field_description]: "Closing time of day (ignored if allDay = true)"
+      [google.fhir.proto.field_description]: "Closing time of day (ignored if allDay = true)"
     }
   }
 }
@@ -405,7 +405,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -415,7 +415,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -425,7 +425,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -435,8 +435,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Reason presented to the user explaining why time not available"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Reason presented to the user explaining why time not available"
     }
   }
   field {
@@ -446,12 +446,12 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Period"
     options {
-      [google.fhir.stu3.proto.field_description]: "Service not availablefrom this date"
+      [google.fhir.proto.field_description]: "Service not availablefrom this date"
     }
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for HealthcareService, last updated 2017-04-19T07:44:43.294+10:00.\nThe details of a healthcare service available at a location.\nSee http://hl7.org/fhir/StructureDefinition/HealthcareService"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/HealthcareService"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for HealthcareService, last updated 2017-04-19T07:44:43.294+10:00.\nThe details of a healthcare service available at a location.\nSee http://hl7.org/fhir/StructureDefinition/HealthcareService"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/HealthcareService"
 }

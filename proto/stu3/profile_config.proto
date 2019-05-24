@@ -9,7 +9,7 @@ option java_package = "com.google.fhir.proto";
 option java_multiple_files = true;
 
 message PackageInfo {
-  stu3.proto.FhirVersion fhir_version = 1;
+  proto.FhirVersion fhir_version = 1;
   // Base url to use for all profiles defined here.
   // e.g., g.co/fhir/profiles
   string base_url = 2;

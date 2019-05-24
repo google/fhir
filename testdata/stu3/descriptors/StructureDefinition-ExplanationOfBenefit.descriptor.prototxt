@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Business Identifier"
+    [google.fhir.proto.field_description]: "Business Identifier"
   }
 }
 field {
@@ -96,7 +96,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExplanationOfBenefitStatusCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "active | cancelled | draft | entered-in-error"
+    [google.fhir.proto.field_description]: "active | cancelled | draft | entered-in-error"
   }
 }
 field {
@@ -106,7 +106,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Type or discipline"
+    [google.fhir.proto.field_description]: "Type or discipline"
   }
 }
 field {
@@ -116,7 +116,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Finer grained claim type information"
+    [google.fhir.proto.field_description]: "Finer grained claim type information"
   }
 }
 field {
@@ -126,8 +126,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "The subject of the Products and Services"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.field_description]: "The subject of the Products and Services"
+    [google.fhir.proto.valid_reference_type]: "Patient"
   }
 }
 field {
@@ -137,7 +137,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Period"
   options {
-    [google.fhir.stu3.proto.field_description]: "Period for charge submission"
+    [google.fhir.proto.field_description]: "Period for charge submission"
   }
 }
 field {
@@ -147,7 +147,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "Creation date"
+    [google.fhir.proto.field_description]: "Creation date"
   }
 }
 field {
@@ -157,8 +157,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Author"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.field_description]: "Author"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -168,8 +168,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Insurer responsible for the EOB"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.field_description]: "Insurer responsible for the EOB"
+    [google.fhir.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -179,8 +179,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Responsible provider for the claim"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.field_description]: "Responsible provider for the claim"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -190,8 +190,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Responsible organization for the claim"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.field_description]: "Responsible organization for the claim"
+    [google.fhir.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -201,8 +201,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Treatment Referral"
-    [google.fhir.stu3.proto.valid_reference_type]: "ReferralRequest"
+    [google.fhir.proto.field_description]: "Treatment Referral"
+    [google.fhir.proto.valid_reference_type]: "ReferralRequest"
   }
 }
 field {
@@ -212,8 +212,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Servicing Facility"
-    [google.fhir.stu3.proto.valid_reference_type]: "Location"
+    [google.fhir.proto.field_description]: "Servicing Facility"
+    [google.fhir.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -223,8 +223,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Claim reference"
-    [google.fhir.stu3.proto.valid_reference_type]: "Claim"
+    [google.fhir.proto.field_description]: "Claim reference"
+    [google.fhir.proto.valid_reference_type]: "Claim"
   }
 }
 field {
@@ -234,8 +234,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Claim response reference"
-    [google.fhir.stu3.proto.valid_reference_type]: "ClaimResponse"
+    [google.fhir.proto.field_description]: "Claim response reference"
+    [google.fhir.proto.valid_reference_type]: "ClaimResponse"
   }
 }
 field {
@@ -245,7 +245,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "complete | error | partial"
+    [google.fhir.proto.field_description]: "complete | error | partial"
   }
 }
 field {
@@ -255,7 +255,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Disposition Message"
+    [google.fhir.proto.field_description]: "Disposition Message"
   }
 }
 field {
@@ -265,7 +265,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.RelatedClaim"
   options {
-    [google.fhir.stu3.proto.field_description]: "Related Claims which may be revelant to processing this claim"
+    [google.fhir.proto.field_description]: "Related Claims which may be revelant to processing this claim"
   }
 }
 field {
@@ -275,9 +275,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Prescription authorizing services or products"
-    [google.fhir.stu3.proto.valid_reference_type]: "MedicationRequest"
-    [google.fhir.stu3.proto.valid_reference_type]: "VisionPrescription"
+    [google.fhir.proto.field_description]: "Prescription authorizing services or products"
+    [google.fhir.proto.valid_reference_type]: "MedicationRequest"
+    [google.fhir.proto.valid_reference_type]: "VisionPrescription"
   }
 }
 field {
@@ -287,8 +287,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Original prescription if superceded by fulfiller"
-    [google.fhir.stu3.proto.valid_reference_type]: "MedicationRequest"
+    [google.fhir.proto.field_description]: "Original prescription if superceded by fulfiller"
+    [google.fhir.proto.valid_reference_type]: "MedicationRequest"
   }
 }
 field {
@@ -298,7 +298,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Payee"
   options {
-    [google.fhir.stu3.proto.field_description]: "Party to be paid any benefits payable"
+    [google.fhir.proto.field_description]: "Party to be paid any benefits payable"
   }
 }
 field {
@@ -308,7 +308,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.SupportingInformation"
   options {
-    [google.fhir.stu3.proto.field_description]: "Exceptions, special considerations, the condition, situation, prior or concurrent issues"
+    [google.fhir.proto.field_description]: "Exceptions, special considerations, the condition, situation, prior or concurrent issues"
   }
 }
 field {
@@ -318,7 +318,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.CareTeam"
   options {
-    [google.fhir.stu3.proto.field_description]: "Care Team members"
+    [google.fhir.proto.field_description]: "Care Team members"
   }
 }
 field {
@@ -328,7 +328,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Diagnosis"
   options {
-    [google.fhir.stu3.proto.field_description]: "List of Diagnosis"
+    [google.fhir.proto.field_description]: "List of Diagnosis"
   }
 }
 field {
@@ -338,7 +338,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Procedure"
   options {
-    [google.fhir.stu3.proto.field_description]: "Procedures performed"
+    [google.fhir.proto.field_description]: "Procedures performed"
   }
 }
 field {
@@ -348,7 +348,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.PositiveInt"
   options {
-    [google.fhir.stu3.proto.field_description]: "Precedence (primary, secondary, etc.)"
+    [google.fhir.proto.field_description]: "Precedence (primary, secondary, etc.)"
   }
 }
 field {
@@ -358,7 +358,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Insurance"
   options {
-    [google.fhir.stu3.proto.field_description]: "Insurance or medical plan"
+    [google.fhir.proto.field_description]: "Insurance or medical plan"
   }
 }
 field {
@@ -368,7 +368,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Accident"
   options {
-    [google.fhir.stu3.proto.field_description]: "Details of an accident"
+    [google.fhir.proto.field_description]: "Details of an accident"
   }
 }
 field {
@@ -378,7 +378,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Period"
   options {
-    [google.fhir.stu3.proto.field_description]: "Period unable to work"
+    [google.fhir.proto.field_description]: "Period unable to work"
   }
 }
 field {
@@ -388,7 +388,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Period"
   options {
-    [google.fhir.stu3.proto.field_description]: "Period in hospital"
+    [google.fhir.proto.field_description]: "Period in hospital"
   }
 }
 field {
@@ -398,7 +398,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item"
   options {
-    [google.fhir.stu3.proto.field_description]: "Goods and Services"
+    [google.fhir.proto.field_description]: "Goods and Services"
   }
 }
 field {
@@ -408,7 +408,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.AddedItem"
   options {
-    [google.fhir.stu3.proto.field_description]: "Insurer added line items"
+    [google.fhir.proto.field_description]: "Insurer added line items"
   }
 }
 field {
@@ -418,7 +418,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Money"
   options {
-    [google.fhir.stu3.proto.field_description]: "Total Cost of service from the Claim"
+    [google.fhir.proto.field_description]: "Total Cost of service from the Claim"
   }
 }
 field {
@@ -428,7 +428,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Money"
   options {
-    [google.fhir.stu3.proto.field_description]: "Unallocated deductable"
+    [google.fhir.proto.field_description]: "Unallocated deductable"
   }
 }
 field {
@@ -438,7 +438,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Money"
   options {
-    [google.fhir.stu3.proto.field_description]: "Total benefit payable for the Claim"
+    [google.fhir.proto.field_description]: "Total benefit payable for the Claim"
   }
 }
 field {
@@ -448,7 +448,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Payment"
   options {
-    [google.fhir.stu3.proto.field_description]: "Payment (if paid)"
+    [google.fhir.proto.field_description]: "Payment (if paid)"
   }
 }
 field {
@@ -458,7 +458,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Printed Form Identifier"
+    [google.fhir.proto.field_description]: "Printed Form Identifier"
   }
 }
 field {
@@ -468,7 +468,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Note"
   options {
-    [google.fhir.stu3.proto.field_description]: "Processing notes"
+    [google.fhir.proto.field_description]: "Processing notes"
   }
 }
 field {
@@ -478,7 +478,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.BenefitBalance"
   options {
-    [google.fhir.stu3.proto.field_description]: "Balance by Benefit Category"
+    [google.fhir.proto.field_description]: "Balance by Benefit Category"
   }
 }
 nested_type {
@@ -490,7 +490,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -500,7 +500,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -510,7 +510,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -520,8 +520,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Reference to the related claim"
-      [google.fhir.stu3.proto.valid_reference_type]: "Claim"
+      [google.fhir.proto.field_description]: "Reference to the related claim"
+      [google.fhir.proto.valid_reference_type]: "Claim"
     }
   }
   field {
@@ -531,7 +531,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "How the reference claim is related"
+      [google.fhir.proto.field_description]: "How the reference claim is related"
     }
   }
   field {
@@ -541,7 +541,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Identifier"
     options {
-      [google.fhir.stu3.proto.field_description]: "Related file or case reference"
+      [google.fhir.proto.field_description]: "Related file or case reference"
     }
   }
 }
@@ -554,7 +554,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -564,7 +564,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -574,7 +574,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -584,7 +584,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Type of party: Subscriber, Provider, other"
+      [google.fhir.proto.field_description]: "Type of party: Subscriber, Provider, other"
     }
   }
   field {
@@ -594,7 +594,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "organization | patient | practitioner | relatedperson"
+      [google.fhir.proto.field_description]: "organization | patient | practitioner | relatedperson"
     }
   }
   field {
@@ -604,11 +604,11 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Party to receive the payable"
-      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
-      [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-      [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+      [google.fhir.proto.field_description]: "Party to receive the payable"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.valid_reference_type]: "Patient"
+      [google.fhir.proto.valid_reference_type]: "RelatedPerson"
     }
   }
 }
@@ -621,7 +621,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -631,7 +631,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -641,7 +641,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -651,8 +651,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Information instance identifier"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Information instance identifier"
     }
   }
   field {
@@ -662,8 +662,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "General class of information"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "General class of information"
     }
   }
   field {
@@ -673,7 +673,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Type of information"
+      [google.fhir.proto.field_description]: "Type of information"
     }
   }
   field {
@@ -683,7 +683,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.SupportingInformation.TimingType"
     options {
-      [google.fhir.stu3.proto.field_description]: "When it occurred"
+      [google.fhir.proto.field_description]: "When it occurred"
     }
   }
   field {
@@ -693,7 +693,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.SupportingInformation.Value"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Data or supporting information"
+      [google.fhir.proto.field_description]: "Additional Data or supporting information"
     }
   }
   field {
@@ -703,7 +703,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Coding"
     options {
-      [google.fhir.stu3.proto.field_description]: "Reason associated with the information"
+      [google.fhir.proto.field_description]: "Reason associated with the information"
     }
   }
   nested_type {
@@ -725,7 +725,7 @@ nested_type {
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "timing"
@@ -765,12 +765,12 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+        [google.fhir.proto.valid_reference_type]: "Resource"
       }
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "value"
@@ -786,7 +786,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -796,7 +796,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -806,7 +806,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -816,8 +816,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Number to covey order of careteam"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Number to covey order of careteam"
     }
   }
   field {
@@ -827,10 +827,10 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Member of the Care Team"
-      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Member of the Care Team"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "Organization"
     }
   }
   field {
@@ -840,7 +840,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Boolean"
     options {
-      [google.fhir.stu3.proto.field_description]: "Billing practitioner"
+      [google.fhir.proto.field_description]: "Billing practitioner"
     }
   }
   field {
@@ -850,7 +850,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Role on the team"
+      [google.fhir.proto.field_description]: "Role on the team"
     }
   }
   field {
@@ -860,7 +860,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Type, classification or Specialization"
+      [google.fhir.proto.field_description]: "Type, classification or Specialization"
     }
   }
 }
@@ -873,7 +873,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -883,7 +883,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -893,7 +893,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -903,8 +903,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Number to covey order of diagnosis"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Number to covey order of diagnosis"
     }
   }
   field {
@@ -914,8 +914,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Diagnosis.DiagnosisType"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Patient\'s diagnosis"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Patient\'s diagnosis"
     }
   }
   field {
@@ -925,7 +925,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Timing or nature of the diagnosis"
+      [google.fhir.proto.field_description]: "Timing or nature of the diagnosis"
     }
   }
   field {
@@ -935,7 +935,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Package billing code"
+      [google.fhir.proto.field_description]: "Package billing code"
     }
   }
   nested_type {
@@ -955,12 +955,12 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "Condition"
+        [google.fhir.proto.valid_reference_type]: "Condition"
       }
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "diagnosis"
@@ -976,7 +976,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -986,7 +986,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -996,7 +996,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -1006,8 +1006,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Procedure sequence for reference"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Procedure sequence for reference"
     }
   }
   field {
@@ -1017,7 +1017,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.DateTime"
     options {
-      [google.fhir.stu3.proto.field_description]: "When the procedure was performed"
+      [google.fhir.proto.field_description]: "When the procedure was performed"
     }
   }
   field {
@@ -1027,8 +1027,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Procedure.ProcedureType"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Patient\'s list of procedures performed"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Patient\'s list of procedures performed"
     }
   }
   nested_type {
@@ -1048,12 +1048,12 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "Procedure"
+        [google.fhir.proto.valid_reference_type]: "Procedure"
       }
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "procedure"
@@ -1069,7 +1069,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -1079,7 +1079,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -1089,7 +1089,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -1099,8 +1099,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Insurance information"
-      [google.fhir.stu3.proto.valid_reference_type]: "Coverage"
+      [google.fhir.proto.field_description]: "Insurance information"
+      [google.fhir.proto.valid_reference_type]: "Coverage"
     }
   }
   field {
@@ -1110,7 +1110,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Pre-Authorization/Determination Reference"
+      [google.fhir.proto.field_description]: "Pre-Authorization/Determination Reference"
     }
   }
 }
@@ -1123,7 +1123,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -1133,7 +1133,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -1143,7 +1143,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -1153,7 +1153,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Date"
     options {
-      [google.fhir.stu3.proto.field_description]: "When the accident occurred"
+      [google.fhir.proto.field_description]: "When the accident occurred"
     }
   }
   field {
@@ -1163,7 +1163,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "The nature of the accident"
+      [google.fhir.proto.field_description]: "The nature of the accident"
     }
   }
   field {
@@ -1173,7 +1173,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Accident.Location"
     options {
-      [google.fhir.stu3.proto.field_description]: "Accident Place"
+      [google.fhir.proto.field_description]: "Accident Place"
     }
   }
   nested_type {
@@ -1193,12 +1193,12 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "Location"
+        [google.fhir.proto.valid_reference_type]: "Location"
       }
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "location"
@@ -1214,7 +1214,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -1224,7 +1224,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -1234,7 +1234,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -1244,8 +1244,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Service instance"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Service instance"
     }
   }
   field {
@@ -1255,7 +1255,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.field_description]: "Applicable careteam members"
+      [google.fhir.proto.field_description]: "Applicable careteam members"
     }
   }
   field {
@@ -1265,7 +1265,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.field_description]: "Applicable diagnoses"
+      [google.fhir.proto.field_description]: "Applicable diagnoses"
     }
   }
   field {
@@ -1275,7 +1275,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.field_description]: "Applicable procedures"
+      [google.fhir.proto.field_description]: "Applicable procedures"
     }
   }
   field {
@@ -1285,7 +1285,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.field_description]: "Applicable exception and supporting information"
+      [google.fhir.proto.field_description]: "Applicable exception and supporting information"
     }
   }
   field {
@@ -1295,7 +1295,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Revenue or cost center code"
+      [google.fhir.proto.field_description]: "Revenue or cost center code"
     }
   }
   field {
@@ -1305,7 +1305,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Type of service or product"
+      [google.fhir.proto.field_description]: "Type of service or product"
     }
   }
   field {
@@ -1315,7 +1315,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Billing Code"
+      [google.fhir.proto.field_description]: "Billing Code"
     }
   }
   field {
@@ -1325,7 +1325,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Service/Product billing modifiers"
+      [google.fhir.proto.field_description]: "Service/Product billing modifiers"
     }
   }
   field {
@@ -1335,7 +1335,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Program specific reason for item inclusion"
+      [google.fhir.proto.field_description]: "Program specific reason for item inclusion"
     }
   }
   field {
@@ -1345,7 +1345,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Serviced"
     options {
-      [google.fhir.stu3.proto.field_description]: "Date or dates of Service"
+      [google.fhir.proto.field_description]: "Date or dates of Service"
     }
   }
   field {
@@ -1355,7 +1355,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Location"
     options {
-      [google.fhir.stu3.proto.field_description]: "Place of service"
+      [google.fhir.proto.field_description]: "Place of service"
     }
   }
   field {
@@ -1365,7 +1365,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
-      [google.fhir.stu3.proto.field_description]: "Count of Products or Services"
+      [google.fhir.proto.field_description]: "Count of Products or Services"
     }
   }
   field {
@@ -1375,7 +1375,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Money"
     options {
-      [google.fhir.stu3.proto.field_description]: "Fee, charge or cost per point"
+      [google.fhir.proto.field_description]: "Fee, charge or cost per point"
     }
   }
   field {
@@ -1385,7 +1385,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Decimal"
     options {
-      [google.fhir.stu3.proto.field_description]: "Price scaling factor"
+      [google.fhir.proto.field_description]: "Price scaling factor"
     }
   }
   field {
@@ -1395,7 +1395,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Money"
     options {
-      [google.fhir.stu3.proto.field_description]: "Total item cost"
+      [google.fhir.proto.field_description]: "Total item cost"
     }
   }
   field {
@@ -1405,8 +1405,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Unique Device Identifier"
-      [google.fhir.stu3.proto.valid_reference_type]: "Device"
+      [google.fhir.proto.field_description]: "Unique Device Identifier"
+      [google.fhir.proto.valid_reference_type]: "Device"
     }
   }
   field {
@@ -1416,7 +1416,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Service Location"
+      [google.fhir.proto.field_description]: "Service Location"
     }
   }
   field {
@@ -1426,7 +1426,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Service Sub-location"
+      [google.fhir.proto.field_description]: "Service Sub-location"
     }
   }
   field {
@@ -1436,8 +1436,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Encounters related to this billed item"
-      [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
+      [google.fhir.proto.field_description]: "Encounters related to this billed item"
+      [google.fhir.proto.valid_reference_type]: "Encounter"
     }
   }
   field {
@@ -1447,7 +1447,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.field_description]: "List of note numbers which apply"
+      [google.fhir.proto.field_description]: "List of note numbers which apply"
     }
   }
   field {
@@ -1457,7 +1457,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Adjudication"
     options {
-      [google.fhir.stu3.proto.field_description]: "Adjudication details"
+      [google.fhir.proto.field_description]: "Adjudication details"
     }
   }
   field {
@@ -1467,7 +1467,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Detail"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional items"
+      [google.fhir.proto.field_description]: "Additional items"
     }
   }
   nested_type {
@@ -1489,7 +1489,7 @@ nested_type {
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "serviced"
@@ -1520,12 +1520,12 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "Location"
+        [google.fhir.proto.valid_reference_type]: "Location"
       }
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "location"
@@ -1540,7 +1540,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -1550,7 +1550,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -1560,7 +1560,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -1570,8 +1570,8 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-        [google.fhir.stu3.proto.field_description]: "Adjudication category such as co-pay, eligible, benefit, etc."
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "Adjudication category such as co-pay, eligible, benefit, etc."
       }
     }
     field {
@@ -1581,7 +1581,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "Explanation of Adjudication outcome"
+        [google.fhir.proto.field_description]: "Explanation of Adjudication outcome"
       }
     }
     field {
@@ -1591,7 +1591,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Money"
       options {
-        [google.fhir.stu3.proto.field_description]: "Monetary amount"
+        [google.fhir.proto.field_description]: "Monetary amount"
       }
     }
     field {
@@ -1601,7 +1601,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Decimal"
       options {
-        [google.fhir.stu3.proto.field_description]: "Non-monitory value"
+        [google.fhir.proto.field_description]: "Non-monitory value"
       }
     }
   }
@@ -1614,7 +1614,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -1624,7 +1624,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -1634,7 +1634,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -1644,8 +1644,8 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.PositiveInt"
       options {
-        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-        [google.fhir.stu3.proto.field_description]: "Service instance"
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "Service instance"
       }
     }
     field {
@@ -1655,8 +1655,8 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-        [google.fhir.stu3.proto.field_description]: "Group or type of product or service"
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "Group or type of product or service"
       }
     }
     field {
@@ -1666,7 +1666,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "Revenue or cost center code"
+        [google.fhir.proto.field_description]: "Revenue or cost center code"
       }
     }
     field {
@@ -1676,7 +1676,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "Type of service or product"
+        [google.fhir.proto.field_description]: "Type of service or product"
       }
     }
     field {
@@ -1686,7 +1686,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "Billing Code"
+        [google.fhir.proto.field_description]: "Billing Code"
       }
     }
     field {
@@ -1696,7 +1696,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "Service/Product billing modifiers"
+        [google.fhir.proto.field_description]: "Service/Product billing modifiers"
       }
     }
     field {
@@ -1706,7 +1706,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "Program specific reason for item inclusion"
+        [google.fhir.proto.field_description]: "Program specific reason for item inclusion"
       }
     }
     field {
@@ -1716,7 +1716,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.SimpleQuantity"
       options {
-        [google.fhir.stu3.proto.field_description]: "Count of Products or Services"
+        [google.fhir.proto.field_description]: "Count of Products or Services"
       }
     }
     field {
@@ -1726,7 +1726,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Money"
       options {
-        [google.fhir.stu3.proto.field_description]: "Fee, charge or cost per point"
+        [google.fhir.proto.field_description]: "Fee, charge or cost per point"
       }
     }
     field {
@@ -1736,7 +1736,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Decimal"
       options {
-        [google.fhir.stu3.proto.field_description]: "Price scaling factor"
+        [google.fhir.proto.field_description]: "Price scaling factor"
       }
     }
     field {
@@ -1746,7 +1746,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Money"
       options {
-        [google.fhir.stu3.proto.field_description]: "Total additional item cost"
+        [google.fhir.proto.field_description]: "Total additional item cost"
       }
     }
     field {
@@ -1756,8 +1756,8 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.field_description]: "Unique Device Identifier"
-        [google.fhir.stu3.proto.valid_reference_type]: "Device"
+        [google.fhir.proto.field_description]: "Unique Device Identifier"
+        [google.fhir.proto.valid_reference_type]: "Device"
       }
     }
     field {
@@ -1767,7 +1767,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.PositiveInt"
       options {
-        [google.fhir.stu3.proto.field_description]: "List of note numbers which apply"
+        [google.fhir.proto.field_description]: "List of note numbers which apply"
       }
     }
     field {
@@ -1777,7 +1777,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Adjudication"
       options {
-        [google.fhir.stu3.proto.field_description]: "Detail level adjudication details"
+        [google.fhir.proto.field_description]: "Detail level adjudication details"
       }
     }
     field {
@@ -1787,7 +1787,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Detail.SubDetail"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional items"
+        [google.fhir.proto.field_description]: "Additional items"
       }
     }
     nested_type {
@@ -1799,7 +1799,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.String"
         options {
-          [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+          [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
         }
       }
       field {
@@ -1809,7 +1809,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Extension"
         options {
-          [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+          [google.fhir.proto.field_description]: "Additional Content defined by implementations"
         }
       }
       field {
@@ -1819,7 +1819,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Extension"
         options {
-          [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+          [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
         }
       }
       field {
@@ -1829,8 +1829,8 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.PositiveInt"
         options {
-          [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-          [google.fhir.stu3.proto.field_description]: "Service instance"
+          [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+          [google.fhir.proto.field_description]: "Service instance"
         }
       }
       field {
@@ -1840,8 +1840,8 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.CodeableConcept"
         options {
-          [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-          [google.fhir.stu3.proto.field_description]: "Type of product or service"
+          [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+          [google.fhir.proto.field_description]: "Type of product or service"
         }
       }
       field {
@@ -1851,7 +1851,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.CodeableConcept"
         options {
-          [google.fhir.stu3.proto.field_description]: "Revenue or cost center code"
+          [google.fhir.proto.field_description]: "Revenue or cost center code"
         }
       }
       field {
@@ -1861,7 +1861,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.CodeableConcept"
         options {
-          [google.fhir.stu3.proto.field_description]: "Type of service or product"
+          [google.fhir.proto.field_description]: "Type of service or product"
         }
       }
       field {
@@ -1871,7 +1871,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.CodeableConcept"
         options {
-          [google.fhir.stu3.proto.field_description]: "Billing Code"
+          [google.fhir.proto.field_description]: "Billing Code"
         }
       }
       field {
@@ -1881,7 +1881,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.CodeableConcept"
         options {
-          [google.fhir.stu3.proto.field_description]: "Service/Product billing modifiers"
+          [google.fhir.proto.field_description]: "Service/Product billing modifiers"
         }
       }
       field {
@@ -1891,7 +1891,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.CodeableConcept"
         options {
-          [google.fhir.stu3.proto.field_description]: "Program specific reason for item inclusion"
+          [google.fhir.proto.field_description]: "Program specific reason for item inclusion"
         }
       }
       field {
@@ -1901,7 +1901,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.SimpleQuantity"
         options {
-          [google.fhir.stu3.proto.field_description]: "Count of Products or Services"
+          [google.fhir.proto.field_description]: "Count of Products or Services"
         }
       }
       field {
@@ -1911,7 +1911,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Money"
         options {
-          [google.fhir.stu3.proto.field_description]: "Fee, charge or cost per point"
+          [google.fhir.proto.field_description]: "Fee, charge or cost per point"
         }
       }
       field {
@@ -1921,7 +1921,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Decimal"
         options {
-          [google.fhir.stu3.proto.field_description]: "Price scaling factor"
+          [google.fhir.proto.field_description]: "Price scaling factor"
         }
       }
       field {
@@ -1931,7 +1931,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Money"
         options {
-          [google.fhir.stu3.proto.field_description]: "Net additional item cost"
+          [google.fhir.proto.field_description]: "Net additional item cost"
         }
       }
       field {
@@ -1941,8 +1941,8 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Reference"
         options {
-          [google.fhir.stu3.proto.field_description]: "Unique Device Identifier"
-          [google.fhir.stu3.proto.valid_reference_type]: "Device"
+          [google.fhir.proto.field_description]: "Unique Device Identifier"
+          [google.fhir.proto.valid_reference_type]: "Device"
         }
       }
       field {
@@ -1952,7 +1952,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.PositiveInt"
         options {
-          [google.fhir.stu3.proto.field_description]: "List of note numbers which apply"
+          [google.fhir.proto.field_description]: "List of note numbers which apply"
         }
       }
       field {
@@ -1962,7 +1962,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Adjudication"
         options {
-          [google.fhir.stu3.proto.field_description]: "Language if different from the resource"
+          [google.fhir.proto.field_description]: "Language if different from the resource"
         }
       }
     }
@@ -1977,7 +1977,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -1987,7 +1987,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -1997,7 +1997,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -2007,7 +2007,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.field_description]: "Service instances"
+      [google.fhir.proto.field_description]: "Service instances"
     }
   }
   field {
@@ -2017,7 +2017,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Revenue or cost center code"
+      [google.fhir.proto.field_description]: "Revenue or cost center code"
     }
   }
   field {
@@ -2027,7 +2027,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Type of service or product"
+      [google.fhir.proto.field_description]: "Type of service or product"
     }
   }
   field {
@@ -2037,7 +2037,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Billing Code"
+      [google.fhir.proto.field_description]: "Billing Code"
     }
   }
   field {
@@ -2047,7 +2047,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Service/Product billing modifiers"
+      [google.fhir.proto.field_description]: "Service/Product billing modifiers"
     }
   }
   field {
@@ -2057,7 +2057,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Money"
     options {
-      [google.fhir.stu3.proto.field_description]: "Professional fee or Product charge"
+      [google.fhir.proto.field_description]: "Professional fee or Product charge"
     }
   }
   field {
@@ -2067,7 +2067,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.field_description]: "List of note numbers which apply"
+      [google.fhir.proto.field_description]: "List of note numbers which apply"
     }
   }
   field {
@@ -2077,7 +2077,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Adjudication"
     options {
-      [google.fhir.stu3.proto.field_description]: "Added items adjudication"
+      [google.fhir.proto.field_description]: "Added items adjudication"
     }
   }
   field {
@@ -2087,7 +2087,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.AddedItem.AddedItemsDetail"
     options {
-      [google.fhir.stu3.proto.field_description]: "Added items details"
+      [google.fhir.proto.field_description]: "Added items details"
     }
   }
   nested_type {
@@ -2099,7 +2099,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -2109,7 +2109,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -2119,7 +2119,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -2129,7 +2129,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "Revenue or cost center code"
+        [google.fhir.proto.field_description]: "Revenue or cost center code"
       }
     }
     field {
@@ -2139,7 +2139,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "Type of service or product"
+        [google.fhir.proto.field_description]: "Type of service or product"
       }
     }
     field {
@@ -2149,7 +2149,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "Billing Code"
+        [google.fhir.proto.field_description]: "Billing Code"
       }
     }
     field {
@@ -2159,7 +2159,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "Service/Product billing modifiers"
+        [google.fhir.proto.field_description]: "Service/Product billing modifiers"
       }
     }
     field {
@@ -2169,7 +2169,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Money"
       options {
-        [google.fhir.stu3.proto.field_description]: "Professional fee or Product charge"
+        [google.fhir.proto.field_description]: "Professional fee or Product charge"
       }
     }
     field {
@@ -2179,7 +2179,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.PositiveInt"
       options {
-        [google.fhir.stu3.proto.field_description]: "List of note numbers which apply"
+        [google.fhir.proto.field_description]: "List of note numbers which apply"
       }
     }
     field {
@@ -2189,7 +2189,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.Item.Adjudication"
       options {
-        [google.fhir.stu3.proto.field_description]: "Added items detail adjudication"
+        [google.fhir.proto.field_description]: "Added items detail adjudication"
       }
     }
   }
@@ -2203,7 +2203,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -2213,7 +2213,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -2223,7 +2223,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -2233,7 +2233,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Partial or Complete"
+      [google.fhir.proto.field_description]: "Partial or Complete"
     }
   }
   field {
@@ -2243,7 +2243,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Money"
     options {
-      [google.fhir.stu3.proto.field_description]: "Payment adjustment for non-Claim issues"
+      [google.fhir.proto.field_description]: "Payment adjustment for non-Claim issues"
     }
   }
   field {
@@ -2253,7 +2253,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Explanation for the non-claim adjustment"
+      [google.fhir.proto.field_description]: "Explanation for the non-claim adjustment"
     }
   }
   field {
@@ -2263,7 +2263,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Date"
     options {
-      [google.fhir.stu3.proto.field_description]: "Expected date of Payment"
+      [google.fhir.proto.field_description]: "Expected date of Payment"
     }
   }
   field {
@@ -2273,7 +2273,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Money"
     options {
-      [google.fhir.stu3.proto.field_description]: "Payable amount after adjustment"
+      [google.fhir.proto.field_description]: "Payable amount after adjustment"
     }
   }
   field {
@@ -2283,7 +2283,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Identifier"
     options {
-      [google.fhir.stu3.proto.field_description]: "Identifier of the payment instrument"
+      [google.fhir.proto.field_description]: "Identifier of the payment instrument"
     }
   }
 }
@@ -2296,7 +2296,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -2306,7 +2306,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -2316,7 +2316,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -2326,7 +2326,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.PositiveInt"
     options {
-      [google.fhir.stu3.proto.field_description]: "Sequence number for this note"
+      [google.fhir.proto.field_description]: "Sequence number for this note"
     }
   }
   field {
@@ -2336,7 +2336,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "display | print | printoper"
+      [google.fhir.proto.field_description]: "display | print | printoper"
     }
   }
   field {
@@ -2346,7 +2346,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Note explanitory text"
+      [google.fhir.proto.field_description]: "Note explanitory text"
     }
   }
   field {
@@ -2356,7 +2356,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Language if different from the resource"
+      [google.fhir.proto.field_description]: "Language if different from the resource"
     }
   }
 }
@@ -2369,7 +2369,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -2379,7 +2379,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -2389,7 +2389,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -2399,8 +2399,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Type of services covered"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Type of services covered"
     }
   }
   field {
@@ -2410,7 +2410,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Detailed services covered within the type"
+      [google.fhir.proto.field_description]: "Detailed services covered within the type"
     }
   }
   field {
@@ -2420,7 +2420,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Boolean"
     options {
-      [google.fhir.stu3.proto.field_description]: "Excluded from the plan"
+      [google.fhir.proto.field_description]: "Excluded from the plan"
     }
   }
   field {
@@ -2430,7 +2430,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Short name for the benefit"
+      [google.fhir.proto.field_description]: "Short name for the benefit"
     }
   }
   field {
@@ -2440,7 +2440,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Description of the benefit or services covered"
+      [google.fhir.proto.field_description]: "Description of the benefit or services covered"
     }
   }
   field {
@@ -2450,7 +2450,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "In or out of network"
+      [google.fhir.proto.field_description]: "In or out of network"
     }
   }
   field {
@@ -2460,7 +2460,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Individual or family"
+      [google.fhir.proto.field_description]: "Individual or family"
     }
   }
   field {
@@ -2470,7 +2470,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Annual or lifetime"
+      [google.fhir.proto.field_description]: "Annual or lifetime"
     }
   }
   field {
@@ -2480,7 +2480,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.BenefitBalance.Benefit"
     options {
-      [google.fhir.stu3.proto.field_description]: "Benefit Summary"
+      [google.fhir.proto.field_description]: "Benefit Summary"
     }
   }
   nested_type {
@@ -2492,7 +2492,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -2502,7 +2502,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -2512,7 +2512,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -2522,8 +2522,8 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-        [google.fhir.stu3.proto.field_description]: "Deductable, visits, benefit amount"
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "Deductable, visits, benefit amount"
       }
     }
     field {
@@ -2533,7 +2533,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.BenefitBalance.Benefit.Allowed"
       options {
-        [google.fhir.stu3.proto.field_description]: "Benefits allowed"
+        [google.fhir.proto.field_description]: "Benefits allowed"
       }
     }
     field {
@@ -2543,7 +2543,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.ExplanationOfBenefit.BenefitBalance.Benefit.Used"
       options {
-        [google.fhir.stu3.proto.field_description]: "Benefits used"
+        [google.fhir.proto.field_description]: "Benefits used"
       }
     }
     nested_type {
@@ -2574,7 +2574,7 @@ nested_type {
         oneof_index: 0
       }
       options {
-        [google.fhir.stu3.proto.is_choice_type]: true
+        [google.fhir.proto.is_choice_type]: true
       }
       oneof_decl {
         name: "allowed"
@@ -2599,7 +2599,7 @@ nested_type {
         oneof_index: 0
       }
       options {
-        [google.fhir.stu3.proto.is_choice_type]: true
+        [google.fhir.proto.is_choice_type]: true
       }
       oneof_decl {
         name: "used"
@@ -2608,7 +2608,7 @@ nested_type {
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for ExplanationOfBenefit, last updated 2017-04-19T07:44:43.294+10:00.\nExplanation of Benefit resource.\nSee http://hl7.org/fhir/StructureDefinition/ExplanationOfBenefit"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ExplanationOfBenefit"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ExplanationOfBenefit, last updated 2017-04-19T07:44:43.294+10:00.\nExplanation of Benefit resource.\nSee http://hl7.org/fhir/StructureDefinition/ExplanationOfBenefit"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ExplanationOfBenefit"
 }

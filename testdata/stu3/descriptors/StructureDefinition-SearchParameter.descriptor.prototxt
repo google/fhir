@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,8 +86,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Logical URI to reference this search parameter (globally unique)"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Logical URI to reference this search parameter (globally unique)"
   }
 }
 field {
@@ -97,7 +97,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Business version of the search parameter"
+    [google.fhir.proto.field_description]: "Business version of the search parameter"
   }
 }
 field {
@@ -107,8 +107,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Name for this search parameter (computer friendly)"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Name for this search parameter (computer friendly)"
   }
 }
 field {
@@ -118,8 +118,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.PublicationStatusCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "draft | active | retired | unknown"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "draft | active | retired | unknown"
   }
 }
 field {
@@ -129,7 +129,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "For testing purposes, not real usage"
+    [google.fhir.proto.field_description]: "For testing purposes, not real usage"
   }
 }
 field {
@@ -139,7 +139,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "Date this was last changed"
+    [google.fhir.proto.field_description]: "Date this was last changed"
   }
 }
 field {
@@ -149,7 +149,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Name of the publisher (organization or individual)"
+    [google.fhir.proto.field_description]: "Name of the publisher (organization or individual)"
   }
 }
 field {
@@ -159,7 +159,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContactDetail"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contact details for the publisher"
+    [google.fhir.proto.field_description]: "Contact details for the publisher"
   }
 }
 field {
@@ -169,7 +169,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.UsageContext"
   options {
-    [google.fhir.stu3.proto.field_description]: "Context the content is intended to support"
+    [google.fhir.proto.field_description]: "Context the content is intended to support"
   }
 }
 field {
@@ -179,7 +179,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Intended jurisdiction for search parameter (if applicable)"
+    [google.fhir.proto.field_description]: "Intended jurisdiction for search parameter (if applicable)"
   }
 }
 field {
@@ -189,7 +189,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Markdown"
   options {
-    [google.fhir.stu3.proto.field_description]: "Why this search parameter is defined"
+    [google.fhir.proto.field_description]: "Why this search parameter is defined"
   }
 }
 field {
@@ -199,8 +199,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Code"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Code used in URL"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Code used in URL"
   }
 }
 field {
@@ -210,8 +210,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ResourceTypeCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "The resource type(s) this search parameter applies to"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "The resource type(s) this search parameter applies to"
   }
 }
 field {
@@ -221,8 +221,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.SearchParamTypeCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "number | date | string | token | reference | composite | quantity | uri"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "number | date | string | token | reference | composite | quantity | uri"
   }
 }
 field {
@@ -232,7 +232,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "Original Definition for the search parameter"
+    [google.fhir.proto.field_description]: "Original Definition for the search parameter"
   }
 }
 field {
@@ -242,8 +242,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Markdown"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Natural language description of the search parameter"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Natural language description of the search parameter"
   }
 }
 field {
@@ -253,7 +253,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "FHIRPath expression that extracts the values"
+    [google.fhir.proto.field_description]: "FHIRPath expression that extracts the values"
   }
 }
 field {
@@ -263,7 +263,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "XPath that extracts the values"
+    [google.fhir.proto.field_description]: "XPath that extracts the values"
   }
 }
 field {
@@ -273,7 +273,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.XPathUsageTypeCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "normal | phonetic | nearby | distance | other"
+    [google.fhir.proto.field_description]: "normal | phonetic | nearby | distance | other"
   }
 }
 field {
@@ -283,7 +283,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ResourceTypeCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Types of resource (if a resource reference)"
+    [google.fhir.proto.field_description]: "Types of resource (if a resource reference)"
   }
 }
 field {
@@ -293,7 +293,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.SearchComparatorCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "eq | ne | gt | lt | ge | le | sa | eb | ap"
+    [google.fhir.proto.field_description]: "eq | ne | gt | lt | ge | le | sa | eb | ap"
   }
 }
 field {
@@ -303,7 +303,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.SearchModifierCodeCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "missing | exact | contains | not | text | in | not-in | below | above | type"
+    [google.fhir.proto.field_description]: "missing | exact | contains | not | text | in | not-in | below | above | type"
   }
 }
 field {
@@ -313,7 +313,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Chained names supported"
+    [google.fhir.proto.field_description]: "Chained names supported"
   }
 }
 field {
@@ -323,7 +323,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.SearchParameter.Component"
   options {
-    [google.fhir.stu3.proto.field_description]: "For Composite resources to define the parts"
+    [google.fhir.proto.field_description]: "For Composite resources to define the parts"
   }
 }
 nested_type {
@@ -335,7 +335,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -345,7 +345,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -355,7 +355,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -365,9 +365,9 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Defines how the part works"
-      [google.fhir.stu3.proto.valid_reference_type]: "SearchParameter"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Defines how the part works"
+      [google.fhir.proto.valid_reference_type]: "SearchParameter"
     }
   }
   field {
@@ -377,13 +377,13 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Subexpression relative to main expression"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Subexpression relative to main expression"
     }
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for SearchParameter, last updated 2017-04-19T07:44:43.294+10:00.\nSearch Parameter for a resource.\nSee http://hl7.org/fhir/StructureDefinition/SearchParameter"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/SearchParameter"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for SearchParameter, last updated 2017-04-19T07:44:43.294+10:00.\nSearch Parameter for a resource.\nSee http://hl7.org/fhir/StructureDefinition/SearchParameter"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/SearchParameter"
 }

@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "When the event occurs"
+    [google.fhir.proto.field_description]: "When the event occurs"
   }
 }
 field {
@@ -36,16 +36,16 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Timing.Repeat"
   options {
-    [google.fhir.stu3.proto.field_description]: "When the event is to occur"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "offset.empty() or (when.exists() and ((when in (\'C\' | \'CM\' | \'CD\' | \'CV\')).not()))"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "period.exists() implies period >= 0"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "periodMax.empty() or period.exists()"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "durationMax.empty() or duration.exists()"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "countMax.empty() or count.exists()"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "duration.empty() or durationUnit.exists()"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "timeOfDay.empty() or when.empty()"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "period.empty() or periodUnit.exists()"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "duration.exists() implies duration >= 0"
+    [google.fhir.proto.field_description]: "When the event is to occur"
+    [google.fhir.proto.fhir_path_constraint]: "offset.empty() or (when.exists() and ((when in (\'C\' | \'CM\' | \'CD\' | \'CV\')).not()))"
+    [google.fhir.proto.fhir_path_constraint]: "period.exists() implies period >= 0"
+    [google.fhir.proto.fhir_path_constraint]: "periodMax.empty() or period.exists()"
+    [google.fhir.proto.fhir_path_constraint]: "durationMax.empty() or duration.exists()"
+    [google.fhir.proto.fhir_path_constraint]: "countMax.empty() or count.exists()"
+    [google.fhir.proto.fhir_path_constraint]: "duration.empty() or durationUnit.exists()"
+    [google.fhir.proto.fhir_path_constraint]: "timeOfDay.empty() or when.empty()"
+    [google.fhir.proto.fhir_path_constraint]: "period.empty() or periodUnit.exists()"
+    [google.fhir.proto.fhir_path_constraint]: "duration.exists() implies duration >= 0"
   }
 }
 field {
@@ -55,7 +55,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "BID | TID | QID | AM | PM | QD | QOD | Q4H | Q6H +"
+    [google.fhir.proto.field_description]: "BID | TID | QID | AM | PM | QD | QOD | Q4H | Q6H +"
   }
 }
 nested_type {
@@ -67,7 +67,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -77,7 +77,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -87,7 +87,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Timing.Repeat.Bounds"
     options {
-      [google.fhir.stu3.proto.field_description]: "Length/Range of lengths, or (Start and/or end) limits"
+      [google.fhir.proto.field_description]: "Length/Range of lengths, or (Start and/or end) limits"
     }
   }
   field {
@@ -97,7 +97,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Integer"
     options {
-      [google.fhir.stu3.proto.field_description]: "Number of times to repeat"
+      [google.fhir.proto.field_description]: "Number of times to repeat"
     }
   }
   field {
@@ -107,7 +107,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Integer"
     options {
-      [google.fhir.stu3.proto.field_description]: "Maximum number of times to repeat"
+      [google.fhir.proto.field_description]: "Maximum number of times to repeat"
     }
   }
   field {
@@ -117,7 +117,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Decimal"
     options {
-      [google.fhir.stu3.proto.field_description]: "How long when it happens"
+      [google.fhir.proto.field_description]: "How long when it happens"
     }
   }
   field {
@@ -127,7 +127,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Decimal"
     options {
-      [google.fhir.stu3.proto.field_description]: "How long when it happens (Max)"
+      [google.fhir.proto.field_description]: "How long when it happens (Max)"
     }
   }
   field {
@@ -137,7 +137,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.UnitsOfTimeCode"
     options {
-      [google.fhir.stu3.proto.field_description]: "s | min | h | d | wk | mo | a - unit of time (UCUM)"
+      [google.fhir.proto.field_description]: "s | min | h | d | wk | mo | a - unit of time (UCUM)"
     }
   }
   field {
@@ -147,7 +147,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Integer"
     options {
-      [google.fhir.stu3.proto.field_description]: "Event occurs frequency times per period"
+      [google.fhir.proto.field_description]: "Event occurs frequency times per period"
     }
   }
   field {
@@ -157,7 +157,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Integer"
     options {
-      [google.fhir.stu3.proto.field_description]: "Event occurs up to frequencyMax times per period"
+      [google.fhir.proto.field_description]: "Event occurs up to frequencyMax times per period"
     }
   }
   field {
@@ -167,7 +167,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Decimal"
     options {
-      [google.fhir.stu3.proto.field_description]: "Event occurs frequency times per period"
+      [google.fhir.proto.field_description]: "Event occurs frequency times per period"
     }
   }
   field {
@@ -177,7 +177,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Decimal"
     options {
-      [google.fhir.stu3.proto.field_description]: "Upper limit of period (3-4 hours)"
+      [google.fhir.proto.field_description]: "Upper limit of period (3-4 hours)"
     }
   }
   field {
@@ -187,7 +187,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.UnitsOfTimeCode"
     options {
-      [google.fhir.stu3.proto.field_description]: "s | min | h | d | wk | mo | a - unit of time (UCUM)"
+      [google.fhir.proto.field_description]: "s | min | h | d | wk | mo | a - unit of time (UCUM)"
     }
   }
   field {
@@ -197,7 +197,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.DaysOfWeekCode"
     options {
-      [google.fhir.stu3.proto.field_description]: "mon | tue | wed | thu | fri | sat | sun"
+      [google.fhir.proto.field_description]: "mon | tue | wed | thu | fri | sat | sun"
     }
   }
   field {
@@ -207,7 +207,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Time"
     options {
-      [google.fhir.stu3.proto.field_description]: "Time of day for action"
+      [google.fhir.proto.field_description]: "Time of day for action"
     }
   }
   field {
@@ -217,7 +217,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.EventTimingCode"
     options {
-      [google.fhir.stu3.proto.field_description]: "Regular life events the event is tied to"
+      [google.fhir.proto.field_description]: "Regular life events the event is tied to"
     }
   }
   field {
@@ -227,7 +227,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.UnsignedInt"
     options {
-      [google.fhir.stu3.proto.field_description]: "Minutes from event (before or after)"
+      [google.fhir.proto.field_description]: "Minutes from event (before or after)"
     }
   }
   nested_type {
@@ -257,7 +257,7 @@ nested_type {
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "bounds"
@@ -265,7 +265,7 @@ nested_type {
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Timing, last updated 2017-04-19T07:44:43.294+10:00.\nA timing schedule that specifies an event that may occur multiple times.\nSee http://hl7.org/fhir/StructureDefinition/Timing"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Timing"
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Timing, last updated 2017-04-19T07:44:43.294+10:00.\nA timing schedule that specifies an event that may occur multiple times.\nSee http://hl7.org/fhir/StructureDefinition/Timing"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Timing"
 }

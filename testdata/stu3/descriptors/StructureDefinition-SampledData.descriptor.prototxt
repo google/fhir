@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -26,8 +26,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.SimpleQuantity"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Zero value and units"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Zero value and units"
   }
 }
 field {
@@ -37,8 +37,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Decimal"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Number of milliseconds between samples"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Number of milliseconds between samples"
   }
 }
 field {
@@ -48,7 +48,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Decimal"
   options {
-    [google.fhir.stu3.proto.field_description]: "Multiply data by this before adding to origin"
+    [google.fhir.proto.field_description]: "Multiply data by this before adding to origin"
   }
 }
 field {
@@ -58,7 +58,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Decimal"
   options {
-    [google.fhir.stu3.proto.field_description]: "Lower limit of detection"
+    [google.fhir.proto.field_description]: "Lower limit of detection"
   }
 }
 field {
@@ -68,7 +68,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Decimal"
   options {
-    [google.fhir.stu3.proto.field_description]: "Upper limit of detection"
+    [google.fhir.proto.field_description]: "Upper limit of detection"
   }
 }
 field {
@@ -78,8 +78,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.PositiveInt"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Number of sample points at each time point"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Number of sample points at each time point"
   }
 }
 field {
@@ -89,12 +89,12 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Decimal values with spaces, or \"E\" | \"U\" | \"L\""
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Decimal values with spaces, or \"E\" | \"U\" | \"L\""
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for SampledData, last updated 2017-04-19T07:44:43.294+10:00.\nA series of measurements taken by a device.\nSee http://hl7.org/fhir/StructureDefinition/SampledData"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/SampledData"
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for SampledData, last updated 2017-04-19T07:44:43.294+10:00.\nA series of measurements taken by a device.\nSee http://hl7.org/fhir/StructureDefinition/SampledData"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/SampledData"
 }

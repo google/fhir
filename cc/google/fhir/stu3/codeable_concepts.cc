@@ -161,8 +161,7 @@ const FieldDescriptor* ProfiledFieldForSystem(const Message& concept,
   const ::google::protobuf::Descriptor* descriptor = concept.GetDescriptor();
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
-    if (field->options().GetExtension(
-            stu3::proto::fhir_inlined_coding_system) == system) {
+    if (GetInlinedCodingSystem(field) == system) {
       return field;
     }
   }
@@ -285,8 +284,7 @@ Status AddCoding(Message* concept, const proto::Coding& coding) {
         return Status::OK();
       } else if (IsMessageType<proto::CodingWithFixedCode>(
                      profiled_field->message_type())) {
-        const string& fixed_code = profiled_field->options().GetExtension(
-            stu3::proto::fhir_inlined_coding_code);
+        const string& fixed_code = GetInlinedCodingCode(profiled_field);
         if (fixed_code == coding.code().value()) {
           if (!profiled_field->is_repeated() &&
               FieldHasValue(*concept, profiled_field)) {

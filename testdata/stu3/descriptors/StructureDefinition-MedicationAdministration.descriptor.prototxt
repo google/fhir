@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "External identifier"
+    [google.fhir.proto.field_description]: "External identifier"
   }
 }
 field {
@@ -96,9 +96,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Instantiates protocol or definition"
-    [google.fhir.stu3.proto.valid_reference_type]: "PlanDefinition"
-    [google.fhir.stu3.proto.valid_reference_type]: "ActivityDefinition"
+    [google.fhir.proto.field_description]: "Instantiates protocol or definition"
+    [google.fhir.proto.valid_reference_type]: "PlanDefinition"
+    [google.fhir.proto.valid_reference_type]: "ActivityDefinition"
   }
 }
 field {
@@ -108,9 +108,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Part of referenced event"
-    [google.fhir.stu3.proto.valid_reference_type]: "MedicationAdministration"
-    [google.fhir.stu3.proto.valid_reference_type]: "Procedure"
+    [google.fhir.proto.field_description]: "Part of referenced event"
+    [google.fhir.proto.valid_reference_type]: "MedicationAdministration"
+    [google.fhir.proto.valid_reference_type]: "Procedure"
   }
 }
 field {
@@ -120,8 +120,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.MedicationAdministrationStatusCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "in-progress | on-hold | completed | entered-in-error | stopped | unknown"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "in-progress | on-hold | completed | entered-in-error | stopped | unknown"
   }
 }
 field {
@@ -131,7 +131,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Type of medication usage"
+    [google.fhir.proto.field_description]: "Type of medication usage"
   }
 }
 field {
@@ -141,8 +141,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.MedicationAdministration.Medication"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "What was administered"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "What was administered"
   }
 }
 field {
@@ -152,10 +152,10 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Who received medication"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "Group"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Who received medication"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Group"
   }
 }
 field {
@@ -165,9 +165,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Encounter or Episode of Care administered as part of"
-    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "EpisodeOfCare"
+    [google.fhir.proto.field_description]: "Encounter or Episode of Care administered as part of"
+    [google.fhir.proto.valid_reference_type]: "Encounter"
+    [google.fhir.proto.valid_reference_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -177,8 +177,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional information to support administration"
-    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+    [google.fhir.proto.field_description]: "Additional information to support administration"
+    [google.fhir.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -188,8 +188,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.MedicationAdministration.Effective"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Start and end time of administration"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Start and end time of administration"
   }
 }
 field {
@@ -199,7 +199,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.MedicationAdministration.Performer"
   options {
-    [google.fhir.stu3.proto.field_description]: "Who administered substance"
+    [google.fhir.proto.field_description]: "Who administered substance"
   }
 }
 field {
@@ -209,7 +209,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "True if medication not administered"
+    [google.fhir.proto.field_description]: "True if medication not administered"
   }
 }
 field {
@@ -219,7 +219,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Reason administration not performed"
+    [google.fhir.proto.field_description]: "Reason administration not performed"
   }
 }
 field {
@@ -229,7 +229,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Reason administration performed"
+    [google.fhir.proto.field_description]: "Reason administration performed"
   }
 }
 field {
@@ -239,9 +239,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Condition or Observation that supports why the medication was administered"
-    [google.fhir.stu3.proto.valid_reference_type]: "Condition"
-    [google.fhir.stu3.proto.valid_reference_type]: "Observation"
+    [google.fhir.proto.field_description]: "Condition or Observation that supports why the medication was administered"
+    [google.fhir.proto.valid_reference_type]: "Condition"
+    [google.fhir.proto.valid_reference_type]: "Observation"
   }
 }
 field {
@@ -251,8 +251,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Request administration performed against"
-    [google.fhir.stu3.proto.valid_reference_type]: "MedicationRequest"
+    [google.fhir.proto.field_description]: "Request administration performed against"
+    [google.fhir.proto.valid_reference_type]: "MedicationRequest"
   }
 }
 field {
@@ -262,8 +262,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Device used to administer"
-    [google.fhir.stu3.proto.valid_reference_type]: "Device"
+    [google.fhir.proto.field_description]: "Device used to administer"
+    [google.fhir.proto.valid_reference_type]: "Device"
   }
 }
 field {
@@ -273,7 +273,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Annotation"
   options {
-    [google.fhir.stu3.proto.field_description]: "Information about the administration"
+    [google.fhir.proto.field_description]: "Information about the administration"
   }
 }
 field {
@@ -283,8 +283,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.MedicationAdministration.Dosage"
   options {
-    [google.fhir.stu3.proto.field_description]: "Details of how medication was taken"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "dose.exists() or rate.exists()"
+    [google.fhir.proto.field_description]: "Details of how medication was taken"
+    [google.fhir.proto.fhir_path_constraint]: "dose.exists() or rate.exists()"
   }
 }
 field {
@@ -294,8 +294,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "A list of events of interest in the lifecycle"
-    [google.fhir.stu3.proto.valid_reference_type]: "Provenance"
+    [google.fhir.proto.field_description]: "A list of events of interest in the lifecycle"
+    [google.fhir.proto.valid_reference_type]: "Provenance"
   }
 }
 nested_type {
@@ -315,12 +315,12 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "Medication"
+      [google.fhir.proto.valid_reference_type]: "Medication"
     }
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "medication"
@@ -345,7 +345,7 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "effective"
@@ -360,7 +360,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -370,7 +370,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -380,7 +380,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -390,12 +390,12 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Individual who was performing"
-      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-      [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
-      [google.fhir.stu3.proto.valid_reference_type]: "Device"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Individual who was performing"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "Patient"
+      [google.fhir.proto.valid_reference_type]: "RelatedPerson"
+      [google.fhir.proto.valid_reference_type]: "Device"
     }
   }
   field {
@@ -405,8 +405,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Organization organization was acting for"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.field_description]: "Organization organization was acting for"
+      [google.fhir.proto.valid_reference_type]: "Organization"
     }
   }
 }
@@ -419,7 +419,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -429,7 +429,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -439,7 +439,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -449,7 +449,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Free text dosage instructions e.g. SIG"
+      [google.fhir.proto.field_description]: "Free text dosage instructions e.g. SIG"
     }
   }
   field {
@@ -459,7 +459,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Body site administered to"
+      [google.fhir.proto.field_description]: "Body site administered to"
     }
   }
   field {
@@ -469,7 +469,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Path of substance into body"
+      [google.fhir.proto.field_description]: "Path of substance into body"
     }
   }
   field {
@@ -479,7 +479,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "How drug was administered"
+      [google.fhir.proto.field_description]: "How drug was administered"
     }
   }
   field {
@@ -489,7 +489,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
-      [google.fhir.stu3.proto.field_description]: "Amount of medication per dose"
+      [google.fhir.proto.field_description]: "Amount of medication per dose"
     }
   }
   field {
@@ -499,7 +499,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.MedicationAdministration.Dosage.Rate"
     options {
-      [google.fhir.stu3.proto.field_description]: "Dose quantity per unit of time"
+      [google.fhir.proto.field_description]: "Dose quantity per unit of time"
     }
   }
   nested_type {
@@ -521,7 +521,7 @@ nested_type {
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "rate"
@@ -529,7 +529,7 @@ nested_type {
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for MedicationAdministration, last updated 2017-04-19T07:44:43.294+10:00.\nAdministration of medication to a patient.\nSee http://hl7.org/fhir/StructureDefinition/MedicationAdministration"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MedicationAdministration"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MedicationAdministration, last updated 2017-04-19T07:44:43.294+10:00.\nAdministration of medication to a patient.\nSee http://hl7.org/fhir/StructureDefinition/MedicationAdministration"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MedicationAdministration"
 }

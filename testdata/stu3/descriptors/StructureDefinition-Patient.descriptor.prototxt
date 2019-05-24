@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "An identifier for this patient"
+    [google.fhir.proto.field_description]: "An identifier for this patient"
   }
 }
 field {
@@ -96,7 +96,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "Whether this patient\'s record is in active use"
+    [google.fhir.proto.field_description]: "Whether this patient\'s record is in active use"
   }
 }
 field {
@@ -106,7 +106,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.HumanName"
   options {
-    [google.fhir.stu3.proto.field_description]: "A name associated with the patient"
+    [google.fhir.proto.field_description]: "A name associated with the patient"
   }
 }
 field {
@@ -116,7 +116,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContactPoint"
   options {
-    [google.fhir.stu3.proto.field_description]: "A contact detail for the individual"
+    [google.fhir.proto.field_description]: "A contact detail for the individual"
   }
 }
 field {
@@ -126,7 +126,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.AdministrativeGenderCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "male | female | other | unknown"
+    [google.fhir.proto.field_description]: "male | female | other | unknown"
   }
 }
 field {
@@ -136,7 +136,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Date"
   options {
-    [google.fhir.stu3.proto.field_description]: "The date of birth for the individual"
+    [google.fhir.proto.field_description]: "The date of birth for the individual"
   }
 }
 field {
@@ -146,7 +146,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Patient.Deceased"
   options {
-    [google.fhir.stu3.proto.field_description]: "Indicates if the individual is deceased or not"
+    [google.fhir.proto.field_description]: "Indicates if the individual is deceased or not"
   }
 }
 field {
@@ -156,7 +156,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Address"
   options {
-    [google.fhir.stu3.proto.field_description]: "Addresses for the individual"
+    [google.fhir.proto.field_description]: "Addresses for the individual"
   }
 }
 field {
@@ -166,7 +166,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Marital (civil) status of a patient"
+    [google.fhir.proto.field_description]: "Marital (civil) status of a patient"
   }
 }
 field {
@@ -176,7 +176,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Patient.MultipleBirth"
   options {
-    [google.fhir.stu3.proto.field_description]: "Whether patient is part of a multiple birth"
+    [google.fhir.proto.field_description]: "Whether patient is part of a multiple birth"
   }
 }
 field {
@@ -186,7 +186,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Attachment"
   options {
-    [google.fhir.stu3.proto.field_description]: "Image of the patient"
+    [google.fhir.proto.field_description]: "Image of the patient"
   }
 }
 field {
@@ -196,8 +196,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Patient.Contact"
   options {
-    [google.fhir.stu3.proto.field_description]: "A contact party (e.g. guardian, partner, friend) for the patient"
-    [google.fhir.stu3.proto.fhir_path_constraint]: "name.exists() or telecom.exists() or address.exists() or organization.exists()"
+    [google.fhir.proto.field_description]: "A contact party (e.g. guardian, partner, friend) for the patient"
+    [google.fhir.proto.fhir_path_constraint]: "name.exists() or telecom.exists() or address.exists() or organization.exists()"
   }
 }
 field {
@@ -207,7 +207,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Patient.Animal"
   options {
-    [google.fhir.stu3.proto.field_description]: "This patient is known to be an animal (non-human)"
+    [google.fhir.proto.field_description]: "This patient is known to be an animal (non-human)"
   }
 }
 field {
@@ -217,7 +217,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Patient.Communication"
   options {
-    [google.fhir.stu3.proto.field_description]: "A list of Languages which may be used to communicate with the patient about his or her health"
+    [google.fhir.proto.field_description]: "A list of Languages which may be used to communicate with the patient about his or her health"
   }
 }
 field {
@@ -227,9 +227,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Patient\'s nominated primary care provider"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.field_description]: "Patient\'s nominated primary care provider"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -239,8 +239,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Organization that is the custodian of the patient record"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.field_description]: "Organization that is the custodian of the patient record"
+    [google.fhir.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -250,7 +250,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Patient.Link"
   options {
-    [google.fhir.stu3.proto.field_description]: "Link to another patient resource that concerns the same actual person"
+    [google.fhir.proto.field_description]: "Link to another patient resource that concerns the same actual person"
   }
 }
 nested_type {
@@ -272,7 +272,7 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "deceased"
@@ -297,7 +297,7 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "multiple_birth"
@@ -312,7 +312,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -322,7 +322,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -332,7 +332,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -342,7 +342,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "The kind of relationship"
+      [google.fhir.proto.field_description]: "The kind of relationship"
     }
   }
   field {
@@ -352,7 +352,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.HumanName"
     options {
-      [google.fhir.stu3.proto.field_description]: "A name associated with the contact person"
+      [google.fhir.proto.field_description]: "A name associated with the contact person"
     }
   }
   field {
@@ -362,7 +362,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.ContactPoint"
     options {
-      [google.fhir.stu3.proto.field_description]: "A contact detail for the person"
+      [google.fhir.proto.field_description]: "A contact detail for the person"
     }
   }
   field {
@@ -372,7 +372,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Address"
     options {
-      [google.fhir.stu3.proto.field_description]: "Address for the contact person"
+      [google.fhir.proto.field_description]: "Address for the contact person"
     }
   }
   field {
@@ -382,7 +382,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.AdministrativeGenderCode"
     options {
-      [google.fhir.stu3.proto.field_description]: "male | female | other | unknown"
+      [google.fhir.proto.field_description]: "male | female | other | unknown"
     }
   }
   field {
@@ -392,8 +392,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Organization that is associated with the contact"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.field_description]: "Organization that is associated with the contact"
+      [google.fhir.proto.valid_reference_type]: "Organization"
     }
   }
   field {
@@ -403,7 +403,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Period"
     options {
-      [google.fhir.stu3.proto.field_description]: "The period during which this contact person or organization is valid to be contacted relating to this patient"
+      [google.fhir.proto.field_description]: "The period during which this contact person or organization is valid to be contacted relating to this patient"
     }
   }
 }
@@ -416,7 +416,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -426,7 +426,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -436,7 +436,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -446,8 +446,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "E.g. Dog, Cow"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "E.g. Dog, Cow"
     }
   }
   field {
@@ -457,7 +457,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "E.g. Poodle, Angus"
+      [google.fhir.proto.field_description]: "E.g. Poodle, Angus"
     }
   }
   field {
@@ -467,7 +467,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "E.g. Neutered, Intact"
+      [google.fhir.proto.field_description]: "E.g. Neutered, Intact"
     }
   }
 }
@@ -480,7 +480,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -490,7 +490,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -500,7 +500,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -510,8 +510,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "The language which can be used to communicate with the patient about his or her health"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "The language which can be used to communicate with the patient about his or her health"
     }
   }
   field {
@@ -521,7 +521,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Boolean"
     options {
-      [google.fhir.stu3.proto.field_description]: "Language preference indicator"
+      [google.fhir.proto.field_description]: "Language preference indicator"
     }
   }
 }
@@ -534,7 +534,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -544,7 +544,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -554,7 +554,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -564,10 +564,10 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "The other patient or related person resource that the link refers to"
-      [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-      [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "The other patient or related person resource that the link refers to"
+      [google.fhir.proto.valid_reference_type]: "Patient"
+      [google.fhir.proto.valid_reference_type]: "RelatedPerson"
     }
   }
   field {
@@ -577,13 +577,13 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.LinkTypeCode"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "replaced-by | replaces | refer | seealso - type of link"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "replaced-by | replaces | refer | seealso - type of link"
     }
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Patient, last updated 2017-04-19T07:44:43.294+10:00.\nInformation about an individual or animal receiving health care services.\nSee http://hl7.org/fhir/StructureDefinition/Patient"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Patient"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Patient, last updated 2017-04-19T07:44:43.294+10:00.\nInformation about an individual or animal receiving health care services.\nSee http://hl7.org/fhir/StructureDefinition/Patient"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Patient"
 }

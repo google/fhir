@@ -40,6 +40,8 @@ namespace fhir {
 namespace stu3 {
 
 using std::string;
+using ::google::fhir::proto::fhir_inlined_coding_code;
+using ::google::fhir::proto::fhir_inlined_coding_system;
 using ::google::fhir::stu3::proto::Code;
 using ::google::fhir::stu3::proto::CodeableConcept;
 using ::google::fhir::stu3::proto::Coding;
@@ -76,9 +78,8 @@ Status PerformExtensionSlicing(Message* message) {
   std::unordered_map<string, const FieldDescriptor*> extension_map;
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
-    if (field->options().HasExtension(proto::fhir_inlined_extension_url)) {
-      extension_map[field->options().GetExtension(
-          proto::fhir_inlined_extension_url)] = field;
+    if (HasInlinedExtensionUrl(field)) {
+      extension_map[GetInlinedExtensionUrl(field)] = field;
     }
   }
 
@@ -149,12 +150,12 @@ Status SliceCodingsInCodeableConcept(Message* codeable_concept_like) {
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
     const FieldOptions& field_options = field->options();
-    if (field_options.HasExtension(proto::fhir_inlined_coding_system)) {
+    if (field_options.HasExtension(fhir_inlined_coding_system)) {
       const string& fixed_system =
-          field_options.GetExtension(proto::fhir_inlined_coding_system);
-      if (field_options.HasExtension(proto::fhir_inlined_coding_code)) {
+          field_options.GetExtension(fhir_inlined_coding_system);
+      if (field_options.HasExtension(fhir_inlined_coding_code)) {
         fixed_codes[fixed_system] = std::make_tuple(
-            field_options.GetExtension(proto::fhir_inlined_coding_code), field);
+            field_options.GetExtension(fhir_inlined_coding_code), field);
       } else {
         fixed_systems[fixed_system] = field;
       }
@@ -313,7 +314,7 @@ Status PerformExtensionUnslicing(const google::protobuf::Message& profiled_messa
 
   for (int i = 0; i < profiled_descriptor->field_count(); i++) {
     const FieldDescriptor* field = profiled_descriptor->field(i);
-    if (!field->options().HasExtension(proto::fhir_inlined_extension_url) ||
+    if (!HasInlinedExtensionUrl(field) ||
         !FieldHasValue(profiled_message, field)) {
       // We only care about present fields with inlined extension urls.
       continue;
@@ -336,8 +337,8 @@ Status PerformExtensionUnslicing(const google::protobuf::Message& profiled_messa
           ConvertToExtension(extension_as_message, raw_extension));
     } else {
       // This just a raw datatype, and therefore a simple extension
-      raw_extension->mutable_url()->set_value(
-          field->options().GetExtension(proto::fhir_inlined_extension_url));
+      raw_extension->mutable_url()->set_value(GetInlinedExtensionUrl(field));
+
       FHIR_RETURN_IF_ERROR(
           SetDatatypeOnExtension(extension_as_message, raw_extension));
     }

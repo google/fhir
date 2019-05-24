@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.AddressUseCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "home | work | temp | old - purpose of this address"
+    [google.fhir.proto.field_description]: "home | work | temp | old - purpose of this address"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.AddressTypeCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "postal | physical | both"
+    [google.fhir.proto.field_description]: "postal | physical | both"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text representation of the address"
+    [google.fhir.proto.field_description]: "Text representation of the address"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Street name, number, direction & P.O. Box etc."
+    [google.fhir.proto.field_description]: "Street name, number, direction & P.O. Box etc."
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Name of city, town etc."
+    [google.fhir.proto.field_description]: "Name of city, town etc."
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "District name (aka county)"
+    [google.fhir.proto.field_description]: "District name (aka county)"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Sub-unit of country (abbreviations ok)"
+    [google.fhir.proto.field_description]: "Sub-unit of country (abbreviations ok)"
   }
 }
 field {
@@ -96,7 +96,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Postal code for area"
+    [google.fhir.proto.field_description]: "Postal code for area"
   }
 }
 field {
@@ -106,7 +106,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Country (e.g. can be ISO 3166 2 or 3 letter code)"
+    [google.fhir.proto.field_description]: "Country (e.g. can be ISO 3166 2 or 3 letter code)"
   }
 }
 field {
@@ -116,11 +116,11 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Period"
   options {
-    [google.fhir.stu3.proto.field_description]: "Time period when address was/is in use"
+    [google.fhir.proto.field_description]: "Time period when address was/is in use"
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Address, last updated 2017-04-19T07:44:43.294+10:00.\nAn address expressed using postal conventions (as opposed to GPS or other location definition formats).\nSee http://hl7.org/fhir/StructureDefinition/Address"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Address"
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Address, last updated 2017-04-19T07:44:43.294+10:00.\nAn address expressed using postal conventions (as opposed to GPS or other location definition formats).\nSee http://hl7.org/fhir/StructureDefinition/Address"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Address"
 }

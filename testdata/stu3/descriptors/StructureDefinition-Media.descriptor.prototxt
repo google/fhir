@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Identifier(s) for the image"
+    [google.fhir.proto.field_description]: "Identifier(s) for the image"
   }
 }
 field {
@@ -96,8 +96,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Procedure that caused this media to be created"
-    [google.fhir.stu3.proto.valid_reference_type]: "ProcedureRequest"
+    [google.fhir.proto.field_description]: "Procedure that caused this media to be created"
+    [google.fhir.proto.valid_reference_type]: "ProcedureRequest"
   }
 }
 field {
@@ -107,8 +107,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DigitalMediaTypeCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "photo | video | audio"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "photo | video | audio"
   }
 }
 field {
@@ -118,7 +118,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "The type of acquisition equipment/process"
+    [google.fhir.proto.field_description]: "The type of acquisition equipment/process"
   }
 }
 field {
@@ -128,7 +128,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Imaging view, e.g. Lateral or Antero-posterior"
+    [google.fhir.proto.field_description]: "Imaging view, e.g. Lateral or Antero-posterior"
   }
 }
 field {
@@ -138,12 +138,12 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Who/What this Media is a record of"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-    [google.fhir.stu3.proto.valid_reference_type]: "Group"
-    [google.fhir.stu3.proto.valid_reference_type]: "Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "Specimen"
+    [google.fhir.proto.field_description]: "Who/What this Media is a record of"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.valid_reference_type]: "Group"
+    [google.fhir.proto.valid_reference_type]: "Device"
+    [google.fhir.proto.valid_reference_type]: "Specimen"
   }
 }
 field {
@@ -153,9 +153,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Encounter / Episode associated with media"
-    [google.fhir.stu3.proto.valid_reference_type]: "Encounter"
-    [google.fhir.stu3.proto.valid_reference_type]: "EpisodeOfCare"
+    [google.fhir.proto.field_description]: "Encounter / Episode associated with media"
+    [google.fhir.proto.valid_reference_type]: "Encounter"
+    [google.fhir.proto.valid_reference_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -165,7 +165,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Media.Occurrence"
   options {
-    [google.fhir.stu3.proto.field_description]: "When Media was collected"
+    [google.fhir.proto.field_description]: "When Media was collected"
   }
 }
 field {
@@ -175,8 +175,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "The person who generated the image"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.field_description]: "The person who generated the image"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -186,7 +186,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Why was event performed?"
+    [google.fhir.proto.field_description]: "Why was event performed?"
   }
 }
 field {
@@ -196,7 +196,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Body part in media"
+    [google.fhir.proto.field_description]: "Body part in media"
   }
 }
 field {
@@ -206,9 +206,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Observing Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "Device"
-    [google.fhir.stu3.proto.valid_reference_type]: "DeviceMetric"
+    [google.fhir.proto.field_description]: "Observing Device"
+    [google.fhir.proto.valid_reference_type]: "Device"
+    [google.fhir.proto.valid_reference_type]: "DeviceMetric"
   }
 }
 field {
@@ -218,7 +218,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.PositiveInt"
   options {
-    [google.fhir.stu3.proto.field_description]: "Height of the image in pixels (photo/video)"
+    [google.fhir.proto.field_description]: "Height of the image in pixels (photo/video)"
   }
 }
 field {
@@ -228,7 +228,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.PositiveInt"
   options {
-    [google.fhir.stu3.proto.field_description]: "Width of the image in pixels (photo/video)"
+    [google.fhir.proto.field_description]: "Width of the image in pixels (photo/video)"
   }
 }
 field {
@@ -238,7 +238,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.PositiveInt"
   options {
-    [google.fhir.stu3.proto.field_description]: "Number of frames if > 1 (photo)"
+    [google.fhir.proto.field_description]: "Number of frames if > 1 (photo)"
   }
 }
 field {
@@ -248,7 +248,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.UnsignedInt"
   options {
-    [google.fhir.stu3.proto.field_description]: "Length in seconds (audio / video)"
+    [google.fhir.proto.field_description]: "Length in seconds (audio / video)"
   }
 }
 field {
@@ -258,8 +258,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Attachment"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "Actual Media - reference or data"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Actual Media - reference or data"
   }
 }
 field {
@@ -269,7 +269,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Annotation"
   options {
-    [google.fhir.stu3.proto.field_description]: "Comments made about the media"
+    [google.fhir.proto.field_description]: "Comments made about the media"
   }
 }
 nested_type {
@@ -291,14 +291,14 @@ nested_type {
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "occurrence"
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Media, last updated 2017-04-19T07:44:43.294+10:00.\nA photo, video, or audio recording acquired or used in healthcare. The actual content may be inline or provided by direct reference.\nSee http://hl7.org/fhir/StructureDefinition/Media"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Media"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Media, last updated 2017-04-19T07:44:43.294+10:00.\nA photo, video, or audio recording acquired or used in healthcare. The actual content may be inline or provided by direct reference.\nSee http://hl7.org/fhir/StructureDefinition/Media"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Media"
 }

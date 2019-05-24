@@ -33,6 +33,8 @@ namespace stu3 {
 
 using std::string;
 
+using ::google::fhir::proto::valid_reference_type;
+using ::google::fhir::proto::validation_requirement;
 using ::google::fhir::stu3::proto::Reference;
 using ::google::fhir::stu3::proto::ReferenceId;
 using ::google::protobuf::Descriptor;
@@ -66,8 +68,7 @@ Status ValidateReference(const Message& message, const FieldDescriptor* field,
       // There's no reference field, but there is other data.  That's valid.
       return Status::OK();
     }
-    if (field->options().ExtensionSize(stu3::proto::valid_reference_type) ==
-        0) {
+    if (field->options().ExtensionSize(valid_reference_type) == 0) {
       // The reference field does not have restrictions, so any value is fine.
       return Status::OK();
     }
@@ -78,13 +79,12 @@ Status ValidateReference(const Message& message, const FieldDescriptor* field,
 
     if (IsMessageType<ReferenceId>(reference_field->message_type())) {
       const string& reference_type = reference_field->options().GetExtension(
-          stu3::proto::referenced_fhir_type);
+          ::google::fhir::proto::referenced_fhir_type);
       bool is_allowed = false;
-      for (int i = 0; i < field->options().ExtensionSize(
-                              stu3::proto::valid_reference_type);
+      for (int i = 0; i < field->options().ExtensionSize(valid_reference_type);
            i++) {
         const string& valid_type =
-            field->options().GetExtension(stu3::proto::valid_reference_type, i);
+            field->options().GetExtension(valid_reference_type, i);
         if (valid_type == reference_type || valid_type == "Resource") {
           is_allowed = true;
           break;
@@ -122,7 +122,8 @@ Status ValidateFhirConstraints(const Message& message,
   for (int i = 0; i < descriptor->oneof_decl_count(); i++) {
     const ::google::protobuf::OneofDescriptor* oneof = descriptor->oneof_decl(i);
     if (!reflection->HasOneof(message, oneof) &&
-        !oneof->options().GetExtension(stu3::proto::fhir_oneof_is_optional)) {
+        !oneof->options().GetExtension(
+            ::google::fhir::proto::fhir_oneof_is_optional)) {
       FHIR_RETURN_IF_ERROR(::tensorflow::errors::FailedPrecondition(
           "empty-oneof-", oneof->full_name()));
     }
@@ -134,9 +135,9 @@ Status ValidateFhirConstraints(const Message& message,
 Status CheckField(const Message& message, const FieldDescriptor* field,
                   const string& base_name) {
   const string& new_base = absl::StrCat(base_name, ".", field->json_name());
-  if (field->options().HasExtension(stu3::proto::validation_requirement) &&
-      field->options().GetExtension(stu3::proto::validation_requirement) ==
-          stu3::proto::REQUIRED_BY_FHIR) {
+  if (field->options().HasExtension(validation_requirement) &&
+      field->options().GetExtension(validation_requirement) ==
+          ::google::fhir::proto::REQUIRED_BY_FHIR) {
     if (!FieldHasValue(message, field)) {
       return FailedPrecondition("missing-", new_base);
     }

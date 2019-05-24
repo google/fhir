@@ -25,16 +25,16 @@ option java_package = "com.google.fhir.stu3.uscore";
 // A type defined by US Core for Birthsex
 // http://hl7.org/fhir/us/core/ValueSet/us-core-birthsex
 message UsCoreBirthSexCode {
-  option (proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (proto.fhir_valueset_url) =
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/us/core/ValueSet/us-core-birthsex";
 
   // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
-    FEMALE = 1 [(proto.fhir_original_code) = "F"];
-    MALE = 2 [(proto.fhir_original_code) = "M"];
-    UNKNOWN = 3 [(proto.fhir_original_code) = "UNK"];
+    FEMALE = 1 [(.google.fhir.proto.fhir_original_code) = "F"];
+    MALE = 2 [(.google.fhir.proto.fhir_original_code) = "M"];
+    UNKNOWN = 3 [(.google.fhir.proto.fhir_original_code) = "UNK"];
   }
   Value value = 1;
 

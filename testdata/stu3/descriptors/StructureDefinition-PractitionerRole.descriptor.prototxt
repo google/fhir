@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Business Identifiers that are specific to a role/location"
+    [google.fhir.proto.field_description]: "Business Identifiers that are specific to a role/location"
   }
 }
 field {
@@ -96,7 +96,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Boolean"
   options {
-    [google.fhir.stu3.proto.field_description]: "Whether this practitioner\'s record is in active use"
+    [google.fhir.proto.field_description]: "Whether this practitioner\'s record is in active use"
   }
 }
 field {
@@ -106,7 +106,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Period"
   options {
-    [google.fhir.stu3.proto.field_description]: "The period during which the practitioner is authorized to perform in these role(s)"
+    [google.fhir.proto.field_description]: "The period during which the practitioner is authorized to perform in these role(s)"
   }
 }
 field {
@@ -116,8 +116,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Practitioner that is able to provide the defined services for the organation"
-    [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.field_description]: "Practitioner that is able to provide the defined services for the organation"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
   }
 }
 field {
@@ -127,8 +127,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Organization where the roles are available"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.field_description]: "Organization where the roles are available"
+    [google.fhir.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -138,7 +138,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Roles which this practitioner may perform"
+    [google.fhir.proto.field_description]: "Roles which this practitioner may perform"
   }
 }
 field {
@@ -148,7 +148,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Specific specialty of the practitioner"
+    [google.fhir.proto.field_description]: "Specific specialty of the practitioner"
   }
 }
 field {
@@ -158,8 +158,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "The location(s) at which this practitioner provides care"
-    [google.fhir.stu3.proto.valid_reference_type]: "Location"
+    [google.fhir.proto.field_description]: "The location(s) at which this practitioner provides care"
+    [google.fhir.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -169,8 +169,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "The list of healthcare services that this worker provides for this role\'s Organization/Location(s)"
-    [google.fhir.stu3.proto.valid_reference_type]: "HealthcareService"
+    [google.fhir.proto.field_description]: "The list of healthcare services that this worker provides for this role\'s Organization/Location(s)"
+    [google.fhir.proto.valid_reference_type]: "HealthcareService"
   }
 }
 field {
@@ -180,7 +180,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContactPoint"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contact details that are specific to the role/location/service"
+    [google.fhir.proto.field_description]: "Contact details that are specific to the role/location/service"
   }
 }
 field {
@@ -190,7 +190,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.PractitionerRole.AvailableTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "Times the Service Site is available"
+    [google.fhir.proto.field_description]: "Times the Service Site is available"
   }
 }
 field {
@@ -200,7 +200,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.PractitionerRole.NotAvailable"
   options {
-    [google.fhir.stu3.proto.field_description]: "Not available during this time due to provided reason"
+    [google.fhir.proto.field_description]: "Not available during this time due to provided reason"
   }
 }
 field {
@@ -210,7 +210,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.String"
   options {
-    [google.fhir.stu3.proto.field_description]: "Description of availability exceptions"
+    [google.fhir.proto.field_description]: "Description of availability exceptions"
   }
 }
 field {
@@ -220,8 +220,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Technical endpoints providing access to services operated for the practitioner with this role"
-    [google.fhir.stu3.proto.valid_reference_type]: "Endpoint"
+    [google.fhir.proto.field_description]: "Technical endpoints providing access to services operated for the practitioner with this role"
+    [google.fhir.proto.valid_reference_type]: "Endpoint"
   }
 }
 nested_type {
@@ -233,7 +233,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -243,7 +243,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -253,7 +253,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -263,7 +263,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.DaysOfWeekCode"
     options {
-      [google.fhir.stu3.proto.field_description]: "mon | tue | wed | thu | fri | sat | sun"
+      [google.fhir.proto.field_description]: "mon | tue | wed | thu | fri | sat | sun"
     }
   }
   field {
@@ -273,7 +273,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Boolean"
     options {
-      [google.fhir.stu3.proto.field_description]: "Always available? e.g. 24 hour service"
+      [google.fhir.proto.field_description]: "Always available? e.g. 24 hour service"
     }
   }
   field {
@@ -283,7 +283,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Time"
     options {
-      [google.fhir.stu3.proto.field_description]: "Opening time of day (ignored if allDay = true)"
+      [google.fhir.proto.field_description]: "Opening time of day (ignored if allDay = true)"
     }
   }
   field {
@@ -293,7 +293,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Time"
     options {
-      [google.fhir.stu3.proto.field_description]: "Closing time of day (ignored if allDay = true)"
+      [google.fhir.proto.field_description]: "Closing time of day (ignored if allDay = true)"
     }
   }
 }
@@ -306,7 +306,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -316,7 +316,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -326,7 +326,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -336,8 +336,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Reason presented to the user explaining why time not available"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Reason presented to the user explaining why time not available"
     }
   }
   field {
@@ -347,12 +347,12 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Period"
     options {
-      [google.fhir.stu3.proto.field_description]: "Service not availablefrom this date"
+      [google.fhir.proto.field_description]: "Service not availablefrom this date"
     }
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for PractitionerRole, last updated 2017-04-19T07:44:43.294+10:00.\nRoles/organizations the practitioner is associated with.\nSee http://hl7.org/fhir/StructureDefinition/PractitionerRole"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/PractitionerRole"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for PractitionerRole, last updated 2017-04-19T07:44:43.294+10:00.\nRoles/organizations the practitioner is associated with.\nSee http://hl7.org/fhir/StructureDefinition/PractitionerRole"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/PractitionerRole"
 }

@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional identifier for the Report"
+    [google.fhir.proto.field_description]: "Additional identifier for the Report"
   }
 }
 field {
@@ -96,8 +96,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.MeasureReportStatusCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "complete | pending | error"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "complete | pending | error"
   }
 }
 field {
@@ -107,8 +107,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.MeasureReportTypeCode"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "individual | patient-list | summary"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "individual | patient-list | summary"
   }
 }
 field {
@@ -118,9 +118,9 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "What measure was evaluated"
-    [google.fhir.stu3.proto.valid_reference_type]: "Measure"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "What measure was evaluated"
+    [google.fhir.proto.valid_reference_type]: "Measure"
   }
 }
 field {
@@ -130,8 +130,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "What patient the report is for"
-    [google.fhir.stu3.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.field_description]: "What patient the report is for"
+    [google.fhir.proto.valid_reference_type]: "Patient"
   }
 }
 field {
@@ -141,7 +141,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "When the report was generated"
+    [google.fhir.proto.field_description]: "When the report was generated"
   }
 }
 field {
@@ -151,8 +151,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Who is reporting the data"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.field_description]: "Who is reporting the data"
+    [google.fhir.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -162,8 +162,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Period"
   options {
-    [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.stu3.proto.field_description]: "What period the report covers"
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "What period the report covers"
   }
 }
 field {
@@ -173,7 +173,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.MeasureReport.Group"
   options {
-    [google.fhir.stu3.proto.field_description]: "Measure results for each group"
+    [google.fhir.proto.field_description]: "Measure results for each group"
   }
 }
 field {
@@ -183,8 +183,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "What data was evaluated to produce the measure score"
-    [google.fhir.stu3.proto.valid_reference_type]: "Bundle"
+    [google.fhir.proto.field_description]: "What data was evaluated to produce the measure score"
+    [google.fhir.proto.valid_reference_type]: "Bundle"
   }
 }
 nested_type {
@@ -196,7 +196,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -206,7 +206,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -216,7 +216,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -226,8 +226,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Identifier"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "What group of the measure"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "What group of the measure"
     }
   }
   field {
@@ -237,7 +237,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.MeasureReport.Group.Population"
     options {
-      [google.fhir.stu3.proto.field_description]: "The populations in the group"
+      [google.fhir.proto.field_description]: "The populations in the group"
     }
   }
   field {
@@ -247,7 +247,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Decimal"
     options {
-      [google.fhir.stu3.proto.field_description]: "What score this group achieved"
+      [google.fhir.proto.field_description]: "What score this group achieved"
     }
   }
   field {
@@ -257,7 +257,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.MeasureReport.Group.Stratifier"
     options {
-      [google.fhir.stu3.proto.field_description]: "Stratification results"
+      [google.fhir.proto.field_description]: "Stratification results"
     }
   }
   nested_type {
@@ -269,7 +269,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -279,7 +279,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -289,7 +289,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -299,7 +299,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Identifier"
       options {
-        [google.fhir.stu3.proto.field_description]: "Population identifier as defined in the measure"
+        [google.fhir.proto.field_description]: "Population identifier as defined in the measure"
       }
     }
     field {
@@ -309,7 +309,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "initial-population | numerator | numerator-exclusion | denominator | denominator-exclusion | denominator-exception | measure-population | measure-population-exclusion | measure-score"
+        [google.fhir.proto.field_description]: "initial-population | numerator | numerator-exclusion | denominator | denominator-exclusion | denominator-exception | measure-population | measure-population-exclusion | measure-score"
       }
     }
     field {
@@ -319,7 +319,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Integer"
       options {
-        [google.fhir.stu3.proto.field_description]: "Size of the population"
+        [google.fhir.proto.field_description]: "Size of the population"
       }
     }
     field {
@@ -329,8 +329,8 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.field_description]: "For patient-list reports, the patients in this population"
-        [google.fhir.stu3.proto.valid_reference_type]: "List"
+        [google.fhir.proto.field_description]: "For patient-list reports, the patients in this population"
+        [google.fhir.proto.valid_reference_type]: "List"
       }
     }
   }
@@ -343,7 +343,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -353,7 +353,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -363,7 +363,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -373,7 +373,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Identifier"
       options {
-        [google.fhir.stu3.proto.field_description]: "What stratifier of the group"
+        [google.fhir.proto.field_description]: "What stratifier of the group"
       }
     }
     field {
@@ -383,7 +383,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.MeasureReport.Group.Stratifier.StratifierGroup"
       options {
-        [google.fhir.stu3.proto.field_description]: "Stratum results, one for each unique value in the stratifier"
+        [google.fhir.proto.field_description]: "Stratum results, one for each unique value in the stratifier"
       }
     }
     nested_type {
@@ -395,7 +395,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.String"
         options {
-          [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+          [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
         }
       }
       field {
@@ -405,7 +405,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Extension"
         options {
-          [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+          [google.fhir.proto.field_description]: "Additional Content defined by implementations"
         }
       }
       field {
@@ -415,7 +415,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Extension"
         options {
-          [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+          [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
         }
       }
       field {
@@ -425,8 +425,8 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.String"
         options {
-          [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-          [google.fhir.stu3.proto.field_description]: "The stratum value, e.g. male"
+          [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+          [google.fhir.proto.field_description]: "The stratum value, e.g. male"
         }
       }
       field {
@@ -436,7 +436,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.MeasureReport.Group.Stratifier.StratifierGroup.StratifierGroupPopulation"
         options {
-          [google.fhir.stu3.proto.field_description]: "Population results in this stratum"
+          [google.fhir.proto.field_description]: "Population results in this stratum"
         }
       }
       field {
@@ -446,7 +446,7 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Decimal"
         options {
-          [google.fhir.stu3.proto.field_description]: "What score this stratum achieved"
+          [google.fhir.proto.field_description]: "What score this stratum achieved"
         }
       }
       nested_type {
@@ -458,7 +458,7 @@ nested_type {
           type: TYPE_MESSAGE
           type_name: ".google.fhir.stu3.proto.String"
           options {
-            [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+            [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
           }
         }
         field {
@@ -468,7 +468,7 @@ nested_type {
           type: TYPE_MESSAGE
           type_name: ".google.fhir.stu3.proto.Extension"
           options {
-            [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+            [google.fhir.proto.field_description]: "Additional Content defined by implementations"
           }
         }
         field {
@@ -478,7 +478,7 @@ nested_type {
           type: TYPE_MESSAGE
           type_name: ".google.fhir.stu3.proto.Extension"
           options {
-            [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+            [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
           }
         }
         field {
@@ -488,7 +488,7 @@ nested_type {
           type: TYPE_MESSAGE
           type_name: ".google.fhir.stu3.proto.Identifier"
           options {
-            [google.fhir.stu3.proto.field_description]: "Population identifier as defined in the measure"
+            [google.fhir.proto.field_description]: "Population identifier as defined in the measure"
           }
         }
         field {
@@ -498,7 +498,7 @@ nested_type {
           type: TYPE_MESSAGE
           type_name: ".google.fhir.stu3.proto.CodeableConcept"
           options {
-            [google.fhir.stu3.proto.field_description]: "initial-population | numerator | numerator-exclusion | denominator | denominator-exclusion | denominator-exception | measure-population | measure-population-exclusion | measure-score"
+            [google.fhir.proto.field_description]: "initial-population | numerator | numerator-exclusion | denominator | denominator-exclusion | denominator-exception | measure-population | measure-population-exclusion | measure-score"
           }
         }
         field {
@@ -508,7 +508,7 @@ nested_type {
           type: TYPE_MESSAGE
           type_name: ".google.fhir.stu3.proto.Integer"
           options {
-            [google.fhir.stu3.proto.field_description]: "Size of the population"
+            [google.fhir.proto.field_description]: "Size of the population"
           }
         }
         field {
@@ -518,8 +518,8 @@ nested_type {
           type: TYPE_MESSAGE
           type_name: ".google.fhir.stu3.proto.Reference"
           options {
-            [google.fhir.stu3.proto.field_description]: "For patient-list reports, the patients in this population"
-            [google.fhir.stu3.proto.valid_reference_type]: "List"
+            [google.fhir.proto.field_description]: "For patient-list reports, the patients in this population"
+            [google.fhir.proto.valid_reference_type]: "List"
           }
         }
       }
@@ -527,7 +527,7 @@ nested_type {
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for MeasureReport, last updated 2017-04-19T07:44:43.294+10:00.\nResults of a measure evaluation.\nSee http://hl7.org/fhir/StructureDefinition/MeasureReport"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MeasureReport"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MeasureReport, last updated 2017-04-19T07:44:43.294+10:00.\nResults of a measure evaluation.\nSee http://hl7.org/fhir/StructureDefinition/MeasureReport"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MeasureReport"
 }

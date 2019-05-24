@@ -76,10 +76,7 @@ $PROTO_GENERATOR \
 if [ $? -eq 0 ]
 then
   echo -e "\n//End of auto-generated messages.\n" >> $OUTPUT_PATH/datatypes.proto
-  cat extension_proto.txt >> $OUTPUT_PATH/datatypes.proto
-  cat fixed_coding_proto.txt >> $OUTPUT_PATH/datatypes.proto
-  cat reference_proto.txt >> $OUTPUT_PATH/datatypes.proto
-  cat codes_proto.txt >> $OUTPUT_PATH/datatypes.proto
+  cat datatypes_supplement_proto.txt >> $OUTPUT_PATH/datatypes.proto
 fi
 
 # generate metadatatypes.proto

@@ -6,7 +6,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Id"
   options {
-    [google.fhir.stu3.proto.field_description]: "Logical id of this artifact"
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
 }
 field {
@@ -16,7 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Meta"
   options {
-    [google.fhir.stu3.proto.field_description]: "Metadata about the resource"
+    [google.fhir.proto.field_description]: "Metadata about the resource"
   }
 }
 field {
@@ -26,7 +26,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Uri"
   options {
-    [google.fhir.stu3.proto.field_description]: "A set of rules under which this content was created"
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
 }
 field {
@@ -36,7 +36,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.LanguageCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "Language of the resource content"
+    [google.fhir.proto.field_description]: "Language of the resource content"
   }
 }
 field {
@@ -46,7 +46,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Narrative"
   options {
-    [google.fhir.stu3.proto.field_description]: "Text summary of the resource, for human interpretation"
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
 }
 field {
@@ -56,7 +56,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContainedResource"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contained, inline Resources"
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
@@ -66,7 +66,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
   }
 }
 field {
@@ -76,7 +76,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Extension"
   options {
-    [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
@@ -86,7 +86,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Identifier"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contract number"
+    [google.fhir.proto.field_description]: "Contract number"
   }
 }
 field {
@@ -96,7 +96,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.ContractResourceStatusCode"
   options {
-    [google.fhir.stu3.proto.field_description]: "amended | appended | cancelled | disputed | entered-in-error | executable | executed | negotiable | offered | policy | rejected | renewed | revoked | resolved | terminated"
+    [google.fhir.proto.field_description]: "amended | appended | cancelled | disputed | entered-in-error | executable | executed | negotiable | offered | policy | rejected | renewed | revoked | resolved | terminated"
   }
 }
 field {
@@ -106,7 +106,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.DateTime"
   options {
-    [google.fhir.stu3.proto.field_description]: "When this Contract was issued"
+    [google.fhir.proto.field_description]: "When this Contract was issued"
   }
 }
 field {
@@ -116,7 +116,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Period"
   options {
-    [google.fhir.stu3.proto.field_description]: "Effective time"
+    [google.fhir.proto.field_description]: "Effective time"
   }
 }
 field {
@@ -126,8 +126,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contract Target Entity"
-    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+    [google.fhir.proto.field_description]: "Contract Target Entity"
+    [google.fhir.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -137,8 +137,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Context of the Contract"
-    [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+    [google.fhir.proto.field_description]: "Context of the Contract"
+    [google.fhir.proto.valid_reference_type]: "Resource"
   }
 }
 field {
@@ -148,8 +148,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Authority under which this Contract has standing"
-    [google.fhir.stu3.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.field_description]: "Authority under which this Contract has standing"
+    [google.fhir.proto.valid_reference_type]: "Organization"
   }
 }
 field {
@@ -159,8 +159,8 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Reference"
   options {
-    [google.fhir.stu3.proto.field_description]: "Domain in which this Contract applies"
-    [google.fhir.stu3.proto.valid_reference_type]: "Location"
+    [google.fhir.proto.field_description]: "Domain in which this Contract applies"
+    [google.fhir.proto.valid_reference_type]: "Location"
   }
 }
 field {
@@ -170,7 +170,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Type or form"
+    [google.fhir.proto.field_description]: "Type or form"
   }
 }
 field {
@@ -180,7 +180,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Subtype within the context of type"
+    [google.fhir.proto.field_description]: "Subtype within the context of type"
   }
 }
 field {
@@ -190,7 +190,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Action stipulated by this Contract"
+    [google.fhir.proto.field_description]: "Action stipulated by this Contract"
   }
 }
 field {
@@ -200,7 +200,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Rationale for the stiplulated action"
+    [google.fhir.proto.field_description]: "Rationale for the stiplulated action"
   }
 }
 field {
@@ -210,7 +210,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Decision by Grantor"
+    [google.fhir.proto.field_description]: "Decision by Grantor"
   }
 }
 field {
@@ -220,7 +220,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.CodeableConcept"
   options {
-    [google.fhir.stu3.proto.field_description]: "Content derived from the basal information"
+    [google.fhir.proto.field_description]: "Content derived from the basal information"
   }
 }
 field {
@@ -230,7 +230,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Coding"
   options {
-    [google.fhir.stu3.proto.field_description]: "Security Labels that define affected resources"
+    [google.fhir.proto.field_description]: "Security Labels that define affected resources"
   }
 }
 field {
@@ -240,7 +240,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Contract.Agent"
   options {
-    [google.fhir.stu3.proto.field_description]: "Entity being ascribed responsibility"
+    [google.fhir.proto.field_description]: "Entity being ascribed responsibility"
   }
 }
 field {
@@ -250,7 +250,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Contract.Signatory"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contract Signatory"
+    [google.fhir.proto.field_description]: "Contract Signatory"
   }
 }
 field {
@@ -260,7 +260,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Contract.ValuedItem"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contract Valued Item List"
+    [google.fhir.proto.field_description]: "Contract Valued Item List"
   }
 }
 field {
@@ -270,7 +270,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Contract.Term"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contract Term List"
+    [google.fhir.proto.field_description]: "Contract Term List"
   }
 }
 field {
@@ -280,7 +280,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Contract.Binding"
   options {
-    [google.fhir.stu3.proto.field_description]: "Binding Contract"
+    [google.fhir.proto.field_description]: "Binding Contract"
   }
 }
 field {
@@ -290,7 +290,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Contract.FriendlyLanguage"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contract Friendly Language"
+    [google.fhir.proto.field_description]: "Contract Friendly Language"
   }
 }
 field {
@@ -300,7 +300,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Contract.LegalLanguage"
   options {
-    [google.fhir.stu3.proto.field_description]: "Contract Legal Language"
+    [google.fhir.proto.field_description]: "Contract Legal Language"
   }
 }
 field {
@@ -310,7 +310,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.stu3.proto.Contract.ComputableLanguage"
   options {
-    [google.fhir.stu3.proto.field_description]: "Computable Contract Language"
+    [google.fhir.proto.field_description]: "Computable Contract Language"
   }
 }
 nested_type {
@@ -322,7 +322,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -332,7 +332,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -342,7 +342,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -352,17 +352,17 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Contract Agent Type"
-      [google.fhir.stu3.proto.valid_reference_type]: "Contract"
-      [google.fhir.stu3.proto.valid_reference_type]: "Device"
-      [google.fhir.stu3.proto.valid_reference_type]: "Group"
-      [google.fhir.stu3.proto.valid_reference_type]: "Location"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
-      [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
-      [google.fhir.stu3.proto.valid_reference_type]: "Substance"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Contract Agent Type"
+      [google.fhir.proto.valid_reference_type]: "Contract"
+      [google.fhir.proto.valid_reference_type]: "Device"
+      [google.fhir.proto.valid_reference_type]: "Group"
+      [google.fhir.proto.valid_reference_type]: "Location"
+      [google.fhir.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.valid_reference_type]: "Patient"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "RelatedPerson"
+      [google.fhir.proto.valid_reference_type]: "Substance"
     }
   }
   field {
@@ -372,7 +372,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Role type of the agent"
+      [google.fhir.proto.field_description]: "Role type of the agent"
     }
   }
 }
@@ -385,7 +385,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -395,7 +395,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -405,7 +405,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -415,8 +415,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Coding"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Contract Signatory Role"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Contract Signatory Role"
     }
   }
   field {
@@ -426,12 +426,12 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Contract Signatory Party"
-      [google.fhir.stu3.proto.valid_reference_type]: "Organization"
-      [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-      [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-      [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Contract Signatory Party"
+      [google.fhir.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.valid_reference_type]: "Patient"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "RelatedPerson"
     }
   }
   field {
@@ -441,8 +441,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Signature"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Contract Documentation Signature"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Contract Documentation Signature"
     }
   }
 }
@@ -455,7 +455,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -465,7 +465,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -475,7 +475,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -485,7 +485,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Contract.ValuedItem.Entity"
     options {
-      [google.fhir.stu3.proto.field_description]: "Contract Valued Item Type"
+      [google.fhir.proto.field_description]: "Contract Valued Item Type"
     }
   }
   field {
@@ -495,7 +495,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Identifier"
     options {
-      [google.fhir.stu3.proto.field_description]: "Contract Valued Item Number"
+      [google.fhir.proto.field_description]: "Contract Valued Item Number"
     }
   }
   field {
@@ -505,7 +505,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.DateTime"
     options {
-      [google.fhir.stu3.proto.field_description]: "Contract Valued Item Effective Tiem"
+      [google.fhir.proto.field_description]: "Contract Valued Item Effective Tiem"
     }
   }
   field {
@@ -515,7 +515,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.SimpleQuantity"
     options {
-      [google.fhir.stu3.proto.field_description]: "Count of Contract Valued Items"
+      [google.fhir.proto.field_description]: "Count of Contract Valued Items"
     }
   }
   field {
@@ -525,7 +525,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Money"
     options {
-      [google.fhir.stu3.proto.field_description]: "Contract Valued Item fee, charge, or cost"
+      [google.fhir.proto.field_description]: "Contract Valued Item fee, charge, or cost"
     }
   }
   field {
@@ -535,7 +535,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Decimal"
     options {
-      [google.fhir.stu3.proto.field_description]: "Contract Valued Item Price Scaling Factor"
+      [google.fhir.proto.field_description]: "Contract Valued Item Price Scaling Factor"
     }
   }
   field {
@@ -545,7 +545,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Decimal"
     options {
-      [google.fhir.stu3.proto.field_description]: "Contract Valued Item Difficulty Scaling Factor"
+      [google.fhir.proto.field_description]: "Contract Valued Item Difficulty Scaling Factor"
     }
   }
   field {
@@ -555,7 +555,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Money"
     options {
-      [google.fhir.stu3.proto.field_description]: "Total Contract Valued Item Value"
+      [google.fhir.proto.field_description]: "Total Contract Valued Item Value"
     }
   }
   nested_type {
@@ -575,12 +575,12 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+        [google.fhir.proto.valid_reference_type]: "Resource"
       }
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "entity"
@@ -596,7 +596,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -606,7 +606,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -616,7 +616,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -626,7 +626,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Identifier"
     options {
-      [google.fhir.stu3.proto.field_description]: "Contract Term Number"
+      [google.fhir.proto.field_description]: "Contract Term Number"
     }
   }
   field {
@@ -636,7 +636,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.DateTime"
     options {
-      [google.fhir.stu3.proto.field_description]: "Contract Term Issue Date Time"
+      [google.fhir.proto.field_description]: "Contract Term Issue Date Time"
     }
   }
   field {
@@ -646,7 +646,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Period"
     options {
-      [google.fhir.stu3.proto.field_description]: "Contract Term Effective Time"
+      [google.fhir.proto.field_description]: "Contract Term Effective Time"
     }
   }
   field {
@@ -656,7 +656,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Contract Term Type or Form"
+      [google.fhir.proto.field_description]: "Contract Term Type or Form"
     }
   }
   field {
@@ -666,7 +666,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Contract Term Type specific classification"
+      [google.fhir.proto.field_description]: "Contract Term Type specific classification"
     }
   }
   field {
@@ -676,8 +676,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.field_description]: "Context of the Contract term"
-      [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+      [google.fhir.proto.field_description]: "Context of the Contract term"
+      [google.fhir.proto.valid_reference_type]: "Resource"
     }
   }
   field {
@@ -687,7 +687,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Contract Term Activity"
+      [google.fhir.proto.field_description]: "Contract Term Activity"
     }
   }
   field {
@@ -697,7 +697,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.CodeableConcept"
     options {
-      [google.fhir.stu3.proto.field_description]: "Purpose for the Contract Term Action"
+      [google.fhir.proto.field_description]: "Purpose for the Contract Term Action"
     }
   }
   field {
@@ -707,7 +707,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Coding"
     options {
-      [google.fhir.stu3.proto.field_description]: "Security Labels that define affected terms"
+      [google.fhir.proto.field_description]: "Security Labels that define affected terms"
     }
   }
   field {
@@ -717,7 +717,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Contract.Term.TermAgent"
     options {
-      [google.fhir.stu3.proto.field_description]: "Contract Term Agent List"
+      [google.fhir.proto.field_description]: "Contract Term Agent List"
     }
   }
   field {
@@ -727,7 +727,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "Human readable Contract term text"
+      [google.fhir.proto.field_description]: "Human readable Contract term text"
     }
   }
   field {
@@ -737,7 +737,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Contract.Term.TermValuedItem"
     options {
-      [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item List"
+      [google.fhir.proto.field_description]: "Contract Term Valued Item List"
     }
   }
   field {
@@ -747,7 +747,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Contract.Term"
     options {
-      [google.fhir.stu3.proto.field_description]: "Nested Contract Term Group"
+      [google.fhir.proto.field_description]: "Nested Contract Term Group"
     }
   }
   nested_type {
@@ -759,7 +759,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -769,7 +769,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -779,7 +779,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -789,17 +789,17 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-        [google.fhir.stu3.proto.field_description]: "Contract Term Agent Subject"
-        [google.fhir.stu3.proto.valid_reference_type]: "Contract"
-        [google.fhir.stu3.proto.valid_reference_type]: "Device"
-        [google.fhir.stu3.proto.valid_reference_type]: "Group"
-        [google.fhir.stu3.proto.valid_reference_type]: "Location"
-        [google.fhir.stu3.proto.valid_reference_type]: "Organization"
-        [google.fhir.stu3.proto.valid_reference_type]: "Patient"
-        [google.fhir.stu3.proto.valid_reference_type]: "Practitioner"
-        [google.fhir.stu3.proto.valid_reference_type]: "RelatedPerson"
-        [google.fhir.stu3.proto.valid_reference_type]: "Substance"
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "Contract Term Agent Subject"
+        [google.fhir.proto.valid_reference_type]: "Contract"
+        [google.fhir.proto.valid_reference_type]: "Device"
+        [google.fhir.proto.valid_reference_type]: "Group"
+        [google.fhir.proto.valid_reference_type]: "Location"
+        [google.fhir.proto.valid_reference_type]: "Organization"
+        [google.fhir.proto.valid_reference_type]: "Patient"
+        [google.fhir.proto.valid_reference_type]: "Practitioner"
+        [google.fhir.proto.valid_reference_type]: "RelatedPerson"
+        [google.fhir.proto.valid_reference_type]: "Substance"
       }
     }
     field {
@@ -809,7 +809,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.CodeableConcept"
       options {
-        [google.fhir.stu3.proto.field_description]: "Type of the Contract Term Agent"
+        [google.fhir.proto.field_description]: "Type of the Contract Term Agent"
       }
     }
   }
@@ -822,7 +822,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.String"
       options {
-        [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
       }
     }
     field {
@@ -832,7 +832,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
       }
     }
     field {
@@ -842,7 +842,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Extension"
       options {
-        [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
       }
     }
     field {
@@ -852,7 +852,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Contract.Term.TermValuedItem.Entity"
       options {
-        [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Type"
+        [google.fhir.proto.field_description]: "Contract Term Valued Item Type"
       }
     }
     field {
@@ -862,7 +862,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Identifier"
       options {
-        [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Number"
+        [google.fhir.proto.field_description]: "Contract Term Valued Item Number"
       }
     }
     field {
@@ -872,7 +872,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.DateTime"
       options {
-        [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Effective Tiem"
+        [google.fhir.proto.field_description]: "Contract Term Valued Item Effective Tiem"
       }
     }
     field {
@@ -882,7 +882,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.SimpleQuantity"
       options {
-        [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Count"
+        [google.fhir.proto.field_description]: "Contract Term Valued Item Count"
       }
     }
     field {
@@ -892,7 +892,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Money"
       options {
-        [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item fee, charge, or cost"
+        [google.fhir.proto.field_description]: "Contract Term Valued Item fee, charge, or cost"
       }
     }
     field {
@@ -902,7 +902,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Decimal"
       options {
-        [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Price Scaling Factor"
+        [google.fhir.proto.field_description]: "Contract Term Valued Item Price Scaling Factor"
       }
     }
     field {
@@ -912,7 +912,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Decimal"
       options {
-        [google.fhir.stu3.proto.field_description]: "Contract Term Valued Item Difficulty Scaling Factor"
+        [google.fhir.proto.field_description]: "Contract Term Valued Item Difficulty Scaling Factor"
       }
     }
     field {
@@ -922,7 +922,7 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Money"
       options {
-        [google.fhir.stu3.proto.field_description]: "Total Contract Term Valued Item Value"
+        [google.fhir.proto.field_description]: "Total Contract Term Valued Item Value"
       }
     }
     nested_type {
@@ -942,12 +942,12 @@ nested_type {
         type: TYPE_MESSAGE
         type_name: ".google.fhir.stu3.proto.Reference"
         options {
-          [google.fhir.stu3.proto.valid_reference_type]: "Resource"
+          [google.fhir.proto.valid_reference_type]: "Resource"
         }
         oneof_index: 0
       }
       options {
-        [google.fhir.stu3.proto.is_choice_type]: true
+        [google.fhir.proto.is_choice_type]: true
       }
       oneof_decl {
         name: "entity"
@@ -972,14 +972,14 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Reference"
     options {
-      [google.fhir.stu3.proto.valid_reference_type]: "Composition"
-      [google.fhir.stu3.proto.valid_reference_type]: "DocumentReference"
-      [google.fhir.stu3.proto.valid_reference_type]: "QuestionnaireResponse"
+      [google.fhir.proto.valid_reference_type]: "Composition"
+      [google.fhir.proto.valid_reference_type]: "DocumentReference"
+      [google.fhir.proto.valid_reference_type]: "QuestionnaireResponse"
     }
     oneof_index: 0
   }
   options {
-    [google.fhir.stu3.proto.is_choice_type]: true
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "binding"
@@ -994,7 +994,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -1004,7 +1004,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -1014,7 +1014,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -1024,8 +1024,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Contract.FriendlyLanguage.Content"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Easily comprehended representation of this Contract"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Easily comprehended representation of this Contract"
     }
   }
   nested_type {
@@ -1045,14 +1045,14 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "Composition"
-        [google.fhir.stu3.proto.valid_reference_type]: "DocumentReference"
-        [google.fhir.stu3.proto.valid_reference_type]: "QuestionnaireResponse"
+        [google.fhir.proto.valid_reference_type]: "Composition"
+        [google.fhir.proto.valid_reference_type]: "DocumentReference"
+        [google.fhir.proto.valid_reference_type]: "QuestionnaireResponse"
       }
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "content"
@@ -1068,7 +1068,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -1078,7 +1078,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -1088,7 +1088,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -1098,8 +1098,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Contract.LegalLanguage.Content"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Contract Legal Text"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Contract Legal Text"
     }
   }
   nested_type {
@@ -1119,14 +1119,14 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "Composition"
-        [google.fhir.stu3.proto.valid_reference_type]: "DocumentReference"
-        [google.fhir.stu3.proto.valid_reference_type]: "QuestionnaireResponse"
+        [google.fhir.proto.valid_reference_type]: "Composition"
+        [google.fhir.proto.valid_reference_type]: "DocumentReference"
+        [google.fhir.proto.valid_reference_type]: "QuestionnaireResponse"
       }
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "content"
@@ -1142,7 +1142,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.String"
     options {
-      [google.fhir.stu3.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
     }
   }
   field {
@@ -1152,7 +1152,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
     }
   }
   field {
@@ -1162,7 +1162,7 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Extension"
     options {
-      [google.fhir.stu3.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
     }
   }
   field {
@@ -1172,8 +1172,8 @@ nested_type {
     type: TYPE_MESSAGE
     type_name: ".google.fhir.stu3.proto.Contract.ComputableLanguage.Content"
     options {
-      [google.fhir.stu3.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.stu3.proto.field_description]: "Computable Contract Rules"
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Computable Contract Rules"
     }
   }
   nested_type {
@@ -1193,12 +1193,12 @@ nested_type {
       type: TYPE_MESSAGE
       type_name: ".google.fhir.stu3.proto.Reference"
       options {
-        [google.fhir.stu3.proto.valid_reference_type]: "DocumentReference"
+        [google.fhir.proto.valid_reference_type]: "DocumentReference"
       }
       oneof_index: 0
     }
     options {
-      [google.fhir.stu3.proto.is_choice_type]: true
+      [google.fhir.proto.is_choice_type]: true
     }
     oneof_decl {
       name: "content"
@@ -1206,7 +1206,7 @@ nested_type {
   }
 }
 options {
-  [google.fhir.stu3.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.stu3.proto.message_description]: "Auto-generated from StructureDefinition for Contract, last updated 2017-04-19T07:44:43.294+10:00.\nLegal Agreement.\nSee http://hl7.org/fhir/StructureDefinition/Contract"
-  [google.fhir.stu3.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Contract"
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Contract, last updated 2017-04-19T07:44:43.294+10:00.\nLegal Agreement.\nSee http://hl7.org/fhir/StructureDefinition/Contract"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Contract"
 }
