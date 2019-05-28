@@ -21,6 +21,7 @@ import "proto/stu3/datatypes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.google";
+option (.google.fhir.proto.fhir_version) = STU3;
 
 // Auto-generated from StructureDefinition for PrimitiveHasNoValue.
 // Whether or not the primitive is missing a value.
@@ -53,12 +54,18 @@ message Base64BinarySeparatorStride {
   proto.String id = 1;
 
   // The separator, usually a sequence of spaces.
-  proto.String separator = 4
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  proto.String separator = 4 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
 
   // The stride.
-  proto.PositiveInt stride = 5
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  proto.PositiveInt stride = 5 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
 }
 
 // Auto-generated from StructureDefinition for EventLabel.
@@ -78,27 +85,44 @@ message EventLabel {
   repeated proto.Extension extension = 2;
 
   // The patient associated with this label
-  proto.Reference patient = 4
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  proto.Reference patient = 4 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
 
   // The type of label, part of the prediction task definition
-  proto.Coding type = 5
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  proto.Coding type = 5 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
 
   // Time associated with the label event, if available
-  proto.DateTime event_time = 6;
+  proto.DateTime event_time = 6 [(.google.fhir.proto.fhir_path_constraint) =
+                                     "extension.exists() != value.exists()"];
 
   // Resource that owns this label
-  proto.Reference source = 7;
+  proto.Reference source = 7 [(.google.fhir.proto.fhir_path_constraint) =
+                                  "extension.exists() != value.exists()"];
 
   // List of labels associated with this event
   message Label {
     // xml:id (or equivalent in JSON)
     proto.String id = 1;
 
+    // Extension.extension.extension not present on profile.
+    reserved 2;
+
+    // Extension.extension.value[x] not present on profile.
+    reserved 3;
+
     // Class name in multi-class prediction tasks, e.g. code "780.60" for icd9
-    proto.Coding class_name = 4
-        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    proto.Coding class_name = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.fhir_path_constraint) =
+          "extension.exists() != value.exists()"
+    ];
 
     // The value of the label
     message ClassValue {
@@ -112,10 +136,14 @@ message EventLabel {
         proto.DateTime date_time = 5;
       }
     }
-    ClassValue class_value = 5
-        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    ClassValue class_value = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.fhir_path_constraint) =
+          "extension.exists() != value.exists()"
+    ];
   }
-  repeated Label label = 8;
+  repeated Label label = 8 [(.google.fhir.proto.fhir_path_constraint) =
+                                "extension.exists() != value.exists()"];
 }
 
 // Auto-generated from StructureDefinition for EventTrigger.
@@ -132,13 +160,20 @@ message EventTrigger {
   proto.String id = 1;
 
   // The type of trigger, part of the prediction task definition.
-  proto.Coding type = 4
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  proto.Coding type = 4 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
 
   // Prediction event time, more recent data will be elided.
-  proto.DateTime event_time = 5
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  proto.DateTime event_time = 5 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
 
   // Resource that owns this trigger.
-  proto.Reference source = 6;
+  proto.Reference source = 6 [(.google.fhir.proto.fhir_path_constraint) =
+                                  "extension.exists() != value.exists()"];
 }
