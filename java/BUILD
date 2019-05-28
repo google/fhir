@@ -43,7 +43,6 @@ java_library(
         ["src/main/java/com/google/fhir/examples/*.java"],
         exclude = [
             "src/main/java/com/google/fhir/examples/BigQuerySchemaGeneratorMain.java",
-            "src/main/java/com/google/fhir/examples/StructureDefinitionTransformerMain.java",
             "src/main/java/com/google/fhir/examples/ProfileGeneratorMain.java",
         ],
     ),
@@ -170,17 +169,6 @@ java_test(
         "@com_google_http_client_google_http_client_gson//jar",
         "@com_google_truth_truth//jar",
         "@junit_junit//jar",
-    ],
-)
-
-java_binary(
-    name = "StructureDefinitionTransformer",
-    srcs = ["src/main/java/com/google/fhir/examples/StructureDefinitionTransformerMain.java"],
-    main_class = "com.google.fhir.examples.StructureDefinitionTransformerMain",
-    deps = [
-        ":structure_definition_transformer",
-        "//external:guava",
-        "@com_beust_jcommander//jar",
     ],
 )
 
