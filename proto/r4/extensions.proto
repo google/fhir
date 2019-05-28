@@ -164,7 +164,7 @@ message QuestionnaireDisplayCategory {
 // Auto-generated from StructureDefinition for researchStudy.
 // Associated research study.
 // See http://hl7.org/fhir/StructureDefinition/workflow-researchStudy
-message ResearchStudy {
+message ResearchStudyExtension {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -682,7 +682,7 @@ message StringMarkdown {
 // Auto-generated from StructureDefinition for episodeOfCare.
 // Associated Encounter episode of care.
 // See http://hl7.org/fhir/StructureDefinition/workflow-episodeOfCare
-message EpisodeOfCare {
+message EpisodeOfCareExtension {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -6936,7 +6936,7 @@ message ConditionBasedOn {
 // Auto-generated from StructureDefinition for location.
 // Where event occurred.
 // See http://hl7.org/fhir/StructureDefinition/event-location
-message Location {
+message LocationExtension {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
