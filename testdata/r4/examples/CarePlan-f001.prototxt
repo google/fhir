@@ -1,0 +1,166 @@
+id {
+  value: "f001"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f001</p><p><b>contained</b>: , </p><p><b>identifier</b>: CP2903 (OFFICIAL)</p><p><b>status</b>: completed</p><p><b>intent</b>: plan</p><p><b>subject</b>: <a>P. van de Heuvel</a></p><p><b>period</b>: 26/06/2011 --&gt; 27/06/2011</p><p><b>careTeam</b>: id: careteam</p><p><b>addresses</b>: <a>?????</a></p><p><b>goal</b>: id: goal; lifecycleStatus: completed; Achieved <span>(Details : {http://terminology.hl7.org/CodeSystem/goal-achievement code \'achieved\' = \'Achieved\', given as \'Achieved\'})</span>; recovery surgery on heart of patient <span>(Details )</span>; Annotation: goal accomplished without complications</p><blockquote><p><b>activity</b></p><h3>Details</h3><table><tr><td>-</td><td><b>Kind</b></td><td><b>Code</b></td><td><b>Status</b></td><td><b>DoNotPerform</b></td><td><b>Scheduled[x]</b></td><td><b>Performer</b></td></tr><tr><td>*</td><td>ServiceRequest</td><td>Operation on heart <span>(Details : {SNOMED CT code \'64915003\' = \'Operative procedure on heart\', given as \'Operation on heart\'})</span></td><td>completed</td><td>true</td><td>2011-06-27T09:30:10+01:00</td><td><a>P. Voigt</a></td></tr></table></blockquote></div>"
+  }
+}
+contained {
+  care_team {
+    id {
+      value: "careteam"
+    }
+    participant {
+      member {
+        practitioner_id {
+          value: "f002"
+        }
+        display {
+          value: "P. Voigt"
+        }
+      }
+    }
+  }
+}
+contained {
+  goal {
+    id {
+      value: "goal"
+    }
+    lifecycle_status {
+      value: COMPLETED
+    }
+    achievement_status {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/goal-achievement"
+        }
+        code {
+          value: "achieved"
+        }
+        display {
+          value: "Achieved"
+        }
+      }
+      text {
+        value: "Achieved"
+      }
+    }
+    description {
+      text {
+        value: "recovery surgery on heart of patient"
+      }
+    }
+    subject {
+      patient_id {
+        value: "f001"
+      }
+      display {
+        value: "P. van de Heuvel"
+      }
+    }
+    note {
+      text {
+        value: "goal accomplished without complications"
+      }
+    }
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.bmc.nl/zorgportal/identifiers/careplans"
+  }
+  value {
+    value: "CP2903"
+  }
+}
+status {
+  value: COMPLETED
+}
+intent {
+  value: PLAN
+}
+subject {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+period {
+  start {
+    value_us: 1309010400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1309096800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+care_team {
+  fragment {
+    value: "careteam"
+  }
+}
+addresses {
+  condition_id {
+    value: "f201"
+  }
+  display {
+    value: "?????"
+  }
+}
+goal {
+  fragment {
+    value: "goal"
+  }
+}
+activity {
+  detail {
+    kind {
+      value: SERVICE_REQUEST
+    }
+    code {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "64915003"
+        }
+        display {
+          value: "Operation on heart"
+        }
+      }
+    }
+    status {
+      value: COMPLETED
+    }
+    do_not_perform {
+      value: true
+    }
+    scheduled {
+      string_value {
+        value: "2011-06-27T09:30:10+01:00"
+      }
+    }
+    performer {
+      practitioner_id {
+        value: "f002"
+      }
+      display {
+        value: "P. Voigt"
+      }
+    }
+  }
+}

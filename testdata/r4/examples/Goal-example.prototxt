@@ -1,0 +1,148 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<p> A simple care goal for a patient to lose weight due to obesity.</p>\n\t\t</div>"
+  }
+}
+identifier {
+  value {
+    value: "123"
+  }
+}
+lifecycle_status {
+  value: ON_HOLD
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/goal-category"
+    }
+    code {
+      value: "dietary"
+    }
+  }
+}
+priority {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/goal-priority"
+    }
+    code {
+      value: "high-priority"
+    }
+    display {
+      value: "High Priority"
+    }
+  }
+  text {
+    value: "high"
+  }
+}
+description {
+  text {
+    value: "Target weight is 160 to 180 lbs."
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+start {
+  date {
+    value_us: 1428152400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+target {
+  measure {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "3141-9"
+      }
+      display {
+        value: "Weight Measured"
+      }
+    }
+  }
+  detail {
+    range {
+      low {
+        value {
+          value: "160"
+        }
+        unit {
+          value: "lbs"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "[lb_av]"
+        }
+      }
+      high {
+        value {
+          value: "180"
+        }
+        unit {
+          value: "lbs"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "[lb_av]"
+        }
+      }
+    }
+  }
+  due {
+    date {
+      value_us: 1459778400000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}
+status_date {
+  value_us: 1455368400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+status_reason {
+  value: "Patient wants to defer weight loss until after honeymoon."
+}
+expressed_by {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+addresses {
+  display {
+    value: "obesity condition"
+  }
+}
+outcome_reference {
+  observation_id {
+    value: "example"
+  }
+  display {
+    value: "Body Weight Measured"
+  }
+}

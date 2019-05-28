@@ -1,0 +1,535 @@
+name: "MedicationDispense"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Id"
+  options {
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Meta"
+  options {
+    [google.fhir.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Uri"
+  options {
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Code"
+  options {
+    [google.fhir.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Narrative"
+  options {
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.ContainedResource"
+  options {
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Identifier"
+  options {
+    [google.fhir.proto.field_description]: "External identifier"
+  }
+}
+field {
+  name: "part_of"
+  number: 10
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Event that dispense is part of"
+    [google.fhir.proto.valid_reference_type]: "Procedure"
+  }
+}
+field {
+  name: "status"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.MedicationDispenseStatusCodesCode"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "preparation | in-progress | cancelled | on-hold | completed | entered-in-error | stopped | unknown"
+  }
+}
+field {
+  name: "status_reason"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.MedicationDispense.StatusReasonX"
+  options {
+    [google.fhir.proto.field_description]: "Why a dispense was not performed"
+  }
+}
+field {
+  name: "category"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "Type of medication dispense"
+  }
+}
+field {
+  name: "medication"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.MedicationDispense.MedicationX"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "What medication was supplied"
+  }
+}
+field {
+  name: "subject"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Who the dispense is for"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Group"
+  }
+}
+field {
+  name: "context"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Encounter / Episode associated with event"
+    [google.fhir.proto.valid_reference_type]: "Encounter"
+    [google.fhir.proto.valid_reference_type]: "EpisodeOfCare"
+  }
+}
+field {
+  name: "supporting_information"
+  number: 17
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Information that supports the dispensing of the medication"
+    [google.fhir.proto.valid_reference_type]: "Resource"
+  }
+}
+field {
+  name: "performer"
+  number: 18
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.MedicationDispense.Performer"
+  options {
+    [google.fhir.proto.field_description]: "Who performed event"
+    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+  }
+}
+field {
+  name: "location"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Where the dispense occurred"
+    [google.fhir.proto.valid_reference_type]: "Location"
+  }
+}
+field {
+  name: "authorizing_prescription"
+  number: 20
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Medication order that authorizes the dispense"
+    [google.fhir.proto.valid_reference_type]: "MedicationRequest"
+  }
+}
+field {
+  name: "type"
+  number: 21
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "Trial fill, partial fill, emergency fill, etc."
+  }
+}
+field {
+  name: "quantity"
+  number: 22
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.SimpleQuantity"
+  options {
+    [google.fhir.proto.field_description]: "Amount dispensed"
+  }
+}
+field {
+  name: "days_supply"
+  number: 23
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.SimpleQuantity"
+  options {
+    [google.fhir.proto.field_description]: "Amount of medication expressed as a timing amount"
+  }
+}
+field {
+  name: "when_prepared"
+  number: 24
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "When product was packaged and reviewed"
+  }
+}
+field {
+  name: "when_handed_over"
+  number: 25
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "When product was given out"
+  }
+}
+field {
+  name: "destination"
+  number: 26
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Where the medication was sent"
+    [google.fhir.proto.valid_reference_type]: "Location"
+  }
+}
+field {
+  name: "receiver"
+  number: 27
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Who collected the medication"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+  }
+}
+field {
+  name: "note"
+  number: 28
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Annotation"
+  options {
+    [google.fhir.proto.field_description]: "Information about the dispense"
+  }
+}
+field {
+  name: "dosage_instruction"
+  number: 29
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Dosage"
+  options {
+    [google.fhir.proto.field_description]: "How the medication is to be used by the patient or administered by the caregiver"
+  }
+}
+field {
+  name: "substitution"
+  number: 30
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.MedicationDispense.Substitution"
+  options {
+    [google.fhir.proto.field_description]: "Whether a substitution was performed on the dispense"
+    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+  }
+}
+field {
+  name: "detected_issue"
+  number: 31
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Clinical issue with action"
+    [google.fhir.proto.valid_reference_type]: "DetectedIssue"
+  }
+}
+field {
+  name: "event_history"
+  number: 32
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "A list of relevant lifecycle events"
+    [google.fhir.proto.valid_reference_type]: "Provenance"
+  }
+}
+nested_type {
+  name: "StatusReasonX"
+  field {
+    name: "codeable_concept"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Reference"
+    options {
+      [google.fhir.proto.valid_reference_type]: "DetectedIssue"
+    }
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+nested_type {
+  name: "MedicationX"
+  field {
+    name: "codeable_concept"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Reference"
+    options {
+      [google.fhir.proto.valid_reference_type]: "Medication"
+    }
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+nested_type {
+  name: "Performer"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
+    }
+  }
+  field {
+    name: "function"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "Who performed the dispense and what they did"
+    }
+  }
+  field {
+    name: "actor"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Reference"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Individual who was performing"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "PractitionerRole"
+      [google.fhir.proto.valid_reference_type]: "Organization"
+      [google.fhir.proto.valid_reference_type]: "Patient"
+      [google.fhir.proto.valid_reference_type]: "Device"
+      [google.fhir.proto.valid_reference_type]: "RelatedPerson"
+    }
+  }
+}
+nested_type {
+  name: "Substitution"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
+    }
+  }
+  field {
+    name: "was_substituted"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Boolean"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Whether a substitution was or was not performed on the dispense"
+    }
+  }
+  field {
+    name: "type"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "Code signifying whether a different drug was dispensed from what was prescribed"
+    }
+  }
+  field {
+    name: "reason"
+    number: 6
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "Why was substitution made"
+    }
+  }
+  field {
+    name: "responsible_party"
+    number: 7
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Reference"
+    options {
+      [google.fhir.proto.field_description]: "Who is responsible for the substitution"
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "PractitionerRole"
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MedicationDispense, last updated 2018-12-27T22:37:54.724+11:00.\nDispensing a medication to a named patient.\nSee http://hl7.org/fhir/StructureDefinition/MedicationDispense"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MedicationDispense"
+}

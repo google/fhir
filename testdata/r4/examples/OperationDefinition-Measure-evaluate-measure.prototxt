@@ -1,0 +1,263 @@
+id {
+  value: "Measure-evaluate-measure"
+}
+meta {
+  last_updated {
+    value_us: 1545910674724000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <h2>Evaluate Measure</h2>\n            <p>OPERATION: Evaluate Measure</p>\n            <p>The official URL for this operation definition is: </p>\n            <pre>http://hl7.org/fhir/OperationDefinition/Measure-evaluate-measure</pre>\n            <div>\n              <p>The evaluate-measure operation is used to calculate an eMeasure and obtain the results</p>\n\n            </div>\n            <p>URL: [base]/Measure/$evaluate-measure</p>\n            <p>URL: [base]/Measure/[id]/$evaluate-measure</p>\n            <p>Parameters</p>\n            <table class=\"grid\">\n              <tr>\n                <td>\n                  <b>Use</b>\n                </td>\n                <td>\n                  <b>Name</b>\n                </td>\n                <td>\n                  <b>Cardinality</b>\n                </td>\n                <td>\n                  <b>Type</b>\n                </td>\n                <td>\n                  <b>Binding</b>\n                </td>\n                <td>\n                  <b>Documentation</b>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>periodStart</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#date\">date</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The start of the measurement period. In keeping with the semantics of the date parameter used in the FHIR search operation, the period will start at the beginning of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period start to be 2014-01-01T00:00:00 inclusive</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>periodEnd</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#date\">date</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The end of the measurement period. The period will end at the end of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period end to be 2014-12-31T23:59:59 inclusive</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>measure</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#string\">string</a>\n                  <br/>(\n                  <a href=\"search.html#reference\">reference</a>)\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The measure to evaluate. This parameter is only required when the operation is invoked on the resource type, it is not used when invoking the operation on a Measure instance</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>reportType</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#code\">code</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The type of measure report: subject, subject-list, or population. If not specified, a default value of subject will be used if the subject parameter is supplied, otherwise, population will be used</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>subject</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#string\">string</a>\n                  <br/>(\n                  <a href=\"search.html#reference\">reference</a>)\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Subject for which the measure will be calculated. If not specified, the measure will be calculated for all subjects that meet the requirements of the measure. If specified, the measure will only be calculated for the referenced subject(s)</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>practitioner</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#string\">string</a>\n                  <br/>(\n                  <a href=\"search.html#reference\">reference</a>)\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Practitioner for which the measure will be calculated. If specified, the measure will be calculated only for subjects that have a primary relationship to the identified practitioner</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>lastReceivedOn</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#dateTime\">dateTime</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The date the results of this measure were last received. This parameter is only valid for patient-level reports and is used to indicate when the last time a result for this patient was received. This information can be used to limit the set of resources returned for a patient-level report</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>return</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"measurereport.html\">MeasureReport</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The results of the measure calculation. See the MeasureReport resource for a complete description of the output of this operation. Note that implementations may choose to return a MeasureReport with a status of pending to indicate that the report is still being generated. In this case, the client can use a polling method to continually request the MeasureReport until the status is updated to complete</p>\n\n                  </div>\n                </td>\n              </tr>\n            </table>\n            <div>\n              <p>The effect of invoking this operation is to calculate the measure for the given subject, or all subjects if no subject is supplied, and return the results as a MeasureReport resource of the appropriate type. Note that whether or not this operation affects the state of the server depends on whether the server persists the generated MeasureReport. If the MeasureReport is not persisted, this operation can be invoked with GET</p>\n\n            </div>\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+      value: 2
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "trial-use"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/OperationDefinition/Measure-evaluate-measure"
+}
+version {
+  value: "4.0.0"
+}
+name {
+  value: "Evaluate Measure"
+}
+status {
+  value: DRAFT
+}
+kind {
+  value: OPERATION
+}
+date {
+  value_us: 1545910674000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+publisher {
+  value: "HL7 (FHIR Project)"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "fhir@lists.hl7.org"
+    }
+  }
+}
+description {
+  value: "The evaluate-measure operation is used to calculate an eMeasure and obtain the results"
+}
+code {
+  value: "evaluate-measure"
+}
+comment {
+  value: "The effect of invoking this operation is to calculate the measure for the given subject, or all subjects if no subject is supplied, and return the results as a MeasureReport resource of the appropriate type. Note that whether or not this operation affects the state of the server depends on whether the server persists the generated MeasureReport. If the MeasureReport is not persisted, this operation can be invoked with GET"
+}
+resource {
+  value: MEASURE
+}
+system {
+}
+type {
+  value: true
+}
+instance {
+  value: true
+}
+parameter {
+  name {
+    value: "periodStart"
+  }
+  use {
+    value: IN
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The start of the measurement period. In keeping with the semantics of the date parameter used in the FHIR search operation, the period will start at the beginning of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period start to be 2014-01-01T00:00:00 inclusive"
+  }
+  type {
+    value: DATE
+  }
+}
+parameter {
+  name {
+    value: "periodEnd"
+  }
+  use {
+    value: IN
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The end of the measurement period. The period will end at the end of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period end to be 2014-12-31T23:59:59 inclusive"
+  }
+  type {
+    value: DATE
+  }
+}
+parameter {
+  name {
+    value: "measure"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The measure to evaluate. This parameter is only required when the operation is invoked on the resource type, it is not used when invoking the operation on a Measure instance"
+  }
+  type {
+    value: STRING
+  }
+  search_type {
+    value: REFERENCE
+  }
+}
+parameter {
+  name {
+    value: "reportType"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The type of measure report: subject, subject-list, or population. If not specified, a default value of subject will be used if the subject parameter is supplied, otherwise, population will be used"
+  }
+  type {
+    value: CODE
+  }
+}
+parameter {
+  name {
+    value: "subject"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "Subject for which the measure will be calculated. If not specified, the measure will be calculated for all subjects that meet the requirements of the measure. If specified, the measure will only be calculated for the referenced subject(s)"
+  }
+  type {
+    value: STRING
+  }
+  search_type {
+    value: REFERENCE
+  }
+}
+parameter {
+  name {
+    value: "practitioner"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "Practitioner for which the measure will be calculated. If specified, the measure will be calculated only for subjects that have a primary relationship to the identified practitioner"
+  }
+  type {
+    value: STRING
+  }
+  search_type {
+    value: REFERENCE
+  }
+}
+parameter {
+  name {
+    value: "lastReceivedOn"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The date the results of this measure were last received. This parameter is only valid for patient-level reports and is used to indicate when the last time a result for this patient was received. This information can be used to limit the set of resources returned for a patient-level report"
+  }
+  type {
+    value: DATE_TIME
+  }
+}
+parameter {
+  name {
+    value: "return"
+  }
+  use {
+    value: OUT
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The results of the measure calculation. See the MeasureReport resource for a complete description of the output of this operation. Note that implementations may choose to return a MeasureReport with a status of pending to indicate that the report is still being generated. In this case, the client can use a polling method to continually request the MeasureReport until the status is updated to complete"
+  }
+  type {
+    value: MEASURE_REPORT
+  }
+}

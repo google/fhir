@@ -1,0 +1,168 @@
+id {
+  value: "example-rest"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-rest</p><p><b>type</b>: Restful Operation (Details: http://terminology.hl7.org/CodeSystem/audit-event-type code rest = \'RESTful Operation\', stated as \'Restful Operation\')</p><p><b>subtype</b>: vread (Details: http://hl7.org/fhir/restful-interaction code vread = \'vread\', stated as \'vread\')</p><p><b>action</b>: R</p><p><b>recorded</b>: 20/06/2013 11:42:24 PM</p><p><b>outcome</b>: 0</p><blockquote><p><b>agent</b></p><p><b>type</b>: human user <span>(Details : {http://terminology.hl7.org/CodeSystem/extra-security-role-type code \'humanuser\' = \'human user\', given as \'human user\'})</span></p><p><b>who</b>: </p><p><b>altId</b>: 601847123</p><p><b>name</b>: Grahame Grieve</p><p><b>requestor</b>: true</p></blockquote><blockquote><p><b>agent</b></p><p><b>type</b>: Source Role ID <span>(Details : {DICOM code \'110153\' = \'Source Role ID\', given as \'Source Role ID\'})</span></p><p><b>who</b>: </p><p><b>altId</b>: 6580</p><p><b>requestor</b>: false</p><h3>Networks</h3><table><tr><td>-</td><td><b>Address</b></td><td><b>Type</b></td></tr><tr><td>*</td><td>Workstation1.ehr.familyclinic.com</td><td>1</td></tr></table></blockquote><h3>Sources</h3><table><tr><td>-</td><td><b>Site</b></td><td><b>Observer</b></td><td><b>Type</b></td></tr><tr><td>*</td><td>Cloud</td><td/><td>Web Server (Details: http://terminology.hl7.org/CodeSystem/security-source-type code 3 = \'Web Server\', stated as \'Web Server\')</td></tr></table><h3>Entities</h3><table><tr><td>-</td><td><b>What</b></td><td><b>Type</b></td><td><b>Lifecycle</b></td></tr><tr><td>*</td><td><a>Patient/example/_history/1</a></td><td>System Object (Details: http://terminology.hl7.org/CodeSystem/audit-entity-type code 2 = \'System Object\', stated as \'System Object\')</td><td>Access / Use (Details: http://terminology.hl7.org/CodeSystem/dicom-audit-lifecycle code 6 = \'Access / Use\', stated as \'Access / Use\')</td></tr></table></div>"
+  }
+}
+type {
+  system {
+    value: "http://terminology.hl7.org/CodeSystem/audit-event-type"
+  }
+  code {
+    value: "rest"
+  }
+  display {
+    value: "Restful Operation"
+  }
+}
+subtype {
+  system {
+    value: "http://hl7.org/fhir/restful-interaction"
+  }
+  code {
+    value: "vread"
+  }
+  display {
+    value: "vread"
+  }
+}
+action {
+  value: R
+}
+recorded {
+  value_us: 1371771744000000
+  timezone: "Z"
+  precision: SECOND
+}
+outcome {
+  value: NUM_0
+}
+agent {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/extra-security-role-type"
+      }
+      code {
+        value: "humanuser"
+      }
+      display {
+        value: "human user"
+      }
+    }
+  }
+  who {
+    identifier {
+      value {
+        value: "95"
+      }
+    }
+  }
+  alt_id {
+    value: "601847123"
+  }
+  name {
+    value: "Grahame Grieve"
+  }
+  requestor {
+    value: true
+  }
+}
+agent {
+  type {
+    coding {
+      system {
+        value: "http://dicom.nema.org/resources/ontology/DCM"
+      }
+      code {
+        value: "110153"
+      }
+      display {
+        value: "Source Role ID"
+      }
+    }
+  }
+  who {
+    identifier {
+      system {
+        value: "urn:oid:2.16.840.1.113883.4.2"
+      }
+      value {
+        value: "2.16.840.1.113883.4.2"
+      }
+    }
+  }
+  alt_id {
+    value: "6580"
+  }
+  requestor {
+  }
+  network {
+    address {
+      value: "Workstation1.ehr.familyclinic.com"
+    }
+    type {
+      value: NUM_1
+    }
+  }
+}
+source {
+  site {
+    value: "Cloud"
+  }
+  observer {
+    identifier {
+      value {
+        value: "hl7connect.healthintersections.com.au"
+      }
+    }
+  }
+  type {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/security-source-type"
+    }
+    code {
+      value: "3"
+    }
+    display {
+      value: "Web Server"
+    }
+  }
+}
+entity {
+  what {
+    patient_id {
+      value: "example"
+      history {
+        value: "1"
+      }
+    }
+  }
+  type {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/audit-entity-type"
+    }
+    code {
+      value: "2"
+    }
+    display {
+      value: "System Object"
+    }
+  }
+  lifecycle {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/dicom-audit-lifecycle"
+    }
+    code {
+      value: "6"
+    }
+    display {
+      value: "Access / Use"
+    }
+  }
+}

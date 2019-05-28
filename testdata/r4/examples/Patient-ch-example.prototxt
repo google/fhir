@@ -1,0 +1,128 @@
+id {
+  value: "ch-example"
+}
+meta {
+  version_id {
+    value: "1"
+  }
+  last_updated {
+    value_us: 1463360152000000
+    timezone: "Z"
+    precision: SECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <table>\n        <tbody>\n          <tr>\n            <td>\345\220\215\345\255\227</td>\n            <td>\345\274\240\346\227\240\345\277\214</td> </tr>\n          <tr>\n            <td>\345\234\260\345\235\200</td>\n            <td>\344\270\212\346\265\267\345\270\202\351\273\204\345\237\224\345\214\272\351\251\254\345\275\223\350\267\257190\345\217\267, 1974\345\271\26412\346\234\21025\346\227\245</td> \n          </tr>\n          <tr>\n            <td>\350\201\224\347\263\273\346\226\271\345\274\217</td>\n            <td>\344\275\217\345\256\205: \344\270\215\350\257\246\343\200\202\345\267\245\344\275\234: 18337177888</td> \n          </tr>\n          <tr>\n            <td>Id</td>\n            <td>MRN: 3112219680806371X (\345\270\202\345\215\253\347\224\237\345\261\200)</td> \n          </tr> \n        </tbody> \n      </table> \n    </div>"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+      }
+      code {
+        value: "MR"
+      }
+    }
+  }
+  system {
+    value: "urn:oid:1.2.36.146.595.217.0.1"
+  }
+  value {
+    value: "3112219680806371X"
+  }
+  period {
+    start {
+      value_us: 989071200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  assigner {
+    display {
+      value: "\345\270\202\345\215\253\347\224\237\345\261\200"
+    }
+  }
+}
+active {
+  value: true
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  text {
+    value: "\345\274\240\346\227\240\345\277\214"
+  }
+}
+telecom {
+  use {
+    value: HOME
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "18337177888"
+  }
+  use {
+    value: WORK
+  }
+}
+gender {
+  value: MALE
+}
+birth_date {
+  value_us: 157122000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+deceased {
+  boolean {
+  }
+}
+address {
+  use {
+    value: HOME
+  }
+  type {
+    value: BOTH
+  }
+  line {
+    value: "\351\251\254\345\275\223\350\267\257190\345\217\267"
+  }
+  city {
+    value: "\344\270\212\346\265\267\345\270\202"
+  }
+  district {
+    value: "\351\273\204\345\237\224\345\214\272"
+  }
+  postal_code {
+    value: "200000"
+  }
+  period {
+    start {
+      value_us: 157122000000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}
+managing_organization {
+  organization_id {
+    value: "1"
+  }
+  display {
+    value: "\344\270\212\346\265\267\344\270\234\346\226\271\345\214\273\351\231\242"
+  }
+}

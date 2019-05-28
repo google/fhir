@@ -1,0 +1,86 @@
+id {
+  value: "serum-zika-dengue-virus-igm"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Id: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">ActivityDefinition/serum-zika-dengue-virus-igm</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Status: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">draft</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Description: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">Order Serum Zika and Dengue Virus IgM</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Related: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <p style=\"margin-top: 5px;\">\n                     <b>type: </b>\n                     <span>documentation</span>\n                  </p>\n                  <p style=\"margin-top: 5px;\">\n                     <b>display: </b>\n                     <span>Explanation of diagnostic tests for Zika virus and which to use based on the patients clinical and exposure history.</span>\n                  </p>\n                  <p style=\"margin-top: 5px;\">\n                     <b>url: </b>\n                     <span>http://www.cdc.gov/zika/hc-providers/diagnostic.html</span>\n                  </p>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Category: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">diagnostic</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Code: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-right: 25px;\">\n                  <span style=\"padding-left: 25px;\">\n                     <b>text: </b>\n                     <span>Serum Zika and Dengue Virus IgM</span>\n                     <br/>\n                  </span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Participant: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">practitioner</td>\n            </tr>\n         </table>\n      </div>"
+  }
+}
+url {
+  value: "http://example.org/ActivityDefinition/serum-zika-dengue-virus-igm"
+}
+status {
+  value: DRAFT
+}
+description {
+  value: "Order Serum Zika and Dengue Virus IgM"
+}
+related_artifact {
+  type {
+    value: DOCUMENTATION
+  }
+  display {
+    value: "Explanation of diagnostic tests for Zika virus and which to use based on the patient\342\200\231s clinical and exposure history."
+  }
+  url {
+    value: "http://www.cdc.gov/zika/hc-providers/diagnostic.html"
+  }
+}
+related_artifact {
+  type {
+    value: DERIVED_FROM
+  }
+  resource {
+    value: "ActivityDefinition/serum-dengue-virus-igm"
+  }
+}
+library {
+  value: "Library/zika-virus-intervention-logic"
+}
+kind {
+  value: SERVICE_REQUEST
+}
+code {
+  text {
+    value: "Serum Zika and Dengue Virus IgM"
+  }
+}
+timing {
+  timing {
+    event {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/cqf-expression"
+        }
+        value {
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "Now()"
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue"
+        }
+        value {
+          boolean {
+            value: true
+          }
+        }
+      }
+    }
+  }
+}
+participant {
+  type {
+    value: PRACTITIONER
+  }
+}

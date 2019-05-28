@@ -1,0 +1,513 @@
+name: "HealthcareService"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Id"
+  options {
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Meta"
+  options {
+    [google.fhir.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Uri"
+  options {
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Code"
+  options {
+    [google.fhir.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Narrative"
+  options {
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.ContainedResource"
+  options {
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Identifier"
+  options {
+    [google.fhir.proto.field_description]: "External identifiers for this item"
+  }
+}
+field {
+  name: "active"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Boolean"
+  options {
+    [google.fhir.proto.field_description]: "Whether this HealthcareService record is in active use"
+  }
+}
+field {
+  name: "provided_by"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Organization that provides this service"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+  }
+}
+field {
+  name: "category"
+  number: 12
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "Broad category of service being performed or delivered"
+  }
+}
+field {
+  name: "type"
+  number: 13
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "Type of service that may be delivered or performed"
+  }
+}
+field {
+  name: "specialty"
+  number: 14
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "Specialties handled by the HealthcareService"
+  }
+}
+field {
+  name: "location"
+  number: 15
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Location(s) where service may be provided"
+    [google.fhir.proto.valid_reference_type]: "Location"
+  }
+}
+field {
+  name: "name"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "Description of service as presented to a consumer while searching"
+  }
+}
+field {
+  name: "comment"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "Additional description and/or any specific issues not covered elsewhere"
+  }
+}
+field {
+  name: "extra_details"
+  number: 18
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Markdown"
+  options {
+    [google.fhir.proto.field_description]: "Extra details about the service that can\'t be placed in the other fields"
+  }
+}
+field {
+  name: "photo"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Attachment"
+  options {
+    [google.fhir.proto.field_description]: "Facilitates quick identification of the service"
+  }
+}
+field {
+  name: "telecom"
+  number: 20
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.ContactPoint"
+  options {
+    [google.fhir.proto.field_description]: "Contacts related to the healthcare service"
+  }
+}
+field {
+  name: "coverage_area"
+  number: 21
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Location(s) service is intended for/available to"
+    [google.fhir.proto.valid_reference_type]: "Location"
+  }
+}
+field {
+  name: "service_provision_code"
+  number: 22
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "Conditions under which service is available/offered"
+  }
+}
+field {
+  name: "eligibility"
+  number: 23
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.HealthcareService.Eligibility"
+  options {
+    [google.fhir.proto.field_description]: "Specific eligibility requirements required to use the service"
+    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+  }
+}
+field {
+  name: "program"
+  number: 24
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "Programs that this service is applicable to"
+  }
+}
+field {
+  name: "characteristic"
+  number: 25
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "Collection of characteristics (attributes)"
+  }
+}
+field {
+  name: "communication"
+  number: 26
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "The language that this service is offered in"
+  }
+}
+field {
+  name: "referral_method"
+  number: 27
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "Ways that the service accepts referrals"
+  }
+}
+field {
+  name: "appointment_required"
+  number: 28
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Boolean"
+  options {
+    [google.fhir.proto.field_description]: "If an appointment is required for access to this service"
+  }
+}
+field {
+  name: "available_time"
+  number: 29
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.HealthcareService.AvailableTime"
+  options {
+    [google.fhir.proto.field_description]: "Times the Service Site is available"
+    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+  }
+}
+field {
+  name: "not_available"
+  number: 30
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.HealthcareService.NotAvailable"
+  options {
+    [google.fhir.proto.field_description]: "Not available during this time due to provided reason"
+    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+  }
+}
+field {
+  name: "availability_exceptions"
+  number: 31
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "Description of availability exceptions"
+  }
+}
+field {
+  name: "endpoint"
+  number: 32
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Technical endpoints providing access to electronic services operated for the healthcare service"
+    [google.fhir.proto.valid_reference_type]: "Endpoint"
+  }
+}
+nested_type {
+  name: "Eligibility"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
+    }
+  }
+  field {
+    name: "code"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "Coded value for the eligibility"
+    }
+  }
+  field {
+    name: "comment"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Markdown"
+    options {
+      [google.fhir.proto.field_description]: "Describes the eligibility conditions for the service"
+    }
+  }
+}
+nested_type {
+  name: "AvailableTime"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
+    }
+  }
+  field {
+    name: "days_of_week"
+    number: 4
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.DaysOfWeekCode"
+    options {
+      [google.fhir.proto.field_description]: "mon | tue | wed | thu | fri | sat | sun"
+    }
+  }
+  field {
+    name: "all_day"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Boolean"
+    options {
+      [google.fhir.proto.field_description]: "Always available? e.g. 24 hour service"
+    }
+  }
+  field {
+    name: "available_start_time"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Time"
+    options {
+      [google.fhir.proto.field_description]: "Opening time of day (ignored if allDay = true)"
+    }
+  }
+  field {
+    name: "available_end_time"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Time"
+    options {
+      [google.fhir.proto.field_description]: "Closing time of day (ignored if allDay = true)"
+    }
+  }
+}
+nested_type {
+  name: "NotAvailable"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
+    }
+  }
+  field {
+    name: "description"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.String"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Reason presented to the user explaining why time not available"
+    }
+  }
+  field {
+    name: "during"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Period"
+    options {
+      [google.fhir.proto.field_description]: "Service not available from this date"
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for HealthcareService, last updated 2018-12-27T22:37:54.724+11:00.\nThe details of a healthcare service available at a location.\nSee http://hl7.org/fhir/StructureDefinition/HealthcareService"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/HealthcareService"
+}

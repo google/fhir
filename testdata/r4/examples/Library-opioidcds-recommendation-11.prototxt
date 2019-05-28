@@ -1,0 +1,210 @@
+id {
+  value: "opioidcds-recommendation-11"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: opioidcds-recommendation-11</p><p><b>identifier</b>: OpioidCDS_REC_11 (OFFICIAL)</p><p><b>version</b>: 0.1.0</p><p><b>title</b>: Opioid CDS Logic for recommendation #11</p><p><b>status</b>: active</p><p><b>experimental</b>: false</p><p><b>type</b>: Logic Library <span>(Details : {http://terminology.hl7.org/CodeSystem/library-type code \'logic-library\' = \'Logic Library\', given as \'Logic Library\'})</span></p><p><b>date</b>: 25/03/2018 1:49:09 PM</p><p><b>publisher</b>: Centers for Disease Control and Prevention (CDC)</p><p><b>description</b>: Opioid decision support logic to avoid prescribing opioid pain medication and benzodiazepines concurrently whenever possible.</p><p><b>useContext</b>: , </p><p><b>jurisdiction</b>: United States of America <span>(Details : {urn:iso:std:iso:3166 code \'US\' = \'United States of America\', given as \'United States of America\'})</span></p><p><b>purpose</b>: The purpose of this library is to determine whether opioid pain medication and benzodiazepines have been prescribed concurrently.</p><p><b>usage</b>: This library is used to notify the prescriber/user to avoid prescribing opioid pain medication and benzodiazepines concurrently.</p><p><b>copyright</b>: \302\251 CDC 2016+.</p><p><b>topic</b>: Opioid Prescribing <span>(Details )</span></p><p><b>author</b>: , , , </p><p><b>relatedArtifact</b>: , </p><p><b>dataRequirement</b>: , </p><p><b>content</b>: </p></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  value {
+    value: "OpioidCDS_REC_11"
+  }
+}
+version {
+  value: "0.1.0"
+}
+title {
+  value: "Opioid CDS Logic for recommendation #11"
+}
+status {
+  value: ACTIVE
+}
+experimental {
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/library-type"
+    }
+    code {
+      value: "logic-library"
+    }
+    display {
+      value: "Logic Library"
+    }
+  }
+}
+date {
+  value_us: 1522007349000000
+  timezone: "-06:00"
+  precision: SECOND
+}
+publisher {
+  value: "Centers for Disease Control and Prevention (CDC)"
+}
+description {
+  value: "Opioid decision support logic to avoid prescribing opioid pain medication and benzodiazepines concurrently whenever possible."
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+    display {
+      value: "Clinical Focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "182888003"
+        }
+        display {
+          value: "Medication requested (situation)"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+    display {
+      value: "Clinical Focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "82423001"
+        }
+        display {
+          value: "Chronic pain (finding)"
+        }
+      }
+    }
+  }
+}
+jurisdiction {
+  coding {
+    system {
+      value: "urn:iso:std:iso:3166"
+    }
+    code {
+      value: "US"
+    }
+    display {
+      value: "United States of America"
+    }
+  }
+}
+purpose {
+  value: "The purpose of this library is to determine whether opioid pain medication and benzodiazepines have been prescribed concurrently."
+}
+usage {
+  value: "This library is used to notify the prescriber/user to avoid prescribing opioid pain medication and benzodiazepines concurrently."
+}
+copyright {
+  value: "\302\251 CDC 2016+."
+}
+topic {
+  text {
+    value: "Opioid Prescribing"
+  }
+}
+author {
+  name {
+    value: "Kensaku Kawamoto, MD, PhD, MHS"
+  }
+}
+author {
+  name {
+    value: "Bryn Rhodes"
+  }
+}
+author {
+  name {
+    value: "Floyd Eisenberg, MD, MPH"
+  }
+}
+author {
+  name {
+    value: "Robert McClure, MD, MPH"
+  }
+}
+related_artifact {
+  type {
+    value: DOCUMENTATION
+  }
+  display {
+    value: "CDC guideline for prescribing opioids for chronic pain"
+  }
+  url {
+    value: "https://guidelines.gov/summaries/summary/50153/cdc-guideline-for-prescribing-opioids-for-chronic-pain---united-states-2016#420"
+  }
+}
+related_artifact {
+  type {
+    value: DEPENDS_ON
+  }
+  resource {
+    value: "Library/opioidcds-common"
+  }
+}
+data_requirement {
+  type {
+    value: MEDICATION_REQUEST
+  }
+  code_filter {
+    path {
+      value: "medicationCodeableConcept"
+    }
+    value_set {
+      value: "http://example.org/fhir/ValueSet/benzodiazepines"
+    }
+  }
+}
+data_requirement {
+  type {
+    value: MEDICATION_REQUEST
+  }
+  code_filter {
+    path {
+      value: "medicationCodeableConcept"
+    }
+    value_set {
+      value: "http://example.org/fhir/ValueSet/opioids-abused-in-ambulatory-care"
+    }
+  }
+}
+content {
+  content_type {
+    value: "application/elm+xml"
+  }
+  data {
+    value: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<library xmlns=\"urn:hl7-org:elm:r1\" xmlns:t=\"urn:hl7-org:elm-types:r1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:fhir=\"http://hl7.org/fhir\" xmlns:qdm43=\"urn:healthit-gov:qdm:v4_3\" xmlns:qdm53=\"urn:healthit-gov:qdm:v5_3\" xmlns:a=\"urn:hl7-org:cql-annotations:r1\">\n   <annotation startLine=\"54\" startChar=\"13\" endLine=\"54\" endChar=\"57\" message=\"Could not resolve code path medicationCodeableConcept for the type of the retrieve FHIR.MedicationRequest.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"54\" startChar=\"13\" endLine=\"54\" endChar=\"57\" message=\"Could not resolve membership operator for terminology target of the retrieve.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"58\" startChar=\"14\" endLine=\"58\" endChar=\"77\" message=\"Could not resolve code path medicationCodeableConcept for the type of the retrieve FHIR.MedicationRequest.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"58\" startChar=\"14\" endLine=\"58\" endChar=\"77\" message=\"Could not resolve membership operator for terminology target of the retrieve.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <identifier id=\"OpioidCDS_STU4_REC_11\" version=\"0.1.0\"/>\n   <schemaIdentifier id=\"urn:hl7-org:elm\" version=\"r1\"/>\n   <usings>\n      <def localIdentifier=\"System\" uri=\"urn:hl7-org:elm-types:r1\"/>\n      <def localIdentifier=\"FHIR\" uri=\"http://hl7.org/fhir\" version=\"3.2.0\"/>\n   </usings>\n   <includes>\n      <def localIdentifier=\"Common\" path=\"OpioidCDS_STU4_Common\" version=\"0.1.0\"/>\n   </includes>\n   <parameters>\n      <def name=\"ContextPrescriptions\" accessLevel=\"Public\">\n         <parameterTypeSpecifier xsi:type=\"ListTypeSpecifier\">\n            <elementType name=\"fhir:MedicationRequest\" xsi:type=\"NamedTypeSpecifier\"/>\n         </parameterTypeSpecifier>\n      </def>\n   </parameters>\n   <statements>\n      <def name=\"Patient\" context=\"Patient\">\n         <expression xsi:type=\"SingletonFrom\">\n            <operand dataType=\"fhir:Patient\" xsi:type=\"Retrieve\"/>\n         </expression>\n      </def>\n      <def name=\"Validate Trigger Event For Benzodiazepine\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Exists\">\n            <operand xsi:type=\"Query\">\n               <source alias=\"triggerScript\">\n                  <expression name=\"ContextPrescriptions\" xsi:type=\"ParameterRef\"/>\n               </source>\n               <where name=\"IsBenzodiazepine\" libraryName=\"Common\" xsi:type=\"FunctionRef\">\n                  <operand name=\"ToCode\" libraryName=\"Common\" xsi:type=\"FunctionRef\">\n                     <operand xsi:type=\"Indexer\">\n                        <operand path=\"coding\" xsi:type=\"Property\">\n                           <source path=\"medication\" scope=\"triggerScript\" xsi:type=\"Property\"/>\n                        </operand>\n                        <operand valueType=\"t:Integer\" value=\"0\" xsi:type=\"Literal\"/>\n                     </operand>\n                  </operand>\n               </where>\n            </operand>\n         </expression>\n      </def>\n      <def name=\"Validate Trigger Event For Ambulatory Care Abuse Potential\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Exists\">\n            <operand xsi:type=\"Query\">\n               <source alias=\"triggerScript\">\n                  <expression name=\"ContextPrescriptions\" xsi:type=\"ParameterRef\"/>\n               </source>\n               <where name=\"IsOpioidWithAmbulatoryAbusePotential\" libraryName=\"Common\" xsi:type=\"FunctionRef\">\n                  <operand name=\"ToCode\" libraryName=\"Common\" xsi:type=\"FunctionRef\">\n                     <operand xsi:type=\"Indexer\">\n                        <operand path=\"coding\" xsi:type=\"Property\">\n                           <source path=\"medication\" scope=\"triggerScript\" xsi:type=\"Property\"/>\n                        </operand>\n                        <operand valueType=\"t:Integer\" value=\"0\" xsi:type=\"Literal\"/>\n                     </operand>\n                  </operand>\n               </where>\n            </operand>\n         </expression>\n      </def>\n      <def name=\"On Benzodiazepine\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Or\">\n            <operand name=\"Validate Trigger Event For Benzodiazepine\" xsi:type=\"ExpressionRef\"/>\n            <operand xsi:type=\"Exists\">\n               <operand dataType=\"fhir:MedicationRequest\" codeProperty=\"medicationCodeableConcept\" xsi:type=\"Retrieve\">\n                  <codes name=\"Benzodiazepines\" libraryName=\"Common\" xsi:type=\"ValueSetRef\"/>\n               </operand>\n            </operand>\n         </expression>\n      </def>\n      <def name=\"Opioid with Ambulatory Care Abuse Potential\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Or\">\n            <operand name=\"Validate Trigger Event For Ambulatory Care Abuse Potential\" xsi:type=\"ExpressionRef\"/>\n            <operand xsi:type=\"Exists\">\n               <operand dataType=\"fhir:MedicationRequest\" codeProperty=\"medicationCodeableConcept\" xsi:type=\"Retrieve\">\n                  <codes name=\"Ambulatory Abuse Potential Opioids\" libraryName=\"Common\" xsi:type=\"ValueSetRef\"/>\n               </operand>\n            </operand>\n         </expression>\n      </def>\n      <def name=\"Inclusion Criteria\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"And\">\n            <operand xsi:type=\"And\">\n               <operand xsi:type=\"Or\">\n                  <operand name=\"Validate Trigger Event For Benzodiazepine\" xsi:type=\"ExpressionRef\"/>\n                  <operand name=\"Validate Trigger Event For Ambulatory Care Abuse Potential\" xsi:type=\"ExpressionRef\"/>\n               </operand>\n               <operand name=\"On Benzodiazepine\" xsi:type=\"ExpressionRef\"/>\n            </operand>\n            <operand name=\"Opioid with Ambulatory Care Abuse Potential\" xsi:type=\"ExpressionRef\"/>\n         </expression>\n      </def>\n      <def name=\"Get Indicator\" context=\"Patient\" accessLevel=\"Public\">\n         <expression valueType=\"t:String\" value=\"warning\" xsi:type=\"Literal\"/>\n      </def>\n      <def name=\"Get Summary\" context=\"Patient\" accessLevel=\"Public\">\n         <expression valueType=\"t:String\" value=\"Avoid prescribing opioid pain medication and benzodiazepine concurrently whenever possible.\" xsi:type=\"Literal\"/>\n      </def>\n      <def name=\"Get Detail\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"If\">\n            <condition asType=\"t:Boolean\" xsi:type=\"As\">\n               <operand name=\"Validate Trigger Event For Benzodiazepine\" xsi:type=\"ExpressionRef\"/>\n            </condition>\n            <then valueType=\"t:String\" value=\"The benzodiazepine prescription request is concurrent with an active opioid prescription\" xsi:type=\"Literal\"/>\n            <else valueType=\"t:String\" value=\"The opioid prescription request is concurrent with an active benzodiazepine prescription\" xsi:type=\"Literal\"/>\n         </expression>\n      </def>\n   </statements>\n</library>\n"
+  }
+}

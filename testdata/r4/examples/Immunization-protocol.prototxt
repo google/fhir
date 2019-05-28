@@ -1,0 +1,206 @@
+id {
+  value: "protocol"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: protocol</p><p><b>identifier</b>: urn:oid:1.3.6.1.4.1.21367.2005.3.7.1234</p><p><b>status</b>: completed</p><p><b>vaccineCode</b>: Twinrix (HepA/HepB) <span>(Details : {http://hl7.org/fhir/sid/cvx code \'104\' = \'Hep A-Hep B)</span></p><p><b>patient</b>: <a>Patient/example</a></p><p><b>encounter</b>: <a>Encounter/example</a></p><p><b>occurrence</b>: 18/06/2018</p><p><b>primarySource</b>: true</p><p><b>location</b>: <a>Location/1</a></p><p><b>manufacturer</b>: <a>Organization/hl7</a></p><p><b>lotNumber</b>: PT123F</p><p><b>expirationDate</b>: 15/12/2018</p><p><b>site</b>: left arm <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ActSite code \'LA\' = \'left arm\', given as \'left arm\'})</span></p><p><b>route</b>: Injection, intramuscular <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration code \'IM\' = \'Injection, intramuscular\', given as \'Injection, intramuscular\'})</span></p><p><b>doseQuantity</b>: 5 mg<span> (Details: UCUM code mg = \'mg\')</span></p><blockquote><p><b>performer</b></p><p><b>function</b>: Ordering Provider <span>(Details : {http://terminology.hl7.org/CodeSystem/v2-0443 code \'OP\' = \'Ordering Provider)</span></p><p><b>actor</b>: <a>Practitioner/example</a></p></blockquote><blockquote><p><b>performer</b></p><p><b>function</b>: Administering Provider <span>(Details : {http://terminology.hl7.org/CodeSystem/v2-0443 code \'AP\' = \'Administering Provider)</span></p><p><b>actor</b>: <a>Practitioner/example</a></p></blockquote><p><b>isSubpotent</b>: false</p><p><b>programEligibility</b>: Not Eligible <span>(Details : {http://terminology.hl7.org/CodeSystem/immunization-program-eligibility code \'ineligible\' = \'Not Eligible)</span></p><p><b>fundingSource</b>: Private <span>(Details : {http://terminology.hl7.org/CodeSystem/immunization-funding-source code \'private\' = \'Private)</span></p><blockquote><p><b>protocolApplied</b></p><p><b>series</b>: 2-dose</p><p><b>targetDisease</b>: Viral hepatitis, type A <span>(Details : {SNOMED CT code \'40468003\' = \'Viral hepatitis, type A)</span></p><p><b>doseNumber</b>: 1</p></blockquote><blockquote><p><b>protocolApplied</b></p><p><b>series</b>: 3-dose</p><p><b>targetDisease</b>: Type B viral hepatitis <span>(Details : {SNOMED CT code \'66071002\' = \'Type B viral hepatitis)</span></p><p><b>doseNumber</b>: 2</p></blockquote></div>"
+  }
+}
+identifier {
+  system {
+    value: "urn:ietf:rfc:3986"
+  }
+  value {
+    value: "urn:oid:1.3.6.1.4.1.21367.2005.3.7.1234"
+  }
+}
+status {
+  value: COMPLETED
+}
+vaccine_code {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/sid/cvx"
+    }
+    code {
+      value: "104"
+    }
+  }
+  text {
+    value: "Twinrix (HepA/HepB)"
+  }
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+occurrence {
+  date_time {
+    value_us: 1529244000000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+primary_source {
+  value: true
+}
+location {
+  location_id {
+    value: "1"
+  }
+}
+manufacturer {
+  organization_id {
+    value: "hl7"
+  }
+}
+lot_number {
+  value: "PT123F"
+}
+expiration_date {
+  value_us: 1544792400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+site {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActSite"
+    }
+    code {
+      value: "LA"
+    }
+    display {
+      value: "left arm"
+    }
+  }
+}
+route {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration"
+    }
+    code {
+      value: "IM"
+    }
+    display {
+      value: "Injection, intramuscular"
+    }
+  }
+}
+dose_quantity {
+  value {
+    value: "5"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "mg"
+  }
+}
+performer {
+  function {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0443"
+      }
+      code {
+        value: "OP"
+      }
+    }
+  }
+  actor {
+    practitioner_id {
+      value: "example"
+    }
+  }
+}
+performer {
+  function {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0443"
+      }
+      code {
+        value: "AP"
+      }
+    }
+  }
+  actor {
+    practitioner_id {
+      value: "example"
+    }
+  }
+}
+is_subpotent {
+}
+program_eligibility {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/immunization-program-eligibility"
+    }
+    code {
+      value: "ineligible"
+    }
+  }
+}
+funding_source {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/immunization-funding-source"
+    }
+    code {
+      value: "private"
+    }
+  }
+}
+protocol_applied {
+  series {
+    value: "2-dose"
+  }
+  target_disease {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "40468003"
+      }
+    }
+  }
+  dose_number {
+    positive_int {
+      value: 1
+    }
+  }
+}
+protocol_applied {
+  series {
+    value: "3-dose"
+  }
+  target_disease {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "66071002"
+      }
+    }
+  }
+  dose_number {
+    positive_int {
+      value: 2
+    }
+  }
+}

@@ -16,8 +16,7 @@ package com.google.fhir.stu3;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import com.google.common.io.Files;
-import com.google.devtools.build.runfiles.Runfiles;
+import com.google.fhir.common.JsonFormatTestBase;
 import com.google.fhir.stu3.proto.Account;
 import com.google.fhir.stu3.proto.ActivityDefinition;
 import com.google.fhir.stu3.proto.AdverseEvent;
@@ -136,20 +135,7 @@ import com.google.fhir.stu3.proto.TestScript;
 import com.google.fhir.stu3.proto.ValueSet;
 import com.google.fhir.stu3.proto.VisionPrescription;
 import com.google.fhir.stu3.testing.TestPatient;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
-import com.google.protobuf.Message;
-import com.google.protobuf.Message.Builder;
-import com.google.protobuf.TextFormat;
-import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
-import java.time.ZoneId;
-import java.util.Map;
-import java.util.TreeSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -157,93 +143,15 @@ import org.junit.runners.JUnit4;
 
 /** Unit tests for {@link JsonFormat}. */
 @RunWith(JUnit4.class)
-public class JsonFormatTest {
-  private JsonFormat.Parser jsonParser;
-  private JsonFormat.Printer jsonPrinter;
-  private TextFormat.Parser textParser;
-  private Runfiles runfiles;
+public class JsonFormatTest extends JsonFormatTestBase {
 
-  /** Read the specifed json file from the testdata directory as a String. */
-  private String loadJson(String filename) throws IOException {
-    File file = new File(runfiles.rlocation("com_google_fhir/" + filename));
-    return Files.asCharSource(file, StandardCharsets.UTF_8).read();
-  }
-
-  /** Read the specifed prototxt file from the testdata directory and parse it. */
-  private void mergeText(String filename, Message.Builder builder) throws IOException {
-    File file = new File(runfiles.rlocation("com_google_fhir/testdata/stu3/" + filename));
-    textParser.merge(Files.asCharSource(file, StandardCharsets.UTF_8).read(), builder);
-  }
-
-  private void testParse(String name, Builder builder) throws IOException {
-    // Parse the json version of the input.
-    Builder jsonBuilder = builder.clone();
-    jsonParser.merge(loadJson("spec/hl7.fhir.core/3.0.1/package/" + name + ".json"), jsonBuilder);
-    // Parse the proto text version of the input.
-    Builder textBuilder = builder.clone();
-    mergeText("examples/" + name + ".prototxt", textBuilder);
-
-    assertThat(jsonBuilder.build().toString()).isEqualTo(textBuilder.build().toString());
-  }
-
-  private JsonElement canonicalize(JsonElement element) {
-    if (element.isJsonObject()) {
-      JsonObject object = element.getAsJsonObject();
-      JsonObject sorted = new JsonObject();
-      TreeSet<String> keys = new TreeSet<>();
-      for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-        keys.add(entry.getKey());
-      }
-      for (String key : keys) {
-        sorted.add(key, canonicalize(object.get(key)));
-      }
-      return sorted;
-    }
-    if (element.isJsonArray()) {
-      JsonArray sorted = new JsonArray();
-      for (JsonElement e : element.getAsJsonArray()) {
-        sorted.add(canonicalize(e));
-      }
-      return sorted;
-    }
-    return element;
-  }
-
-  private String canonicalizeJson(String json) {
-    com.google.gson.JsonParser gsonParser = new com.google.gson.JsonParser();
-    JsonElement testJson = canonicalize(gsonParser.parse(new JsonReader(new StringReader(json))));
-    return testJson.toString();
-  }
-
-  private void testPrint(String name, Builder builder) throws IOException {
-    // Parse the proto text version of the input.
-    Builder textBuilder = builder.clone();
-    mergeText("examples/" + name + ".prototxt", textBuilder);
-    // Load the json version of the input as a String.
-    String jsonGolden = loadJson("spec/hl7.fhir.core/3.0.1/package/" + name + ".json");
-    // Print the proto as json and compare.
-    String jsonTest = jsonPrinter.print(textBuilder);
-    assertThat(jsonTest).isEqualTo(jsonGolden);
-  }
-
-  private void testConvertForAnalytics(String name, Builder builder) throws IOException {
-    // Parse the json version of the input.
-    Builder jsonBuilder = builder.clone();
-    jsonParser.merge(loadJson("spec/hl7.fhir.core/3.0.1/package/" + name + ".json"), jsonBuilder);
-    // Load the analytics version of the input as a String.
-    String analyticsGolden = loadJson("testdata/stu3/bigquery/" + name + ".json");
-    // Print and compare.
-    String analyticsTest = jsonPrinter.forAnalytics().print(jsonBuilder);
-    assertThat(analyticsTest.trim()).isEqualTo(analyticsGolden.trim());
+  public JsonFormatTest() {
+    super("stu3", "3.0.1");
   }
 
   @Before
   public void setUp() throws IOException {
-    jsonParser =
-        JsonFormat.Parser.newBuilder().withDefaultTimeZone(ZoneId.of("Australia/Sydney")).build();
-    jsonPrinter = JsonFormat.getPrinter().withDefaultTimeZone(ZoneId.of("Australia/Sydney"));
-    textParser = TextFormat.getParser();
-    runfiles = Runfiles.create();
+    setUpParser();
   }
 
   /** Test parsing JSON edge cases. */

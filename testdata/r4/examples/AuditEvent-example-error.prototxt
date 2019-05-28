@@ -1,0 +1,203 @@
+id {
+  value: "example-error"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Recording that an error has happened due to a client requesting that an Observation resource be Created on the Patient endpoint. Note that the OperationOutcome from failed transaction is recorded as an AuditEvent.entity.</div>"
+  }
+}
+contained {
+  operation_outcome {
+    id {
+      value: "o1"
+    }
+    issue {
+      severity {
+        value: ERROR
+      }
+      code {
+        value: INVALID
+      }
+      details {
+        text {
+          value: "Invalid pointer operation"
+        }
+      }
+    }
+  }
+}
+type {
+  system {
+    value: "http://terminology.hl7.org/CodeSystem/audit-event-type"
+  }
+  code {
+    value: "rest"
+  }
+  display {
+    value: "Restful Operation"
+  }
+}
+subtype {
+  system {
+    value: "http://hl7.org/fhir/restful-interaction"
+  }
+  code {
+    value: "create"
+  }
+  display {
+    value: "create"
+  }
+}
+action {
+  value: C
+}
+recorded {
+  value_us: 1504827744000000
+  timezone: "Z"
+  precision: SECOND
+}
+outcome {
+  value: NUM_8
+}
+outcome_desc {
+  value: "Invalid request to create an Operation resource on the Patient endpoint."
+}
+agent {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/extra-security-role-type"
+      }
+      code {
+        value: "humanuser"
+      }
+      display {
+        value: "human user"
+      }
+    }
+  }
+  who {
+    identifier {
+      value {
+        value: "95"
+      }
+    }
+  }
+  alt_id {
+    value: "601847123"
+  }
+  name {
+    value: "Grahame Grieve"
+  }
+  requestor {
+    value: true
+  }
+}
+agent {
+  type {
+    coding {
+      system {
+        value: "http://dicom.nema.org/resources/ontology/DCM"
+      }
+      code {
+        value: "110153"
+      }
+      display {
+        value: "Source Role ID"
+      }
+    }
+  }
+  who {
+    identifier {
+      system {
+        value: "urn:oid:2.16.840.1.113883.4.2"
+      }
+      value {
+        value: "2.16.840.1.113883.4.2"
+      }
+    }
+  }
+  alt_id {
+    value: "6580"
+  }
+  requestor {
+  }
+  network {
+    address {
+      value: "Workstation1.ehr.familyclinic.com"
+    }
+    type {
+      value: NUM_1
+    }
+  }
+}
+source {
+  site {
+    value: "Cloud"
+  }
+  observer {
+    identifier {
+      value {
+        value: "hl7connect.healthintersections.com.au"
+      }
+    }
+  }
+  type {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/security-source-type"
+    }
+    code {
+      value: "3"
+    }
+    display {
+      value: "Web Server"
+    }
+  }
+}
+entity {
+  type {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/audit-entity-type"
+    }
+    code {
+      value: "2"
+    }
+    display {
+      value: "System Object"
+    }
+  }
+  detail {
+    type {
+      value: "requested transaction"
+    }
+    value {
+      string_value {
+        value: "http POST ..... "
+      }
+    }
+  }
+}
+entity {
+  what {
+    fragment {
+      value: "o1"
+    }
+  }
+  type {
+    system {
+      value: "http://hl7.org/fhir/resource-types"
+    }
+    code {
+      value: "OperationOutcome"
+    }
+    display {
+      value: "OperationOutcome"
+    }
+  }
+  description {
+    value: "transaction failed"
+  }
+}

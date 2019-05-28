@@ -1,0 +1,53 @@
+id {
+  value: "1"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t25 Dec 2013 9:00am - 9:15am: <b>Busy</b> Physiotherapy\n\t\t</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://example.org/identifiers/slots"
+  }
+  value {
+    value: "123132"
+  }
+}
+service_category {
+  coding {
+    code {
+      value: "17"
+    }
+    display {
+      value: "General Practice"
+    }
+  }
+}
+schedule {
+  schedule_id {
+    value: "example"
+  }
+}
+status {
+  value: BUSY
+}
+start {
+  value_us: 1387962000000000
+  timezone: "Z"
+  precision: SECOND
+}
+end {
+  value_us: 1387962900000000
+  timezone: "Z"
+  precision: SECOND
+}
+overbooked {
+  value: true
+}
+comment {
+  value: "Assessments should be performed before requesting appointments in this slot."
+}

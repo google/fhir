@@ -14,7 +14,9 @@
 
 package com.google.fhir.stu3;
 
-import com.google.fhir.stu3.proto.Oid;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.Oid;
+import com.google.protobuf.MessageOrBuilder;
 import java.util.regex.Pattern;
 
 /** A wrapper around the Oid FHIR primitive type. */
@@ -27,6 +29,10 @@ public class OidWrapper extends PrimitiveWrapper<Oid> {
   /** Create an OidWrapper from an Oid. */
   public OidWrapper(Oid oid) {
     super(oid);
+  }
+
+  public OidWrapper(MessageOrBuilder message) {
+    super(ProtoUtils.fieldWiseCopy(message, Oid.newBuilder()).build());
   }
 
   /** Create an OidWrapper from a java String. */

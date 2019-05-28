@@ -1,0 +1,1077 @@
+id {
+  value: "b248b1b2-1686-4b94-9936-37d7a5f94b51"
+}
+meta {
+  last_updated {
+    value_us: 1338335132000000
+    timezone: "Z"
+    precision: SECOND
+  }
+}
+type {
+  value: COLLECTION
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Patient/1"
+  }
+  resource {
+    patient {
+      id {
+        value: "1"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Everywoman, Eve. SSN:\n            444222222</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "444222222"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Everywoman"
+        }
+        given {
+          value: "Eve"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-2003"
+        }
+        use {
+          value: WORK
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+      birth_date {
+        value_us: 107618400000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "2222 Home Street"
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "hl7"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Patient/2"
+  }
+  resource {
+    patient {
+      id {
+        value: "2"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Everyman, Adam. SSN:\n            444333333</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "444333333"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Everyman"
+        }
+        given {
+          value: "Adam"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-2004"
+        }
+        use {
+          value: WORK
+        }
+      }
+      gender {
+        value: MALE
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "2222 Home Street"
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "hl7"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Patient/3"
+  }
+  resource {
+    patient {
+      id {
+        value: "3"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Kidd, Kari. SSN:\n            444555555</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "444555555"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Kidd"
+        }
+        given {
+          value: "Kari"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-2005"
+        }
+        use {
+          value: WORK
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "2222 Home Street"
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "hl7"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Patient/4"
+  }
+  resource {
+    patient {
+      id {
+        value: "4"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Nuclear, Nancy. SSN:\n            444114567</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "444114567"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Nuclear"
+        }
+        given {
+          value: "Nancy"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-5001"
+        }
+        use {
+          value: WORK
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "6666 Home Street"
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "hl7"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Patient/5"
+  }
+  resource {
+    patient {
+      id {
+        value: "5"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Nuclear, Neville. SSN:\n            444111234</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "444111234"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Nuclear"
+        }
+        given {
+          value: "Neville"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-5001"
+        }
+        use {
+          value: WORK
+        }
+      }
+      gender {
+        value: MALE
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "6666 Home Street"
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "hl7"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Patient/6"
+  }
+  resource {
+    patient {
+      id {
+        value: "6"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Nuclear, Ned. SSN:\n            444113456</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "444113456"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Nuclear"
+        }
+        given {
+          value: "Ned"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-5001"
+        }
+        use {
+          value: WORK
+        }
+      }
+      gender {
+        value: MALE
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "6666 Home Street"
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "hl7"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Patient/7"
+  }
+  resource {
+    patient {
+      id {
+        value: "7"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Nuclear, Nelda. SSN:\n            444112345</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "444112345"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Nuclear"
+        }
+        given {
+          value: "Nelda"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-5001"
+        }
+        use {
+          value: WORK
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "6666 Home Street"
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "hl7"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Patient/8"
+  }
+  resource {
+    patient {
+      id {
+        value: "8"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Mum, Martha. SSN:\n            444666666</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "444666666"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Mum"
+        }
+        given {
+          value: "Martha"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-2006"
+        }
+        use {
+          value: WORK
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "4444 Home Street"
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "hl7"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Patient/9"
+  }
+  resource {
+    patient {
+      id {
+        value: "9"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Sons, Stuart. SSN:\n            444777777</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "444777777"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Sons"
+        }
+        given {
+          value: "Stuart"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-2007"
+        }
+        use {
+          value: WORK
+        }
+      }
+      gender {
+        value: OTHER
+        extension {
+          url {
+            value: "http://example.org/Profile/administrative-status"
+          }
+          value {
+            codeable_concept {
+              coding {
+                system {
+                  value: "http://example.org/fhir/v2/administrative-status"
+                }
+                code {
+                  value: "FTM"
+                }
+                display {
+                  value: "female-to-male"
+                }
+              }
+            }
+          }
+        }
+      }
+      deceased {
+        date_time {
+          value_us: 1030111200000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "4444 Home Street"
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "hl7"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Patient/10"
+  }
+  resource {
+    patient {
+      id {
+        value: "10"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Betterhalf, Boris. SSN:\n            444888888</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "444888888"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Betterhalf"
+        }
+        given {
+          value: "Boris"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-2008"
+        }
+        use {
+          value: WORK
+        }
+      }
+      gender {
+        value: MALE
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "2222 Home Street"
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "hl7"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Patient/11"
+  }
+  resource {
+    patient {
+      id {
+        value: "11"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Relative, Ralph. SSN:\n            444999999</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "444999999"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Relative"
+        }
+        given {
+          value: "Ralph"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-2009"
+        }
+        use {
+          value: WORK
+        }
+      }
+      gender {
+        value: MALE
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "4444 Home Street"
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "hl7"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Patient/12"
+  }
+  resource {
+    patient {
+      id {
+        value: "12"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Contact, Carrie. SSN:\n            555222222</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "555222222"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Contact"
+        }
+        given {
+          value: "Carrie"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-2010"
+        }
+        use {
+          value: WORK
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "5555 Home Street"
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "hl7"
+        }
+      }
+    }
+  }
+}

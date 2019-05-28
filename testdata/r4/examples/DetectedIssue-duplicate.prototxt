@@ -1,0 +1,77 @@
+id {
+  value: "duplicate"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Similar test was performed within the past 14 days</p>\n      <ul>\n        <li>\n          <a href=\"ServiceRequest/id\">Chest CT - ordered May 8, 2013 by Dr. Adam Careful</a>\n        </li>\n        <li>\n          <a href=\"ImagingStudy/example\">Image 1 from Series 3: CT Images on Patient MINT (MINT1234) taken at 1-Jan 2011 01:20 AM</a>\n        </li>\n      </ul>\n    </div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://example.org"
+  }
+  value {
+    value: "12345"
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "DUPTHPY"
+    }
+    display {
+      value: "Duplicate Therapy Alert"
+    }
+  }
+}
+patient {
+  patient_id {
+    value: "dicom"
+  }
+}
+identified {
+  date_time {
+    value_us: 1367935200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+author {
+  device_id {
+    value: "software"
+  }
+}
+implicated {
+  service_request_id {
+    value: "di"
+  }
+  display {
+    value: "Chest CT - ordered May 8, 2013 by Dr. Adam Careful"
+  }
+}
+implicated {
+  imaging_study_id {
+    value: "example"
+  }
+  display {
+    value: "Image 1 from Series 3: CT Images on Patient MINT (MINT1234) taken at 1-Jan 2011 01:20 AM"
+  }
+}
+detail {
+  value: "Similar test was performed within the past 14 days"
+}
+reference {
+  value: "http://www.tmhp.com/RadiologyClinicalDecisionSupport/2011/CHEST%20IMAGING%20GUIDELINES%202011.pdf"
+}

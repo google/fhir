@@ -1,0 +1,80 @@
+id {
+  value: "component-b-example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Screening for Depression\n    <p>This measure example is used to illustrate how a composite measure can be constructured. This measure is one component of the composite measure.</p></div>"
+  }
+}
+title {
+  value: "Screening for Depression"
+}
+status {
+  value: DRAFT
+}
+scoring {
+  coding {
+    code {
+      value: "proportion"
+    }
+  }
+}
+group {
+  id {
+    value: "Main"
+  }
+  population {
+    code {
+      coding {
+        code {
+          value: "initial-population"
+        }
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Initial Population"
+      }
+    }
+  }
+  population {
+    code {
+      coding {
+        code {
+          value: "denominator"
+        }
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Denominator"
+      }
+    }
+  }
+  population {
+    code {
+      coding {
+        code {
+          value: "numerator"
+        }
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Numerator"
+      }
+    }
+  }
+}

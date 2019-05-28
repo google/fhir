@@ -1,0 +1,62 @@
+id {
+  value: "52345"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the CoverageEligibilityRequest</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/coverageelegibilityrequest"
+  }
+  value {
+    value: "52345"
+  }
+}
+status {
+  value: ACTIVE
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+purpose {
+  value: VALIDATION
+}
+patient {
+  patient_id {
+    value: "pat1"
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+provider {
+  organization_id {
+    value: "1"
+  }
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+insurance {
+  focal {
+    value: true
+  }
+  coverage {
+    coverage_id {
+      value: "9876B1"
+    }
+  }
+}

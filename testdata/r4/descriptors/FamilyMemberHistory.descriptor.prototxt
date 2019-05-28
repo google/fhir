@@ -1,0 +1,521 @@
+name: "FamilyMemberHistory"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Id"
+  options {
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Meta"
+  options {
+    [google.fhir.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Uri"
+  options {
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Code"
+  options {
+    [google.fhir.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Narrative"
+  options {
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.ContainedResource"
+  options {
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Identifier"
+  options {
+    [google.fhir.proto.field_description]: "External Id(s) for this record"
+  }
+}
+field {
+  name: "instantiates_canonical"
+  number: 10
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Canonical"
+  options {
+    [google.fhir.proto.field_description]: "Instantiates FHIR protocol or definition"
+  }
+}
+field {
+  name: "instantiates_uri"
+  number: 11
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Uri"
+  options {
+    [google.fhir.proto.field_description]: "Instantiates external protocol or definition"
+  }
+}
+field {
+  name: "status"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.FamilyHistoryStatusCode"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "partial | completed | entered-in-error | health-unknown"
+  }
+}
+field {
+  name: "data_absent_reason"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "subject-unknown | withheld | unable-to-obtain | deferred"
+  }
+}
+field {
+  name: "patient"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Patient history is about"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+  }
+}
+field {
+  name: "date"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "When history was recorded or last updated"
+  }
+}
+field {
+  name: "name"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "The family member described"
+  }
+}
+field {
+  name: "relationship"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Relationship to the subject"
+  }
+}
+field {
+  name: "sex"
+  number: 18
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "male | female | other | unknown"
+  }
+}
+field {
+  name: "born"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.FamilyMemberHistory.BornX"
+  options {
+    [google.fhir.proto.field_description]: "(approximate) date of birth"
+  }
+}
+field {
+  name: "age"
+  number: 20
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.FamilyMemberHistory.AgeX"
+  options {
+    [google.fhir.proto.field_description]: "(approximate) age"
+  }
+}
+field {
+  name: "estimated_age"
+  number: 21
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Boolean"
+  options {
+    [google.fhir.proto.field_description]: "Age is estimated?"
+  }
+}
+field {
+  name: "deceased"
+  number: 22
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.FamilyMemberHistory.DeceasedX"
+  options {
+    [google.fhir.proto.field_description]: "Dead? How old/when?"
+  }
+}
+field {
+  name: "reason_code"
+  number: 23
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "Why was family member history performed?"
+  }
+}
+field {
+  name: "reason_reference"
+  number: 24
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Why was family member history performed?"
+    [google.fhir.proto.valid_reference_type]: "Condition"
+    [google.fhir.proto.valid_reference_type]: "Observation"
+    [google.fhir.proto.valid_reference_type]: "AllergyIntolerance"
+    [google.fhir.proto.valid_reference_type]: "QuestionnaireResponse"
+    [google.fhir.proto.valid_reference_type]: "DiagnosticReport"
+    [google.fhir.proto.valid_reference_type]: "DocumentReference"
+  }
+}
+field {
+  name: "note"
+  number: 25
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Annotation"
+  options {
+    [google.fhir.proto.field_description]: "General note about related person"
+  }
+}
+field {
+  name: "condition"
+  number: 26
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.FamilyMemberHistory.Condition"
+  options {
+    [google.fhir.proto.field_description]: "Condition that the related person had"
+    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+  }
+}
+nested_type {
+  name: "BornX"
+  field {
+    name: "period"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Period"
+    oneof_index: 0
+  }
+  field {
+    name: "date"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Date"
+    oneof_index: 0
+  }
+  field {
+    name: "string_value"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.String"
+    oneof_index: 0
+    json_name: "string"
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+nested_type {
+  name: "AgeX"
+  field {
+    name: "age"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Age"
+    oneof_index: 0
+  }
+  field {
+    name: "range"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Range"
+    oneof_index: 0
+  }
+  field {
+    name: "string_value"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.String"
+    oneof_index: 0
+    json_name: "string"
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+nested_type {
+  name: "DeceasedX"
+  field {
+    name: "boolean"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Boolean"
+    oneof_index: 0
+  }
+  field {
+    name: "age"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Age"
+    oneof_index: 0
+  }
+  field {
+    name: "range"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Range"
+    oneof_index: 0
+  }
+  field {
+    name: "date"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Date"
+    oneof_index: 0
+  }
+  field {
+    name: "string_value"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.String"
+    oneof_index: 0
+    json_name: "string"
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+nested_type {
+  name: "Condition"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
+    }
+  }
+  field {
+    name: "code"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Condition suffered by relation"
+    }
+  }
+  field {
+    name: "outcome"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "deceased | permanent disability | etc."
+    }
+  }
+  field {
+    name: "contributed_to_death"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Boolean"
+    options {
+      [google.fhir.proto.field_description]: "Whether the condition contributed to the cause of death"
+    }
+  }
+  field {
+    name: "onset"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.FamilyMemberHistory.Condition.OnsetX"
+    options {
+      [google.fhir.proto.field_description]: "When condition first manifested"
+    }
+  }
+  field {
+    name: "note"
+    number: 8
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Annotation"
+    options {
+      [google.fhir.proto.field_description]: "Extra information about condition"
+    }
+  }
+  nested_type {
+    name: "OnsetX"
+    field {
+      name: "age"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.proto.Age"
+      oneof_index: 0
+    }
+    field {
+      name: "range"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.proto.Range"
+      oneof_index: 0
+    }
+    field {
+      name: "period"
+      number: 3
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.proto.Period"
+      oneof_index: 0
+    }
+    field {
+      name: "string_value"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.proto.String"
+      oneof_index: 0
+      json_name: "string"
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "choice"
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for FamilyMemberHistory, last updated 2018-12-27T22:37:54.724+11:00.\nInformation about patient\'s relatives, relevant for patient.\nSee http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory"
+}

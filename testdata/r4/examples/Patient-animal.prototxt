@@ -1,0 +1,167 @@
+id {
+  value: "animal"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n      <table>\n        \n        <tbody>\n          \n          <tr>\n            \n            <td>Id</td>\n            \n            <td>Kenzi (Dog: Golden Retriever)</td>\n          \n          </tr>\n          \n          <tr>\n            \n            <td>Owner</td>\n            \n            <td>Peter Chalmers, 534 Erewhon, Pleasantville, Vic, 3999</td>\n          \n          </tr>\n          \n          <tr>\n            \n            <td>Contacts</td>\n            \n            <td>Work: (03) 5555 6473</td>\n          \n          </tr>\n          \n          <tr>\n            \n            <td>Id</td>\n            \n            <td>Dog Tag: 1234123 (Maroondah City Council)</td>\n          \n          </tr>\n        \n        </tbody>\n      \n      </table>\n    \n    </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/patient-animal"
+  }
+  extension {
+    url {
+      value: "species"
+    }
+    value {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/animal-species"
+          }
+          code {
+            value: "canislf"
+          }
+          display {
+            value: "Dog"
+          }
+        }
+      }
+    }
+  }
+  extension {
+    url {
+      value: "breed"
+    }
+    value {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "58108001"
+          }
+          display {
+            value: "Golden retriever"
+          }
+        }
+        coding {
+          system {
+            value: "http://example.org/fhir/CodeSystem/animal-breed"
+          }
+          code {
+            value: "gret"
+          }
+          display {
+            value: "Golden Retriever"
+          }
+        }
+      }
+    }
+  }
+  extension {
+    url {
+      value: "genderStatus"
+    }
+    value {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/animal-genderstatus"
+          }
+          code {
+            value: "neutered"
+          }
+        }
+      }
+    }
+  }
+}
+identifier {
+  type {
+    text {
+      value: "Dog Tag"
+    }
+  }
+  system {
+    value: "http://www.maroondah.vic.gov.au/AnimalRegFees.aspx"
+  }
+  value {
+    value: "1234123"
+  }
+  period {
+    start {
+      value_us: 1275228000000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  assigner {
+    display {
+      value: "Maroondah City Council"
+    }
+  }
+}
+active {
+  value: true
+}
+name {
+  use {
+    value: USUAL
+  }
+  given {
+    value: "Kenzi"
+  }
+}
+gender {
+  value: FEMALE
+}
+birth_date {
+  value_us: 1269262800000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+contact {
+  relationship {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0131"
+      }
+      code {
+        value: "C"
+      }
+    }
+  }
+  name {
+    family {
+      value: "Chalmers"
+    }
+    given {
+      value: "Peter"
+    }
+    given {
+      value: "James"
+    }
+  }
+  telecom {
+    system {
+      value: PHONE
+    }
+    value {
+      value: "(03) 5555 6473"
+    }
+    use {
+      value: WORK
+    }
+  }
+}
+managing_organization {
+  display {
+    value: "Pete\'s Vetinary Services"
+  }
+}

@@ -1,0 +1,83 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Example of Invoice</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://myHospital.org/Invoices"
+  }
+  value {
+    value: "654321"
+  }
+}
+status {
+  value: ISSUED
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+date {
+  value_us: 1485327600000000
+  timezone: "+01:00"
+  precision: SECOND
+}
+participant {
+  role {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "17561000"
+      }
+      display {
+        value: "Cardiologist"
+      }
+    }
+  }
+  actor {
+    practitioner_id {
+      value: "example"
+    }
+  }
+}
+issuer {
+  identifier {
+    system {
+      value: "http://myhospital/NamingSystem/departments"
+    }
+    value {
+      value: "CARD_INTERMEDIATE_CARE"
+    }
+  }
+}
+account {
+  account_id {
+    value: "example"
+  }
+}
+total_net {
+  value {
+    value: "40"
+  }
+  currency {
+    value: "EUR"
+  }
+}
+total_gross {
+  value {
+    value: "48"
+  }
+  currency {
+    value: "EUR"
+  }
+}

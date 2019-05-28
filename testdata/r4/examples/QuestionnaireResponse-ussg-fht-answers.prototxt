@@ -1,0 +1,4064 @@
+id {
+  value: "ussg-fht-answers"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: ussg-fht-answers</p><p><b>questionnaire</b>: <a>Questionnaire/ussg-fht</a></p><p><b>status</b>: in-progress</p><p><b>subject</b>: <a>http://hl7.org/fhir/Patient/proband</a></p><p><b>authored</b>: 17/01/2008</p><blockquote><p><b>item</b></p><p><b>linkId</b>: 0</p><h3>Items</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>item</b></p><p><b>linkId</b>: 1</p><p><b>definition</b>: <a>http://loinc.org/fhir/DataElement/54126-8</a></p><p><b>text</b>: Your health information</p><h3>Items</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>item</b></p><p><b>linkId</b>: 2</p><p><b>definition</b>: <a>http://loinc.org/fhir/DataElement/54114-4</a></p><p><b>text</b>: Family member health information</p><h3>Items</h3><table><tr><td>-</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr></table></blockquote></div>"
+  }
+}
+questionnaire {
+  value: "Questionnaire/ussg-fht"
+}
+status {
+  value: IN_PROGRESS
+}
+subject {
+  type {
+    value: "Patient"
+  }
+  uri {
+    value: "http://hl7.org/fhir/Patient/proband"
+  }
+}
+authored {
+  value_us: 1200488400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+item {
+  link_id {
+    value: "0"
+  }
+  item {
+    link_id {
+      value: "0.1"
+    }
+    text {
+      value: "Date Done"
+    }
+    answer {
+      value {
+        date {
+          value_us: 1200488400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+    }
+  }
+}
+item {
+  link_id {
+    value: "1"
+  }
+  definition {
+    value: "http://loinc.org/fhir/DataElement/54126-8"
+  }
+  text {
+    value: "Your health information"
+  }
+  item {
+    link_id {
+      value: "1.1"
+    }
+    item {
+      link_id {
+        value: "1.1.1"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/54125-0"
+      }
+      text {
+        value: "Name"
+      }
+      answer {
+        value {
+          string_value {
+            value: "Annie Proband"
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "1.1.2"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/54131-8"
+      }
+      text {
+        value: "Gender"
+      }
+      answer {
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA3-6"
+            }
+            display {
+              value: "Female"
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "1.1.3"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/21112-8"
+      }
+      text {
+        value: "Date of Birth"
+      }
+      answer {
+        value {
+          date {
+            value_us: -118231200000000
+            timezone: "Australia/Sydney"
+            precision: DAY
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "1.1.4"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/54132-6"
+      }
+      text {
+        value: "Were you born a twin?"
+      }
+      answer {
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA32-8"
+            }
+            display {
+              value: "No"
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "1.1.5"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/54128-4"
+      }
+      text {
+        value: "Were you adopted?"
+      }
+      answer {
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA32-8"
+            }
+            display {
+              value: "No"
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "1.1.6"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/54135-9"
+      }
+      text {
+        value: "Are your parents related to each other in any way other than marriage?"
+      }
+      answer {
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA32-8"
+            }
+            display {
+              value: "No"
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "1.1.7"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/8302-2"
+      }
+      text {
+        value: "Height"
+      }
+      answer {
+        value {
+          decimal {
+            value: "63"
+          }
+        }
+        item {
+          link_id {
+            value: "1.1.7.1"
+          }
+          item {
+            link_id {
+              value: "1.1.7.1.1"
+            }
+            text {
+              value: "Units"
+            }
+            answer {
+              value {
+                coding {
+                  system {
+                    value: "http://unitsofmeasure.org"
+                  }
+                  code {
+                    value: "[in_i]"
+                  }
+                  display {
+                    value: "inches"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "1.1.8"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/29463-7"
+      }
+      text {
+        value: "Weight"
+      }
+      answer {
+        value {
+          decimal {
+            value: "127"
+          }
+        }
+        item {
+          link_id {
+            value: "1.1.8.1"
+          }
+          item {
+            link_id {
+              value: "1.1.8.1.1"
+            }
+            text {
+              value: "Units"
+            }
+            answer {
+              value {
+                coding {
+                  system {
+                    value: "http://unitsofmeasure.org"
+                  }
+                  code {
+                    value: "[lb_av]"
+                  }
+                  display {
+                    value: "pounds"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "1.1.9"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/39156-5"
+      }
+      text {
+        value: "Body mass index (BMI) [Ratio]"
+      }
+      answer {
+        value {
+          decimal {
+            value: "22.5"
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "1.1.10"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/54134-2"
+      }
+      text {
+        value: "Race"
+      }
+      answer {
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA4457-3"
+            }
+            display {
+              value: "White"
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "1.1.11"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/54133-4"
+      }
+      text {
+        value: "Ethnicity"
+      }
+      answer {
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA10602-3"
+            }
+            display {
+              value: "-- Mexican"
+            }
+          }
+        }
+      }
+      answer {
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA10606-4"
+            }
+            display {
+              value: "-- South American"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+item {
+  link_id {
+    value: "2"
+  }
+  definition {
+    value: "http://loinc.org/fhir/DataElement/54114-4"
+  }
+  text {
+    value: "Family member health information"
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1.1"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/54136-7"
+      }
+      text {
+        value: "Relationship to you"
+      }
+      answer {
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA10405-1"
+            }
+            display {
+              value: "Daughter"
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.1.2"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/54138-3"
+      }
+      text {
+        value: "Name"
+      }
+      answer {
+        value {
+          string_value {
+            value: "Susan"
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.1.3"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/54123-5"
+      }
+      text {
+        value: "Gender"
+      }
+      answer {
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA3-6"
+            }
+            display {
+              value: "Female"
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.1.4"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/54139-1"
+      }
+      text {
+        value: "Living?"
+      }
+      answer {
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA33-6"
+            }
+            display {
+              value: "Yes"
+            }
+          }
+        }
+        item {
+          link_id {
+            value: "2.1.1.4.2"
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2.2"
+            }
+            definition {
+              value: "http://loinc.org/fhir/DataElement/54141-7"
+            }
+            text {
+              value: "Age"
+            }
+            answer {
+              value {
+                decimal {
+                  value: "17"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.1.5"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/54121-9"
+      }
+      text {
+        value: "Was this person born a twin?"
+      }
+      answer {
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA32-8"
+            }
+            display {
+              value: "No"
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.1.6"
+      }
+      definition {
+        value: "http://loinc.org/fhir/DataElement/54122-7"
+      }
+      text {
+        value: "Was this person adopted?"
+      }
+      answer {
+        value {
+          coding {
+            system {
+              value: "http://loinc.org"
+            }
+            code {
+              value: "LA32-8"
+            }
+            display {
+              value: "No"
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10415-0"
+              }
+              display {
+                value: "Brother"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Brian"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA2-8"
+              }
+              display {
+                value: "Male"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.2.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54141-7"
+              }
+              text {
+                value: "Age"
+              }
+              answer {
+                value {
+                  decimal {
+                    value: "32"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.2"
+      }
+      text {
+        value: "This family member\'s history of disease"
+      }
+      item {
+        link_id {
+          value: "2.1.2.1"
+        }
+        text {
+          value: "Disease or Condition"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10550-4"
+              }
+              display {
+                value: "-- Other Cancer"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.2.2"
+        }
+        text {
+          value: "Age at Diagnosis"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10397-0"
+              }
+              display {
+                value: "30-39"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10418-4"
+              }
+              display {
+                value: "Sister"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Janet"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.2.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54141-7"
+              }
+              text {
+                value: "Age"
+              }
+              answer {
+                value {
+                  decimal {
+                    value: "36"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.2"
+      }
+      text {
+        value: "This family member\'s history of disease"
+      }
+      item {
+        link_id {
+          value: "2.1.2.1"
+        }
+        text {
+          value: "Disease or Condition"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10536-3"
+              }
+              display {
+                value: "-- Breast Cancer"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.2.2"
+        }
+        text {
+          value: "Age at Diagnosis"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10397-0"
+              }
+              display {
+                value: "30-39"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10419-2"
+              }
+              display {
+                value: "Nephew"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Ian"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA2-8"
+              }
+              display {
+                value: "Male"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.2.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54141-7"
+              }
+              text {
+                value: "Age"
+              }
+              answer {
+                value {
+                  decimal {
+                    value: "16"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10420-0"
+              }
+              display {
+                value: "Niece"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Helen"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.2.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54141-7"
+              }
+              text {
+                value: "Age"
+              }
+              answer {
+                value {
+                  decimal {
+                    value: "15"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10416-8"
+              }
+              display {
+                value: "Father"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Donald"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA2-8"
+              }
+              display {
+                value: "Male"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.2.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54141-7"
+              }
+              text {
+                value: "Age"
+              }
+              answer {
+                value {
+                  decimal {
+                    value: "52"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10425-9"
+              }
+              display {
+                value: "Paternal Uncle"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Eric"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA2-8"
+              }
+              display {
+                value: "Male"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.2.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54141-7"
+              }
+              text {
+                value: "Age"
+              }
+              answer {
+                value {
+                  decimal {
+                    value: "56"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10421-8"
+              }
+              display {
+                value: "Paternal Aunt"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Fiona"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.2.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54141-7"
+              }
+              text {
+                value: "Age"
+              }
+              answer {
+                value {
+                  decimal {
+                    value: "57"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.2"
+      }
+      text {
+        value: "This family member\'s history of disease"
+      }
+      item {
+        link_id {
+          value: "2.1.2.1"
+        }
+        text {
+          value: "Disease or Condition"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10543-9"
+              }
+              display {
+                value: "-- Skin Cancer"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10423-4"
+              }
+              display {
+                value: "Paternal Grandfather"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Bob"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA2-8"
+              }
+              display {
+                value: "Male"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.1"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.1.1"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54112-8"
+              }
+              text {
+                value: "Cause of Death"
+              }
+              answer {
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10537-1"
+                    }
+                    display {
+                      value: "-- Colon Cancer"
+                    }
+                  }
+                }
+              }
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.1.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54113-6"
+              }
+              text {
+                value: "Age at Death"
+              }
+              answer {
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10400-2"
+                    }
+                    display {
+                      value: "OVER 60"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.2"
+      }
+      text {
+        value: "This family member\'s history of disease"
+      }
+      item {
+        link_id {
+          value: "2.1.2.1"
+        }
+        text {
+          value: "Disease or Condition"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10537-1"
+              }
+              display {
+                value: "-- Colon Cancer"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.2.2"
+        }
+        text {
+          value: "Age at Diagnosis"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10400-2"
+              }
+              display {
+                value: "OVER 60"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10424-2"
+              }
+              display {
+                value: "Paternal Grandmother"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Claire"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.1"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.1.1"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54112-8"
+              }
+              text {
+                value: "Cause of Death"
+              }
+              answer {
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10589-2"
+                    }
+                    display {
+                      value: "-- Other/Unexpected"
+                    }
+                  }
+                }
+                item {
+                  link_id {
+                    value: "2.1.1.4.1.1.1"
+                  }
+                  text {
+                    value: "Please specify"
+                  }
+                  answer {
+                    value {
+                      string_value {
+                        value: "Lou Gehrigs"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.1.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54113-6"
+              }
+              text {
+                value: "Age at Death"
+              }
+              answer {
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10400-2"
+                    }
+                    display {
+                      value: "OVER 60"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10417-6"
+              }
+              display {
+                value: "Mother"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Harriet"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.1"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.1.1"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54112-8"
+              }
+              text {
+                value: "Cause of Death"
+              }
+              answer {
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10539-7"
+                    }
+                    display {
+                      value: "-- Ovarian Cancer"
+                    }
+                  }
+                }
+              }
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.1.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54113-6"
+              }
+              text {
+                value: "Age at Death"
+              }
+              answer {
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10399-6"
+                    }
+                    display {
+                      value: "50-59"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.2"
+      }
+      text {
+        value: "This family member\'s history of disease"
+      }
+      item {
+        link_id {
+          value: "2.1.2.1"
+        }
+        text {
+          value: "Disease or Condition"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10539-7"
+              }
+              display {
+                value: "-- Ovarian Cancer"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.2.2"
+        }
+        text {
+          value: "Age at Diagnosis"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10398-8"
+              }
+              display {
+                value: "40-49"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10414-3"
+              }
+              display {
+                value: "Maternal Uncle"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Rudy"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA2-8"
+              }
+              display {
+                value: "Male"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.2.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54141-7"
+              }
+              text {
+                value: "Age"
+              }
+              answer {
+                value {
+                  decimal {
+                    value: "60"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10410-1"
+              }
+              display {
+                value: "Maternal Aunt"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Julie"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.2.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54141-7"
+              }
+              text {
+                value: "Age"
+              }
+              answer {
+                value {
+                  decimal {
+                    value: "57"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10412-7"
+              }
+              display {
+                value: "Maternal Grandfather"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Ian"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA2-8"
+              }
+              display {
+                value: "Male"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.1"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.1.1"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54112-8"
+              }
+              text {
+                value: "Cause of Death"
+              }
+              answer {
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10558-7"
+                    }
+                    display {
+                      value: "-- Heart Attack"
+                    }
+                  }
+                }
+              }
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.1.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54113-6"
+              }
+              text {
+                value: "Age at Death"
+              }
+              answer {
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10400-2"
+                    }
+                    display {
+                      value: "OVER 60"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10413-5"
+              }
+              display {
+                value: "Maternal Grandmother"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Gladys"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.1"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.1.1"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54112-8"
+              }
+              text {
+                value: "Cause of Death"
+              }
+              answer {
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10571-0"
+                    }
+                    display {
+                      value: "-- Other/Unknown"
+                    }
+                  }
+                }
+              }
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.1.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54113-6"
+              }
+              text {
+                value: "Age at Death"
+              }
+              answer {
+                value {
+                  coding {
+                    system {
+                      value: "http://loinc.org"
+                    }
+                    code {
+                      value: "LA10400-2"
+                    }
+                    display {
+                      value: "OVER 60"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.2"
+      }
+      text {
+        value: "This family member\'s history of disease"
+      }
+      item {
+        link_id {
+          value: "2.1.2.1"
+        }
+        text {
+          value: "Disease or Condition"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10536-3"
+              }
+              display {
+                value: "-- Breast Cancer"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.2.2"
+        }
+        text {
+          value: "Age at Diagnosis"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10399-6"
+              }
+              display {
+                value: "50-59"
+              }
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.2"
+      }
+      text {
+        value: "This family member\'s history of disease"
+      }
+      item {
+        link_id {
+          value: "2.1.2.1"
+        }
+        text {
+          value: "Disease or Condition"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10564-5"
+              }
+              display {
+                value: "-- Asthma"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.2.2"
+        }
+        text {
+          value: "Age at Diagnosis"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10395-4"
+              }
+              display {
+                value: "Childhood"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10411-9"
+              }
+              display {
+                value: "Maternal Cousin"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Karren"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.2.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54141-7"
+              }
+              text {
+                value: "Age"
+              }
+              answer {
+                value {
+                  decimal {
+                    value: "30"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "2.1.2"
+      }
+      text {
+        value: "This family member\'s history of disease"
+      }
+      item {
+        link_id {
+          value: "2.1.2.1"
+        }
+        text {
+          value: "Disease or Condition"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10536-3"
+              }
+              display {
+                value: "-- Breast Cancer"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.2.2"
+        }
+        text {
+          value: "Age at Diagnosis"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10397-0"
+              }
+              display {
+                value: "30-39"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    item {
+      link_id {
+        value: "2.1.1"
+      }
+      item {
+        link_id {
+          value: "2.1.1.1"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54136-7"
+        }
+        text {
+          value: "Relationship to you"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA10411-9"
+              }
+              display {
+                value: "Maternal Cousin"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.2"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54138-3"
+        }
+        text {
+          value: "Name"
+        }
+        answer {
+          value {
+            string_value {
+              value: "Mary"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.3"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54123-5"
+        }
+        text {
+          value: "Gender"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA3-6"
+              }
+              display {
+                value: "Female"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.4"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54139-1"
+        }
+        text {
+          value: "Living?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA33-6"
+              }
+              display {
+                value: "Yes"
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "2.1.1.4.2"
+            }
+            item {
+              link_id {
+                value: "2.1.1.4.2.2"
+              }
+              definition {
+                value: "http://loinc.org/fhir/DataElement/54141-7"
+              }
+              text {
+                value: "Age"
+              }
+              answer {
+                value {
+                  decimal {
+                    value: "31"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.5"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54121-9"
+        }
+        text {
+          value: "Was this person born a twin?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "2.1.1.6"
+        }
+        definition {
+          value: "http://loinc.org/fhir/DataElement/54122-7"
+        }
+        text {
+          value: "Was this person adopted?"
+        }
+        answer {
+          value {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA32-8"
+              }
+              display {
+                value: "No"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

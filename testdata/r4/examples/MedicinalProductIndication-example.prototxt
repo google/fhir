@@ -1,0 +1,58 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>diseaseSymptomProcedure</b>: Prevention of venous thromboembolic events (VTE) in adult patients who have undergone elective hip\\nor knee replacement surgery.\\nPrevention of stroke and systemic embolism in adult patients with non-valvular atrial fibrillation\\n(NVAF), with one or more risk factors, such as prior stroke or transient ischaemic attack (TIA); age\\n\342\211\245 75 years; hypertension; diabetes mellitus; symptomatic heart failure (NYHA Class \342\211\245 II).\\nTreatment of deep vein thrombosis (DVT) and pulmonary embolism (PE), and prevention of recurrent\\nDVT and PE in adults (see section 4.4 for haemodynamically unstable PE patients). <span>(Details : {http://ema.europa.eu/example/indicationasdisease-symptom-procedure code \'Venousthromboembolismprophylaxis\' = \'Venousthromboembolismprophylaxis)</span></p><p><b>comorbidity</b>: Hipsurgery <span>(Details : {http://ema.europa.eu/example/comorbidity code \'Hipsurgery\' = \'Hipsurgery)</span></p><p><b>intendedEffect</b>: PRYLX <span>(Details : {http://ema.europa.eu/example/intendedeffect code \'PRYLX\' = \'PRYLX)</span></p><p><b>population</b>: </p></div>"
+  }
+}
+disease_symptom_procedure {
+  coding {
+    system {
+      value: "http://ema.europa.eu/example/indicationasdisease-symptom-procedure"
+    }
+    code {
+      value: "Venousthromboembolismprophylaxis"
+    }
+  }
+  text {
+    value: "Prevention of venous thromboembolic events (VTE) in adult patients who have undergone elective hip\\nor knee replacement surgery.\\nPrevention of stroke and systemic embolism in adult patients with non-valvular atrial fibrillation\\n(NVAF), with one or more risk factors, such as prior stroke or transient ischaemic attack (TIA); age\\n\342\211\245 75 years; hypertension; diabetes mellitus; symptomatic heart failure (NYHA Class \342\211\245 II).\\nTreatment of deep vein thrombosis (DVT) and pulmonary embolism (PE), and prevention of recurrent\\nDVT and PE in adults (see section 4.4 for haemodynamically unstable PE patients)."
+  }
+}
+comorbidity {
+  coding {
+    system {
+      value: "http://ema.europa.eu/example/comorbidity"
+    }
+    code {
+      value: "Hipsurgery"
+    }
+  }
+}
+intended_effect {
+  coding {
+    system {
+      value: "http://ema.europa.eu/example/intendedeffect"
+    }
+    code {
+      value: "PRYLX"
+    }
+  }
+}
+population {
+  age {
+    range {
+      low {
+        value {
+          value: "18"
+        }
+        unit {
+          value: "a"
+        }
+      }
+    }
+  }
+}

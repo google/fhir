@@ -1,0 +1,154 @@
+id {
+  value: "f001"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f001</p><p><b>identifier</b>: v1451 (OFFICIAL)</p><p><b>status</b>: finished</p><p><b>class</b>: ambulatory (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode code AMB = \'ambulatory\', stated as \'ambulatory\')</p><p><b>type</b>: Patient-initiated encounter <span>(Details : {SNOMED CT code \'270427003\' = \'Patient-initiated encounter\', given as \'Patient-initiated encounter\'})</span></p><p><b>priority</b>: Non-urgent cardiological admission <span>(Details : {SNOMED CT code \'310361003\' = \'Non-urgent cardiological admission\', given as \'Non-urgent cardiological admission\'})</span></p><p><b>subject</b>: <a>P. van de Heuvel</a></p><h3>Participants</h3><table><tr><td>-</td><td><b>Individual</b></td></tr><tr><td>*</td><td><a>P. Voigt</a></td></tr></table><p><b>length</b>: 140 min<span> (Details: UCUM code min = \'min\')</span></p><p><b>reasonCode</b>: Heart valve replacement <span>(Details : {SNOMED CT code \'34068001\' = \'Heart valve replacement\', given as \'Heart valve replacement\'})</span></p><h3>Hospitalizations</h3><table><tr><td>-</td><td><b>PreAdmissionIdentifier</b></td><td><b>AdmitSource</b></td><td><b>DischargeDisposition</b></td></tr><tr><td>*</td><td>93042 (OFFICIAL)</td><td>Referral by physician <span>(Details : {SNOMED CT code \'305956004\' = \'Referral from physician\', given as \'Referral by physician\'})</span></td><td>Discharge to home <span>(Details : {SNOMED CT code \'306689006\' = \'Discharge to home\', given as \'Discharge to home\'})</span></td></tr></table><p><b>serviceProvider</b>: <a>Burgers University Medical Center</a></p></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.amc.nl/zorgportal/identifiers/visits"
+  }
+  value {
+    value: "v1451"
+  }
+}
+status {
+  value: FINISHED
+}
+class_value {
+  system {
+    value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+  }
+  code {
+    value: "AMB"
+  }
+  display {
+    value: "ambulatory"
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "270427003"
+    }
+    display {
+      value: "Patient-initiated encounter"
+    }
+  }
+}
+priority {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "310361003"
+    }
+    display {
+      value: "Non-urgent cardiological admission"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+participant {
+  individual {
+    practitioner_id {
+      value: "f002"
+    }
+    display {
+      value: "P. Voigt"
+    }
+  }
+}
+length {
+  value {
+    value: "140"
+  }
+  unit {
+    value: "min"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "min"
+  }
+}
+reason_code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "34068001"
+    }
+    display {
+      value: "Heart valve replacement"
+    }
+  }
+}
+hospitalization {
+  pre_admission_identifier {
+    use {
+      value: OFFICIAL
+    }
+    system {
+      value: "http://www.amc.nl/zorgportal/identifiers/pre-admissions"
+    }
+    value {
+      value: "93042"
+    }
+  }
+  admit_source {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "305956004"
+      }
+      display {
+        value: "Referral by physician"
+      }
+    }
+  }
+  discharge_disposition {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "306689006"
+      }
+      display {
+        value: "Discharge to home"
+      }
+    }
+  }
+}
+service_provider {
+  organization_id {
+    value: "f001"
+  }
+  display {
+    value: "Burgers University Medical Center"
+  }
+}

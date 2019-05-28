@@ -1,0 +1,35 @@
+id {
+  value: "break-the-glass"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Additional information may be available using the Break-The-Glass Protocol</p>\n    </div>"
+  }
+}
+issue {
+  severity {
+    value: INFORMATION
+  }
+  code {
+    value: SUPPRESSED
+  }
+  details {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+      }
+      code {
+        value: "ETREAT"
+      }
+      display {
+        value: "Emergency Treatment"
+      }
+    }
+    text {
+      value: "Additional information may be available using the Break-The-Glass Protocol"
+    }
+  }
+}

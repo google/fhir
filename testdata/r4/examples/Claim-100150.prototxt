@@ -1,0 +1,154 @@
+id {
+  value: "100150"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Oral Health Claim</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/claim"
+  }
+  value {
+    value: "12345"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/claim-type"
+    }
+    code {
+      value: "oral"
+    }
+  }
+}
+use {
+  value: CLAIM
+}
+patient {
+  patient_id {
+    value: "1"
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+provider {
+  organization_id {
+    value: "1"
+  }
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+payee {
+  type {
+    coding {
+      code {
+        value: "provider"
+      }
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    practitioner_id {
+      value: "example"
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis {
+    codeable_concept {
+      coding {
+        code {
+          value: "123456"
+        }
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  identifier {
+    system {
+      value: "http://happyvalley.com/claim"
+    }
+    value {
+      value: "12345"
+    }
+  }
+  coverage {
+    coverage_id {
+      value: "9876B1"
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_sequence {
+    value: 1
+  }
+  product_or_service {
+    coding {
+      code {
+        value: "1200"
+      }
+    }
+  }
+  serviced {
+    date {
+      value_us: 1408111200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  unit_price {
+    value {
+      value: "135.57"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: "135.57"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}

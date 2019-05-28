@@ -1,0 +1,98 @@
+id {
+  value: "hl7"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      Health Level Seven International<br/>\n\t\t\t\t3300 Washtenaw Avenue, Suite 227<br/>\n\t\t\t\tAnn Arbor, MI 48104<br/>\n\t\t\t\tUSA<br/>\n\t\t\t\t(+1) 734-677-7777 (phone)<br/>\n\t\t\t\t(+1) 734-677-6622 (fax)<br/>\n\t\t\t\tE-mail:  <a href=\"mailto:hq@HL7.org\">hq@HL7.org</a>\n    </div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+name {
+  value: "Health Level Seven International"
+}
+description {
+  value: "HL7 Headquarters"
+}
+mode {
+  value: INSTANCE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+    }
+    code {
+      value: "SLEEP"
+    }
+    display {
+      value: "Sleep disorders unit"
+    }
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "(+1) 734-677-7777"
+  }
+}
+telecom {
+  system {
+    value: FAX
+  }
+  value {
+    value: "(+1) 734-677-6622"
+  }
+}
+telecom {
+  system {
+    value: EMAIL
+  }
+  value {
+    value: "hq@HL7.org"
+  }
+}
+address {
+  line {
+    value: "3300 Washtenaw Avenue, Suite 227"
+  }
+  city {
+    value: "Ann Arbor"
+  }
+  state {
+    value: "MI"
+  }
+  postal_code {
+    value: "48104"
+  }
+  country {
+    value: "USA"
+  }
+}
+physical_type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/location-physical-type"
+    }
+    code {
+      value: "bu"
+    }
+    display {
+      value: "Building"
+    }
+  }
+}
+position {
+  longitude {
+    value: "42.256500"
+  }
+  latitude {
+    value: "-83.694710"
+  }
+}

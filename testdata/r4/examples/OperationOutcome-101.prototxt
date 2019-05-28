@@ -1,0 +1,33 @@
+id {
+  value: "101"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>The code &quot;W&quot; is not known and not legal Patient.gender.</p>\n    </div>"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: CODE_INVALID
+  }
+  details {
+    text {
+      value: "The code \"W\" is not known and not legal in this context"
+    }
+  }
+  diagnostics {
+    value: "Acme.Interop.FHIRProcessors.Patient.processGender line 2453"
+  }
+  location {
+    value: "/f:Patient/f:gender"
+  }
+  expression {
+    value: "Patient.gender"
+  }
+}

@@ -1,0 +1,213 @@
+id {
+  value: "meddisp0304"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: meddisp0304</p><p><b>contained</b>: </p><p><b>status</b>: completed</p><p><b>medication</b>: Zosyn (piperacillin/tazobactam) 4.5gm injection. Generated Summary: id: med0302; Zosyn (piperacillin/tazobactam) 4.5gm injection <span>(Details : {http://hl7.org/fhir/sid/ndc code \'0206-8862-02\' = \'0206-8862-02\', given as \'Zosyn (piperacillin/tazobactam) 4.5gm injection\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Practitioner/f006</a></td></tr></table><p><b>authorizingPrescription</b>: <a>MedicationRequest/medrx0319</a></p><p><b>type</b>: First Fill <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ActCode code \'FF\' = \'First Fill\', given as \'First Fill\'})</span></p><p><b>quantity</b>: 250 mL<span> (Details: UCUM code mL = \'mL\')</span></p><p><b>daysSupply</b>: 1 Day<span> (Details: UCUM code d = \'d\')</span></p><p><b>whenPrepared</b>: 25/06/2015 7:13:00 AM</p><p><b>whenHandedOver</b>: 26/06/2015 7:13:00 AM</p><p><b>dosageInstruction</b>: </p></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "med0302"
+    }
+    code {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/ndc"
+        }
+        code {
+          value: "0206-8862-02"
+        }
+        display {
+          value: "Zosyn (piperacillin/tazobactam) 4.5gm injection"
+        }
+      }
+    }
+  }
+}
+status {
+  value: COMPLETED
+}
+medication {
+  reference {
+    fragment {
+      value: "med0302"
+    }
+    display {
+      value: "Zosyn (piperacillin/tazobactam) 4.5gm injection"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "f006"
+    }
+  }
+}
+authorizing_prescription {
+  medication_request_id {
+    value: "medrx0319"
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "FF"
+    }
+    display {
+      value: "First Fill"
+    }
+  }
+}
+quantity {
+  value {
+    value: "250"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "mL"
+  }
+}
+days_supply {
+  value {
+    value: "1"
+  }
+  unit {
+    value: "Day"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "d"
+  }
+}
+when_prepared {
+  value_us: 1435198380000000
+  timezone: "+05:00"
+  precision: SECOND
+}
+when_handed_over {
+  value_us: 1435284780000000
+  timezone: "+05:00"
+  precision: SECOND
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "4.5 grams in D5W 250 ml. IV every 6 hours. Infuse over 30 min at 8L/min"
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 1
+      }
+      period {
+        value: "6"
+      }
+      period_unit {
+        value: H
+      }
+    }
+  }
+  site {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "255560000"
+      }
+      display {
+        value: "Intravenous route (qualifier value)"
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "47625008"
+      }
+      display {
+        value: "IV intravascular route that begins within a vein)"
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "calculated"
+        }
+        display {
+          value: "Calculated"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "4.5"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "g"
+        }
+      }
+    }
+    rate {
+      ratio {
+        numerator {
+          value {
+            value: "8"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "ml"
+          }
+        }
+        denominator {
+          value {
+            value: "1"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "min"
+          }
+        }
+      }
+    }
+  }
+}

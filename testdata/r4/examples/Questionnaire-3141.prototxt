@@ -1,0 +1,256 @@
+id {
+  value: "3141"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <pre>\n            1.Comorbidity?\n              1.1 Cardial Comorbidity\n                1.1.1 Angina?\n                1.1.2 MI?\n              1.2 Vascular Comorbidity?\n              ...\n            Histopathology\n              Abdominal\n                pT category?\n              ...\n          </pre>\n    </div>"
+  }
+}
+url {
+  value: "http://hl7.org/fhir/Questionnaire/3141"
+}
+title {
+  value: "Cancer Quality Forum Questionnaire 2012"
+}
+status {
+  value: DRAFT
+}
+subject_type {
+  value: PATIENT
+}
+date {
+  value_us: 1325336400000000
+  timezone: "Australia/Sydney"
+  precision: MONTH
+}
+item {
+  link_id {
+    value: "1"
+  }
+  code {
+    system {
+      value: "http://example.org/system/code/sections"
+    }
+    code {
+      value: "COMORBIDITY"
+    }
+  }
+  type {
+    value: GROUP
+  }
+  item {
+    link_id {
+      value: "1.1"
+    }
+    code {
+      system {
+        value: "http://example.org/system/code/questions"
+      }
+      code {
+        value: "COMORB"
+      }
+    }
+    prefix {
+      value: "1"
+    }
+    type {
+      value: CHOICE
+    }
+    answer_value_set {
+      value: "http://hl7.org/fhir/ValueSet/yesnodontknow"
+    }
+    item {
+      link_id {
+        value: "1.1.1"
+      }
+      code {
+        system {
+          value: "http://example.org/system/code/sections"
+        }
+        code {
+          value: "CARDIAL"
+        }
+      }
+      type {
+        value: GROUP
+      }
+      enable_when {
+        question {
+          value: "1.1"
+        }
+        operator {
+          value: EQUALS
+        }
+        answer {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0136"
+            }
+            code {
+              value: "Y"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "1.1.1.1"
+        }
+        code {
+          system {
+            value: "http://example.org/system/code/questions"
+          }
+          code {
+            value: "COMORBCAR"
+          }
+        }
+        prefix {
+          value: "1.1"
+        }
+        type {
+          value: CHOICE
+        }
+        answer_value_set {
+          value: "http://hl7.org/fhir/ValueSet/yesnodontknow"
+        }
+        item {
+          link_id {
+            value: "1.1.1.1.1"
+          }
+          code {
+            system {
+              value: "http://example.org/system/code/questions"
+            }
+            code {
+              value: "COMCAR00"
+            }
+            display {
+              value: "Angina Pectoris"
+            }
+          }
+          code {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "194828000"
+            }
+            display {
+              value: "Angina (disorder)"
+            }
+          }
+          prefix {
+            value: "1.1.1"
+          }
+          type {
+            value: CHOICE
+          }
+          answer_value_set {
+            value: "http://hl7.org/fhir/ValueSet/yesnodontknow"
+          }
+        }
+        item {
+          link_id {
+            value: "1.1.1.1.2"
+          }
+          code {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "22298006"
+            }
+            display {
+              value: "Myocardial infarction (disorder)"
+            }
+          }
+          prefix {
+            value: "1.1.2"
+          }
+          type {
+            value: CHOICE
+          }
+          answer_value_set {
+            value: "http://hl7.org/fhir/ValueSet/yesnodontknow"
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "1.1.1.2"
+        }
+        code {
+          system {
+            value: "http://example.org/system/code/questions"
+          }
+          code {
+            value: "COMORBVAS"
+          }
+        }
+        prefix {
+          value: "1.2"
+        }
+        type {
+          value: CHOICE
+        }
+        answer_value_set {
+          value: "http://hl7.org/fhir/ValueSet/yesnodontknow"
+        }
+      }
+    }
+  }
+}
+item {
+  link_id {
+    value: "2"
+  }
+  code {
+    system {
+      value: "http://example.org/system/code/sections"
+    }
+    code {
+      value: "HISTOPATHOLOGY"
+    }
+  }
+  type {
+    value: GROUP
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    code {
+      system {
+        value: "http://example.org/system/code/sections"
+      }
+      code {
+        value: "ABDOMINAL"
+      }
+    }
+    type {
+      value: GROUP
+    }
+    item {
+      link_id {
+        value: "2.1.2"
+      }
+      code {
+        system {
+          value: "http://example.org/system/code/questions"
+        }
+        code {
+          value: "STADPT"
+        }
+        display {
+          value: "pT category"
+        }
+      }
+      type {
+        value: CHOICE
+      }
+    }
+  }
+}

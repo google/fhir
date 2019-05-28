@@ -1,0 +1,278 @@
+id {
+  value: "medadmin0302"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medadmin0302</p><p><b>contained</b>: </p><p><b>partOf</b>: <a>Procedure/biopsy</a></p><p><b>status</b>: completed</p><p><b>category</b>: Inpatient <span>(Details : {http://terminology.hl7.org/CodeSystem/medication-admin-category code \'inpatient\' = \'Inpatient\', given as \'Inpatient\'})</span></p><p><b>medication</b>: id: med0317; Injection Solution (qualifier value) <span>(Details : {SNOMED CT code \'385219001\' = \'Injection solution\', given as \'Injection Solution (qualifier value)\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>context</b>: <a>encounter who leads to this prescription</a></p><p><b>effective</b>: 15/01/2015 4:30:00 AM --&gt; 15/01/2015 2:30:00 PM</p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Patrick Pump</a></td></tr></table><p><b>reasonCode</b>: Given as Ordered <span>(Details : {http://terminology.hl7.org/CodeSystem/reason-medication-given code \'b\' = \'Given as Ordered\', given as \'Given as Ordered\'})</span></p><p><b>request</b>: <a>MedicationRequest/medrx0322</a></p><h3>Dosages</h3><table><tr><td>-</td><td><b>Text</b></td><td><b>Site</b></td><td><b>Route</b></td><td><b>Method</b></td><td><b>Dose</b></td><td><b>Rate[x]</b></td></tr><tr><td>*</td><td>KCl 20 mEq in 1 L 0.9%NS IV at 100 ml/hr</td><td>Structure of ligament of left superior vena cava <span>(Details : {SNOMED CT code \'6073002\' = \'Ligament of left superior vena cava\', given as \'Structure of ligament of left superior vena cava\'})</span></td><td>Intravenous route (qualifier value) <span>(Details : {SNOMED CT code \'47625008\' = \'Intravenous route\', given as \'Intravenous route (qualifier value)\'})</span></td><td>Continuous infusion <span>(Details )</span></td><td>20 meq<span> (Details: UCUM code meq = \'meq\')</span></td><td>100 mL<span> (Details: UCUM code mL = \'mL\')</span>/1 h<span> (Details: UCUM code h = \'h\')</span></td></tr></table></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "med0317"
+    }
+    form {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "385219001"
+        }
+        display {
+          value: "Injection Solution (qualifier value)"
+        }
+      }
+      text {
+        value: "Injection Solution (qualifier value)"
+      }
+    }
+    ingredient {
+      item {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+            }
+            code {
+              value: "204520"
+            }
+            display {
+              value: "Potassium Chloride"
+            }
+          }
+        }
+      }
+      strength {
+        numerator {
+          value {
+            value: "2"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "meq"
+          }
+        }
+        denominator {
+          value {
+            value: "1"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mL"
+          }
+        }
+      }
+    }
+    ingredient {
+      item {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+            }
+            code {
+              value: "313002"
+            }
+            display {
+              value: "Sodium Chloride 0.9% injectable solution"
+            }
+          }
+        }
+      }
+      strength {
+        numerator {
+          value {
+            value: "0.9"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "g"
+          }
+        }
+        denominator {
+          value {
+            value: "100"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mL"
+          }
+        }
+      }
+    }
+  }
+}
+part_of {
+  procedure_id {
+    value: "biopsy"
+  }
+}
+status {
+  value: COMPLETED
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/medication-admin-category"
+    }
+    code {
+      value: "inpatient"
+    }
+    display {
+      value: "Inpatient"
+    }
+  }
+}
+medication {
+  reference {
+    fragment {
+      value: "med0317"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+context {
+  encounter_id {
+    value: "f001"
+  }
+  display {
+    value: "encounter who leads to this prescription"
+  }
+}
+effective {
+  period {
+    start {
+      value_us: 1421292600000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1421328600000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "f007"
+    }
+    display {
+      value: "Patrick Pump"
+    }
+  }
+}
+reason_code {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/reason-medication-given"
+    }
+    code {
+      value: "b"
+    }
+    display {
+      value: "Given as Ordered"
+    }
+  }
+}
+request {
+  medication_request_id {
+    value: "medrx0322"
+  }
+}
+dosage {
+  text {
+    value: "KCl 20 mEq in 1 L 0.9%NS IV at 100 ml/hr"
+  }
+  site {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "6073002"
+      }
+      display {
+        value: "Structure of ligament of left superior vena cava"
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "47625008"
+      }
+      display {
+        value: "Intravenous route (qualifier value)"
+      }
+    }
+  }
+  method {
+    text {
+      value: "Continuous infusion"
+    }
+  }
+  dose {
+    value {
+      value: "20"
+    }
+    unit {
+      value: "meq"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "meq"
+    }
+  }
+  rate {
+    ratio {
+      numerator {
+        value {
+          value: "100"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mL"
+        }
+      }
+      denominator {
+        value {
+          value: "1"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "h"
+        }
+      }
+    }
+  }
+}

@@ -14,7 +14,9 @@
 
 package com.google.fhir.stu3;
 
-import com.google.fhir.stu3.proto.String;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.String;
+import com.google.protobuf.MessageOrBuilder;
 
 /** A wrapper around the String FHIR primitive type. */
 public class StringWrapper extends PrimitiveWrapper<String> {
@@ -25,6 +27,10 @@ public class StringWrapper extends PrimitiveWrapper<String> {
   /** Create an StringWrapper from a String. */
   public StringWrapper(String string) {
     super(string);
+  }
+
+  public StringWrapper(MessageOrBuilder message) {
+    super(ProtoUtils.fieldWiseCopy(message, String.newBuilder()).build());
   }
 
   /** Create an StringWrapper from a java String. */

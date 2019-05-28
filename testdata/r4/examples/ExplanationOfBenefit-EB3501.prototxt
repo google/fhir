@@ -1,0 +1,310 @@
+id {
+  value: "EB3501"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the ExplanationOfBenefit for a claim that had errors, various other attributes (such as accident and hospitalization) are also completed.</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/explanationofbenefit"
+  }
+  value {
+    value: "error-1"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/claim-type"
+    }
+    code {
+      value: "oral"
+    }
+  }
+}
+sub_type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/ex-claimsubtype"
+    }
+    code {
+      value: "emergency"
+    }
+  }
+}
+use {
+  value: CLAIM
+}
+patient {
+  patient_id {
+    value: "pat1"
+  }
+}
+billable_period {
+  start {
+    value_us: 1391173200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1393592400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+enterer {
+  practitioner_id {
+    value: "1"
+  }
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+provider {
+  organization_id {
+    value: "2"
+  }
+}
+related {
+  reference {
+    system {
+      value: "http://www.BenefitsInc.com/case-number"
+    }
+    value {
+      value: "23-56Tu-XX-47-20150M14"
+    }
+  }
+}
+prescription {
+  medication_request_id {
+    value: "medrx002"
+  }
+}
+original_prescription {
+  medication_request_id {
+    value: "medrx0301"
+  }
+}
+facility {
+  location_id {
+    value: "1"
+  }
+}
+claim {
+  claim_id {
+    value: "100150"
+  }
+}
+claim_response {
+  claim_response_id {
+    value: "R3500"
+  }
+}
+outcome {
+  value: ERROR
+}
+disposition {
+  value: "Could not process."
+}
+supporting_info {
+  sequence {
+    value: 1
+  }
+  category {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/claiminformationcategory"
+      }
+      code {
+        value: "employmentimpacted"
+      }
+    }
+  }
+  timing {
+    period {
+      start {
+        value_us: 1392296400000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+      end {
+        value_us: 1393506000000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+}
+supporting_info {
+  sequence {
+    value: 2
+  }
+  category {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/claiminformationcategory"
+      }
+      code {
+        value: "hospitalized"
+      }
+    }
+  }
+  timing {
+    period {
+      start {
+        value_us: 1392296400000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+      end {
+        value_us: 1392469200000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+}
+procedure {
+  sequence {
+    value: 1
+  }
+  date {
+    value_us: 1392296400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  procedure {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/ex-icd-10-procedures"
+        }
+        code {
+          value: "123001"
+        }
+      }
+    }
+  }
+  udi {
+    device_id {
+      value: "example"
+    }
+  }
+}
+precedence {
+  value: 2
+}
+insurance {
+  focal {
+    value: true
+  }
+  coverage {
+    coverage_id {
+      value: "9876B1"
+    }
+  }
+}
+accident {
+  date {
+    value_us: 1392296400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+      }
+      code {
+        value: "SPT"
+      }
+    }
+  }
+  location {
+    reference {
+      location_id {
+        value: "ph"
+      }
+    }
+  }
+}
+total {
+  category {
+    coding {
+      code {
+        value: "submitted"
+      }
+    }
+  }
+  amount {
+    value {
+      value: "2478.57"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}
+total {
+  category {
+    coding {
+      code {
+        value: "benefit"
+      }
+    }
+  }
+  amount {
+    value {
+      value: "0.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}
+form_code {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/forms-codes"
+    }
+    code {
+      value: "2"
+    }
+  }
+}
+process_note {
+  number {
+    value: 1
+  }
+  type {
+    value: DISPLAY
+  }
+  text {
+    value: "Invalid claim"
+  }
+  language {
+    coding {
+      system {
+        value: "urn:ietf:bcp:47"
+      }
+      code {
+        value: "en-CA"
+      }
+    }
+  }
+}

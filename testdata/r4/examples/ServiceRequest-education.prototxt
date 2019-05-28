@@ -1,0 +1,81 @@
+id {
+  value: "education"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: education</p><p><b>status</b>: completed</p><p><b>intent</b>: order</p><p><b>category</b>: Education <span>(Details : {SNOMED CT code \'311401005\' = \'Patient education\', given as \'Patient education (procedure)\'})</span></p><p><b>code</b>: Health education - breast examination <span>(Details : {SNOMED CT code \'48023004\' = \'Breast self-examination technique education\', given as \'Breast self-examination technique education (procedure)\'})</span></p><p><b>subject</b>: Jane Doe</p><p><b>occurrence</b>: 16/08/2014</p><p><b>authoredOn</b>: 16/08/2016</p><p><b>requester</b>: Angela Care, MD</p><p><b>performer</b>: Pamela Educator, RN</p><p><b>reasonCode</b>: early detection of breast mass <span>(Details )</span></p></div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+intent {
+  value: ORDER
+}
+category {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "311401005"
+    }
+    display {
+      value: "Patient education (procedure)"
+    }
+  }
+  text {
+    value: "Education"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "48023004"
+    }
+    display {
+      value: "Breast self-examination technique education (procedure)"
+    }
+  }
+  text {
+    value: "Health education - breast examination"
+  }
+}
+subject {
+  display {
+    value: "Jane Doe"
+  }
+}
+occurrence {
+  date_time {
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+authored_on {
+  value_us: 1471269600000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+requester {
+  display {
+    value: "Angela Care, MD"
+  }
+}
+performer {
+  display {
+    value: "Pamela Educator, RN"
+  }
+}
+reason_code {
+  text {
+    value: "early detection of breast mass"
+  }
+}

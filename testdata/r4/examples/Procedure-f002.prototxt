@@ -1,0 +1,116 @@
+id {
+  value: "f002"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f002</p><p><b>status</b>: completed</p><p><b>code</b>: Partial lobectomy of lung <span>(Details : {SNOMED CT code \'359615001\' = \'Partial lobectomy of lung\', given as \'Partial lobectomy of lung\'})</span></p><p><b>subject</b>: <a>P. van de Heuvel</a></p><p><b>encounter</b>: <a>Encounter/f002</a></p><p><b>performed</b>: 08/03/2013 9:00:10 AM --&gt; 08/03/2013 9:30:10 AM</p><h3>Performers</h3><table><tr><td>-</td><td><b>Function</b></td><td><b>Actor</b></td></tr><tr><td>*</td><td>Care role <span>(Details : {urn:oid:2.16.840.1.113883.2.4.15.111 code \'01.000\' = \'01.000\', given as \'Arts\'})</span></td><td><a>M.I.M. Versteegh</a></td></tr></table><p><b>reasonCode</b>: Malignant tumor of lung <span>(Details )</span></p><p><b>bodySite</b>: Lung structure <span>(Details : {SNOMED CT code \'39607008\' = \'Lung\', given as \'Lung structure\'})</span></p><p><b>outcome</b>: improved blood circulation <span>(Details )</span></p><p><b>report</b>: <a>Lab results blood test</a></p><p><b>followUp</b>: described in care plan <span>(Details )</span></p></div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "359615001"
+    }
+    display {
+      value: "Partial lobectomy of lung"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+encounter {
+  encounter_id {
+    value: "f002"
+  }
+}
+performed {
+  period {
+    start {
+      value_us: 1362729610000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1362731410000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+  }
+}
+performer {
+  function {
+    coding {
+      system {
+        value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+      }
+      code {
+        value: "01.000"
+      }
+      display {
+        value: "Arts"
+      }
+    }
+    text {
+      value: "Care role"
+    }
+  }
+  actor {
+    practitioner_id {
+      value: "f003"
+    }
+    display {
+      value: "M.I.M. Versteegh"
+    }
+  }
+}
+reason_code {
+  text {
+    value: "Malignant tumor of lung"
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "39607008"
+    }
+    display {
+      value: "Lung structure"
+    }
+  }
+}
+outcome {
+  text {
+    value: "improved blood circulation"
+  }
+}
+report {
+  diagnostic_report_id {
+    value: "f001"
+  }
+  display {
+    value: "Lab results blood test"
+  }
+}
+follow_up {
+  text {
+    value: "described in care plan"
+  }
+}

@@ -1,0 +1,378 @@
+id {
+  value: "medrx0321"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medrx0321</p><p><b>contained</b>: </p><p><b>identifier</b>: 12345689 (OFFICIAL)</p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>medication</b>: Novolog 100u/ml. Generated Summary: id: med0307; Novolog 100u/ml <span>(Details : {http://hl7.org/fhir/sid/ndc code \'0169-7501-11\' = \'0169-7501-11\', given as \'Novolog 100u/ml\'})</span>; Injection solution (qualifier value) <span>(Details : {SNOMED CT code \'385219001\' = \'Injection solution\', given as \'Injection solution (qualifier value)\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>authoredOn</b>: 15/01/2015</p><p><b>requester</b>: <a>Patrick Pump</a></p><p><b>reasonCode</b>: Diabetes mellitus type 2 (disorder) <span>(Details : {SNOMED CT code \'44054006\' = \'Diabetes mellitus type II\', given as \'Diabetes mellitus type 2 (disorder)\'})</span></p><p><b>note</b>: Check blood sugar levels before taking insulin</p><p><b>dosageInstruction</b>: , , </p><h3>DispenseRequests</h3><table><tr><td>-</td><td><b>ValidityPeriod</b></td><td><b>NumberOfRepeatsAllowed</b></td><td><b>Quantity</b></td><td><b>ExpectedSupplyDuration</b></td></tr><tr><td>*</td><td>15/01/2015 --&gt; 15/01/2016</td><td>3</td><td>10 ml<span> (Details: UCUM code ml = \'ml\')</span></td><td>30 days<span> (Details: UCUM code d = \'d\')</span></td></tr></table></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "med0307"
+    }
+    code {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/ndc"
+        }
+        code {
+          value: "0169-7501-11"
+        }
+        display {
+          value: "Novolog 100u/ml"
+        }
+      }
+    }
+    form {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "385219001"
+        }
+        display {
+          value: "Injection solution (qualifier value)"
+        }
+      }
+    }
+    ingredient {
+      item {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "325072002"
+            }
+            display {
+              value: "Insulin Aspart (substance)"
+            }
+          }
+        }
+      }
+      strength {
+        numerator {
+          value {
+            value: "100"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "U"
+          }
+        }
+        denominator {
+          value {
+            value: "1"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mL"
+          }
+        }
+      }
+    }
+    batch {
+      lot_number {
+        value: "12345"
+      }
+      expiration_date {
+        value_us: 1572440400000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.bmc.nl/portal/prescriptions"
+  }
+  value {
+    value: "12345689"
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: ORDER
+}
+medication {
+  reference {
+    fragment {
+      value: "med0307"
+    }
+    display {
+      value: "Novolog 100u/ml"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+authored_on {
+  value_us: 1421240400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+requester {
+  practitioner_id {
+    value: "f007"
+  }
+  display {
+    value: "Patrick Pump"
+  }
+}
+reason_code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "44054006"
+    }
+    display {
+      value: "Diabetes mellitus type 2 (disorder)"
+    }
+  }
+}
+note {
+  text {
+    value: "Check blood sugar levels before taking insulin"
+  }
+}
+dosage_instruction {
+  sequence {
+    value: 2
+  }
+  text {
+    value: "inject 10 units subcut 10 minutes before breakfast"
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 1
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+      when {
+        value: ACM
+      }
+      offset {
+        value: 10
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "ordered"
+        }
+        display {
+          value: "Ordered"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "10"
+        }
+        unit {
+          value: "U"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "U"
+        }
+      }
+    }
+  }
+}
+dosage_instruction {
+  sequence {
+    value: 2
+  }
+  text {
+    value: "15 units before lunch"
+  }
+  additional_instruction {
+    text {
+      value: "Before Lunch"
+    }
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 1
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "ordered"
+        }
+        display {
+          value: "Ordered"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "15"
+        }
+        unit {
+          value: "U"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "U"
+        }
+      }
+    }
+  }
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "20 units before dinner"
+  }
+  additional_instruction {
+    text {
+      value: "Before Dinner"
+    }
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 1
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "ordered"
+        }
+        display {
+          value: "Ordered"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "20"
+        }
+        unit {
+          value: "U"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "U"
+        }
+      }
+    }
+  }
+}
+dispense_request {
+  validity_period {
+    start {
+      value_us: 1421240400000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+    end {
+      value_us: 1452776400000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  number_of_repeats_allowed {
+    value: 3
+  }
+  quantity {
+    value {
+      value: "10"
+    }
+    unit {
+      value: "ml"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "ml"
+    }
+  }
+  expected_supply_duration {
+    value {
+      value: "30"
+    }
+    unit {
+      value: "days"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "d"
+    }
+  }
+}

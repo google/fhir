@@ -1,0 +1,343 @@
+id {
+  value: "100152"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Oral Health Claim</div>"
+  }
+}
+contained {
+  organization {
+    id {
+      value: "org-insurer"
+    }
+    identifier {
+      system {
+        value: "http://www.bindb.com/bin"
+      }
+      value {
+        value: "123456"
+      }
+    }
+  }
+}
+contained {
+  organization {
+    id {
+      value: "org-org"
+    }
+    identifier {
+      system {
+        value: "http://www.jurisdiction.com/oralhealthoffices"
+      }
+      value {
+        value: "3456"
+      }
+    }
+  }
+}
+contained {
+  practitioner {
+    id {
+      value: "provider-1"
+    }
+    identifier {
+      system {
+        value: "http://www.jurisdiction.com/oralhealthproviders"
+      }
+      value {
+        value: "123456789"
+      }
+    }
+  }
+}
+contained {
+  patient {
+    id {
+      value: "patient-1"
+    }
+    name {
+      use {
+        value: OFFICIAL
+      }
+      family {
+        value: "Donald"
+      }
+      given {
+        value: "Duck"
+      }
+    }
+    gender {
+      value: MALE
+    }
+    birth_date {
+      value_us: 516636000000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+    address {
+      use {
+        value: HOME
+      }
+      line {
+        value: "1234 Main Street"
+      }
+      city {
+        value: "Vancouver"
+      }
+      postal_code {
+        value: "V2H1Y3"
+      }
+      country {
+        value: "CAD"
+      }
+    }
+  }
+}
+contained {
+  coverage {
+    id {
+      value: "coverage-1"
+    }
+    identifier {
+      system {
+        value: "http://benefitsinc.com/certificate"
+      }
+      value {
+        value: "12345"
+      }
+    }
+    status {
+      value: ACTIVE
+    }
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+        }
+        code {
+          value: "EHCPOL"
+        }
+      }
+    }
+    subscriber {
+      fragment {
+        value: "patient-1"
+      }
+    }
+    beneficiary {
+      fragment {
+        value: "patient-1"
+      }
+    }
+    dependent {
+      value: "1"
+    }
+    relationship {
+      coding {
+        code {
+          value: "self"
+        }
+      }
+    }
+    payor {
+      identifier {
+        system {
+          value: "http://www.bindb.com/bin"
+        }
+        value {
+          value: "123456"
+        }
+      }
+    }
+    class_value {
+      type {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+          }
+          code {
+            value: "plan"
+          }
+        }
+      }
+      value {
+        value: "CBI35"
+      }
+      name {
+        value: "Corporate Baker\'s Inc. Plan#35"
+      }
+    }
+    class_value {
+      type {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+          }
+          code {
+            value: "subplan"
+          }
+        }
+      }
+      value {
+        value: "123"
+      }
+      name {
+        value: "Trainee Part-time Benefits"
+      }
+    }
+    class_value {
+      type {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+          }
+          code {
+            value: "sequence"
+          }
+        }
+      }
+      value {
+        value: "1"
+      }
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/claim"
+  }
+  value {
+    value: "12347"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/claim-type"
+    }
+    code {
+      value: "oral"
+    }
+  }
+}
+use {
+  value: CLAIM
+}
+patient {
+  fragment {
+    value: "patient-1"
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+insurer {
+  fragment {
+    value: "org-insurer"
+  }
+}
+provider {
+  fragment {
+    value: "org-org"
+  }
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+payee {
+  type {
+    coding {
+      code {
+        value: "provider"
+      }
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    fragment {
+      value: "provider-1"
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis {
+    codeable_concept {
+      coding {
+        code {
+          value: "123456"
+        }
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    fragment {
+      value: "coverage-1"
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_sequence {
+    value: 1
+  }
+  product_or_service {
+    coding {
+      code {
+        value: "1200"
+      }
+    }
+  }
+  serviced {
+    date {
+      value_us: 1408111200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  unit_price {
+    value {
+      value: "135.57"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: "135.57"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}

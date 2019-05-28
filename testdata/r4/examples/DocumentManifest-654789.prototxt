@@ -1,0 +1,146 @@
+id {
+  value: "654789"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A Financial Management Attachment example</div>"
+  }
+}
+contained {
+  organization {
+    id {
+      value: "org-1"
+    }
+    identifier {
+      system {
+        value: "http://nationalidentifiers.org/insurers"
+      }
+      value {
+        value: "52345"
+      }
+    }
+  }
+}
+contained {
+  document_reference {
+    id {
+      value: "a1"
+    }
+    status {
+      value: CURRENT
+    }
+    content {
+      attachment {
+        content_type {
+          value: "application/pdf"
+        }
+        data {
+          value: "Hello"
+        }
+        title {
+          value: "accident notes 20100201.pdf"
+        }
+        creation {
+          value_us: 1265043023000000
+          timezone: "-05:00"
+          precision: SECOND
+        }
+      }
+    }
+  }
+}
+contained {
+  document_reference {
+    id {
+      value: "a2"
+    }
+    status {
+      value: CURRENT
+    }
+    content {
+      attachment {
+        content_type {
+          value: "application/pdf"
+        }
+        url {
+          value: "http://happyvalley.com/docs/AB12345"
+        }
+        size {
+          value: 104274
+        }
+        hash {
+          value: "Hello there"
+        }
+        creation {
+          value_us: 1265018254000000
+          timezone: "+01:00"
+          precision: SECOND
+        }
+      }
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/supportingdocumentation"
+  }
+  value {
+    value: "52345"
+  }
+}
+status {
+  value: CURRENT
+}
+created {
+  value_us: 1411318223000000
+  timezone: "-05:00"
+  precision: SECOND
+}
+recipient {
+  fragment {
+    value: "org-1"
+  }
+}
+content {
+  fragment {
+    value: "a1"
+  }
+}
+content {
+  fragment {
+    value: "a2"
+  }
+}
+content {
+  document_reference_id {
+    value: "example"
+  }
+}
+content {
+  diagnostic_report_id {
+    value: "f001"
+  }
+}
+related {
+  identifier {
+    system {
+      value: "http://happyvalley.com/claim"
+    }
+    value {
+      value: "12345"
+    }
+  }
+}
+related {
+  identifier {
+    system {
+      value: "http://www.BenefitsInc.com/fhir/remittance"
+    }
+    value {
+      value: "R3500"
+    }
+  }
+}

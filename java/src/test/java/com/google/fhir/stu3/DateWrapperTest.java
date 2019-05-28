@@ -16,7 +16,7 @@ package com.google.fhir.stu3;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import com.google.fhir.stu3.proto.Date;
+import com.google.fhir.r4.proto.Date;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import org.junit.Test;

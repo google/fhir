@@ -1,0 +1,65 @@
+id {
+  value: "656"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: 656</p><p><b>identifier</b>: patientId-urn:oid:1.2.4~0000000000000000~152584~20170503155426~820</p><p><b>status</b>: final</p><p><b>code</b>: MDC_FLOW_AWAY_EXP_FORCED_PEAK <span>(Details : {urn:iso:std:iso:11073:10101 code \'152584\' = \'152584\', given as \'MDC_FLOW_AWAY_EXP_FORCED_PEAK\'})</span></p><p><b>subject</b>: <a>Patient/PatientId-patientId</a></p><p><b>effective</b>: 03/05/2017 3:54:26 PM</p><p><b>performer</b>: <a>Patient/PatientId-patientId</a></p><p><b>value</b>: 820 cL/s<span> (Details: urn:iso:std:iso:11073:10101 code 265201 = \'265201\')</span></p></div>"
+  }
+}
+identifier {
+  value {
+    value: "patientId-urn:oid:1.2.4~0000000000000000~152584~20170503155426~820"
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "urn:iso:std:iso:11073:10101"
+    }
+    code {
+      value: "152584"
+    }
+    display {
+      value: "MDC_FLOW_AWAY_EXP_FORCED_PEAK"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "PatientId-patientId"
+  }
+}
+effective {
+  date_time {
+    value_us: 1493841266000000
+    timezone: "-04:00"
+    precision: SECOND
+  }
+}
+performer {
+  patient_id {
+    value: "PatientId-patientId"
+  }
+}
+value {
+  quantity {
+    value {
+      value: "820"
+    }
+    unit {
+      value: "cL/s"
+    }
+    system {
+      value: "urn:iso:std:iso:11073:10101"
+    }
+    code {
+      value: "265201"
+    }
+  }
+}

@@ -14,7 +14,9 @@
 
 package com.google.fhir.stu3;
 
-import com.google.fhir.stu3.proto.Id;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.Id;
+import com.google.protobuf.MessageOrBuilder;
 import java.util.regex.Pattern;
 
 /** A wrapper around the Id FHIR primitive type. */
@@ -27,6 +29,10 @@ public class IdWrapper extends PrimitiveWrapper<Id> {
   /** Create an IdWrapper from an Id. */
   public IdWrapper(Id id) {
     super(id);
+  }
+
+  public IdWrapper(MessageOrBuilder message) {
+    super(ProtoUtils.fieldWiseCopy(message, Id.newBuilder()).build());
   }
 
   /** Create an IdWrapper from a java String. */

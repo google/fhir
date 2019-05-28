@@ -1,0 +1,16 @@
+id {
+  value: "medicationexample1"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Amoxicillin 250mg/5ml Suspension</div>"
+  }
+}
+code {
+  text {
+    value: "Amoxicillin 250mg/5ml Suspension"
+  }
+}

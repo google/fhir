@@ -1,0 +1,43 @@
+id {
+  value: "graphic-example-4"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: graphic-example-4</p><p><b>type</b>: dna</p><p><b>coordinateSystem</b>: 0</p><h3>ReferenceSeqs</h3><table><tr><td>-</td><td><b>Chromosome</b></td><td><b>GenomeBuild</b></td><td><b>Strand</b></td><td><b>WindowStart</b></td><td><b>WindowEnd</b></td></tr><tr><td>*</td><td>chromosome 2 <span>(Details : {http://terminology.hl7.org/CodeSystem/chromosome-human code \'2\' = \'chromosome 2\', given as \'chromosome 2\'})</span></td><td>GRCh 38</td><td>watson</td><td>128273736</td><td>128273740</td></tr></table></div>"
+  }
+}
+type {
+  value: DNA
+}
+coordinate_system {
+}
+reference_seq {
+  chromosome {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/chromosome-human"
+      }
+      code {
+        value: "2"
+      }
+      display {
+        value: "chromosome 2"
+      }
+    }
+  }
+  genome_build {
+    value: "GRCh 38"
+  }
+  strand {
+    value: WATSON
+  }
+  window_start {
+    value: 128273736
+  }
+  window_end {
+    value: 128273740
+  }
+}

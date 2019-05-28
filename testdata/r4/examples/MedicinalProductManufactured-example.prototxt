@@ -1,0 +1,60 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>manufacturedDoseForm</b>: Film-coatedtablet <span>(Details : {http://ema.europa.eu/example/manufactureddoseform code \'Film-coatedtablet\' = \'Film-coatedtablet)</span></p><p><b>unitOfPresentation</b>: Tablet <span>(Details : {http://ema.europa.eu/example/unitofpresentation code \'Tablet\' = \'Tablet)</span></p><p><b>quantity</b>: 10 1</p><p><b>manufacturer</b>: <a>Organization/example</a></p><p><b>ingredient</b>: <a>MedicinalProductIngredient/example</a></p><p><b>physicalCharacteristics</b>: </p></div>"
+  }
+}
+manufactured_dose_form {
+  coding {
+    system {
+      value: "http://ema.europa.eu/example/manufactureddoseform"
+    }
+    code {
+      value: "Film-coatedtablet"
+    }
+  }
+}
+unit_of_presentation {
+  coding {
+    system {
+      value: "http://ema.europa.eu/example/unitofpresentation"
+    }
+    code {
+      value: "Tablet"
+    }
+  }
+}
+quantity {
+  value {
+    value: "10"
+  }
+  unit {
+    value: "1"
+  }
+}
+manufacturer {
+  organization_id {
+    value: "example"
+  }
+}
+ingredient {
+  medicinal_product_ingredient_id {
+    value: "example"
+  }
+}
+physical_characteristics {
+  shape {
+    value: "Oval"
+  }
+  color {
+    value: "Pink"
+  }
+  imprint {
+    value: "894"
+  }
+}

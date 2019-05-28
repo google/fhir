@@ -1,0 +1,149 @@
+id {
+  value: "meddisp0307"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: meddisp0307</p><p><b>status</b>: completed</p><p><b>medication</b>: Myleran 2mg tablet, film coated <span>(Details : {http://hl7.org/fhir/sid/ndc code \'76388-713-25\' = \'76388-713-25\', given as \'Myleran 2mg tablet, film coated\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Practitioner/f006</a></td></tr></table><p><b>authorizingPrescription</b>: <a>MedicationRequest/medrx0306</a></p><p><b>type</b>: Refill - Part Fill <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ActCode code \'RFP\' = \'Refill - Part Fill\', given as \'Refill - Part Fill\'})</span></p><p><b>quantity</b>: 90 TAB<span> (Details: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm code TAB = \'Tablet\')</span></p><p><b>daysSupply</b>: 30 Day<span> (Details: UCUM code d = \'d\')</span></p><p><b>whenPrepared</b>: 15/01/2015 10:20:00 AM</p><p><b>whenHandedOver</b>: 15/01/2015 4:20:00 PM</p><p><b>dosageInstruction</b>: </p></div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+medication {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/sid/ndc"
+      }
+      code {
+        value: "76388-713-25"
+      }
+      display {
+        value: "Myleran 2mg tablet, film coated"
+      }
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "f006"
+    }
+  }
+}
+authorizing_prescription {
+  medication_request_id {
+    value: "medrx0306"
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "RFP"
+    }
+    display {
+      value: "Refill - Part Fill"
+    }
+  }
+}
+quantity {
+  value {
+    value: "90"
+  }
+  system {
+    value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+  }
+  code {
+    value: "TAB"
+  }
+}
+days_supply {
+  value {
+    value: "30"
+  }
+  unit {
+    value: "Day"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "d"
+  }
+}
+when_prepared {
+  value_us: 1421317200000000
+  timezone: "Z"
+  precision: SECOND
+}
+when_handed_over {
+  value_us: 1421338800000000
+  timezone: "Z"
+  precision: SECOND
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "Take 3 tablets (6mg) once daily"
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 1
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "calculated"
+        }
+        display {
+          value: "Calculated"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "6"
+        }
+        unit {
+          value: "mg"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mg"
+        }
+      }
+    }
+  }
+}

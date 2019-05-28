@@ -1,0 +1,150 @@
+id {
+  value: "med0319"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: med0319</p><p><b>form</b>: Ointment <span>(Details : {SNOMED CT code \'385101003\' = \'Ointment\', given as \'Ointment\'})</span></p><blockquote><p><b>ingredient</b></p><p><b>item</b>: Salicyclic Acid (substance) <span>(Details : {SNOMED CT code \'387253001\' = \'Salicylic acid\', given as \'Salicyclic Acid (substance)\'})</span></p><p><b>strength</b>: 5 g<span> (Details: UCUM code g = \'g\')</span>/100 g<span> (Details: UCUM code g = \'g\')</span></p></blockquote><blockquote><p><b>ingredient</b></p><p><b>item</b>: Hydrocortisone (substance) <span>(Details : {SNOMED CT code \'396458002\' = \'Hydrocortisone\', given as \'Hydrocortisone (substance)\'})</span></p><p><b>strength</b>: 1 g<span> (Details: UCUM code g = \'g\')</span>/100 g<span> (Details: UCUM code g = \'g\')</span></p></blockquote><blockquote><p><b>ingredient</b></p><p><b>item</b>: White Petrolatum (substance) <span>(Details : {SNOMED CT code \'126066007\' = \'White petroleum\', given as \'White Petrolatum (substance)\'})</span></p><p><b>strength</b>: 94 g<span> (Details: UCUM code g = \'g\')</span>/100 g<span> (Details: UCUM code g = \'g\')</span></p></blockquote></div>"
+  }
+}
+form {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "385101003"
+    }
+    display {
+      value: "Ointment"
+    }
+  }
+  text {
+    value: "Ointment"
+  }
+}
+ingredient {
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "387253001"
+        }
+        display {
+          value: "Salicyclic Acid (substance)"
+        }
+      }
+    }
+  }
+  strength {
+    numerator {
+      value {
+        value: "5"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "g"
+      }
+    }
+    denominator {
+      value {
+        value: "100"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "g"
+      }
+    }
+  }
+}
+ingredient {
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "396458002"
+        }
+        display {
+          value: "Hydrocortisone (substance)"
+        }
+      }
+    }
+  }
+  strength {
+    numerator {
+      value {
+        value: "1"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "g"
+      }
+    }
+    denominator {
+      value {
+        value: "100"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "g"
+      }
+    }
+  }
+}
+ingredient {
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "126066007"
+        }
+        display {
+          value: "White Petrolatum (substance)"
+        }
+      }
+    }
+  }
+  strength {
+    numerator {
+      value {
+        value: "94"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "g"
+      }
+    }
+    denominator {
+      value {
+        value: "100"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "g"
+      }
+    }
+  }
+}

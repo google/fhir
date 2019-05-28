@@ -1,0 +1,25 @@
+id {
+  value: "3"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n      <p>Michigan Helth</p>\n    \n    </div>"
+  }
+}
+identifier {
+  system {
+    value: "http://michigan.gov/state-dept-ids"
+  }
+  value {
+    value: "25"
+  }
+}
+name {
+  value: "Michigan Health"
+}
+alias {
+  value: "Michigan State Department of Health"
+}

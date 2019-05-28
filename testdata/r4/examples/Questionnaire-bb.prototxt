@@ -1,0 +1,247 @@
+id {
+  value: "bb"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <pre>\n        <b>Birth details - To be completed by health professional</b>\n  Name of child: ____________________________________\n            Sex: __\n            \n  Neonatal Information\n    Birth Weight (kg): ___________\n    Birth Length (cm): ___________\n    Vitamin K given  : __\n             1st dose: ___________\n             2nd dose: ___________\n    Hep B given      : __\n      Date given     : ___________\n    Abnormalities noted at birth:\n      _______________________________________________\n      </pre>\n    </div>"
+  }
+}
+url {
+  value: "http://hl7.org/fhir/Questionnaire/bb"
+}
+title {
+  value: "NSW Government My Personal Health Record"
+}
+status {
+  value: DRAFT
+}
+subject_type {
+  value: PATIENT
+}
+date {
+  value_us: 1361192400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "New South Wales Department of Health"
+}
+jurisdiction {
+  coding {
+    system {
+      value: "urn:iso:std:iso:3166"
+    }
+    code {
+      value: "AU"
+    }
+  }
+}
+item {
+  link_id {
+    value: "birthDetails"
+  }
+  text {
+    value: "Birth details - To be completed by health professional"
+  }
+  type {
+    value: GROUP
+  }
+  item {
+    link_id {
+      value: "group"
+    }
+    type {
+      value: GROUP
+    }
+    item {
+      link_id {
+        value: "nameOfChild"
+      }
+      text {
+        value: "Name of child"
+      }
+      type {
+        value: STRING
+      }
+    }
+    item {
+      link_id {
+        value: "sex"
+      }
+      text {
+        value: "Sex"
+      }
+      type {
+        value: CHOICE
+      }
+      answer_option {
+        value {
+          coding {
+            code {
+              value: "F"
+            }
+          }
+        }
+      }
+      answer_option {
+        value {
+          coding {
+            code {
+              value: "M"
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "neonatalInformation"
+    }
+    text {
+      value: "Neonatal Information"
+    }
+    type {
+      value: GROUP
+    }
+    item {
+      link_id {
+        value: "birthWeight"
+      }
+      text {
+        value: "Birth weight (kg)"
+      }
+      type {
+        value: DECIMAL
+      }
+    }
+    item {
+      link_id {
+        value: "birthLength"
+      }
+      text {
+        value: "Birth length (cm)"
+      }
+      type {
+        value: DECIMAL
+      }
+    }
+    item {
+      link_id {
+        value: "vitaminKgiven"
+      }
+      text {
+        value: "Vitamin K given"
+      }
+      type {
+        value: CHOICE
+      }
+      answer_option {
+        value {
+          coding {
+            code {
+              value: "INJECTION"
+            }
+          }
+        }
+      }
+      answer_option {
+        value {
+          coding {
+            code {
+              value: "INTRAVENOUS"
+            }
+          }
+        }
+      }
+      answer_option {
+        value {
+          coding {
+            code {
+              value: "ORAL"
+            }
+          }
+        }
+      }
+      item {
+        link_id {
+          value: "vitaminKgivenDoses"
+        }
+        type {
+          value: GROUP
+        }
+        enable_when {
+          question {
+            value: "vitaminKgiven"
+          }
+          operator {
+            value: EXISTS
+          }
+          answer {
+            boolean {
+              value: true
+            }
+          }
+        }
+        item {
+          link_id {
+            value: "vitaminiKDose1"
+          }
+          text {
+            value: "1st dose"
+          }
+          type {
+            value: DATE_TIME
+          }
+        }
+        item {
+          link_id {
+            value: "vitaminiKDose2"
+          }
+          text {
+            value: "2nd dose"
+          }
+          type {
+            value: DATE_TIME
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "hepBgiven"
+      }
+      text {
+        value: "Hep B given y / n"
+      }
+      type {
+        value: BOOLEAN
+      }
+      item {
+        link_id {
+          value: "hepBgivenDate"
+        }
+        text {
+          value: "Date given"
+        }
+        type {
+          value: DATE
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "abnormalitiesAtBirth"
+      }
+      text {
+        value: "Abnormalities noted at birth"
+      }
+      type {
+        value: STRING
+      }
+    }
+  }
+}

@@ -1,0 +1,165 @@
+id {
+  value: "f201"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f201</p><p><b>status</b>: completed</p><p><b>subject</b>: <a>Roel</a></p><p><b>authored</b>: 18/06/2013 12:00:00 AM</p><p><b>author</b>: <a>Practitioner/f201</a></p><p><b>source</b>: <a>Practitioner/f201</a></p><blockquote><p><b>item</b></p><p><b>linkId</b>: 1</p><h3>Items</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>item</b></p><p><b>linkId</b>: 2</p><p><b>text</b>: General questions</p><h3>Items</h3><table><tr><td>-</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>item</b></p><p><b>linkId</b>: 3</p><p><b>text</b>: Intoxications</p><h3>Items</h3><table><tr><td>-</td></tr><tr><td>*</td></tr><tr><td>*</td></tr></table></blockquote></div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+subject {
+  patient_id {
+    value: "f201"
+  }
+  display {
+    value: "Roel"
+  }
+}
+authored {
+  value_us: 1371510000000000
+  timezone: "+01:00"
+  precision: SECOND
+}
+author {
+  practitioner_id {
+    value: "f201"
+  }
+}
+source {
+  practitioner_id {
+    value: "f201"
+  }
+}
+item {
+  link_id {
+    value: "1"
+  }
+  item {
+    link_id {
+      value: "1.1"
+    }
+    text {
+      value: "Do you have allergies?"
+    }
+    answer {
+      value {
+        string_value {
+          value: "I am allergic to house dust"
+        }
+      }
+    }
+  }
+}
+item {
+  link_id {
+    value: "2"
+  }
+  text {
+    value: "General questions"
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    text {
+      value: "What is your gender?"
+    }
+    answer {
+      value {
+        string_value {
+          value: "Male"
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.2"
+    }
+    text {
+      value: "What is your date of birth?"
+    }
+    answer {
+      value {
+        date {
+          value_us: -309434400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.3"
+    }
+    text {
+      value: "What is your country of birth?"
+    }
+    answer {
+      value {
+        string_value {
+          value: "The Netherlands"
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "2.4"
+    }
+    text {
+      value: "What is your marital status?"
+    }
+    answer {
+      value {
+        string_value {
+          value: "married"
+        }
+      }
+    }
+  }
+}
+item {
+  link_id {
+    value: "3"
+  }
+  text {
+    value: "Intoxications"
+  }
+  item {
+    link_id {
+      value: "3.1"
+    }
+    text {
+      value: "Do you smoke?"
+    }
+    answer {
+      value {
+        string_value {
+          value: "No"
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "3.2"
+    }
+    text {
+      value: "Do you drink alchohol?"
+    }
+    answer {
+      value {
+        string_value {
+          value: "No, but I used to drink"
+        }
+      }
+    }
+  }
+}

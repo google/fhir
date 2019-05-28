@@ -15,7 +15,9 @@
 package com.google.fhir.stu3;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.fhir.stu3.proto.Instant;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.Instant;
+import com.google.protobuf.MessageOrBuilder;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -43,6 +45,10 @@ public class InstantWrapper extends PrimitiveWrapper<Instant> {
   /** Create an InstantWrapper from an Instant. */
   public InstantWrapper(Instant instant) {
     super(instant);
+  }
+
+  public InstantWrapper(MessageOrBuilder message) {
+    super(ProtoUtils.fieldWiseCopy(message, Instant.newBuilder()).build());
   }
 
   /** Create an InstantWrapper from a java String. */

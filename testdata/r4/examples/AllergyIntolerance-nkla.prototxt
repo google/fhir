@@ -1,0 +1,68 @@
+id {
+  value: "nkla"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>No Known Latex Allergy</p>\n      <p>recordedDate:2015-08-06</p>\n    </div>"
+  }
+}
+clinical_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+    }
+    code {
+      value: "active"
+    }
+    display {
+      value: "Active"
+    }
+  }
+}
+verification_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification"
+    }
+    code {
+      value: "confirmed"
+    }
+    display {
+      value: "Confirmed"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "716184000"
+    }
+    display {
+      value: "No Known Latex Allergy (situation)"
+    }
+  }
+  text {
+    value: "No Known Latex Allergy"
+  }
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+}
+recorded_date {
+  value_us: 1438897051000000
+  timezone: "-06:00"
+  precision: SECOND
+}
+recorder {
+  practitioner_id {
+    value: "example"
+  }
+}

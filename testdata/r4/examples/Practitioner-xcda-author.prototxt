@@ -1,0 +1,22 @@
+id {
+  value: "xcda-author"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Harold Hippocrates, MD</p>\n    </div>"
+  }
+}
+name {
+  family {
+    value: "Hippocrates"
+  }
+  given {
+    value: "Harold"
+  }
+  suffix {
+    value: "MD"
+  }
+}

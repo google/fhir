@@ -1,0 +1,30 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Accept Brian MRI results discussion</div>"
+  }
+}
+appointment {
+  appointment_id {
+    value: "example"
+  }
+  display {
+    value: "Brian MRI results discussion"
+  }
+}
+actor {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+participant_status {
+  value: ACCEPTED
+}

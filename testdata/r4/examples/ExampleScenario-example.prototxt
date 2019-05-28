@@ -1,0 +1,606 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>status</b>: draft</p><p><b>purpose</b>: Purpose: this serves to enable remote performing of medication administration, by using remote / mobile devices to a) Get the planned medication administrations and b) Record the performing of these administrations without a permanent connection to the EHR.</p><blockquote><p><b>actor</b></p><p><b>actorId</b>: Nurse</p><p><b>type</b>: person</p><p><b>name</b>: Nurse</p><p><b>description</b>: The Nurse</p></blockquote><blockquote><p><b>actor</b></p><p><b>actorId</b>: MAP</p><p><b>type</b>: entity</p><p><b>name</b>: Nurse\'s Tablet</p><p><b>description</b>: The entity that receives the Administration Requests to show the nurse to perform them</p></blockquote><blockquote><p><b>actor</b></p><p><b>actorId</b>: OP</p><p><b>type</b>: entity</p><p><b>name</b>: MAR / Scheduler</p><p><b>description</b>: The Medication Administration Order Placer</p></blockquote><blockquote><p><b>actor</b></p><p><b>actorId</b>: MAC</p><p><b>type</b>: entity</p><p><b>name</b>: MAR / EHR</p><p><b>description</b>: The entity that receives the Medication Administration reports</p></blockquote><blockquote><p><b>instance</b></p><p><b>resourceId</b>: iherx001</p><p><b>resourceType</b>: MedicationRequest</p><p><b>name</b>: Initial Prescription</p><p><b>description</b>: The initial prescription which describes &quot;medication X, 3 times per day&quot; - the exact scheduling is not   in the initial prescription (it is left for the care teams to decide on the schedule).</p></blockquote><blockquote><p><b>instance</b></p><p><b>resourceId</b>: iherx001.001</p><p><b>resourceType</b>: MedicationRequest</p><p><b>name</b>: Request for day 1, morning</p><p><b>description</b>: The administration request for day 1, morning</p></blockquote><blockquote><p><b>instance</b></p><p><b>resourceId</b>: iherx001.002</p><p><b>resourceType</b>: MedicationRequest</p><p><b>name</b>: Request for day 1, lunch</p><p><b>description</b>: The administration request for day 1, lunch</p></blockquote><blockquote><p><b>instance</b></p><p><b>resourceId</b>: iherx001.003</p><p><b>resourceType</b>: MedicationRequest</p><p><b>name</b>: Request for day 1, evening</p><p><b>description</b>: The administration request for day 1, evening</p></blockquote><blockquote><p><b>instance</b></p><p><b>resourceId</b>: iherx001.004</p><p><b>resourceType</b>: MedicationRequest</p><p><b>name</b>: Request for day 2, morning</p><p><b>description</b>: The administration request for day 2, morning</p></blockquote><blockquote><p><b>instance</b></p><p><b>resourceId</b>: iherx001.005</p><p><b>resourceType</b>: MedicationRequest</p><p><b>name</b>: Request for day 2, lunch</p><p><b>description</b>: The administration request for day 2, lunch</p></blockquote><blockquote><p><b>instance</b></p><p><b>resourceId</b>: iherx001.006</p><p><b>resourceType</b>: MedicationRequest</p><p><b>name</b>: Request for day 2, evening</p><p><b>description</b>: The administration request for day 2, evening</p></blockquote><blockquote><p><b>instance</b></p><p><b>resourceId</b>: iheadm001a</p><p><b>resourceType</b>: MedicationAdministration</p><p><b>name</b>: Morning meds - taken</p><p><b>description</b>: Administration report for day 1, morning: Taken</p></blockquote><blockquote><p><b>instance</b></p><p><b>resourceId</b>: iheadm001b</p><p><b>resourceType</b>: MedicationAdministration</p><p><b>name</b>: Morning meds - not taken</p><p><b>description</b>: Administration report for day 1, morning: NOT Taken</p></blockquote><blockquote><p><b>instance</b></p><p><b>resourceId</b>: iherx001bundle</p><p><b>resourceType</b>: MedicationRequest</p><p><b>name</b>: Bundle of Medication Requests</p><p><b>description</b>: All the medication Requests for Day 1</p><blockquote><p><b>containedInstance</b></p><p><b>resourceId</b>: iherx001.001</p></blockquote><blockquote><p><b>containedInstance</b></p><p><b>resourceId</b>: iherx001.002</p></blockquote><blockquote><p><b>containedInstance</b></p><p><b>resourceId</b>: iherx001.003</p></blockquote><blockquote><p><b>containedInstance</b></p><p><b>resourceId</b>: iherx001.004</p></blockquote><blockquote><p><b>containedInstance</b></p><p><b>resourceId</b>: iherx001.005</p></blockquote><blockquote><p><b>containedInstance</b></p><p><b>resourceId</b>: iherx001.006</p></blockquote></blockquote><blockquote><p><b>instance</b></p><p><b>resourceId</b>: iheadm002</p><p><b>resourceType</b>: MedicationAdministration</p><p><b>name</b>: Lunch meds - taken</p><p><b>description</b>: Administration report for day 1, lunch: Taken</p><blockquote><p><b>version</b></p><p><b>versionId</b>: iheadm002v1</p><p><b>description</b>: Medication just taken</p></blockquote><blockquote><p><b>version</b></p><p><b>versionId</b>: iheadm002v2</p><p><b>description</b>: Medication rejected</p></blockquote></blockquote><blockquote><p><b>instance</b></p><p><b>resourceId</b>: iherxqry</p><p><b>resourceType</b>: SearchParameter</p><p><b>name</b>: Search query1</p><p><b>description</b>: The search administration request for day 1, morning</p></blockquote><blockquote><p><b>process</b></p><p><b>title</b>: Mobile Medication Administration</p><p><b>description</b>: This scenario demonstrates the process of getting the relevant medication instructions for a patient visit and reporting the results of administration. The scenario is as follows: After the prescription is issued, the institution schedules each individual administration event in the Medication Administration Record (MAR). When preparing for a visit, the nurse queries the MAR for the scheduled administrations, obtaining a bundle of records. The nurse then performs the care activities and registers the results in the device. Upon synchronization of the device and the institution, the results of administration are uploaded to the EHR, thus updating the MAR.</p><p><b>preConditions</b>: Medication administration requests are in the EHR / MAR, scheduled for each individual intake.</p><p><b>postConditions</b>: Medication administration Reports are submitted, EHR is updated.</p><blockquote><p><b>step</b></p><h3>Operations</h3><table><tr><td>-</td><td><b>Number</b></td><td><b>Name</b></td><td><b>Initiator</b></td><td><b>Receiver</b></td></tr><tr><td>*</td><td>1</td><td>1. Get today\'s schedule</td><td>Nurse</td><td>MAP</td></tr></table></blockquote><blockquote><p><b>step</b></p><h3>Processes</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>step</b></p><p><b>pause</b>: true</p></blockquote><blockquote><p><b>step</b></p><h3>Operations</h3><table><tr><td>-</td><td><b>Number</b></td><td><b>Name</b></td><td><b>Initiator</b></td><td><b>Receiver</b></td></tr><tr><td>*</td><td>4</td><td>Notify (alert)</td><td>MAP</td><td>Nurse</td></tr></table></blockquote><blockquote><p><b>step</b></p><h3>Operations</h3><table><tr><td>-</td><td><b>Number</b></td><td><b>Name</b></td><td><b>Initiator</b></td><td><b>Receiver</b></td></tr><tr><td>*</td><td>5</td><td>Read orders</td><td>Nurse</td><td>MAP</td></tr></table></blockquote><blockquote><p><b>step</b></p><p><b>pause</b>: true</p></blockquote><blockquote><p><b>step</b></p><h3>Operations</h3><table><tr><td>-</td><td><b>Number</b></td><td><b>Name</b></td><td><b>Initiator</b></td><td><b>Receiver</b></td></tr><tr><td>*</td><td>5</td><td>Ask if patient took meds</td><td>Nurse</td><td>Nurse</td></tr></table></blockquote><blockquote><p><b>step</b></p><blockquote><p><b>alternative</b></p><p><b>title</b>: Patient took drugs</p><p><b>description</b>: Invoke if patient took medications</p><h3>Steps</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>alternative</b></p><p><b>title</b>: No drugs</p><p><b>description</b>: No, patient did not take drugs</p><h3>Steps</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>alternative</b></p><p><b>title</b>: Not clear</p><p><b>description</b>: Unknown whether patient took medications or not</p><h3>Steps</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote></blockquote><blockquote><p><b>step</b></p><p><b>pause</b>: true</p></blockquote><blockquote><p><b>step</b></p><h3>Operations</h3><table><tr><td>-</td><td><b>Number</b></td><td><b>Name</b></td><td><b>Initiator</b></td><td><b>Receiver</b></td></tr><tr><td>*</td><td>6</td><td>Administer drug</td><td>Nurse</td><td>Nurse</td></tr></table></blockquote><blockquote><p><b>step</b></p><h3>Operations</h3><table><tr><td>-</td><td><b>Number</b></td><td><b>Name</b></td><td><b>Initiator</b></td><td><b>Receiver</b></td><td><b>InitiatorActive</b></td></tr><tr><td>*</td><td>7</td><td>Register administration</td><td>Nurse</td><td>MAP</td><td>true</td></tr></table></blockquote><blockquote><p><b>step</b></p><p><b>pause</b>: true</p></blockquote><blockquote><p><b>step</b></p><h3>Processes</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote><blockquote><p><b>step</b></p><p><b>pause</b>: true</p></blockquote><blockquote><p><b>step</b></p><h3>Processes</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote></blockquote></div>"
+  }
+}
+status {
+  value: DRAFT
+}
+purpose {
+  value: "Purpose: this serves to enable remote performing of medication administration, by using remote / mobile devices to a) Get the planned medication administrations and b) Record the performing of these administrations without a permanent connection to the EHR."
+}
+actor {
+  actor_id {
+    value: "Nurse"
+  }
+  type {
+    value: PERSON
+  }
+  name {
+    value: "Nurse"
+  }
+  description {
+    value: "The Nurse"
+  }
+}
+actor {
+  actor_id {
+    value: "MAP"
+  }
+  type {
+    value: ENTITY
+  }
+  name {
+    value: "Nurse\'s Tablet"
+  }
+  description {
+    value: "The entity that receives the Administration Requests to show the nurse to perform them"
+  }
+}
+actor {
+  actor_id {
+    value: "OP"
+  }
+  type {
+    value: ENTITY
+  }
+  name {
+    value: "MAR / Scheduler"
+  }
+  description {
+    value: "The Medication Administration Order Placer"
+  }
+}
+actor {
+  actor_id {
+    value: "MAC"
+  }
+  type {
+    value: ENTITY
+  }
+  name {
+    value: "MAR / EHR"
+  }
+  description {
+    value: "The entity that receives the Medication Administration reports"
+  }
+}
+instance {
+  resource_id {
+    value: "iherx001"
+  }
+  resource_type {
+    value: MEDICATION_REQUEST
+  }
+  name {
+    value: "Initial Prescription"
+  }
+  description {
+    value: "The initial prescription which describes \"medication X, 3 times per day\" - the exact scheduling is not   in the initial prescription (it is left for the care teams to decide on the schedule)."
+  }
+}
+instance {
+  resource_id {
+    value: "iherx001.001"
+  }
+  resource_type {
+    value: MEDICATION_REQUEST
+  }
+  name {
+    value: "Request for day 1, morning"
+  }
+  description {
+    value: "The administration request for day 1, morning"
+  }
+}
+instance {
+  resource_id {
+    value: "iherx001.002"
+  }
+  resource_type {
+    value: MEDICATION_REQUEST
+  }
+  name {
+    value: "Request for day 1, lunch"
+  }
+  description {
+    value: "The administration request for day 1, lunch"
+  }
+}
+instance {
+  resource_id {
+    value: "iherx001.003"
+  }
+  resource_type {
+    value: MEDICATION_REQUEST
+  }
+  name {
+    value: "Request for day 1, evening"
+  }
+  description {
+    value: "The administration request for day 1, evening"
+  }
+}
+instance {
+  resource_id {
+    value: "iherx001.004"
+  }
+  resource_type {
+    value: MEDICATION_REQUEST
+  }
+  name {
+    value: "Request for day 2, morning"
+  }
+  description {
+    value: "The administration request for day 2, morning"
+  }
+}
+instance {
+  resource_id {
+    value: "iherx001.005"
+  }
+  resource_type {
+    value: MEDICATION_REQUEST
+  }
+  name {
+    value: "Request for day 2, lunch"
+  }
+  description {
+    value: "The administration request for day 2, lunch"
+  }
+}
+instance {
+  resource_id {
+    value: "iherx001.006"
+  }
+  resource_type {
+    value: MEDICATION_REQUEST
+  }
+  name {
+    value: "Request for day 2, evening"
+  }
+  description {
+    value: "The administration request for day 2, evening"
+  }
+}
+instance {
+  resource_id {
+    value: "iheadm001a"
+  }
+  resource_type {
+    value: MEDICATION_ADMINISTRATION
+  }
+  name {
+    value: "Morning meds - taken"
+  }
+  description {
+    value: "Administration report for day 1, morning: Taken"
+  }
+}
+instance {
+  resource_id {
+    value: "iheadm001b"
+  }
+  resource_type {
+    value: MEDICATION_ADMINISTRATION
+  }
+  name {
+    value: "Morning meds - not taken"
+  }
+  description {
+    value: "Administration report for day 1, morning: NOT Taken"
+  }
+}
+instance {
+  resource_id {
+    value: "iherx001bundle"
+  }
+  resource_type {
+    value: MEDICATION_REQUEST
+  }
+  name {
+    value: "Bundle of Medication Requests"
+  }
+  description {
+    value: "All the medication Requests for Day 1"
+  }
+  contained_instance {
+    resource_id {
+      value: "iherx001.001"
+    }
+  }
+  contained_instance {
+    resource_id {
+      value: "iherx001.002"
+    }
+  }
+  contained_instance {
+    resource_id {
+      value: "iherx001.003"
+    }
+  }
+  contained_instance {
+    resource_id {
+      value: "iherx001.004"
+    }
+  }
+  contained_instance {
+    resource_id {
+      value: "iherx001.005"
+    }
+  }
+  contained_instance {
+    resource_id {
+      value: "iherx001.006"
+    }
+  }
+}
+instance {
+  resource_id {
+    value: "iheadm002"
+  }
+  resource_type {
+    value: MEDICATION_ADMINISTRATION
+  }
+  name {
+    value: "Lunch meds - taken"
+  }
+  description {
+    value: "Administration report for day 1, lunch: Taken"
+  }
+  version {
+    version_id {
+      value: "iheadm002v1"
+    }
+    description {
+      value: "Medication just taken"
+    }
+  }
+  version {
+    version_id {
+      value: "iheadm002v2"
+    }
+    description {
+      value: "Medication rejected"
+    }
+  }
+}
+instance {
+  resource_id {
+    value: "iherxqry"
+  }
+  resource_type {
+    value: SEARCH_PARAMETER
+  }
+  name {
+    value: "Search query1"
+  }
+  description {
+    value: "The search administration request for day 1, morning"
+  }
+}
+process {
+  title {
+    value: "Mobile Medication Administration"
+  }
+  description {
+    value: "This scenario demonstrates the process of getting the relevant medication instructions for a patient visit and reporting the results of administration. The scenario is as follows: After the prescription is issued, the institution schedules each individual administration event in the Medication Administration Record (MAR). When preparing for a visit, the nurse queries the MAR for the scheduled administrations, obtaining a bundle of records. The nurse then performs the care activities and registers the results in the device. Upon synchronization of the device and the institution, the results of administration are uploaded to the EHR, thus updating the MAR."
+  }
+  pre_conditions {
+    value: "Medication administration requests are in the EHR / MAR, scheduled for each individual intake."
+  }
+  post_conditions {
+    value: "Medication administration Reports are submitted, EHR is updated."
+  }
+  step {
+    operation {
+      number {
+        value: "1"
+      }
+      name {
+        value: "1. Get today\'s schedule"
+      }
+      initiator {
+        value: "Nurse"
+      }
+      receiver {
+        value: "MAP"
+      }
+    }
+  }
+  step {
+    process {
+      title {
+        value: "P1. Query Administration Requests"
+      }
+      description {
+        value: "Query for medication administration orders,\\n- For today\'s shifts\\n- For today\'s patients"
+      }
+      step {
+        operation {
+          number {
+            value: "2"
+          }
+          name {
+            value: "2.Query for medication administration orders,\\n- For today\'s shifts\\n- For today\'s patients"
+          }
+          initiator {
+            value: "MAP"
+          }
+          receiver {
+            value: "OP"
+          }
+          request {
+            resource_id {
+              value: "iherxqry"
+            }
+          }
+          response {
+            resource_id {
+              value: "iherx001bundle"
+            }
+          }
+        }
+      }
+    }
+  }
+  step {
+    pause {
+      value: true
+    }
+  }
+  step {
+    operation {
+      number {
+        value: "4"
+      }
+      name {
+        value: "Notify (alert)"
+      }
+      initiator {
+        value: "MAP"
+      }
+      receiver {
+        value: "Nurse"
+      }
+    }
+  }
+  step {
+    operation {
+      number {
+        value: "5"
+      }
+      name {
+        value: "Read orders"
+      }
+      initiator {
+        value: "Nurse"
+      }
+      receiver {
+        value: "MAP"
+      }
+    }
+  }
+  step {
+    pause {
+      value: true
+    }
+  }
+  step {
+    operation {
+      number {
+        value: "5"
+      }
+      name {
+        value: "Ask if patient took meds"
+      }
+      initiator {
+        value: "Nurse"
+      }
+      receiver {
+        value: "Nurse"
+      }
+    }
+  }
+  step {
+    alternative {
+      title {
+        value: "Patient took drugs"
+      }
+      description {
+        value: "Invoke if patient took medications"
+      }
+      step {
+        process {
+          title {
+            value: "Register Meds taken"
+          }
+          step {
+            operation {
+              number {
+                value: "1a"
+              }
+              name {
+                value: "Register Meds taken"
+              }
+              initiator {
+                value: "Nurse"
+              }
+              receiver {
+                value: "MAP"
+              }
+              initiator_active {
+                value: true
+              }
+            }
+          }
+        }
+      }
+    }
+    alternative {
+      title {
+        value: "No drugs"
+      }
+      description {
+        value: "No, patient did not take drugs"
+      }
+      step {
+        process {
+          title {
+            value: "Register Meds NOT taken"
+          }
+          step {
+            operation {
+              number {
+                value: "1b"
+              }
+              name {
+                value: "Register Meds NOT taken"
+              }
+              initiator {
+                value: "Nurse"
+              }
+              receiver {
+                value: "MAP"
+              }
+              initiator_active {
+                value: true
+              }
+            }
+          }
+        }
+      }
+    }
+    alternative {
+      title {
+        value: "Not clear"
+      }
+      description {
+        value: "Unknown whether patient took medications or not"
+      }
+      step {
+        pause {
+          value: true
+        }
+      }
+    }
+  }
+  step {
+    pause {
+      value: true
+    }
+  }
+  step {
+    operation {
+      number {
+        value: "6"
+      }
+      name {
+        value: "Administer drug"
+      }
+      initiator {
+        value: "Nurse"
+      }
+      receiver {
+        value: "Nurse"
+      }
+    }
+  }
+  step {
+    operation {
+      number {
+        value: "7"
+      }
+      name {
+        value: "Register administration"
+      }
+      initiator {
+        value: "Nurse"
+      }
+      receiver {
+        value: "MAP"
+      }
+      initiator_active {
+        value: true
+      }
+    }
+  }
+  step {
+    pause {
+      value: true
+    }
+  }
+  step {
+    process {
+      title {
+        value: "P2. Update administration reports"
+      }
+      step {
+        operation {
+          number {
+            value: "8"
+          }
+          name {
+            value: "Nurse updates administration report"
+          }
+          initiator {
+            value: "Nurse"
+          }
+          receiver {
+            value: "MAP"
+          }
+          initiator_active {
+            value: true
+          }
+          request {
+            resource_id {
+              value: "iheadm002"
+            }
+          }
+        }
+      }
+    }
+  }
+  step {
+    pause {
+      value: true
+    }
+  }
+  step {
+    process {
+      title {
+        value: "P3. Upload administration reports"
+      }
+      description {
+        value: "The nurse\'s system uploads the administration results to the server"
+      }
+      step {
+        operation {
+          number {
+            value: "9"
+          }
+          name {
+            value: "Refresh"
+          }
+          initiator {
+            value: "MAP"
+          }
+          receiver {
+            value: "MAC"
+          }
+          request {
+            resource_id {
+              value: "iheadm001"
+            }
+          }
+        }
+      }
+    }
+  }
+}

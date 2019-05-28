@@ -1,0 +1,1299 @@
+id {
+  value: "example-cardiology-os"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-cardiology-os</p><p><b>contained</b>: , , , , , , , , , , , , </p><p><b>url</b>: <b>http://va.gov/kas/orderset/B5-Cardiology-ChestPainCAD-OS</b></p><p><b>identifier</b>: bb7ccea6-9744-4743-854a-bcffd87191f6 (OFFICIAL), CLIN0004AG, KP-914</p><p><b>version</b>: 0.1</p><p><b>name</b>: ChestPainCoronaryArteryDiseaseOrderSetKNART</p><p><b>title</b>: Chest Pain (CP) - Coronary Artery Disease (CAD) Order Set KNART</p><p><b>type</b>: Order Set <span>(Details : {http://terminology.hl7.org/CodeSystem/plan-definition-type code \'order-set\' = \'Order Set\', given as \'Order Set\'})</span></p><p><b>status</b>: active</p><p><b>date</b>: 29/08/2017</p><p><b>publisher</b>: Department of Veterans Affairs</p><p><b>description</b>: The Cardiology chest pain (CP) and coronary artery disease (CAD) group of KNARTs are     intended to assist primary care providers in the management of adult patients with stable     chest pain (with or without known CAD); aid in determining when a cardiology consultation is     appropriate; provide guidance for initial noninvasive diagnostic orders (stress testing) and     provide a structured documentation template for the process. Stable patients with cardiac     chest pain require risk stratification, office-based workup, initiation of disease-specific     medications, and subspecialty referral to a cardiologist.</p><p><b>useContext</b>: </p><p><b>usage</b>: The Cardiology chest pain (CP) and coronary artery disease (CAD) group of KNARTs are intended to assist primary care providers in the management of adult patients with stable chest pain (with or without known CAD); aid in determining when a cardiology consultation is appropriate; provide guidance for initial noninvasive diagnostic orders (stress testing) and provide a structured documentation template for the process. Stable patients with cardiac chest pain require risk stratification, office-based workup, initiation of disease-specific medications, and subspecialty referral to a cardiologist. This context excludes emergent patients (new/ongoing/unstable pattern CP). Included are those patients with stable CP with or without known CAD, to be considered for evaluation by cardiology.</p><p><b>copyright</b>: \302\251 Copyright Cognitive Medical Systems, Inc. 9444 Waples Street Suite 300 San Diego, CA 92121</p><p><b>author</b>: , , </p><p><b>relatedArtifact</b>: , , , , , , , , , , , </p><p><b>library</b>: <a>#cardiology-chestPain-logic</a></p><blockquote><p><b>action</b></p><h3>Actions</h3><table><tr><td>-</td></tr><tr><td>*</td></tr><tr><td>*</td></tr></table></blockquote></div>"
+  }
+}
+contained {
+  library {
+    id {
+      value: "cardiology-chestPain-logic"
+    }
+    status {
+      value: ACTIVE
+    }
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/library-type"
+        }
+        code {
+          value: "logic-library"
+        }
+        display {
+          value: "Logic Library"
+        }
+      }
+    }
+    description {
+      value: "Placeholder library"
+    }
+  }
+}
+contained {
+  activity_definition {
+    id {
+      value: "referralToCardiologyConsult"
+    }
+    status {
+      value: DRAFT
+    }
+    description {
+      value: "Consider other consult modalities which might be available (e.g., e-consult or other rapidly iterative consult method. A simple consult is included here as the overarching clinical intent."
+    }
+    kind {
+      value: SERVICE_REQUEST
+    }
+    timing {
+      timing {
+        event {
+          extension {
+            url {
+              value: "http://hl7.org/fhir/StructureDefinition/cqf-expression"
+            }
+            value {
+              expression {
+                language {
+                  value: "text/cql"
+                }
+                expression {
+                  value: "Now()"
+                }
+              }
+            }
+          }
+          extension {
+            url {
+              value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue"
+            }
+            value {
+              boolean {
+                value: true
+              }
+            }
+          }
+        }
+      }
+    }
+    participant {
+      type {
+        value: PRACTITIONER
+      }
+    }
+  }
+}
+contained {
+  activity_definition {
+    id {
+      value: "metoprololTartrate25Prescription"
+    }
+    status {
+      value: DRAFT
+    }
+    kind {
+      value: MEDICATION_REQUEST
+    }
+    product {
+      reference {
+        fragment {
+          value: "metoprololTartrate25Medication"
+        }
+      }
+    }
+    dosage {
+      text {
+        value: "1 tablet oral 2 time daily"
+      }
+      timing {
+        repeat {
+          frequency {
+            value: 2
+          }
+          period {
+            value: "1"
+          }
+          period_unit {
+            value: D
+          }
+        }
+      }
+      route {
+        coding {
+          code {
+            value: "26643006"
+          }
+          display {
+            value: "Oral route (qualifier value)"
+          }
+        }
+        text {
+          value: "Oral route (qualifier value)"
+        }
+      }
+      dose_and_rate {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+            }
+            code {
+              value: "ordered"
+            }
+            display {
+              value: "Ordered"
+            }
+          }
+        }
+        dose {
+          quantity {
+            value {
+              value: "1"
+            }
+            unit {
+              value: "{tbl}"
+            }
+          }
+        }
+      }
+    }
+    dynamic_value {
+      path {
+        value: "medicationRequest.priority"
+      }
+      expression {
+        language {
+          value: "text/cql"
+        }
+        expression {
+          value: "routine"
+        }
+      }
+    }
+  }
+}
+contained {
+  medication {
+    id {
+      value: "metoprololTartrate25Medication"
+    }
+    code {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "866426"
+        }
+      }
+      text {
+        value: "Metoprolol Tartrate 25 MG"
+      }
+    }
+    form {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "385055001"
+        }
+        display {
+          value: "Tablet dose form"
+        }
+      }
+      text {
+        value: "Tablet dose form"
+      }
+    }
+    ingredient {
+      item {
+        reference {
+          fragment {
+            value: "metoprololTartrate25Substance"
+          }
+        }
+      }
+      strength {
+        numerator {
+          value {
+            value: "25"
+          }
+          unit {
+            value: "mg"
+          }
+        }
+        denominator {
+          value {
+            value: "1"
+          }
+          unit {
+            value: "{tbl}"
+          }
+        }
+      }
+    }
+  }
+}
+contained {
+  substance {
+    id {
+      value: "metoprololTartrate25Substance"
+    }
+    code {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "6918"
+        }
+      }
+      text {
+        value: "Metoprolol"
+      }
+    }
+  }
+}
+contained {
+  activity_definition {
+    id {
+      value: "metoprololTartrate50Prescription"
+    }
+    status {
+      value: DRAFT
+    }
+    kind {
+      value: MEDICATION_REQUEST
+    }
+    product {
+      reference {
+        fragment {
+          value: "metoprololTartrate50Medication"
+        }
+      }
+    }
+    dosage {
+      text {
+        value: "1 tablet oral 2 time daily"
+      }
+      timing {
+        repeat {
+          frequency {
+            value: 2
+          }
+          period {
+            value: "1"
+          }
+          period_unit {
+            value: D
+          }
+        }
+      }
+      route {
+        coding {
+          code {
+            value: "26643006"
+          }
+          display {
+            value: "Oral route (qualifier value)"
+          }
+        }
+        text {
+          value: "Oral route (qualifier value)"
+        }
+      }
+      dose_and_rate {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+            }
+            code {
+              value: "ordered"
+            }
+            display {
+              value: "Ordered"
+            }
+          }
+        }
+        dose {
+          quantity {
+            value {
+              value: "1"
+            }
+            unit {
+              value: "{tbl}"
+            }
+          }
+        }
+      }
+    }
+    dynamic_value {
+      path {
+        value: "medicationRequest.priority"
+      }
+      expression {
+        language {
+          value: "text/cql"
+        }
+        expression {
+          value: "routine"
+        }
+      }
+    }
+  }
+}
+contained {
+  medication {
+    id {
+      value: "metoprololTartrate50Medication"
+    }
+    code {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "866435"
+        }
+      }
+      text {
+        value: "Metoprolol Tartrate 50 MG"
+      }
+    }
+    form {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "385055001"
+        }
+        display {
+          value: "Tablet dose form"
+        }
+      }
+      text {
+        value: "Tablet dose form"
+      }
+    }
+    ingredient {
+      item {
+        reference {
+          fragment {
+            value: "metoprololTartrate50Substance"
+          }
+        }
+      }
+      strength {
+        numerator {
+          value {
+            value: "50"
+          }
+          unit {
+            value: "mg"
+          }
+        }
+        denominator {
+          value {
+            value: "1"
+          }
+          unit {
+            value: "{tbl}"
+          }
+        }
+      }
+    }
+  }
+}
+contained {
+  substance {
+    id {
+      value: "metoprololTartrate50Substance"
+    }
+    code {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "6918"
+        }
+      }
+      text {
+        value: "Metoprolol"
+      }
+    }
+  }
+}
+contained {
+  activity_definition {
+    id {
+      value: "nitroglycerinPrescription"
+    }
+    status {
+      value: DRAFT
+    }
+    kind {
+      value: MEDICATION_REQUEST
+    }
+    product {
+      reference {
+        fragment {
+          value: "nitroglycerinMedication"
+        }
+      }
+    }
+    dosage {
+      text {
+        value: "nitroglycerin 0.4 mg tablet sub-lingual every 5 minutes as needed for chest pain; maximum 3 tablets"
+      }
+      timing {
+        repeat {
+          frequency {
+            value: 1
+          }
+          period {
+            value: "5"
+          }
+          period_unit {
+            value: MIN
+          }
+        }
+      }
+      dose_and_rate {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+            }
+            code {
+              value: "ordered"
+            }
+            display {
+              value: "Ordered"
+            }
+          }
+        }
+        dose {
+          quantity {
+            value {
+              value: "1"
+            }
+            unit {
+              value: "{tbl}"
+            }
+          }
+        }
+      }
+      max_dose_per_administration {
+        value {
+          value: "3"
+        }
+        unit {
+          value: "{tbl}"
+        }
+      }
+    }
+    dynamic_value {
+      path {
+        value: "medicationRequest.priority"
+      }
+      expression {
+        language {
+          value: "text/cql"
+        }
+        expression {
+          value: "routine"
+        }
+      }
+    }
+  }
+}
+contained {
+  medication {
+    id {
+      value: "nitroglycerinMedication"
+    }
+    code {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "316365"
+        }
+      }
+      text {
+        value: "Nitroglycerin 0.4 MG"
+      }
+    }
+    form {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "385055001"
+        }
+        display {
+          value: "Tablet dose form"
+        }
+      }
+      text {
+        value: "Tablet dose form"
+      }
+    }
+    ingredient {
+      item {
+        reference {
+          fragment {
+            value: "nitroglycerinSubstance"
+          }
+        }
+      }
+      strength {
+        numerator {
+          value {
+            value: "0.4"
+          }
+          unit {
+            value: "mg"
+          }
+        }
+        denominator {
+          value {
+            value: "1"
+          }
+          unit {
+            value: "{tbl}"
+          }
+        }
+      }
+    }
+  }
+}
+contained {
+  substance {
+    id {
+      value: "nitroglycerinSubstance"
+    }
+    code {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "4917"
+        }
+      }
+      text {
+        value: "Nitroglycerin"
+      }
+    }
+  }
+}
+contained {
+  questionnaire {
+    id {
+      value: "CollectReferralReason"
+    }
+    status {
+      value: DRAFT
+    }
+    item {
+      link_id {
+        value: "1"
+      }
+      text {
+        value: "Reason for Cardiology Consult"
+      }
+      type {
+        value: CHOICE
+      }
+      required {
+        value: true
+      }
+      repeats {
+        value: true
+      }
+      answer_value_set {
+        value: "#CardiologyReferralReasonValues"
+      }
+    }
+  }
+}
+contained {
+  questionnaire {
+    id {
+      value: "CardiologyConsultationGoal"
+    }
+    status {
+      value: DRAFT
+    }
+    item {
+      link_id {
+        value: "2"
+      }
+      text {
+        value: "Goal of cardiology consultation"
+      }
+      type {
+        value: STRING
+      }
+    }
+  }
+}
+url {
+  value: "http://va.gov/kas/orderset/B5-Cardiology-ChestPainCAD-OS"
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "urn:va.gov:kbs:knart:artifact:r1"
+  }
+  value {
+    value: "bb7ccea6-9744-4743-854a-bcffd87191f6"
+  }
+}
+identifier {
+  system {
+    value: "urn:va.gov:kbs:contract:VA118-16-D-1008:to:VA-118-16-F-1008-0007"
+  }
+  value {
+    value: "CLIN0004AG"
+  }
+}
+identifier {
+  system {
+    value: "urn:cognitivemedicine.com:lab:jira"
+  }
+  value {
+    value: "KP-914"
+  }
+}
+version {
+  value: "0.1"
+}
+name {
+  value: "ChestPainCoronaryArteryDiseaseOrderSetKNART"
+}
+title {
+  value: "Chest Pain (CP) - Coronary Artery Disease (CAD) Order Set KNART"
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/plan-definition-type"
+    }
+    code {
+      value: "order-set"
+    }
+    display {
+      value: "Order Set"
+    }
+  }
+}
+status {
+  value: ACTIVE
+}
+date {
+  value_us: 1503928800000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "Department of Veterans Affairs"
+}
+description {
+  value: "The Cardiology chest pain (CP) and coronary artery disease (CAD) group of KNARTs are     intended to assist primary care providers in the management of adult patients with stable     chest pain (with or without known CAD); aid in determining when a cardiology consultation is     appropriate; provide guidance for initial noninvasive diagnostic orders (stress testing) and     provide a structured documentation template for the process. Stable patients with cardiac     chest pain require risk stratification, office-based workup, initiation of disease-specific     medications, and subspecialty referral to a cardiologist."
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "look up value"
+        }
+        display {
+          value: "appropriate snomed condition"
+        }
+      }
+    }
+  }
+}
+usage {
+  value: "The Cardiology chest pain (CP) and coronary artery disease (CAD) group of KNARTs are intended to assist primary care providers in the management of adult patients with stable chest pain (with or without known CAD); aid in determining when a cardiology consultation is appropriate; provide guidance for initial noninvasive diagnostic orders (stress testing) and provide a structured documentation template for the process. Stable patients with cardiac chest pain require risk stratification, office-based workup, initiation of disease-specific medications, and subspecialty referral to a cardiologist. This context excludes emergent patients (new/ongoing/unstable pattern CP). Included are those patients with stable CP with or without known CAD, to be considered for evaluation by cardiology."
+}
+copyright {
+  value: "\302\251 Copyright Cognitive Medical Systems, Inc. 9444 Waples Street Suite 300 San Diego, CA 92121"
+}
+author {
+  name {
+    value: "Bruce Bray MD"
+  }
+}
+author {
+  name {
+    value: "Scott Wall MD"
+  }
+}
+author {
+  name {
+    value: "Aiden Abidov MD, PhD"
+  }
+}
+related_artifact {
+  type {
+    value: DERIVED_FROM
+  }
+  display {
+    value: "Cardiology: Chest Pain (CP) / Coronary Artery Disease (CAD) Clinical Content White Paper"
+  }
+  url {
+    value: "NEED-A-URL-HERE"
+  }
+}
+related_artifact {
+  type {
+    value: JUSTIFICATION
+  }
+  display {
+    value: "Outcome CVD (coronary death, myocardial infarction, coronary insufficiency, angina, ischemic stroke, hemorrhagic stroke, transient ischemic attack, peripheral artery disease, heart failure)"
+  }
+  citation {
+    value: "Cardiovascular disease          (10-year risk) [Internet].: Framingham Heart Study; cited 2017]. Available from: https://www.framinghamheartstudy.org/risk-functions/cardiovascular-disease/10-year-risk.php."
+  }
+  url {
+    value: "https://www.framinghamheartstudy.org/risk-functions/cardiovascular-disease/10-year-risk.php"
+  }
+}
+related_artifact {
+  type {
+    value: JUSTIFICATION
+  }
+  display {
+    value: "General cardiovascular risk profile for use in primary care: the Framingham Heart Study"
+  }
+  citation {
+    value: "Cardiovascular disease          (10-year risk) [Internet].: Framingham Heart Study; cited 2017]. Available from: https://www.framinghamheartstudy.org/risk-functions/cardiovascular-disease/10-year-risk.php."
+  }
+  url {
+    value: "https://www.framinghamheartstudy.org/risk-functions/cardiovascular-disease/10-year-risk.php"
+  }
+}
+related_artifact {
+  type {
+    value: JUSTIFICATION
+  }
+  display {
+    value: "2014 ACC/AHA/AATS/PCNA/SCAI/STS focused update of the guideline for the diagnosis and management of patients with stable ischemic heart disease: a report of the American College of Cardiology/American Heart Association Task Force on Practice Guidelines, and the American Association for Thoracic Surgery, Preventive Cardiovascular Nurses Association, Society for Cardiovascular Angiography and Interventions, and Society of Thoracic Surgeons"
+  }
+  citation {
+    value: "Fihn SD, Blankenship JC, Alexander KP, Bittl JA, Byrne JG, Fletcher BJ, et al. 2014 ACC/AHA/AATS/PCNA/SCAI/STS focused update of the guideline for the diagnosis and management of patients with stable ischemic heart disease: A report of the american college of cardiology/american heart association task force on practice guidelines, and the american association for thoracic surgery, preventive cardiovascular nurses association, society for cardiovascular angiography and interventions, and society of thoracic surgeons. J Thorac Cardiovasc Surg. 2015 March 01;149(3):5."
+  }
+  url {
+    value: "NEED-A-URL-HERE"
+  }
+}
+related_artifact {
+  type {
+    value: JUSTIFICATION
+  }
+  display {
+    value: "ACC/AHA 2002 guideline update for exercise testing: summary article: A report of the American college of cardiology/American heart association task force on practice guidelines (committee to update the 1997 exercise testing guidelines)"
+  }
+  citation {
+    value: "Gibbons RJ, Balady GJ, Bricker JT, Chaitman BR, Fletcher GF, Froelicher VF, et al. ACC/AHA 2002 guideline update for exercise testing: Summary article: A report of the american college of cardiology/american heart association task force on practice guidelines (committee to update the 1997 exercise testing guidelines). Circulation. 2002 October 01;106(14):1883-92."
+  }
+  url {
+    value: "NEED-A-URL-HERE"
+  }
+}
+related_artifact {
+  type {
+    value: JUSTIFICATION
+  }
+  display {
+    value: "LABEL: ASPIRIN 81 MG- aspirin tablet, coated"
+  }
+  citation {
+    value: "Label: ASPIRIN 81 MG- aspirin tablet, coated [Internet].: National Library of Medicine; 2017. Available from: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b4064039-2345-4227-b83d-54dc13a838d3."
+  }
+  url {
+    value: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b4064039-2345-4227-b83d-54dc13a838d3"
+  }
+}
+related_artifact {
+  type {
+    value: JUSTIFICATION
+  }
+  display {
+    value: "LABEL: CLOPIDOGREL- clopidogrel bisulfate tablet, film coated"
+  }
+  citation {
+    value: "LABEL: CLOPIDOGREL- clopidogrel bisulfate tablet, film coated [Internet].: National Library of Medicine; 2017. Available from: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=edae8df1-caf9-ff72-1304-5ae8b355f8e7."
+  }
+  url {
+    value: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=7fe85155-bc00-406b-b097-e8aece187a8a"
+  }
+}
+related_artifact {
+  type {
+    value: JUSTIFICATION
+  }
+  display {
+    value: "LABEL: LIPITOR- atorvastatin calcium tablet, film coated"
+  }
+  citation {
+    value: "LABEL: LIPITOR- atorvastatin calcium tablet, film coated [Internet].: National Library of Medicine; 2017. Available from: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=7fe85155-bc00-406b-b097-e8aece187a8a."
+  }
+  url {
+    value: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=7fe85155-bc00-406b-b097-e8aece187a8a"
+  }
+}
+related_artifact {
+  type {
+    value: JUSTIFICATION
+  }
+  display {
+    value: "LABEL: METOPROLOL SUCCINATE EXTENDED-RELEASE - metoprolol succinate tablet, film coated, extended release"
+  }
+  citation {
+    value: "LABEL: LIPITOR- atorvastatin calcium tablet, film coated [Internet].: National Library of Medicine; 2017. Available from: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=7fe85155-bc00-406b-b097-e8aece187a8a."
+  }
+  url {
+    value: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2d948600-35d8-4490-983b-918bdce488c8"
+  }
+}
+related_artifact {
+  type {
+    value: JUSTIFICATION
+  }
+  display {
+    value: "LABEL: NITROGLYCERIN- nitroglycerin tablet"
+  }
+  citation {
+    value: "LABEL: NITROGLYCERIN- nitroglycerin tablet [Internet].: National Library of Medicine; 2017. Available from: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=67bf2a15-b115-47ac-ae28-ce2dafd6b5c9."
+  }
+  url {
+    value: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=67bf2a15-b115-47ac-ae28-ce2dafd6b5c9"
+  }
+}
+related_artifact {
+  type {
+    value: JUSTIFICATION
+  }
+  display {
+    value: "LABEL: SIMVASTATIN - simvastatin tablet"
+  }
+  citation {
+    value: "LABEL: SIMVASTATIN - simvastatin tablet [Internet].: National Library of Medicine; 2017. Available from: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5c1c694c-4b08-469e-b538-08e69df06146."
+  }
+  url {
+    value: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5c1c694c-4b08-469e-b538-08e69df06146"
+  }
+}
+related_artifact {
+  type {
+    value: JUSTIFICATION
+  }
+  display {
+    value: "Chest Pain Guideline Development Group. NICE guidance. Chest          pain of recent onset: assessment and diagnosis of recent onset chest pain or discomfort of suspected cardiac origin."
+  }
+  citation {
+    value: "Skinner JS, Smeeth L, Kendall JM, Adams PC, Timmis A, Chest Pain Guideline Development Group. NICE guidance. chest pain of recent onset: Assessment and diagnosis of recent onset chest pain or discomfort of suspected cardiac origin. Heart. 2010 June 01;96(12):974-8."
+  }
+  url {
+    value: "http://heart.bmj.com/content/96/12/974.long"
+  }
+}
+library {
+  value: "#cardiology-chestPain-logic"
+}
+action {
+  action {
+    title {
+      value: "Consults and Referrals"
+    }
+    grouping_behavior {
+      value: LOGICAL_GROUP
+    }
+    selection_behavior {
+      value: ANY
+    }
+    action {
+      text_equivalent {
+        value: "Referral to cardiology to evaluate chest pain (routine)"
+      }
+      definition {
+        canonical {
+          value: "#referralToCardiologyConsult"
+        }
+      }
+      dynamic_value {
+        path {
+          value: "timing.event"
+        }
+        expression {
+          language {
+            value: "text/cql"
+          }
+          expression {
+            value: "Now()"
+          }
+        }
+      }
+      dynamic_value {
+        path {
+          value: "specialty"
+        }
+        expression {
+          language {
+            value: "text/cql"
+          }
+          expression {
+            value: "Code \'261QM0850X\' from CardiologyChestPainLogic.\"NUCC Provider Taxonomy\" display \'Adult Mental Health\'"
+          }
+        }
+      }
+      dynamic_value {
+        path {
+          value: "occurrenceDateTime"
+        }
+        expression {
+          language {
+            value: "text/cql"
+          }
+          expression {
+            value: "CardiologyChestPainLogic.ServiceRequestFulfillmentTime"
+          }
+        }
+      }
+      dynamic_value {
+        path {
+          value: "subject"
+        }
+        expression {
+          language {
+            value: "text/cql"
+          }
+          expression {
+            value: "CardiologyChestPainLogic.Patient"
+          }
+        }
+      }
+      dynamic_value {
+        path {
+          value: "requester.agent"
+        }
+        expression {
+          language {
+            value: "text/cql"
+          }
+          expression {
+            value: "CardiologyChestPainLogic.Practitioner"
+          }
+        }
+      }
+      dynamic_value {
+        path {
+          value: "reasonCode"
+        }
+        expression {
+          language {
+            value: "text/cql"
+          }
+          expression {
+            value: "CardiologyChestPainLogic.CardiologyReferralReason"
+          }
+        }
+      }
+      dynamic_value {
+        path {
+          value: "reasonReference"
+        }
+        expression {
+          language {
+            value: "text/cql"
+          }
+          expression {
+            value: "CardiologyChestPainLogic.RiskAssessment"
+          }
+        }
+      }
+    }
+    action {
+      title {
+        value: "Reason for cardiology consultation"
+      }
+      definition {
+        canonical {
+          value: "#CollectReferralReason"
+        }
+      }
+    }
+    action {
+      title {
+        value: "Goal of cardiology consultation"
+      }
+      definition {
+        canonical {
+          value: "#CardiologyConsultationGoal"
+        }
+      }
+    }
+  }
+  action {
+    title {
+      value: "Medications"
+    }
+    description {
+      value: "Consider the following medications for stable patients to be initiated prior to the cardiology consultation."
+    }
+    action {
+      grouping_behavior {
+        value: LOGICAL_GROUP
+      }
+      selection_behavior {
+        value: AT_MOST_ONE
+      }
+    }
+    action {
+      title {
+        value: "Antianginal Therapy"
+      }
+      grouping_behavior {
+        value: LOGICAL_GROUP
+      }
+      selection_behavior {
+        value: AT_MOST_ONE
+      }
+      action {
+        text_equivalent {
+          value: "metoprolol tartrate 25 mg tablet 1 tablet oral 2 time daily"
+        }
+        definition {
+          canonical {
+            value: "#metoprololTartrate25Prescription"
+          }
+        }
+        dynamic_value {
+          path {
+            value: "status"
+          }
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "\'draft\'"
+            }
+          }
+        }
+        dynamic_value {
+          path {
+            value: "patient"
+          }
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "CardiologyChestPainLogic.Patient"
+            }
+          }
+        }
+        dynamic_value {
+          path {
+            value: "prescriber"
+          }
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "CardiologyChestPainLogic.Practitioner"
+            }
+          }
+        }
+      }
+      action {
+        text_equivalent {
+          value: "metoprolol tartrate 50 mg tablet 1 tablet oral 2 time daily"
+        }
+        definition {
+          canonical {
+            value: "#metoprololTartrate50Prescription"
+          }
+        }
+        dynamic_value {
+          path {
+            value: "status"
+          }
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "\'draft\'"
+            }
+          }
+        }
+        dynamic_value {
+          path {
+            value: "patient"
+          }
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "CardiologyChestPainLogic.Patient"
+            }
+          }
+        }
+        dynamic_value {
+          path {
+            value: "prescriber"
+          }
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "CardiologyChestPainLogic.Practitioner"
+            }
+          }
+        }
+      }
+      action {
+        text_equivalent {
+          value: "amlodipine 5  tablet 1 tablet oral  daily"
+        }
+        definition {
+          canonical {
+            value: "#amlodipinePrescription"
+          }
+        }
+        dynamic_value {
+          path {
+            value: "status"
+          }
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "\'draft\'"
+            }
+          }
+        }
+        dynamic_value {
+          path {
+            value: "patient"
+          }
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "CardiologyChestPainLogic.Patient"
+            }
+          }
+        }
+        dynamic_value {
+          path {
+            value: "prescriber"
+          }
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "CardiologyChestPainLogic.Practitioner"
+            }
+          }
+        }
+      }
+    }
+    action {
+      title {
+        value: "Nitroglycerin"
+      }
+      grouping_behavior {
+        value: LOGICAL_GROUP
+      }
+      selection_behavior {
+        value: AT_MOST_ONE
+      }
+      action {
+        text_equivalent {
+          value: "nitroglycerin 0.4 mg tablet sub-lingual every 5 minutes as needed for chest pain; maximum 3 tablets"
+        }
+        definition {
+          canonical {
+            value: "#nitroglycerinPrescription"
+          }
+        }
+        dynamic_value {
+          path {
+            value: "status"
+          }
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "\'draft\'"
+            }
+          }
+        }
+        dynamic_value {
+          path {
+            value: "patient"
+          }
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "CardiologyChestPainLogic.Patient"
+            }
+          }
+        }
+        dynamic_value {
+          path {
+            value: "prescriber"
+          }
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "CardiologyChestPainLogic.Practitioner"
+            }
+          }
+        }
+      }
+    }
+  }
+}

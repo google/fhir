@@ -1,0 +1,90 @@
+id {
+  value: "bmi-using-related"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: bmi-using-related</p><p><b>status</b>: final</p><p><b>category</b>: Vital Signs <span>(Details : {http://terminology.hl7.org/CodeSystem/observation-category code \'vital-signs\' = \'Vital Signs\', given as \'Vital Signs\'})</span></p><p><b>code</b>: BMI <span>(Details : {LOINC code \'39156-5\' = \'Body mass index (BMI) [Ratio]\', given as \'Body mass index (BMI) [Ratio]\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>effective</b>: 02/07/1999</p><p><b>value</b>: 16.2 kg/m2<span> (Details: UCUM code kg/m2 = \'kg/m2\')</span></p><p><b>derivedFrom</b>: </p><ul><li><a>Body Height</a></li><li><a>Body Weight</a></li></ul></div>"
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/observation-category"
+    }
+    code {
+      value: "vital-signs"
+    }
+    display {
+      value: "Vital Signs"
+    }
+  }
+  text {
+    value: "Vital Signs"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "39156-5"
+    }
+    display {
+      value: "Body mass index (BMI) [Ratio]"
+    }
+  }
+  text {
+    value: "BMI"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+effective {
+  date_time {
+    value_us: 930837600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+value {
+  quantity {
+    value {
+      value: "16.2"
+    }
+    unit {
+      value: "kg/m2"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "kg/m2"
+    }
+  }
+}
+derived_from {
+  observation_id {
+    value: "bodyheight"
+  }
+  display {
+    value: "Body Height"
+  }
+}
+derived_from {
+  observation_id {
+    value: "example"
+  }
+  display {
+    value: "Body Weight"
+  }
+}

@@ -15,7 +15,9 @@
 package com.google.fhir.stu3;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.fhir.stu3.proto.Date;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.Date;
+import com.google.protobuf.MessageOrBuilder;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Year;
@@ -45,6 +47,10 @@ public class DateWrapper extends PrimitiveWrapper<Date> {
     super(date);
   }
 
+  public DateWrapper(MessageOrBuilder message) {
+    super(ProtoUtils.fieldWiseCopy(message, Date.newBuilder()).build());
+  }
+
   /**
    * Create a DateWrapper from a Date and a default timezone. The default timezone is currently
    * unused, since FHIR dates do not include timezones. Once there are finalized timezone extension,
@@ -52,6 +58,10 @@ public class DateWrapper extends PrimitiveWrapper<Date> {
    */
   public DateWrapper(Date date, ZoneId defaultTimeZone) {
     super(date);
+  }
+
+  public DateWrapper(MessageOrBuilder message, ZoneId defaultTimeZone) {
+    super(ProtoUtils.fieldWiseCopy(message, Date.newBuilder()).build());
   }
 
   /** Create a DateWrapper from a java String and a default timezone. */

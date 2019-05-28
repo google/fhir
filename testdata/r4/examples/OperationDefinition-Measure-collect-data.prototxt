@@ -1,0 +1,263 @@
+id {
+  value: "Measure-collect-data"
+}
+meta {
+  last_updated {
+    value_us: 1545910674724000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <h2>Collect Data</h2>\n            <p>OPERATION: Collect Data</p>\n            <p>The official URL for this operation definition is: </p>\n            <pre>http://hl7.org/fhir/OperationDefinition/Measure-collect-data</pre>\n            <div>\n              <p>The collect-data operation is used to collect the data-of-interest for the given measure.</p>\n\n            </div>\n            <p>URL: [base]/Measure/$collect-data</p>\n            <p>URL: [base]/Measure/[id]/$collect-data</p>\n            <p>Parameters</p>\n            <table class=\"grid\">\n              <tr>\n                <td>\n                  <b>Use</b>\n                </td>\n                <td>\n                  <b>Name</b>\n                </td>\n                <td>\n                  <b>Cardinality</b>\n                </td>\n                <td>\n                  <b>Type</b>\n                </td>\n                <td>\n                  <b>Binding</b>\n                </td>\n                <td>\n                  <b>Documentation</b>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>periodStart</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#date\">date</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The start of the measurement period. In keeping with the semantics of the date parameter used in the FHIR search operation, the period will start at the beginning of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period s</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>periodEnd</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#date\">date</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The end of the measurement period. The period will end at the end of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period end to be 2014-12-31T23:59:59 inclusive</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>measure</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#string\">string</a>\n                  <br/>(\n                  <a href=\"search.html#reference\">reference</a>)\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The measure to evaluate. This parameter is only required when the operation is invoked on the resource type, it is not used when invoking the operation on a Measure instance</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>subject</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#string\">string</a>\n                  <br/>(\n                  <a href=\"search.html#reference\">reference</a>)\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Subject for which the measure will be collected. If not specified, measure data will be collected for all subjects that meet the requirements of the measure. If specified, the measure will only be calculated for the referenced subject(s)</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>practitioner</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#string\">string</a>\n                  <br/>(\n                  <a href=\"search.html#reference\">reference</a>)\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Practitioner for which the measure will be collected. If specified, measure data will be collected only for subjects that have a primary relationship to the identified practitioner</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>lastReceivedOn</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#dateTime\">dateTime</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The date the results of this measure were last received. This parameter used to indicate when the last time data for this measure was collected. This information is used to support incremental data collection scenarios</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>measureReport</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"measurereport.html\">MeasureReport</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>A MeasureReport of type data-collection detailing the results of the operation</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>resource</td>\n                <td>0..*</td>\n                <td>\n                  <a href=\"resource.html\">Resource</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The result resources that make up the data-of-interest for the measure</p>\n\n                  </div>\n                </td>\n              </tr>\n            </table>\n            <div>\n              <p>The effect of invoking this operation is to gather the data required to perform an evaluation of the measure. If the lastReceivedOn parameter is supplied, only data that is new or has been changed since the lastReceivedOn date is included in the response. Note that the resulting MeasureReport is a transient resource</p>\n\n            </div>\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+      value: 2
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "trial-use"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/OperationDefinition/Measure-collect-data"
+}
+version {
+  value: "4.0.0"
+}
+name {
+  value: "Collect Data"
+}
+status {
+  value: DRAFT
+}
+kind {
+  value: OPERATION
+}
+date {
+  value_us: 1545910674000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+publisher {
+  value: "HL7 (FHIR Project)"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "fhir@lists.hl7.org"
+    }
+  }
+}
+description {
+  value: "The collect-data operation is used to collect the data-of-interest for the given measure."
+}
+code {
+  value: "collect-data"
+}
+comment {
+  value: "The effect of invoking this operation is to gather the data required to perform an evaluation of the measure. If the lastReceivedOn parameter is supplied, only data that is new or has been changed since the lastReceivedOn date is included in the response. Note that the resulting MeasureReport is a transient resource"
+}
+resource {
+  value: MEASURE
+}
+system {
+}
+type {
+  value: true
+}
+instance {
+  value: true
+}
+parameter {
+  name {
+    value: "periodStart"
+  }
+  use {
+    value: IN
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The start of the measurement period. In keeping with the semantics of the date parameter used in the FHIR search operation, the period will start at the beginning of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period s"
+  }
+  type {
+    value: DATE
+  }
+}
+parameter {
+  name {
+    value: "periodEnd"
+  }
+  use {
+    value: IN
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The end of the measurement period. The period will end at the end of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period end to be 2014-12-31T23:59:59 inclusive"
+  }
+  type {
+    value: DATE
+  }
+}
+parameter {
+  name {
+    value: "measure"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The measure to evaluate. This parameter is only required when the operation is invoked on the resource type, it is not used when invoking the operation on a Measure instance"
+  }
+  type {
+    value: STRING
+  }
+  search_type {
+    value: REFERENCE
+  }
+}
+parameter {
+  name {
+    value: "subject"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "Subject for which the measure will be collected. If not specified, measure data will be collected for all subjects that meet the requirements of the measure. If specified, the measure will only be calculated for the referenced subject(s)"
+  }
+  type {
+    value: STRING
+  }
+  search_type {
+    value: REFERENCE
+  }
+}
+parameter {
+  name {
+    value: "practitioner"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "Practitioner for which the measure will be collected. If specified, measure data will be collected only for subjects that have a primary relationship to the identified practitioner"
+  }
+  type {
+    value: STRING
+  }
+  search_type {
+    value: REFERENCE
+  }
+}
+parameter {
+  name {
+    value: "lastReceivedOn"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The date the results of this measure were last received. This parameter used to indicate when the last time data for this measure was collected. This information is used to support incremental data collection scenarios"
+  }
+  type {
+    value: DATE_TIME
+  }
+}
+parameter {
+  name {
+    value: "measureReport"
+  }
+  use {
+    value: OUT
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "A MeasureReport of type data-collection detailing the results of the operation"
+  }
+  type {
+    value: MEASURE_REPORT
+  }
+}
+parameter {
+  name {
+    value: "resource"
+  }
+  use {
+    value: OUT
+  }
+  min {
+  }
+  max {
+    value: "*"
+  }
+  documentation {
+    value: "The result resources that make up the data-of-interest for the measure"
+  }
+  type {
+    value: RESOURCE
+  }
+}

@@ -1,0 +1,195 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>identifier</b>: EU/1/11/999/001</p><p><b>country</b>: EU <span>(Details : {http://ema.europa.eu/example/country code \'EU\' = \'EU)</span></p><p><b>status</b>: active <span>(Details : {http://ema.europa.eu/example/authorisationstatus code \'active\' = \'active)</span></p><p><b>statusDate</b>: 14/01/2015</p><p><b>validityPeriod</b>: 16/08/2015 --&gt; 20/05/2020</p><p><b>dataExclusivityPeriod</b>: 15/08/2010 --&gt; 15/08/2020</p><p><b>dateOfFirstAuthorization</b>: 15/08/2010</p><p><b>internationalBirthDate</b>: 15/08/2010</p><blockquote><p><b>jurisdictionalAuthorization</b></p><p><b>identifier</b>: 123-456-789</p><p><b>country</b>: NO <span>(Details : {http://ema.europa.eu/example/countryCode code \'NO\' = \'NO)</span></p></blockquote><blockquote><p><b>jurisdictionalAuthorization</b></p><p><b>identifier</b>: 123-456-123</p><p><b>country</b>: NO <span>(Details : {http://ema.europa.eu/example/countryCode code \'NO\' = \'NO)</span></p></blockquote><p><b>holder</b>: <a>Organization/example</a></p><p><b>regulator</b>: <a>Organization/example</a></p><blockquote><p><b>procedure</b></p><p><b>identifier</b>: EMEA/H/C/009999/IA/0099/G</p><p><b>type</b>: VariationTypeIA <span>(Details : {http://ema.europa.eu/example/marketingAuthorisationProcedureType code \'VariationTypeIA\' = \'VariationTypeIA)</span></p><p><b>date</b>: 02/08/2015 --&gt; 21/08/2015</p><h3>Applications</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote></div>"
+  }
+}
+identifier {
+  system {
+    value: "http://ema.europa.eu/example/marketingAuthorisationNumber"
+  }
+  value {
+    value: "EU/1/11/999/001"
+  }
+}
+country {
+  coding {
+    system {
+      value: "http://ema.europa.eu/example/country"
+    }
+    code {
+      value: "EU"
+    }
+  }
+}
+status {
+  coding {
+    system {
+      value: "http://ema.europa.eu/example/authorisationstatus"
+    }
+    code {
+      value: "active"
+    }
+  }
+}
+status_date {
+  value_us: 1421154000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+validity_period {
+  start {
+    value_us: 1439647200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1589896800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+data_exclusivity_period {
+  start {
+    value_us: 1281794400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1597413600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+date_of_first_authorization {
+  value_us: 1281794400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+international_birth_date {
+  value_us: 1281794400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+jurisdictional_authorization {
+  id {
+    value: "1"
+  }
+  identifier {
+    system {
+      value: "http://ema.europa.eu/example/marketingauthorisationnumber"
+    }
+    value {
+      value: "123-456-789"
+    }
+  }
+  country {
+    coding {
+      system {
+        value: "http://ema.europa.eu/example/countryCode"
+      }
+      code {
+        value: "NO"
+      }
+    }
+  }
+}
+jurisdictional_authorization {
+  id {
+    value: "2"
+  }
+  identifier {
+    system {
+      value: "http://ema.europa.eu/example/marketingauthorisationnumber"
+    }
+    value {
+      value: "123-456-123"
+    }
+  }
+  country {
+    coding {
+      system {
+        value: "http://ema.europa.eu/example/countryCode"
+      }
+      code {
+        value: "NO"
+      }
+    }
+  }
+}
+holder {
+  organization_id {
+    value: "example"
+  }
+}
+regulator {
+  organization_id {
+    value: "example"
+  }
+}
+procedure {
+  identifier {
+    system {
+      value: "http://ema.europa.eu/example/procedureidentifier-number"
+    }
+    value {
+      value: "EMEA/H/C/009999/IA/0099/G"
+    }
+  }
+  type {
+    coding {
+      system {
+        value: "http://ema.europa.eu/example/marketingAuthorisationProcedureType"
+      }
+      code {
+        value: "VariationTypeIA"
+      }
+    }
+  }
+  date {
+    period {
+      start {
+        value_us: 1438437600000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+      end {
+        value_us: 1440079200000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+  application {
+    identifier {
+      system {
+        value: "http://ema.europa.eu/example/applicationidentifier-number"
+      }
+      value {
+        value: "IA38G"
+      }
+    }
+    type {
+      coding {
+        system {
+          value: "http://ema.europa.eu/example/marketingAuthorisationApplicationType"
+        }
+        code {
+          value: "GroupTypeIAVariationNotification"
+        }
+      }
+    }
+    date {
+      date_time {
+        value_us: 1438351200000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+}

@@ -1,0 +1,438 @@
+id {
+  value: "E2501"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the CoverageEligibilityResponse.</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/coverageeligibilityresponse"
+  }
+  value {
+    value: "881234"
+  }
+}
+status {
+  value: ACTIVE
+}
+purpose {
+  value: VALIDATION
+}
+purpose {
+  value: BENEFITS
+}
+patient {
+  patient_id {
+    value: "pat1"
+  }
+}
+serviced {
+  date {
+    value_us: 1410876000000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+request {
+  uri {
+    value: "http://www.BenefitsInc.com/fhir/coverageeligibilityresponse/225476332402"
+  }
+}
+outcome {
+  value: COMPLETE
+}
+disposition {
+  value: "Policy is currently in-force."
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+insurance {
+  coverage {
+    coverage_id {
+      value: "9876B1"
+    }
+  }
+  inforce {
+    value: true
+  }
+  item {
+    category {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+        }
+        code {
+          value: "30"
+        }
+        display {
+          value: "Health Benefit Plan Coverage"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-term"
+        }
+        code {
+          value: "annual"
+        }
+      }
+    }
+    benefit {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed {
+        money {
+          value {
+            value: "500000"
+          }
+          currency {
+            value: "SAR"
+          }
+        }
+      }
+    }
+    benefit {
+      type {
+        coding {
+          code {
+            value: "copay-maximum"
+          }
+        }
+      }
+      allowed {
+        money {
+          value {
+            value: "100"
+          }
+          currency {
+            value: "SAR"
+          }
+        }
+      }
+    }
+    benefit {
+      type {
+        coding {
+          code {
+            value: "copay-percent"
+          }
+        }
+      }
+      allowed {
+        unsigned_int {
+          value: 20
+        }
+      }
+    }
+  }
+  item {
+    category {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+        }
+        code {
+          value: "69"
+        }
+        display {
+          value: "Maternity"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-term"
+        }
+        code {
+          value: "annual"
+        }
+      }
+    }
+    benefit {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed {
+        money {
+          value {
+            value: "15000"
+          }
+          currency {
+            value: "SAR"
+          }
+        }
+      }
+    }
+  }
+  item {
+    category {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+        }
+        code {
+          value: "F3"
+        }
+        display {
+          value: "Dental Coverage"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-term"
+        }
+        code {
+          value: "annual"
+        }
+      }
+    }
+    benefit {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed {
+        money {
+          value {
+            value: "2000"
+          }
+          currency {
+            value: "SAR"
+          }
+        }
+      }
+    }
+  }
+  item {
+    category {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+        }
+        code {
+          value: "F6"
+        }
+        display {
+          value: "Vision Coverage"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-term"
+        }
+        code {
+          value: "annual"
+        }
+      }
+    }
+    benefit {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed {
+        money {
+          value {
+            value: "400"
+          }
+          currency {
+            value: "SAR"
+          }
+        }
+      }
+    }
+  }
+  item {
+    category {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+        }
+        code {
+          value: "49"
+        }
+        display {
+          value: "Hospital Room and Board"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-term"
+        }
+        code {
+          value: "day"
+        }
+      }
+    }
+    benefit {
+      type {
+        coding {
+          code {
+            value: "room"
+          }
+        }
+      }
+      allowed {
+        string_value {
+          value: "shared"
+        }
+      }
+    }
+    benefit {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed {
+        money {
+          value {
+            value: "600"
+          }
+          currency {
+            value: "SAR"
+          }
+        }
+      }
+    }
+  }
+}

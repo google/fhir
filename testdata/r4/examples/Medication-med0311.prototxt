@@ -1,0 +1,90 @@
+id {
+  value: "med0311"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: med0311</p><p><b>contained</b>: </p><p><b>code</b>: Prednisone 5mg tablet (Product) <span>(Details : {SNOMED CT code \'373994007\' = \'Prednisone 5mg tablet\', given as \'Prednisone 5mg tablet (Product)\'})</span></p><p><b>form</b>: Tablet dose form (qualifier value) <span>(Details : {SNOMED CT code \'385055001\' = \'Tablet\', given as \'Tablet dose form (qualifier value)\'})</span></p><h3>Ingredients</h3><table><tr><td>-</td><td><b>Item[x]</b></td><td><b>Strength</b></td></tr><tr><td>*</td><td>id: sub03; Prednisone (substance) <span>(Details : {SNOMED CT code \'116602009\' = \'Prednisone\', given as \'Prednisone (substance)\'})</span></td><td>5 mg<span> (Details: UCUM code mg = \'mg\')</span>/1 TAB<span> (Details: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm code TAB = \'Tablet\')</span></td></tr></table></div>"
+  }
+}
+contained {
+  substance {
+    id {
+      value: "sub03"
+    }
+    code {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "116602009"
+        }
+        display {
+          value: "Prednisone (substance)"
+        }
+      }
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "373994007"
+    }
+    display {
+      value: "Prednisone 5mg tablet (Product)"
+    }
+  }
+}
+form {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "385055001"
+    }
+    display {
+      value: "Tablet dose form (qualifier value)"
+    }
+  }
+}
+ingredient {
+  item {
+    reference {
+      fragment {
+        value: "sub03"
+      }
+    }
+  }
+  strength {
+    numerator {
+      value {
+        value: "5"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mg"
+      }
+    }
+    denominator {
+      value {
+        value: "1"
+      }
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+      }
+      code {
+        value: "TAB"
+      }
+    }
+  }
+}

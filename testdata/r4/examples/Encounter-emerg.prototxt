@@ -1,0 +1,282 @@
+id {
+  value: "emerg"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Emergency visit that escalated into inpatient patient @example</div>"
+  }
+}
+status {
+  value: IN_PROGRESS
+}
+status_history {
+  status {
+    value: ARRIVED
+  }
+  period {
+    start {
+      value_us: 1485897300000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1485898500000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+}
+status_history {
+  status {
+    value: TRIAGED
+  }
+  period {
+    start {
+      value_us: 1485898500000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1485902700000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+}
+status_history {
+  status {
+    value: IN_PROGRESS
+  }
+  period {
+    start {
+      value_us: 1485902700000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1485915300000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+}
+status_history {
+  status {
+    value: ONLEAVE
+  }
+  period {
+    start {
+      value_us: 1485915300000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1485917100000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+}
+status_history {
+  status {
+    value: IN_PROGRESS
+  }
+  period {
+    start {
+      value_us: 1485917100000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+}
+class_value {
+  system {
+    value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+  }
+  code {
+    value: "IMP"
+  }
+  display {
+    value: "inpatient encounter"
+  }
+}
+class_history {
+  class_value {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "EMER"
+    }
+    display {
+      value: "emergency"
+    }
+  }
+  period {
+    start {
+      value_us: 1485897300000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1485905220000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+}
+class_history {
+  class_value {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "IMP"
+    }
+    display {
+      value: "inpatient encounter"
+    }
+  }
+  period {
+    start {
+      value_us: 1485905220000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+period {
+  start {
+    value_us: 1485897300000000
+    timezone: "+10:00"
+    precision: SECOND
+  }
+}
+hospitalization {
+  admit_source {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/admit-source"
+      }
+      code {
+        value: "emd"
+      }
+      display {
+        value: "From accident/emergency department"
+      }
+    }
+  }
+}
+location {
+  location {
+    display {
+      value: "Emergency Waiting Room"
+    }
+  }
+  status {
+    value: ACTIVE
+  }
+  period {
+    start {
+      value_us: 1485897300000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1485902700000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+}
+location {
+  location {
+    display {
+      value: "Emergency"
+    }
+  }
+  status {
+    value: ACTIVE
+  }
+  period {
+    start {
+      value_us: 1485902700000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1485905220000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+}
+location {
+  location {
+    display {
+      value: "Ward 1, Room 42, Bed 1"
+    }
+  }
+  status {
+    value: ACTIVE
+  }
+  period {
+    start {
+      value_us: 1485905220000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1485915300000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+}
+location {
+  location {
+    display {
+      value: "Ward 1, Room 42, Bed 1"
+    }
+  }
+  status {
+    value: RESERVED
+  }
+  period {
+    start {
+      value_us: 1485915300000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1485917100000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+}
+location {
+  location {
+    display {
+      value: "Ward 1, Room 42, Bed 1"
+    }
+  }
+  status {
+    value: ACTIVE
+  }
+  period {
+    start {
+      value_us: 1485917100000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+}

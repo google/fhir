@@ -1,0 +1,36 @@
+id {
+  value: "example-wadors"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\tExample of an Imaging DICOM WADO-RS type endpoint\n\t\t</div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+connection_type {
+  system {
+    value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+  }
+  code {
+    value: "dicom-wado-rs"
+  }
+}
+name {
+  value: "PACS Hospital DICOM WADO-RS endpoint"
+}
+payload_type {
+  text {
+    value: "DICOM WADO-RS"
+  }
+}
+payload_mime_type {
+  value: "application/dicom"
+}
+address {
+  value: "https://pacs.hospital.org/wado-rs"
+}

@@ -1,0 +1,186 @@
+id {
+  value: "7546D"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the coverage</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://xyz.com/codes/identifier"
+  }
+  value {
+    value: "AB98761"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "EHCPOL"
+    }
+    display {
+      value: "extended healthcare"
+    }
+  }
+}
+subscriber {
+  patient_id {
+    value: "5"
+  }
+}
+subscriber_id {
+  value: "AB9876"
+}
+beneficiary {
+  patient_id {
+    value: "5"
+  }
+}
+dependent {
+  value: "1"
+}
+relationship {
+  coding {
+    code {
+      value: "self"
+    }
+  }
+}
+period {
+  start {
+    value_us: 1300280400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1331902800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+payor {
+  organization_id {
+    value: "2"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "group"
+      }
+    }
+  }
+  value {
+    value: "WESTAIR"
+  }
+  name {
+    value: "Western Airlines"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "plan"
+      }
+    }
+  }
+  value {
+    value: "BG4352"
+  }
+  name {
+    value: "Full Coverage: Medical, Dental, Pharmacy, Vision, EHC"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "subplan"
+      }
+    }
+  }
+  value {
+    value: "D15C9"
+  }
+  name {
+    value: "Platinum"
+  }
+}
+order {
+  value: 2
+}
+network {
+  value: "5"
+}
+cost_to_beneficiary {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-copay-type"
+      }
+      code {
+        value: "gpvisit"
+      }
+    }
+  }
+  value {
+    money {
+      value {
+        value: "20.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  exception {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/ex-coverage-financial-exception"
+        }
+        code {
+          value: "retired"
+        }
+      }
+    }
+    period {
+      start {
+        value_us: 1514725200000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+      end {
+        value_us: 1546174800000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+}
+contract {
+  contract_id {
+    value: "INS-101"
+  }
+}

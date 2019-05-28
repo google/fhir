@@ -1,0 +1,257 @@
+id {
+  value: "gpvisit"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>  Represents the flow of a patient within a practice. The plan is created when\n        they arrive and represents the \'care\' of the patient over the course of that encounter.\n        They first see the nurse for basic observations (BP, pulse, temp) then the doctor for\n        the consultation and finally the nurse again for a tetanus immunization. As the plan is\n        updated (e.g. a new activity added), different versions of the plan exist, and workflow timings\n        for reporting can be gained by examining the plan history. This example is the version after\n        seeing the doctor, and waiting for the nurse.The plan can either be created \'ad hoc\' and modified as\n        the parient progresses, or start with a standard template (which can, of course, be altered to suit the patient.</p>\n    </div>"
+  }
+}
+contained {
+  condition {
+    id {
+      value: "p1"
+    }
+    clinical_status {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
+        }
+        code {
+          value: "active"
+        }
+      }
+    }
+    verification_status {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+        }
+        code {
+          value: "confirmed"
+        }
+      }
+    }
+    code {
+      text {
+        value: "Overseas encounter"
+      }
+    }
+    subject {
+      patient_id {
+        value: "100"
+      }
+      display {
+        value: "Peter James Chalmers"
+      }
+    }
+  }
+}
+contained {
+  care_team {
+    id {
+      value: "careteam"
+    }
+    participant {
+      id {
+        value: "part1"
+      }
+      role {
+        coding {
+          system {
+            value: "http://example.org/local"
+          }
+          code {
+            value: "nur"
+          }
+        }
+        text {
+          value: "nurse"
+        }
+      }
+      member {
+        practitioner_id {
+          value: "13"
+        }
+        display {
+          value: "Nurse Nancy"
+        }
+      }
+    }
+    participant {
+      id {
+        value: "part2"
+      }
+      role {
+        coding {
+          system {
+            value: "http://example.org/local"
+          }
+          code {
+            value: "doc"
+          }
+        }
+        text {
+          value: "doctor"
+        }
+      }
+      member {
+        practitioner_id {
+          value: "14"
+        }
+        display {
+          value: "Doctor Dave"
+        }
+      }
+    }
+  }
+}
+contained {
+  goal {
+    id {
+      value: "goal"
+    }
+    lifecycle_status {
+      value: PLANNED
+    }
+    description {
+      text {
+        value: "Complete consultation"
+      }
+    }
+    subject {
+      patient_id {
+        value: "100"
+      }
+      display {
+        value: "Peter James Chalmers"
+      }
+    }
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: PLAN
+}
+subject {
+  patient_id {
+    value: "100"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+period {
+  start {
+    value_us: 1357036200000000
+    timezone: "+00:00"
+    precision: SECOND
+  }
+}
+care_team {
+  fragment {
+    value: "careteam"
+  }
+}
+addresses {
+  fragment {
+    value: "p1"
+  }
+  display {
+    value: "obesity"
+  }
+}
+goal {
+  fragment {
+    value: "goal"
+  }
+}
+activity {
+  outcome_reference {
+    encounter_id {
+      value: "example"
+    }
+  }
+  detail {
+    kind {
+      value: APPOINTMENT
+    }
+    code {
+      coding {
+        system {
+          value: "http://example.org/local"
+        }
+        code {
+          value: "nursecon"
+        }
+      }
+      text {
+        value: "Nurse Consultation"
+      }
+    }
+    status {
+      value: COMPLETED
+    }
+    do_not_perform {
+    }
+    scheduled {
+      period {
+        start {
+          value_us: 1357036680000000
+          timezone: "+00:00"
+          precision: SECOND
+        }
+        end {
+          value_us: 1357037400000000
+          timezone: "+00:00"
+          precision: SECOND
+        }
+      }
+    }
+    performer {
+      practitioner_id {
+        value: "13"
+      }
+      display {
+        value: "Nurse Nancy"
+      }
+    }
+  }
+}
+activity {
+  detail {
+    kind {
+      value: APPOINTMENT
+    }
+    code {
+      coding {
+        system {
+          value: "http://example.org/local"
+        }
+        code {
+          value: "doccon"
+        }
+      }
+      text {
+        value: "Doctor Consultation"
+      }
+    }
+    status {
+      value: SCHEDULED
+    }
+    do_not_perform {
+    }
+    performer {
+      practitioner_id {
+        value: "14"
+      }
+      display {
+        value: "Doctor Dave"
+      }
+    }
+  }
+}

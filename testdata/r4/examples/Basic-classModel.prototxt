@@ -1,0 +1,105 @@
+id {
+  value: "classModel"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p><b>Class1</b></p>\n      <ul>\n        <li>Attribute1: 1..*</li>\n        <li>Attribute2: 0..1</li>\n      </ul>\n    </div>"
+  }
+}
+extension {
+  url {
+    value: "http://example.org/do-not-use/fhir-extensions/UMLclass"
+  }
+  extension {
+    url {
+      value: "name"
+    }
+    value {
+      string_value {
+        value: "Class1"
+      }
+    }
+  }
+  extension {
+    url {
+      value: "attribute"
+    }
+    extension {
+      url {
+        value: "name"
+      }
+      value {
+        string_value {
+          value: "attribute1"
+        }
+      }
+    }
+    extension {
+      url {
+        value: "minOccurs"
+      }
+      value {
+        integer {
+          value: 1
+        }
+      }
+    }
+    extension {
+      url {
+        value: "maxOccurs"
+      }
+      value {
+        code {
+          value: "*"
+        }
+      }
+    }
+  }
+  extension {
+    url {
+      value: "attribute"
+    }
+    extension {
+      url {
+        value: "name"
+      }
+      value {
+        string_value {
+          value: "attribute2"
+        }
+      }
+    }
+    extension {
+      url {
+        value: "minOccurs"
+      }
+      value {
+        integer {
+        }
+      }
+    }
+    extension {
+      url {
+        value: "maxOccurs"
+      }
+      value {
+        integer {
+          value: 1
+        }
+      }
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://example.org/do-not-use/fhir-codes#resourceTypes"
+    }
+    code {
+      value: "UMLCLASSMODEL"
+    }
+  }
+}

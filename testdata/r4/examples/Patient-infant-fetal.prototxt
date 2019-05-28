@@ -1,0 +1,95 @@
+id {
+  value: "infant-fetal"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: infant-fetal</p><p><b>identifier</b>: Medical record number = MRN657865757378</p><p><b>gender</b>: male</p><h3>Contacts</h3><table><tr><td>-</td><td><b>Relationship</b></td><td><b>Name</b></td><td><b>Telecom</b></td></tr><tr><td>*</td><td>Mother <span>(Details : {SNOMED CT code \'72705000\' = \'Mother\', given as \'Mother\'}; {http://terminology.hl7.org/CodeSystem/v2-0131 code \'N\' = \'Next-of-Kin; {http://terminology.hl7.org/CodeSystem/v3-RoleCode code \'MTH\' = \'mother)</span></td><td>Leia Organa (MAIDEN)</td><td>ph: +31201234567(MOBILE)</td></tr></table></div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"
+  }
+  value {
+    string_value {
+      value: "Organa"
+    }
+  }
+}
+identifier {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+      }
+      code {
+        value: "MR"
+      }
+    }
+  }
+  system {
+    value: "http://coruscanthealth.org/main-hospital/patient-identifier"
+  }
+  value {
+    value: "MRN657865757378"
+  }
+}
+gender {
+  value: MALE
+}
+contact {
+  relationship {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "72705000"
+      }
+      display {
+        value: "Mother"
+      }
+    }
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0131"
+      }
+      code {
+        value: "N"
+      }
+    }
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+      }
+      code {
+        value: "MTH"
+      }
+    }
+  }
+  name {
+    use {
+      value: MAIDEN
+    }
+    family {
+      value: "Organa"
+    }
+    given {
+      value: "Leia"
+    }
+  }
+  telecom {
+    system {
+      value: PHONE
+    }
+    value {
+      value: "+31201234567"
+    }
+    use {
+      value: MOBILE
+    }
+  }
+}

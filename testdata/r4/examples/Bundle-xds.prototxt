@@ -1,0 +1,364 @@
+id {
+  value: "xds"
+}
+meta {
+  last_updated {
+    value_us: 1372684293000000
+    timezone: "Z"
+    precision: SECOND
+  }
+}
+type {
+  value: TRANSACTION
+}
+entry {
+  full_url {
+    value: "urn:uuid:3fdc72f4-a11d-4a9d-9260-a9f745779e1d"
+  }
+  resource {
+    document_reference {
+      meta {
+        last_updated {
+          value_us: 1372684293000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\n\t\t\t\t\t\t<a href=\"http://localhost:9556/svc/fhir/Binary/1e404af3-077f-4bee-b7a6-a9be97e1ce32\">Document: urn:oid:129.6.58.92.88336</a>undefined, created 24/12/2005\n\t\t\t\t\t</div>"
+        }
+      }
+      master_identifier {
+        system {
+          value: "urn:ietf:rfc:3986"
+        }
+        value {
+          value: "urn:oid:129.6.58.92.88336"
+        }
+      }
+      status {
+        value: CURRENT
+      }
+      type {
+        coding {
+          system {
+            value: "http://ihe.net/connectathon/classCodes"
+          }
+          code {
+            value: "History and Physical"
+          }
+          display {
+            value: "History and Physical"
+          }
+        }
+      }
+      category {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "47039-3"
+          }
+          display {
+            value: "Inpatient Admission history and physical note"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "a2"
+        }
+      }
+      date {
+        value_us: 1372684293000000
+        timezone: "+10:00"
+        precision: SECOND
+      }
+      author {
+        practitioner_id {
+          value: "a3"
+        }
+      }
+      author {
+        practitioner_id {
+          value: "a4"
+        }
+      }
+      description {
+        value: "Physical"
+      }
+      security_label {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"
+          }
+          code {
+            value: "N"
+          }
+          display {
+            value: "normal"
+          }
+        }
+      }
+      content {
+        attachment {
+          content_type {
+            value: "text/plain"
+          }
+          language {
+            value: "en-US"
+          }
+          url {
+            value: "http://localhost:9556/svc/fhir/Binary/1e404af3-077f-4bee-b7a6-a9be97e1ce32"
+          }
+          title {
+            value: "Physical"
+          }
+          creation {
+            value_us: 1135342800000000
+            timezone: "Australia/Sydney"
+            precision: DAY
+          }
+        }
+        format {
+          system {
+            value: "urn:oid:1.3.6.1.4.1.19376.1.2.3"
+          }
+          code {
+            value: "urn:ihe:pcc:handp:2008"
+          }
+        }
+      }
+      context {
+        period {
+          start {
+            value_us: 1103752800000000
+            timezone: "+10:00"
+            precision: SECOND
+          }
+          end {
+            value_us: 1103752860000000
+            timezone: "+10:00"
+            precision: SECOND
+          }
+        }
+        practice_setting {
+          coding {
+            system {
+              value: "http://ihe.net/connectathon/practiceSettingCodes"
+            }
+            code {
+              value: "General Medicine"
+            }
+            display {
+              value: "General Medicine"
+            }
+          }
+        }
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "DocumentReference"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://localhost:9556/svc/fhir/Patient/a2"
+  }
+  resource {
+    patient {
+      id {
+        value: "a2"
+      }
+      meta {
+        last_updated {
+          value_us: 1372684293000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Person DOE, John, M, dob: 27/05/1956</div>"
+        }
+      }
+      identifier {
+        use {
+          value: USUAL
+        }
+        value {
+          value: "MRN"
+        }
+      }
+      name {
+        use {
+          value: USUAL
+        }
+        text {
+          value: "DOE, John"
+        }
+        family {
+          value: "Doe"
+        }
+        given {
+          value: "John"
+        }
+      }
+      birth_date {
+        value_us: -429184800000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "Patient"
+    }
+    if_none_exist {
+      value: "Patient?identifier=http://acme.org/xds/patients!89765a87b"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://localhost:9556/svc/fhir/Practitioner/a3"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "a3"
+      }
+      meta {
+        last_updated {
+          value_us: 1372684293000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Author Gerald Smitty @ Cleveland Clinic</div>"
+        }
+      }
+      name {
+        use {
+          value: USUAL
+        }
+        family {
+          value: "Smitty"
+        }
+        given {
+          value: "Gerald"
+        }
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "Practitioner"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://localhost:9556/svc/fhir/Practitioner/a4"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "a4"
+      }
+      meta {
+        last_updated {
+          value_us: 1372684293000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Author Person @ Cleveland Clinic</div>"
+        }
+      }
+      name {
+        use {
+          value: USUAL
+        }
+        family {
+          value: "Dopplemeyer"
+        }
+        given {
+          value: "Sherry"
+        }
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "Practitioner"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://localhost:9556/svc/fhir/Binary/1e404af3-077f-4bee-b7a6-a9be97e1ce32"
+  }
+  resource {
+    binary {
+      id {
+        value: "1e404af3-077f-4bee-b7a6-a9be97e1ce32"
+      }
+      meta {
+        last_updated {
+          value_us: 1372684293000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      content_type {
+        value: "text/plain"
+      }
+      data {
+        value: "asdasdasdasdasd"
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "Binary"
+    }
+  }
+}

@@ -1,0 +1,72 @@
+id {
+  value: "stroke"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Ischemic stroke, July 18, 2010</div>"
+  }
+}
+clinical_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
+    }
+    code {
+      value: "active"
+    }
+  }
+}
+verification_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+    }
+    code {
+      value: "confirmed"
+    }
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/condition-category"
+    }
+    code {
+      value: "encounter-diagnosis"
+    }
+    display {
+      value: "Encounter Diagnosis"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "422504002"
+    }
+    display {
+      value: "Ischemic stroke (disorder)"
+    }
+  }
+  text {
+    value: "Stroke"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+onset {
+  date_time {
+    value_us: 1279375200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}

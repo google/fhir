@@ -1,0 +1,430 @@
+id {
+  value: "meddisp0305"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: meddisp0305</p><p><b>contained</b>: </p><p><b>status</b>: entered-in-error</p><p><b>medication</b>: Prednisone. Generated Summary: id: med0311; Prednisone 5mg Oral Tablet 48 Count Pack <span>(Details : {RxNorm code \'763179\' = \'predniSONE 5 MG Oral Tablet 48 Count Pack\', given as \'Prednisone 5mg Oral Tablet 48 Count Pack\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Practitioner/f006</a></td></tr></table><p><b>authorizingPrescription</b>: <a>MedicationRequest/medrx0303</a></p><p><b>type</b>: First Fill <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ActCode code \'FF\' = \'First Fill\', given as \'First Fill\'})</span></p><p><b>quantity</b>: 49 TAB<span> (Details: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm code TAB = \'Tablet\')</span></p><p><b>daysSupply</b>: 21 Day<span> (Details: UCUM code d = \'d\')</span></p><p><b>whenPrepared</b>: 15/01/2015 10:20:00 AM</p><p><b>whenHandedOver</b>: 15/01/2015 4:20:00 PM</p><p><b>dosageInstruction</b>: , , </p></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "med0311"
+    }
+    code {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "763179"
+        }
+        display {
+          value: "Prednisone 5mg Oral Tablet 48 Count Pack"
+        }
+      }
+    }
+  }
+}
+status {
+  value: ENTERED_IN_ERROR
+}
+medication {
+  reference {
+    fragment {
+      value: "med0311"
+    }
+    display {
+      value: "Prednisone"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "f006"
+    }
+  }
+}
+authorizing_prescription {
+  medication_request_id {
+    value: "medrx0303"
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "FF"
+    }
+    display {
+      value: "First Fill"
+    }
+  }
+}
+quantity {
+  value {
+    value: "49"
+  }
+  unit {
+    value: "TAB"
+  }
+  system {
+    value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+  }
+  code {
+    value: "TAB"
+  }
+}
+days_supply {
+  value {
+    value: "21"
+  }
+  unit {
+    value: "Day"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "d"
+  }
+}
+when_prepared {
+  value_us: 1421317200000000
+  timezone: "Z"
+  precision: SECOND
+}
+when_handed_over {
+  value_us: 1421338800000000
+  timezone: "Z"
+  precision: SECOND
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "Take 4 tablets daily for 7 days starting January 16, 2015"
+  }
+  additional_instruction {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "311504000"
+      }
+      display {
+        value: "With or after Food"
+      }
+    }
+  }
+  timing {
+    repeat {
+      bounds {
+        period {
+          start {
+            value_us: 1421326800000000
+            timezone: "Australia/Sydney"
+            precision: DAY
+          }
+          end {
+            value_us: 1421672400000000
+            timezone: "Australia/Sydney"
+            precision: DAY
+          }
+        }
+      }
+      frequency {
+        value: 1
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "26643006"
+      }
+      display {
+        value: "Oral Route"
+      }
+    }
+  }
+  method {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "421521009"
+      }
+      display {
+        value: "Swallow - dosing instruction imperative (qualifier value)"
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "calculated"
+        }
+        display {
+          value: "Calculated"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "4"
+        }
+        unit {
+          value: "TAB"
+        }
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+        }
+        code {
+          value: "TAB"
+        }
+      }
+    }
+  }
+}
+dosage_instruction {
+  sequence {
+    value: 2
+  }
+  text {
+    value: "Take 2 tablets daily for 7 days starting January 23, 2015"
+  }
+  additional_instruction {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "311504000"
+      }
+      display {
+        value: "With or after Food"
+      }
+    }
+  }
+  timing {
+    repeat {
+      bounds {
+        period {
+          start {
+            value_us: 1421931600000000
+            timezone: "Australia/Sydney"
+            precision: DAY
+          }
+          end {
+            value_us: 1422536400000000
+            timezone: "Australia/Sydney"
+            precision: DAY
+          }
+        }
+      }
+      frequency {
+        value: 1
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "26643006"
+      }
+      display {
+        value: "Oral Route"
+      }
+    }
+  }
+  method {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "421521009"
+      }
+      display {
+        value: "Swallow - dosing instruction imperative (qualifier value)"
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "calculated"
+        }
+        display {
+          value: "Calculated"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "2"
+        }
+        unit {
+          value: "TAB"
+        }
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+        }
+        code {
+          value: "TAB"
+        }
+      }
+    }
+  }
+}
+dosage_instruction {
+  sequence {
+    value: 3
+  }
+  text {
+    value: "Take 1 tablets daily for 7 days starting January 31, 2015"
+  }
+  additional_instruction {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "311504000"
+      }
+      display {
+        value: "With or after Food"
+      }
+    }
+  }
+  timing {
+    repeat {
+      bounds {
+        period {
+          start {
+            value_us: 1422622800000000
+            timezone: "Australia/Sydney"
+            precision: DAY
+          }
+          end {
+            value_us: 1423141200000000
+            timezone: "Australia/Sydney"
+            precision: DAY
+          }
+        }
+      }
+      frequency {
+        value: 1
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "26643006"
+      }
+      display {
+        value: "Oral Route"
+      }
+    }
+  }
+  method {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "421521009"
+      }
+      display {
+        value: "Swallow - dosing instruction imperative (qualifier value)"
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "calculated"
+        }
+        display {
+          value: "Calculated"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "1"
+        }
+        unit {
+          value: "TAB"
+        }
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+        }
+        code {
+          value: "TAB"
+        }
+      }
+    }
+  }
+}

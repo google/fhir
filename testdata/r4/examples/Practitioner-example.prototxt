@@ -1,0 +1,88 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Dr Adam Careful is a Referring Practitioner for Acme Hospital from 1-Jan 2012 to 31-Mar\n        2012</p>\n    </div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.acme.org/practitioners"
+  }
+  value {
+    value: "23"
+  }
+}
+active {
+  value: true
+}
+name {
+  family {
+    value: "Careful"
+  }
+  given {
+    value: "Adam"
+  }
+  prefix {
+    value: "Dr"
+  }
+}
+address {
+  use {
+    value: HOME
+  }
+  line {
+    value: "534 Erewhon St"
+  }
+  city {
+    value: "PleasantVille"
+  }
+  state {
+    value: "Vic"
+  }
+  postal_code {
+    value: "3999"
+  }
+}
+qualification {
+  identifier {
+    system {
+      value: "http://example.org/UniversityIdentifier"
+    }
+    value {
+      value: "12345"
+    }
+  }
+  code {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0360/2.7"
+      }
+      code {
+        value: "BS"
+      }
+      display {
+        value: "Bachelor of Science"
+      }
+    }
+    text {
+      value: "Bachelor of Science"
+    }
+  }
+  period {
+    start {
+      value_us: 788878800000000
+      timezone: "Australia/Sydney"
+      precision: YEAR
+    }
+  }
+  issuer {
+    display {
+      value: "Example University"
+    }
+  }
+}

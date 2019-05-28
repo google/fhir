@@ -1,0 +1,37 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>"
+  }
+}
+identifier {
+  type {
+    text {
+      value: "Subject id"
+    }
+  }
+  system {
+    value: "http://example.org/studysubjectids"
+  }
+  value {
+    value: "123"
+  }
+}
+status {
+  value: CANDIDATE
+}
+study {
+  research_study_id {
+    value: "example"
+  }
+}
+individual {
+  patient_id {
+    value: "example"
+  }
+}

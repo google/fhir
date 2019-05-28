@@ -1,0 +1,109 @@
+id {
+  value: "pcd-example-notOrg"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">The following scenario is based on existing\n      jurisdictional policy and are realized in existing systems in Canada. The default policy is\n      one of implied consent for the provision of care, so these scenarios all deal with withdrawal\n      or withholding consent for that purpose. In other jurisdictions, where an express consent\n      model is used (Opt-In), these would examples would contain the phrase &quot;consent to&quot; rather than\n      &quot;withhold&quot; or &quot;withdraw&quot; consent for. <p> specific to use-case 3) Withhold or withdraw consent\n        for disclosure to a specific provider organization </p><p> Patient &quot;P. van de Heuvel&quot;\n        ex-spouse is a Physician that is employed by Good Health Clinic. P. decides that he would\n        like to withdraw/withhold consent to disclose any instance of his health information to Good\n        Health Clinic. </p>\n    </div>"
+  }
+}
+issued {
+  value_us: 1447765200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+subject {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+authority {
+  organization_id {
+    value: "3"
+  }
+  display {
+    value: "Michigan Health"
+  }
+}
+domain {
+  location_id {
+    value: "ukp"
+  }
+  display {
+    value: "UK Pharmacies"
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "57016-8"
+    }
+  }
+}
+sub_type {
+  coding {
+    system {
+      value: "http://www.infoway-inforoute.ca.org/Consent-subtype-codes"
+    }
+    code {
+      value: "Opt-In"
+    }
+    display {
+      value: "Default Authorization with exceptions."
+    }
+  }
+}
+term {
+  type {
+    coding {
+      system {
+        value: "http://example.org/fhir/consent-term-type-codes"
+      }
+      code {
+        value: "withhold-from"
+      }
+      display {
+        value: "Withhold all data from specified actor entity."
+      }
+    }
+  }
+  offer {
+    topic {
+      organization_id {
+        value: "2.16.840.1.113883.19.5"
+      }
+      display {
+        value: "Good Health Clinic"
+      }
+    }
+    text {
+      value: "Withhold this order and any results or related objects from any provider."
+    }
+  }
+}
+friendly {
+  content {
+    attachment {
+      title {
+        value: "The terms of the consent in friendly consumer speak."
+      }
+    }
+  }
+}
+legal {
+  content {
+    attachment {
+      title {
+        value: "The terms of the consent in lawyer speak."
+      }
+    }
+  }
+}

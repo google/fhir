@@ -1,0 +1,2146 @@
+id {
+  value: "hla-1"
+}
+type {
+  value: TRANSACTION
+}
+entry {
+  full_url {
+    value: "urn:uuid:b0a4b18e-94e7-4b1b-8031-c7ae4bdd8db9"
+  }
+  resource {
+    diagnostic_report {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<h3>HLA-A,-B,-C genotyping report for Mary Chalmers (MRN:12345)</h3>\n\t\t\t\t\t\t<pre>\n  LOCUS   ALLELE 1            ALLELE 2\n  HLA-A   HLA-A:01:01G        HLA-A*01:02\n  HLA-B   HLA-B*15:01:01G     HLA-B*57:01:01G\n  HLA-C   HLA-C*01:02:01G     HLA-C*03:04:01G\n                </pre>\n\t\t\t\t\t\t<p>Allele assignments based on IMGT/HLA 3.23</p>\n\t\t\t\t\t\t<p>Effective date: 2015-12-15</p>\n\t\t\t\t\t\t<p>Method: Sequencing of exons 2 and 3 of HLA Class I genes</p>\n\t\t\t\t\t\t<p>Lab: aTypingLab Inc</p>\n\t\t\t\t\t\t<p>Note: Please refer the <a href=\"genomics.html#hla\">implementation guide </a> for more explanation on this\n                carefully organized bundle example.</p>\n\t\t\t\t\t\t<pre>\n  Bob Milius - NMDP - 2016-12-01\n\n  Transaction bundle that creates and links:\n  + DiagnosticReport summarizing genotyping for HLA-A,-B,-C typing of patient(donor)\n  + Obervations for each genotype\n  + Observations for each allele\n  + Sequences for exons 2 and 3 for HLA-A,-B, -C\n\n  The endpoints of the following resources are hardcoded into this transaction bundle\n  because these are presumed to already exist when developing the DiagnosticRequest\n  which was to generate this report bundle:\n\n  Patient/119 (potential donor)\n  Specimen/120 (buccal swab)\n  Organization/68  (typing lab)\n  ServiceRequest/123  (report is based on this request)\n                </pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-allele-database"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.ebi.ac.uk/ipd/imgt/hla"
+              }
+              version {
+                value: "3.23"
+              }
+            }
+            text {
+              value: "IMGT/HLA 3.23"
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-glstring"
+        }
+        extension {
+          url {
+            value: "text"
+          }
+          value {
+            string_value {
+              value: "HLA-A:01:01G+HLA-A*01:02^HLA-B*15:01:01:01+HLA-B*57:01:01^HLA-C*01:02:01+HLA-C*03:04:01:01"
+            }
+          }
+        }
+        extension {
+          url {
+            value: "uri"
+          }
+          value {
+            uri {
+              value: "https://gl.nmdp.org/imgt-hla/3.23.0/multilocus-unphased-genotype/i"
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-method"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.ncbi.nlm.nih.gov/gtr/"
+              }
+              code {
+                value: "GTR000000000.0"
+              }
+            }
+            text {
+              value: "Next Generation Sequencing of exons 2 and 3 of HLA Class I genes"
+            }
+          }
+        }
+      }
+      based_on {
+        service_request_id {
+          value: "123"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      category {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v2-0074"
+          }
+          code {
+            value: "GE"
+          }
+          display {
+            value: "Genetics"
+          }
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "13303-3"
+          }
+          display {
+            value: "HLA-A+\342\200\213B+\342\200\213C (class I) [Type]"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+      issued {
+        value_us: 1481832930000000
+        timezone: "-06:00"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "68"
+        }
+        display {
+          value: "aTypingLab Inc"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "67"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      result {
+        uri {
+          value: "urn:uuid:49a86246-4004-42eb-9bdc-f542f93f9228"
+        }
+        display {
+          value: "HLA-A: HLA-A:01:01G+HLA-A*01:02"
+        }
+      }
+      result {
+        uri {
+          value: "urn:uuid:60613a43-c4cb-4502-b3e2-cf9215feaa70"
+        }
+        display {
+          value: "HLA-B: HLA-B*15:01:01G+HLA-B*57:01:01G"
+        }
+      }
+      result {
+        uri {
+          value: "urn:uuid:0e0a780e-4486-4cd0-bfae-7243c579f208"
+        }
+        display {
+          value: "HLA-C: HLA-C*01:02:01G+HLA-C*03:04:01G"
+        }
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "DiagnosticReport"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:8200dab6-18a2-4550-b913-a7db480c0804"
+  }
+  resource {
+    molecular_sequence {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>&quot;HLA-A*01:01:01:01, exon 2&quot;</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      type {
+        value: DNA
+      }
+      coordinate_system {
+      }
+      patient {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      reference_seq {
+        reference_seq_id {
+          coding {
+            system {
+              value: "http://www.ebi.ac.uk/ipd/imgt/hla"
+            }
+            version {
+              value: "3.23"
+            }
+            code {
+              value: "HLA00001"
+            }
+          }
+          text {
+            value: "HLA-A*01:01:01:01"
+          }
+        }
+        window_start {
+          value: 503
+        }
+        window_end {
+          value: 773
+        }
+      }
+      observed_seq {
+        value: "GCTCCCACTCCATGAGGTATTTCTTCACATCCGTGTCCCGGCCCGGCCGCGGGGAGCCCCGCTTCATCGCCGTGGGCTACGTGGACGACACGCAGTTCGTGCGGTTCGACAGCGACGCCGCGAGCCAGAAGATGGAGCCGCGGGCGCCGTGGATAGAGCAGGAGGGGCCGGAGTATTGGGACCAGGAGACACGGAATATGAAGGCCCACTCACAGACTGACCGAGCGAACCTGGGGACCCTGCGCGGCTACTACAACCAGAGCGAGGACG"
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "MolecularSequence"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:7c393185-f15c-45bc-a714-c0fdbea32675"
+  }
+  resource {
+    molecular_sequence {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>&quot;HLA-A*01:01:01:01, exon 3&quot;</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      type {
+        value: DNA
+      }
+      coordinate_system {
+      }
+      patient {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      reference_seq {
+        reference_seq_id {
+          coding {
+            system {
+              value: "http://www.ebi.ac.uk/ipd/imgt/hla"
+            }
+            version {
+              value: "3.23"
+            }
+            code {
+              value: "HLA00001"
+            }
+          }
+          text {
+            value: "HLA-A*01:01:01:01"
+          }
+        }
+        window_start {
+          value: 1014
+        }
+        window_end {
+          value: 1290
+        }
+      }
+      observed_seq {
+        value: "GTTCTCACACCATCCAGATAATGTATGGCTGCGACGTGGGGCCGGACGGGCGCTTCCTCCGCGGGTACCGGCAGGACGCCTACGACGGCAAGGATTACATCGCCCTGAACGAGGACCTGCGCTCTTGGACCGCGGCGGACATGGCAGCTCAGATCACCAAGCGCAAGTGGGAGGCGGTCCATGCGGCGGAGCAGCGGAGAGTCTACCTGGAGGGCCGGTGCGTGGACGGGCTCCGCAGATACCTGGAGAACGGGAAGGAGACGCTGCAGCGCACGG"
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "MolecularSequence"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:65c85f14-c3a0-4b72-818f-820e04fcc621"
+  }
+  resource {
+    molecular_sequence {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>&quot;HLA-A*01:02, exon 2&quot;</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      type {
+        value: DNA
+      }
+      coordinate_system {
+      }
+      patient {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      reference_seq {
+        reference_seq_id {
+          coding {
+            system {
+              value: "http://www.ebi.ac.uk/ipd/imgt/hla"
+            }
+            version {
+              value: "3.23"
+            }
+            code {
+              value: "HLA00002"
+            }
+          }
+          text {
+            value: "HLA-A*01:02"
+          }
+        }
+        window_start {
+          value: 503
+        }
+        window_end {
+          value: 773
+        }
+      }
+      observed_seq {
+        value: "GCTCCCACTCCATGAGGTATTTCTCCACATCCGTGTCCCGGCCCGGCAGTGGAGAGCCCCGCTTCATCGCAGTGGGCTACGTGGACGACACGCAGTTCGTGCGGTTCGACAGCGACGCCGCGAGCCAGAAGATGGAGCCGCGGGCGCCGTGGATAGAGCAGGAGGGGCCGGAGTATTGGGACCAGGAGACACGGAATATGAAGGCCCACTCACAGACTGACCGAGCGAACCTGGGGACCCTGCGCGGCTACTACAACCAGAGCGAGGACG"
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "MolecularSequence"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:fbba9fe7-0ece-4ec1-9233-a437a8d242a0"
+  }
+  resource {
+    molecular_sequence {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>&quot;HLA-A*01:02, exon 3&quot;</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      type {
+        value: DNA
+      }
+      coordinate_system {
+      }
+      patient {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      reference_seq {
+        reference_seq_id {
+          coding {
+            system {
+              value: "http://www.ebi.ac.uk/ipd/imgt/hla"
+            }
+            version {
+              value: "3.23"
+            }
+            code {
+              value: "HLA00002"
+            }
+          }
+          text {
+            value: "HLA-A*01:02"
+          }
+        }
+        window_start {
+          value: 1014
+        }
+        window_end {
+          value: 1290
+        }
+      }
+      observed_seq {
+        value: "GTTCTCACACCATCCAGATAATGTATGGCTGCGACGTGGGGCCGGACGGGCGCTTCCTCCGCGGGTACCGGCAGGACGCCTACGACGGCAAGGATTACATCGCCCTGAACGAGGACCTGCGCTCTTGGACCGCGGCGGACATGGCAGCTCAGATCACCAAGCGCAAGTGGGAGGCGGTCCATGCGGCGGAGCAGCGGAGAGTCTACCTGGAGGGCCGGTGCGTGGACGGGCTCCGCAGATACCTGGAGAACGGGAAGGAGACGCTGCAGCGCACGG"
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "MolecularSequence"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:cbabf93e-1b4b-46f2-ba1e-d84862670670"
+  }
+  resource {
+    molecular_sequence {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>&quot;HLA-B*15:01:01:01, exon 2&quot;</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      type {
+        value: DNA
+      }
+      coordinate_system {
+      }
+      patient {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      reference_seq {
+        reference_seq_id {
+          coding {
+            system {
+              value: "http://www.ebi.ac.uk/ipd/imgt/hla"
+            }
+            version {
+              value: "3.23"
+            }
+            code {
+              value: "HLA00162"
+            }
+          }
+          text {
+            value: "HLA-B*15:01:01:01"
+          }
+        }
+        window_start {
+          value: 486
+        }
+        window_end {
+          value: 756
+        }
+      }
+      observed_seq {
+        value: "GCTCCCACTCCATGAGGTATTTCTACACCGCCATGTCCCGGCCCGGCCGCGGGGAGCCCCGCTTCATCGCAGTGGGCTACGTGGACGACACCCAGTTCGTGAGGTTCGACAGCGACGCCGCGAGTCCGAGGATGGCGCCCCGGGCGCCATGGATAGAGCAGGAGGGGCCGGAGTATTGGGACCGGGAGACACAGATCTCCAAGACCAACACACAGACTTACCGAGAGAGCCTGCGGAACCTGCGCGGCTACTACAACCAGAGCGAGGCCG"
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "MolecularSequence"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:c233ad3d-1572-48d6-93da-0a583535e138"
+  }
+  resource {
+    molecular_sequence {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>&quot;HLA-B*15:01:01:01, exon 3&quot;</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      type {
+        value: DNA
+      }
+      coordinate_system {
+      }
+      patient {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      reference_seq {
+        reference_seq_id {
+          coding {
+            system {
+              value: "http://www.ebi.ac.uk/ipd/imgt/hla"
+            }
+            version {
+              value: "3.23"
+            }
+            code {
+              value: "HLA00162"
+            }
+          }
+          text {
+            value: "HLA-B*15:01:01:01"
+          }
+        }
+        window_start {
+          value: 1001
+        }
+        window_end {
+          value: 1277
+        }
+      }
+      observed_seq {
+        value: "GGTCTCACACCCTCCAGAGGATGTACGGCTGCGACGTGGGGCCGGACGGGCGCCTCCTCCGCGGGCATGACCAGTCCGCCTACGACGGCAAGGATTACATCGCCCTGAACGAGGACCTGAGCTCCTGGACCGCGGCGGACACGGCGGCTCAGATCACCCAGCGCAAGTGGGAGGCGGCCCGTGAGGCGGAGCAGTGGAGAGCCTACCTGGAGGGCCTGTGCGTGGAGTGGCTCCGCAGATACCTGGAGAACGGGAAGGAGACGCTGCAGCGCGCGG"
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "MolecularSequence"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:05fa52d7-5c67-460a-8722-d3460b24d6fe"
+  }
+  resource {
+    molecular_sequence {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>&quot;HLA-B*57:01:01, exon 2&quot;</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      type {
+        value: DNA
+      }
+      coordinate_system {
+      }
+      patient {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      reference_seq {
+        reference_seq_id {
+          coding {
+            system {
+              value: "http://www.ebi.ac.uk/ipd/imgt/hla"
+            }
+            version {
+              value: "3.23"
+            }
+            code {
+              value: "HLA00381"
+            }
+          }
+          text {
+            value: "HLA-B*57:01:01"
+          }
+        }
+        window_start {
+          value: 485
+        }
+        window_end {
+          value: 755
+        }
+      }
+      observed_seq {
+        value: "GCTCCCACTCCATGAGGTATTTCTACACCGCCATGTCCCGGCCCGGCCGCGGGGAGCCCCGCTTCATCGCAGTGGGCTACGTGGACGACACCCAGTTCGTGAGGTTCGACAGCGACGCCGCGAGTCCGAGGATGGCGCCCCGGGCGCCATGGATAGAGCAGGAGGGGCCGGAGTATTGGGACGGGGAGACACGGAACATGAAGGCCTCCGCGCAGACTTACCGAGAGAACCTGCGGATCGCGCTCCGCTACTACAACCAGAGCGAGGCCG"
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "MolecularSequence"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:db69e549-6267-4777-b4b9-8813f3329309"
+  }
+  resource {
+    molecular_sequence {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>&quot;HLA-B*57:01:01, exon 3&quot;</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      type {
+        value: DNA
+      }
+      coordinate_system {
+      }
+      patient {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      reference_seq {
+        reference_seq_id {
+          coding {
+            system {
+              value: "http://www.ebi.ac.uk/ipd/imgt/hla"
+            }
+            version {
+              value: "3.23"
+            }
+            code {
+              value: "HLA00381"
+            }
+          }
+          text {
+            value: "HLA-B*57:01:01"
+          }
+        }
+        window_start {
+          value: 1001
+        }
+        window_end {
+          value: 1277
+        }
+      }
+      observed_seq {
+        value: "GGTCTCACATCATCCAGGTGATGTATGGCTGCGACGTGGGGCCGGACGGGCGCCTCCTCCGCGGGCATGACCAGTCCGCCTACGACGGCAAGGATTACATCGCCCTGAACGAGGACCTGAGCTCCTGGACCGCGGCGGACACGGCGGCTCAGATCACCCAGCGCAAGTGGGAGGCGGCCCGTGTGGCGGAGCAGCTGAGAGCCTACCTGGAGGGCCTGTGCGTGGAGTGGCTCCGCAGATACCTGGAGAACGGGAAGGAGACGCTGCAGCGCGCGG"
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "MolecularSequence"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:bb55c2bc-5ad2-4bc1-8ff3-c407d06b12d0"
+  }
+  resource {
+    molecular_sequence {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>&quot;HLA-C*01:02:01, exon 2&quot;</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      type {
+        value: DNA
+      }
+      coordinate_system {
+      }
+      patient {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      reference_seq {
+        reference_seq_id {
+          coding {
+            system {
+              value: "http://www.ebi.ac.uk/ipd/imgt/hla"
+            }
+            version {
+              value: "3.23"
+            }
+            code {
+              value: "HLA00401"
+            }
+          }
+          text {
+            value: "HLA-C*01:02:01"
+          }
+        }
+        window_start {
+          value: 486
+        }
+        window_end {
+          value: 756
+        }
+      }
+      observed_seq {
+        value: "GCTCCCACTCCATGAAGTATTTCTTCACATCCGTGTCCCGGCCTGGCCGCGGAGAGCCCCGCTTCATCTCAGTGGGCTACGTGGACGACACGCAGTTCGTGCGGTTCGACAGCGACGCCGCGAGTCCGAGAGGGGAGCCGCGGGCGCCGTGGGTGGAGCAGGAGGGGCCGGAGTATTGGGACCGGGAGACACAGAAGTACAAGCGCCAGGCACAGACTGACCGAGTGAGCCTGCGGAACCTGCGCGGCTACTACAACCAGAGCGAGGCCG"
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "MolecularSequence"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:46938bb2-0486-4e87-bfd3-89aab2d5e22f"
+  }
+  resource {
+    molecular_sequence {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>&quot;HLA-C*01:02:01, exon 3&quot;</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      type {
+        value: DNA
+      }
+      coordinate_system {
+      }
+      patient {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      reference_seq {
+        reference_seq_id {
+          coding {
+            system {
+              value: "http://www.ebi.ac.uk/ipd/imgt/hla"
+            }
+            version {
+              value: "3.23"
+            }
+            code {
+              value: "HLA00401"
+            }
+          }
+          text {
+            value: "HLA-C*01:02:01"
+          }
+        }
+        window_start {
+          value: 1002
+        }
+        window_end {
+          value: 1278
+        }
+      }
+      observed_seq {
+        value: "GGTCTCACACCCTCCAGTGGATGTGTGGCTGCGACCTGGGGCCCGACGGGCGCCTCCTCCGCGGGTATGACCAGTACGCCTACGACGGCAAGGATTACATCGCCCTGAACGAGGACCTGCGCTCCTGGACCGCCGCGGACACCGCGGCTCAGATCACCCAGCGCAAGTGGGAGGCGGCCCGTGAGGCGGAGCAGCGGAGAGCCTACCTGGAGGGCACGTGCGTGGAGTGGCTCCGCAGATACCTGGAGAACGGGAAGGAGACGCTGCAGCGCGCGG"
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "MolecularSequence"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:2ae2ff34-279e-43c2-9018-b054fd3fc1ce"
+  }
+  resource {
+    molecular_sequence {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>&quot;HLA-C*03:04:01:01, exon 2&quot;</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      type {
+        value: DNA
+      }
+      coordinate_system {
+      }
+      patient {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      reference_seq {
+        reference_seq_id {
+          coding {
+            system {
+              value: "http://www.ebi.ac.uk/ipd/imgt/hla"
+            }
+            version {
+              value: "3.23"
+            }
+            code {
+              value: "HLA00413"
+            }
+          }
+          text {
+            value: "HLA-C*03:04:01:01"
+          }
+        }
+        window_start {
+          value: 486
+        }
+        window_end {
+          value: 756
+        }
+      }
+      observed_seq {
+        value: "GCTCCCACTCCATGAGGTATTTCTACACCGCTGTGTCCCGGCCCGGCCGCGGGGAGCCCCACTTCATCGCAGTGGGCTACGTGGACGACACGCAGTTCGTGCGGTTCGACAGCGACGCCGCGAGTCCGAGAGGGGAGCCGCGGGCGCCGTGGGTGGAGCAGGAGGGGCCGGAGTATTGGGACCGGGAGACACAGAAGTACAAGCGCCAGGCACAGACTGACCGAGTGAGCCTGCGGAACCTGCGCGGCTACTACAACCAGAGCGAGGCCG"
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "MolecularSequence"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:19153ef1-68c6-47a2-9676-c4eefbd39af9"
+  }
+  resource {
+    molecular_sequence {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>&quot;HLA-C*03:04:01:01, exon 3&quot;</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      type {
+        value: DNA
+      }
+      coordinate_system {
+      }
+      patient {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      reference_seq {
+        reference_seq_id {
+          coding {
+            system {
+              value: "http://www.ebi.ac.uk/ipd/imgt/hla"
+            }
+            version {
+              value: "3.23"
+            }
+            code {
+              value: "HLA00413"
+            }
+          }
+          text {
+            value: "HLA-C*03:04:01:01"
+          }
+        }
+        window_start {
+          value: 1001
+        }
+        window_end {
+          value: 1277
+        }
+      }
+      observed_seq {
+        value: "GGTCTCACATCATCCAGAGGATGTATGGCTGCGACGTGGGGCCCGACGGGCGCCTCCTCCGCGGGTATGACCAGTACGCCTACGACGGCAAGGATTACATCGCCCTGAACGAGGATCTGCGCTCCTGGACCGCCGCGGACACGGCGGCTCAGATCACCCAGCGCAAGTGGGAGGCGGCCCGTGAGGCGGAGCAGCTGAGAGCCTACCTGGAGGGCCTGTGCGTGGAGTGGCTCCGCAGATACCTGAAGAATGGGAAGGAGACGCTGCAGCGCGCGG"
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "MolecularSequence"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:b7765bbf-df40-486a-9f2f-404309643de6"
+  }
+  resource {
+    observation {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>HLA-A:01:01:01G</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4931"
+              }
+              display {
+                value: "HLA-A"
+              }
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
+            }
+          }
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "57290-9"
+          }
+          display {
+            value: "HLA-A [Type] by High resolution"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:8200dab6-18a2-4550-b913-a7db480c0804"
+        }
+        display {
+          value: "HLA-A*01:01:01:01, exon 2"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:7c393185-f15c-45bc-a714-c0fdbea32675"
+        }
+        display {
+          value: "HLA-A*01:01:01:01, exon 3"
+        }
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "Observation"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:d98d92a7-0e86-4ae5-b036-b7e1bba6ec32"
+  }
+  resource {
+    observation {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>HLA-A*01:02</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4931"
+              }
+              display {
+                value: "HLA-A"
+              }
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
+            }
+          }
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "57290-9"
+          }
+          display {
+            value: "HLA-A [Type] by High resolution"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:65c85f14-c3a0-4b72-818f-820e04fcc621"
+        }
+        display {
+          value: "HLA-A*01:02, exon 2"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:fbba9fe7-0ece-4ec1-9233-a437a8d242a0"
+        }
+        display {
+          value: "HLA-A*01:02, exon 3"
+        }
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "Observation"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:49a86246-4004-42eb-9bdc-f542f93f9228"
+  }
+  resource {
+    observation {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>HLA-A:01:01G+HLA-A*01:02</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4931"
+              }
+              display {
+                value: "HLA-A"
+              }
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
+            }
+          }
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "57290-9"
+          }
+          display {
+            value: "HLA-A [Type] by High resolution"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:b7765bbf-df40-486a-9f2f-404309643de6"
+        }
+        display {
+          value: "HLA-A*01:01:01G, exons 2 and 3"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:d98d92a7-0e86-4ae5-b036-b7e1bba6ec32"
+        }
+        display {
+          value: "HLA-A*01:02, exons 2 and 3"
+        }
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "Observation"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:e2092243-2970-49d2-a90f-b90d1d49715a"
+  }
+  resource {
+    observation {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>HLA-B*15:01:01G</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4932"
+              }
+              display {
+                value: "HLA-B"
+              }
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
+            }
+          }
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "57291-7"
+          }
+          display {
+            value: "HLA-B [Type] by High resolution"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:cbabf93e-1b4b-46f2-ba1e-d84862670670"
+        }
+        display {
+          value: "HLA-B*15:01:01:01, exon 2"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:c233ad3d-1572-48d6-93da-0a583535e138"
+        }
+        display {
+          value: "HLA-B*15:01:01:01, exon 3"
+        }
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "Observation"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:792be53e-d4fb-4887-a367-815ef6c706e5"
+  }
+  resource {
+    observation {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>HLA-B*57:01:01G</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4932"
+              }
+              display {
+                value: "HLA-B"
+              }
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
+            }
+          }
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "57291-7"
+          }
+          display {
+            value: "HLA-B [Type] by High resolution"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:05fa52d7-5c67-460a-8722-d3460b24d6fe"
+        }
+        display {
+          value: "HLA-B*57:01:01, exon 2"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:db69e549-6267-4777-b4b9-8813f3329309"
+        }
+        display {
+          value: "HLA-B*57:01:01, exon 3"
+        }
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "Observation"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:60613a43-c4cb-4502-b3e2-cf9215feaa70"
+  }
+  resource {
+    observation {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>HLA-B*15:01:01G+HLA-B*57:01:01G</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4932"
+              }
+              display {
+                value: "HLA-B"
+              }
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
+            }
+          }
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "57291-7"
+          }
+          display {
+            value: "HLA-B [Type] by High resolution"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:e2092243-2970-49d2-a90f-b90d1d49715a"
+        }
+        display {
+          value: "HLA-B*15:01:01G, exons 2 and 3"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:792be53e-d4fb-4887-a367-815ef6c706e5"
+        }
+        display {
+          value: "HLA-B*57:01:01G, exons 2 and 3"
+        }
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "Observation"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:709c5315-9403-4867-9d82-0b953836665f"
+  }
+  resource {
+    observation {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>HLA-C*01:02:01</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4933"
+              }
+              display {
+                value: "HLA-C"
+              }
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
+            }
+          }
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "77636-9"
+          }
+          display {
+            value: "HLA-C [Type] by High resolution"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:bb55c2bc-5ad2-4bc1-8ff3-c407d06b12d0"
+        }
+        display {
+          value: "HLA-C*01:02:01, exon 2"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:46938bb2-0486-4e87-bfd3-89aab2d5e22f"
+        }
+        display {
+          value: "HLA-C*01:02:01, exon 3"
+        }
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "Observation"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:8b2aa21c-1426-4717-8ab0-a84d83df7d47"
+  }
+  resource {
+    observation {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>HLA-C*03:04:01:01</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4933"
+              }
+              display {
+                value: "HLA-C"
+              }
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
+            }
+          }
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "77636-9"
+          }
+          display {
+            value: "HLA-C [Type] by High resolution"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:2ae2ff34-279e-43c2-9018-b054fd3fc1ce"
+        }
+        display {
+          value: "HLA-C*03:04:01:01, exon 2"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:19153ef1-68c6-47a2-9676-c4eefbd39af9"
+        }
+        display {
+          value: "HLA-C*03:04:01:01, exon 3"
+        }
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "Observation"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:0e0a780e-4486-4cd0-bfae-7243c579f208"
+  }
+  resource {
+    observation {
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<pre>HLA-C*01:02:01G+HLA-C*03:04:01G</pre>\n\t\t\t\t\t</div>"
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://www.genenames.org"
+              }
+              code {
+                value: "HGNC:4933"
+              }
+              display {
+                value: "HLA-C"
+              }
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://loinc.org"
+              }
+              code {
+                value: "LA6683-2"
+              }
+              display {
+                value: "germline"
+              }
+            }
+          }
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "77636-9"
+          }
+          display {
+            value: "HLA-C [Type] by High resolution"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "119"
+        }
+        display {
+          value: "Mary Chalmers"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1481720400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "120"
+        }
+        display {
+          value: "buccal swab from Mary Chalmers"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:709c5315-9403-4867-9d82-0b953836665f"
+        }
+        display {
+          value: "HLA-C*01:02:01G, exons 2 and 3"
+        }
+      }
+      derived_from {
+        uri {
+          value: "urn:uuid:8b2aa21c-1426-4717-8ab0-a84d83df7d47"
+        }
+        display {
+          value: "HLA-C*03:04:01G, exons 2 and 3"
+        }
+      }
+    }
+  }
+  request {
+    method {
+      value: POST
+    }
+    url {
+      value: "Observation"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+id {
+  value: "graphic-example-2"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: graphic-example-2</p><p><b>type</b>: dna</p><p><b>coordinateSystem</b>: 0</p><h3>ReferenceSeqs</h3><table><tr><td>-</td><td><b>ReferenceSeqString</b></td><td><b>Strand</b></td><td><b>WindowStart</b></td><td><b>WindowEnd</b></td></tr><tr><td>*</td><td>CGCCATTG</td><td>watson</td><td>0</td><td>8</td></tr></table><p><b>pointer</b>: <a>MolecularSequence/graphic-example-3</a></p></div>"
+  }
+}
+type {
+  value: DNA
+}
+coordinate_system {
+}
+reference_seq {
+  reference_seq_string {
+    value: "CGCCATTG"
+  }
+  strand {
+    value: WATSON
+  }
+  window_start {
+  }
+  window_end {
+    value: 8
+  }
+}
+pointer {
+  molecular_sequence_id {
+    value: "graphic-example-3"
+  }
+}

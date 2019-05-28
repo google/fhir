@@ -1,0 +1,117 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Care Team</div>"
+  }
+}
+contained {
+  practitioner {
+    id {
+      value: "pr1"
+    }
+    name {
+      family {
+        value: "Dietician"
+      }
+      given {
+        value: "Dorothy"
+      }
+    }
+  }
+}
+identifier {
+  value {
+    value: "12345"
+  }
+}
+status {
+  value: ACTIVE
+}
+category {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "LA27976-2"
+    }
+    display {
+      value: "Encounter-focused care team"
+    }
+  }
+}
+name {
+  value: "Peter James Charlmers Care Plan for Inpatient Encounter"
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+period {
+  end {
+    value_us: 1356958800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+participant {
+  role {
+    text {
+      value: "responsiblePerson"
+    }
+  }
+  member {
+    patient_id {
+      value: "example"
+    }
+    display {
+      value: "Peter James Chalmers"
+    }
+  }
+}
+participant {
+  role {
+    text {
+      value: "adviser"
+    }
+  }
+  member {
+    fragment {
+      value: "pr1"
+    }
+    display {
+      value: "Dorothy Dietition"
+    }
+  }
+  on_behalf_of {
+    organization_id {
+      value: "f001"
+    }
+  }
+  period {
+    end {
+      value_us: 1356958800000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}
+managing_organization {
+  organization_id {
+    value: "f001"
+  }
+}

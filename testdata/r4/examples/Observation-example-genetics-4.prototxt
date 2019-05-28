@@ -1,0 +1,85 @@
+id {
+  value: "example-genetics-4"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-genetics-4</p><p><b>status</b>: final</p><p><b>code</b>: Allele ABC <span>(Details )</span></p><p><b>subject</b>: <a>Molecular Lab Patient ID: HOSP-23456</a></p><p><b>issued</b>: 03/04/2013 3:30:10 PM</p><p><b>performer</b>: <a>Molecular Diagnostics Laboratory</a></p><p><b>interpretation</b>: Positive <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'POS\' = \'Positive)</span></p><p><b>specimen</b>: <a>Molecular Specimen ID: MLD45-Z4-1234</a></p><p><b>hasMember</b>: </p><ul><li><a>Variant-1</a></li><li><a>Variant-2</a></li><li><a>Variant-3</a></li></ul></div>"
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  text {
+    value: "Allele ABC"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Molecular Lab Patient ID: HOSP-23456"
+  }
+}
+issued {
+  value_us: 1364999410000000
+  timezone: "+01:00"
+  precision: SECOND
+}
+performer {
+  practitioner_id {
+    value: "example"
+  }
+  display {
+    value: "Molecular Diagnostics Laboratory"
+  }
+}
+interpretation {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+    }
+    code {
+      value: "POS"
+    }
+  }
+  text {
+    value: "Positive"
+  }
+}
+specimen {
+  specimen_id {
+    value: "genetics-example1-somatic"
+  }
+  display {
+    value: "Molecular Specimen ID: MLD45-Z4-1234"
+  }
+}
+has_member {
+  observation_id {
+    value: "example-genetics-1"
+  }
+  display {
+    value: "Variant-1"
+  }
+}
+has_member {
+  observation_id {
+    value: "example-genetics-2"
+  }
+  display {
+    value: "Variant-2"
+  }
+}
+has_member {
+  observation_id {
+    value: "example-genetics-3"
+  }
+  display {
+    value: "Variant-3"
+  }
+}

@@ -1,0 +1,131 @@
+id {
+  value: "f003"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f003</p><p><b>clinicalStatus</b>: Active <span>(Details : {http://terminology.hl7.org/CodeSystem/condition-clinical code \'active\' = \'Active)</span></p><p><b>verificationStatus</b>: Confirmed <span>(Details : {http://terminology.hl7.org/CodeSystem/condition-ver-status code \'confirmed\' = \'Confirmed)</span></p><p><b>category</b>: diagnosis <span>(Details : {SNOMED CT code \'439401001\' = \'Diagnosis\', given as \'diagnosis\'})</span></p><p><b>severity</b>: Mild to moderate <span>(Details : {SNOMED CT code \'371923003\' = \'Mild to moderate\', given as \'Mild to moderate\'})</span></p><p><b>code</b>: Retropharyngeal abscess <span>(Details : {SNOMED CT code \'18099001\' = \'Retropharyngeal abscess\', given as \'Retropharyngeal abscess\'})</span></p><p><b>bodySite</b>: Entire retropharyngeal area <span>(Details : {SNOMED CT code \'280193007\' = \'Retropharyngeal space\', given as \'Entire retropharyngeal area\'})</span></p><p><b>subject</b>: <a>P. van de Heuvel</a></p><p><b>encounter</b>: <a>Encounter/f003</a></p><p><b>onset</b>: 27/02/2012</p><p><b>recordedDate</b>: 20/02/2012</p><p><b>asserter</b>: <a>P. van de Heuvel</a></p><h3>Evidences</h3><table><tr><td>-</td><td><b>Code</b></td></tr><tr><td>*</td><td>CT of neck <span>(Details : {SNOMED CT code \'169068008\' = \'CT of neck\', given as \'CT of neck\'})</span></td></tr></table></div>"
+  }
+}
+clinical_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
+    }
+    code {
+      value: "active"
+    }
+  }
+}
+verification_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+    }
+    code {
+      value: "confirmed"
+    }
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "439401001"
+    }
+    display {
+      value: "diagnosis"
+    }
+  }
+}
+severity {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "371923003"
+    }
+    display {
+      value: "Mild to moderate"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "18099001"
+    }
+    display {
+      value: "Retropharyngeal abscess"
+    }
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "280193007"
+    }
+    display {
+      value: "Entire retropharyngeal area"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+encounter {
+  encounter_id {
+    value: "f003"
+  }
+}
+onset {
+  date_time {
+    value_us: 1330261200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+recorded_date {
+  value_us: 1329656400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+asserter {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+evidence {
+  code {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "169068008"
+      }
+      display {
+        value: "CT of neck"
+      }
+    }
+  }
+}

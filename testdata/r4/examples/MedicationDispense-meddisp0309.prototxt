@@ -1,0 +1,167 @@
+id {
+  value: "meddisp0309"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: meddisp0309</p><p><b>contained</b>: </p><p><b>status</b>: entered-in-error</p><p><b>medication</b>: Nystatin 100,000 units/ml oral suspension (product). Generated Summary: id: med0312; Nystatin 100,000 units/ml oral suspension (product) <span>(Details : {SNOMED CT code \'324689003\' = \'Nystatin 100,000units/mL oral suspension\', given as \'Nystatin 100,000 units/ml oral suspension (product)\'})</span></p><p><b>subject</b>: <a>Donald Duck </a></p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Practitioner/f006</a></td></tr></table><p><b>authorizingPrescription</b>: <a>MedicationRequest/medrx0319</a></p><p><b>type</b>: First Fill <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ActCode code \'FF\' = \'First Fill\', given as \'First Fill\'})</span></p><p><b>quantity</b>: 10 ml<span> (Details: UCUM code ml = \'ml\')</span></p><p><b>daysSupply</b>: 10 Day<span> (Details: UCUM code d = \'d\')</span></p><p><b>whenPrepared</b>: 15/01/2015</p><p><b>whenHandedOver</b>: 15/01/2016</p><p><b>dosageInstruction</b>: </p></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "med0312"
+    }
+    code {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "324689003"
+        }
+        display {
+          value: "Nystatin 100,000 units/ml oral suspension (product)"
+        }
+      }
+    }
+  }
+}
+status {
+  value: ENTERED_IN_ERROR
+}
+medication {
+  reference {
+    fragment {
+      value: "med0312"
+    }
+    display {
+      value: "Nystatin 100,000 units/ml oral suspension (product)"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck "
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "f006"
+    }
+  }
+}
+authorizing_prescription {
+  medication_request_id {
+    value: "medrx0319"
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "FF"
+    }
+    display {
+      value: "First Fill"
+    }
+  }
+}
+quantity {
+  value {
+    value: "10"
+  }
+  unit {
+    value: "ml"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "ml"
+  }
+}
+days_supply {
+  value {
+    value: "10"
+  }
+  unit {
+    value: "Day"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "d"
+  }
+}
+when_prepared {
+  value_us: 1421240400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+when_handed_over {
+  value_us: 1452776400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "10 drops four times daily - apply in mouth using cotton swab or finger"
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 4
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "ordered"
+        }
+        display {
+          value: "Ordered"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "10"
+        }
+        unit {
+          value: "drop"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "drop"
+        }
+      }
+    }
+  }
+}

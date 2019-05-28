@@ -1,0 +1,418 @@
+id {
+  value: "terminology-server"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <h2>Terminology Service Capability Statement</h2>\n      <div>\n        <p>Basic capability statement for a Terminology Server. A server can support more fucntionality than defined here, but this is the minimum amount</p>\n\n      </div>\n      <table>\n        <tr>\n          <td>Mode</td>\n          <td>SERVER</td>\n        </tr>\n        <tr>\n          <td>Description</td>\n          <td>RESTful Terminology Server</td>\n        </tr>\n        <tr>\n          <td>Transaction</td>\n          <td/>\n        </tr>\n        <tr>\n          <td>System History</td>\n          <td/>\n        </tr>\n        <tr>\n          <td>System Search</td>\n          <td/>\n        </tr>\n      </table>\n      <table>\n        <tr>\n          <th>\n            <b>Resource Type</b>\n          </th>\n          <th>\n            <b>Profile</b>\n          </th>\n          <th>\n            <b>Read</b>\n          </th>\n          <th>\n            <b>V-Read</b>\n          </th>\n          <th>\n            <b>Search</b>\n          </th>\n          <th>\n            <b>Update</b>\n          </th>\n          <th>\n            <b>Updates</b>\n          </th>\n          <th>\n            <b>Create</b>\n          </th>\n          <th>\n            <b>Delete</b>\n          </th>\n          <th>\n            <b>History</b>\n          </th>\n        </tr>\n        <tr>\n          <td>ValueSet</td>\n          <td>\n            <a href=\"StructureDefinition/ValueSet\">StructureDefinition/ValueSet</a>\n          </td>\n          <td>y</td>\n          <td/>\n          <td>y</td>\n          <td/>\n          <td/>\n          <td/>\n          <td/>\n          <td/>\n        </tr>\n        <tr>\n          <td>ConceptMap</td>\n          <td>\n            <a href=\"StructureDefinition/ConceptMap\">StructureDefinition/ConceptMap</a>\n          </td>\n          <td>y</td>\n          <td/>\n          <td>y</td>\n          <td/>\n          <td/>\n          <td/>\n          <td/>\n          <td/>\n        </tr>\n      </table>\n    </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/capabilitystatement-supported-system"
+  }
+  value {
+    uri {
+      value: "http://loinc.org"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/terminology-server"
+}
+version {
+  value: "4.0.0"
+}
+name {
+  value: "Terminology Service Capability Statement"
+}
+status {
+  value: DRAFT
+}
+date {
+  value_us: 1436018400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "HL7, Inc"
+}
+contact {
+  name {
+    value: "FHIR Project"
+  }
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+}
+description {
+  value: "Basic capability statement for a Terminology Server. A server can support more fucntionality than defined here, but this is the minimum amount"
+}
+kind {
+  value: CAPABILITY
+}
+software {
+  name {
+    value: "ACME Terminology Server"
+  }
+}
+fhir_version {
+  value: NUM_4_0_0
+}
+format {
+  value: "json"
+}
+format {
+  value: "xml"
+}
+rest {
+  mode {
+    value: SERVER
+  }
+  documentation {
+    value: "RESTful Terminology Server"
+  }
+  security {
+    cors {
+      value: true
+    }
+    service {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/restful-security-service"
+        }
+        code {
+          value: "Certificates"
+        }
+      }
+    }
+  }
+  resource {
+    type {
+      value: VALUE_SET
+    }
+    profile {
+      value: "StructureDefinition/ValueSet"
+    }
+    interaction {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation"
+        }
+        value {
+          code {
+            value: "SHALL"
+          }
+        }
+      }
+      code {
+        value: READ
+      }
+      documentation {
+        value: "Read allows clients to get the logical definitions of the value sets"
+      }
+    }
+    interaction {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation"
+        }
+        value {
+          code {
+            value: "SHALL"
+          }
+        }
+      }
+      code {
+        value: SEARCH_TYPE
+      }
+      documentation {
+        value: "Search allows clients to find value sets on the server"
+      }
+    }
+    search_param {
+      name {
+        value: "date"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/ValueSet-date"
+      }
+      type {
+        value: DATE
+      }
+    }
+    search_param {
+      name {
+        value: "name"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/ValueSet-name"
+      }
+      type {
+        value: STRING
+      }
+    }
+    search_param {
+      name {
+        value: "reference"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/ValueSet-reference"
+      }
+      type {
+        value: TOKEN
+      }
+    }
+    search_param {
+      name {
+        value: "status"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/ValueSet-status"
+      }
+      type {
+        value: TOKEN
+      }
+    }
+    search_param {
+      name {
+        value: "url"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/ValueSet-url"
+      }
+      type {
+        value: URI
+      }
+    }
+    search_param {
+      name {
+        value: "version"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/ValueSet-version"
+      }
+      type {
+        value: TOKEN
+      }
+    }
+  }
+  resource {
+    type {
+      value: CONCEPT_MAP
+    }
+    profile {
+      value: "StructureDefinition/ConceptMap"
+    }
+    interaction {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation"
+        }
+        value {
+          code {
+            value: "SHALL"
+          }
+        }
+      }
+      code {
+        value: READ
+      }
+      documentation {
+        value: "Read allows clients to get the logical definitions of the concept maps"
+      }
+    }
+    interaction {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation"
+        }
+        value {
+          code {
+            value: "SHALL"
+          }
+        }
+      }
+      code {
+        value: SEARCH_TYPE
+      }
+      documentation {
+        value: "Search allows clients to find concept maps on the server"
+      }
+    }
+    search_param {
+      name {
+        value: "date"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/ConceptMap-date"
+      }
+      type {
+        value: DATE
+      }
+    }
+    search_param {
+      name {
+        value: "name"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/ConceptMap-name"
+      }
+      type {
+        value: STRING
+      }
+    }
+    search_param {
+      name {
+        value: "status"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/ConceptMap-status"
+      }
+      type {
+        value: TOKEN
+      }
+    }
+    search_param {
+      name {
+        value: "source"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/ConceptMap-source"
+      }
+      type {
+        value: URI
+      }
+    }
+    search_param {
+      name {
+        value: "target"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/ConceptMap-target"
+      }
+      type {
+        value: URI
+      }
+    }
+    search_param {
+      name {
+        value: "url"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/ConceptMap-url"
+      }
+      type {
+        value: URI
+      }
+    }
+    search_param {
+      name {
+        value: "version"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/ConceptMap-version"
+      }
+      type {
+        value: TOKEN
+      }
+    }
+  }
+  operation {
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation"
+      }
+      value {
+        code {
+          value: "SHALL"
+        }
+      }
+    }
+    name {
+      value: "expand"
+    }
+    definition {
+      value: "OperationDefinition/ValueSet-expand"
+    }
+  }
+  operation {
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation"
+      }
+      value {
+        code {
+          value: "SHALL"
+        }
+      }
+    }
+    name {
+      value: "lookup"
+    }
+    definition {
+      value: "OperationDefinition/CodeSystem-lookup"
+    }
+  }
+  operation {
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation"
+      }
+      value {
+        code {
+          value: "SHALL"
+        }
+      }
+    }
+    name {
+      value: "validate-code"
+    }
+    definition {
+      value: "OperationDefinition/ValueSet-validate-code"
+    }
+  }
+  operation {
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation"
+      }
+      value {
+        code {
+          value: "SHALL"
+        }
+      }
+    }
+    name {
+      value: "translate"
+    }
+    definition {
+      value: "OperationDefinition/ConceptMap-translate"
+    }
+  }
+  operation {
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation"
+      }
+      value {
+        code {
+          value: "SHOULD"
+        }
+      }
+    }
+    name {
+      value: "closure"
+    }
+    definition {
+      value: "OperationDefinition/ConceptMap-closure"
+    }
+  }
+}

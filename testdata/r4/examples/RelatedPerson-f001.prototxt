@@ -1,0 +1,75 @@
+id {
+  value: "f001"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n     Sarah Abels\n    </div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  type {
+    text {
+      value: "BSN"
+    }
+  }
+  system {
+    value: "urn:oid:2.16.840.1.113883.2.4.6.3"
+  }
+}
+patient {
+  patient_id {
+    value: "f001"
+  }
+}
+relationship {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+    }
+    code {
+      value: "SIGOTHR"
+    }
+  }
+}
+name {
+  use {
+    value: USUAL
+  }
+  family {
+    value: "Abels"
+  }
+  given {
+    value: "Sarah"
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "0690383372"
+  }
+  use {
+    value: MOBILE
+  }
+}
+telecom {
+  system {
+    value: EMAIL
+  }
+  value {
+    value: "s.abels@kpn.nl"
+  }
+  use {
+    value: HOME
+  }
+}
+gender {
+  value: FEMALE
+}

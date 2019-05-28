@@ -1,0 +1,44 @@
+id {
+  value: "blood-tubes-supply"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n    </div>"
+  }
+}
+status {
+  value: DRAFT
+}
+description {
+  value: "10 Blood collect tubes blue cap"
+}
+purpose {
+  value: "Describes a request for 10 Blood collection tubes with blue caps."
+}
+usage {
+  value: "This activity definition is used as the definition of a supply request to resupply blood collection tubes. Elements that apply universally are defined here, while elements that apply to the specific setting of a referral within a particular order set are defined in the order set."
+}
+kind {
+  value: SUPPLY_REQUEST
+}
+code {
+  coding {
+    code {
+      value: "BlueTubes"
+    }
+    display {
+      value: "Blood collect tubes blue cap"
+    }
+  }
+}
+quantity {
+  value {
+    value: "10"
+  }
+}
+transform {
+  value: "StructureMap/supplyrequest-transform"
+}

@@ -1,0 +1,163 @@
+id {
+  value: "33124"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Sample Contract Lens prescription</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.happysight.com/prescription"
+  }
+  value {
+    value: "15014"
+  }
+}
+status {
+  value: ACTIVE
+}
+created {
+  value_us: 1402754400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+}
+encounter {
+  encounter_id {
+    value: "f001"
+  }
+}
+date_written {
+  value_us: 1402754400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+prescriber {
+  practitioner_id {
+    value: "example"
+  }
+}
+lens_specification {
+  product {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/ex-visionprescriptionproduct"
+      }
+      code {
+        value: "contact"
+      }
+    }
+  }
+  eye {
+    value: RIGHT
+  }
+  cylinder {
+    value: "-2.25"
+  }
+  axis {
+    value: 160
+  }
+  add {
+    value: "1.75"
+  }
+  power {
+    value: "-2.75"
+  }
+  back_curve {
+    value: "8.7"
+  }
+  diameter {
+    value: "14.0"
+  }
+  duration {
+    value {
+      value: "1"
+    }
+    unit {
+      value: "month"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "month"
+    }
+  }
+  color {
+    value: "green"
+  }
+  brand {
+    value: "OphthaGuard"
+  }
+  note {
+    text {
+      value: "Shade treatment for extreme light sensitivity"
+    }
+  }
+}
+lens_specification {
+  product {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/ex-visionprescriptionproduct"
+      }
+      code {
+        value: "contact"
+      }
+    }
+  }
+  eye {
+    value: LEFT
+  }
+  cylinder {
+    value: "-3.50"
+  }
+  axis {
+    value: 160
+  }
+  add {
+    value: "1.75"
+  }
+  power {
+    value: "-2.75"
+  }
+  back_curve {
+    value: "8.7"
+  }
+  diameter {
+    value: "14.0"
+  }
+  duration {
+    value {
+      value: "1"
+    }
+    unit {
+      value: "month"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "month"
+    }
+  }
+  color {
+    value: "green"
+  }
+  brand {
+    value: "OphthaGuard"
+  }
+  note {
+    text {
+      value: "Shade treatment for extreme light sensitivity"
+    }
+  }
+}

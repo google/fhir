@@ -1,0 +1,62 @@
+id {
+  value: "infant-mom"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: infant-mom</p><p><b>name</b>: Leia Solo (OFFICIAL), Leia Organa (MAIDEN)</p><p><b>gender</b>: female</p><p><b>birthDate</b>: 12/10/1995</p><p><b>maritalStatus</b>: Married <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-MaritalStatus code \'M\' = \'Married\', given as \'Married\'})</span></p><p><b>generalPractitioner</b>: <a>Too-Onebee</a></p></div>"
+  }
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  family {
+    value: "Solo"
+  }
+  given {
+    value: "Leia"
+  }
+}
+name {
+  use {
+    value: MAIDEN
+  }
+  family {
+    value: "Organa"
+  }
+  given {
+    value: "Leia"
+  }
+}
+gender {
+  value: FEMALE
+}
+birth_date {
+  value_us: 813420000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+marital_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus"
+    }
+    code {
+      value: "M"
+    }
+    display {
+      value: "Married"
+    }
+  }
+}
+general_practitioner {
+  practitioner_id {
+    value: "21B"
+  }
+  display {
+    value: "Too-Onebee"
+  }
+}

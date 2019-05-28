@@ -1,0 +1,153 @@
+id {
+  value: "consent-example-signature"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: consent-example-signature</p><p><b>identifier</b>: 494e0c7a-a69e-4fb4-9d02-6aae747790d7</p><p><b>status</b>: active</p><p><b>scope</b>: Privacy Consent <span>(Details : {http://terminology.hl7.org/CodeSystem/consentscope code \'patient-privacy\' = \'Privacy Consent)</span></p><p><b>category</b>: Notice of Privacy Practices <span>(Details : {http://terminology.hl7.org/CodeSystem/consentcategorycodes code \'npp\' = \'Notice of Privacy Practices)</span></p><p><b>patient</b>: <a>Patient/72</a></p><p><b>dateTime</b>: 26/05/2016 12:41:10 AM</p><p><b>performer</b>: <a>Patient/72</a></p><p><b>organization</b>: <a>Organization/f001</a></p><p><b>policyRule</b>: opt-in <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ActCode code \'OPTIN\' = \'opt-in)</span></p><blockquote><p><b>provision</b></p><p><b>period</b>: 10/10/2015 --&gt; 10/10/2016</p><h3>Actors</h3><table><tr><td>-</td><td><b>Role</b></td><td><b>Reference</b></td></tr><tr><td>*</td><td>primary information recipient <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ParticipationType code \'PRCP\' = \'primary information recipient)</span></td><td><a>Practitioner/13</a></td></tr></table><h3>Provisions</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table></blockquote></div>"
+  }
+}
+identifier {
+  system {
+    value: "urn:oid:2.16.840.1.113883.3.72.5.9.1"
+  }
+  value {
+    value: "494e0c7a-a69e-4fb4-9d02-6aae747790d7"
+  }
+}
+status {
+  value: ACTIVE
+}
+scope {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/consentscope"
+    }
+    code {
+      value: "patient-privacy"
+    }
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/consentcategorycodes"
+    }
+    code {
+      value: "npp"
+    }
+  }
+}
+patient {
+  patient_id {
+    value: "72"
+  }
+}
+date_time {
+  value_us: 1464237670000000
+  timezone: "-04:00"
+  precision: SECOND
+}
+performer {
+  patient_id {
+    value: "72"
+  }
+}
+organization {
+  organization_id {
+    value: "f001"
+  }
+}
+policy_rule {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "OPTIN"
+    }
+  }
+}
+provision {
+  period {
+    start {
+      value_us: 1444395600000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+    end {
+      value_us: 1476018000000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      practitioner_id {
+        value: "13"
+      }
+    }
+  }
+  provision {
+    type {
+      value: PERMIT
+    }
+    actor {
+      role {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+          }
+          code {
+            value: "AUT"
+          }
+        }
+      }
+      reference {
+        practitioner_id {
+          value: "xcda-author"
+        }
+      }
+    }
+    class_value {
+      system {
+        value: "urn:ietf:bcp:13"
+      }
+      code {
+        value: "application/hl7-cda+xml"
+      }
+    }
+    code {
+      coding {
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "34133-9"
+        }
+      }
+    }
+    code {
+      coding {
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "18842-5"
+        }
+      }
+    }
+  }
+}

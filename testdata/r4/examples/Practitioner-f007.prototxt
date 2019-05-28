@@ -1,0 +1,105 @@
+id {
+  value: "f007"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f007</p><p><b>identifier</b>: 874635264 (OFFICIAL), 567IUI51C154 (USUAL)</p><p><b>name</b>: Simone Heps (OFFICIAL)</p><p><b>telecom</b>: ph: 020556936(WORK), S.M.Heps@bmc.nl(WORK), fax: 0205669283(WORK)</p><p><b>address</b>: Galapagosweg 91 Den Burg 9105 PZ NLD (WORK)</p><p><b>gender</b>: female</p><p><b>birthDate</b>: 07/11/1971</p></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "urn:oid:2.16.528.1.1007.3.1"
+  }
+  value {
+    value: "874635264"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  system {
+    value: "urn:oid:2.16.840.1.113883.2.4.6.3"
+  }
+  value {
+    value: "567IUI51C154"
+  }
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  family {
+    value: "Heps"
+  }
+  given {
+    value: "Simone"
+  }
+  suffix {
+    value: "MD"
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "020556936"
+  }
+  use {
+    value: WORK
+  }
+}
+telecom {
+  system {
+    value: EMAIL
+  }
+  value {
+    value: "S.M.Heps@bmc.nl"
+  }
+  use {
+    value: WORK
+  }
+}
+telecom {
+  system {
+    value: FAX
+  }
+  value {
+    value: "0205669283"
+  }
+  use {
+    value: WORK
+  }
+}
+address {
+  use {
+    value: WORK
+  }
+  line {
+    value: "Galapagosweg 91"
+  }
+  city {
+    value: "Den Burg"
+  }
+  postal_code {
+    value: "9105 PZ"
+  }
+  country {
+    value: "NLD"
+  }
+}
+gender {
+  value: FEMALE
+}
+birth_date {
+  value_us: 58280400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}

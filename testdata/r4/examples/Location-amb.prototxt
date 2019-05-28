@@ -1,0 +1,65 @@
+id {
+  value: "amb"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Mobile Clinic</div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+name {
+  value: "BUMC Ambulance"
+}
+description {
+  value: "Ambulance provided by Burgers University Medical Center"
+}
+mode {
+  value: KIND
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+    }
+    code {
+      value: "AMB"
+    }
+    display {
+      value: "Ambulance"
+    }
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "2329"
+  }
+  use {
+    value: MOBILE
+  }
+}
+physical_type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/location-physical-type"
+    }
+    code {
+      value: "ve"
+    }
+    display {
+      value: "Vehicle"
+    }
+  }
+}
+managing_organization {
+  organization_id {
+    value: "f001"
+  }
+}

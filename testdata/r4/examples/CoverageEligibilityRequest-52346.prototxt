@@ -1,0 +1,107 @@
+id {
+  value: "52346"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the CoverageEligibilityRequest</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/coverageelegibilityrequest"
+  }
+  value {
+    value: "52346"
+  }
+}
+status {
+  value: ACTIVE
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+purpose {
+  value: VALIDATION
+}
+purpose {
+  value: BENEFITS
+}
+patient {
+  patient_id {
+    value: "pat1"
+  }
+}
+serviced {
+  date {
+    value_us: 1410876000000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+enterer {
+  identifier {
+    system {
+      value: "http://happyvalleyclinic.com/staff"
+    }
+    value {
+      value: "14"
+    }
+  }
+}
+provider {
+  organization_id {
+    value: "1"
+  }
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+facility {
+  identifier {
+    system {
+      value: "http://statecliniclicensor.com/clinicid"
+    }
+    value {
+      value: "G35B9"
+    }
+  }
+}
+insurance {
+  coverage {
+    coverage_id {
+      value: "9876B1"
+    }
+  }
+  business_arrangement {
+    value: "NB8742"
+  }
+}
+item {
+  category {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+      }
+      code {
+        value: "69"
+      }
+      display {
+        value: "Maternity"
+      }
+    }
+  }
+}

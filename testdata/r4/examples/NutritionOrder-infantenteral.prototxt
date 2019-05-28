@@ -1,0 +1,173 @@
+id {
+  value: "infantenteral"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: infantenteral</p><p><b>identifier</b>: 123</p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>patient</b>: <a>Peter Chalmers</a></p><p><b>encounter</b>: <a>Inpatient</a></p><p><b>dateTime</b>: 17/09/2014</p><p><b>orderer</b>: <a>Dr Adam Careful</a></p><blockquote><p><b>enteralFormula</b></p><p><b>baseFormulaType</b>: infant formula + iron <span>(Details : {SNOMED CT code \'412414007\' = \'Infant formula + iron\', given as \'infant formula + iron\'})</span></p><p><b>baseFormulaProductName</b>: Acme Infant Formula + Iron</p><p><b>additiveType</b>: Carbohydrate <span>(Details : {http://terminology.hl7.org/CodeSystem/entformula-additive code \'carbohydrate\' = \'Carbohydrate\', given as \'Carbohydrate\'})</span></p><p><b>additiveProductName</b>: Acme High Carbohydrate Additive</p><p><b>caloricDensity</b>: 20 calories per ounce<span> (Details: UCUM code cal/[foz_us] = \'cal/foz_us\')</span></p><p><b>routeofAdministration</b>: Swallow, oral <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration code \'PO\' = \'Swallow, oral\', given as \'Swallow, oral\'})</span></p><h3>Administrations</h3><table><tr><td>-</td><td><b>Schedule</b></td><td><b>Quantity</b></td></tr><tr><td>*</td><td>Starting 17/09/2014, Do Once per 3 hours</td><td>4 ounces<span> (Details: UCUM code [foz_us] = \'foz_us\')</span></td></tr></table><p><b>maxVolumeToDeliver</b>: 32 ounces<span> (Details: UCUM code [foz_us] = \'foz_us\')</span></p><p><b>administrationInstruction</b>: Add high calorie high carbohydrate additive to increase cal/oz from 24 cal/oz to 27 cal/oz.</p></blockquote></div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.acme.org/nutritionorders"
+  }
+  value {
+    value: "123"
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: ORDER
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter Chalmers"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+  display {
+    value: "Inpatient"
+  }
+}
+date_time {
+  value_us: 1410876000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+orderer {
+  practitioner_id {
+    value: "example"
+  }
+  display {
+    value: "Dr Adam Careful"
+  }
+}
+enteral_formula {
+  base_formula_type {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "412414007"
+      }
+      display {
+        value: "infant formula + iron"
+      }
+    }
+  }
+  base_formula_product_name {
+    value: "Acme Infant Formula + Iron"
+  }
+  additive_type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/entformula-additive"
+      }
+      code {
+        value: "carbohydrate"
+      }
+      display {
+        value: "Carbohydrate"
+      }
+    }
+  }
+  additive_product_name {
+    value: "Acme High Carbohydrate Additive"
+  }
+  caloric_density {
+    value {
+      value: "20"
+    }
+    unit {
+      value: "calories per ounce"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "cal/[foz_us]"
+    }
+  }
+  routeof_administration {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration"
+      }
+      code {
+        value: "PO"
+      }
+      display {
+        value: "Swallow, oral"
+      }
+      user_selected {
+        value: true
+      }
+    }
+  }
+  administration {
+    schedule {
+      repeat {
+        bounds {
+          period {
+            start {
+              value_us: 1410876000000000
+              timezone: "Australia/Sydney"
+              precision: DAY
+            }
+          }
+        }
+        frequency {
+          value: 1
+        }
+        period {
+          value: "3"
+        }
+        period_unit {
+          value: H
+        }
+      }
+    }
+    quantity {
+      value {
+        value: "4"
+      }
+      unit {
+        value: "ounces"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "[foz_us]"
+      }
+    }
+  }
+  max_volume_to_deliver {
+    value {
+      value: "32"
+    }
+    unit {
+      value: "ounces"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "[foz_us]"
+    }
+  }
+  administration_instruction {
+    value: "Add high calorie high carbohydrate additive to increase cal/oz from 24 cal/oz to 27 cal/oz."
+  }
+}

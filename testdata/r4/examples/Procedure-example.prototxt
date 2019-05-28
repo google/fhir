@@ -1,0 +1,83 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Routine Appendectomy</div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "80146002"
+    }
+    display {
+      value: "Appendectomy (Procedure)"
+    }
+  }
+  text {
+    value: "Appendectomy"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+performed {
+  date_time {
+    value_us: 1365080400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+recorder {
+  practitioner_id {
+    value: "example"
+  }
+  display {
+    value: "Dr Cecil Surgeon"
+  }
+}
+asserter {
+  practitioner_id {
+    value: "example"
+  }
+  display {
+    value: "Dr Cecil Surgeon"
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "example"
+    }
+    display {
+      value: "Dr Cecil Surgeon"
+    }
+  }
+}
+reason_code {
+  text {
+    value: "Generalized abdominal pain 24 hours. Localized in RIF with rebound and guarding"
+  }
+}
+follow_up {
+  text {
+    value: "ROS 5 days  - 2013-04-10"
+  }
+}
+note {
+  text {
+    value: "Routine Appendectomy. Appendix was inflamed and in retro-caecal position"
+  }
+}

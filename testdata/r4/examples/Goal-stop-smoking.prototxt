@@ -1,0 +1,71 @@
+id {
+  value: "stop-smoking"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<p> A simple care goal for a patient to stop smoking.</p>\n\t\t</div>"
+  }
+}
+identifier {
+  value {
+    value: "123"
+  }
+}
+lifecycle_status {
+  value: COMPLETED
+}
+achievement_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/goal-achievement"
+    }
+    code {
+      value: "achieved"
+    }
+    display {
+      value: "Achieved"
+    }
+  }
+  text {
+    value: "Achieved"
+  }
+}
+description {
+  text {
+    value: "Stop smoking"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+start {
+  date {
+    value_us: 1428152400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+outcome_code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "8517006"
+    }
+    display {
+      value: "Ex-smoker (finding)"
+    }
+  }
+  text {
+    value: "Former smoker"
+  }
+}

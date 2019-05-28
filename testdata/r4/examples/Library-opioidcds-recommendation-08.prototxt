@@ -1,0 +1,247 @@
+id {
+  value: "opioidcds-recommendation-08"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: opioidcds-recommendation-08</p><p><b>identifier</b>: OpioidCDS_REC_04 (OFFICIAL)</p><p><b>version</b>: 0.1.0</p><p><b>title</b>: Opioid CDS Logic for recommendation #4</p><p><b>status</b>: active</p><p><b>experimental</b>: false</p><p><b>type</b>: Logic Library <span>(Details : {http://terminology.hl7.org/CodeSystem/library-type code \'logic-library\' = \'Logic Library\', given as \'Logic Library\'})</span></p><p><b>date</b>: 25/03/2018 1:49:09 PM</p><p><b>publisher</b>: Centers for Disease Control and Prevention (CDC)</p><p><b>description</b>: Opioid decision support logic to consider offering Naloxone when factors that increase risk for opioid overdose are present.</p><p><b>useContext</b>: , </p><p><b>jurisdiction</b>: United States of America <span>(Details : {urn:iso:std:iso:3166 code \'US\' = \'United States of America\', given as \'United States of America\'})</span></p><p><b>purpose</b>: The purpose of this library is to determine whether increased risks for opioid overdose are present.</p><p><b>usage</b>: This library is used to recommend the prescriber/user to consider offering Naloxone when increased risks for opioid overdose are present.</p><p><b>copyright</b>: \302\251 CDC 2016+.</p><p><b>topic</b>: Opioid Prescribing <span>(Details )</span></p><p><b>author</b>: , , , </p><p><b>relatedArtifact</b>: , , </p><p><b>dataRequirement</b>: , , , </p><p><b>content</b>: </p></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  value {
+    value: "OpioidCDS_REC_04"
+  }
+}
+version {
+  value: "0.1.0"
+}
+title {
+  value: "Opioid CDS Logic for recommendation #4"
+}
+status {
+  value: ACTIVE
+}
+experimental {
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/library-type"
+    }
+    code {
+      value: "logic-library"
+    }
+    display {
+      value: "Logic Library"
+    }
+  }
+}
+date {
+  value_us: 1522007349000000
+  timezone: "-06:00"
+  precision: SECOND
+}
+publisher {
+  value: "Centers for Disease Control and Prevention (CDC)"
+}
+description {
+  value: "Opioid decision support logic to consider offering Naloxone when factors that increase risk for opioid overdose are present."
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+    display {
+      value: "Clinical Focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "182888003"
+        }
+        display {
+          value: "Medication requested (situation)"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+    display {
+      value: "Clinical Focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "82423001"
+        }
+        display {
+          value: "Chronic pain (finding)"
+        }
+      }
+    }
+  }
+}
+jurisdiction {
+  coding {
+    system {
+      value: "urn:iso:std:iso:3166"
+    }
+    code {
+      value: "US"
+    }
+    display {
+      value: "United States of America"
+    }
+  }
+}
+purpose {
+  value: "The purpose of this library is to determine whether increased risks for opioid overdose are present."
+}
+usage {
+  value: "This library is used to recommend the prescriber/user to consider offering Naloxone when increased risks for opioid overdose are present."
+}
+copyright {
+  value: "\302\251 CDC 2016+."
+}
+topic {
+  text {
+    value: "Opioid Prescribing"
+  }
+}
+author {
+  name {
+    value: "Kensaku Kawamoto, MD, PhD, MHS"
+  }
+}
+author {
+  name {
+    value: "Bryn Rhodes"
+  }
+}
+author {
+  name {
+    value: "Floyd Eisenberg, MD, MPH"
+  }
+}
+author {
+  name {
+    value: "Robert McClure, MD, MPH"
+  }
+}
+related_artifact {
+  type {
+    value: DOCUMENTATION
+  }
+  display {
+    value: "CDC guideline for prescribing opioids for chronic pain"
+  }
+  url {
+    value: "https://guidelines.gov/summaries/summary/50153/cdc-guideline-for-prescribing-opioids-for-chronic-pain---united-states-2016#420"
+  }
+}
+related_artifact {
+  type {
+    value: DEPENDS_ON
+  }
+  resource {
+    value: "Library/opioidcds-common"
+  }
+}
+related_artifact {
+  type {
+    value: DOCUMENTATION
+  }
+  display {
+    value: "MME Conversion Tables"
+  }
+  url {
+    value: "https://www.cdc.gov/drugoverdose/pdf/calculating_total_daily_dose-a.pdf"
+  }
+}
+data_requirement {
+  type {
+    value: MEDICATION_REQUEST
+  }
+  code_filter {
+    path {
+      value: "medicationCodeableConcept"
+    }
+    value_set {
+      value: "http://example.org/fhir/ValueSet/naloxone"
+    }
+  }
+}
+data_requirement {
+  type {
+    value: MEDICATION_REQUEST
+  }
+  code_filter {
+    path {
+      value: "medicationCodeableConcept"
+    }
+    value_set {
+      value: "http://example.org/fhir/ValueSet/opioids-abused-in-ambulatory-care"
+    }
+  }
+}
+data_requirement {
+  type {
+    value: MEDICATION_REQUEST
+  }
+  code_filter {
+    path {
+      value: "medicationCodeableConcept"
+    }
+    value_set {
+      value: "http://example.org/fhir/ValueSet/benzodiazepines"
+    }
+  }
+}
+data_requirement {
+  type {
+    value: CONDITION
+  }
+  code_filter {
+    path {
+      value: "code"
+    }
+    value_set {
+      value: "http://example.org/fhir/ValueSet/substance-abuse"
+    }
+  }
+}
+content {
+  content_type {
+    value: "application/elm+xml"
+  }
+  data {
+    value: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<library xmlns=\"urn:hl7-org:elm:r1\" xmlns:t=\"urn:hl7-org:elm-types:r1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:fhir=\"http://hl7.org/fhir\" xmlns:qdm43=\"urn:healthit-gov:qdm:v4_3\" xmlns:qdm53=\"urn:healthit-gov:qdm:v5_3\" xmlns:a=\"urn:hl7-org:cql-annotations:r1\">\n   <annotation startLine=\"63\" startChar=\"11\" endLine=\"63\" endChar=\"48\" message=\"Could not resolve code path medicationCodeableConcept for the type of the retrieve FHIR.MedicationRequest.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"63\" startChar=\"11\" endLine=\"63\" endChar=\"48\" message=\"Could not resolve membership operator for terminology target of the retrieve.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"81\" startChar=\"5\" endLine=\"81\" endChar=\"68\" message=\"Could not resolve code path medicationCodeableConcept for the type of the retrieve FHIR.MedicationRequest.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"81\" startChar=\"5\" endLine=\"81\" endChar=\"68\" message=\"Could not resolve membership operator for terminology target of the retrieve.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"74\" startChar=\"11\" endLine=\"74\" endChar=\"55\" message=\"Could not resolve code path medicationCodeableConcept for the type of the retrieve FHIR.MedicationRequest.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"74\" startChar=\"11\" endLine=\"74\" endChar=\"55\" message=\"Could not resolve membership operator for terminology target of the retrieve.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"77\" startChar=\"12\" endLine=\"77\" endChar=\"41\" message=\"Could not resolve membership operator for terminology target of the retrieve.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <identifier id=\"OpioidCDS_STU4_REC_08\" version=\"0.1.0\"/>\n   <schemaIdentifier id=\"urn:hl7-org:elm\" version=\"r1\"/>\n   <usings>\n      <def localIdentifier=\"System\" uri=\"urn:hl7-org:elm-types:r1\"/>\n      <def localIdentifier=\"FHIR\" uri=\"http://hl7.org/fhir\" version=\"3.2.0\"/>\n   </usings>\n   <includes>\n      <def localIdentifier=\"Common\" path=\"OpioidCDS_STU4_Common\" version=\"0.1.0\"/>\n   </includes>\n   <parameters>\n      <def name=\"ContextPrescriptions\" accessLevel=\"Public\">\n         <parameterTypeSpecifier xsi:type=\"ListTypeSpecifier\">\n            <elementType name=\"fhir:MedicationRequest\" xsi:type=\"NamedTypeSpecifier\"/>\n         </parameterTypeSpecifier>\n      </def>\n   </parameters>\n   <valueSets>\n      <def name=\"Substance Abuse\" id=\"TODO\" accessLevel=\"Public\"/>\n   </valueSets>\n   <statements>\n      <def name=\"Patient\" context=\"Patient\">\n         <expression xsi:type=\"SingletonFrom\">\n            <operand dataType=\"fhir:Patient\" xsi:type=\"Retrieve\"/>\n         </expression>\n      </def>\n      <def name=\"Validate Trigger Event\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Exists\">\n            <operand xsi:type=\"Query\">\n               <source alias=\"triggerScript\">\n                  <expression name=\"ContextPrescriptions\" xsi:type=\"ParameterRef\"/>\n               </source>\n               <where name=\"IsOpioidWithAmbulatoryAbusePotential\" libraryName=\"Common\" xsi:type=\"FunctionRef\">\n                  <operand name=\"ToCode\" libraryName=\"Common\" xsi:type=\"FunctionRef\">\n                     <operand xsi:type=\"Indexer\">\n                        <operand path=\"coding\" xsi:type=\"Property\">\n                           <source path=\"medication\" scope=\"triggerScript\" xsi:type=\"Property\"/>\n                        </operand>\n                        <operand valueType=\"t:Integer\" value=\"0\" xsi:type=\"Literal\"/>\n                     </operand>\n                  </operand>\n               </where>\n            </operand>\n         </expression>\n      </def>\n      <def name=\"Exclusion Criteria\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Exists\">\n            <operand dataType=\"fhir:MedicationRequest\" codeProperty=\"medicationCodeableConcept\" xsi:type=\"Retrieve\">\n               <codes name=\"Naloxone\" libraryName=\"Common\" xsi:type=\"ValueSetRef\"/>\n            </operand>\n         </expression>\n      </def>\n      <def name=\"Get Active Ambulatory Opioid Rx\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Union\">\n            <operand xsi:type=\"Query\">\n               <source alias=\"Rx\">\n                  <expression dataType=\"fhir:MedicationRequest\" codeProperty=\"medicationCodeableConcept\" xsi:type=\"Retrieve\">\n                     <codes name=\"Ambulatory Abuse Potential Opioids\" libraryName=\"Common\" xsi:type=\"ValueSetRef\"/>\n                  </expression>\n               </source>\n               <where xsi:type=\"And\">\n                  <operand xsi:type=\"Equal\">\n                     <operand path=\"value\" xsi:type=\"Property\">\n                        <source path=\"status\" scope=\"Rx\" xsi:type=\"Property\"/>\n                     </operand>\n                     <operand valueType=\"t:String\" value=\"active\" xsi:type=\"Literal\"/>\n                  </operand>\n                  <operand xsi:type=\"Equal\">\n                     <operand path=\"value\" xsi:type=\"Property\">\n                        <source path=\"code\" xsi:type=\"Property\">\n                           <source xsi:type=\"Indexer\">\n                              <operand xsi:type=\"Flatten\">\n                                 <operand xsi:type=\"Query\">\n                                    <source alias=\"$this\">\n                                       <expression path=\"category\" scope=\"Rx\" xsi:type=\"Property\"/>\n                                    </source>\n                                    <where xsi:type=\"Not\">\n                                       <operand xsi:type=\"IsNull\">\n                                          <operand path=\"coding\" xsi:type=\"Property\">\n                                             <source name=\"$this\" xsi:type=\"AliasRef\"/>\n                                          </operand>\n                                       </operand>\n                                    </where>\n                                    <return>\n                                       <expression path=\"coding\" xsi:type=\"Property\">\n                                          <source name=\"$this\" xsi:type=\"AliasRef\"/>\n                                       </expression>\n                                    </return>\n                                 </operand>\n                              </operand>\n                              <operand valueType=\"t:Integer\" value=\"0\" xsi:type=\"Literal\"/>\n                           </source>\n                        </source>\n                     </operand>\n                     <operand valueType=\"t:String\" value=\"outpatient\" xsi:type=\"Literal\"/>\n                  </operand>\n               </where>\n            </operand>\n            <operand name=\"ContextPrescriptions\" xsi:type=\"ParameterRef\"/>\n         </expression>\n      </def>\n      <def name=\"Average MME\" context=\"Patient\" accessLevel=\"Public\">\n         <expression name=\"TotalMME\" libraryName=\"Common\" xsi:type=\"FunctionRef\">\n            <operand name=\"Get Active Ambulatory Opioid Rx\" xsi:type=\"ExpressionRef\"/>\n         </expression>\n      </def>\n      <def name=\"MME >= 50 mg/d?\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"If\">\n            <condition asType=\"t:Boolean\" xsi:type=\"As\">\n               <operand xsi:type=\"IsNull\">\n                  <operand name=\"Average MME\" xsi:type=\"ExpressionRef\"/>\n               </operand>\n            </condition>\n            <then valueType=\"t:Boolean\" value=\"false\" xsi:type=\"Literal\"/>\n            <else xsi:type=\"GreaterOrEqual\">\n               <operand name=\"Average MME\" xsi:type=\"ExpressionRef\"/>\n               <operand value=\"50\" unit=\"mg/d\" xsi:type=\"Quantity\"/>\n            </else>\n         </expression>\n      </def>\n      <def name=\"On Benzodiazepine\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Exists\">\n            <operand dataType=\"fhir:MedicationRequest\" codeProperty=\"medicationCodeableConcept\" xsi:type=\"Retrieve\">\n               <codes name=\"Benzodiazepines\" libraryName=\"Common\" xsi:type=\"ValueSetRef\"/>\n            </operand>\n         </expression>\n      </def>\n      <def name=\"Inclusion Criteria\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"And\">\n            <operand xsi:type=\"And\">\n               <operand name=\"Validate Trigger Event\" xsi:type=\"ExpressionRef\"/>\n               <operand xsi:type=\"Not\">\n                  <operand name=\"Exclusion Criteria\" xsi:type=\"ExpressionRef\"/>\n               </operand>\n            </operand>\n            <operand xsi:type=\"Or\">\n               <operand name=\"MME >= 50 mg/d?\" xsi:type=\"ExpressionRef\"/>\n               <operand name=\"On Benzodiazepine\" xsi:type=\"ExpressionRef\"/>\n            </operand>\n         </expression>\n      </def>\n      <def name=\"Has Substance Abuse History\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Exists\">\n            <operand dataType=\"fhir:Condition\" codeProperty=\"code\" xsi:type=\"Retrieve\">\n               <codes name=\"Substance Abuse\" xsi:type=\"ValueSetRef\"/>\n            </operand>\n         </expression>\n      </def>\n      <def name=\"Get Indicator\" context=\"Patient\" accessLevel=\"Public\">\n         <expression valueType=\"t:String\" value=\"warning\" xsi:type=\"Literal\"/>\n      </def>\n      <def name=\"Get Summary\" context=\"Patient\" accessLevel=\"Public\">\n         <expression valueType=\"t:String\" value=\"Incorporate into the management plan strategies to mitigate risk; including considering offering naloxone when factors that increase risk for opioid overdose are present\" xsi:type=\"Literal\"/>\n      </def>\n      <def name=\"Get Notification\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Concatenate\">\n            <operand valueType=\"t:String\" value=\"Consider offering naloxone given following risk factor(s) for opioid overdose: \" xsi:type=\"Literal\"/>\n            <operand xsi:type=\"If\">\n               <condition asType=\"t:Boolean\" xsi:type=\"As\">\n                  <operand name=\"MME >= 50 mg/d?\" xsi:type=\"ExpressionRef\"/>\n               </condition>\n               <then xsi:type=\"Concatenate\">\n                  <operand xsi:type=\"Concatenate\">\n                     <operand valueType=\"t:String\" value=\"Average MME (\" xsi:type=\"Literal\"/>\n                     <operand xsi:type=\"ToString\">\n                        <operand name=\"Average MME\" xsi:type=\"ExpressionRef\"/>\n                     </operand>\n                  </operand>\n                  <operand valueType=\"t:String\" value=\") >= 50 mg/day, \" xsi:type=\"Literal\"/>\n               </then>\n               <else xsi:type=\"Concatenate\">\n                  <operand valueType=\"t:String\" value=\"\" xsi:type=\"Literal\"/>\n                  <operand xsi:type=\"If\">\n                     <condition asType=\"t:Boolean\" xsi:type=\"As\">\n                        <operand name=\"On Benzodiazepine\" xsi:type=\"ExpressionRef\"/>\n                     </condition>\n                     <then valueType=\"t:String\" value=\"concurrent use of benzodiazepine, \" xsi:type=\"Literal\"/>\n                     <else valueType=\"t:String\" value=\"\" xsi:type=\"Literal\"/>\n                  </operand>\n               </else>\n            </operand>\n         </expression>\n      </def>\n   </statements>\n</library>\n"
+  }
+}

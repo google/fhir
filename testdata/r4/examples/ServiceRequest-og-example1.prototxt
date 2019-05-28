@@ -1,0 +1,57 @@
+id {
+  value: "og-example1"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: og-example1</p><p><b>status</b>: active</p><p><b>intent</b>: original-order</p><p><b>code</b>: ABCB4 gene mutation analysis <span>(Details : {LOINC code \'49874-1\' = \'ABCB4 gene mutation analysis in Blood or Tissue by Molecular genetics method Narrative)</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>encounter</b>: <a>Encounter/example</a></p><p><b>occurrence</b>: 12/05/2014 4:16:00 PM</p><p><b>requester</b>: <a>Practitioner/example</a></p><p><b>performer</b>: <a>Practitioner/example</a></p></div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: ORIGINAL_ORDER
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "49874-1"
+    }
+  }
+  text {
+    value: "ABCB4 gene mutation analysis"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+occurrence {
+  date_time {
+    value_us: 1399936560000000
+    timezone: "-07:00"
+    precision: SECOND
+  }
+}
+requester {
+  practitioner_id {
+    value: "example"
+  }
+}
+performer {
+  practitioner_id {
+    value: "example"
+  }
+}

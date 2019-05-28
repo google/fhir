@@ -1,0 +1,131 @@
+id {
+  value: "biopsy"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Biopsy of suspected melanoma L) arm</div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+category {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "103693007"
+    }
+    display {
+      value: "Diagnostic procedure (procedure)"
+    }
+  }
+  text {
+    value: "Diagnostic procedure"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "90105005"
+    }
+    display {
+      value: "Biopsy of soft tissue of forearm (Procedure)"
+    }
+  }
+  text {
+    value: "Biopsy of suspected melanoma L) arm"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+performed {
+  date_time {
+    value_us: 1391346000000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "example"
+    }
+    display {
+      value: "Dr Bert Biopser"
+    }
+  }
+}
+reason_code {
+  text {
+    value: "Dark lesion l) forearm. getting darker last 3 months."
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "368225008"
+    }
+    display {
+      value: "Entire Left Forearm"
+    }
+  }
+  text {
+    value: "Left forearm"
+  }
+}
+complication {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "67750007"
+    }
+    display {
+      value: "Ineffective airway clearance (finding)"
+    }
+  }
+  text {
+    value: "Ineffective airway clearance"
+  }
+}
+follow_up {
+  text {
+    value: "Review in clinic"
+  }
+}
+note {
+  text {
+    value: "Standard Biopsy"
+  }
+}
+used_code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "79068005"
+    }
+    display {
+      value: "Needle, device (physical object)"
+    }
+  }
+  text {
+    value: "30-guage needle"
+  }
+}

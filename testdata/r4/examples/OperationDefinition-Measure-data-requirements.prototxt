@@ -1,0 +1,158 @@
+id {
+  value: "Measure-data-requirements"
+}
+meta {
+  last_updated {
+    value_us: 1545910674724000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <h2>Data Requirements</h2>\n            <p>OPERATION: Data Requirements</p>\n            <p>The official URL for this operation definition is: </p>\n            <pre>http://hl7.org/fhir/OperationDefinition/Measure-data-requirements</pre>\n            <div>\n              <p>The data-requirements operation aggregates and returns the parameters and data requirements for the measure and all its dependencies as a single module definition</p>\n\n            </div>\n            <p>URL: [base]/Measure/[id]/$data-requirements</p>\n            <p>Parameters</p>\n            <table class=\"grid\">\n              <tr>\n                <td>\n                  <b>Use</b>\n                </td>\n                <td>\n                  <b>Name</b>\n                </td>\n                <td>\n                  <b>Cardinality</b>\n                </td>\n                <td>\n                  <b>Type</b>\n                </td>\n                <td>\n                  <b>Binding</b>\n                </td>\n                <td>\n                  <b>Documentation</b>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>periodStart</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#date\">date</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The start of the measurement period. In keeping with the semantics of the date parameter used in the FHIR search operation, the period will start at the beginning of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period start to be 2014-01-01T00:00:00 inclusive</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>periodEnd</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#date\">date</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The end of the measurement period. The period will end at the end of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period end to be 2014-12-31T23:59:59 inclusive</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>return</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"library.html\">Library</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The result of the requirements gathering is a module-definition Library that describes the aggregate parameters, data requirements, and dependencies of the measure</p>\n\n                  </div>\n                </td>\n              </tr>\n            </table>\n            <div>\n              <p>The effect of invoking this operation is to determine the aggregate set of data requirements and dependencies for the measure. The result is a Library resource with a type of module-definition that contains all the parameter definitions and data requirements of the libraries referenced by the measures. Implementations SHOULD aggregate data requirements intelligently (i.e. by collapsing overlapping data requirements). This operation defines what resources are subsequently referenced in the evaluatedResources element of the MeasureReport when submitting measure data</p>\n\n            </div>\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+      value: 2
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "trial-use"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/OperationDefinition/Measure-data-requirements"
+}
+version {
+  value: "4.0.0"
+}
+name {
+  value: "Data Requirements"
+}
+status {
+  value: DRAFT
+}
+kind {
+  value: OPERATION
+}
+date {
+  value_us: 1545910674000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+publisher {
+  value: "HL7 (FHIR Project)"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "fhir@lists.hl7.org"
+    }
+  }
+}
+description {
+  value: "The data-requirements operation aggregates and returns the parameters and data requirements for the measure and all its dependencies as a single module definition"
+}
+code {
+  value: "data-requirements"
+}
+comment {
+  value: "The effect of invoking this operation is to determine the aggregate set of data requirements and dependencies for the measure. The result is a Library resource with a type of module-definition that contains all the parameter definitions and data requirements of the libraries referenced by the measures. Implementations SHOULD aggregate data requirements intelligently (i.e. by collapsing overlapping data requirements). This operation defines what resources are subsequently referenced in the evaluatedResources element of the MeasureReport when submitting measure data"
+}
+resource {
+  value: MEASURE
+}
+system {
+}
+type {
+}
+instance {
+  value: true
+}
+parameter {
+  name {
+    value: "periodStart"
+  }
+  use {
+    value: IN
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The start of the measurement period. In keeping with the semantics of the date parameter used in the FHIR search operation, the period will start at the beginning of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period start to be 2014-01-01T00:00:00 inclusive"
+  }
+  type {
+    value: DATE
+  }
+}
+parameter {
+  name {
+    value: "periodEnd"
+  }
+  use {
+    value: IN
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The end of the measurement period. The period will end at the end of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period end to be 2014-12-31T23:59:59 inclusive"
+  }
+  type {
+    value: DATE
+  }
+}
+parameter {
+  name {
+    value: "return"
+  }
+  use {
+    value: OUT
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The result of the requirements gathering is a module-definition Library that describes the aggregate parameters, data requirements, and dependencies of the measure"
+  }
+  type {
+    value: LIBRARY
+  }
+}

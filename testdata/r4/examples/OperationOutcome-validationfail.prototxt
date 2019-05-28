@@ -1,0 +1,30 @@
+id {
+  value: "validationfail"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Error parsing resource XML (Unknown Content &quot;label&quot; @ /Patient/identifier/label) at Patient.identifier</p>\n    </div>"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: STRUCTURE
+  }
+  details {
+    text {
+      value: "Error parsing resource XML (Unknown Content \"label\""
+    }
+  }
+  location {
+    value: "/f:Patient/f:identifier"
+  }
+  expression {
+    value: "Patient.identifier"
+  }
+}

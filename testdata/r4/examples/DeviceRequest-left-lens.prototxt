@@ -1,0 +1,164 @@
+id {
+  value: "left-lens"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: left-lens</p><p><b>identifier</b>: 15013L</p><p><b>groupIdentifier</b>: 15013</p><p><b>status</b>: completed</p><p><b>intent</b>: original-order</p><p><b>code</b>: Lens <span>(Details : {http://terminology.hl7.org/CodeSystem/ex-visionprescriptionproduct code \'lens\' = \'Lens)</span></p><blockquote><p><b>parameter</b></p><p><b>code</b>: sphere, left lens <span>(Details : {LOINC code \'28842-3\' = \'Sphere distance Glasses prescription.lens - left\', given as \'Sphere distance Glasses prescription.lens - left\'})</span></p><p><b>value</b>: -1.00 Diopter<span> (Details: UCUM code [diop] = \'diop\')</span></p></blockquote><blockquote><p><b>parameter</b></p><p><b>code</b>: cylinder, left lens <span>(Details : {LOINC code \'28843-1\' = \'Cylinder distance Glasses prescription.lens - left\', given as \'Cylinder base distance Glasses prescription.lens - left\'})</span></p><p><b>value</b>: -0.50 Diopter<span> (Details: UCUM code [diop] = \'diop\')</span></p></blockquote><blockquote><p><b>parameter</b></p><p><b>code</b>: axis, left lens <span>(Details : {LOINC code \'28844-9\' = \'Axis distance Glasses prescription.lens - left\', given as \' Axis distance Glasses prescription.lens - left\'})</span></p><p><b>value</b>: 180 Degrees<span> (Details: UCUM code deg = \'deg\')</span></p></blockquote><p><b>subject</b>: <a>Patient/example</a></p><p><b>occurrence</b>: 15/06/2014</p><p><b>requester</b>: <a>Practitioner/example</a></p></div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.happysight.com/prescription"
+  }
+  value {
+    value: "15013L"
+  }
+}
+group_identifier {
+  system {
+    value: "http://acme.org"
+  }
+  value {
+    value: "15013"
+  }
+}
+status {
+  value: COMPLETED
+}
+intent {
+  value: ORIGINAL_ORDER
+}
+code {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/ex-visionprescriptionproduct"
+      }
+      code {
+        value: "lens"
+      }
+    }
+  }
+}
+parameter {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "28842-3"
+      }
+      display {
+        value: "Sphere distance Glasses prescription.lens - left"
+      }
+    }
+    text {
+      value: "sphere, left lens"
+    }
+  }
+  value {
+    quantity {
+      value {
+        value: "-1.00"
+      }
+      unit {
+        value: "Diopter"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "[diop]"
+      }
+    }
+  }
+}
+parameter {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "28843-1"
+      }
+      display {
+        value: "Cylinder base distance Glasses prescription.lens - left"
+      }
+    }
+    text {
+      value: "cylinder, left lens"
+    }
+  }
+  value {
+    quantity {
+      value {
+        value: "-0.50"
+      }
+      unit {
+        value: "Diopter"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "[diop]"
+      }
+    }
+  }
+}
+parameter {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "28844-9"
+      }
+      display {
+        value: " Axis distance Glasses prescription.lens - left"
+      }
+    }
+    text {
+      value: "axis, left lens"
+    }
+  }
+  value {
+    quantity {
+      value {
+        value: "180"
+      }
+      unit {
+        value: "Degrees"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "deg"
+      }
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+occurrence {
+  date_time {
+    value_us: 1402754400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+requester {
+  practitioner_id {
+    value: "example"
+  }
+}

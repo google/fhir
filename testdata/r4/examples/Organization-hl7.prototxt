@@ -1,0 +1,63 @@
+id {
+  value: "hl7"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      Health Level Seven International\n      <br/>\n\t\t\t\t3300 Washtenaw Avenue, Suite 227\n      <br/>\n\t\t\t\tAnn Arbor, MI 48104\n      <br/>\n\t\t\t\tUSA\n      <br/>\n\t\t\t\t(+1) 734-677-7777 (phone)\n      <br/>\n\t\t\t\t(+1) 734-677-6622 (fax)\n      <br/>\n\t\t\t\tE-mail:  \n      <a href=\"mailto:hq@HL7.org\">hq@HL7.org</a>\n    \n    </div>"
+  }
+}
+name {
+  value: "Health Level Seven International"
+}
+alias {
+  value: "HL7 International"
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "(+1) 734-677-7777"
+  }
+}
+telecom {
+  system {
+    value: FAX
+  }
+  value {
+    value: "(+1) 734-677-6622"
+  }
+}
+telecom {
+  system {
+    value: EMAIL
+  }
+  value {
+    value: "hq@HL7.org"
+  }
+}
+address {
+  line {
+    value: "3300 Washtenaw Avenue, Suite 227"
+  }
+  city {
+    value: "Ann Arbor"
+  }
+  state {
+    value: "MI"
+  }
+  postal_code {
+    value: "48104"
+  }
+  country {
+    value: "USA"
+  }
+}
+endpoint {
+  endpoint_id {
+    value: "example"
+  }
+}

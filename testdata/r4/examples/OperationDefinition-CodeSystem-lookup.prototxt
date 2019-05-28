@@ -1,0 +1,523 @@
+id {
+  value: "CodeSystem-lookup"
+}
+meta {
+  last_updated {
+    value_us: 1545910674724000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <h2>Concept Look Up &amp; Decomposition</h2>\n            <p>OPERATION: Concept Look Up &amp; Decomposition</p>\n            <p>The official URL for this operation definition is: </p>\n            <pre>http://hl7.org/fhir/OperationDefinition/CodeSystem-lookup</pre>\n            <div>\n              <p>Given a code/system, or a Coding, get additional details about the concept, including definition, status, designations, and properties. One of the products of this operation is a full decomposition of a code from a structured terminology.</p>\n\n              <p>When invoking this operation, a client SHALL provide both a system and a code, either using the system+code parameters, or in the coding parameter. Other parameters are optional</p>\n\n            </div>\n            <p>URL: [base]/CodeSystem/$lookup</p>\n            <p>Parameters</p>\n            <table class=\"grid\">\n              <tr>\n                <td>\n                  <b>Use</b>\n                </td>\n                <td>\n                  <b>Name</b>\n                </td>\n                <td>\n                  <b>Cardinality</b>\n                </td>\n                <td>\n                  <b>Type</b>\n                </td>\n                <td>\n                  <b>Binding</b>\n                </td>\n                <td>\n                  <b>Documentation</b>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>code</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#code\">code</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The code that is to be located. If a code is provided, a system must be provided</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>system</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#uri\">uri</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The system for the code that is to be located</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>version</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#string\">string</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The version of the system, if one was provided in the source data</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>coding</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#Coding\">Coding</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>A coding to look up</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>date</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#dateTime\">dateTime</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The date for which the information should be returned. Normally, this is the current conditions (which is the default value) but under some circumstances, systems need to acccess this information as it would have been in the past. A typical example of this would be where code selection is constrained to the set of codes that were available when the patient was treated, not when the record is being edited. Note that which date is appropriate is a matter for implementation policy.</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>displayLanguage</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#code\">code</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The requested language for display (see $expand.displayLanguage)</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>property</td>\n                <td>0..*</td>\n                <td>\n                  <a href=\"datatypes.html#code\">code</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>A property that the client wishes to be returned in the output. If no properties are specified, the server chooses what to return. The following properties are defined for all code systems: url, name, version (code system info) and code information: display, definition, designation, parent and child, and for designations, lang.X where X is a designation language code. Some of the properties are returned explicit in named parameters (when the names match), and the rest (except for lang.X) in the property parameter group</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>name</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#string\">string</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>A display name for the code system</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>version</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#string\">string</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The version that these details are based on</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>display</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#string\">string</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The preferred display for this concept</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>designation</td>\n                <td>0..*</td>\n                <td/>\n                <td/>\n                <td>\n                  <div>\n                    <p>Additional representations for this concept</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>designation.language</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#code\">code</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The language this designation is defined for</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>designation.use</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#Coding\">Coding</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>A code that details how this designation would be used</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>designation.value</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#string\">string</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The text value for this designation</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>property</td>\n                <td>0..*</td>\n                <td/>\n                <td/>\n                <td>\n                  <div>\n                    <p>One or more properties that contain additional information about the code, including status. For complex terminologies (e.g. SNOMED CT, LOINC, medications), these properties serve to decompose the code</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>property.code</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#code\">code</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Identifies the property returned</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>property.value</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#code\">code</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The value of the property returned</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>property.description</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#string\">string</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Human Readable representation of the property value (e.g. display for a code)</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>property.subproperty</td>\n                <td>0..*</td>\n                <td/>\n                <td/>\n                <td>\n                  <div>\n                    <p>Nested Properties (mainly used for SNOMED CT decomposition, for relationship Groups)</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>property.subproperty.code</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#code\">code</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Identifies the sub-property returned</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>property.subproperty.value</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#code\">code</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The value of the sub-property returned</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>property.subproperty.description</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#string\">string</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Human Readable representation of the property value (e.g. display for a code)</p>\n\n                  </div>\n                </td>\n              </tr>\n            </table>\n            <div>\n              <p>Note that the $lookup operation is more than just a code system search  - the server finds the concept, and gathers the return information from the underlying code system definitions.</p>\n\n            </div>\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+      value: 5
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "normative"
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version"
+  }
+  value {
+    code {
+      value: "4.0.0"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/OperationDefinition/CodeSystem-lookup"
+}
+version {
+  value: "4.0.0"
+}
+name {
+  value: "Concept Look Up & Decomposition"
+}
+status {
+  value: DRAFT
+}
+kind {
+  value: OPERATION
+}
+date {
+  value_us: 1545910674000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+publisher {
+  value: "HL7 (FHIR Project)"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "fhir@lists.hl7.org"
+    }
+  }
+}
+description {
+  value: "Given a code/system, or a Coding, get additional details about the concept, including definition, status, designations, and properties. One of the products of this operation is a full decomposition of a code from a structured terminology.\n\nWhen invoking this operation, a client SHALL provide both a system and a code, either using the system+code parameters, or in the coding parameter. Other parameters are optional"
+}
+code {
+  value: "lookup"
+}
+comment {
+  value: "Note that the $lookup operation is more than just a code system search  - the server finds the concept, and gathers the return information from the underlying code system definitions."
+}
+resource {
+  value: CODE_SYSTEM
+}
+system {
+}
+type {
+  value: true
+}
+instance {
+}
+parameter {
+  name {
+    value: "code"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The code that is to be located. If a code is provided, a system must be provided"
+  }
+  type {
+    value: CODE
+  }
+}
+parameter {
+  name {
+    value: "system"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The system for the code that is to be located"
+  }
+  type {
+    value: URI
+  }
+}
+parameter {
+  name {
+    value: "version"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The version of the system, if one was provided in the source data"
+  }
+  type {
+    value: STRING
+  }
+}
+parameter {
+  name {
+    value: "coding"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "A coding to look up"
+  }
+  type {
+    value: CODING
+  }
+}
+parameter {
+  name {
+    value: "date"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The date for which the information should be returned. Normally, this is the current conditions (which is the default value) but under some circumstances, systems need to acccess this information as it would have been in the past. A typical example of this would be where code selection is constrained to the set of codes that were available when the patient was treated, not when the record is being edited. Note that which date is appropriate is a matter for implementation policy."
+  }
+  type {
+    value: DATE_TIME
+  }
+}
+parameter {
+  name {
+    value: "displayLanguage"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The requested language for display (see $expand.displayLanguage)"
+  }
+  type {
+    value: CODE
+  }
+}
+parameter {
+  name {
+    value: "property"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "*"
+  }
+  documentation {
+    value: "A property that the client wishes to be returned in the output. If no properties are specified, the server chooses what to return. The following properties are defined for all code systems: url, name, version (code system info) and code information: display, definition, designation, parent and child, and for designations, lang.X where X is a designation language code. Some of the properties are returned explicit in named parameters (when the names match), and the rest (except for lang.X) in the property parameter group"
+  }
+  type {
+    value: CODE
+  }
+}
+parameter {
+  name {
+    value: "name"
+  }
+  use {
+    value: OUT
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "A display name for the code system"
+  }
+  type {
+    value: STRING
+  }
+}
+parameter {
+  name {
+    value: "version"
+  }
+  use {
+    value: OUT
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The version that these details are based on"
+  }
+  type {
+    value: STRING
+  }
+}
+parameter {
+  name {
+    value: "display"
+  }
+  use {
+    value: OUT
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The preferred display for this concept"
+  }
+  type {
+    value: STRING
+  }
+}
+parameter {
+  name {
+    value: "designation"
+  }
+  use {
+    value: OUT
+  }
+  min {
+  }
+  max {
+    value: "*"
+  }
+  documentation {
+    value: "Additional representations for this concept"
+  }
+  part {
+    name {
+      value: "language"
+    }
+    use {
+      value: OUT
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    documentation {
+      value: "The language this designation is defined for"
+    }
+    type {
+      value: CODE
+    }
+  }
+  part {
+    name {
+      value: "use"
+    }
+    use {
+      value: OUT
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    documentation {
+      value: "A code that details how this designation would be used"
+    }
+    type {
+      value: CODING
+    }
+  }
+  part {
+    name {
+      value: "value"
+    }
+    use {
+      value: OUT
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    documentation {
+      value: "The text value for this designation"
+    }
+    type {
+      value: STRING
+    }
+  }
+}
+parameter {
+  name {
+    value: "property"
+  }
+  use {
+    value: OUT
+  }
+  min {
+  }
+  max {
+    value: "*"
+  }
+  documentation {
+    value: "One or more properties that contain additional information about the code, including status. For complex terminologies (e.g. SNOMED CT, LOINC, medications), these properties serve to decompose the code"
+  }
+  part {
+    name {
+      value: "code"
+    }
+    use {
+      value: OUT
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    documentation {
+      value: "Identifies the property returned"
+    }
+    type {
+      value: CODE
+    }
+  }
+  part {
+    name {
+      value: "value"
+    }
+    use {
+      value: OUT
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    documentation {
+      value: "The value of the property returned"
+    }
+    type {
+      value: CODE
+    }
+  }
+  part {
+    name {
+      value: "description"
+    }
+    use {
+      value: OUT
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    documentation {
+      value: "Human Readable representation of the property value (e.g. display for a code)"
+    }
+    type {
+      value: STRING
+    }
+  }
+  part {
+    name {
+      value: "subproperty"
+    }
+    use {
+      value: OUT
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    documentation {
+      value: "Nested Properties (mainly used for SNOMED CT decomposition, for relationship Groups)"
+    }
+    part {
+      name {
+        value: "code"
+      }
+      use {
+        value: OUT
+      }
+      min {
+        value: 1
+      }
+      max {
+        value: "1"
+      }
+      documentation {
+        value: "Identifies the sub-property returned"
+      }
+      type {
+        value: CODE
+      }
+    }
+    part {
+      name {
+        value: "value"
+      }
+      use {
+        value: OUT
+      }
+      min {
+        value: 1
+      }
+      max {
+        value: "1"
+      }
+      documentation {
+        value: "The value of the sub-property returned"
+      }
+      type {
+        value: CODE
+      }
+    }
+    part {
+      name {
+        value: "description"
+      }
+      use {
+        value: OUT
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+      documentation {
+        value: "Human Readable representation of the property value (e.g. display for a code)"
+      }
+      type {
+        value: STRING
+      }
+    }
+  }
+}

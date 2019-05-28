@@ -1,0 +1,95 @@
+id {
+  value: "dicom"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"> Patient MINT_TEST, ID = MINT1234. Age = 56y, Size =\n      1.83m, Weight = 72.58kg </div>"
+  }
+}
+extension {
+  url {
+    value: "http://nema.org/fhir/extensions#0010:1010"
+  }
+  value {
+    quantity {
+      value {
+        value: "56"
+      }
+      unit {
+        value: "Y"
+      }
+    }
+  }
+}
+extension {
+  url {
+    value: "http://nema.org/fhir/extensions#0010:1020"
+  }
+  value {
+    quantity {
+      value {
+        value: "1.83"
+      }
+      unit {
+        value: "m"
+      }
+    }
+  }
+}
+extension {
+  url {
+    value: "http://nema.org/fhir/extensions#0010:1030"
+  }
+  value {
+    quantity {
+      value {
+        value: "72.58"
+      }
+      unit {
+        value: "kg"
+      }
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://nema.org/examples/patients"
+  }
+  value {
+    value: "MINT1234"
+  }
+}
+active {
+  value: true
+}
+name {
+  family {
+    value: "MINT_TEST"
+  }
+}
+gender {
+  value: MALE
+  extension {
+    url {
+      value: "http://nema.org/examples/extensions#gender"
+    }
+    value {
+      coding {
+        system {
+          value: "http://nema.org/examples/gender"
+        }
+        code {
+          value: "M"
+        }
+      }
+    }
+  }
+}
+managing_organization {
+  organization_id {
+    value: "1"
+  }
+}

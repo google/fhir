@@ -1,0 +1,95 @@
+id {
+  value: "vitals-panel"
+}
+meta {
+  profile {
+    value: "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: vitals-panel</p><p><b>meta</b>: </p><p><b>status</b>: final</p><p><b>category</b>: Vital Signs <span>(Details : {http://terminology.hl7.org/CodeSystem/observation-category code \'vital-signs\' = \'Vital Signs\', given as \'Vital Signs\'})</span></p><p><b>code</b>: Vital signs Panel <span>(Details : {LOINC code \'85353-1\' = \'Vital signs, weight, height, head circumference, oxygen saturation &amp; BMI panel\', given as \'Vital signs, weight, height, head circumference, oxygen saturation and BMI panel\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>effective</b>: 02/07/1999</p><p><b>hasMember</b>: </p><ul><li><a>Respiratory Rate</a></li><li><a>Heart Rate</a></li><li><a>Blood Pressure</a></li><li><a>Body Temperature</a></li></ul></div>"
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/observation-category"
+    }
+    code {
+      value: "vital-signs"
+    }
+    display {
+      value: "Vital Signs"
+    }
+  }
+  text {
+    value: "Vital Signs"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "85353-1"
+    }
+    display {
+      value: "Vital signs, weight, height, head circumference, oxygen saturation and BMI panel"
+    }
+  }
+  text {
+    value: "Vital signs Panel"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+effective {
+  date_time {
+    value_us: 930837600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+has_member {
+  observation_id {
+    value: "respiratory-rate"
+  }
+  display {
+    value: "Respiratory Rate"
+  }
+}
+has_member {
+  observation_id {
+    value: "heart-rate"
+  }
+  display {
+    value: "Heart Rate"
+  }
+}
+has_member {
+  observation_id {
+    value: "blood-pressure"
+  }
+  display {
+    value: "Blood Pressure"
+  }
+}
+has_member {
+  observation_id {
+    value: "body-temperature"
+  }
+  display {
+    value: "Body Temperature"
+  }
+}

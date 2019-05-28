@@ -1,0 +1,45 @@
+id {
+  value: "example-pgx"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-pgx</p><p><b>status</b>: active</p><p><b>intent</b>: original-order</p><p><b>code</b>: CYP2D6 gene targeted mutation analysis <span>(Details : {LOINC code \'47403-1\' = \'CYP2D6 gene mutation analysis in Blood or Tissue by Molecular genetics method Narrative\', given as \'CYP2D6 gene targeted mutation analysis\'})</span></p><p><b>subject</b>: <a>Patient/899962</a></p><p><b>authoredOn</b>: 10/10/2016 3:00:00 PM</p><p><b>requester</b>: <a>Practitioner/12345</a></p></div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: ORIGINAL_ORDER
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "47403-1"
+    }
+    display {
+      value: "CYP2D6 gene targeted mutation analysis"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "899962"
+  }
+}
+authored_on {
+  value_us: 1476136800000000
+  timezone: "-07:00"
+  precision: SECOND
+}
+requester {
+  practitioner_id {
+    value: "12345"
+  }
+}

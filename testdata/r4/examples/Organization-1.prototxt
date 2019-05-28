@@ -1,0 +1,44 @@
+id {
+  value: "1"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n      <p>Gastroenterology @ Acme Hospital. ph: +1 555 234 3523, email: \n        <a href=\"mailto:gastro@acme.org\">gastro@acme.org</a>\n      </p>\n    \n    </div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.acme.org.au/units"
+  }
+  value {
+    value: "Gastro"
+  }
+}
+name {
+  value: "Gastroenterology"
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "+1 555 234 3523"
+  }
+  use {
+    value: MOBILE
+  }
+}
+telecom {
+  system {
+    value: EMAIL
+  }
+  value {
+    value: "gastro@acme.org"
+  }
+  use {
+    value: WORK
+  }
+}

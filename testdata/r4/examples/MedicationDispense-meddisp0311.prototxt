@@ -1,0 +1,201 @@
+id {
+  value: "meddisp0311"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: meddisp0311</p><p><b>status</b>: completed</p><p><b>medication</b>: Acetaminophen 120mg Suppository <span>(Details : {http://hl7.org/fhir/sid/ndc code \'50090-0001\' = \'50090-0001\', given as \'Acetaminophen 120mg Suppository\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Practitioner/f006</a></td></tr></table><p><b>authorizingPrescription</b>: <a>MedicationRequest/medrx0324</a></p><p><b>type</b>: Refill - Part Fill <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ActCode code \'RFP\' = \'Refill - Part Fill\', given as \'Refill - Part Fill\'})</span></p><p><b>quantity</b>: 60 RECSUPP<span> (Details: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm code RECSUPP = \'Rectal Suppository\')</span></p><p><b>daysSupply</b>: 10 Day<span> (Details: UCUM code d = \'d\')</span></p><p><b>whenPrepared</b>: 15/01/2015 10:20:00 AM</p><p><b>whenHandedOver</b>: 15/01/2015 4:20:00 PM</p><p><b>dosageInstruction</b>: </p></div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+medication {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/sid/ndc"
+      }
+      code {
+        value: "50090-0001"
+      }
+      display {
+        value: "Acetaminophen 120mg Suppository"
+      }
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "f006"
+    }
+  }
+}
+authorizing_prescription {
+  medication_request_id {
+    value: "medrx0324"
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "RFP"
+    }
+    display {
+      value: "Refill - Part Fill"
+    }
+  }
+}
+quantity {
+  value {
+    value: "60"
+  }
+  system {
+    value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+  }
+  code {
+    value: "RECSUPP"
+  }
+}
+days_supply {
+  value {
+    value: "10"
+  }
+  unit {
+    value: "Day"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "d"
+  }
+}
+when_prepared {
+  value_us: 1421317200000000
+  timezone: "Z"
+  precision: SECOND
+}
+when_handed_over {
+  value_us: 1421338800000000
+  timezone: "Z"
+  precision: SECOND
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "Insert two suppositories (240mg) rectally twice daily as needed for fever to a maximim of 6 per day"
+  }
+  additional_instruction {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "418637003"
+      }
+      display {
+        value: "Do not take with any other paracetamol products (qualifier value)"
+      }
+    }
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 2
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  as_needed {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "386661006"
+        }
+        display {
+          value: "Fever (finding)"
+        }
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "ordered"
+        }
+        display {
+          value: "Ordered"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "240"
+        }
+        unit {
+          value: "mg"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mg"
+        }
+      }
+    }
+  }
+  max_dose_per_period {
+    numerator {
+      value {
+        value: "720"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mg"
+      }
+    }
+    denominator {
+      value {
+        value: "1"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "d"
+      }
+    }
+  }
+}

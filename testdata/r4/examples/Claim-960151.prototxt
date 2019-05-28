@@ -1,0 +1,331 @@
+id {
+  value: "960151"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Claim</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyhospital.com/claim"
+  }
+  value {
+    value: "96123451"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/claim-type"
+    }
+    code {
+      value: "institutional"
+    }
+  }
+}
+use {
+  value: CLAIM
+}
+patient {
+  patient_id {
+    value: "1"
+  }
+}
+billable_period {
+  start {
+    value_us: 1408024800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+enterer {
+  identifier {
+    system {
+      value: "http://jurisdiction.org/facilities/HOSP1234/users"
+    }
+    value {
+      value: "UC1234"
+    }
+  }
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+provider {
+  identifier {
+    system {
+      value: "http://npid.org/providerid"
+    }
+    value {
+      value: "NJ12345"
+    }
+  }
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+payee {
+  type {
+    coding {
+      code {
+        value: "provider"
+      }
+    }
+  }
+}
+facility {
+  identifier {
+    system {
+      value: "http://jurisdiction.org/facilities"
+    }
+    value {
+      value: "HOSP1234"
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    practitioner_id {
+      value: "example"
+    }
+  }
+  responsible {
+    value: true
+  }
+  role {
+    coding {
+      system {
+        value: "http://example.org/fhir/CodeSystem/claim-careteamrole"
+      }
+      code {
+        value: "primary"
+      }
+    }
+  }
+  qualification {
+    coding {
+      system {
+        value: "http://example.org/fhir/CodeSystem/provider-qualification"
+      }
+      code {
+        value: "physician"
+      }
+    }
+  }
+}
+supporting_info {
+  sequence {
+    value: 1
+  }
+  category {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/claiminformationcategory"
+      }
+      code {
+        value: "employmentimpacted"
+      }
+    }
+  }
+  timing {
+    period {
+      start {
+        value_us: 1408111200000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+      end {
+        value_us: 1408111200000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+}
+supporting_info {
+  sequence {
+    value: 2
+  }
+  category {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/claiminformationcategory"
+      }
+      code {
+        value: "hospitalized"
+      }
+    }
+  }
+  timing {
+    period {
+      start {
+        value_us: 1408024800000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+      end {
+        value_us: 1408111200000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis {
+    codeable_concept {
+      coding {
+        code {
+          value: "654456"
+        }
+      }
+    }
+  }
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/ex-diagnosistype"
+      }
+      code {
+        value: "admitting"
+      }
+    }
+  }
+  package_code {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/ex-diagnosisrelatedgroup"
+      }
+      code {
+        value: "400"
+      }
+      display {
+        value: "Head trauma - concussion"
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    coverage_id {
+      value: "9876B1"
+    }
+  }
+  business_arrangement {
+    value: "BA987123"
+  }
+  pre_auth_ref {
+    value: "PA2014G56473"
+  }
+}
+accident {
+  date {
+    value_us: 1404828000000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ActIncidentCode"
+      }
+      code {
+        value: "SPT"
+      }
+      display {
+        value: "Sporting Accident"
+      }
+    }
+  }
+  location {
+    address {
+      text {
+        value: "Grouse Mountain Ski Hill"
+      }
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_sequence {
+    value: 1
+  }
+  product_or_service {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/ex-serviceproduct"
+      }
+      code {
+        value: "exam"
+      }
+    }
+  }
+  serviced {
+    date {
+      value_us: 1408111200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  unit_price {
+    value {
+      value: "125.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: "125.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}
+total {
+  value {
+    value: "125.00"
+  }
+  currency {
+    value: "USD"
+  }
+}

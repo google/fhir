@@ -1,0 +1,52 @@
+id {
+  value: "example3"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example3</p><p><b>status</b>: draft</p><p><b>intent</b>: order</p><p><b>code</b>: Refill Request <span>(Details )</span></p><p><b>focus</b>: <a>MedicationRequest/medrx002</a></p><p><b>for</b>: <a>Patient/f001</a></p><p><b>authoredOn</b>: 10/03/2016 10:39:32 PM</p><p><b>lastModified</b>: 10/03/2016 10:39:32 PM</p><p><b>requester</b>: <a>Patient/example</a></p><p><b>owner</b>: <a>Practitioner/example</a></p></div>"
+  }
+}
+status {
+  value: DRAFT
+}
+intent {
+  value: ORDER
+}
+code {
+  text {
+    value: "Refill Request"
+  }
+}
+focus {
+  medication_request_id {
+    value: "medrx002"
+  }
+}
+for_value {
+  patient_id {
+    value: "f001"
+  }
+}
+authored_on {
+  value_us: 1457663972000000
+  timezone: "-04:00"
+  precision: SECOND
+}
+last_modified {
+  value_us: 1457663972000000
+  timezone: "-04:00"
+  precision: SECOND
+}
+requester {
+  patient_id {
+    value: "example"
+  }
+}
+owner {
+  practitioner_id {
+    value: "example"
+  }
+}

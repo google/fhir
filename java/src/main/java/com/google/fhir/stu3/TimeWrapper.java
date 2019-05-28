@@ -15,7 +15,9 @@
 package com.google.fhir.stu3;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.fhir.stu3.proto.Time;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.Time;
+import com.google.protobuf.MessageOrBuilder;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -40,6 +42,10 @@ public class TimeWrapper extends PrimitiveWrapper<Time> {
   /** Create a TimeWrapper from a Time. */
   public TimeWrapper(Time time) {
     super(time);
+  }
+
+  public TimeWrapper(MessageOrBuilder message) {
+    super(ProtoUtils.fieldWiseCopy(message, Time.newBuilder()).build());
   }
 
   /** Create a TimeWrapper from a java String. */

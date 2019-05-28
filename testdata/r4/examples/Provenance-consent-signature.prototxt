@@ -1,0 +1,70 @@
+id {
+  value: "consent-signature"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: consent-signature</p><p><b>target</b>: <a>Consent/consent-example-signature</a></p><p><b>recorded</b>: 26/05/2016 12:41:10 AM</p><h3>Agents</h3><table><tr><td>-</td><td><b>Role</b></td><td><b>Who</b></td></tr><tr><td>*</td><td>author (originator) <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ParticipationType code \'AUT\' = \'author (originator))</span></td><td><a>Patient/72</a></td></tr></table><p><b>signature</b>: </p></div>"
+  }
+}
+target {
+  consent_id {
+    value: "consent-example-signature"
+  }
+}
+recorded {
+  value_us: 1464237670000000
+  timezone: "-04:00"
+  precision: SECOND
+}
+agent {
+  role {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+      }
+      code {
+        value: "AUT"
+      }
+    }
+  }
+  who {
+    patient_id {
+      value: "72"
+    }
+  }
+}
+signature {
+  type {
+    system {
+      value: "urn:iso-astm:E1762-95:2013"
+    }
+    code {
+      value: "1.2.840.10065.1.12.1.1"
+    }
+    display {
+      value: "Author\'s Signature"
+    }
+  }
+  when {
+    value_us: 1464237670000000
+    timezone: "-04:00"
+    precision: SECOND
+  }
+  who {
+    patient_id {
+      value: "72"
+    }
+  }
+  target_format {
+    value: "application/fhir+xml"
+  }
+  sig_format {
+    value: "application/signature+xml"
+  }
+  data {
+    value: "this blob is snipped"
+  }
+}

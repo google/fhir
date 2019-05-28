@@ -1,0 +1,287 @@
+id {
+  value: "example-disclosure"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Disclosure by some idiot, for marketing reasons, to places unknown, of a Poor Sap, data about Everthing important.</div>"
+  }
+}
+type {
+  system {
+    value: "http://dicom.nema.org/resources/ontology/DCM"
+  }
+  code {
+    value: "110106"
+  }
+  display {
+    value: "Export"
+  }
+}
+subtype {
+  code {
+    value: "Disclosure"
+  }
+  display {
+    value: "HIPAA disclosure"
+  }
+}
+action {
+  value: R
+}
+recorded {
+  value_us: 1379808480000000
+  timezone: "Z"
+  precision: SECOND
+}
+outcome {
+  value: NUM_0
+}
+outcome_desc {
+  value: "Successful  Disclosure"
+}
+purpose_of_event {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+    }
+    code {
+      value: "HMARKT"
+    }
+    display {
+      value: "healthcare marketing"
+    }
+  }
+}
+agent {
+  type {
+    coding {
+      system {
+        value: "http://dicom.nema.org/resources/ontology/DCM"
+      }
+      code {
+        value: "110153"
+      }
+      display {
+        value: "Source Role ID"
+      }
+    }
+  }
+  who {
+    identifier {
+      value {
+        value: "SomeIdiot@nowhere"
+      }
+    }
+  }
+  alt_id {
+    value: "notMe"
+  }
+  name {
+    value: "That guy everyone wishes would be caught"
+  }
+  requestor {
+    value: true
+  }
+  location {
+    location_id {
+      value: "1"
+    }
+  }
+  policy {
+    value: "http://consent.com/yes"
+  }
+  network {
+    address {
+      value: "custodian.net"
+    }
+    type {
+      value: NUM_1
+    }
+  }
+}
+agent {
+  type {
+    coding {
+      system {
+        value: "http://dicom.nema.org/resources/ontology/DCM"
+      }
+      code {
+        value: "110152"
+      }
+      display {
+        value: "Destination Role ID"
+      }
+    }
+  }
+  who {
+    practitioner_id {
+      value: "example"
+    }
+    display {
+      value: "Where"
+    }
+  }
+  requestor {
+  }
+  network {
+    address {
+      value: "marketing.land"
+    }
+    type {
+      value: NUM_1
+    }
+  }
+  purpose_of_use {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+      }
+      code {
+        value: "HMARKT"
+      }
+      display {
+        value: "healthcare marketing"
+      }
+    }
+  }
+}
+source {
+  site {
+    value: "Watcher"
+  }
+  observer {
+    display {
+      value: "Watchers Accounting of Disclosures Application"
+    }
+  }
+  type {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/security-source-type"
+    }
+    code {
+      value: "4"
+    }
+    display {
+      value: "Application Server"
+    }
+  }
+}
+entity {
+  what {
+    patient_id {
+      value: "example"
+    }
+  }
+  type {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/audit-entity-type"
+    }
+    code {
+      value: "1"
+    }
+    display {
+      value: "Person"
+    }
+  }
+  role {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/object-role"
+    }
+    code {
+      value: "1"
+    }
+    display {
+      value: "Patient"
+    }
+  }
+}
+entity {
+  what {
+    patient_id {
+      value: "example"
+      history {
+        value: "1"
+      }
+    }
+    identifier {
+      value {
+        value: "What.id"
+      }
+    }
+  }
+  type {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/audit-entity-type"
+    }
+    code {
+      value: "2"
+    }
+    display {
+      value: "System Object"
+    }
+  }
+  role {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/object-role"
+    }
+    code {
+      value: "4"
+    }
+    display {
+      value: "Domain Resource"
+    }
+  }
+  lifecycle {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/dicom-audit-lifecycle"
+    }
+    code {
+      value: "11"
+    }
+    display {
+      value: "Disclosure"
+    }
+  }
+  security_label {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"
+    }
+    code {
+      value: "V"
+    }
+    display {
+      value: "very restricted"
+    }
+  }
+  security_label {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "STD"
+    }
+    display {
+      value: "sexually transmitted disease information sensitivity"
+    }
+  }
+  security_label {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "DELAU"
+    }
+    display {
+      value: "delete after use"
+    }
+  }
+  name {
+    value: "Namne of What"
+  }
+  description {
+    value: "data about Everthing important"
+  }
+}

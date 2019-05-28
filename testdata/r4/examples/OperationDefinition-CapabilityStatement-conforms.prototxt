@@ -1,0 +1,213 @@
+id {
+  value: "CapabilityStatement-conforms"
+}
+meta {
+  last_updated {
+    value_us: 1545910674724000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <h2>Test if a server implements a client\'s required operations</h2>\n            <p>OPERATION: Test if a server implements a client\'s required operations</p>\n            <p>The official URL for this operation definition is: </p>\n            <pre>http://hl7.org/fhir/OperationDefinition/CapabilityStatement-conforms</pre>\n            <div>\n              <p>This operation asks the server to check that it implements all the resources, interactions, search parameters, and operations that the client provides in its capability statement. The client provides both capability statements by reference, and must ensure that all the referenced resources are available to the conformance server</p>\n\n            </div>\n            <p>URL: [base]/CapabilityStatement/$conforms</p>\n            <p>Parameters</p>\n            <table class=\"grid\">\n              <tr>\n                <td>\n                  <b>Use</b>\n                </td>\n                <td>\n                  <b>Name</b>\n                </td>\n                <td>\n                  <b>Cardinality</b>\n                </td>\n                <td>\n                  <b>Type</b>\n                </td>\n                <td>\n                  <b>Binding</b>\n                </td>\n                <td>\n                  <b>Documentation</b>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>left</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#canonical\">canonical</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>A canonical reference to the left-hand system\'s capability statement</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>right</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#canonical\">canonical</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>A canonical reference to the right-hand system\'s capability statement</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>mode</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#code\">code</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>What kind of comparison to perform - server to server, or client to server (use the codes \'server/server\' or \'client/server\')</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>issues</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"operationoutcome.html\">OperationOutcome</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Outcome of the CapabilityStatement test</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>union</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"capabilitystatement.html\">CapabilityStatement</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The intersection of the functionality described by the CapabilityStatement resources</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>intersection</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"capabilitystatement.html\">CapabilityStatement</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The union of the functionality described by the CapabilityStatement resources</p>\n\n                  </div>\n                </td>\n              </tr>\n            </table>\n            <div>\n              <p>The operation performs a full comparison of the functionality described by the two capability statements, including the profiles and value sets they reference, and also including concept maps and structure maps.</p>\n\n              <p>The full execution of this operation is still a matter of research, but it is intended to support comparison of systems to see if they will interoperate</p>\n\n              <p>If the capability statements can be successfully compared, then the return value is a 200 OK with an OperationOutcome along with intersection and union capability statements. The operation outcome can contain errors relating to differences between the capability statements. If the capability statements cannot be compared, because dependencies cannot be located, the return value is a 4xx error, with an OperationOutcome with at least one issue with severity &gt;= error</p>\n\n            </div>\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+      value: 5
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "trial-use"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/OperationDefinition/CapabilityStatement-conforms"
+}
+version {
+  value: "4.0.0"
+}
+name {
+  value: "Test if a server implements a client\'s required operations"
+}
+status {
+  value: DRAFT
+}
+kind {
+  value: OPERATION
+}
+date {
+  value_us: 1545910674000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+publisher {
+  value: "HL7 (FHIR Project)"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "fhir@lists.hl7.org"
+    }
+  }
+}
+description {
+  value: "This operation asks the server to check that it implements all the resources, interactions, search parameters, and operations that the client provides in its capability statement. The client provides both capability statements by reference, and must ensure that all the referenced resources are available to the conformance server"
+}
+code {
+  value: "conforms"
+}
+comment {
+  value: "The operation performs a full comparison of the functionality described by the two capability statements, including the profiles and value sets they reference, and also including concept maps and structure maps.     \n\nThe full execution of this operation is still a matter of research, but it is intended to support comparison of systems to see if they will interoperate    \n\nIf the capability statements can be successfully compared, then the return value is a 200 OK with an OperationOutcome along with intersection and union capability statements. The operation outcome can contain errors relating to differences between the capability statements. If the capability statements cannot be compared, because dependencies cannot be located, the return value is a 4xx error, with an OperationOutcome with at least one issue with severity >= error"
+}
+resource {
+  value: CAPABILITY_STATEMENT
+}
+system {
+}
+type {
+  value: true
+}
+instance {
+}
+parameter {
+  name {
+    value: "left"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "A canonical reference to the left-hand system\'s capability statement"
+  }
+  type {
+    value: CANONICAL
+  }
+}
+parameter {
+  name {
+    value: "right"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "A canonical reference to the right-hand system\'s capability statement"
+  }
+  type {
+    value: CANONICAL
+  }
+}
+parameter {
+  name {
+    value: "mode"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "What kind of comparison to perform - server to server, or client to server (use the codes \'server/server\' or \'client/server\')"
+  }
+  type {
+    value: CODE
+  }
+}
+parameter {
+  name {
+    value: "issues"
+  }
+  use {
+    value: OUT
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "Outcome of the CapabilityStatement test"
+  }
+  type {
+    value: OPERATION_OUTCOME
+  }
+}
+parameter {
+  name {
+    value: "union"
+  }
+  use {
+    value: OUT
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The intersection of the functionality described by the CapabilityStatement resources"
+  }
+  type {
+    value: CAPABILITY_STATEMENT
+  }
+}
+parameter {
+  name {
+    value: "intersection"
+  }
+  use {
+    value: OUT
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The union of the functionality described by the CapabilityStatement resources"
+  }
+  type {
+    value: CAPABILITY_STATEMENT
+  }
+}

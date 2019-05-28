@@ -1,0 +1,82 @@
+id {
+  value: "genetics-example1"
+}
+meta {
+  last_updated {
+    value_us: 1338335132000000
+    timezone: "Z"
+    precision: SECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Everywoman, Eve. SSN:\n      444222222</div>"
+  }
+}
+identifier {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+      }
+      code {
+        value: "SS"
+      }
+    }
+  }
+  system {
+    value: "http://hl7.org/fhir/sid/us-ssn"
+  }
+  value {
+    value: "444222222"
+  }
+}
+active {
+  value: true
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  family {
+    value: "Everywoman"
+  }
+  given {
+    value: "Eve"
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "555-555-2003"
+  }
+  use {
+    value: WORK
+  }
+}
+gender {
+  value: FEMALE
+}
+birth_date {
+  value_us: 107618400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+address {
+  use {
+    value: HOME
+  }
+  line {
+    value: "2222 Home Street"
+  }
+}
+managing_organization {
+  organization_id {
+    value: "hl7"
+  }
+}

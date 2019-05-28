@@ -1,0 +1,389 @@
+id {
+  value: "meddisp0306"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: meddisp0306</p><p><b>contained</b>: </p><p><b>status</b>: in-progress</p><p><b>medication</b>: Alemtuzumab 10mg/ml (Lemtrada). Generated Summary: id: med0303; Alemtuzumab 10mg/ml (Lemtrada) <span>(Details : {RxNorm code \'1594660\' = \'alemtuzumab 10 MG/ML [Lemtrada]\', given as \'Alemtuzumab 10mg/ml (Lemtrada)\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Practitioner/f006</a></td></tr></table><p><b>authorizingPrescription</b>: <a>MedicationRequest/medrx0317</a></p><p><b>type</b>: Daily Fill <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ActCode code \'DF\' = \'Daily Fill\', given as \'Daily Fill\'})</span></p><p><b>quantity</b>: 5 415818006<span> (Details: SNOMED CT code 415818006 = \'Vial\')</span></p><p><b>daysSupply</b>: 7 Day<span> (Details: UCUM code d = \'d\')</span></p><p><b>whenPrepared</b>: 15/01/2015 10:20:00 AM</p><p><b>dosageInstruction</b>: , , </p></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "med0303"
+    }
+    code {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "1594660"
+        }
+        display {
+          value: "Alemtuzumab 10mg/ml (Lemtrada)"
+        }
+      }
+    }
+  }
+}
+status {
+  value: IN_PROGRESS
+}
+medication {
+  reference {
+    fragment {
+      value: "med0303"
+    }
+    display {
+      value: "Alemtuzumab 10mg/ml (Lemtrada)"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "f006"
+    }
+  }
+}
+authorizing_prescription {
+  medication_request_id {
+    value: "medrx0317"
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "DF"
+    }
+    display {
+      value: "Daily Fill"
+    }
+  }
+}
+quantity {
+  value {
+    value: "5"
+  }
+  system {
+    value: "http://snomed.info/sct"
+  }
+  code {
+    value: "415818006"
+  }
+}
+days_supply {
+  value {
+    value: "7"
+  }
+  unit {
+    value: "Day"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "d"
+  }
+}
+when_prepared {
+  value_us: 1421317200000000
+  timezone: "Z"
+  precision: SECOND
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "Rapid daily-dose escalation, until tolerated, from 3 mg/d, and then 10 mg/d, to the recommended maintenance dose of 30 mg IV over 120 min, 3 times per wk on alternate days for up to 12 wk"
+  }
+  additional_instruction {
+    text {
+      value: "Rapidly increase dose until tolerated"
+    }
+  }
+  additional_instruction {
+    text {
+      value: "Administer on alternate days"
+    }
+  }
+  timing {
+    repeat {
+      duration {
+        value: "12"
+      }
+      duration_unit {
+        value: WK
+      }
+      frequency {
+        value: 3
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: WK
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "47625008"
+      }
+      display {
+        value: "Intravenous route (qualifier value)"
+      }
+    }
+  }
+  method {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "422145002"
+      }
+      display {
+        value: "Inject - dosing instruction imperative (qualifier value)"
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "calculated"
+        }
+        display {
+          value: "Calculated"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "3"
+        }
+        unit {
+          value: "mg"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mg"
+        }
+      }
+    }
+  }
+}
+dosage_instruction {
+  sequence {
+    value: 2
+  }
+  text {
+    value: "Rapid daily-dose escalation, until tolerated, from 3 mg/d, and then 10 mg/d, to the recommended maintenance dose of 30 mg IV over 120 min, 3 times per wk on alternate days for up to 12 wk"
+  }
+  additional_instruction {
+    text {
+      value: "Rapidly increase dose until tolerated"
+    }
+  }
+  additional_instruction {
+    text {
+      value: "Administer on alternate days"
+    }
+  }
+  timing {
+    repeat {
+      duration {
+        value: "12"
+      }
+      duration_unit {
+        value: WK
+      }
+      frequency {
+        value: 3
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: WK
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "47625008"
+      }
+      display {
+        value: "Intravenous route (qualifier value)"
+      }
+    }
+  }
+  method {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "422145002"
+      }
+      display {
+        value: "Inject - dosing instruction imperative (qualifier value)"
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "calculated"
+        }
+        display {
+          value: "Calculated"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "10"
+        }
+        unit {
+          value: "mg"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mg"
+        }
+      }
+    }
+  }
+}
+dosage_instruction {
+  sequence {
+    value: 3
+  }
+  text {
+    value: "Rapid daily-dose escalation, until tolerated, from 3 mg/d, and then 10 mg/d, to the recommended maintenance dose of 30 mg IV over 120 min, 3 times per wk on alternate days for up to 12 wk"
+  }
+  additional_instruction {
+    text {
+      value: "Rapidly increase dose until tolerated"
+    }
+  }
+  additional_instruction {
+    text {
+      value: "Administer on alternate days"
+    }
+  }
+  timing {
+    repeat {
+      duration {
+        value: "12"
+      }
+      duration_unit {
+        value: WK
+      }
+      frequency {
+        value: 3
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: WK
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "47625008"
+      }
+      display {
+        value: "Intravenous route (qualifier value)"
+      }
+    }
+  }
+  method {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "422145002"
+      }
+      display {
+        value: "Inject - dosing instruction imperative (qualifier value)"
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "calculated"
+        }
+        display {
+          value: "Calculated"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "30"
+        }
+        unit {
+          value: "mg"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mg"
+        }
+      }
+    }
+  }
+}

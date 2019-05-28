@@ -1,0 +1,106 @@
+id {
+  value: "33123"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<p>OD -2.00 SPH         +2.00 add    0.5 p.d. BD</p>\n\t\t\t<p>OS -1.00 -0.50 x 180 +2.00 add    0.5 p.d. BU</p>\n\t\t</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.happysight.com/prescription"
+  }
+  value {
+    value: "15013"
+  }
+}
+status {
+  value: ACTIVE
+}
+created {
+  value_us: 1402754400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+}
+date_written {
+  value_us: 1402754400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+prescriber {
+  practitioner_id {
+    value: "example"
+  }
+}
+lens_specification {
+  product {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/ex-visionprescriptionproduct"
+      }
+      code {
+        value: "lens"
+      }
+    }
+  }
+  eye {
+    value: RIGHT
+  }
+  sphere {
+    value: "-2.00"
+  }
+  prism {
+    amount {
+      value: "0.5"
+    }
+    base {
+      value: DOWN
+    }
+  }
+  add {
+    value: "2.00"
+  }
+}
+lens_specification {
+  product {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/ex-visionprescriptionproduct"
+      }
+      code {
+        value: "lens"
+      }
+    }
+  }
+  eye {
+    value: LEFT
+  }
+  sphere {
+    value: "-1.00"
+  }
+  cylinder {
+    value: "-0.50"
+  }
+  axis {
+    value: 180
+  }
+  prism {
+    amount {
+      value: "0.5"
+    }
+    base {
+      value: UP
+    }
+  }
+  add {
+    value: "2.00"
+  }
+}

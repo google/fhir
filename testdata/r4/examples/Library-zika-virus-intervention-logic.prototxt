@@ -1,0 +1,189 @@
+id {
+  value: "zika-virus-intervention-logic"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Zika Virus Intervention Logic</div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  value {
+    value: "zika-virus-intervention-logic"
+  }
+}
+version {
+  value: "1.0.0"
+}
+title {
+  value: "Zika Virus Intervention Logic"
+}
+status {
+  value: ACTIVE
+}
+experimental {
+  value: true
+}
+type {
+  coding {
+    code {
+      value: "logic-library"
+    }
+  }
+}
+date {
+  value_us: 1479042000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+description {
+  value: "Decision support logic for managing zika virus infection"
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "age"
+    }
+  }
+  value {
+    range {
+      low {
+        value {
+          value: "12"
+        }
+        unit {
+          value: "a"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "user"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "309343006"
+        }
+        display {
+          value: "Physician"
+        }
+      }
+    }
+  }
+}
+topic {
+  text {
+    value: "Zika Virus Management"
+  }
+}
+related_artifact {
+  type {
+    value: DEPENDS_ON
+  }
+  resource {
+    value: "Library/fhir-model-definition"
+  }
+}
+related_artifact {
+  type {
+    value: DEPENDS_ON
+  }
+  resource {
+    value: "ValueSet/zika-affected-area"
+  }
+}
+parameter {
+  name {
+    value: "Patient"
+  }
+  use {
+    value: IN
+  }
+  type {
+    value: PATIENT
+  }
+}
+parameter {
+  name {
+    value: "Current Encounter"
+  }
+  use {
+    value: IN
+  }
+  type {
+    value: ENCOUNTER
+  }
+}
+data_requirement {
+  type {
+    value: CONDITION
+  }
+  code_filter {
+    path {
+      value: "code"
+    }
+    value_set {
+      value: "urn:oid:X.Y.Z"
+    }
+  }
+}
+data_requirement {
+  type {
+    value: OBSERVATION
+  }
+  code_filter {
+    path {
+      value: "code"
+    }
+    value_set {
+      value: "urn:oid:X.Y.Z"
+    }
+  }
+}
+data_requirement {
+  type {
+    value: CONDITION
+  }
+  code_filter {
+    path {
+      value: "code"
+    }
+    value_set {
+      value: "urn:oid:2.16.840.1.114222.4.11.7459"
+    }
+  }
+}
+content {
+  content_type {
+    value: "text/cql"
+  }
+  data {
+    value: "library \"zika-virus-intervention-logic\" version \'1.0.0\'\r\n\r\nusing FHIR version \'1.8\'\r\n\r\ninclude FHIRHelpers version \'1.8\' called FHIRHelpers\r\n\r\ncodesystem \"Example Questionnaires\": \'http://example.org/questionnaires\'\r\n\r\nvalueset \"Pregnancy\": \'urn:oid:X.Y.Z\'\r\nvalueset \"Zika Affected Areas\": \'urn:oid:2.16.840.1.114222.4.11.7457\' // Value set has been created based upon Jan 26th, 2016 travel notice from CDC Zika virus disease website\thttps://phinvads.cdc.gov/vads/ViewValueSet.action?oid=2.16.840.1.114222.4.11.7457\r\nvalueset \"Zika Virus Signs and Symptoms\":\t\'2.16.840.1.114222.4.11.7459\' // https://phinvads.cdc.gov/vads/ViewValueSet.action?oid=2.16.840.1.114222.4.11.7459\r\nvalueset \"General Arbovirus Signs and Symptoms\": \'2.16.840.1.114222.4.11.7460\' // Signs and Symptoms of Arboviral diseases. This value set would be used for public health case notification and includes signs and symptoms of Dengue, Chikungunya and Zika.\thttps://phinvads.cdc.gov/vads/ViewValueSet.action?oid=2.16.840.1.114222.4.11.7460\r\nvalueset \"Zika Virus Tests\": \'2.16.840.1.114222.4.11.7480\'\t// https://phinvads.cdc.gov/vads/ViewValueSet.action?oid=2.16.840.1.114222.4.11.7480\r\nvalueset \"Arbovirus Tests\": \'2.16.840.1.114222.4.11.4120\' // https://phinvads.cdc.gov/vads/ViewValueSet.action?oid=2.16.840.1.114222.4.11.4120\r\nvalueset \"Chikungunya Tests\": \'2.16.840.1.114222.4.11.7339\' // https://phinvads.cdc.gov/vads/ViewValueSet.action?oid=2.16.840.1.114222.4.11.7339\r\nvalueset \"Dengue Tests\": \'2.16.840.1.114222.4.11.4141\' //\thttps://phinvads.cdc.gov/vads/ViewValueSet.action?oid=2.16.840.1.114222.4.11.4141\r\nvalueset \"Zika Virus IgM ELISA Results\": \'2.16.840.1.114222.4.11.7476\' // This value set is intended for use in electronic laboratory reporting based on the results received from the laboratory.  The laboratory may also report a quantitative titer if applicable.\thttps://phinvads.cdc.gov/vads/ViewValueSet.action?oid=2.16.840.1.114222.4.11.7476\r\nvalueset \"Zika Virus Neutralizing Antibody Results\": \'2.16.840.1.114222.4.11.7477\' // This value set is intended for use in electronic laboratory reporting based on the results received from the laboratory.  The laboratory may also report a quantitative titer if applicable.\thttps://phinvads.cdc.gov/vads/ViewValueSet.action?oid=2.16.840.1.114222.4.11.7477\r\nvalueset \"Arbovirus Test Results\": \'2.16.840.1.114222.4.11.4003\' //\thttps://phinvads.cdc.gov/vads/ViewValueSet.action?oid=2.16.840.1.114222.4.11.4003\r\nvalueset \"Chikungunya Test Results\": \'2.16.840.1.114222.4.11.7343\' // This value set is intended for use in electronic laboratory reporting based on the results received from the laboratory.  The laboratory may also report a quantitative titer if applicable.\thttps://phinvads.cdc.gov/vads/ViewValueSet.action?oid=2.16.840.1.114222.4.11.7343\r\nvalueset \"Dengue Test Results\": \'2.16.840.1.114222.4.11.4025\' // This value set is intended for use in electronic laboratory reporting based on the results received from the laboratory.  The laboratory may also report a quantitative titer if applicable.\thttps://phinvads.cdc.gov/vads/ViewValueSet.action?oid=2.16.840.1.114222.4.11.4025\r\n\r\ncode \"CDE: Resident of or Frequent Traveler to Zika Area\": \'CDE: Resident of or Frequent Traveler to Zika Area\' from \"Example Questionnaires\"\r\ncode \"CDE: Recent Travel to Zika Area\": \'CDE: Recent Travel to Zika Area\' from \"Example Questionnaires\"\r\ncode \"CDE: Time Since Returned From Travel\": \'CDE: Time Since Returned From Travel\' from \"Example Questionnaires\"\r\ncode \"CDE: Recent Sexual Encounter With Traveler to Zika Area\": \'CDE: Recent Sexual Encounter With Traveler to Zika Area\' from \"Example Questionnaires\"\r\ncode \"CDE: Time Since Sexual Encounter\": \'CDE: Time Since Sexual Encounter\' from \"Example Questionnaires\"\r\ncode \"CDE: Planned Travel to Zika Area\": \'CDE: Planned Travel to Zika Area\' from \"Example Questionnaires\"\r\n\r\nparameter \"Current Encounter\" Encounter\r\n\r\ncontext Patient\r\n\r\ndefine \"Pregnancy Conditions\":\r\n  [Condition: \"Pregnancy\"] C\r\n    where C.clinicalStatus = \'active\'\r\n      and C.verificationStatus = \'confirmed\'\r\n      // well, this is ugly....\r\n      and Interval[C.onset as dateTime, C.abatement as dateTime] includes Today()\r\n\r\ndefine \"Is Patient Pregnant\":\r\n  Patient.gender = \'female\'\r\n    and exists (\"Pregnancy Conditions\")\r\n\r\ndefine \"Zika Exposure Assessment\":\r\n  Code \'Zika Virus Exposure Assessment\' from \"Example Questionnaires\"\r\n\r\ndefine \"Zika Exposure Assessment Result\":\r\n  First(\r\n    [Observation: \"Zika Exposure Assessment\"] O\r\n      where O.status = \'final\'\r\n        and O.encounter.reference = \"Current Encounter\".id // TODO: fix\r\n      sort by (O.effective) desc\r\n  )\r\n\r\ndefine \"Has Zika Exposure Assessment\":\r\n  \"Zika Exposure Assessment Result\" is not null\r\n\r\ndefine \"Zika Symptoms\":\r\n  [Condition: \"Zika Virus Signs and Symptoms\"] C\r\n    where C.clinicalStatus = \'active\'\r\n      and C.verificationStatus = \'confirmed\'\r\n      and C.\"context\".reference = \"Current Encounter\".id // TODO: fix\r\n\r\ndefine \"Has Zika Symptoms\":\r\n  exists \"Zika Symptoms\"\r\n\r\ndefine \"No Zika Symptoms\":\r\n  not \"Has Zika Symptoms\"\r\n\r\ndefine \"Yes\": { \'Yes\' }\r\n\r\ndefine \"Resident of or Frequent Traveler to Zika Area\":\r\n  exists (\r\n    \"Zika Exposure Assessment Result\".component C\r\n      // TODO: Need to streamline, this ought to have worked, not sure why it didn\'t (without the coding[0] access)\r\n      where C.code.coding[0] = \"CDE: Resident of or Frequent Traveler to Zika Area\"\r\n        and C.value in \"Yes\"\r\n  )\r\n\r\ndefine \"Recent Travel to Zika Area\":\r\n  exists (\r\n    \"Zika Exposure Assessment Result\".component C\r\n      where C.code.coding[0] = \"CDE: Recent Travel to Zika Area\"\r\n        and C.value in \"Yes\"\r\n  )\r\n\r\ndefine \"Time Since Returned From Travel\":\r\n  singleton from (\r\n    \"Zika Exposure Assessment Result\".component C\r\n      where C.code.coding[0] = \"CDE: Time Since Returned From Travel\"\r\n      return C.value as Quantity\r\n  )\r\n\r\ndefine \"Recent Sexual Encounter With Traveler to Zika Area\":\r\n  exists (\r\n    \"Zika Exposure Assessment Result\".component C\r\n      where C.code.coding[0] = \"CDE: Recent Sexual Encounter With Traveler to Zika Area\"\r\n        and C.value in \"Yes\"\r\n  )\r\n\r\ndefine \"Time Since Sexual Encounter\":\r\n  singleton from (\r\n    \"Zika Exposure Assessment Result\".component C\r\n      where C.code.coding[0] = \"CDE: Time Since Sexual Encounter\"\r\n      return C.value as Quantity\r\n  )\r\n\r\ndefine \"Time Since Possible Exposure\":\r\n  Coalesce(\"Time Since Returned From Travel\", \"Time Since Sexual Encounter\")\r\n\r\ndefine \"Planned Travel to Zika Area\":\r\n  exists (\r\n    \"Zika Exposure Assessment Result\".component C\r\n      where C.code.coding[0] = \"CDE: Planned Travel to Zika Area\"\r\n        and C.value in \"Yes\"\r\n  )\r\n\r\ndefine \"Has Possible Zika Exposure\":\r\n  \"Resident of or Frequent Traveler to Zika Area\"\r\n    or \"Recent Travel to Zika Area\"\r\n    or \"Recent Sexual Encounter With Traveler to Zika Area\"\r\n\r\ndefine \"Zika Symptom Onset\":\r\n  First(\r\n    \"Zika Symptoms\" S\r\n      sort by (S.onset as dateTime)\r\n  ).onset\r\n\r\ndefine \"Time Since Symptom Onset\":\r\n  System.Quantity { value: weeks between \"Zika Symptom Onset\" and Today(), unit: \'wk\' }\r\n\r\ndefine \"Should Administer Zika Exposure Assessment\":\r\n  not (\"Has Zika Exposure Assessment\")\r\n\r\ndefine \"Should Order Serum + Urine rRT-PCR Test\":\r\n  (\"Has Possible Zika Exposure\" and \"Has Zika Symptoms\" and \"Time Since Symptom Onset\" < 2 weeks)\r\n    or (\"No Zika Symptoms\" and \"Time Since Possible Exposure\" < 2 weeks)\r\n\r\ndefine \"Should Order Serum Zika Virus IgM + Dengue Virus IgM\":\r\n  (\"Has Possible Zika Exposure\" and \"Has Zika Symptoms\" and \"Time Since Symptom Onset\" in Interval[2 weeks, 12 weeks))\r\n    or (\"Resident of or Frequent Traveler to Zika Area\" and \"No Zika Symptoms\")\r\n    or (\"No Zika Symptoms\" and \"Time Since Possible Exposure\" in Interval[2 weeks, 12 weeks))\r\n\r\ndefine \"Should Consider IgM Antibody Testing\":\r\n  (\"Has Possible Zika Exposure\" and \"Has Zika Symptoms\" and \"Time Since Symptom Onset\" >= 12 weeks)\r\n    or (\"No Zika Symptoms\" and \"Time Since Possible Exposure\" >= 12 weeks)\r\n\r\ndefine \"Should Provide Mosquito Prevention and Contraception Advice\":\r\n  \"Planned Travel to Zika Area\"\r\n"
+  }
+  url {
+    value: "library-zika-virus-intervention-logic-content.cql"
+  }
+  title {
+    value: "Zika Virus Intervention Logic"
+  }
+}

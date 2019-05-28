@@ -1,0 +1,85 @@
+id {
+  value: "77654"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the PaymentNotice</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://benefitsinc.com/paymentnotice"
+  }
+  value {
+    value: "776543"
+  }
+}
+status {
+  value: ACTIVE
+}
+request {
+  uri {
+    value: "http://benefitsinc.com/fhir/claim/12345"
+  }
+}
+response {
+  uri {
+    value: "http://benefitsinc.com/fhir/claimresponse/CR12345"
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+provider {
+  organization_id {
+    value: "1"
+  }
+}
+payment {
+  payment_reconciliation_id {
+    value: "ER2500"
+  }
+}
+payment_date {
+  value_us: 1408024800000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+payee {
+  organization_id {
+    value: "1"
+  }
+}
+recipient {
+  identifier {
+    system {
+      value: "http://regulators.gov"
+    }
+    value {
+      value: "AB123"
+    }
+  }
+}
+amount {
+  value {
+    value: "12500.00"
+  }
+  currency {
+    value: "USD"
+  }
+}
+payment_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/paymentstatus"
+    }
+    code {
+      value: "paid"
+    }
+  }
+}

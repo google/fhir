@@ -1,0 +1,4625 @@
+id {
+  value: "3ad0687e-f477-468c-afd5-fcc2bf897809"
+}
+meta {
+  last_updated {
+    value_us: 1338335132000000
+    timezone: "Z"
+    precision: SECOND
+  }
+}
+type {
+  value: COLLECTION
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/1"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "1"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Dr. Beverly Crusher</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "333333333"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "NPI"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-npi"
+        }
+        value {
+          value: "1122334499"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "DEA"
+            }
+          }
+        }
+        system {
+          value: "https://www.deanumber.com/"
+        }
+        value {
+          value: "F91234567-001AB"
+        }
+      }
+      name {
+        family {
+          value: "Beverly"
+        }
+        given {
+          value: "Crusher"
+        }
+        prefix {
+          value: "Dr"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/13"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "13"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Seven, Henry. SSN:\n            333333333</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "333333333"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Seven"
+        }
+        given {
+          value: "Henry"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1002"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1002 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/14"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "14"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Assigned, Amanda. SSN:\n            33344444</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "33344444"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Assigned"
+        }
+        given {
+          value: "Amanda"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1021"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1020 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/15"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "15"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Hippocrates, Harold. SSN:\n            444444444</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "444444444"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Hippocrates"
+        }
+        given {
+          value: "Harold"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1003"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1003 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/16"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "16"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Primary, Patricia. SSN:\n            555555555</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "555555555"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Primary"
+        }
+        given {
+          value: "Patricia"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1004"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1004 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/17"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "17"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Admit, Alan. SSN:\n            666666666</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "666666666"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Admit"
+        }
+        given {
+          value: "Alan"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1005"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1005 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/18"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "18"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Attend, Aaron. SSN:\n            777777777</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "777777777"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Attend"
+        }
+        given {
+          value: "Aaron"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1006"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1006 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/19"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "19"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Sender, Sam. SSN:\n            888888888</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "888888888"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Sender"
+        }
+        given {
+          value: "Sam"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1007"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1007 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/20"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "20"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Intern, Irving. SSN:\n            888222222</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "888222222"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Intern"
+        }
+        given {
+          value: "Irving"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1022"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1021 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/21"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "21"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Resident, Rachel. SSN:\n            888333333</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "888333333"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Resident"
+        }
+        given {
+          value: "Rachel"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1023"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1022 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/22"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "22"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Leader, Linda. SSN:\n            888444444</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "888444444"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Leader"
+        }
+        given {
+          value: "Linda"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1024"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1023 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/23"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "23"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Verify, Virgil. SSN:\n            999999999</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "999999999"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Verify"
+        }
+        given {
+          value: "Virgil"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1008"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1008 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/24"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "24"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Specialize, Sara. SSN:\n            222333333</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222333333"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Specialize"
+        }
+        given {
+          value: "Sara"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1009"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1009 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/25"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "25"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Reaction, Ramsey. SSN:\n            222223333</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222223333"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Reaction"
+        }
+        given {
+          value: "Ramsey"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1025"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1024 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/26"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "26"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Sleeper, Sally. SSN:\n            222666666</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222666666"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Sleeper"
+        }
+        given {
+          value: "Sally"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1012"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1012 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/27"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "27"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Pump, Patrick. SSN:\n            222334444</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222334444"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Pump"
+        }
+        given {
+          value: "Patrick"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1027"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1025 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/28"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "28"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Valve, Vera. SSN:\n            222335555</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222335555"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Valve"
+        }
+        given {
+          value: "Vera"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1028"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1026 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/29"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "29"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Scratch, Sophie. SSN:\n            222336666</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222336666"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Scratch"
+        }
+        given {
+          value: "Sophie"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1029"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1027 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/30"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "30"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Emergency, Eric. SSN:\n            222337777</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222337777"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Emergency"
+        }
+        given {
+          value: "Eric"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1030"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1028 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/31"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "31"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Hormone, Horace. SSN:\n            222338888</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222338888"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Hormone"
+        }
+        given {
+          value: "Horace"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1031"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1029 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/32"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "32"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Family, Fay. SSN:\n            222339999</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222339999"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Family"
+        }
+        given {
+          value: "Fay"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1032"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1030 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/33"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "33"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Tum, Tony. SSN:\n            222442222</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222442222"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Tum"
+        }
+        given {
+          value: "Tony"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1033"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1031 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/34"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "34"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Sage, Stanley. SSN:\n            222443333</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222443333"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Sage"
+        }
+        given {
+          value: "Stanley"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1034"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1032 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/35"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "35"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Bleeder, Boris. SSN:\n            222443344</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222443344"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Bleeder"
+        }
+        given {
+          value: "Boris"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1035"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1033 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/36"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "36"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Pasteur, Paula. SSN:\n            222445555</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222445555"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Pasteur"
+        }
+        given {
+          value: "Paula"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1036"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1034 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/37"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "37"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Osler, Otto. SSN:\n            222446666</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222446666"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Osler"
+        }
+        given {
+          value: "Otto"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1037"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1035 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/38"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "38"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Renal, Rory. SSN:\n            222447777</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222447777"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Renal"
+        }
+        given {
+          value: "Rory"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1038"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1036 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/39"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "39"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Brain, Barry. SSN:\n            222448888</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222448888"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Brain"
+        }
+        given {
+          value: "Barry"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1039"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1037 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/40"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "40"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Cranium, Carol. SSN:\n            222449999</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222449999"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Cranium"
+        }
+        given {
+          value: "Carol"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1040"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1038 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/41"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "41"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Fem, Flora. SSN:\n            222552222</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222552222"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Fem"
+        }
+        given {
+          value: "Flora"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1041"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1039 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/42"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "42"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Tumor, Trudy. SSN:\n            222553333</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222553333"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Tumor"
+        }
+        given {
+          value: "Trudy"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-2003"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1040 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/43"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "43"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Vision, Victor. SSN:\n            222554444</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222554444"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Vision"
+        }
+        given {
+          value: "Victor"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1043"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1041 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/44"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "44"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Carpenter, Calvin. SSN:\n            222555545</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222555545"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Carpenter"
+        }
+        given {
+          value: "Calvin"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1044"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1042 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/45"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "45"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Rhino, Rick. SSN:\n            222556666</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222556666"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Rhino"
+        }
+        given {
+          value: "Rick"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1045"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1043 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/46"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "46"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Slide, Stan. SSN:\n            222444444</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222444444"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Slide"
+        }
+        given {
+          value: "Stan"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1010"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1010 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/47"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "47"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Kidder, Karen. SSN:\n            222557777</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222557777"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Kidder"
+        }
+        given {
+          value: "Karen"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1046"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1044 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/48"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "48"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Hollywood, Heddie. SSN:\n            222558888</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222558888"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Hollywood"
+        }
+        given {
+          value: "Heddie"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1047"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1045 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/49"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "49"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Shrink, Serena. SSN:\n            222559999</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222559999"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Shrink"
+        }
+        given {
+          value: "Serena"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1048"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1046 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/50"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "50"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Puffer, Penny. SSN:\n            222662222</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222662222"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Puffer"
+        }
+        given {
+          value: "Penny"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1049"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1047 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/51"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "51"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Curie, Christine. SSN:\n            222555555</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222555555"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Curie"
+        }
+        given {
+          value: "Christine"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1011"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1011 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/52"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "52"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Joint, Jeffrey. SSN:\n            222663333</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222663333"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Joint"
+        }
+        given {
+          value: "Jeffrey"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1050"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1048 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/53"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "53"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Cutter, Carl. SSN:\n            222777777</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222777777"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Cutter"
+        }
+        given {
+          value: "Carl"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1013"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1013 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/54"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "54"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Plumber, Peter. SSN:\n            222664444</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222664444"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Plumber"
+        }
+        given {
+          value: "Peter"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1051"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1049 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/55"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "55"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Helper, Horace. SSN:\n            222665555</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222665555"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Helper"
+        }
+        given {
+          value: "Horace"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1052"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1050 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/56"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "56"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Nightingale, Nancy. SSN:\n            222888888</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222888888"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Nightingale"
+        }
+        given {
+          value: "Nancy"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1014"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1014 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/57"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "57"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Barton, Clarence. SSN:\n            222999999</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222999999"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Barton"
+        }
+        given {
+          value: "Clarence"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1015"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1015 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/58"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "58"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Bender, Bob. SSN:\n            222666666</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222666666"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Bender"
+        }
+        given {
+          value: "Bob"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1053"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1051 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/59"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "59"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Chopper, Charlie. SSN:\n            222667777</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222667777"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Chopper"
+        }
+        given {
+          value: "Charlie"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1054"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1052 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/60"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "60"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Brace, Ben. SSN:\n            222668888</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222668888"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Brace"
+        }
+        given {
+          value: "Ben"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1055"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1053 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/61"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "61"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Specs, Sylvia. SSN:\n            222669999</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222669999"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Specs"
+        }
+        given {
+          value: "Sylvia"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1056"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1054 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/62"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "62"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Script, Susan. SSN:\n            333222222</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "333222222"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Script"
+        }
+        given {
+          value: "Susan"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1016"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1016 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/63"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "63"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Bunion, Paul. SSN:\n            222772222</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222772222"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Bunion"
+        }
+        given {
+          value: "Paul"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1057"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1055 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/64"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "64"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Listener, Larry. SSN:\n            222773333</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222773333"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Listener"
+        }
+        given {
+          value: "Larry"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1058"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1056 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/65"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "65"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Beaker, Bill. SSN:\n            333444444</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "333444444"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Beaker"
+        }
+        given {
+          value: "Bill"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1017"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1017 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/66"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "66"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Chow, Connie. SSN:\n            333555555</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "333555555"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Chow"
+        }
+        given {
+          value: "Connie"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1018"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1018 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/67"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "67"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">teHelper. SSN: 000111111</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "000111111"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Helper"
+        }
+        given {
+          value: "Helen"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1019"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1019 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/68"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "68"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Player, Pamela. SSN:\n            222776666</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222776666"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Player"
+        }
+        given {
+          value: "Pamela"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1059"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1057 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/69"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "69"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Stretcher, Seth. SSN:\n            222778888</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "222778888"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Stretcher"
+        }
+        given {
+          value: "Seth"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1060"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1058 Healthcare Drive"
+        }
+      }
+      gender {
+        value: MALE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Practitioner/70"
+  }
+  resource {
+    practitioner {
+      id {
+        value: "70"
+      }
+      meta {
+        last_updated {
+          value_us: 1338335132000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Enter Ellen, ElleSSN:\n            333777777</div>"
+        }
+      }
+      identifier {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "SS"
+            }
+          }
+        }
+        system {
+          value: "http://hl7.org/fhir/sid/us-ssn"
+        }
+        value {
+          value: "333777777"
+        }
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Enter"
+        }
+        given {
+          value: "Ellen"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555-555-1020"
+        }
+        use {
+          value: WORK
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        line {
+          value: "1058 Healthcare Drive"
+        }
+      }
+      gender {
+        value: FEMALE
+      }
+    }
+  }
+}

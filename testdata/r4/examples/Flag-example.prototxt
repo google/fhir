@@ -1,0 +1,79 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Large Dog warning for Peter Patient</div>"
+  }
+}
+identifier {
+  value {
+    value: "12345"
+  }
+}
+status {
+  value: INACTIVE
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/flag-category"
+    }
+    code {
+      value: "safety"
+    }
+    display {
+      value: "Safety"
+    }
+  }
+  text {
+    value: "Safety"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://example.org/local"
+    }
+    code {
+      value: "bigdog"
+    }
+    display {
+      value: "Big dog"
+    }
+  }
+  text {
+    value: "Patient has a big dog at his home. Always always wear a suit of armor or take other active counter-measures"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter Patient"
+  }
+}
+period {
+  start {
+    value_us: 1421413200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1480510800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+author {
+  practitioner_id {
+    value: "example"
+  }
+  display {
+    value: "Nancy Nurse"
+  }
+}

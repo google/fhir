@@ -1,0 +1,153 @@
+id {
+  value: "fm-solicited"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Attachment in response to a Request</div>"
+  }
+}
+contained {
+  organization {
+    id {
+      value: "provider"
+    }
+    identifier {
+      system {
+        value: "http://www.jurisdiction.com/provideroffices"
+      }
+      value {
+        value: "3456"
+      }
+    }
+  }
+}
+contained {
+  organization {
+    id {
+      value: "payor"
+    }
+    identifier {
+      system {
+        value: "http://www.jurisdiction.com/insurer"
+      }
+      value {
+        value: "123456"
+      }
+    }
+  }
+}
+contained {
+  communication_request {
+    id {
+      value: "request"
+    }
+    identifier {
+      system {
+        value: "http://www.jurisdiction.com/insurer/123456"
+      }
+      value {
+        value: "ABC123"
+      }
+    }
+    status {
+      value: COMPLETED
+    }
+    subject {
+      patient_id {
+        value: "1"
+      }
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://www.providerco.com/communication"
+  }
+  value {
+    value: "12345"
+  }
+}
+based_on {
+  fragment {
+    value: "request"
+  }
+}
+status {
+  value: COMPLETED
+}
+category {
+  coding {
+    system {
+      value: "http://acme.org/messagetypes"
+    }
+    code {
+      value: "SolicitedAttachment"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "1"
+  }
+}
+sent {
+  value_us: 1465783270000000
+  timezone: "-08:00"
+  precision: SECOND
+}
+recipient {
+  fragment {
+    value: "payor"
+  }
+}
+sender {
+  fragment {
+    value: "provider"
+  }
+}
+payload {
+  content {
+    attachment {
+      content_type {
+        value: "application/pdf"
+      }
+      data {
+        value: "Hello"
+      }
+      title {
+        value: "accident notes 20100201.pdf"
+      }
+      creation {
+        value_us: 1265043023000000
+        timezone: "-05:00"
+        precision: SECOND
+      }
+    }
+  }
+}
+payload {
+  content {
+    attachment {
+      content_type {
+        value: "application/pdf"
+      }
+      url {
+        value: "http://happyvalley.com/docs/AB12345"
+      }
+      size {
+        value: 104274
+      }
+      hash {
+        value: "Hello there"
+      }
+      creation {
+        value_us: 1265018254000000
+        timezone: "+01:00"
+        precision: SECOND
+      }
+    }
+  }
+}

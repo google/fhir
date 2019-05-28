@@ -1,0 +1,164 @@
+id {
+  value: "right-lens"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: right-lens</p><p><b>identifier</b>: 15013R</p><p><b>groupIdentifier</b>: 15013</p><p><b>status</b>: completed</p><p><b>intent</b>: original-order</p><p><b>code</b>: Lens <span>(Details : {http://terminology.hl7.org/CodeSystem/ex-visionprescriptionproduct code \'lens\' = \'Lens)</span></p><blockquote><p><b>parameter</b></p><p><b>code</b>: sphere, right lens <span>(Details : {LOINC code \'28826-6\' = \'Sphere distance Glasses prescription.lens - right\', given as \'Sphere distance Glasses prescription.lens - right\'})</span></p><p><b>value</b>: -2.00 Diopter<span> (Details: UCUM code [diop] = \'diop\')</span></p></blockquote><blockquote><p><b>parameter</b></p><p><b>code</b>: prisms, right lens <span>(Details : {LOINC code \'28829-0\' = \'Prism base distance Glasses prescription.lens - right\', given as \'Prism base distance Glasses prescription.lens - right\'})</span></p><p><b>value</b>: -2.00 Diopter<span> (Details: UCUM code [diop] = \'diop\')</span></p></blockquote><blockquote><p><b>parameter</b></p><p><b>code</b>: add, right lens <span>(Details : {LOINC code \'28810-0\' = \'Add 1 LM glasses lens - right\', given as \'Add 1 LM glasses lens - right\'})</span></p><p><b>value</b>: 2.00 Diopter<span> (Details: UCUM code [diop] = \'diop\')</span></p></blockquote><p><b>subject</b>: <a>Patient/example</a></p><p><b>occurrence</b>: 15/06/2014</p><p><b>requester</b>: <a>Practitioner/example</a></p></div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.happysight.com/prescription"
+  }
+  value {
+    value: "15013R"
+  }
+}
+group_identifier {
+  system {
+    value: "http://acme.org"
+  }
+  value {
+    value: "15013"
+  }
+}
+status {
+  value: COMPLETED
+}
+intent {
+  value: ORIGINAL_ORDER
+}
+code {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/ex-visionprescriptionproduct"
+      }
+      code {
+        value: "lens"
+      }
+    }
+  }
+}
+parameter {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "28826-6"
+      }
+      display {
+        value: "Sphere distance Glasses prescription.lens - right"
+      }
+    }
+    text {
+      value: "sphere, right lens"
+    }
+  }
+  value {
+    quantity {
+      value {
+        value: "-2.00"
+      }
+      unit {
+        value: "Diopter"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "[diop]"
+      }
+    }
+  }
+}
+parameter {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "28829-0"
+      }
+      display {
+        value: "Prism base distance Glasses prescription.lens - right"
+      }
+    }
+    text {
+      value: "prisms, right lens"
+    }
+  }
+  value {
+    quantity {
+      value {
+        value: "-2.00"
+      }
+      unit {
+        value: "Diopter"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "[diop]"
+      }
+    }
+  }
+}
+parameter {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "28810-0"
+      }
+      display {
+        value: "Add 1 LM glasses lens - right"
+      }
+    }
+    text {
+      value: "add, right lens"
+    }
+  }
+  value {
+    quantity {
+      value {
+        value: "2.00"
+      }
+      unit {
+        value: "Diopter"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "[diop]"
+      }
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+occurrence {
+  date_time {
+    value_us: 1402754400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+requester {
+  practitioner_id {
+    value: "example"
+  }
+}

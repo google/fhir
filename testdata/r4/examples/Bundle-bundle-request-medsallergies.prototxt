@@ -1,0 +1,56 @@
+id {
+  value: "bundle-request-medsallergies"
+}
+type {
+  value: BATCH
+}
+entry {
+  request {
+    method {
+      value: GET
+    }
+    url {
+      value: "/Patient/example"
+    }
+  }
+}
+entry {
+  request {
+    method {
+      value: GET
+    }
+    url {
+      value: "/MedicationStatement?patient=example&_list=$current-medications"
+    }
+  }
+}
+entry {
+  request {
+    method {
+      value: GET
+    }
+    url {
+      value: "/AllergyIntolerance?patient=example&_list=$current-allergies"
+    }
+  }
+}
+entry {
+  request {
+    method {
+      value: GET
+    }
+    url {
+      value: "/Condition?patient=example&_list=$current-problems"
+    }
+  }
+}
+entry {
+  request {
+    method {
+      value: GET
+    }
+    url {
+      value: "/MedicationStatement?patient=example&notgiven:not=true"
+    }
+  }
+}

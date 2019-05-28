@@ -1,0 +1,182 @@
+id {
+  value: "f001"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f001</p><p><b>identifier</b>: 738472983 (USUAL), ?? (USUAL)</p><p><b>active</b>: true</p><p><b>name</b>: Pieter van de Heuvel </p><p><b>telecom</b>: ph: 0648352638(MOBILE), p.heuvel@gmail.com(HOME)</p><p><b>gender</b>: male</p><p><b>birthDate</b>: 17/11/1944</p><p><b>deceased</b>: false</p><p><b>address</b>: Van Egmondkade 23 Amsterdam 1024 RJ NLD (HOME)</p><p><b>maritalStatus</b>: Getrouwd <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-MaritalStatus code \'M\' = \'Married\', given as \'Married\'})</span></p><p><b>multipleBirth</b>: true</p><h3>Contacts</h3><table><tr><td>-</td><td><b>Relationship</b></td><td><b>Name</b></td><td><b>Telecom</b></td></tr><tr><td>*</td><td>Emergency Contact <span>(Details : {http://terminology.hl7.org/CodeSystem/v2-0131 code \'C\' = \'Emergency Contact)</span></td><td>Sarah Abels </td><td>ph: 0690383372(MOBILE)</td></tr></table><h3>Communications</h3><table><tr><td>-</td><td><b>Language</b></td><td><b>Preferred</b></td></tr><tr><td>*</td><td>Nederlands <span>(Details : {urn:ietf:bcp:47 code \'nl\' = \'Dutch\', given as \'Dutch\'})</span></td><td>true</td></tr></table><p><b>managingOrganization</b>: <a>Burgers University Medical Centre</a></p></div>"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  system {
+    value: "urn:oid:2.16.840.1.113883.2.4.6.3"
+  }
+  value {
+    value: "738472983"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  system {
+    value: "urn:oid:2.16.840.1.113883.2.4.6.3"
+  }
+}
+active {
+  value: true
+}
+name {
+  use {
+    value: USUAL
+  }
+  family {
+    value: "van de Heuvel"
+  }
+  given {
+    value: "Pieter"
+  }
+  suffix {
+    value: "MSc"
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "0648352638"
+  }
+  use {
+    value: MOBILE
+  }
+}
+telecom {
+  system {
+    value: EMAIL
+  }
+  value {
+    value: "p.heuvel@gmail.com"
+  }
+  use {
+    value: HOME
+  }
+}
+gender {
+  value: MALE
+}
+birth_date {
+  value_us: -792842400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+deceased {
+  boolean {
+  }
+}
+address {
+  use {
+    value: HOME
+  }
+  line {
+    value: "Van Egmondkade 23"
+  }
+  city {
+    value: "Amsterdam"
+  }
+  postal_code {
+    value: "1024 RJ"
+  }
+  country {
+    value: "NLD"
+  }
+}
+marital_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus"
+    }
+    code {
+      value: "M"
+    }
+    display {
+      value: "Married"
+    }
+  }
+  text {
+    value: "Getrouwd"
+  }
+}
+multiple_birth {
+  boolean {
+    value: true
+  }
+}
+contact {
+  relationship {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0131"
+      }
+      code {
+        value: "C"
+      }
+    }
+  }
+  name {
+    use {
+      value: USUAL
+    }
+    family {
+      value: "Abels"
+    }
+    given {
+      value: "Sarah"
+    }
+  }
+  telecom {
+    system {
+      value: PHONE
+    }
+    value {
+      value: "0690383372"
+    }
+    use {
+      value: MOBILE
+    }
+  }
+}
+communication {
+  language {
+    coding {
+      system {
+        value: "urn:ietf:bcp:47"
+      }
+      code {
+        value: "nl"
+      }
+      display {
+        value: "Dutch"
+      }
+    }
+    text {
+      value: "Nederlands"
+    }
+  }
+  preferred {
+    value: true
+  }
+}
+managing_organization {
+  organization_id {
+    value: "f001"
+  }
+  display {
+    value: "Burgers University Medical Centre"
+  }
+}

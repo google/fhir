@@ -1,0 +1,66 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n      <p>\n        <b>SNOMED CT</b>\n      </p>\n      \n      <p> oid: 2.16.840.1.113883.6.96</p>\n      \n      <p> uri: http://snomed.info/sct</p>\n    \n    </div>"
+  }
+}
+name {
+  value: "SNOMED CT"
+}
+status {
+  value: ACTIVE
+}
+kind {
+  value: CODESYSTEM
+}
+date {
+  value_us: 1418389200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "HL7 International on behalf of IHTSDO"
+}
+contact {
+  name {
+    value: "FHIR project team"
+  }
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+}
+responsible {
+  value: "IHTSDO & affiliates"
+}
+description {
+  value: "SNOMED CT is a concept-based, scientifically validated terminology that provides a unique and permanent concept identifier that can be included in multiple HL7 data types including CD and CE.  The concepts are managed to avoid \"semantic drift\" so the meaning remains constant.  If the concept is found to be ambiguous or the meaning changes, the concept is inactivated but still retained and the identifier is never reused.    SNOMED CT\'s concepts are interrelated hierarchically and using description logic.    SNOMED CT concepts have a unique \"fully-specified name\", a preferred term, and, optionally, synonyms.  The description languages include English and Spanish."
+}
+unique_id {
+  type {
+    value: OID
+  }
+  value {
+    value: "2.16.840.1.113883.6.96"
+  }
+}
+unique_id {
+  type {
+    value: URI
+  }
+  value {
+    value: "http://snomed.info/sct"
+  }
+  preferred {
+    value: true
+  }
+}

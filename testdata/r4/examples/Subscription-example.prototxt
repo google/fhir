@@ -1,0 +1,47 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>"
+  }
+}
+status {
+  value: REQUESTED
+}
+contact {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "ext 4123"
+  }
+}
+end {
+  value_us: 1609459200000000
+  timezone: "Z"
+  precision: SECOND
+}
+reason {
+  value: "Monitor new neonatal function"
+}
+criteria {
+  value: "Observation?code=http://loinc.org|1975-2"
+}
+channel {
+  type {
+    value: REST_HOOK
+  }
+  endpoint {
+    value: "https://biliwatch.com/customers/mount-auburn-miu/on-result"
+  }
+  payload {
+    value: "application/fhir+json"
+  }
+  header {
+    value: "Authorization: Bearer secret-token-abc-123"
+  }
+}

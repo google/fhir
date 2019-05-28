@@ -1,0 +1,121 @@
+id {
+  value: "C-123"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the contract</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/contract"
+  }
+  value {
+    value: "12347"
+  }
+}
+term {
+  offer {
+    text {
+      value: "Can\'t refuse"
+    }
+  }
+  asset {
+    type {
+      coding {
+        system {
+          value: "urn:ietf:rfc:3986"
+        }
+        code {
+          value: "RicardianContract"
+        }
+      }
+    }
+    subtype {
+      text {
+        value: "sample"
+      }
+    }
+    period {
+      start {
+        value_us: 1496239200000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+    valued_item {
+      entity {
+        codeable_concept {
+          text {
+            value: "Ford Bobcat"
+          }
+        }
+      }
+      identifier {
+        system {
+          value: "http://somewhere.motor-vehicle.com/vin"
+        }
+        value {
+          value: "XXSVT34-7665t952236"
+        }
+      }
+      effective_time {
+        value_us: 788878800000000
+        timezone: "Australia/Sydney"
+        precision: YEAR
+      }
+      quantity {
+        value {
+          value: "1"
+        }
+      }
+      unit_price {
+        value {
+          value: "200.00"
+        }
+        currency {
+          value: "CAD"
+        }
+      }
+      factor {
+        value: "1.0"
+      }
+      points {
+        value: "1.0"
+      }
+      net {
+        value {
+          value: "200.00"
+        }
+        currency {
+          value: "CAD"
+        }
+      }
+    }
+  }
+}
+rule {
+  content {
+    attachment {
+      content_type {
+        value: "application/txt"
+      }
+      url {
+        value: "http://www.rfc-editor.org/bcp/bcp13.txt"
+      }
+    }
+  }
+}
+legally_binding {
+  attachment {
+    content_type {
+      value: "application/pdf"
+    }
+    url {
+      value: "http://www.aws3.com/storage/doc.pdf"
+    }
+  }
+}

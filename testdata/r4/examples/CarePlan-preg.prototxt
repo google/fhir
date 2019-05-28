@@ -1,0 +1,398 @@
+id {
+  value: "preg"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>A maternity care plan (for a pregnant woman).</p>\n      <p>LMP is 1st Jan, 2013 (a great new years party!) The plan has activities to take prenatal vitamins, schedule first antenatal,\n            and \'placeholders\' for the second antenatal and delivery (there would be lots of others of course)</p>\n      <p>Note that where is a proposed \'status\' element against each activity</p>\n    </div>"
+  }
+}
+contained {
+  condition {
+    id {
+      value: "p1"
+    }
+    clinical_status {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
+        }
+        code {
+          value: "active"
+        }
+      }
+    }
+    verification_status {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+        }
+        code {
+          value: "confirmed"
+        }
+      }
+    }
+    code {
+      text {
+        value: "pregnancy"
+      }
+    }
+    subject {
+      patient_id {
+        value: "1"
+      }
+      display {
+        value: "Eve Everywoman"
+      }
+    }
+  }
+}
+contained {
+  practitioner {
+    id {
+      value: "pr1"
+    }
+    name {
+      family {
+        value: "Midwife"
+      }
+      given {
+        value: "Mavis"
+      }
+    }
+  }
+}
+contained {
+  practitioner {
+    id {
+      value: "pr2"
+    }
+    name {
+      family {
+        value: "Obstetrician"
+      }
+      given {
+        value: "Oscar"
+      }
+    }
+  }
+}
+contained {
+  care_team {
+    id {
+      value: "careteam"
+    }
+    participant {
+      role {
+        coding {
+          system {
+            value: "http://example.org/mysys"
+          }
+          code {
+            value: "lmc"
+          }
+        }
+        text {
+          value: "Midwife"
+        }
+      }
+      member {
+        fragment {
+          value: "pr1"
+        }
+        display {
+          value: "Mavis Midwife"
+        }
+      }
+    }
+    participant {
+      role {
+        coding {
+          system {
+            value: "http://example.org/mysys"
+          }
+          code {
+            value: "obs"
+          }
+        }
+        text {
+          value: "Obstretitian"
+        }
+      }
+      member {
+        fragment {
+          value: "pr2"
+        }
+        display {
+          value: "Oscar Obstetrician"
+        }
+      }
+    }
+  }
+}
+contained {
+  goal {
+    id {
+      value: "goal"
+    }
+    lifecycle_status {
+      value: ACTIVE
+    }
+    description {
+      text {
+        value: "Maintain patient\'s health throughout pregnancy and ensure a healthy child"
+      }
+    }
+    subject {
+      patient_id {
+        value: "1"
+      }
+      display {
+        value: "Eve Everywoman"
+      }
+    }
+  }
+}
+extension {
+  url {
+    value: "http://example.org/fhir/StructureDefinition/careplan#lmp"
+  }
+  value {
+    date_time {
+      value_us: 1356958800000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: PLAN
+}
+subject {
+  patient_id {
+    value: "1"
+  }
+  display {
+    value: "Eve Everywoman"
+  }
+}
+period {
+  start {
+    value_us: 1356958800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1380549600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+care_team {
+  fragment {
+    value: "careteam"
+  }
+}
+addresses {
+  fragment {
+    value: "p1"
+  }
+  display {
+    value: "pregnancy"
+  }
+}
+goal {
+  fragment {
+    value: "goal"
+  }
+}
+activity {
+  reference {
+    display {
+      value: "Prenatal vitamin MedicationRequest"
+    }
+  }
+}
+activity {
+  extension {
+    url {
+      value: "http://example.org/fhir/StructureDefinition/careplan#andetails"
+    }
+    value {
+      uri {
+        value: "http://orionhealth.com/fhir/careplan/1andetails"
+      }
+    }
+  }
+  detail {
+    kind {
+      value: APPOINTMENT
+    }
+    code {
+      coding {
+        system {
+          value: "http://example.org/mySystem"
+        }
+        code {
+          value: "1an"
+        }
+      }
+      text {
+        value: "First Antenatal encounter"
+      }
+    }
+    status {
+      value: SCHEDULED
+    }
+    do_not_perform {
+    }
+    scheduled {
+      timing {
+        repeat {
+          bounds {
+            period {
+              start {
+                value_us: 1360760400000000
+                timezone: "Australia/Sydney"
+                precision: DAY
+              }
+              end {
+                value_us: 1361970000000000
+                timezone: "Australia/Sydney"
+                precision: DAY
+              }
+            }
+          }
+        }
+      }
+    }
+    performer {
+      fragment {
+        value: "pr1"
+      }
+      display {
+        value: "Mavis Midwife"
+      }
+    }
+    description {
+      value: "The first antenatal encounter. This is where a detailed physical examination is performed.             and the pregnanacy discussed with the mother-to-be."
+    }
+  }
+}
+activity {
+  detail {
+    kind {
+      value: APPOINTMENT
+    }
+    code {
+      coding {
+        system {
+          value: "http://example.org/mySystem"
+        }
+        code {
+          value: "an"
+        }
+      }
+      text {
+        value: "Follow-up Antenatal encounter"
+      }
+    }
+    status {
+      value: NOT_STARTED
+    }
+    do_not_perform {
+    }
+    scheduled {
+      timing {
+        repeat {
+          bounds {
+            period {
+              start {
+                value_us: 1362056400000000
+                timezone: "Australia/Sydney"
+                precision: DAY
+              }
+              end {
+                value_us: 1363179600000000
+                timezone: "Australia/Sydney"
+                precision: DAY
+              }
+            }
+          }
+        }
+      }
+    }
+    performer {
+      fragment {
+        value: "pr1"
+      }
+      display {
+        value: "Mavis Midwife"
+      }
+    }
+    description {
+      value: "The second antenatal encounter. Discuss any issues that arose from the first antenatal encounter"
+    }
+  }
+}
+activity {
+  detail {
+    kind {
+      value: APPOINTMENT
+    }
+    code {
+      coding {
+        system {
+          value: "http://example.org/mySystem"
+        }
+        code {
+          value: "del"
+        }
+      }
+      text {
+        value: "Delivery"
+      }
+    }
+    status {
+      value: NOT_STARTED
+    }
+    do_not_perform {
+    }
+    scheduled {
+      timing {
+        repeat {
+          bounds {
+            period {
+              start {
+                value_us: 1377957600000000
+                timezone: "Australia/Sydney"
+                precision: DAY
+              }
+              end {
+                value_us: 1379080800000000
+                timezone: "Australia/Sydney"
+                precision: DAY
+              }
+            }
+          }
+        }
+      }
+    }
+    performer {
+      fragment {
+        value: "pr1"
+      }
+      display {
+        value: "Mavis Midwife"
+      }
+    }
+    description {
+      value: "The delivery."
+    }
+  }
+}

@@ -1,0 +1,441 @@
+id {
+  value: "medrx0301"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medrx0301</p><p><b>contained</b>: , </p><p><b>identifier</b>: 12345689 (OFFICIAL)</p><p><b>status</b>: completed</p><p><b>statusReason</b>: Try another treatment first <span>(Details : {http://terminology.hl7.org/CodeSystem/medicationrequest-status-reason code \'altchoice\' = \'Try another treatment first\', given as \'Try another treatment first\'})</span></p><p><b>intent</b>: order</p><p><b>category</b>: Inpatient <span>(Details : {http://terminology.hl7.org/CodeSystem/medicationrequest-category code \'inpatient\' = \'Inpatient\', given as \'Inpatient\'})</span></p><p><b>medication</b>: id: med0310; Oral Form Oxycodone (product) <span>(Details : {SNOMED CT code \'430127000\' = \'Oral form oxycodone\', given as \'Oral Form Oxycodone (product)\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>encounter</b>: <a>encounter who leads to this prescription</a></p><p><b>supportingInformation</b>: <a>Procedure/biopsy</a></p><p><b>authoredOn</b>: 15/01/2015</p><p><b>requester</b>: <a>Patrick Pump</a></p><p><b>performer</b>: <a>Carla Espinosa</a></p><p><b>performerType</b>: Public Health Nurse <span>(Details : {SNOMED CT code \'26369006\' = \'Public health nurse\', given as \'Public Health Nurse\'})</span></p><p><b>reasonCode</b>: Rib Pain (finding) <span>(Details : {SNOMED CT code \'297217002\' = \'Rib pain\', given as \'Rib Pain (finding)\'})</span></p><p><b>insurance</b>: <a>Coverage/9876B1</a></p><p><b>note</b>: Patient told to take with food</p><p><b>dosageInstruction</b>: </p><h3>DispenseRequests</h3><table><tr><td>-</td><td><b>ValidityPeriod</b></td><td><b>NumberOfRepeatsAllowed</b></td><td><b>Quantity</b></td><td><b>ExpectedSupplyDuration</b></td><td><b>Performer</b></td></tr><tr><td>*</td><td>15/01/2015 --&gt; 15/01/2016</td><td>0</td><td>30 TAB<span> (Details: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm code TAB = \'Tablet\')</span></td><td>10 days<span> (Details: UCUM code d = \'d\')</span></td><td><a>Practitioner/f001</a></td></tr></table><h3>Substitutions</h3><table><tr><td>-</td><td><b>Allowed[x]</b></td><td><b>Reason</b></td></tr><tr><td>*</td><td>true</td><td>formulary policy <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ActReason code \'FP\' = \'formulary policy\', given as \'formulary policy\'})</span></td></tr></table><p><b>detectedIssue</b>: <a>DetectedIssue/allergy</a></p><p><b>eventHistory</b>: Author\'s Signature. Generated Summary: id: signature; recorded: 01/02/2017 5:23:07 PM; </p></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "med0310"
+    }
+    code {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "430127000"
+        }
+        display {
+          value: "Oral Form Oxycodone (product)"
+        }
+      }
+    }
+  }
+}
+contained {
+  provenance {
+    id {
+      value: "signature"
+    }
+    target {
+      service_request_id {
+        value: "physiotherapy"
+      }
+    }
+    recorded {
+      value_us: 1485969787000000
+      timezone: "Z"
+      precision: SECOND
+    }
+    agent {
+      role {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+          }
+          code {
+            value: "AUT"
+          }
+        }
+      }
+      who {
+        practitioner_id {
+          value: "example"
+        }
+        display {
+          value: "Dr Adam Careful"
+        }
+      }
+    }
+    signature {
+      type {
+        system {
+          value: "urn:iso-astm:E1762-95:2013"
+        }
+        code {
+          value: "1.2.840.10065.1.12.1.1"
+        }
+        display {
+          value: "Author\'s Signature"
+        }
+      }
+      when {
+        value_us: 1485969787000000
+        timezone: "Z"
+        precision: SECOND
+      }
+      who {
+        practitioner_id {
+          value: "example"
+        }
+        display {
+          value: "Dr Adam Careful"
+        }
+      }
+      target_format {
+        value: "application/fhir+xml"
+      }
+      sig_format {
+        value: "application/signature+xml"
+      }
+      data {
+        value: "this blob is snipped"
+      }
+    }
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.bmc.nl/portal/prescriptions"
+  }
+  value {
+    value: "12345689"
+  }
+}
+status {
+  value: COMPLETED
+}
+status_reason {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/medicationrequest-status-reason"
+    }
+    code {
+      value: "altchoice"
+    }
+    display {
+      value: "Try another treatment first"
+    }
+  }
+}
+intent {
+  value: ORDER
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/medicationrequest-category"
+    }
+    code {
+      value: "inpatient"
+    }
+    display {
+      value: "Inpatient"
+    }
+  }
+}
+medication {
+  reference {
+    fragment {
+      value: "med0310"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+encounter {
+  encounter_id {
+    value: "f201"
+  }
+  display {
+    value: "encounter who leads to this prescription"
+  }
+}
+supporting_information {
+  procedure_id {
+    value: "biopsy"
+  }
+}
+authored_on {
+  value_us: 1421240400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+requester {
+  practitioner_id {
+    value: "f007"
+  }
+  display {
+    value: "Patrick Pump"
+  }
+}
+performer {
+  practitioner_id {
+    value: "f204"
+  }
+  display {
+    value: "Carla Espinosa"
+  }
+}
+performer_type {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "26369006"
+    }
+    display {
+      value: "Public Health Nurse"
+    }
+  }
+}
+reason_code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "297217002"
+    }
+    display {
+      value: "Rib Pain (finding)"
+    }
+  }
+}
+insurance {
+  coverage_id {
+    value: "9876B1"
+  }
+}
+note {
+  text {
+    value: "Patient told to take with food"
+  }
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "one to two tablets every 4-6 hours as needed for rib pain"
+  }
+  additional_instruction {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "418914006"
+      }
+      display {
+        value: "Warning. May cause drowsiness. If affected do not drive or operate machinery. Avoid alcoholic drink (qualifier value)"
+      }
+    }
+  }
+  patient_instruction {
+    value: "Take one to two tablets every four to six hours as needed for rib pain"
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 1
+      }
+      period {
+        value: "4"
+      }
+      period_max {
+        value: "6"
+      }
+      period_unit {
+        value: H
+      }
+    }
+  }
+  as_needed {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "297217002"
+        }
+        display {
+          value: "Rib Pain (finding)"
+        }
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "26643006"
+      }
+      display {
+        value: "Oral Route"
+      }
+    }
+  }
+  method {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "421521009"
+      }
+      display {
+        value: "Swallow - dosing instruction imperative (qualifier value)"
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "ordered"
+        }
+        display {
+          value: "Ordered"
+        }
+      }
+    }
+    dose {
+      range {
+        low {
+          value {
+            value: "1"
+          }
+          unit {
+            value: "TAB"
+          }
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+          }
+          code {
+            value: "TAB"
+          }
+        }
+        high {
+          value {
+            value: "2"
+          }
+          unit {
+            value: "TAB"
+          }
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+          }
+          code {
+            value: "TAB"
+          }
+        }
+      }
+    }
+  }
+}
+dispense_request {
+  validity_period {
+    start {
+      value_us: 1421240400000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+    end {
+      value_us: 1452776400000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  number_of_repeats_allowed {
+  }
+  quantity {
+    value {
+      value: "30"
+    }
+    unit {
+      value: "TAB"
+    }
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+    }
+    code {
+      value: "TAB"
+    }
+  }
+  expected_supply_duration {
+    value {
+      value: "10"
+    }
+    unit {
+      value: "days"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "d"
+    }
+  }
+  performer {
+    practitioner_id {
+      value: "f001"
+    }
+  }
+}
+substitution {
+  allowed {
+    boolean {
+      value: true
+    }
+  }
+  reason {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+      }
+      code {
+        value: "FP"
+      }
+      display {
+        value: "formulary policy"
+      }
+    }
+  }
+}
+detected_issue {
+  detected_issue_id {
+    value: "allergy"
+  }
+}
+event_history {
+  fragment {
+    value: "signature"
+  }
+  display {
+    value: "Author\'s Signature"
+  }
+}

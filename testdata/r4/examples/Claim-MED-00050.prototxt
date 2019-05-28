@@ -1,0 +1,478 @@
+id {
+  value: "MED-00050"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of a CMS 1500 Claim</div>"
+  }
+}
+contained {
+  patient {
+    id {
+      value: "patient-1"
+    }
+    name {
+      use {
+        value: OFFICIAL
+      }
+      family {
+        value: "Ashcraft"
+      }
+      given {
+        value: "Alvina"
+      }
+    }
+    gender {
+      value: FEMALE
+    }
+    birth_date {
+      value_us: -491047200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+    address {
+      use {
+        value: HOME
+      }
+      line {
+        value: "123 Main Street"
+      }
+      city {
+        value: "Portland"
+      }
+      state {
+        value: "OR"
+      }
+      postal_code {
+        value: "97125"
+      }
+      country {
+        value: "USA"
+      }
+    }
+  }
+}
+contained {
+  coverage {
+    id {
+      value: "coverage-1"
+    }
+    identifier {
+      system {
+        value: "http://benefitsinc.com/certificate"
+      }
+      value {
+        value: "10138556"
+      }
+    }
+    status {
+      value: ACTIVE
+    }
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+        }
+        code {
+          value: "HIP"
+        }
+        display {
+          value: "health insurance plan policy"
+        }
+      }
+    }
+    subscriber {
+      fragment {
+        value: "patient-1"
+      }
+    }
+    beneficiary {
+      fragment {
+        value: "patient-1"
+      }
+    }
+    relationship {
+      coding {
+        code {
+          value: "self"
+        }
+      }
+    }
+    period {
+      start {
+        value_us: 1420095600000000
+        timezone: "-07:00"
+        precision: SECOND
+      }
+      end {
+        value_us: 1451631600000000
+        timezone: "-07:00"
+        precision: SECOND
+      }
+    }
+    payor {
+      identifier {
+        system {
+          value: "http://www.bindb.com/bin"
+        }
+        value {
+          value: "123456"
+        }
+      }
+      display {
+        value: "Humana Inc."
+      }
+    }
+    class_value {
+      type {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+          }
+          code {
+            value: "group"
+          }
+        }
+      }
+      value {
+        value: "80902206"
+      }
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://CedarArmsMedicalCenter.com/claim"
+  }
+  value {
+    value: "MED-00050"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/claim-type"
+    }
+    code {
+      value: "institutional"
+    }
+  }
+}
+sub_type {
+  coding {
+    system {
+      value: "https://www.cms.gov/codes/billtype"
+    }
+    code {
+      value: "831"
+    }
+    display {
+      value: "Hospital Outpatient Surgery performed in an Ambulatory \342\200\213Surgical Center"
+    }
+  }
+}
+use {
+  value: CLAIM
+}
+patient {
+  fragment {
+    value: "patient-1"
+  }
+}
+created {
+  value_us: 1444978800000000
+  timezone: "-07:00"
+  precision: SECOND
+}
+insurer {
+  identifier {
+    system {
+      value: "http://www.bindb.com/bin"
+    }
+    value {
+      value: "123456"
+    }
+  }
+  display {
+    value: "Humana Inc."
+  }
+}
+provider {
+  organization_id {
+    value: "1"
+  }
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+payee {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/payeetype"
+      }
+      code {
+        value: "provider"
+      }
+    }
+  }
+  party {
+    organization_id {
+      value: "1"
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    practitioner_id {
+      value: "example"
+    }
+  }
+}
+supporting_info {
+  sequence {
+    value: 1
+  }
+  category {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/claiminformationcategory"
+      }
+      code {
+        value: "hospitalized"
+      }
+    }
+  }
+  timing {
+    period {
+      start {
+        value_us: 1443682800000000
+        timezone: "-07:00"
+        precision: SECOND
+      }
+      end {
+        value_us: 1444028400000000
+        timezone: "-07:00"
+        precision: SECOND
+      }
+    }
+  }
+}
+supporting_info {
+  sequence {
+    value: 2
+  }
+  category {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/claiminformationcategory"
+      }
+      code {
+        value: "discharge"
+      }
+    }
+  }
+  code {
+    coding {
+      system {
+        value: "https://www.cms.gov/Outreach-and-Education/Medicare-Learning-Network-MLN/MLNMattersArticles/downloads/SE0801.pdf"
+      }
+      code {
+        value: "01"
+      }
+      display {
+        value: "Discharge to Home or Self Care"
+      }
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/icd-10"
+        }
+        code {
+          value: "M96.1"
+        }
+        display {
+          value: "Postlaminectomy syndrome"
+        }
+      }
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 2
+  }
+  diagnosis {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/icd-10"
+        }
+        code {
+          value: "G89.4"
+        }
+        display {
+          value: "Chronic pain syndrome"
+        }
+      }
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 3
+  }
+  diagnosis {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/icd-10"
+        }
+        code {
+          value: "M53.88"
+        }
+        display {
+          value: "Other specified dorsopathies, sacral and sacrococcygeal region"
+        }
+      }
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 4
+  }
+  diagnosis {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/icd-10"
+        }
+        code {
+          value: "M47.816"
+        }
+        display {
+          value: "Spondylosis without myelopathy or radiculopathy, lumbar region"
+        }
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  identifier {
+    system {
+      value: "http://CedarArmsMedicalCenter.com/claim"
+    }
+    value {
+      value: "MED-00050"
+    }
+  }
+  coverage {
+    fragment {
+      value: "coverage-1"
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_sequence {
+    value: 1
+  }
+  diagnosis_sequence {
+    value: 2
+  }
+  diagnosis_sequence {
+    value: 4
+  }
+  information_sequence {
+    value: 1
+  }
+  product_or_service {
+    coding {
+      system {
+        value: "http://www.ama-assn.org/go/cpt"
+      }
+      code {
+        value: "62264"
+      }
+      display {
+        value: "Surgical Procedures on the Spine and Spinal Cord"
+      }
+    }
+  }
+  serviced {
+    date {
+      value_us: 1444654800000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  location {
+    codeable_concept {
+      coding {
+        system {
+          value: "https://www.cms.gov/medicare/coding/place-of-service-codes/place_of_service_code_set.html"
+        }
+        code {
+          value: "24"
+        }
+        display {
+          value: "Ambulatory Surgical Center"
+        }
+      }
+    }
+  }
+  unit_price {
+    value {
+      value: "12500.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: "12500.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}
+total {
+  value {
+    value: "12500.00"
+  }
+  currency {
+    value: "USD"
+  }
+}

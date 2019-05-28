@@ -1,0 +1,161 @@
+id {
+  value: "example-search"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-search</p><p><b>type</b>: Restful Operation (Details: http://terminology.hl7.org/CodeSystem/audit-event-type code rest = \'RESTful Operation\', stated as \'Restful Operation\')</p><p><b>subtype</b>: search (Details: http://hl7.org/fhir/restful-interaction code search = \'search\', stated as \'search\')</p><p><b>action</b>: E</p><p><b>recorded</b>: 22/08/2015 11:42:24 PM</p><p><b>outcome</b>: 0</p><blockquote><p><b>agent</b></p><p><b>type</b>: human user <span>(Details : {http://terminology.hl7.org/CodeSystem/extra-security-role-type code \'humanuser\' = \'human user\', given as \'human user\'})</span></p><p><b>who</b>: </p><p><b>altId</b>: 601847123</p><p><b>name</b>: Grahame Grieve</p><p><b>requestor</b>: true</p></blockquote><blockquote><p><b>agent</b></p><p><b>type</b>: Source Role ID <span>(Details : {DICOM code \'110153\' = \'Source Role ID\', given as \'Source Role ID\'})</span></p><p><b>who</b>: </p><p><b>altId</b>: 6580</p><p><b>requestor</b>: false</p><h3>Networks</h3><table><tr><td>-</td><td><b>Address</b></td><td><b>Type</b></td></tr><tr><td>*</td><td>Workstation1.ehr.familyclinic.com</td><td>1</td></tr></table></blockquote><h3>Sources</h3><table><tr><td>-</td><td><b>Site</b></td><td><b>Observer</b></td><td><b>Type</b></td></tr><tr><td>*</td><td>Cloud</td><td>hl7connect.healthintersections.com.au</td><td>Web Server (Details: http://terminology.hl7.org/CodeSystem/security-source-type code 3 = \'Web Server\', stated as \'Web Server\')</td></tr></table><h3>Entities</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Role</b></td><td><b>Query</b></td></tr><tr><td>*</td><td>System Object (Details: http://terminology.hl7.org/CodeSystem/audit-entity-type code 2 = \'System Object\', stated as \'System Object\')</td><td>Query (Details: http://terminology.hl7.org/CodeSystem/object-role code 24 = \'Query\', stated as \'Query\')</td><td>aHR0cDovL2ZoaXItZGV2LmhlYWx0aGludGVyc2VjdGlvbnMuY29tLmF1L29wZW4vRW5jb3VudGVyP3BhcnRpY2lwYW50PTEz</td></tr></table></div>"
+  }
+}
+type {
+  system {
+    value: "http://terminology.hl7.org/CodeSystem/audit-event-type"
+  }
+  code {
+    value: "rest"
+  }
+  display {
+    value: "Restful Operation"
+  }
+}
+subtype {
+  system {
+    value: "http://hl7.org/fhir/restful-interaction"
+  }
+  code {
+    value: "search"
+  }
+  display {
+    value: "search"
+  }
+}
+action {
+  value: E
+}
+recorded {
+  value_us: 1440286944000000
+  timezone: "Z"
+  precision: SECOND
+}
+outcome {
+  value: NUM_0
+}
+agent {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/extra-security-role-type"
+      }
+      code {
+        value: "humanuser"
+      }
+      display {
+        value: "human user"
+      }
+    }
+  }
+  who {
+    identifier {
+      value {
+        value: "95"
+      }
+    }
+  }
+  alt_id {
+    value: "601847123"
+  }
+  name {
+    value: "Grahame Grieve"
+  }
+  requestor {
+    value: true
+  }
+}
+agent {
+  type {
+    coding {
+      system {
+        value: "http://dicom.nema.org/resources/ontology/DCM"
+      }
+      code {
+        value: "110153"
+      }
+      display {
+        value: "Source Role ID"
+      }
+    }
+  }
+  who {
+    identifier {
+      system {
+        value: "urn:oid:2.16.840.1.113883.4.2"
+      }
+      value {
+        value: "2.16.840.1.113883.4.2"
+      }
+    }
+  }
+  alt_id {
+    value: "6580"
+  }
+  requestor {
+  }
+  network {
+    address {
+      value: "Workstation1.ehr.familyclinic.com"
+    }
+    type {
+      value: NUM_1
+    }
+  }
+}
+source {
+  site {
+    value: "Cloud"
+  }
+  observer {
+    display {
+      value: "hl7connect.healthintersections.com.au"
+    }
+  }
+  type {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/security-source-type"
+    }
+    code {
+      value: "3"
+    }
+    display {
+      value: "Web Server"
+    }
+  }
+}
+entity {
+  type {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/audit-entity-type"
+    }
+    code {
+      value: "2"
+    }
+    display {
+      value: "System Object"
+    }
+  }
+  role {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/object-role"
+    }
+    code {
+      value: "24"
+    }
+    display {
+      value: "Query"
+    }
+  }
+  query {
+    value: "http://fhir-dev.healthintersections.com.au/open/Encounter?participant=13"
+  }
+}

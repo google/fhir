@@ -1,0 +1,136 @@
+id {
+  value: "infant-twin-2"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: infant-twin-2</p><p><b>identifier</b>: Medical record number = MRN7465676978, 7465676978</p><p><b>name</b>: Jacen Solo (OFFICIAL)</p><p><b>gender</b>: male</p><p><b>birthDate</b>: 15/05/2017</p><p><b>multipleBirth</b>: 2</p><h3>Contacts</h3><table><tr><td>-</td><td><b>Relationship</b></td><td><b>Name</b></td><td><b>Telecom</b></td></tr><tr><td>*</td><td>Mother <span>(Details : {SNOMED CT code \'72705000\' = \'Mother\', given as \'Mother\'}; {http://terminology.hl7.org/CodeSystem/v2-0131 code \'N\' = \'Next-of-Kin; {http://terminology.hl7.org/CodeSystem/v3-RoleCode code \'MTH\' = \'mother)</span></td><td>Leia Organa (MAIDEN)</td><td>ph: +31201234567(MOBILE)</td></tr></table></div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"
+  }
+  value {
+    string_value {
+      value: "Organa"
+    }
+  }
+}
+identifier {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+      }
+      code {
+        value: "MR"
+      }
+    }
+  }
+  system {
+    value: "http://coruscanthealth.org/main-hospital/patient-identifier"
+  }
+  value {
+    value: "MRN7465676978"
+  }
+}
+identifier {
+  system {
+    value: "http://new-republic.gov/galactic-citizen-identifier"
+  }
+  value {
+    value: "7465676978"
+  }
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  family {
+    value: "Solo"
+  }
+  given {
+    value: "Jacen"
+  }
+}
+gender {
+  value: MALE
+}
+birth_date {
+  value_us: 1494770400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+  extension {
+    url {
+      value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime"
+    }
+    value {
+      date_time {
+        value_us: 1494864690000000
+        timezone: "+01:00"
+        precision: SECOND
+      }
+    }
+  }
+}
+multiple_birth {
+  integer {
+    value: 2
+  }
+}
+contact {
+  relationship {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "72705000"
+      }
+      display {
+        value: "Mother"
+      }
+    }
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0131"
+      }
+      code {
+        value: "N"
+      }
+    }
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+      }
+      code {
+        value: "MTH"
+      }
+    }
+  }
+  name {
+    use {
+      value: MAIDEN
+    }
+    family {
+      value: "Organa"
+    }
+    given {
+      value: "Leia"
+    }
+  }
+  telecom {
+    system {
+      value: PHONE
+    }
+    value {
+      value: "+31201234567"
+    }
+    use {
+      value: MOBILE
+    }
+  }
+}

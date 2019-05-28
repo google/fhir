@@ -1,0 +1,485 @@
+id {
+  value: "100153"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Oral Health Claim</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/claim"
+  }
+  value {
+    value: "12355"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/claim-type"
+    }
+    code {
+      value: "oral"
+    }
+  }
+}
+use {
+  value: PREAUTHORIZATION
+}
+patient {
+  patient_id {
+    value: "1"
+  }
+}
+created {
+  value_us: 1426424400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+provider {
+  organization_id {
+    value: "1"
+  }
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+funds_reserve {
+  coding {
+    code {
+      value: "provider"
+    }
+  }
+}
+payee {
+  type {
+    coding {
+      code {
+        value: "provider"
+      }
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    practitioner_id {
+      value: "example"
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/icd-10"
+        }
+        code {
+          value: "123457"
+        }
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    coverage_id {
+      value: "9876B1"
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_sequence {
+    value: 1
+  }
+  diagnosis_sequence {
+    value: 1
+  }
+  product_or_service {
+    coding {
+      system {
+        value: "http://example.org/fhir/oralservicecodes"
+      }
+      code {
+        value: "ORTHPLAN"
+      }
+    }
+  }
+  serviced {
+    date {
+      value_us: 1431698400000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  unit_price {
+    value {
+      value: "9000.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: "9000.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  detail {
+    sequence {
+      value: 1
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://example.org/fhir/oralservicecodes"
+        }
+        code {
+          value: "ORTHOEXAM"
+        }
+      }
+    }
+    unit_price {
+      value {
+        value: "1000.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+    net {
+      value {
+        value: "1000.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 2
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://example.org/fhir/oralservicecodes"
+        }
+        code {
+          value: "ORTHODIAG"
+        }
+      }
+    }
+    unit_price {
+      value {
+        value: "1500.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+    net {
+      value {
+        value: "1500.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 3
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://example.org/fhir/oralservicecodes"
+        }
+        code {
+          value: "ORTHOINITIAL"
+        }
+      }
+    }
+    unit_price {
+      value {
+        value: "500.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+    net {
+      value {
+        value: "500.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 4
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://example.org/fhir/oralservicecodes"
+        }
+        code {
+          value: "ORTHOMONTHS"
+        }
+      }
+    }
+    quantity {
+      value {
+        value: "24"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 5
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://example.org/fhir/oralservicecodes"
+        }
+        code {
+          value: "ORTHOPERIODIC"
+        }
+      }
+    }
+    quantity {
+      value {
+        value: "24"
+      }
+    }
+    unit_price {
+      value {
+        value: "250.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+    net {
+      value {
+        value: "250.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+}
+item {
+  sequence {
+    value: 2
+  }
+  care_team_sequence {
+    value: 1
+  }
+  product_or_service {
+    coding {
+      system {
+        value: "http://example.org/fhir/oralservicecodes"
+      }
+      code {
+        value: "21211"
+      }
+    }
+  }
+  serviced {
+    date {
+      value_us: 1408111200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  unit_price {
+    value {
+      value: "105.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: "105.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  body_site {
+    coding {
+      system {
+        value: "http://fdi.org/fhir/oraltoothcodes"
+      }
+      code {
+        value: "21"
+      }
+    }
+  }
+  sub_site {
+    coding {
+      system {
+        value: "http://fdi.org/fhir/oralsurfacecodes"
+      }
+      code {
+        value: "L"
+      }
+    }
+  }
+}
+item {
+  sequence {
+    value: 3
+  }
+  care_team_sequence {
+    value: 1
+  }
+  product_or_service {
+    coding {
+      system {
+        value: "http://example.org/fhir/oralservicecodes"
+      }
+      code {
+        value: "27211"
+      }
+    }
+  }
+  serviced {
+    date {
+      value_us: 1408111200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  unit_price {
+    value {
+      value: "1100.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: "1100.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  body_site {
+    coding {
+      system {
+        value: "http://fdi.org/fhir/oraltoothcodes"
+      }
+      code {
+        value: "36"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 1
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://example.org/fhir/oralservicecodes"
+        }
+        code {
+          value: "27211"
+        }
+      }
+    }
+    unit_price {
+      value {
+        value: "750.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+    net {
+      value {
+        value: "750.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 2
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://example.org/fhir/oralservicecodes"
+        }
+        code {
+          value: "lab"
+        }
+      }
+    }
+    unit_price {
+      value {
+        value: "350.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+    net {
+      value {
+        value: "350.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+}

@@ -1,0 +1,75 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<p>The EHR Server supports the following transactions for the resource Person: read, vread, \n        update, history, search(name,gender), create and updates.</p>\n\t\t\t<p>The EHR System supports the following message: admin-notify::Person.</p>\n\t\t\t<p>The EHR Application has a \n        <a href=\"http://fhir.hl7.org/base/Profilebc054d23-75e1-4dc6-aca5-838b6b1ac81d/_history/b5fdd9fc-b021-4ea1-911a-721a60663796\">general document profile</a>.\n      </p>\n\t\t</div>"
+  }
+}
+url {
+  value: "urn:uuid:68D043B5-9ECF-4559-A57A-396E0D452311"
+}
+version {
+  value: "20130510"
+}
+name {
+  value: "ACME-EHR"
+}
+title {
+  value: "ACME EHR capability statement"
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+date {
+  value_us: 1325595600000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "ACME Corporation"
+}
+contact {
+  name {
+    value: "System Administrator"
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "wile@acme.org"
+    }
+  }
+}
+description {
+  value: "This is the FHIR capability statement for the main EHR at ACME for the private interface - it does not describe the public interface"
+}
+kind {
+  value: INSTANCE
+}
+software {
+  name {
+    value: "TxServer"
+  }
+  version {
+    value: "0.1.2"
+  }
+}
+implementation {
+  description {
+    value: "Acme Terminology Server"
+  }
+  url {
+    value: "http://example.org/tx"
+  }
+}
+code_search {
+  value: EXPLICIT
+}

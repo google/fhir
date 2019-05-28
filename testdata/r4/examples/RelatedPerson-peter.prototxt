@@ -1,0 +1,86 @@
+id {
+  value: "peter"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <table>\n        <tbody>\n          <tr>\n            <td>Name</td>\n            <td>Peter Chalmers</td>\n          </tr>\n          <tr>\n            <td>Address</td>\n            <td>534 Erewhon, Pleasantville, Vic, 3999</td>\n          </tr>\n          <tr>\n            <td>Contacts</td>\n            <td>Work: (03) 5555 6473</td>\n          </tr>\n        </tbody>\n      </table>\n    </div>"
+  }
+}
+patient {
+  patient_id {
+    value: "animal"
+  }
+}
+relationship {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v2-0131"
+    }
+    code {
+      value: "C"
+    }
+  }
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  family {
+    value: "Chalmers"
+  }
+  given {
+    value: "Peter"
+  }
+  given {
+    value: "James"
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "(03) 5555 6473"
+  }
+  use {
+    value: WORK
+  }
+}
+gender {
+  value: MALE
+}
+address {
+  use {
+    value: HOME
+  }
+  line {
+    value: "534 Erewhon St"
+  }
+  city {
+    value: "PleasantVille"
+  }
+  state {
+    value: "Vic"
+  }
+  postal_code {
+    value: "3999"
+  }
+}
+photo {
+  content_type {
+    value: "image/jpeg"
+  }
+  url {
+    value: "Binary/f012"
+  }
+}
+period {
+  start {
+    value_us: 1331384400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}

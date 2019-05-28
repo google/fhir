@@ -14,7 +14,9 @@
 
 package com.google.fhir.stu3;
 
-import com.google.fhir.stu3.proto.PositiveInt;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.PositiveInt;
+import com.google.protobuf.MessageOrBuilder;
 import java.util.regex.Pattern;
 
 /** A wrapper around the PositiveInt FHIR primitive type. */
@@ -29,6 +31,10 @@ public class PositiveIntWrapper extends NumericTypeWrapper<PositiveInt> {
   /** Create an PositiveIntWrapper from a PositiveInt. */
   public PositiveIntWrapper(PositiveInt positiveInt) {
     super(positiveInt);
+  }
+
+  public PositiveIntWrapper(MessageOrBuilder message) {
+    super(ProtoUtils.fieldWiseCopy(message, PositiveInt.newBuilder()).build());
   }
 
   /** Create an PositiveIntWrapper from a java String. */

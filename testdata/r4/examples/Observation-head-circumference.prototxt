@@ -1,0 +1,79 @@
+id {
+  value: "head-circumference"
+}
+meta {
+  profile {
+    value: "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: head-circumference</p><p><b>meta</b>: </p><p><b>status</b>: final</p><p><b>category</b>: Vital Signs <span>(Details : {http://terminology.hl7.org/CodeSystem/observation-category code \'vital-signs\' = \'Vital Signs\', given as \'Vital Signs\'})</span></p><p><b>code</b>: Head Circumference <span>(Details : {LOINC code \'9843-4\' = \'Head Occipital-frontal circumference\', given as \'Head Occipital-frontal circumference\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>effective</b>: 02/07/1999</p><p><b>value</b>: 51.2 cm<span> (Details: UCUM code cm = \'cm\')</span></p></div>"
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/observation-category"
+    }
+    code {
+      value: "vital-signs"
+    }
+    display {
+      value: "Vital Signs"
+    }
+  }
+  text {
+    value: "Vital Signs"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "9843-4"
+    }
+    display {
+      value: "Head Occipital-frontal circumference"
+    }
+  }
+  text {
+    value: "Head Circumference"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+effective {
+  date_time {
+    value_us: 930837600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+value {
+  quantity {
+    value {
+      value: "51.2"
+    }
+    unit {
+      value: "cm"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "cm"
+    }
+  }
+}

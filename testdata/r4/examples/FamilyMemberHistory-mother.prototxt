@@ -1,0 +1,69 @@
+id {
+  value: "mother"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Mother died of a stroke aged 56</div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+patient {
+  patient_id {
+    value: "100"
+  }
+  display {
+    value: "Peter Patient"
+  }
+}
+relationship {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+    }
+    code {
+      value: "MTH"
+    }
+    display {
+      value: "mother"
+    }
+  }
+}
+condition {
+  code {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "371041009"
+      }
+      display {
+        value: "Embolic Stroke"
+      }
+    }
+    text {
+      value: "Stroke"
+    }
+  }
+  onset {
+    age {
+      value {
+        value: "56"
+      }
+      unit {
+        value: "yr"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "a"
+      }
+    }
+  }
+}

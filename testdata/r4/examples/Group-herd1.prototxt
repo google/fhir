@@ -1,0 +1,92 @@
+id {
+  value: "herd1"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: herd1</p><p><b>identifier</b>: 20171120-1234</p><p><b>active</b>: true</p><p><b>type</b>: animal</p><p><b>actual</b>: true</p><p><b>code</b>: Porcine <span>(Details : {SNOMED CT code \'388393002\' = \'Genus Sus\', given as \'Genus Sus (organism)\'}; {https://www.aphis.usda.gov code \'POR\' = \'POR\', given as \'porcine\'})</span></p><p><b>name</b>: Breeding herd</p><p><b>quantity</b>: 2500</p><h3>Characteristics</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Value[x]</b></td><td><b>Exclude</b></td></tr><tr><td>*</td><td>gender <span>(Details )</span></td><td>female <span>(Details )</span></td><td>false</td></tr></table></div>"
+  }
+}
+extension {
+  url {
+    value: "http://example.org/fhir/StructureDefinition/owner"
+  }
+  value {
+    reference {
+      related_person_id {
+        value: "peter"
+      }
+      display {
+        value: "Peter Chalmers"
+      }
+    }
+  }
+}
+identifier {
+  system {
+    value: "https://vetmed.iastate.edu/vdl"
+  }
+  value {
+    value: "20171120-1234"
+  }
+}
+active {
+  value: true
+}
+type {
+  value: ANIMAL
+}
+actual {
+  value: true
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "388393002"
+    }
+    display {
+      value: "Genus Sus (organism)"
+    }
+  }
+  coding {
+    system {
+      value: "https://www.aphis.usda.gov"
+    }
+    code {
+      value: "POR"
+    }
+    display {
+      value: "porcine"
+    }
+  }
+  text {
+    value: "Porcine"
+  }
+}
+name {
+  value: "Breeding herd"
+}
+quantity {
+  value: 2500
+}
+characteristic {
+  code {
+    text {
+      value: "gender"
+    }
+  }
+  value {
+    codeable_concept {
+      text {
+        value: "female"
+      }
+    }
+  }
+  exclude {
+  }
+}

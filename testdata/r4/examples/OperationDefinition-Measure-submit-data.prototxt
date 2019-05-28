@@ -1,0 +1,138 @@
+id {
+  value: "Measure-submit-data"
+}
+meta {
+  last_updated {
+    value_us: 1545910674724000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <h2>Submit Data</h2>\n            <p>OPERATION: Submit Data</p>\n            <p>The official URL for this operation definition is: </p>\n            <pre>http://hl7.org/fhir/OperationDefinition/Measure-submit-data</pre>\n            <div>\n              <p>The submit-data operation is used to submit data-of-interest for a measure. There is no expectation that the submitted data represents all the data-of-interest, only that all the data submitted is relevant to the calculation of the measure for a particular subject or population</p>\n\n            </div>\n            <p>URL: [base]/Measure/$submit-data</p>\n            <p>URL: [base]/Measure/[id]/$submit-data</p>\n            <p>Parameters</p>\n            <table class=\"grid\">\n              <tr>\n                <td>\n                  <b>Use</b>\n                </td>\n                <td>\n                  <b>Name</b>\n                </td>\n                <td>\n                  <b>Cardinality</b>\n                </td>\n                <td>\n                  <b>Type</b>\n                </td>\n                <td>\n                  <b>Binding</b>\n                </td>\n                <td>\n                  <b>Documentation</b>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>measureReport</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"measurereport.html\">MeasureReport</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The measure report being submitted</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>resource</td>\n                <td>0..*</td>\n                <td>\n                  <a href=\"resource.html\">Resource</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The individual resources that make up the data-of-interest being submitted</p>\n\n                  </div>\n                </td>\n              </tr>\n            </table>\n            <div>\n              <p>The effect of invoking this operation is that the submitted data is posted to the receiving system and can be used for subsequent calculation of the relevant quality measure. The data-of-interest for a measure can be determined by examining the measure definition, or by invoking the $data-requirements operation</p>\n\n            </div>\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+      value: 2
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "trial-use"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/OperationDefinition/Measure-submit-data"
+}
+version {
+  value: "4.0.0"
+}
+name {
+  value: "Submit Data"
+}
+status {
+  value: DRAFT
+}
+kind {
+  value: OPERATION
+}
+date {
+  value_us: 1545910674000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+publisher {
+  value: "HL7 (FHIR Project)"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "fhir@lists.hl7.org"
+    }
+  }
+}
+description {
+  value: "The submit-data operation is used to submit data-of-interest for a measure. There is no expectation that the submitted data represents all the data-of-interest, only that all the data submitted is relevant to the calculation of the measure for a particular subject or population"
+}
+code {
+  value: "submit-data"
+}
+comment {
+  value: "The effect of invoking this operation is that the submitted data is posted to the receiving system and can be used for subsequent calculation of the relevant quality measure. The data-of-interest for a measure can be determined by examining the measure definition, or by invoking the $data-requirements operation"
+}
+resource {
+  value: MEASURE
+}
+system {
+}
+type {
+  value: true
+}
+instance {
+  value: true
+}
+parameter {
+  name {
+    value: "measureReport"
+  }
+  use {
+    value: IN
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The measure report being submitted"
+  }
+  type {
+    value: MEASURE_REPORT
+  }
+}
+parameter {
+  name {
+    value: "resource"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "*"
+  }
+  documentation {
+    value: "The individual resources that make up the data-of-interest being submitted"
+  }
+  type {
+    value: RESOURCE
+  }
+}

@@ -1,0 +1,87 @@
+id {
+  value: "example-pgx"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-pgx</p><p><b>basedOn</b>: <a>ServiceRequest/example-pgx</a></p><p><b>status</b>: final</p><p><b>code</b>: Pharmacogenetics Report <span>(Details : {https://system/PGxReport code \'PGxReport\' = \'PGxReport\', given as \'Pharmacogenetics Report\'})</span></p><p><b>subject</b>: <a>Bob Smith</a></p><p><b>effective</b>: 15/10/2016 12:34:56 PM</p><p><b>issued</b>: 20/10/2016 2:00:05 PM</p><p><b>performer</b>: <a>Organization/4829</a></p><p><b>result</b>: <a>Observation/example-phenotype</a></p><p><b>presentedForm</b>: </p></div>"
+  }
+}
+based_on {
+  service_request_id {
+    value: "example-pgx"
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "https://system/PGxReport"
+    }
+    code {
+      value: "PGxReport"
+    }
+    display {
+      value: "Pharmacogenetics Report"
+    }
+  }
+  text {
+    value: "Pharmacogenetics Report"
+  }
+}
+subject {
+  patient_id {
+    value: "899962"
+  }
+  display {
+    value: "Bob Smith"
+  }
+}
+effective {
+  date_time {
+    value_us: 1476495296000000
+    timezone: "+11:00"
+    precision: SECOND
+  }
+}
+issued {
+  value_us: 1476932405000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+performer {
+  organization_id {
+    value: "4829"
+  }
+}
+result {
+  observation_id {
+    value: "example-phenotype"
+  }
+}
+presented_form {
+  content_type {
+    value: "application/pdf"
+  }
+  language {
+    value: "en"
+  }
+  data {
+    value: "pdfInBase64Binary"
+  }
+  hash {
+    value: "\347\275^\177\3279\353\236|\343G\367\333\207\272\357\335;\331\347z\331\275[\367\227\236\177\306\264"
+  }
+  title {
+    value: "Pharmacogenetics Report"
+  }
+  creation {
+    value_us: 1476954000000000
+    timezone: "+11:00"
+    precision: SECOND
+  }
+}

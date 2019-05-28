@@ -1,0 +1,51 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">To be added</div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+intent {
+  value: ORDER
+}
+category {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "103693007"
+    }
+    display {
+      value: "Diagnostic procedure (procedure)"
+    }
+  }
+  text {
+    value: "Diagnostics Procedure"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "303653007"
+    }
+    display {
+      value: "Computed tomography of head"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}

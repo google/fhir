@@ -1,0 +1,226 @@
+id {
+  value: "f201"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f201</p><p><b>identifier</b>: BSN = 123456789 (OFFICIAL), BSN = 123456789 (OFFICIAL)</p><p><b>active</b>: true</p><p><b>name</b>: Roel(OFFICIAL)</p><p><b>telecom</b>: ph: +31612345678(MOBILE), ph: +31201234567(HOME)</p><p><b>gender</b>: male</p><p><b>birthDate</b>: 13/03/1960</p><p><b>deceased</b>: false</p><p><b>address</b>: Bos en Lommerplein 280 Amsterdam 1055RW NLD (HOME)</p><p><b>maritalStatus</b>: Legally married <span>(Details : {SNOMED CT code \'36629006\' = \'Legal marriage\', given as \'Legally married\'}; {http://terminology.hl7.org/CodeSystem/v3-MaritalStatus code \'M\' = \'Married)</span></p><p><b>multipleBirth</b>: false</p><p><b>photo</b>: </p><h3>Contacts</h3><table><tr><td>-</td><td><b>Relationship</b></td><td><b>Name</b></td><td><b>Telecom</b></td></tr><tr><td>*</td><td>Wife <span>(Details : {SNOMED CT code \'127850001\' = \'Wife\', given as \'Wife\'}; {http://terminology.hl7.org/CodeSystem/v2-0131 code \'N\' = \'Next-of-Kin; {http://terminology.hl7.org/CodeSystem/v3-RoleCode code \'WIFE\' = \'wife)</span></td><td>Ariadne Bor-Jansma</td><td>ph: +31201234567(HOME)</td></tr></table><h3>Communications</h3><table><tr><td>-</td><td><b>Language</b></td><td><b>Preferred</b></td></tr><tr><td>*</td><td>Dutch <span>(Details : {urn:ietf:bcp:47 code \'nl-NL\' = \'Dutch (Region=Netherlands)\', given as \'Dutch\'})</span></td><td>true</td></tr></table><p><b>managingOrganization</b>: <a>AUMC</a></p></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  type {
+    text {
+      value: "BSN"
+    }
+  }
+  system {
+    value: "urn:oid:2.16.840.1.113883.2.4.6.3"
+  }
+  value {
+    value: "123456789"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  type {
+    text {
+      value: "BSN"
+    }
+  }
+  system {
+    value: "urn:oid:2.16.840.1.113883.2.4.6.3"
+  }
+  value {
+    value: "123456789"
+  }
+}
+active {
+  value: true
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  text {
+    value: "Roel"
+  }
+  family {
+    value: "Bor"
+  }
+  given {
+    value: "Roelof Olaf"
+  }
+  prefix {
+    value: "Drs."
+  }
+  suffix {
+    value: "PDEng."
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "+31612345678"
+  }
+  use {
+    value: MOBILE
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "+31201234567"
+  }
+  use {
+    value: HOME
+  }
+}
+gender {
+  value: MALE
+}
+birth_date {
+  value_us: -309434400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+deceased {
+  boolean {
+  }
+}
+address {
+  use {
+    value: HOME
+  }
+  line {
+    value: "Bos en Lommerplein 280"
+  }
+  city {
+    value: "Amsterdam"
+  }
+  postal_code {
+    value: "1055RW"
+  }
+  country {
+    value: "NLD"
+  }
+}
+marital_status {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "36629006"
+    }
+    display {
+      value: "Legally married"
+    }
+  }
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus"
+    }
+    code {
+      value: "M"
+    }
+  }
+}
+multiple_birth {
+  boolean {
+  }
+}
+photo {
+  content_type {
+    value: "image/jpeg"
+  }
+  url {
+    value: "Binary/f006"
+  }
+}
+contact {
+  relationship {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "127850001"
+      }
+      display {
+        value: "Wife"
+      }
+    }
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0131"
+      }
+      code {
+        value: "N"
+      }
+    }
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+      }
+      code {
+        value: "WIFE"
+      }
+    }
+  }
+  name {
+    use {
+      value: USUAL
+    }
+    text {
+      value: "Ariadne Bor-Jansma"
+    }
+  }
+  telecom {
+    system {
+      value: PHONE
+    }
+    value {
+      value: "+31201234567"
+    }
+    use {
+      value: HOME
+    }
+  }
+}
+communication {
+  language {
+    coding {
+      system {
+        value: "urn:ietf:bcp:47"
+      }
+      code {
+        value: "nl-NL"
+      }
+      display {
+        value: "Dutch"
+      }
+    }
+  }
+  preferred {
+    value: true
+  }
+}
+managing_organization {
+  organization_id {
+    value: "f201"
+  }
+  display {
+    value: "AUMC"
+  }
+}

@@ -1,0 +1,125 @@
+id {
+  value: "gcs"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: gcs</p><p><b>questionnaire</b>: <a>Questionnaire/gcs</a></p><p><b>status</b>: completed</p><p><b>subject</b>: <a>Peter James Chalmers</a></p><p><b>authored</b>: 11/12/2014 4:44:16 AM</p><p><b>source</b>: <a>Practitioner/f007</a></p><blockquote><p><b>item</b></p><p><b>linkId</b>: 1.1</p><h3>Answers</h3><table><tr><td>-</td><td><b>Value[x]</b></td></tr><tr><td>*</td><td>Confused (Details: LOINC code LA6560-2 = \'Confused\', stated as \'Confused\')</td></tr></table></blockquote><blockquote><p><b>item</b></p><p><b>linkId</b>: 1.2</p><h3>Answers</h3><table><tr><td>-</td><td><b>Value[x]</b></td></tr><tr><td>*</td><td>Localizing pain (Details: LOINC code LA6566-9 = \'Localizing pain\', stated as \'Localizing pain\')</td></tr></table></blockquote><blockquote><p><b>item</b></p><p><b>linkId</b>: 1.3</p><h3>Answers</h3><table><tr><td>-</td><td><b>Value[x]</b></td></tr><tr><td>*</td><td>Eyes open spontaneously (Details: LOINC code LA6556-0 = \'Eyes open spontaneously\', stated as \'Eyes open spontaneously\')</td></tr></table></blockquote></div>"
+  }
+}
+questionnaire {
+  value: "Questionnaire/gcs"
+}
+status {
+  value: COMPLETED
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+authored {
+  value_us: 1418273056000000
+  timezone: "Z"
+  precision: SECOND
+}
+source {
+  practitioner_id {
+    value: "f007"
+  }
+}
+item {
+  link_id {
+    value: "1.1"
+  }
+  answer {
+    value {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/ordinalValue"
+          }
+          value {
+            decimal {
+              value: "4"
+            }
+          }
+        }
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "LA6560-2"
+        }
+        display {
+          value: "Confused"
+        }
+      }
+    }
+  }
+}
+item {
+  link_id {
+    value: "1.2"
+  }
+  answer {
+    value {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/ordinalValue"
+          }
+          value {
+            decimal {
+              value: "5"
+            }
+          }
+        }
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "LA6566-9"
+        }
+        display {
+          value: "Localizing pain"
+        }
+      }
+    }
+  }
+}
+item {
+  link_id {
+    value: "1.3"
+  }
+  answer {
+    value {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/ordinalValue"
+          }
+          value {
+            decimal {
+              value: "4"
+            }
+          }
+        }
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "LA6556-0"
+        }
+        display {
+          value: "Eyes open spontaneously"
+        }
+      }
+    }
+  }
+}

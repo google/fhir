@@ -1,0 +1,58 @@
+id {
+  value: "bundle-search-warning"
+}
+meta {
+  last_updated {
+    value_us: 1489440210000000
+    timezone: "+11:00"
+    precision: SECOND
+  }
+}
+type {
+  value: SEARCHSET
+}
+total {
+}
+link {
+  relation {
+    value: "self"
+  }
+  url {
+    value: "https://example.org/fhir/Observation?patient.identifier=http://example.com/fhir/identifier/mrn|123456"
+  }
+}
+entry {
+  resource {
+    operation_outcome {
+      id {
+        value: "warning"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">There is no matching patient for MRN 123456</div>"
+        }
+      }
+      issue {
+        severity {
+          value: WARNING
+        }
+        code {
+          value: NOT_FOUND
+        }
+        details {
+          text {
+            value: "There is no matching patient for MRN 123456"
+          }
+        }
+      }
+    }
+  }
+  search {
+    mode {
+      value: OUTCOME
+    }
+  }
+}

@@ -1,0 +1,192 @@
+id {
+  value: "example002"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example002</p><p><b>contained</b>: </p><p><b>status</b>: active</p><p><b>statusReason</b>: Liver enzymes abnormal <span>(Details : {SNOMED CT code \'166643006\' = \'Liver enzymes abnormal\', given as \'Liver enzymes abnormal\'})</span></p><p><b>medication</b>: id: med0309; Tylenol PM <span>(Details : {http://hl7.org/fhir/sid/ndc code \'50580-506-02\' = \'50580-506-02\', given as \'Tylenol PM\'})</span>; Film-coated tablet (qualifier value) <span>(Details : {SNOMED CT code \'385057009\' = \'Film-coated tablet\', given as \'Film-coated tablet (qualifier value)\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>effective</b>: 23/01/2015</p><p><b>dateAsserted</b>: 22/02/2015</p><p><b>informationSource</b>: <a>Donald Duck</a></p><p><b>note</b>: Patient cannot take acetaminophen as per Dr instructions</p></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "med0309"
+    }
+    code {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/ndc"
+        }
+        code {
+          value: "50580-506-02"
+        }
+        display {
+          value: "Tylenol PM"
+        }
+      }
+    }
+    form {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "385057009"
+        }
+        display {
+          value: "Film-coated tablet (qualifier value)"
+        }
+      }
+    }
+    ingredient {
+      item {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+            }
+            code {
+              value: "315266"
+            }
+            display {
+              value: "Acetaminophen 500 MG"
+            }
+          }
+        }
+      }
+      strength {
+        numerator {
+          value {
+            value: "500"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mg"
+          }
+        }
+        denominator {
+          value {
+            value: "1"
+          }
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+          }
+          code {
+            value: "Tab"
+          }
+        }
+      }
+    }
+    ingredient {
+      item {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+            }
+            code {
+              value: "901813"
+            }
+            display {
+              value: "Diphenhydramine Hydrochloride 25 mg"
+            }
+          }
+        }
+      }
+      strength {
+        numerator {
+          value {
+            value: "25"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mg"
+          }
+        }
+        denominator {
+          value {
+            value: "1"
+          }
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+          }
+          code {
+            value: "Tab"
+          }
+        }
+      }
+    }
+    batch {
+      lot_number {
+        value: "9494788"
+      }
+      expiration_date {
+        value_us: 1495375200000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+}
+status {
+  value: ACTIVE
+}
+status_reason {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "166643006"
+    }
+    display {
+      value: "Liver enzymes abnormal"
+    }
+  }
+}
+medication {
+  reference {
+    fragment {
+      value: "med0309"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+effective {
+  date_time {
+    value_us: 1421931600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+date_asserted {
+  value_us: 1424523600000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+information_source {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+note {
+  text {
+    value: "Patient cannot take acetaminophen as per Dr instructions"
+  }
+}

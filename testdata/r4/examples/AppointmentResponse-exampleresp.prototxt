@@ -1,0 +1,61 @@
+id {
+  value: "exampleresp"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Accept Brian MRI results discussion</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://example.org/sampleappointmentresponse-identifier"
+  }
+  value {
+    value: "response123"
+  }
+}
+appointment {
+  appointment_id {
+    value: "examplereq"
+  }
+  display {
+    value: "Brian MRI results discussion"
+  }
+}
+start {
+  value_us: 1387977300000000
+  timezone: "Z"
+  precision: SECOND
+}
+end {
+  value_us: 1387978200000000
+  timezone: "Z"
+  precision: SECOND
+}
+participant_type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+    }
+    code {
+      value: "ATND"
+    }
+  }
+}
+actor {
+  practitioner_id {
+    value: "example"
+  }
+  display {
+    value: "Dr Adam Careful"
+  }
+}
+participant_status {
+  value: TENTATIVE
+}
+comment {
+  value: "can\'t we try for this time, can\'t do mornings"
+}

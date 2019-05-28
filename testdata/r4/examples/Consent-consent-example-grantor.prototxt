@@ -1,0 +1,118 @@
+id {
+  value: "consent-example-grantor"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">The following scenario is based on a question asked on John Moehrke\'s blog in the \n\t<a href=\"http://healthcaresecprivacy.blogspot.com/2016/04/consent-given-to-authorized.html\">Consent given to authorized representative</a>\n    <p>\nThis is a case where a Patient is giving a limited (read-only) access to an individual.\n\t</p><p>\n    Patient &quot;P. van de Heuvel&quot; wishes to provide XXX with read-only access to the data at Good Health Psychiatric Hospital \n   available for patient requested access use.\n   </p>\n   </div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+scope {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/consentscope"
+    }
+    code {
+      value: "patient-privacy"
+    }
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "INFAO"
+    }
+  }
+}
+patient {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+date_time {
+  value_us: 1447765200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+organization {
+  organization_id {
+    value: "f001"
+  }
+}
+source {
+  attachment {
+    title {
+      value: "The terms of the consent in lawyer speak."
+    }
+  }
+}
+policy_rule {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "OPTOUT"
+    }
+  }
+}
+provision {
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+        }
+        code {
+          value: "CST"
+        }
+      }
+    }
+    reference {
+      organization_id {
+        value: "f001"
+      }
+    }
+  }
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      patient_id {
+        value: "example"
+      }
+      display {
+        value: "Good Health Clinic"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+}

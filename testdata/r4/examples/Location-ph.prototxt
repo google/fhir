@@ -1,0 +1,54 @@
+id {
+  value: "ph"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Patient\'s Home</div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+name {
+  value: "Patient\'s Home"
+}
+description {
+  value: "Patient\'s Home"
+}
+mode {
+  value: KIND
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+    }
+    code {
+      value: "PTRES"
+    }
+    display {
+      value: "Patient\'s Residence"
+    }
+  }
+}
+physical_type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/location-physical-type"
+    }
+    code {
+      value: "ho"
+    }
+    display {
+      value: "House"
+    }
+  }
+}
+managing_organization {
+  organization_id {
+    value: "f001"
+  }
+}

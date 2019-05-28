@@ -1,0 +1,67 @@
+id {
+  value: "pat4"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<p>Patient Sandy Notsowell @ Acme Healthcare, Inc. MR = 123458, DECEASED</p>\n\t\t</div>"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+      }
+      code {
+        value: "MR"
+      }
+    }
+  }
+  system {
+    value: "urn:oid:0.1.2.3.4.5.6.7"
+  }
+  value {
+    value: "123458"
+  }
+}
+active {
+  value: true
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  family {
+    value: "Notsowell"
+  }
+  given {
+    value: "Sandy"
+  }
+}
+gender {
+  value: FEMALE
+}
+birth_date {
+  value_us: 397058400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+deceased {
+  boolean {
+    value: true
+  }
+}
+managing_organization {
+  organization_id {
+    value: "1"
+  }
+  display {
+    value: "ACME Healthcare, Inc"
+  }
+}

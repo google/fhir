@@ -15,7 +15,9 @@
 package com.google.fhir.stu3;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.fhir.stu3.proto.DateTime;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.DateTime;
+import com.google.protobuf.MessageOrBuilder;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -53,6 +55,10 @@ public class DateTimeWrapper extends PrimitiveWrapper<DateTime> {
     super(dateTime);
   }
 
+  public DateTimeWrapper(MessageOrBuilder message) {
+    super(ProtoUtils.fieldWiseCopy(message, DateTime.newBuilder()).build());
+  }
+
   /**
    * Create a DateTimeWrapper from a DateTime and a default timezone. The default timezone is
    * currently unused. Once there are finalized timezone extension, this class will use those to
@@ -60,6 +66,10 @@ public class DateTimeWrapper extends PrimitiveWrapper<DateTime> {
    */
   public DateTimeWrapper(DateTime dateTime, ZoneId defaultTimeZone) {
     super(dateTime);
+  }
+
+  public DateTimeWrapper(MessageOrBuilder message, ZoneId defaultTimeZone) {
+    super(ProtoUtils.fieldWiseCopy(message, DateTime.newBuilder()).build());
   }
 
   /** Create a DateTimeWrapper from a java String and a default timezone. */

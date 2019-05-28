@@ -1,0 +1,118 @@
+id {
+  value: "consent-example-Emergency"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>\n\tWithhold Authorization for Treatment rule for Emegency Treatment\n\t</p>\n      <p>\n    Patient &quot;P. van de Heuvel&quot; wishes to have no data at the Good Health Psychiatric Hospital \n   available rule for Emergency treatment use.\n   An overall Deny consent Directive, with an exception &quot;Permit&quot; of purposeOfUse &quot;ETREAT&quot; \n   at &quot;Good Health&quot; hospital, and exception &quot;Deny&quot; all other purposeOfUse from good health hospital.\n   </p>\n    </div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+scope {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/consentscope"
+    }
+    code {
+      value: "patient-privacy"
+    }
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "EMRGONLY"
+    }
+  }
+}
+patient {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+date_time {
+  value_us: 1447765200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+organization {
+  organization_id {
+    value: "f001"
+  }
+}
+source {
+  attachment {
+    title {
+      value: "The terms of the consent in lawyer speak."
+    }
+  }
+}
+policy_rule {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "OPTOUT"
+    }
+  }
+}
+provision {
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+        }
+        code {
+          value: "CST"
+        }
+      }
+    }
+    reference {
+      organization_id {
+        value: "f001"
+      }
+    }
+  }
+  purpose {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+    }
+    code {
+      value: "ETREAT"
+    }
+  }
+  provision {
+    type {
+      value: DENY
+    }
+    actor {
+      role {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+          }
+          code {
+            value: "CST"
+          }
+        }
+      }
+      reference {
+        organization_id {
+          value: "f001"
+        }
+      }
+    }
+  }
+}

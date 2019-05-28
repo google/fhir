@@ -14,7 +14,9 @@
 
 package com.google.fhir.stu3;
 
-import com.google.fhir.stu3.proto.Decimal;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.Decimal;
+import com.google.protobuf.MessageOrBuilder;
 import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
@@ -29,6 +31,10 @@ public class DecimalWrapper extends NumericTypeWrapper<Decimal> {
   /** Create an DecimalWrapper from a Decimal. */
   public DecimalWrapper(Decimal decimal) {
     super(decimal);
+  }
+
+  public DecimalWrapper(MessageOrBuilder message) {
+    super(ProtoUtils.fieldWiseCopy(message, Decimal.newBuilder()).build());
   }
 
   /** Create an DecimalWrapper from a java String. */

@@ -1,0 +1,983 @@
+id {
+  value: "3ad0687e-f477-468c-afd5-fcc2bf897808"
+}
+type {
+  value: COLLECTION
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/f003-0"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "f003-0"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Marc Versteegh<br/><span style=\"color: gray;\">organization:</span> BMC<br/><span style=\"color: gray;\">role:</span> Care role\n          </div>"
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "f003"
+        }
+        display {
+          value: "Marc Versteegh"
+        }
+      }
+      organization {
+        organization_id {
+          value: "f001"
+        }
+        display {
+          value: "BMC"
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+          }
+          code {
+            value: "01.000"
+          }
+          display {
+            value: "Arts"
+          }
+        }
+        text {
+          value: "Care role"
+        }
+      }
+      specialty {
+        coding {
+          system {
+            value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+          }
+          code {
+            value: "01.011"
+          }
+          display {
+            value: "Cardiothoracal surgery"
+          }
+        }
+        text {
+          value: "specialization"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/example-0"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "example-0"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Adam Careful<br/><span style=\"color: gray;\">location:</span> South Wing, second floor<br/><span style=\"color: gray;\">role:</span> RP<br/><span style=\"color: gray;\">Email:</span> dr.adam.careful@example.org<br/><span style=\"color: gray;\">identifier:</span> 52\n          </div>"
+        }
+      }
+      identifier {
+        system {
+          value: "http://example.org/role-identifier"
+        }
+        value {
+          value: "52"
+        }
+      }
+      period {
+        start {
+          value_us: 1325336400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+        end {
+          value_us: 1333112400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "example"
+        }
+        display {
+          value: "Adam Careful"
+        }
+      }
+      organization {
+        organization_id {
+          value: "f001"
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v2-0286"
+          }
+          code {
+            value: "RP"
+          }
+        }
+      }
+      location {
+        location_id {
+          value: "1"
+        }
+        display {
+          value: "South Wing, second floor"
+        }
+      }
+      healthcare_service {
+        healthcare_service_id {
+          value: "example"
+        }
+      }
+      telecom {
+        system {
+          value: EMAIL
+        }
+        value {
+          value: "dr.adam.careful@example.org"
+        }
+      }
+      endpoint {
+        endpoint_id {
+          value: "example"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/example-1"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "example-1"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Adam Careful<br/><span style=\"color: gray;\">organization:</span> Good Health Clinic\n          </div>"
+        }
+      }
+      period {
+        start {
+          value_us: 1325336400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "example"
+        }
+        display {
+          value: "Adam Careful"
+        }
+      }
+      organization {
+        organization_id {
+          value: "2"
+        }
+        display {
+          value: "Good Health Clinic"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/example-2"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "example-2"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Adam Careful<br/>\n            <span style=\"color: gray;\">organization:</span> Good Health Clinic<br/>\n            <span style=\"color: gray;\">role:</span> On call physcologist\n          </div>"
+        }
+      }
+      period {
+        start {
+          value_us: 1467295200000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+        end {
+          value_us: 1498744800000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "example"
+        }
+        display {
+          value: "Adam Careful"
+        }
+      }
+      organization {
+        organization_id {
+          value: "2"
+        }
+        display {
+          value: "Good Health Clinic"
+        }
+      }
+      code {
+        text {
+          value: "On call physcologist"
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "555 123456"
+        }
+        use {
+          value: MOBILE
+        }
+      }
+      available_time {
+        days_of_week {
+          value: SAT
+        }
+        days_of_week {
+          value: SUN
+        }
+        all_day {
+          value: true
+        }
+      }
+      availability_exceptions {
+        value: "Public Holidays"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/f007-0"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "f007-0"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Simone Heps<br/><span style=\"color: gray;\">organization:</span> BMC<br/><span style=\"color: gray;\">role:</span> Care role\n          </div>"
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "f007"
+        }
+        display {
+          value: "Simone Heps"
+        }
+      }
+      organization {
+        organization_id {
+          value: "f001"
+        }
+        display {
+          value: "BMC"
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+          }
+          code {
+            value: "01.000"
+          }
+          display {
+            value: "Arts"
+          }
+        }
+        text {
+          value: "Care role"
+        }
+      }
+      specialty {
+        coding {
+          system {
+            value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+          }
+          code {
+            value: "01.015"
+          }
+          display {
+            value: "Physician"
+          }
+        }
+        text {
+          value: "specialization"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/f004-0"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "f004-0"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Ronald Briet<br/><span style=\"color: gray;\">organization:</span> BMC<br/><span style=\"color: gray;\">role:</span> Care role\n          </div>"
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "f004"
+        }
+        display {
+          value: "Ronald Briet"
+        }
+      }
+      organization {
+        organization_id {
+          value: "f001"
+        }
+        display {
+          value: "BMC"
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+          }
+          code {
+            value: "01.000"
+          }
+          display {
+            value: "Arts"
+          }
+        }
+        text {
+          value: "Care role"
+        }
+      }
+      specialty {
+        coding {
+          system {
+            value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+          }
+          code {
+            value: "01.018"
+          }
+          display {
+            value: "Ear-, Nose and Throat"
+          }
+        }
+        text {
+          value: "specialization"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/xcda1-0"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "xcda1-0"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Sherry Dopplemeyer<br/><span style=\"color: gray;\">organization:</span> Cleveland Clinic<br/><span style=\"color: gray;\">role:</span> Primary Surgon\n          </div>"
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "xcda1"
+        }
+        display {
+          value: "Sherry Dopplemeyer"
+        }
+      }
+      organization {
+        display {
+          value: "Cleveland Clinic"
+        }
+      }
+      code {
+        text {
+          value: "Primary Surgon"
+        }
+      }
+      specialty {
+        text {
+          value: "Orthopedic"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/f202-0"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "f202-0"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Luigi Maas<br/><span style=\"color: gray;\">organization:</span> AUMC<br/><span style=\"color: gray;\">role:</span> Electronic laboratory reporting\n          </div>"
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "f202"
+        }
+        display {
+          value: "Luigi Maas"
+        }
+      }
+      organization {
+        organization_id {
+          value: "f201"
+        }
+        display {
+          value: "AUMC"
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "33526004"
+          }
+          display {
+            value: "Electronic laboratory reporting"
+          }
+        }
+      }
+      specialty {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "159285000"
+          }
+          display {
+            value: "Medical laboratory technician"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/f201-0"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "f201-0"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Dokter Bronsig<br/><span style=\"color: gray;\">organization:</span> AUMC<br/><span style=\"color: gray;\">role:</span> Implementation of planned interventions\n          </div>"
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "f201"
+        }
+        display {
+          value: "Dokter Bronsig"
+        }
+      }
+      organization {
+        organization_id {
+          value: "f201"
+        }
+        display {
+          value: "AUMC"
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "225304007"
+          }
+          display {
+            value: "Implementation of planned interventions"
+          }
+        }
+      }
+      specialty {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "310512001"
+          }
+          display {
+            value: "Medical oncologist"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/f203-0"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "f203-0"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Juri van Gelder<br/><span style=\"color: gray;\">organization:</span> AUMC<br/><span style=\"color: gray;\">role:</span> Physical therapist\n          </div>"
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "f203"
+        }
+        display {
+          value: "Juri van Gelder"
+        }
+      }
+      organization {
+        organization_id {
+          value: "f201"
+        }
+        display {
+          value: "AUMC"
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "36682004"
+          }
+          display {
+            value: "Physical therapist"
+          }
+        }
+      }
+      specialty {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "410158009"
+          }
+          display {
+            value: "Assess physical therapist service"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/f005-0"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "f005-0"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Langeveld Anne<br/><span style=\"color: gray;\">organization:</span> BMC<br/><span style=\"color: gray;\">role:</span> Care role\n          </div>"
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "f005"
+        }
+        display {
+          value: "Langeveld Anne"
+        }
+      }
+      organization {
+        organization_id {
+          value: "f001"
+        }
+        display {
+          value: "BMC"
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+          }
+          code {
+            value: "01.000"
+          }
+          display {
+            value: "Arts"
+          }
+        }
+        text {
+          value: "Care role"
+        }
+      }
+      specialty {
+        coding {
+          system {
+            value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+          }
+          code {
+            value: "01.018"
+          }
+          display {
+            value: "Keel- neus- en oorarts"
+          }
+        }
+        text {
+          value: "specialization"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/f006-0"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "f006-0"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Rob van den Berk<br/><span style=\"color: gray;\">organization:</span> BMC<br/><span style=\"color: gray;\">role:</span> Care role\n          </div>"
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "f006"
+        }
+        display {
+          value: "Rob van den Berk"
+        }
+      }
+      organization {
+        organization_id {
+          value: "f001"
+        }
+        display {
+          value: "BMC"
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+          }
+          code {
+            value: "01.000"
+          }
+          display {
+            value: "Arts"
+          }
+        }
+        text {
+          value: "Care role"
+        }
+      }
+      specialty {
+        coding {
+          system {
+            value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+          }
+          code {
+            value: "17.000"
+          }
+          display {
+            value: "Pharmacist"
+          }
+        }
+        text {
+          value: "specialization"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/f001-0"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "f001-0"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Eric van den broek<br/><span style=\"color: gray;\">organization:</span> BMC<br/><span style=\"color: gray;\">role:</span> Care role\n          </div>"
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "f001"
+        }
+        display {
+          value: "Eric van den broek"
+        }
+      }
+      organization {
+        organization_id {
+          value: "f001"
+        }
+        display {
+          value: "BMC"
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+          }
+          code {
+            value: "01.000"
+          }
+          display {
+            value: "Arts"
+          }
+        }
+        text {
+          value: "Care role"
+        }
+      }
+      specialty {
+        coding {
+          system {
+            value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+          }
+          code {
+            value: "01.018"
+          }
+          display {
+            value: "Ear-, Nose and Throat"
+          }
+        }
+        text {
+          value: "specialization"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/f002-0"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "f002-0"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Pieter Voigt<br/><span style=\"color: gray;\">organization:</span> BMC<br/><span style=\"color: gray;\">role:</span> Care role\n          </div>"
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "f002"
+        }
+        display {
+          value: "Pieter Voigt"
+        }
+      }
+      organization {
+        organization_id {
+          value: "f001"
+        }
+        display {
+          value: "BMC"
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+          }
+          code {
+            value: "01.000"
+          }
+          display {
+            value: "Arts"
+          }
+        }
+        text {
+          value: "Care role"
+        }
+      }
+      specialty {
+        coding {
+          system {
+            value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+          }
+          code {
+            value: "01.011"
+          }
+          display {
+            value: "Cardiothoracal surgery"
+          }
+        }
+        text {
+          value: "specialization"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/PractitionerRole/f204-0"
+  }
+  resource {
+    practitioner_role {
+      id {
+        value: "f204-0"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <span style=\"color: gray;\">practitioner:</span> Carla Espinosa<br/><span style=\"color: gray;\">organization:</span> AUMC<br/><span style=\"color: gray;\">role:</span> Renal nurse\n          </div>"
+        }
+      }
+      practitioner {
+        practitioner_id {
+          value: "f204"
+        }
+        display {
+          value: "Carla Espinosa"
+        }
+      }
+      organization {
+        organization_id {
+          value: "f201"
+        }
+        display {
+          value: "AUMC"
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "224565004"
+          }
+          display {
+            value: "Renal nurse"
+          }
+        }
+      }
+      specialty {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "9632001"
+          }
+          display {
+            value: "Nursing procedure"
+          }
+        }
+      }
+    }
+  }
+}

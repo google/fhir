@@ -18,10 +18,10 @@ import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
+import com.google.fhir.r4.proto.Extension;
 import com.google.fhir.stu3.google.EventLabel;
 import com.google.fhir.stu3.google.EventTrigger;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;
-import com.google.fhir.stu3.proto.Extension;
 import com.google.protobuf.Message;
 import com.google.protobuf.TextFormat;
 import java.io.File;

@@ -1,0 +1,93 @@
+id {
+  value: "body-length"
+}
+meta {
+  profile {
+    value: "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: body-length</p><p><b>meta</b>: </p><p><b>status</b>: final</p><p><b>category</b>: Vital Signs <span>(Details : {http://terminology.hl7.org/CodeSystem/observation-category code \'vital-signs\' = \'Vital Signs\', given as \'Vital Signs\'})</span></p><p><b>code</b>: Body Length <span>(Details : {LOINC code \'8302-2\' = \'Body height\', given as \'Body height\'}; {LOINC code \'8306-3\' = \'Body height --lying\', given as \'Body height --lying\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>effective</b>: 02/07/1999</p><p><b>value</b>: 25 cm<span> (Details: UCUM code cm = \'cm\')</span></p></div>"
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/observation-category"
+    }
+    code {
+      value: "vital-signs"
+    }
+    display {
+      value: "Vital Signs"
+    }
+  }
+  text {
+    value: "Vital Signs"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "8302-2"
+    }
+    display {
+      value: "Body height"
+    }
+  }
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "8306-3"
+    }
+    display {
+      value: "Body height --lying"
+    }
+    user_selected {
+      value: true
+    }
+  }
+  text {
+    value: "Body Length"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+effective {
+  date_time {
+    value_us: 930837600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+value {
+  quantity {
+    value {
+      value: "25"
+    }
+    unit {
+      value: "cm"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "cm"
+    }
+  }
+}

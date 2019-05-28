@@ -1,0 +1,103 @@
+id {
+  value: "father"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Father died of a heart attack aged 74</div>"
+  }
+}
+identifier {
+  value {
+    value: "12345"
+  }
+}
+instantiates_uri {
+  value: "http://example.org/family-member-history-questionnaire"
+}
+status {
+  value: COMPLETED
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter Patient"
+  }
+}
+date {
+  value_us: 1300366800000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+relationship {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+    }
+    code {
+      value: "FTH"
+    }
+    display {
+      value: "father"
+    }
+  }
+}
+sex {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/administrative-gender"
+    }
+    code {
+      value: "male"
+    }
+    display {
+      value: "Male"
+    }
+  }
+}
+condition {
+  code {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "315619001"
+      }
+      display {
+        value: "Myocardial Infarction"
+      }
+    }
+    text {
+      value: "Heart Attack"
+    }
+  }
+  contributed_to_death {
+    value: true
+  }
+  onset {
+    age {
+      value {
+        value: "74"
+      }
+      unit {
+        value: "yr"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "a"
+      }
+    }
+  }
+  note {
+    text {
+      value: "Was fishing at the time. At least he went doing someting he loved."
+    }
+  }
+}

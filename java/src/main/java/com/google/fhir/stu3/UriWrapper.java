@@ -14,7 +14,9 @@
 
 package com.google.fhir.stu3;
 
-import com.google.fhir.stu3.proto.Uri;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.Uri;
+import com.google.protobuf.MessageOrBuilder;
 
 /** A wrapper around the Uri FHIR primitive type. */
 public class UriWrapper extends PrimitiveWrapper<Uri> {
@@ -24,6 +26,10 @@ public class UriWrapper extends PrimitiveWrapper<Uri> {
   /** Create an UriWrapper from a Uri. */
   public UriWrapper(Uri uri) {
     super(uri);
+  }
+
+  public UriWrapper(MessageOrBuilder message) {
+    super(ProtoUtils.fieldWiseCopy(message, Uri.newBuilder()).build());
   }
 
   /** Create an UriWrapper from a java String. */

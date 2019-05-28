@@ -1,0 +1,27 @@
+id {
+  value: "searchfail"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>The &quot;name&quot; parameter has the modifier &quot;exact&quot; which is not supported by this server</p>\n    </div>"
+  }
+}
+issue {
+  severity {
+    value: FATAL
+  }
+  code {
+    value: CODE_INVALID
+  }
+  details {
+    text {
+      value: "The \"name\" parameter has the modifier \"exact\" which is not supported by this server"
+    }
+  }
+  location {
+    value: "http.name:exact"
+  }
+}

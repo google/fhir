@@ -15,9 +15,10 @@
 package com.google.fhir.stu3;
 
 import com.google.common.collect.ImmutableList;
+import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
-import com.google.fhir.stu3.proto.Extension;
-import com.google.fhir.stu3.proto.Uri;
+import com.google.fhir.r4.proto.Extension;
+import com.google.fhir.r4.proto.Uri;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -47,21 +48,37 @@ public final class ExtensionWrapper {
     return new ExtensionWrapper(new ArrayList<Extension>(input));
   }
 
+  /** Create from a List of Extensions, making a copy. */
+  private static ExtensionWrapper ofStu3(List<com.google.fhir.stu3.proto.Extension> input) {
+    List<Extension> r4Extensions =
+        input.stream()
+            .map(
+                r4Extension ->
+                    ProtoUtils.fieldWiseCopy(r4Extension, Extension.newBuilder()).build())
+            .collect(Collectors.toList());
+    return new ExtensionWrapper(r4Extensions);
+  }
+
   /** Create from the extension field in a message. */
   @SuppressWarnings("unchecked")
   public static ExtensionWrapper fromExtensionsIn(MessageOrBuilder input) {
     FieldDescriptor field = input.getDescriptorForType().findFieldByName("extension");
-    if (field == null
-        || !field.isRepeated()
-        || field.getType() != FieldDescriptor.Type.MESSAGE
-        || !field.getMessageType().equals(Extension.getDescriptor())) {
+    if (field == null || !field.isRepeated() || field.getType() != FieldDescriptor.Type.MESSAGE) {
       throw new IllegalArgumentException(
           "Message type "
               + input.getDescriptorForType().getFullName()
               + " is not a valid FHIR type with extensions");
     }
-    List<Extension> extensions = (List<Extension>) input.getField(field);
-    return ExtensionWrapper.of(extensions);
+    if (field.getMessageType().equals(Extension.getDescriptor())) {
+      List<Extension> extensions = (List<Extension>) input.getField(field);
+      return ExtensionWrapper.of(extensions);
+    }
+    if (field.getMessageType().equals(com.google.fhir.stu3.proto.Extension.getDescriptor())) {
+      List<com.google.fhir.stu3.proto.Extension> extensions =
+          (List<com.google.fhir.stu3.proto.Extension>) input.getField(field);
+      return ExtensionWrapper.ofStu3(extensions);
+    }
+    throw new IllegalArgumentException("Invalid Extension field: " + field.getFullName());
   }
 
   /** Clear all extensions matching the template type from this. */
@@ -88,6 +105,42 @@ public final class ExtensionWrapper {
   /** Return a version of the content suitable for inclusion in protocol messages. * */
   public List<Extension> build() {
     return content;
+  }
+
+  public List<com.google.fhir.stu3.proto.Extension> buildStu3() {
+    return content.stream()
+        .map(
+            r4Ext ->
+                ProtoUtils.fieldWiseCopy(r4Ext, com.google.fhir.stu3.proto.Extension.newBuilder())
+                    .build())
+        .collect(Collectors.toList());
+  }
+
+  public void addToMessage(Message.Builder builder) {
+    FieldDescriptor extensionField = builder.getDescriptorForType().findFieldByName("extension");
+    List<Extension> r4Extensions = build();
+    if (extensionField
+        .getMessageType()
+        .getFullName()
+        .equals(Extension.getDescriptor().getFullName())) {
+      r4Extensions.stream().forEach(ext -> builder.addRepeatedField(extensionField, ext));
+      return;
+    }
+    if (extensionField
+        .getMessageType()
+        .getFullName()
+        .equals(com.google.fhir.stu3.proto.Extension.getDescriptor().getFullName())) {
+      r4Extensions.stream()
+          .map(
+              r4Extension ->
+                  ProtoUtils.fieldWiseCopy(
+                          r4Extension, com.google.fhir.stu3.proto.Extension.newBuilder())
+                      .build())
+          .forEach(ext -> builder.addRepeatedField(extensionField, ext));
+      return;
+    }
+    throw new IllegalArgumentException(
+        "Invalid target extension field: " + extensionField.getMessageType().getFullName());
   }
 
   /**
@@ -129,7 +182,7 @@ public final class ExtensionWrapper {
     // Copy the id field if present.
     FieldDescriptor idField = message.getDescriptorForType().findFieldByName("id");
     if (idField != null && message.hasField(idField)) {
-      extension.setId((com.google.fhir.stu3.proto.String) message.getField(idField));
+      ProtoUtils.fieldWiseCopy((Message) message.getField(idField), extension.getIdBuilder());
     }
     boolean isSingleValueExtension =
         messageFields.size() == 1
@@ -189,8 +242,30 @@ public final class ExtensionWrapper {
   }
 
   private static final Map<Descriptor, FieldDescriptor> EXTENSION_VALUE_FIELDS_BY_TYPE =
-      Extension.Value.getDescriptor().getOneofs().get(0).getFields().stream()
-          .collect(Collectors.toMap(FieldDescriptor::getMessageType, f -> f));
+      buildExtensionValueFieldMap();
+
+  private static Map<Descriptor, FieldDescriptor> buildExtensionValueFieldMap() {
+
+    Map<String, FieldDescriptor> fieldNameToR4Field =
+        Extension.Value.getDescriptor().getOneofs().get(0).getFields().stream()
+            .collect(Collectors.toMap(f -> f.getName(), f -> f));
+
+    Map<Descriptor, FieldDescriptor> fieldsMap =
+        com.google.fhir.stu3.proto.Extension.Value.getDescriptor()
+            .getOneofs()
+            .get(0)
+            .getFields()
+            .stream()
+            .filter(f -> fieldNameToR4Field.containsKey(f.getName()))
+            .collect(
+                Collectors.toMap(
+                    f -> f.getMessageType(), f -> fieldNameToR4Field.get(f.getName())));
+
+    fieldsMap.putAll(
+        Extension.Value.getDescriptor().getOneofs().get(0).getFields().stream()
+            .collect(Collectors.toMap(FieldDescriptor::getMessageType, f -> f)));
+    return fieldsMap;
+  }
 
   private static void addValueToExtension(
       MessageOrBuilder value, Extension.Builder result, boolean isChoiceType) {
@@ -212,9 +287,15 @@ public final class ExtensionWrapper {
     }
     FieldDescriptor valueFieldForType = EXTENSION_VALUE_FIELDS_BY_TYPE.get(valueDescriptor);
     if (valueFieldForType != null) {
-      result.setValue(Extension.Value.newBuilder().setField(valueFieldForType, value).build());
+      Extension.Value.Builder valueBuilder = result.getValueBuilder();
+      ProtoUtils.fieldWiseCopy(value, valueBuilder.getFieldBuilder(valueFieldForType));
       return;
     }
+    if (AnnotationUtils.isPrimitiveType(valueDescriptor)) {
+      throw new IllegalArgumentException(
+          "Unrecognized primitive type: " + valueDescriptor.getFullName());
+    }
+    // TODO: handle stu3 meta field, which is absent on r4 extension.
     // Fall back to adding the value as a message.
     addMessageToExtension(value, result);
   }
@@ -255,7 +336,7 @@ public final class ExtensionWrapper {
       FieldDescriptor idField = builder.getDescriptorForType().findFieldByName("id");
       // TODO: handle copying the id field for all kinds of extensions.
       if (idField != null) {
-        builder.setField(idField, extension.getId());
+        ProtoUtils.fieldWiseCopy(extension.getId(), builder.getFieldBuilder(idField));
       }
     }
 
@@ -274,16 +355,16 @@ public final class ExtensionWrapper {
               .collect(Collectors.toList());
       if (messageFields.size() == 1) {
         FieldDescriptor targetField = checkIsMessage(messageFields.get(0));
-        Message.Builder targetFieldBuilder = builder.newBuilderForField(targetField);
         if (AnnotationUtils.isChoiceType(targetField)) {
+          Message.Builder targetFieldBuilder = builder.newBuilderForField(targetField);
           addValueToChoiceType(extension.getValue(), targetFieldBuilder);
-          setOrAddField(builder, targetField, targetFieldBuilder.build());
+          ProtoUtils.fieldWiseCopy(targetFieldBuilder, builder.getFieldBuilder(targetField));
           return;
-        } else if (extensionValueField
-            .getMessageType()
-            .getFullName()
-            .equals(targetField.getMessageType().getFullName())) {
-          setOrAddField(builder, targetField, extension.getValue().getField(extensionValueField));
+        } else if (AnnotationUtils.sameFhirType(
+            extensionValueField.getMessageType(), targetField.getMessageType())) {
+          ProtoUtils.fieldWiseCopy(
+              (Message) extension.getValue().getField(extensionValueField),
+              builder.getFieldBuilder(targetField));
           return;
         } else {
           throw new IllegalArgumentException(
@@ -346,10 +427,8 @@ public final class ExtensionWrapper {
             value.getOneofFieldDescriptor(Extension.Value.getDescriptor().getOneofs().get(0)));
     for (FieldDescriptor choiceField : choiceDescriptor.getFields()) {
       checkIsMessage(choiceField);
-      if (extensionValueField
-          .getMessageType()
-          .getFullName()
-          .equals(choiceField.getMessageType().getFullName())) {
+      if (AnnotationUtils.sameFhirType(
+          extensionValueField.getMessageType(), choiceField.getMessageType())) {
         addValueToMessage(value, choiceTypeBuilder.getFieldBuilder(choiceField));
       }
     }
@@ -359,7 +438,7 @@ public final class ExtensionWrapper {
     FieldDescriptor valueField =
         checkIsMessage(
             value.getOneofFieldDescriptor(Extension.Value.getDescriptor().getOneofs().get(0)));
-    builder.mergeFrom((Message) value.getField(valueField));
+    ProtoUtils.fieldWiseCopy((Message) value.getField(valueField), builder);
   }
 
   private static void setOrAddField(Message.Builder builder, FieldDescriptor field, Object value) {

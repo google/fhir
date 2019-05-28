@@ -1,0 +1,46 @@
+id {
+  value: "bundle-request-simplesummary"
+}
+type {
+  value: BATCH
+}
+entry {
+  request {
+    method {
+      value: GET
+    }
+    url {
+      value: "/Patient/example"
+    }
+  }
+}
+entry {
+  request {
+    method {
+      value: GET
+    }
+    url {
+      value: "/Condition?patient=example"
+    }
+  }
+}
+entry {
+  request {
+    method {
+      value: GET
+    }
+    url {
+      value: "/MedicationStatement?patient=example"
+    }
+  }
+}
+entry {
+  request {
+    method {
+      value: GET
+    }
+    url {
+      value: "/Observation?patient=example&code=http://loinc.org|55284-4&date=ge2015-01-01"
+    }
+  }
+}

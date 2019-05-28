@@ -1,0 +1,59 @@
+id {
+  value: "xcda"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n      <p>Henry Levin the 7th</p>\n    \n    </div>"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+      }
+      code {
+        value: "MR"
+      }
+    }
+  }
+  system {
+    value: "urn:oid:2.16.840.1.113883.19.5"
+  }
+  value {
+    value: "12345"
+  }
+}
+active {
+  value: true
+}
+name {
+  family {
+    value: "Levin"
+  }
+  given {
+    value: "Henry"
+  }
+}
+gender {
+  value: MALE
+}
+birth_date {
+  value_us: -1176199200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+managing_organization {
+  organization_id {
+    value: "2.16.840.1.113883.19.5"
+  }
+  display {
+    value: "Good Health Clinic"
+  }
+}

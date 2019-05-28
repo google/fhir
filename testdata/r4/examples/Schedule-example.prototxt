@@ -1,0 +1,78 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      Burgers UMC, South Wing, second floor Physiotherapy Schedule\n    </div>"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  system {
+    value: "http://example.org/scheduleid"
+  }
+  value {
+    value: "45"
+  }
+}
+active {
+  value: true
+}
+service_category {
+  coding {
+    code {
+      value: "17"
+    }
+    display {
+      value: "General Practice"
+    }
+  }
+}
+service_type {
+  coding {
+    code {
+      value: "57"
+    }
+    display {
+      value: "Immunization"
+    }
+  }
+}
+specialty {
+  coding {
+    code {
+      value: "408480009"
+    }
+    display {
+      value: "Clinical immunology"
+    }
+  }
+}
+actor {
+  location_id {
+    value: "1"
+  }
+  display {
+    value: "Burgers UMC, South Wing, second floor"
+  }
+}
+planning_horizon {
+  start {
+    value_us: 1387962900000000
+    timezone: "Z"
+    precision: SECOND
+  }
+  end {
+    value_us: 1387963800000000
+    timezone: "Z"
+    precision: SECOND
+  }
+}
+comment {
+  value: "The slots attached to this schedule should be specialized to cover immunizations within the clinic"
+}

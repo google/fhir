@@ -1,0 +1,25 @@
+id {
+  value: "obesity-narrative"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p> Care plan to address obesity.  Goal is a target weight of 160 to 180 lbs.  Activities include diet and exercise.</p>\n    </div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: PLAN
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}

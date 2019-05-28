@@ -1,0 +1,109 @@
+id {
+  value: "vma-urine"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: vma-urine</p><p><b>accessionIdentifier</b>: X352356</p><p><b>status</b>: available</p><p><b>type</b>: Urine, Random <span>(Details : {http://terminology.hl7.org/CodeSystem/v2-0487 code \'RANDU\' = \'Urine, Random\', given as \'Urine, Random\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>receivedTime</b>: 18/08/2015 7:03:00 AM</p><h3>Collections</h3><table><tr><td>-</td><td><b>Collector</b></td><td><b>Collected[x]</b></td></tr><tr><td>*</td><td><a>Practitioner/f202</a></td><td>18/08/2015 7:03:00 AM</td></tr></table><h3>Processings</h3><table><tr><td>-</td><td><b>Description</b></td><td><b>Procedure</b></td><td><b>Additive</b></td><td><b>Time[x]</b></td></tr><tr><td>*</td><td>Acidify to pH &lt; 3.0 with 6 N HCl.</td><td>Acidification <span>(Details : {http://terminology.hl7.org/CodeSystem/v2-0373 code \'ACID\' = \'Acidification)</span></td><td>6 N HCl</td><td>18/08/2015 8:10:00 AM</td></tr></table><h3>Containers</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Capacity</b></td><td><b>SpecimenQuantity</b></td></tr><tr><td>*</td><td>Non-sterile specimen container <span>(Details )</span></td><td>50 mls</td><td>10 mls</td></tr></table></div>"
+  }
+}
+accession_identifier {
+  system {
+    value: "http://lab.acme.org/specimens/2015"
+  }
+  value {
+    value: "X352356"
+  }
+}
+status {
+  value: AVAILABLE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v2-0487"
+    }
+    code {
+      value: "RANDU"
+    }
+    display {
+      value: "Urine, Random"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+received_time {
+  value_us: 1439881380000000
+  timezone: "Z"
+  precision: SECOND
+}
+collection {
+  collector {
+    practitioner_id {
+      value: "f202"
+    }
+  }
+  collected {
+    date_time {
+      value_us: 1439881380000000
+      timezone: "Z"
+      precision: SECOND
+    }
+  }
+}
+processing {
+  description {
+    value: "Acidify to pH < 3.0 with 6 N HCl."
+  }
+  procedure {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0373"
+      }
+      code {
+        value: "ACID"
+      }
+    }
+  }
+  additive {
+    display {
+      value: "6 N HCl"
+    }
+  }
+  time {
+    date_time {
+      value_us: 1439885400000000
+      timezone: "Z"
+      precision: SECOND
+    }
+  }
+}
+container {
+  type {
+    text {
+      value: "Non-sterile specimen container"
+    }
+  }
+  capacity {
+    value {
+      value: "50"
+    }
+    unit {
+      value: "mls"
+    }
+  }
+  specimen_quantity {
+    value {
+      value: "10"
+    }
+    unit {
+      value: "mls"
+    }
+  }
+}

@@ -1,0 +1,83 @@
+id {
+  value: "E2503"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the CoverageEligibilityResponse.</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/coverageeligibilityresponse"
+  }
+  value {
+    value: "8812343"
+  }
+}
+status {
+  value: ACTIVE
+}
+purpose {
+  value: VALIDATION
+}
+patient {
+  patient_id {
+    value: "f201"
+  }
+}
+created {
+  value_us: 1410789600000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+requestor {
+  identifier {
+    system {
+      value: "http://national.org/clinic"
+    }
+    value {
+      value: "OR1234"
+    }
+  }
+}
+request {
+  uri {
+    value: "http://www.BenefitsInc.com/fhir/coverageeligibilityresponse/225476332406"
+  }
+}
+outcome {
+  value: ERROR
+}
+disposition {
+  value: "Eligibiliy request could not be processed, please address errors before submitting."
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+form {
+  coding {
+    system {
+      value: "http://national.org/form"
+    }
+    code {
+      value: "ELRSP/2017/01"
+    }
+  }
+}
+error {
+  code {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/adjudication-error"
+      }
+      code {
+        value: "a001"
+      }
+    }
+  }
+}

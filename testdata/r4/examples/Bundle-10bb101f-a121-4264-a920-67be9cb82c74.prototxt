@@ -1,0 +1,236 @@
+id {
+  value: "10bb101f-a121-4264-a920-67be9cb82c74"
+}
+type {
+  value: MESSAGE
+}
+timestamp {
+  value_us: 1436836533000000
+  timezone: "+10:00"
+  precision: SECOND
+}
+entry {
+  full_url {
+    value: "urn:uuid:267b18ce-3d37-4581-9baa-6fada338038b"
+  }
+  resource {
+    message_header {
+      id {
+        value: "267b18ce-3d37-4581-9baa-6fada338038b"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n             \n            <p>This message is a request to link Patient records 654321 (Patient Donald DUCK @ Acme Healthcare, Inc) and 123456 (Patient Donald D DUCK @ Acme Healthcare, Inc)</p>\n           \n          </div>"
+        }
+      }
+      event {
+        coding {
+          system {
+            value: "http://example.org/fhir/message-events"
+          }
+          code {
+            value: "patient-link"
+          }
+        }
+      }
+      source {
+        endpoint {
+          value: "http://example.org/clients/ehr-lite"
+        }
+      }
+      responsible {
+        uri {
+          value: "http://acme.com/ehr/fhir/Practitioner/2323-33-4"
+        }
+      }
+      focus {
+        uri {
+          value: "http://acme.com/ehr/fhir/Patient/pat1"
+        }
+      }
+      focus {
+        uri {
+          value: "http://acme.com/ehr/fhir/Patient/pat12"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://acme.com/ehr/fhir/Patient/pat1"
+  }
+  resource {
+    patient {
+      id {
+        value: "pat1"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            \n            <p>Patient Donald DUCK @ Acme Healthcare, Inc. MR = 654321</p>\n          \n          </div>"
+        }
+      }
+      identifier {
+        use {
+          value: USUAL
+        }
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "MR"
+            }
+          }
+        }
+        system {
+          value: "urn:oid:0.1.2.3.4.5.6.7"
+        }
+        value {
+          value: "654321"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Donald"
+        }
+        given {
+          value: "Duck"
+        }
+      }
+      gender {
+        value: MALE
+      }
+      contact {
+        relationship {
+          coding {
+            system {
+              value: "http://example.org/fhir/CodeSystem/patient-contact-relationship"
+            }
+            code {
+              value: "E"
+            }
+          }
+        }
+        organization {
+          organization_id {
+            value: "1"
+          }
+          display {
+            value: "Walt Disney Corporation"
+          }
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "1"
+        }
+        display {
+          value: "ACME Healthcare, Inc"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://acme.com/ehr/fhir/Patient/pat12"
+  }
+  resource {
+    patient {
+      id {
+        value: "pat2"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            \n            <p>Patient Donald D DUCK @ Acme Healthcare, Inc. MR = 123456</p>\n          \n          </div>"
+        }
+      }
+      identifier {
+        use {
+          value: USUAL
+        }
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "MR"
+            }
+          }
+        }
+        system {
+          value: "urn:oid:0.1.2.3.4.5.6.7"
+        }
+        value {
+          value: "123456"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Donald"
+        }
+        given {
+          value: "Duck"
+        }
+        given {
+          value: "D"
+        }
+      }
+      gender {
+        value: OTHER
+        extension {
+          url {
+            value: "http://example.org/Profile/administrative-status"
+          }
+          value {
+            codeable_concept {
+              coding {
+                system {
+                  value: "http://terminology.hl7.org/CodeSystem/v2-0001"
+                }
+                code {
+                  value: "A"
+                }
+                display {
+                  value: "Ambiguous"
+                }
+              }
+            }
+          }
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "1"
+        }
+        display {
+          value: "ACME Healthcare, Inc"
+        }
+      }
+    }
+  }
+}

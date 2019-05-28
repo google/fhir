@@ -1,0 +1,126 @@
+id {
+  value: "1"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Burgers UMC, South Wing, second floor</div>"
+  }
+}
+identifier {
+  value {
+    value: "B1-S.F2"
+  }
+}
+status {
+  value: ACTIVE
+}
+name {
+  value: "South Wing, second floor"
+}
+alias {
+  value: "BU MC, SW, F2"
+}
+alias {
+  value: "Burgers University Medical Center, South Wing, second floor"
+}
+description {
+  value: "Second floor of the Old South Wing, formerly in use by Psychiatry"
+}
+mode {
+  value: INSTANCE
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "2328"
+  }
+  use {
+    value: WORK
+  }
+}
+telecom {
+  system {
+    value: FAX
+  }
+  value {
+    value: "2329"
+  }
+  use {
+    value: WORK
+  }
+}
+telecom {
+  system {
+    value: EMAIL
+  }
+  value {
+    value: "second wing admissions"
+  }
+}
+telecom {
+  system {
+    value: URL
+  }
+  value {
+    value: "http://sampleorg.com/southwing"
+  }
+  use {
+    value: WORK
+  }
+}
+address {
+  use {
+    value: WORK
+  }
+  line {
+    value: "Galapagosweg 91, Building A"
+  }
+  city {
+    value: "Den Burg"
+  }
+  postal_code {
+    value: "9105 PZ"
+  }
+  country {
+    value: "NLD"
+  }
+}
+physical_type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/location-physical-type"
+    }
+    code {
+      value: "wi"
+    }
+    display {
+      value: "Wing"
+    }
+  }
+}
+position {
+  longitude {
+    value: "-83.6945691"
+  }
+  latitude {
+    value: "42.25475478"
+  }
+  altitude {
+    value: "0"
+  }
+}
+managing_organization {
+  organization_id {
+    value: "f001"
+  }
+}
+endpoint {
+  endpoint_id {
+    value: "example"
+  }
+}

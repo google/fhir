@@ -1,0 +1,456 @@
+id {
+  value: "lipids"
+}
+type {
+  value: COLLECTION
+}
+entry {
+  full_url {
+    value: "https://example.com/base/DiagnosticReport/lipids"
+  }
+  resource {
+    diagnostic_report {
+      id {
+        value: "lipids"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<h3>Lipid Report for Wile. E. COYOTE (MRN: 23453) issued 3-Mar 2009 14:26</h3>\n\t\t\t\t\t\t<pre>\nTest                  Units       Value       Reference Range\nCholesterol           mmol/L      6.3         &lt;4.5\nTriglyceride          mmol/L      1.3         &lt;2.0\nHDL Cholesterol       mmol/L      1.3         &gt;1.5\nLDL Chol. (calc)      mmol/L      4.2         &lt;3.0\n      </pre>\n\t\t\t\t\t\t<p>Acme Laboratory, Inc signed: Dr Pete Pathologist</p>\n\t\t\t\t\t</div>"
+        }
+      }
+      identifier {
+        system {
+          value: "http://acme.com/lab/reports"
+        }
+        value {
+          value: "5234342"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      category {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v2-0074"
+          }
+          code {
+            value: "HM"
+          }
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "24331-1"
+          }
+          display {
+            value: "Lipid 1996 panel - Serum or Plasma"
+          }
+        }
+        text {
+          value: "Lipid Panel"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1299187800000000
+          timezone: "+11:00"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1359247533000000
+        timezone: "+11:00"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      result {
+        id {
+          value: "1"
+        }
+        observation_id {
+          value: "cholesterol"
+        }
+      }
+      result {
+        id {
+          value: "2"
+        }
+        observation_id {
+          value: "triglyceride"
+        }
+      }
+      result {
+        id {
+          value: "3"
+        }
+        observation_id {
+          value: "hdlcholesterol"
+        }
+      }
+      result {
+        id {
+          value: "4"
+        }
+        observation_id {
+          value: "ldlcholesterol"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/cholesterol"
+  }
+  resource {
+    observation {
+      id {
+        value: "cholesterol"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: cholesterol</p><p><b>status</b>: final</p><p><b>code</b>: Cholesterol <span>(Details : {LOINC code \'35200-5\' = \'Cholesterol [Mass or Moles/volume] in Serum or Plasma\', given as \'Cholesterol [Moles/\342\200\213volume] in Serum or Plasma\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 6.3 mmol/L<span> (Details: UCUM code mmol/L = \'mmol/L\')</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>High</b></td></tr><tr><td>*</td><td>4.5 mmol/L<span> (Details: UCUM code mmol/L = \'mmol/L\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "35200-5"
+          }
+          display {
+            value: "Cholesterol [Moles/\342\200\213volume] in Serum or Plasma"
+          }
+        }
+        text {
+          value: "Cholesterol"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "6.3"
+          }
+          unit {
+            value: "mmol/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        high {
+          value {
+            value: "4.5"
+          }
+          unit {
+            value: "mmol/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/triglyceride"
+  }
+  resource {
+    observation {
+      id {
+        value: "triglyceride"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: triglyceride</p><p><b>status</b>: final</p><p><b>code</b>: Triglyceride <span>(Details : {LOINC code \'35217-9\' = \'Triglyceride [Mass or Moles/volume] in Serum or Plasma\', given as \'Triglyceride [Moles/\342\200\213volume] in Serum or Plasma\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 1.3 mmol/L<span> (Details: UCUM code mmol/L = \'mmol/L\')</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>High</b></td></tr><tr><td>*</td><td>2.0 mmol/L<span> (Details: UCUM code mmol/L = \'mmol/L\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "35217-9"
+          }
+          display {
+            value: "Triglyceride [Moles/\342\200\213volume] in Serum or Plasma"
+          }
+        }
+        text {
+          value: "Triglyceride"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "1.3"
+          }
+          unit {
+            value: "mmol/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        high {
+          value {
+            value: "2.0"
+          }
+          unit {
+            value: "mmol/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/hdlcholesterol"
+  }
+  resource {
+    observation {
+      id {
+        value: "hdlcholesterol"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: hdlcholesterol</p><p><b>status</b>: final</p><p><b>code</b>: Cholesterol in HDL <span>(Details : {LOINC code \'2085-9\' = \'Cholesterol in HDL [Mass/volume] in Serum or Plasma\', given as \'HDL Cholesterol\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 1.3 mmol/L<span> (Details: UCUM code mmol/L = \'mmol/L\')</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td></tr><tr><td>*</td><td>1.5 mmol/L<span> (Details: UCUM code mmol/L = \'mmol/L\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "2085-9"
+          }
+          display {
+            value: "HDL Cholesterol"
+          }
+        }
+        text {
+          value: "Cholesterol in HDL"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "1.3"
+          }
+          unit {
+            value: "mmol/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "1.5"
+          }
+          unit {
+            value: "mmol/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/ldlcholesterol"
+  }
+  resource {
+    observation {
+      id {
+        value: "ldlcholesterol"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: ldlcholesterol</p><p><b>status</b>: final</p><p><b>code</b>: LDL Chol. (Calc) <span>(Details : {LOINC code \'13457-7\' = \'Cholesterol in LDL [Mass/volume] in Serum or Plasma by calculation\', given as \'Cholesterol in LDL [Mass/volume] in Serum or Plasma by calculation\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 4.6 mmol/L<span> (Details: UCUM code mmol/L = \'mmol/L\')</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>High</b></td></tr><tr><td>*</td><td>3.0 mmol/L<span> (Details: UCUM code mmol/L = \'mmol/L\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "13457-7"
+          }
+          display {
+            value: "Cholesterol in LDL [Mass/volume] in Serum or Plasma by calculation"
+          }
+        }
+        text {
+          value: "LDL Chol. (Calc)"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "4.6"
+          }
+          unit {
+            value: "mmol/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        high {
+          value {
+            value: "3.0"
+          }
+          unit {
+            value: "mmol/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,83 @@
+id {
+  value: "example-TPMT-haplotype-two"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-TPMT-haplotype-two</p><p><b>status</b>: unknown</p><p><b>code</b>: Haplotype Call <span>(Details : {SNOMED CT code \'363779003\' = \'Genotype determination\', given as \'Genotype determination\'})</span></p><p><b>subject</b>: <a>E***********</a></p><p><b>issued</b>: 03/04/2013 3:30:10 PM</p><p><b>value</b>: *4 <span>(Details : {http://pharmakb.org code \'PA166128353\' = \'PA166128353\', given as \'*4\'})</span></p><p><b>derivedFrom</b>: <a>MolecularSequence/example-TPMT-two</a></p></div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.genenames.org"
+        }
+        code {
+          value: "12014"
+        }
+        display {
+          value: "TPMT"
+        }
+      }
+    }
+  }
+}
+status {
+  value: UNKNOWN
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "363779003"
+    }
+    display {
+      value: "Genotype determination"
+    }
+  }
+  text {
+    value: "Haplotype Call"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "E***********"
+  }
+}
+issued {
+  value_us: 1364999410000000
+  timezone: "+01:00"
+  precision: SECOND
+}
+value {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://pharmakb.org"
+      }
+      code {
+        value: "PA166128353"
+      }
+      display {
+        value: "*4"
+      }
+    }
+  }
+}
+derived_from {
+  molecular_sequence_id {
+    value: "example-TPMT-two"
+  }
+}

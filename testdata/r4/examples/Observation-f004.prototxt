@@ -1,0 +1,107 @@
+id {
+  value: "f004"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f004</p><p><b>identifier</b>: 6326 (OFFICIAL)</p><p><b>status</b>: final</p><p><b>code</b>: Erythrocytes [#/volume] in Blood by Automated count <span>(Details : {LOINC code \'789-8\' = \'Erythrocytes [#/volume] in Blood by Automated count\', given as \'Erythrocytes [#/volume] in Blood by Automated count\'})</span></p><p><b>subject</b>: <a>P. van de Heuvel</a></p><p><b>effective</b>: 02/04/2013 10:30:10 AM --&gt; 05/04/2013 10:30:10 AM</p><p><b>issued</b>: 03/04/2013 3:30:10 PM</p><p><b>performer</b>: <a>A. Langeveld</a></p><p><b>value</b>: 4.12 10^12/L<span> (Details: UCUM code 10*12/L = \'10*12/L\')</span></p><p><b>interpretation</b>: Low <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'L\' = \'Low\', given as \'Low\'})</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Text</b></td></tr><tr><td>*</td><td> 12-14 y Male: 4.4 - 5.2  x  10^12/L ; 12-14 y Female: 4.2 - 4.8  x  10^12/L ; 15-17 y Male: 4.6 - 5.4  x  10^12/L ; 15-17 y Female: 4.2 - 4.8  x  10^12/L ; 18-64 y Male: 4.6 - 5.4  x  10^12/L ; 18-64 y Female: 4.0 - 4.8  x  10^12/L ; 65-74 y Male: 4.3 - 5.3  x  10^12/L ; 65-74 y Female: 4.1 - 4.9  x  10^12/L       </td></tr></table></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.bmc.nl/zorgportal/identifiers/observations"
+  }
+  value {
+    value: "6326"
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "789-8"
+    }
+    display {
+      value: "Erythrocytes [#/volume] in Blood by Automated count"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+effective {
+  period {
+    start {
+      value_us: 1364895010000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1365154210000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+  }
+}
+issued {
+  value_us: 1364999410000000
+  timezone: "+01:00"
+  precision: SECOND
+}
+performer {
+  practitioner_id {
+    value: "f005"
+  }
+  display {
+    value: "A. Langeveld"
+  }
+}
+value {
+  quantity {
+    value {
+      value: "4.12"
+    }
+    unit {
+      value: "10^12/L"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "10*12/L"
+    }
+  }
+}
+interpretation {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+    }
+    code {
+      value: "L"
+    }
+    display {
+      value: "Low"
+    }
+  }
+}
+reference_range {
+  text {
+    value: " 12-14 y Male: 4.4 - 5.2  x  10^12/L ; 12-14 y Female: 4.2 - 4.8  x  10^12/L ; 15-17 y Male: 4.6 - 5.4  x  10^12/L ; 15-17 y Female: 4.2 - 4.8  x  10^12/L ; 18-64 y Male: 4.6 - 5.4  x  10^12/L ; 18-64 y Female: 4.0 - 4.8  x  10^12/L ; 65-74 y Male: 4.3 - 5.3  x  10^12/L ; 65-74 y Female: 4.1 - 4.9  x  10^12/L       "
+  }
+}

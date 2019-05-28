@@ -1,0 +1,217 @@
+id {
+  value: "meddisp0303"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: meddisp0303</p><p><b>contained</b>: </p><p><b>partOf</b>: <a>Procedure/biopsy</a></p><p><b>status</b>: on-hold</p><p><b>statusReason</b>: <a>DetectedIssue/allergy</a></p><p><b>category</b>: Outpatient <span>(Details : {http://terminology.hl7.org/fhir/CodeSystem/medicationdispense-category code \'outpatient\' = \'Outpatient\', given as \'Outpatient\'})</span></p><p><b>medication</b>: id: med0310; Oxycodone Hydrochloride 5mg oral tablet (Roxicodone <span>(Details : {RxNorm code \'1049623\' = \'ROXICODONE 5 MG Oral Tablet\', given as \'Oxycodone Hydrochloride 5mg oral tablet (Roxicodone\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>context</b>: <a>Encounter/f001</a></p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Practitioner/f006</a></td></tr></table><p><b>authorizingPrescription</b>: <a>MedicationRequest/medrx0310</a></p><p><b>type</b>: Emergency Supply <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ActCode code \'EM\' = \'Emergency Supply\', given as \'Emergency Supply\'})</span></p><p><b>quantity</b>: 30 TAB<span> (Details: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm code TAB = \'Tablet\')</span></p><p><b>daysSupply</b>: 10 Day<span> (Details: UCUM code d = \'d\')</span></p><p><b>whenPrepared</b>: 15/04/2016 7:14:00 AM</p><p><b>dosageInstruction</b>: </p><p><b>detectedIssue</b>: <a>DetectedIssue/allergy</a></p></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "med0310"
+    }
+    code {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "1049623"
+        }
+        display {
+          value: "Oxycodone Hydrochloride 5mg oral tablet (Roxicodone"
+        }
+      }
+    }
+  }
+}
+part_of {
+  procedure_id {
+    value: "biopsy"
+  }
+}
+status {
+  value: ON_HOLD
+}
+status_reason {
+  reference {
+    detected_issue_id {
+      value: "allergy"
+    }
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/fhir/CodeSystem/medicationdispense-category"
+    }
+    code {
+      value: "outpatient"
+    }
+    display {
+      value: "Outpatient"
+    }
+  }
+}
+medication {
+  reference {
+    fragment {
+      value: "med0310"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+context {
+  encounter_id {
+    value: "f001"
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "f006"
+    }
+  }
+}
+authorizing_prescription {
+  medication_request_id {
+    value: "medrx0310"
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "EM"
+    }
+    display {
+      value: "Emergency Supply"
+    }
+  }
+}
+quantity {
+  value {
+    value: "30"
+  }
+  system {
+    value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+  }
+  code {
+    value: "TAB"
+  }
+}
+days_supply {
+  value {
+    value: "10"
+  }
+  unit {
+    value: "Day"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "d"
+  }
+}
+when_prepared {
+  value_us: 1460686440000000
+  timezone: "+05:00"
+  precision: SECOND
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "one to two tablets every 4-6 hours as needed for rib pain"
+  }
+  additional_instruction {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "418914006"
+      }
+      display {
+        value: "Warning. May cause drowsiness. If affected do not drive or operate machinery. Avoid alcoholic drink (qualifier value)"
+      }
+    }
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 1
+      }
+      period {
+        value: "4"
+      }
+      period_max {
+        value: "6"
+      }
+      period_unit {
+        value: H
+      }
+    }
+  }
+  as_needed {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "297217002"
+        }
+        display {
+          value: "Rib Pain (finding)"
+        }
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "26643006"
+      }
+      display {
+        value: "Oral Route"
+      }
+    }
+  }
+  method {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "421521009"
+      }
+      display {
+        value: "Swallow - dosing instruction imperative (qualifier value)"
+      }
+    }
+  }
+}
+detected_issue {
+  detected_issue_id {
+    value: "allergy"
+  }
+}

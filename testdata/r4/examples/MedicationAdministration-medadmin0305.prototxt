@@ -1,0 +1,165 @@
+id {
+  value: "medadmin0305"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medadmin0305</p><p><b>contained</b>: </p><p><b>instantiates</b>: <a>http://www.bccancer.bc.ca/chemotherapy-protocols-site/Documents/Lymphoma-Myeloma/ULYBRENTUX%20Protocol_1Jun2017.pdf</a></p><p><b>status</b>: completed</p><p><b>medication</b>: id: med0306; Adcetris <span>(Details : {http://hl7.org/fhir/sid/ndc code \'51144-050-01\' = \'51144-050-01\', given as \'Adcetris\'})</span>; Lyophilized powder for injectable solution (qualifier value)  <span>(Details : {SNOMED CT code \'421637006\' = \'Lyophilised powder for injectable solution\', given as \'Lyophilized powder for injectable solution (qualifier value) \'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>context</b>: <a>encounter who leads to this prescription</a></p><p><b>effective</b>: 15/01/2015 4:30:00 AM --&gt; 15/01/2015 2:30:00 PM</p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Patrick Pump</a></td></tr></table><p><b>request</b>: <a>MedicationRequest/medrx0316</a></p><h3>Dosages</h3><table><tr><td>-</td><td><b>Text</b></td><td><b>Route</b></td><td><b>Dose</b></td><td><b>Rate[x]</b></td></tr><tr><td>*</td><td>1.8 mg/kg IV infusion over 30 minutes</td><td>Intravenous <span>(Details : {SNOMED CT code \'255560000\' = \'Intravenous\', given as \'Intravenous\'})</span></td><td>1.8 mg/kg<span> (Details: UCUM code mg/kg = \'mg/kg\')</span></td><td>20 min<span> (Details: UCUM code min = \'min\')</span></td></tr></table></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "med0306"
+    }
+    code {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/ndc"
+        }
+        code {
+          value: "51144-050-01"
+        }
+        display {
+          value: "Adcetris"
+        }
+      }
+    }
+    manufacturer {
+      organization_id {
+        value: "mmanu"
+      }
+    }
+    form {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "421637006"
+        }
+        display {
+          value: "Lyophilized powder for injectable solution (qualifier value) "
+        }
+      }
+    }
+    batch {
+      lot_number {
+        value: "12345"
+      }
+      expiration_date {
+        value_us: 1572440400000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+}
+instantiates {
+  value: "http://www.bccancer.bc.ca/chemotherapy-protocols-site/Documents/Lymphoma-Myeloma/ULYBRENTUX%20Protocol_1Jun2017.pdf"
+}
+status {
+  value: COMPLETED
+}
+medication {
+  reference {
+    fragment {
+      value: "med0306"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+context {
+  encounter_id {
+    value: "f001"
+  }
+  display {
+    value: "encounter who leads to this prescription"
+  }
+}
+effective {
+  period {
+    start {
+      value_us: 1421292600000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1421328600000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "f007"
+    }
+    display {
+      value: "Patrick Pump"
+    }
+  }
+}
+request {
+  medication_request_id {
+    value: "medrx0316"
+  }
+}
+dosage {
+  text {
+    value: "1.8 mg/kg IV infusion over 30 minutes"
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "255560000"
+      }
+      display {
+        value: "Intravenous"
+      }
+    }
+  }
+  dose {
+    value {
+      value: "1.8"
+    }
+    unit {
+      value: "mg/kg"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "mg/kg"
+    }
+  }
+  rate {
+    quantity {
+      value {
+        value: "20"
+      }
+      unit {
+        value: "min"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "min"
+      }
+    }
+  }
+}

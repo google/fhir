@@ -1,0 +1,82 @@
+id {
+  value: "skin-patch"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: skin-patch</p><p><b>identifier</b>: 12345</p><p><b>active</b>: false</p><p><b>morphology</b>: Skin patch <span>(Details )</span></p><p><b>location</b>: Forearm <span>(Details : {SNOMED CT code \'14975008\' = \'Forearm\', given as \'Forearm\'})</span></p><p><b>locationQualifier</b>: Left <span>(Details : {SNOMED CT code \'419161000\' = \'Unilateral left\', given as \'Unilateral left\'})</span>, Volar <span>(Details : {SNOMED CT code \'263929005\' = \'Volar\', given as \'Volar\'})</span></p><p><b>description</b>: inner surface (volar) of the left forearm</p><p><b>patient</b>: <a>Patient/example</a></p></div>"
+  }
+}
+identifier {
+  system {
+    value: "http://goodhealth.org/bodystructure/identifiers"
+  }
+  value {
+    value: "12345"
+  }
+}
+active {
+}
+morphology {
+  text {
+    value: "Skin patch"
+  }
+}
+location {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "14975008"
+    }
+    display {
+      value: "Forearm"
+    }
+  }
+  text {
+    value: "Forearm"
+  }
+}
+location_qualifier {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "419161000"
+    }
+    display {
+      value: "Unilateral left"
+    }
+  }
+  text {
+    value: "Left"
+  }
+}
+location_qualifier {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "263929005"
+    }
+    display {
+      value: "Volar"
+    }
+  }
+  text {
+    value: "Volar"
+  }
+}
+description {
+  value: "inner surface (volar) of the left forearm"
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+}

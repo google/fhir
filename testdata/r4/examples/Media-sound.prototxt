@@ -1,0 +1,38 @@
+id {
+  value: "sound"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Sound recording of speech example for Patient Henry Levin (MRN 12345):<br/><img src=\"#11\" alt=\"diagram\"/></div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+subject {
+  patient_id {
+    value: "xcda"
+  }
+}
+operator {
+  practitioner_id {
+    value: "xcda-author"
+  }
+}
+duration {
+  value: "65"
+}
+content {
+  id {
+    value: "a1"
+  }
+  content_type {
+    value: "audio/mpeg"
+  }
+  data {
+    value: "too big too include the whole"
+  }
+}

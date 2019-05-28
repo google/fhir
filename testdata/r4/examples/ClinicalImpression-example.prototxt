@@ -1,0 +1,103 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>identifier</b>: 12345</p><p><b>status</b>: completed</p><p><b>description</b>: This 26 yo male patient is brought into ER by ambulance after being involved in a motor vehicle accident</p><p><b>subject</b>: <a>Patient/example</a></p><p><b>encounter</b>: <a>Encounter/example</a></p><p><b>effective</b>: 06/12/2014 8:00:00 PM --&gt; 06/12/2014 10:33:00 PM</p><p><b>date</b>: 06/12/2014 10:33:00 PM</p><p><b>assessor</b>: <a>Practitioner/example</a></p><p><b>problem</b>: MVA</p><h3>Investigations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Item</b></td></tr><tr><td>*</td><td>Initial Examination <span>(Details )</span></td><td>deep laceration of the scalp (left temporo-occipital)</td></tr></table><p><b>summary</b>: provisional diagnoses of laceration of head and traumatic brain injury (TBI)</p><h3>Findings</h3><table><tr><td>-</td><td><b>ItemCodeableConcept</b></td></tr><tr><td>*</td><td>850.0 <span>(Details : {ICD-9 code \'850.0\' = \'850.0)</span></td></tr></table></div>"
+  }
+}
+identifier {
+  value {
+    value: "12345"
+  }
+}
+status {
+  value: COMPLETED
+}
+description {
+  value: "This 26 yo male patient is brought into ER by ambulance after being involved in a motor vehicle accident"
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+effective {
+  period {
+    start {
+      value_us: 1417856400000000
+      timezone: "+11:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1417865580000000
+      timezone: "+11:00"
+      precision: SECOND
+    }
+  }
+}
+date {
+  value_us: 1417865580000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+assessor {
+  practitioner_id {
+    value: "example"
+  }
+}
+problem {
+  display {
+    value: "MVA"
+  }
+}
+investigation {
+  code {
+    text {
+      value: "Initial Examination"
+    }
+  }
+  item {
+    display {
+      value: "deep laceration of the scalp (left temporo-occipital)"
+    }
+  }
+  item {
+    display {
+      value: "decreased level of consciousness"
+    }
+  }
+  item {
+    display {
+      value: "disoriented to time and place"
+    }
+  }
+  item {
+    display {
+      value: "restless"
+    }
+  }
+}
+summary {
+  value: "provisional diagnoses of laceration of head and traumatic brain injury (TBI)"
+}
+finding {
+  item_codeable_concept {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/sid/icd-9"
+      }
+      code {
+        value: "850.0"
+      }
+    }
+  }
+}

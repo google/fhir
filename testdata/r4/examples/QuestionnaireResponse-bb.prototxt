@@ -1,0 +1,221 @@
+id {
+  value: "bb"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <pre>\n        Cathy Jones, female. Birth weight 3.25 kg at 44.3 cm. \n        Injection of Vitamin K given on 1972-11-30 (first dose) and 1972-12-11 (second dose)\n        Note: Was able to speak Chinese at birth.\n      </pre>\n    </div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+subject {
+  type {
+    value: "Patient"
+  }
+  uri {
+    value: "http://hl7.org/fhir/Patient/1"
+  }
+}
+authored {
+  value_us: 1361247300000000
+  timezone: "+10:00"
+  precision: SECOND
+}
+author {
+  type {
+    value: "Practitioner"
+  }
+  uri {
+    value: "http://hl7.org/fhir/Practitioner/example"
+  }
+}
+item {
+  link_id {
+    value: "birthDetails"
+  }
+  text {
+    value: "Birth details - To be completed by health professional"
+  }
+  item {
+    link_id {
+      value: "group"
+    }
+    item {
+      link_id {
+        value: "nameOfChild"
+      }
+      text {
+        value: "Name of child"
+      }
+      answer {
+        value {
+          string_value {
+            value: "Cathy Jones"
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "sex"
+      }
+      text {
+        value: "Sex"
+      }
+      answer {
+        value {
+          coding {
+            code {
+              value: "f"
+            }
+          }
+        }
+      }
+    }
+  }
+  item {
+    link_id {
+      value: "neonatalInformation"
+    }
+    text {
+      value: "Neonatal Information"
+    }
+    item {
+      link_id {
+        value: "birthWeight"
+      }
+      text {
+        value: "Birth weight (kg)"
+      }
+      answer {
+        value {
+          decimal {
+            value: "3.25"
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "birthLength"
+      }
+      text {
+        value: "Birth length (cm)"
+      }
+      answer {
+        value {
+          decimal {
+            value: "44.3"
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "vitaminKgiven"
+      }
+      text {
+        value: "Vitamin K given"
+      }
+      answer {
+        value {
+          coding {
+            code {
+              value: "INJECTION"
+            }
+          }
+        }
+        item {
+          link_id {
+            value: "vitaminKgivenDoses"
+          }
+          item {
+            link_id {
+              value: "vitaminKDose1"
+            }
+            text {
+              value: "1st dose"
+            }
+            answer {
+              value {
+                date {
+                  value_us: 91890000000000
+                  timezone: "Australia/Sydney"
+                  precision: DAY
+                }
+              }
+            }
+          }
+          item {
+            link_id {
+              value: "vitaminKDose2"
+            }
+            text {
+              value: "2nd dose"
+            }
+            answer {
+              value {
+                date {
+                  value_us: 92840400000000
+                  timezone: "Australia/Sydney"
+                  precision: DAY
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "hepBgiven"
+      }
+      text {
+        value: "Hep B given y / n"
+      }
+      answer {
+        value {
+          boolean {
+            value: true
+          }
+        }
+        item {
+          link_id {
+            value: "hepBgivenDate"
+          }
+          text {
+            value: "Date given"
+          }
+          answer {
+            value {
+              date {
+                value_us: 92235600000000
+                timezone: "Australia/Sydney"
+                precision: DAY
+              }
+            }
+          }
+        }
+      }
+    }
+    item {
+      link_id {
+        value: "abnormalitiesAtBirth"
+      }
+      text {
+        value: "Abnormalities noted at birth"
+      }
+      answer {
+        value {
+          string_value {
+            value: "Already able to speak Chinese"
+          }
+        }
+      }
+    }
+  }
+}

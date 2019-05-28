@@ -15,6 +15,7 @@
 package com.google.fhir.stu3;
 
 import com.google.fhir.proto.Annotations;
+import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.Annotations.StructureDefinitionKindValue;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
@@ -55,6 +56,10 @@ public final class AnnotationUtils {
   public static boolean isChoiceType(FieldDescriptor field) {
     return field.getType() == FieldDescriptor.Type.MESSAGE
         && field.getMessageType().getOptions().getExtension(Annotations.isChoiceType);
+  }
+
+  public static boolean isChoiceType(Descriptor descriptor) {
+    return descriptor.getOptions().getExtension(Annotations.isChoiceType);
   }
 
   public static boolean isReference(MessageOrBuilder message) {
@@ -98,5 +103,13 @@ public final class AnnotationUtils {
       }
     }
     return false;
+  }
+
+  public static FhirVersion getFhirVersion(Descriptor descriptor) {
+    return descriptor.getFile().getOptions().getExtension(Annotations.fhirVersion);
+  }
+
+  public static boolean sameFhirType(Descriptor descriptorA, Descriptor descriptorB) {
+    return getStructureDefinitionUrl(descriptorA).equals(getStructureDefinitionUrl(descriptorB));
   }
 }

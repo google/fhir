@@ -1,0 +1,141 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <table>\n        <tbody>\n          <tr>\n            <td>Name</td>\n            <td>Peter James <b>Chalmers</b> (&quot;Jim&quot;)</td>\n          </tr>\n          <tr>\n            <td>Address</td>\n            <td>534 Erewhon, Pleasantville, Vic, 3999</td>\n          </tr>\n          <tr>\n            <td>Contacts</td>\n            <td>Home: unknown. Work: (03) 5555 6473</td>\n          </tr>\n          <tr>\n            <td>Id</td>\n            <td>MRN: 12345 (Acme Healthcare)</td>\n          </tr>\n        </tbody>\n      </table>\n    </div>"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+      }
+      code {
+        value: "MR"
+      }
+    }
+  }
+  system {
+    value: "urn:oid:1.2.36.146.595.217.0.1"
+  }
+  value {
+    value: "12345"
+  }
+  period {
+    start {
+      value_us: 989071200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  assigner {
+    display {
+      value: "Acme Healthcare"
+    }
+  }
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  family {
+    value: "Chalmers"
+  }
+  given {
+    value: "Peter"
+  }
+  given {
+    value: "James"
+  }
+}
+name {
+  use {
+    value: USUAL
+  }
+  given {
+    value: "Jim"
+  }
+}
+telecom {
+  use {
+    value: HOME
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "(03) 5555 6473"
+  }
+  use {
+    value: WORK
+  }
+}
+telecom {
+  system {
+    value: EMAIL
+  }
+  value {
+    value: "Jim@example.org"
+  }
+  use {
+    value: HOME
+  }
+}
+gender {
+  value: MALE
+}
+birth_date {
+  value_us: 157122000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+address {
+  use {
+    value: HOME
+  }
+  line {
+    value: "534 Erewhon St"
+  }
+  city {
+    value: "PleasantVille"
+  }
+  state {
+    value: "Vic"
+  }
+  postal_code {
+    value: "3999"
+  }
+}
+active {
+  value: true
+}
+link {
+  target {
+    related_person_id {
+      value: "peter"
+    }
+    display {
+      value: "Peter Chalmers"
+    }
+  }
+}
+link {
+  target {
+    patient_id {
+      value: "example"
+    }
+    display {
+      value: "Peter Chalmers"
+    }
+  }
+}

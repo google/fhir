@@ -1,0 +1,134 @@
+id {
+  value: "f203"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f203</p><p><b>clinicalStatus</b>: Active <span>(Details : {http://terminology.hl7.org/CodeSystem/condition-clinical code \'active\' = \'Active)</span></p><p><b>verificationStatus</b>: Confirmed <span>(Details : {http://terminology.hl7.org/CodeSystem/condition-ver-status code \'confirmed\' = \'Confirmed)</span></p><p><b>category</b>: Problem <span>(Details : {SNOMED CT code \'55607006\' = \'Problem\', given as \'Problem\'}; {http://terminology.hl7.org/CodeSystem/condition-category code \'problem-list-item\' = \'Problem List Item)</span></p><p><b>severity</b>: Moderate to severe <span>(Details : {SNOMED CT code \'371924009\' = \'Moderate to severe\', given as \'Moderate to severe\'})</span></p><p><b>code</b>: Bacterial sepsis <span>(Details : {SNOMED CT code \'10001005\' = \'Bacterial septicemia\', given as \'Bacterial sepsis\'})</span></p><p><b>bodySite</b>: Pulmonary vascular structure <span>(Details : {SNOMED CT code \'281158006\' = \'Pulmonary vascular structure\', given as \'Pulmonary vascular structure\'})</span></p><p><b>subject</b>: <a>Roel</a></p><p><b>encounter</b>: <a>Roel\'s encounter on March elevanth</a></p><p><b>onset</b>: 08/03/2013</p><p><b>recordedDate</b>: 11/03/2013</p><p><b>asserter</b>: <a>Practitioner/f201</a></p><h3>Evidences</h3><table><tr><td>-</td><td><b>Detail</b></td></tr><tr><td>*</td><td><a>Diagnostic report for Roel\'s sepsis</a></td></tr></table></div>"
+  }
+}
+clinical_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
+    }
+    code {
+      value: "active"
+    }
+  }
+}
+verification_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+    }
+    code {
+      value: "confirmed"
+    }
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "55607006"
+    }
+    display {
+      value: "Problem"
+    }
+  }
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/condition-category"
+    }
+    code {
+      value: "problem-list-item"
+    }
+  }
+}
+severity {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "371924009"
+    }
+    display {
+      value: "Moderate to severe"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "10001005"
+    }
+    display {
+      value: "Bacterial sepsis"
+    }
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "281158006"
+    }
+    display {
+      value: "Pulmonary vascular structure"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "f201"
+  }
+  display {
+    value: "Roel"
+  }
+}
+encounter {
+  encounter_id {
+    value: "f203"
+  }
+  display {
+    value: "Roel\'s encounter on March elevanth"
+  }
+}
+onset {
+  date_time {
+    value_us: 1362661200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+recorded_date {
+  value_us: 1362920400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+asserter {
+  practitioner_id {
+    value: "f201"
+  }
+}
+evidence {
+  detail {
+    diagnostic_report_id {
+      value: "f202"
+    }
+    display {
+      value: "Diagnostic report for Roel\'s sepsis"
+    }
+  }
+}

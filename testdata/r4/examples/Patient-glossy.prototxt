@@ -1,0 +1,87 @@
+id {
+  value: "glossy"
+}
+meta {
+  last_updated {
+    value_us: 1415839260000000
+    timezone: "+11:00"
+    precision: SECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Henry Levin the 7th</p>\n      <p>MRN: 123456. Male, 24-Sept 1932</p>\n    </div>"
+  }
+}
+extension {
+  url {
+    value: "http://example.org/StructureDefinition/trials"
+  }
+  value {
+    code {
+      value: "renal"
+    }
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+      }
+      code {
+        value: "MR"
+      }
+    }
+  }
+  system {
+    value: "http://www.goodhealth.org/identifiers/mrn"
+  }
+  value {
+    value: "123456"
+  }
+}
+active {
+  value: true
+}
+name {
+  family {
+    value: "Levin"
+  }
+  given {
+    value: "Henry"
+  }
+  suffix {
+    value: "The 7th"
+  }
+}
+gender {
+  value: MALE
+}
+birth_date {
+  value_us: -1176199200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+general_practitioner {
+  practitioner_id {
+    value: "example"
+  }
+  display {
+    value: "Dr Adam Careful"
+  }
+}
+managing_organization {
+  organization_id {
+    value: "2"
+  }
+  display {
+    value: "Good Health Clinic"
+  }
+}

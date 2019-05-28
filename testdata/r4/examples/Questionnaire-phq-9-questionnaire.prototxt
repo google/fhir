@@ -1,0 +1,319 @@
+id {
+  value: "phq-9-questionnaire"
+}
+meta {
+  profile {
+    value: "http://hl7.org/fhir/StructureDefinition/cqf-questionnaire"
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">PHQ-9 Questionnaire with dynamic logic</div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/cqf-library"
+  }
+  value {
+    canonical {
+      value: "Library/phq-9-logic"
+    }
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  value {
+    value: "phq-9"
+  }
+}
+version {
+  value: "1.0.0"
+}
+title {
+  value: "Patient Health Questionnaire (PHQ-9)"
+}
+status {
+  value: DRAFT
+}
+subject_type {
+  value: PATIENT
+}
+code {
+  system {
+    value: "http://loinc.org"
+  }
+  code {
+    value: "44249-1"
+  }
+  display {
+    value: "PHQ-9 quick depression assessment panel:-:Pt:^Patient:-:Report.PHQ-9"
+  }
+}
+item {
+  link_id {
+    value: "LittleInterest"
+  }
+  code {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "44250-9"
+    }
+  }
+  text {
+    value: "Little interest or pleasure in doing things"
+  }
+  type {
+    value: CHOICE
+  }
+  required {
+    value: true
+  }
+  answer_value_set {
+    value: "http://loinc.org/vs/LL358-3"
+  }
+}
+item {
+  link_id {
+    value: "FeelingDown"
+  }
+  code {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "44255-8"
+    }
+  }
+  text {
+    value: "Feeling down, depressed, or hopeless"
+  }
+  type {
+    value: CHOICE
+  }
+  required {
+    value: true
+  }
+  answer_value_set {
+    value: "http://loinc.org/vs/LL358-3"
+  }
+}
+item {
+  link_id {
+    value: "TroubleSleeping"
+  }
+  code {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "44259-0"
+    }
+  }
+  text {
+    value: "Trouble falling or staying asleep"
+  }
+  type {
+    value: CHOICE
+  }
+  required {
+    value: true
+  }
+  answer_value_set {
+    value: "http://loinc.org/vs/LL358-3"
+  }
+}
+item {
+  link_id {
+    value: "FeelingTired"
+  }
+  code {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "44254-1"
+    }
+  }
+  text {
+    value: "Feeling tired or having little energy"
+  }
+  type {
+    value: CHOICE
+  }
+  required {
+    value: true
+  }
+  answer_value_set {
+    value: "http://loinc.org/vs/LL358-3"
+  }
+}
+item {
+  link_id {
+    value: "BadAppetite"
+  }
+  code {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "44251-7"
+    }
+  }
+  text {
+    value: "Poor appetite or overeating"
+  }
+  type {
+    value: CHOICE
+  }
+  required {
+    value: true
+  }
+  answer_value_set {
+    value: "http://loinc.org/vs/LL358-3"
+  }
+}
+item {
+  link_id {
+    value: "FeelingBadAboutSelf"
+  }
+  code {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "44258-2"
+    }
+  }
+  text {
+    value: "Feeling bad about yourself - or that you are a failure or have let yourself or your family down"
+  }
+  type {
+    value: CHOICE
+  }
+  required {
+    value: true
+  }
+  answer_value_set {
+    value: "http://loinc.org/vs/LL358-3"
+  }
+}
+item {
+  link_id {
+    value: "TroubleConcentrating"
+  }
+  code {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "44252-5"
+    }
+  }
+  text {
+    value: "Trouble concentrating on things, such as reading the newspaper or watching television"
+  }
+  type {
+    value: CHOICE
+  }
+  required {
+    value: true
+  }
+  answer_value_set {
+    value: "http://loinc.org/vs/LL358-3"
+  }
+}
+item {
+  link_id {
+    value: "MovingSpeaking"
+  }
+  code {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "44253-3"
+    }
+  }
+  text {
+    value: "Moving or speaking so slowly that other people could have noticed. Or the opposite - being so fidgety or restless that you have been moving around a lot more than usual"
+  }
+  type {
+    value: CHOICE
+  }
+  required {
+    value: true
+  }
+  answer_value_set {
+    value: "http://loinc.org/vs/LL358-3"
+  }
+}
+item {
+  extension {
+    url {
+      value: "http://hl7.org/fhir/StructureDefinition/cqf-expression"
+    }
+    value {
+      expression {
+        language {
+          value: "text/cql"
+        }
+        expression {
+          value: "CalculateTotalScore"
+        }
+      }
+    }
+  }
+  link_id {
+    value: "TotalScore"
+  }
+  code {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "44261-6"
+    }
+  }
+  text {
+    value: "Total score"
+  }
+  type {
+    value: INTEGER
+  }
+  required {
+    value: true
+  }
+}
+item {
+  link_id {
+    value: "Difficulty"
+  }
+  code {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "44256-6"
+    }
+  }
+  text {
+    value: "If you checked off any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people"
+  }
+  type {
+    value: CHOICE
+  }
+  required {
+    value: true
+  }
+  answer_value_set {
+    value: "http://loinc.org/vs/LL358-3"
+  }
+}

@@ -1,0 +1,226 @@
+id {
+  value: "opioidcds-recommendation-05"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: opioidcds-recommendation-05</p><p><b>identifier</b>: OpioidCDS_REC_05 (OFFICIAL)</p><p><b>version</b>: 0.1.0</p><p><b>title</b>: Opioid CDS Logic for recommendation #5</p><p><b>status</b>: active</p><p><b>experimental</b>: false</p><p><b>type</b>: Logic Library <span>(Details : {http://terminology.hl7.org/CodeSystem/library-type code \'logic-library\' = \'Logic Library\', given as \'Logic Library\'})</span></p><p><b>date</b>: 25/03/2018 1:49:09 PM</p><p><b>publisher</b>: Centers for Disease Control and Prevention (CDC)</p><p><b>description</b>: Opioid Decision Support Logic for use in implementing CDC Opioid Prescribing Guidelines.</p><p><b>useContext</b>: , </p><p><b>jurisdiction</b>: United States of America <span>(Details : {urn:iso:std:iso:3166 code \'US\' = \'United States of America\', given as \'United States of America\'})</span></p><p><b>purpose</b>: This library works in concert with the OMTK logic library to provide decision support for Morphine Milligram Equivalence calculations and dynamic value resolution.</p><p><b>usage</b>: This library is to notify the prescriber/user whether the current prescription exceeds the recommended MME.</p><p><b>copyright</b>: \302\251 CDC 2016+.</p><p><b>topic</b>: Opioid Prescribing <span>(Details )</span></p><p><b>author</b>: , , , </p><p><b>relatedArtifact</b>: , , </p><p><b>dataRequirement</b>: </p><p><b>content</b>: </p></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  value {
+    value: "OpioidCDS_REC_05"
+  }
+}
+version {
+  value: "0.1.0"
+}
+title {
+  value: "Opioid CDS Logic for recommendation #5"
+}
+status {
+  value: ACTIVE
+}
+experimental {
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/library-type"
+    }
+    code {
+      value: "logic-library"
+    }
+    display {
+      value: "Logic Library"
+    }
+  }
+}
+date {
+  value_us: 1522007349000000
+  timezone: "-06:00"
+  precision: SECOND
+}
+publisher {
+  value: "Centers for Disease Control and Prevention (CDC)"
+}
+description {
+  value: "Opioid Decision Support Logic for use in implementing CDC Opioid Prescribing Guidelines."
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+    display {
+      value: "Clinical Focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "182888003"
+        }
+        display {
+          value: "Medication requested (situation)"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+    display {
+      value: "Clinical Focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "82423001"
+        }
+        display {
+          value: "Chronic pain (finding)"
+        }
+      }
+    }
+  }
+}
+jurisdiction {
+  coding {
+    system {
+      value: "urn:iso:std:iso:3166"
+    }
+    code {
+      value: "US"
+    }
+    display {
+      value: "United States of America"
+    }
+  }
+}
+purpose {
+  value: "This library works in concert with the OMTK logic library to provide decision support for Morphine Milligram Equivalence calculations and dynamic value resolution."
+}
+usage {
+  value: "This library is to notify the prescriber/user whether the current prescription exceeds the recommended MME."
+}
+copyright {
+  value: "\302\251 CDC 2016+."
+}
+topic {
+  text {
+    value: "Opioid Prescribing"
+  }
+}
+author {
+  name {
+    value: "Kensaku Kawamoto, MD, PhD, MHS"
+  }
+}
+author {
+  name {
+    value: "Bryn Rhodes"
+  }
+}
+author {
+  name {
+    value: "Floyd Eisenberg, MD, MPH"
+  }
+}
+author {
+  name {
+    value: "Robert McClure, MD, MPH"
+  }
+}
+related_artifact {
+  type {
+    value: DOCUMENTATION
+  }
+  display {
+    value: "CDC guideline for prescribing opioids for chronic pain"
+  }
+  url {
+    value: "https://guidelines.gov/summaries/summary/50153/cdc-guideline-for-prescribing-opioids-for-chronic-pain---united-states-2016#420"
+  }
+}
+related_artifact {
+  type {
+    value: DEPENDS_ON
+  }
+  resource {
+    value: "Library/opioidcds-common"
+  }
+}
+related_artifact {
+  type {
+    value: DOCUMENTATION
+  }
+  display {
+    value: "MME Conversion Tables"
+  }
+  url {
+    value: "https://www.cdc.gov/drugoverdose/pdf/calculating_total_daily_dose-a.pdf"
+  }
+}
+data_requirement {
+  id {
+    value: "medications"
+  }
+  type {
+    value: MEDICATION_REQUEST
+  }
+  code_filter {
+    path {
+      value: "status"
+    }
+    code {
+      code {
+        value: "active"
+      }
+    }
+  }
+  code_filter {
+    path {
+      value: "category"
+    }
+    code {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/medicationrequest-category"
+      }
+      code {
+        value: "outpatient"
+      }
+    }
+  }
+}
+content {
+  content_type {
+    value: "application/elm+xml"
+  }
+  data {
+    value: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<library xmlns=\"urn:hl7-org:elm:r1\" xmlns:t=\"urn:hl7-org:elm-types:r1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:fhir=\"http://hl7.org/fhir\" xmlns:qdm43=\"urn:healthit-gov:qdm:v4_3\" xmlns:qdm53=\"urn:healthit-gov:qdm:v5_3\" xmlns:a=\"urn:hl7-org:cql-annotations:r1\">\n   <identifier id=\"OpioidCDS_STU4\" version=\"0.1.0\"/>\n   <schemaIdentifier id=\"urn:hl7-org:elm\" version=\"r1\"/>\n   <usings>\n      <def localIdentifier=\"System\" uri=\"urn:hl7-org:elm-types:r1\"/>\n      <def localIdentifier=\"FHIR\" uri=\"http://hl7.org/fhir\" version=\"3.2.0\"/>\n   </usings>\n   <includes>\n      <def localIdentifier=\"MMECommon\" path=\"OpioidCDS_STU4_Common\" version=\"0.1.0\"/>\n   </includes>\n   <parameters>\n      <def name=\"UserID\" accessLevel=\"Public\">\n         <parameterTypeSpecifier name=\"t:String\" xsi:type=\"NamedTypeSpecifier\"/>\n      </def>\n      <def name=\"ContextPrescriptions\" accessLevel=\"Public\">\n         <parameterTypeSpecifier xsi:type=\"ListTypeSpecifier\">\n            <elementType name=\"fhir:MedicationRequest\" xsi:type=\"NamedTypeSpecifier\"/>\n         </parameterTypeSpecifier>\n      </def>\n   </parameters>\n   <statements>\n      <def name=\"Patient\" context=\"Patient\">\n         <expression xsi:type=\"SingletonFrom\">\n            <operand dataType=\"fhir:Patient\" xsi:type=\"Retrieve\"/>\n         </expression>\n      </def>\n      <def name=\"Get Active Prescriptions\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Query\">\n            <source alias=\"activeRx\">\n               <expression dataType=\"fhir:MedicationRequest\" xsi:type=\"Retrieve\"/>\n            </source>\n            <where xsi:type=\"And\">\n               <operand xsi:type=\"Equal\">\n                  <operand path=\"value\" xsi:type=\"Property\">\n                     <source path=\"status\" scope=\"activeRx\" xsi:type=\"Property\"/>\n                  </operand>\n                  <operand valueType=\"t:String\" value=\"active\" xsi:type=\"Literal\"/>\n               </operand>\n               <operand xsi:type=\"Equal\">\n                  <operand path=\"value\" xsi:type=\"Property\">\n                     <source path=\"code\" xsi:type=\"Property\">\n                        <source xsi:type=\"Indexer\">\n                           <operand xsi:type=\"Flatten\">\n                              <operand xsi:type=\"Query\">\n                                 <source alias=\"$this\">\n                                    <expression path=\"category\" scope=\"activeRx\" xsi:type=\"Property\"/>\n                                 </source>\n                                 <where xsi:type=\"Not\">\n                                    <operand xsi:type=\"IsNull\">\n                                       <operand path=\"coding\" xsi:type=\"Property\">\n                                          <source name=\"$this\" xsi:type=\"AliasRef\"/>\n                                       </operand>\n                                    </operand>\n                                 </where>\n                                 <return>\n                                    <expression path=\"coding\" xsi:type=\"Property\">\n                                       <source name=\"$this\" xsi:type=\"AliasRef\"/>\n                                    </expression>\n                                 </return>\n                              </operand>\n                           </operand>\n                           <operand valueType=\"t:Integer\" value=\"0\" xsi:type=\"Literal\"/>\n                        </source>\n                     </source>\n                  </operand>\n                  <operand valueType=\"t:String\" value=\"outpatient\" xsi:type=\"Literal\"/>\n               </operand>\n            </where>\n         </expression>\n      </def>\n      <def name=\"Total MME\" context=\"Patient\" accessLevel=\"Public\">\n         <expression name=\"TotalMME\" libraryName=\"MMECommon\" xsi:type=\"FunctionRef\">\n            <operand xsi:type=\"Union\">\n               <operand name=\"ContextPrescriptions\" xsi:type=\"ParameterRef\"/>\n               <operand name=\"Get Active Prescriptions\" xsi:type=\"ExpressionRef\"/>\n            </operand>\n         </expression>\n      </def>\n      <def name=\"Is MME 50 Or More?\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"GreaterOrEqual\">\n            <operand name=\"Total MME\" xsi:type=\"ExpressionRef\"/>\n            <operand value=\"50\" unit=\"mg/d\" xsi:type=\"Quantity\"/>\n         </expression>\n      </def>\n      <def name=\"Get Indicator\" context=\"Patient\" accessLevel=\"Public\">\n         <expression valueType=\"t:String\" value=\"warning\" xsi:type=\"Literal\"/>\n      </def>\n      <def name=\"Get Summary\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Concatenate\">\n            <operand valueType=\"t:String\" value=\"High risk for opioid overdose - \" xsi:type=\"Literal\"/>\n            <operand xsi:type=\"Case\">\n               <caseItem>\n                  <when xsi:type=\"GreaterOrEqual\">\n                     <operand path=\"value\" xsi:type=\"Property\">\n                        <source name=\"Total MME\" xsi:type=\"ExpressionRef\"/>\n                     </operand>\n                     <operand xsi:type=\"ToDecimal\">\n                        <operand valueType=\"t:Integer\" value=\"90\" xsi:type=\"Literal\"/>\n                     </operand>\n                  </when>\n                  <then valueType=\"t:String\" value=\"taper now\" xsi:type=\"Literal\"/>\n               </caseItem>\n               <else valueType=\"t:String\" value=\"consider tapering\" xsi:type=\"Literal\"/>\n            </operand>\n         </expression>\n      </def>\n      <def name=\"Get Detail\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Concatenate\">\n            <operand xsi:type=\"Concatenate\">\n               <operand valueType=\"t:String\" value=\"Total morphine milligram equivalent (MME) is \" xsi:type=\"Literal\"/>\n               <operand xsi:type=\"ToString\">\n                  <operand name=\"Total MME\" xsi:type=\"ExpressionRef\"/>\n               </operand>\n            </operand>\n            <operand valueType=\"t:String\" value=\". Taper to less than 50.\" xsi:type=\"Literal\"/>\n         </expression>\n      </def>\n   </statements>\n</library>\n"
+  }
+}

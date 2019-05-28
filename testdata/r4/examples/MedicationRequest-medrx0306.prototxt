@@ -1,0 +1,157 @@
+id {
+  value: "medrx0306"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medrx0306</p><p><b>contained</b>: </p><p><b>identifier</b>: 12345689 (OFFICIAL)</p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>medication</b>: Myleran 2mg tablet. Generated Summary: id: med0304; Myleran 2mg tablet, film coated <span>(Details : {http://hl7.org/fhir/sid/ndc code \'76388-713-25\' = \'76388-713-25\', given as \'Myleran 2mg tablet, film coated\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>authoredOn</b>: 15/01/2015</p><p><b>requester</b>: <a>Patrick Pump</a></p><p><b>reasonCode</b>: Chronic myeloid Leukemia (disorder) <span>(Details : {SNOMED CT code \'92818009\' = \'Chronic myeloid leukemia\', given as \'Chronic myeloid Leukemia (disorder)\'})</span></p><p><b>dosageInstruction</b>: </p></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "med0304"
+    }
+    code {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/ndc"
+        }
+        code {
+          value: "76388-713-25"
+        }
+        display {
+          value: "Myleran 2mg tablet, film coated"
+        }
+      }
+    }
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.bmc.nl/portal/prescriptions"
+  }
+  value {
+    value: "12345689"
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: ORDER
+}
+medication {
+  reference {
+    fragment {
+      value: "med0304"
+    }
+    display {
+      value: "Myleran 2mg tablet"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+authored_on {
+  value_us: 1421240400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+requester {
+  practitioner_id {
+    value: "f007"
+  }
+  display {
+    value: "Patrick Pump"
+  }
+}
+reason_code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "92818009"
+    }
+    display {
+      value: "Chronic myeloid Leukemia (disorder)"
+    }
+  }
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "6 mg PO daily for remission induction; adjust dosage to white blood cell (WBC) count.  With hold treatment if WBC is less than 15,000/\302\265L; resume when WBC is greater than 50,000/\302\265L"
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 1
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "26643006"
+      }
+      display {
+        value: "Oral route (qualifier value)"
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "ordered"
+        }
+        display {
+          value: "Ordered"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "6"
+        }
+        unit {
+          value: "mg"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mg"
+        }
+      }
+    }
+  }
+}

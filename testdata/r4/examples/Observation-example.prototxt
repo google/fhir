@@ -1,0 +1,106 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>status</b>: final</p><p><b>category</b>: Vital Signs <span>(Details : {http://terminology.hl7.org/CodeSystem/observation-category code \'vital-signs\' = \'Vital Signs\', given as \'Vital Signs\'})</span></p><p><b>code</b>: Body Weight <span>(Details : {LOINC code \'29463-7\' = \'Body weight\', given as \'Body Weight\'}; {LOINC code \'3141-9\' = \'Body weight Measured\', given as \'Body weight Measured\'}; {SNOMED CT code \'27113001\' = \'Body weight\', given as \'Body weight\'}; {http://acme.org/devices/clinical-codes code \'body-weight\' = \'body-weight\', given as \'Body Weight\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>encounter</b>: <a>Encounter/example</a></p><p><b>effective</b>: 28/03/2016</p><p><b>value</b>: 185 lbs<span> (Details: UCUM code [lb_av] = \'lb_av\')</span></p></div>"
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/observation-category"
+    }
+    code {
+      value: "vital-signs"
+    }
+    display {
+      value: "Vital Signs"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "29463-7"
+    }
+    display {
+      value: "Body Weight"
+    }
+  }
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "3141-9"
+    }
+    display {
+      value: "Body weight Measured"
+    }
+  }
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "27113001"
+    }
+    display {
+      value: "Body weight"
+    }
+  }
+  coding {
+    system {
+      value: "http://acme.org/devices/clinical-codes"
+    }
+    code {
+      value: "body-weight"
+    }
+    display {
+      value: "Body Weight"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+effective {
+  date_time {
+    value_us: 1459083600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+value {
+  quantity {
+    value {
+      value: "185"
+    }
+    unit {
+      value: "lbs"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "[lb_av]"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+id {
+  value: "example-iid"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\tExample of an Imaging IID type endpoint\n\t\t</div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+connection_type {
+  system {
+    value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+  }
+  code {
+    value: "ihe-iid"
+  }
+}
+name {
+  value: "PACS Hospital Invoke Image Display endpoint"
+}
+payload_type {
+  text {
+    value: "DICOM IID"
+  }
+}
+address {
+  value: "https://pacs.hospital.org/IHEInvokeImageDisplay"
+}

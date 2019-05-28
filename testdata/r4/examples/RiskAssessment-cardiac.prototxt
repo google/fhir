@@ -1,0 +1,106 @@
+id {
+  value: "cardiac"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <table>\n        <tr>\n          <td colspan=\"2\">\n            <h1>Information about your risk score:</h1>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <strong>Age:</strong>\n          </td>\n          <td>39</td>\n        </tr>\n        <tr>\n          <td>\n            <strong>Gender:</strong>\n          </td>\n          <td>male</td>\n        </tr>\n        <tr>\n          <td>\n            <strong>Total Cholesterol:</strong>\n          </td>\n          <td>244 mg/dL</td>\n        </tr>\n        <tr>\n          <td>\n            <strong>HDL Cholesterol:</strong>\n          </td>\n          <td>50 mg/dL\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <strong>Smoker:</strong>\n          </td>\n          <td>No</td>\n        </tr>\n        <tr>\n          <td>\n            <strong>Systolic Blood Pressure:</strong>\n          </td>\n          <td>107 mm/Hg</td>\n        </tr>\n        <tr>\n          <td>\n            <strong>On medication for HBP:</strong>\n          </td>\n          <td>No</td>\n        </tr>\n        <tr>\n          <td valign=\"top\">\n            <b>Risk Score*</b>\n          </td>\n          <td>2%<br/>Means 2 of 100 people with this level of risk will have a heart attack in the next 10 years.</td>\n        </tr>\n        <tr>\n          <td colspan=\"2\">* Your risk score was calculated using an equation.  Other NCEP products, such as printed ATP III materials, use a point system to determine a risk score that is close to the equation score.</td>\n        </tr>\n        <tr>\n          <td colspan=\"2\">To find out what your risk score means and how to lower your risk for a heart attack, go to<br/>\n            <a href=\"http://www.nhlbi.nih.gov/health/public/heart/chol/hbc_what.htm\">&quot;High Blood Cholesterol\342\200\224What You Need to Know&quot;</a>.<br/>\n            <a href=\"http://www.nhlbi.nih.gov/health/public/heart/chol/chol_tlc.htm\">Your Guide to Lowering Cholesterol with Therapeutic Lifestyle Changes (TLC)</a><br/>\n            <a href=\"http://www.nhlbi.nih.gov/health/public/heart/other/hhw/index.htm\">The Healthy Heart Handbook for Women</a>\n          </td>\n        </tr>\n      </table>\n    </div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://example.org"
+  }
+  value {
+    value: "risk-assessment-cardiac"
+  }
+}
+status {
+  value: FINAL
+}
+subject {
+  patient_id {
+    value: "pat2"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+occurrence {
+  date_time {
+    value_us: 1405785840000000
+    timezone: "Z"
+    precision: SECOND
+  }
+}
+performer {
+  display {
+    value: "http://cvdrisk.nhlbi.nih.gov/#cholesterol"
+  }
+}
+basis {
+  patient_id {
+    value: "pat2"
+  }
+}
+basis {
+  diagnostic_report_id {
+    value: "lipids"
+  }
+}
+basis {
+  observation_id {
+    value: "blood-pressure"
+  }
+}
+prediction {
+  outcome {
+    text {
+      value: "Heart Attack"
+    }
+  }
+  probability {
+    decimal {
+      value: "0.02"
+    }
+  }
+  when {
+    range {
+      low {
+        value {
+          value: "39"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+      high {
+        value {
+          value: "49"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+    }
+  }
+}

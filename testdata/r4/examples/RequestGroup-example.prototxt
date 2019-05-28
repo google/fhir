@@ -1,0 +1,212 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Example RequestGroup illustrating related actions to administer medications in sequence with time delay.</div>"
+  }
+}
+contained {
+  medication_request {
+    id {
+      value: "medicationrequest-1"
+    }
+    status {
+      value: UNKNOWN
+    }
+    intent {
+      value: PROPOSAL
+    }
+    medication {
+      codeable_concept {
+        text {
+          value: "Medication 1"
+        }
+      }
+    }
+    subject {
+      patient_id {
+        value: "example"
+      }
+    }
+  }
+}
+contained {
+  medication_request {
+    id {
+      value: "medicationrequest-2"
+    }
+    status {
+      value: UNKNOWN
+    }
+    intent {
+      value: PROPOSAL
+    }
+    medication {
+      codeable_concept {
+        text {
+          value: "Medication 2"
+        }
+      }
+    }
+    subject {
+      patient_id {
+        value: "example"
+      }
+    }
+  }
+}
+identifier {
+  value {
+    value: "requestgroup-1"
+  }
+}
+group_identifier {
+  system {
+    value: "http://example.org/treatment-group"
+  }
+  value {
+    value: "00001"
+  }
+}
+status {
+  value: DRAFT
+}
+intent {
+  value: PLAN
+}
+priority {
+  value: ROUTINE
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+authored_on {
+  value_us: 1488821460000000
+  timezone: "Z"
+  precision: SECOND
+}
+author {
+  practitioner_id {
+    value: "1"
+  }
+}
+reason_code {
+  text {
+    value: "Treatment"
+  }
+}
+note {
+  text {
+    value: "Additional notes about the request group"
+  }
+}
+action {
+  prefix {
+    value: "1"
+  }
+  title {
+    value: "Administer Medications"
+  }
+  description {
+    value: "Administer medications at the appropriate time"
+  }
+  text_equivalent {
+    value: "Administer medication 1, followed an hour later by medication 2"
+  }
+  timing {
+    date_time {
+      value_us: 1488826800000000
+      timezone: "Z"
+      precision: SECOND
+    }
+  }
+  participant {
+    practitioner_id {
+      value: "1"
+    }
+  }
+  grouping_behavior {
+    value: LOGICAL_GROUP
+  }
+  selection_behavior {
+    value: ALL
+  }
+  required_behavior {
+    value: MUST
+  }
+  precheck_behavior {
+    value: YES
+  }
+  cardinality_behavior {
+    value: SINGLE
+  }
+  action {
+    id {
+      value: "medication-action-1"
+    }
+    description {
+      value: "Administer medication 1"
+    }
+    type {
+      coding {
+        code {
+          value: "create"
+        }
+      }
+    }
+    resource {
+      fragment {
+        value: "medicationrequest-1"
+      }
+    }
+  }
+  action {
+    id {
+      value: "medication-action-2"
+    }
+    description {
+      value: "Administer medication 2"
+    }
+    related_action {
+      action_id {
+        value: "medication-action-1"
+      }
+      relationship {
+        value: AFTER_END
+      }
+      offset {
+        duration {
+          value {
+            value: "1"
+          }
+          unit {
+            value: "h"
+          }
+        }
+      }
+    }
+    type {
+      coding {
+        code {
+          value: "create"
+        }
+      }
+    }
+    resource {
+      fragment {
+        value: "medicationrequest-2"
+      }
+    }
+  }
+}

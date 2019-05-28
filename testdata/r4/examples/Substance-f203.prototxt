@@ -1,0 +1,45 @@
+id {
+  value: "f203"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f203</p><p><b>identifier</b>: 1234</p><p><b>category</b>: Chemical <span>(Details : {http://terminology.hl7.org/CodeSystem/substance-category code \'chemical\' = \'Chemical\', given as \'Chemical\'})</span></p><p><b>code</b>: Potassium <span>(Details : {SNOMED CT code \'88480006\' = \'Potassium\', given as \'Potassium\'})</span></p></div>"
+  }
+}
+identifier {
+  system {
+    value: "http://acme.org/identifiers/substances"
+  }
+  value {
+    value: "1234"
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/substance-category"
+    }
+    code {
+      value: "chemical"
+    }
+    display {
+      value: "Chemical"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "88480006"
+    }
+    display {
+      value: "Potassium"
+    }
+  }
+}

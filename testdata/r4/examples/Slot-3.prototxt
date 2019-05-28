@@ -1,0 +1,42 @@
+id {
+  value: "3"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t25 Dec 2013 9:30am - 9:45am: <b>Unavailable</b> Physiotherapy<br/>\n\t\t\tDr Careful is out of the office\n\t\t</div>"
+  }
+}
+service_category {
+  coding {
+    code {
+      value: "17"
+    }
+    display {
+      value: "General Practice"
+    }
+  }
+}
+schedule {
+  schedule_id {
+    value: "example"
+  }
+}
+status {
+  value: BUSY_UNAVAILABLE
+}
+start {
+  value_us: 1387963800000000
+  timezone: "Z"
+  precision: SECOND
+}
+end {
+  value_us: 1387964700000000
+  timezone: "Z"
+  precision: SECOND
+}
+comment {
+  value: "Dr Careful is out of the office"
+}

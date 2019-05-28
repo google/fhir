@@ -1,0 +1,258 @@
+id {
+  value: "example-xr"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">XR Wrist 3+ Views. John Smith (MRN: 09236). Accession: W12342398. Performed: 2017-01-01. 1 series, 2 images.</div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "urn:dicom:uid"
+  }
+  value {
+    value: "urn:oid:2.16.124.113543.6003.1154777499.30246.19789.3503430046"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+      }
+      code {
+        value: "ACSN"
+      }
+    }
+  }
+  value {
+    value: "W12342398"
+  }
+  assigner {
+    organization_id {
+      value: "dicom-organization"
+    }
+  }
+}
+identifier {
+  use {
+    value: SECONDARY
+  }
+  value {
+    value: "55551234"
+  }
+  assigner {
+    organization_id {
+      value: "dicom-organization"
+    }
+  }
+}
+status {
+  value: AVAILABLE
+}
+modality {
+  system {
+    value: "http://dicom.nema.org/resources/ontology/DCM"
+  }
+  code {
+    value: "DX"
+  }
+}
+subject {
+  patient_id {
+    value: "dicom"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+started {
+  value_us: 1483257680000000
+  timezone: "+03:00"
+  precision: SECOND
+}
+based_on {
+  service_request_id {
+    value: "example"
+  }
+}
+referrer {
+  practitioner_id {
+    value: "example"
+  }
+}
+interpreter {
+  practitioner_id {
+    value: "example"
+  }
+}
+endpoint {
+  endpoint_id {
+    value: "example-wadors"
+  }
+}
+number_of_series {
+  value: 1
+}
+number_of_instances {
+  value: 2
+}
+procedure_reference {
+  procedure_id {
+    value: "example"
+  }
+}
+procedure_code {
+  coding {
+    system {
+      value: "http://www.radlex.org"
+    }
+    code {
+      value: "RPID2589"
+    }
+    display {
+      value: "XR Wrist 3+ Views"
+    }
+  }
+  text {
+    value: "XR Wrist 3+ Views"
+  }
+}
+reason_code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "357009"
+    }
+    display {
+      value: "Closed fracture of trapezoidal bone of wrist"
+    }
+  }
+}
+note {
+  text {
+    value: "XR Wrist 3+ Views"
+  }
+}
+series {
+  uid {
+    value: "2.16.124.113543.6003.1154777499.30246.19789.3503430045.1"
+  }
+  number {
+    value: 3
+  }
+  modality {
+    system {
+      value: "http://dicom.nema.org/resources/ontology/DCM"
+    }
+    code {
+      value: "DX"
+    }
+  }
+  description {
+    value: "XR Wrist 3+ Views"
+  }
+  number_of_instances {
+    value: 2
+  }
+  endpoint {
+    endpoint_id {
+      value: "example-wadors"
+    }
+  }
+  body_site {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "T-15460"
+    }
+    display {
+      value: "Wrist Joint"
+    }
+  }
+  laterality {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "419161000"
+    }
+    display {
+      value: "Unilateral left"
+    }
+  }
+  started {
+    value_us: 1293868880000000
+    timezone: "+03:00"
+    precision: SECOND
+  }
+  performer {
+    function {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+        }
+        code {
+          value: "PRF"
+        }
+      }
+    }
+    actor {
+      practitioner_id {
+        value: "example"
+      }
+    }
+  }
+  instance {
+    uid {
+      value: "2.16.124.113543.6003.1154777499.30246.19789.3503430045.1.1"
+    }
+    sop_class {
+      system {
+        value: "urn:ietf:rfc:3986"
+      }
+      code {
+        value: "urn:oid:1.2.840.10008.5.1.4.1.1.2"
+      }
+    }
+    number {
+      value: 1
+    }
+    title {
+      value: "PA VIEW"
+    }
+  }
+  instance {
+    uid {
+      value: "2.16.124.113543.6003.1154777499.30246.19789.3503430045.1.2"
+    }
+    sop_class {
+      system {
+        value: "urn:ietf:rfc:3986"
+      }
+      code {
+        value: "urn:oid:1.2.840.10008.5.1.4.1.1.2"
+      }
+    }
+    number {
+      value: 2
+    }
+    title {
+      value: "LL VIEW"
+    }
+  }
+}

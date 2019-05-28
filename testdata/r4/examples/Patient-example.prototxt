@@ -1,0 +1,281 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<table>\n\t\t\t\t<tbody>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<td>Name</td>\n\t\t\t\t\t\t<td>Peter James \n              <b>Chalmers</b> (&quot;Jim&quot;)\n            </td>\n\t\t\t\t\t</tr>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<td>Address</td>\n\t\t\t\t\t\t<td>534 Erewhon, Pleasantville, Vic, 3999</td>\n\t\t\t\t\t</tr>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<td>Contacts</td>\n\t\t\t\t\t\t<td>Home: unknown. Work: (03) 5555 6473</td>\n\t\t\t\t\t</tr>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<td>Id</td>\n\t\t\t\t\t\t<td>MRN: 12345 (Acme Healthcare)</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</tbody>\n\t\t\t</table>\n\t\t</div>"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+      }
+      code {
+        value: "MR"
+      }
+    }
+  }
+  system {
+    value: "urn:oid:1.2.36.146.595.217.0.1"
+  }
+  value {
+    value: "12345"
+  }
+  period {
+    start {
+      value_us: 989071200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  assigner {
+    display {
+      value: "Acme Healthcare"
+    }
+  }
+}
+active {
+  value: true
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  family {
+    value: "Chalmers"
+  }
+  given {
+    value: "Peter"
+  }
+  given {
+    value: "James"
+  }
+}
+name {
+  use {
+    value: USUAL
+  }
+  given {
+    value: "Jim"
+  }
+}
+name {
+  use {
+    value: MAIDEN
+  }
+  family {
+    value: "Windsor"
+  }
+  given {
+    value: "Peter"
+  }
+  given {
+    value: "James"
+  }
+  period {
+    end {
+      value_us: 1009803600000000
+      timezone: "Australia/Sydney"
+      precision: YEAR
+    }
+  }
+}
+telecom {
+  use {
+    value: HOME
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "(03) 5555 6473"
+  }
+  use {
+    value: WORK
+  }
+  rank {
+    value: 1
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "(03) 3410 5613"
+  }
+  use {
+    value: MOBILE
+  }
+  rank {
+    value: 2
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "(03) 5555 8834"
+  }
+  use {
+    value: OLD
+  }
+  period {
+    end {
+      value_us: 1388494800000000
+      timezone: "Australia/Sydney"
+      precision: YEAR
+    }
+  }
+}
+gender {
+  value: MALE
+}
+birth_date {
+  value_us: 157122000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+  extension {
+    url {
+      value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime"
+    }
+    value {
+      date_time {
+        value_us: 157232145000000
+        timezone: "-05:00"
+        precision: SECOND
+      }
+    }
+  }
+}
+deceased {
+  boolean {
+  }
+}
+address {
+  use {
+    value: HOME
+  }
+  type {
+    value: BOTH
+  }
+  text {
+    value: "534 Erewhon St PeasantVille, Rainbow, Vic  3999"
+  }
+  line {
+    value: "534 Erewhon St"
+  }
+  city {
+    value: "PleasantVille"
+  }
+  district {
+    value: "Rainbow"
+  }
+  state {
+    value: "Vic"
+  }
+  postal_code {
+    value: "3999"
+  }
+  period {
+    start {
+      value_us: 157122000000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}
+contact {
+  relationship {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0131"
+      }
+      code {
+        value: "N"
+      }
+    }
+  }
+  name {
+    family {
+      value: "du March\303\251"
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix"
+        }
+        value {
+          string_value {
+            value: "VV"
+          }
+        }
+      }
+    }
+    given {
+      value: "B\303\251n\303\251dicte"
+    }
+  }
+  telecom {
+    system {
+      value: PHONE
+    }
+    value {
+      value: "+33 (237) 998327"
+    }
+  }
+  address {
+    use {
+      value: HOME
+    }
+    type {
+      value: BOTH
+    }
+    line {
+      value: "534 Erewhon St"
+    }
+    city {
+      value: "PleasantVille"
+    }
+    district {
+      value: "Rainbow"
+    }
+    state {
+      value: "Vic"
+    }
+    postal_code {
+      value: "3999"
+    }
+    period {
+      start {
+        value_us: 157122000000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+  gender {
+    value: FEMALE
+  }
+  period {
+    start {
+      value_us: 1325336400000000
+      timezone: "Australia/Sydney"
+      precision: YEAR
+    }
+  }
+}
+managing_organization {
+  organization_id {
+    value: "1"
+  }
+}

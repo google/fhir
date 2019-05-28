@@ -1,0 +1,141 @@
+id {
+  value: "map-sitting"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: map-sitting</p><p><b>status</b>: final</p><p><b>category</b>: Laboratory <span>(Details : {http://terminology.hl7.org/CodeSystem/observation-category code \'laboratory\' = \'Laboratory\', given as \'Laboratory\'})</span></p><p><b>code</b>: Mean blood pressure <span>(Details : {LOINC code \'8478-0\' = \'Mean blood pressure\', given as \'Mean blood pressure\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>encounter</b>: <a>Encounter/example</a></p><p><b>effective</b>: 02/04/2018 10:30:10 AM --&gt; 05/04/2018 10:30:10 AM</p><p><b>issued</b>: 03/04/2018 3:30:10 PM</p><p><b>value</b>: 60 mm Hg<span> (Details: UCUM code mm[Hg] = \'mmHg\')</span></p><p><b>interpretation</b>: Below low normal <span>(Details : {http://terminology.hl7.org/CodeSystem/v2-0078 code \'L\' = \'Low\', given as \'Low\'})</span></p></div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/observation-bodyPosition"
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "33586001"
+        }
+        display {
+          value: "Sitting position (finding)"
+        }
+      }
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/observation-delta"
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "1250004"
+        }
+        display {
+          value: "Decreased (qualifier value)"
+        }
+      }
+    }
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/observation-category"
+    }
+    code {
+      value: "laboratory"
+    }
+    display {
+      value: "Laboratory"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "8478-0"
+    }
+    display {
+      value: "Mean blood pressure"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+effective {
+  period {
+    start {
+      value_us: 1522661410000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1522920610000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+  }
+}
+issued {
+  value_us: 1522765810000000
+  timezone: "+01:00"
+  precision: SECOND
+}
+value {
+  quantity {
+    value {
+      value: "60"
+    }
+    unit {
+      value: "mm Hg"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "mm[Hg]"
+    }
+  }
+}
+interpretation {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v2-0078"
+    }
+    code {
+      value: "L"
+    }
+    display {
+      value: "Low"
+    }
+  }
+  text {
+    value: "Below low normal"
+  }
+}

@@ -14,8 +14,10 @@
 
 package com.google.fhir.stu3;
 
-import com.google.fhir.stu3.proto.Boolean;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.Boolean;
 import com.google.gson.JsonPrimitive;
+import com.google.protobuf.MessageOrBuilder;
 import java.util.regex.Pattern;
 
 /** A wrapper around the Boolean FHIR primitive type. */
@@ -28,6 +30,10 @@ public class BooleanWrapper extends PrimitiveWrapper<Boolean> {
   /** Create an BooleanWrapper from a Boolean. */
   public BooleanWrapper(Boolean bool) {
     super(bool);
+  }
+
+  public BooleanWrapper(MessageOrBuilder bool) {
+    super(ProtoUtils.fieldWiseCopy(bool, Boolean.newBuilder()).build());
   }
 
   /** Create an BooleanWrapper from a java String. */

@@ -1,0 +1,185 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>url</b>: <b>http://h7.org/fhir/OperationDefinition/example</b></p><p><b>version</b>: B</p><p><b>name</b>: Populate Questionnaire</p><p><b>status</b>: draft</p><p><b>kind</b>: operation</p><p><b>date</b>: 04/08/2015</p><p><b>publisher</b>: Acme Healthcare Services</p><p><b>contact</b>: </p><p><b>description</b>: Limited implementation of the Populate Questionnaire implementation</p><p><b>useContext</b>: </p><p><b>jurisdiction</b>: United Kingdom of Great Britain and Northern Ireland (the) <span>(Details : {urn:iso:std:iso:3166 code \'GB\' = \'United Kingdom of Great Britain and Northern Ireland\', given as \'United Kingdom of Great Britain and Northern Ireland (the)\'})</span></p><p><b>code</b>: populate</p><p><b>comment</b>: Only implemented for Labs and Medications so far</p><p><b>base</b>: <a>OperationDefinition/Questionnaire-populate</a></p><p><b>resource</b>: Questionnaire</p><p><b>system</b>: false</p><p><b>type</b>: false</p><p><b>instance</b>: true</p><blockquote><p><b>parameter</b></p><p><b>name</b>: subject</p><p><b>use</b>: in</p><p><b>min</b>: 1</p><p><b>max</b>: 1</p><p><b>documentation</b>: The resource that is to be the *QuestionnaireResponse.subject*. The [[[QuestionnaireResponse]]]      instance will reference the provided subject.  In addition, if the *local* parameter is      set to true, server information about the specified subject will be used to populate the      instance.</p><p><b>type</b>: Reference</p></blockquote><blockquote><p><b>parameter</b></p><p><b>name</b>: local</p><p><b>use</b>: in</p><p><b>min</b>: 0</p><p><b>max</b>: 1</p><p><b>documentation</b>: If the *local* parameter is set to true, server information about the specified subject will be used to populate the instance.</p><p><b>type</b>: Reference</p></blockquote><blockquote><p><b>parameter</b></p><p><b>name</b>: return</p><p><b>use</b>: out</p><p><b>min</b>: 1</p><p><b>max</b>: 1</p><p><b>documentation</b>: The partially (or fully)-populated set of answers for the specified Questionnaire</p><p><b>type</b>: QuestionnaireResponse</p></blockquote><blockquote><p><b>overload</b></p><p><b>parameterName</b>: subject, local</p></blockquote><blockquote><p><b>overload</b></p><p><b>parameterName</b>: subject</p><p><b>comment</b>: local defaults to false when not passed as a parameter</p></blockquote></div>"
+  }
+}
+url {
+  value: "http://h7.org/fhir/OperationDefinition/example"
+}
+version {
+  value: "B"
+}
+name {
+  value: "Populate Questionnaire"
+}
+status {
+  value: DRAFT
+}
+kind {
+  value: OPERATION
+}
+date {
+  value_us: 1438610400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "Acme Healthcare Services"
+}
+contact {
+  name {
+    value: "System Administrator"
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "beep@coyote.acme.com"
+    }
+  }
+}
+description {
+  value: "Limited implementation of the Populate Questionnaire implementation"
+}
+use_context {
+  code {
+    system {
+      value: "http://build.fhir.org/codesystem-usage-context-type"
+    }
+    code {
+      value: "venue"
+    }
+    display {
+      value: "Clinical Venue"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+        }
+        code {
+          value: "IMP"
+        }
+        display {
+          value: "inpatient encounter"
+        }
+      }
+    }
+  }
+}
+jurisdiction {
+  coding {
+    system {
+      value: "urn:iso:std:iso:3166"
+    }
+    code {
+      value: "GB"
+    }
+    display {
+      value: "United Kingdom of Great Britain and Northern Ireland (the)"
+    }
+  }
+}
+code {
+  value: "populate"
+}
+comment {
+  value: "Only implemented for Labs and Medications so far"
+}
+base {
+  value: "OperationDefinition/Questionnaire-populate"
+}
+resource {
+  value: QUESTIONNAIRE
+}
+system {
+}
+type {
+}
+instance {
+  value: true
+}
+parameter {
+  name {
+    value: "subject"
+  }
+  use {
+    value: IN
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The resource that is to be the *QuestionnaireResponse.subject*. The [[[QuestionnaireResponse]]]      instance will reference the provided subject.  In addition, if the *local* parameter is      set to true, server information about the specified subject will be used to populate the      instance."
+  }
+  type {
+    value: REFERENCE
+  }
+}
+parameter {
+  name {
+    value: "local"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "If the *local* parameter is set to true, server information about the specified subject will be used to populate the instance."
+  }
+  type {
+    value: REFERENCE
+  }
+}
+parameter {
+  name {
+    value: "return"
+  }
+  use {
+    value: OUT
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The partially (or fully)-populated set of answers for the specified Questionnaire"
+  }
+  type {
+    value: QUESTIONNAIRE_RESPONSE
+  }
+}
+overload {
+  parameter_name {
+    value: "subject"
+  }
+  parameter_name {
+    value: "local"
+  }
+}
+overload {
+  parameter_name {
+    value: "subject"
+  }
+  comment {
+    value: "local defaults to false when not passed as a parameter"
+  }
+}

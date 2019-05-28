@@ -14,7 +14,9 @@
 
 package com.google.fhir.stu3;
 
-import com.google.fhir.stu3.proto.Markdown;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.Markdown;
+import com.google.protobuf.MessageOrBuilder;
 
 /** A wrapper around the Markdown FHIR primitive type. */
 public class MarkdownWrapper extends PrimitiveWrapper<Markdown> {
@@ -25,6 +27,10 @@ public class MarkdownWrapper extends PrimitiveWrapper<Markdown> {
   /** Create an MarkdownWrapper from a Markdown. */
   public MarkdownWrapper(Markdown markdown) {
     super(markdown);
+  }
+
+  public MarkdownWrapper(MessageOrBuilder message) {
+    super(ProtoUtils.fieldWiseCopy(message, Markdown.newBuilder()).build());
   }
 
   /** Create an MarkdownWrapper from a java String. */

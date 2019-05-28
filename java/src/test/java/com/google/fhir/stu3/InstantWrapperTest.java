@@ -16,7 +16,7 @@ package com.google.fhir.stu3;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import com.google.fhir.stu3.proto.Instant;
+import com.google.fhir.r4.proto.Instant;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

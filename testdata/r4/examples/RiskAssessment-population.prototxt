@@ -1,0 +1,31 @@
+id {
+  value: "population"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Todo - e.g. probable number of infections in a given region over a time period for a given disease based on vaccination rates and other factors</p>\n    </div>"
+  }
+}
+contained {
+  group {
+    id {
+      value: "group1"
+    }
+    type {
+      value: PERSON
+    }
+    actual {
+    }
+  }
+}
+status {
+  value: FINAL
+}
+subject {
+  fragment {
+    value: "group1"
+  }
+}

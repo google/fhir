@@ -1,0 +1,53 @@
+id {
+  value: "example-encounter"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Follow Infection Control Level 3 Protocol</div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+category {
+  coding {
+    system {
+      value: "http://example.org/local"
+    }
+    code {
+      value: "infection"
+    }
+    display {
+      value: "Infection Control Level"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://example.org/local/if1"
+    }
+    code {
+      value: "l3"
+    }
+    display {
+      value: "Follow Level 3 Protocol"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter Patient"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}

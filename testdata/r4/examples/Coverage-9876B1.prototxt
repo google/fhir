@@ -1,0 +1,275 @@
+id {
+  value: "9876B1"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the coverage</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://benefitsinc.com/certificate"
+  }
+  value {
+    value: "12345"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "EHCPOL"
+    }
+    display {
+      value: "extended healthcare"
+    }
+  }
+}
+policy_holder {
+  uri {
+    value: "http://benefitsinc.com/FHIR/Organization/CBI35"
+  }
+}
+subscriber {
+  patient_id {
+    value: "4"
+  }
+}
+beneficiary {
+  patient_id {
+    value: "4"
+  }
+}
+dependent {
+  value: "0"
+}
+relationship {
+  coding {
+    code {
+      value: "self"
+    }
+  }
+}
+period {
+  start {
+    value_us: 1306072800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1337695200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+payor {
+  organization_id {
+    value: "2"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "group"
+      }
+    }
+  }
+  value {
+    value: "CB135"
+  }
+  name {
+    value: "Corporate Baker\'s Inc. Local #35"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "subgroup"
+      }
+    }
+  }
+  value {
+    value: "123"
+  }
+  name {
+    value: "Trainee Part-time Benefits"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "plan"
+      }
+    }
+  }
+  value {
+    value: "B37FC"
+  }
+  name {
+    value: "Full Coverage: Medical, Dental, Pharmacy, Vision, EHC"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "subplan"
+      }
+    }
+  }
+  value {
+    value: "P7"
+  }
+  name {
+    value: "Includes afterlife benefits"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "class"
+      }
+    }
+  }
+  value {
+    value: "SILVER"
+  }
+  name {
+    value: "Silver: Family Plan spouse only"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "subclass"
+      }
+    }
+  }
+  value {
+    value: "Tier2"
+  }
+  name {
+    value: "Low deductable, max $20 copay"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "sequence"
+      }
+    }
+  }
+  value {
+    value: "9"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "rxid"
+      }
+    }
+  }
+  value {
+    value: "MDF12345"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "rxbin"
+      }
+    }
+  }
+  value {
+    value: "987654"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "rxgroup"
+      }
+    }
+  }
+  value {
+    value: "M35PT"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "rxpcn"
+      }
+    }
+  }
+  value {
+    value: "234516"
+  }
+}
+class_value {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+      }
+      code {
+        value: "sequence"
+      }
+    }
+  }
+  value {
+    value: "9"
+  }
+}

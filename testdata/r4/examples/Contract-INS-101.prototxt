@@ -1,0 +1,222 @@
+id {
+  value: "INS-101"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n         <p>Plan: Your Choice Split Copay (Non-Grandfathered)</p>\n         <p>Certificate Form Number: YCSCWLN (01-2017)</p>\n      </div>"
+  }
+}
+identifier {
+  system {
+    value: "http://xyz-insurance.com/forms"
+  }
+  value {
+    value: "YCSCWLN(01-2017)"
+  }
+}
+applies {
+  start {
+    value_us: 1483189200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+subject {
+  patient_id {
+    value: "1"
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/contract-type"
+    }
+    code {
+      value: "healthinsurance"
+    }
+    display {
+      value: "Health Insurance"
+    }
+  }
+}
+term {
+  offer {
+    text {
+      value: "The benefits, limitations, exclusions and other coverage provisions in this booklet are subject to the terms of our contract with the Group. This booklet is a part of that contract, which is on file in the Group\'s office."
+    }
+  }
+  asset {
+    type {
+      coding {
+        system {
+          value: "urn:ietf:rfc:3986"
+        }
+        code {
+          value: "RicardianContract"
+        }
+      }
+    }
+    subtype {
+      text {
+        value: "sample"
+      }
+    }
+    period {
+      start {
+        value_us: 1496239200000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+    valued_item {
+      entity {
+        codeable_concept {
+          text {
+            value: "Ford Bobcat"
+          }
+        }
+      }
+      identifier {
+        system {
+          value: "http://somewhere.motor-vehicle.com/vin"
+        }
+        value {
+          value: "XXSVT34-7665t952236"
+        }
+      }
+      effective_time {
+        value_us: 788878800000000
+        timezone: "Australia/Sydney"
+        precision: YEAR
+      }
+      quantity {
+        value {
+          value: "1"
+        }
+      }
+      unit_price {
+        value {
+          value: "200.00"
+        }
+        currency {
+          value: "CAD"
+        }
+      }
+      factor {
+        value: "1.0"
+      }
+      points {
+        value: "1.0"
+      }
+      net {
+        value {
+          value: "200.00"
+        }
+        currency {
+          value: "CAD"
+        }
+      }
+    }
+  }
+  group {
+    offer {
+      text {
+        value: "Eligible Providers"
+      }
+    }
+  }
+  group {
+    offer {
+      text {
+        value: "Responsibility for Payment"
+      }
+    }
+  }
+  group {
+    offer {
+      text {
+        value: "List of Benefits"
+      }
+    }
+    group {
+      offer {
+        text {
+          value: "Copays"
+        }
+      }
+      group {
+        offer {
+          text {
+            value: "Emergency Room Copay"
+          }
+        }
+      }
+      group {
+        offer {
+          text {
+            value: "Professional Visit Copay"
+          }
+        }
+      }
+    }
+    group {
+      offer {
+        text {
+          value: "Calendar Year Deductible"
+        }
+      }
+    }
+    group {
+      offer {
+        text {
+          value: "Out-Of-Pocket Maximum"
+        }
+      }
+    }
+    group {
+      offer {
+        text {
+          value: "Medical Services"
+        }
+      }
+      group {
+        offer {
+          text {
+            value: "Ambulance Services"
+          }
+        }
+      }
+      group {
+        offer {
+          text {
+            value: "Dental Services"
+          }
+        }
+      }
+      group {
+        offer {
+          text {
+            value: "Diagnostic Services"
+          }
+        }
+      }
+      group {
+        offer {
+          text {
+            value: "Emergency Room Services"
+          }
+        }
+      }
+      group {
+        offer {
+          text {
+            value: "Hospital Inpatient Care"
+          }
+        }
+      }
+    }
+  }
+}

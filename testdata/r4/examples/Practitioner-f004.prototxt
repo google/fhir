@@ -1,0 +1,121 @@
+id {
+  value: "f004"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f004</p><p><b>identifier</b>: 118265112 (OFFICIAL), 523ASA1LK927 (USUAL)</p><p><b>name</b>: Ronald Briet (OFFICIAL)</p><p><b>telecom</b>: ph: 0205569273(WORK), r.briet@bmc.nl(WORK), fax: 0205664440(WORK)</p><p><b>address</b>: Galapagosweg 91 Amsterdam 1105 AZ NLD (WORK)</p><p><b>gender</b>: male</p><p><b>birthDate</b>: 04/02/1980</p><p><b>communication</b>: Language <span>(Details : {urn:ietf:bcp:47 code \'nl\' = \'Dutch\', given as \'Netherlands\'})</span></p></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "urn:oid:2.16.528.1.1007.3.1"
+  }
+  value {
+    value: "118265112"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  system {
+    value: "urn:oid:2.16.840.1.113883.2.4.6.3"
+  }
+  value {
+    value: "523ASA1LK927"
+  }
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  family {
+    value: "Briet"
+  }
+  given {
+    value: "Ronald"
+  }
+  suffix {
+    value: "MD"
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "0205569273"
+  }
+  use {
+    value: WORK
+  }
+}
+telecom {
+  system {
+    value: EMAIL
+  }
+  value {
+    value: "r.briet@bmc.nl"
+  }
+  use {
+    value: WORK
+  }
+}
+telecom {
+  system {
+    value: FAX
+  }
+  value {
+    value: "0205664440"
+  }
+  use {
+    value: WORK
+  }
+}
+address {
+  use {
+    value: WORK
+  }
+  line {
+    value: "Galapagosweg 91"
+  }
+  city {
+    value: "Amsterdam"
+  }
+  postal_code {
+    value: "1105 AZ"
+  }
+  country {
+    value: "NLD"
+  }
+}
+gender {
+  value: MALE
+}
+birth_date {
+  value_us: 318430800000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+communication {
+  coding {
+    system {
+      value: "urn:ietf:bcp:47"
+    }
+    code {
+      value: "nl"
+    }
+    display {
+      value: "Netherlands"
+    }
+  }
+  text {
+    value: "Language"
+  }
+}

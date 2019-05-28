@@ -1,0 +1,135 @@
+id {
+  value: "Resource-meta-delete"
+}
+meta {
+  last_updated {
+    value_us: 1545910674724000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <h2>Delete profiles, tags, and security labels for a resource</h2>\n            <p>OPERATION: Delete profiles, tags, and security labels for a resource</p>\n            <p>The official URL for this operation definition is: </p>\n            <pre>http://hl7.org/fhir/OperationDefinition/Resource-meta-delete</pre>\n            <div>\n              <p>This operation takes a meta, and deletes the profiles, tags, and security labels found in it from the nominated resource</p>\n\n            </div>\n            <p>URL: [base]/Resource/[id]/$meta-delete</p>\n            <p>Parameters</p>\n            <table class=\"grid\">\n              <tr>\n                <td>\n                  <b>Use</b>\n                </td>\n                <td>\n                  <b>Name</b>\n                </td>\n                <td>\n                  <b>Cardinality</b>\n                </td>\n                <td>\n                  <b>Type</b>\n                </td>\n                <td>\n                  <b>Binding</b>\n                </td>\n                <td>\n                  <b>Documentation</b>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>meta</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#Meta\">Meta</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Profiles, tags, and security labels to delete from the existing resource. It is not an error if these tags, profiles, and labels do not exist.  The identity of a tag or security label is the system+code. When matching existing tags during deletion, version and display are ignored. For profiles, matching is based on the full URL</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>return</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#Meta\">Meta</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Resulting meta for the resource</p>\n\n                  </div>\n                </td>\n              </tr>\n            </table>\n            <div/>\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+      value: 3
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "trial-use"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/OperationDefinition/Resource-meta-delete"
+}
+version {
+  value: "4.0.0"
+}
+name {
+  value: "Delete profiles, tags, and security labels for a resource"
+}
+status {
+  value: DRAFT
+}
+kind {
+  value: OPERATION
+}
+date {
+  value_us: 1545910674000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+publisher {
+  value: "HL7 (FHIR Project)"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "fhir@lists.hl7.org"
+    }
+  }
+}
+description {
+  value: "This operation takes a meta, and deletes the profiles, tags, and security labels found in it from the nominated resource"
+}
+code {
+  value: "meta-delete"
+}
+resource {
+  value: RESOURCE
+}
+system {
+}
+type {
+}
+instance {
+  value: true
+}
+parameter {
+  name {
+    value: "meta"
+  }
+  use {
+    value: IN
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "Profiles, tags, and security labels to delete from the existing resource. It is not an error if these tags, profiles, and labels do not exist.  The identity of a tag or security label is the system+code. When matching existing tags during deletion, version and display are ignored. For profiles, matching is based on the full URL"
+  }
+  type {
+    value: META
+  }
+}
+parameter {
+  name {
+    value: "return"
+  }
+  use {
+    value: OUT
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "Resulting meta for the resource"
+  }
+  type {
+    value: META
+  }
+}

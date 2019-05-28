@@ -1,0 +1,38 @@
+id {
+  value: "xcda1"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: xcda1</p><p><b>identifier</b>: D234123 (OFFICIAL)</p><p><b>name</b>: Sherry Dopplemeyer </p><p><b>telecom</b>: john.doe@healthcare.example.org</p></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://healthcare.example.org/identifiers/staff"
+  }
+  value {
+    value: "D234123"
+  }
+}
+name {
+  family {
+    value: "Dopplemeyer"
+  }
+  given {
+    value: "Sherry"
+  }
+}
+telecom {
+  system {
+    value: EMAIL
+  }
+  value {
+    value: "john.doe@healthcare.example.org"
+  }
+}

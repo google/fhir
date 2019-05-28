@@ -1,0 +1,221 @@
+id {
+  value: "f001"
+}
+type {
+  value: COLLECTION
+}
+entry {
+  full_url {
+    value: "https://example.com/base/DiagnosticReport/f001"
+  }
+  resource {
+    diagnostic_report {
+      id {
+        value: "f001"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f001</p><p><b>identifier</b>: nr1239044 (OFFICIAL)</p><p><b>basedOn</b>: <a>ServiceRequest/req</a></p><p><b>status</b>: final</p><p><b>category</b>: Haematology test <span>(Details : {SNOMED CT code \'252275004\' = \'Haematology test\', given as \'Haematology test\'}; {http://terminology.hl7.org/CodeSystem/v2-0074 code \'HM\' = \'Hematology)</span></p><p><b>code</b>: Complete blood count (hemogram) panel - Blood by Automated count <span>(Details : {LOINC code \'58410-2\' = \'Complete blood count (hemogram) panel - Blood by Automated count\', given as \'Complete blood count (hemogram) panel - Blood by Automated count\'})</span></p><p><b>subject</b>: <a>P. van den Heuvel</a></p><p><b>issued</b>: 15/05/2013 7:32:52 PM</p><p><b>performer</b>: <a>Burgers University Medical Centre</a></p><p><b>result</b>: </p><ul><li><a>Observation/f001</a></li><li><a>Observation/f002</a></li><li><a>Observation/f003</a></li><li><a>Observation/f004</a></li><li><a>Observation/f005</a></li></ul><p><b>conclusion</b>: Core lab</p></div>"
+        }
+      }
+      identifier {
+        use {
+          value: OFFICIAL
+        }
+        system {
+          value: "http://www.bmc.nl/zorgportal/identifiers/reports"
+        }
+        value {
+          value: "nr1239044"
+        }
+      }
+      based_on {
+        service_request_id {
+          value: "req"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      category {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "252275004"
+          }
+          display {
+            value: "Haematology test"
+          }
+        }
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v2-0074"
+          }
+          code {
+            value: "HM"
+          }
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "58410-2"
+          }
+          display {
+            value: "Complete blood count (hemogram) panel - Blood by Automated count"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "f001"
+        }
+        display {
+          value: "P. van den Heuvel"
+        }
+      }
+      issued {
+        value_us: 1368642772000000
+        timezone: "+01:00"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "f001"
+        }
+        display {
+          value: "Burgers University Medical Centre"
+        }
+      }
+      result {
+        observation_id {
+          value: "f001"
+        }
+      }
+      result {
+        observation_id {
+          value: "f002"
+        }
+      }
+      result {
+        observation_id {
+          value: "f003"
+        }
+      }
+      result {
+        observation_id {
+          value: "f004"
+        }
+      }
+      result {
+        observation_id {
+          value: "f005"
+        }
+      }
+      conclusion {
+        value: "Core lab"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/ServiceRequest/req"
+  }
+  resource {
+    service_request {
+      id {
+        value: "req"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: req</p><p><b>identifier</b>: L2381</p><p><b>status</b>: active</p><p><b>intent</b>: original-order</p><p><b>code</b>: Complete blood count (hemogram) panel - Blood by Automated count <span>(Details : {LOINC code \'58410-2\' = \'Complete blood count (hemogram) panel - Blood by Automated count\', given as \'Complete blood count (hemogram) panel - Blood by Automated count\'})</span></p><p><b>subject</b>: <a>P. van den Heuvel</a></p><p><b>encounter</b>: <a>Encounter/f001</a></p><p><b>requester</b>: <a>E.van den Broek</a></p><p><b>note</b>: patient almost fainted during procedure</p></div>"
+        }
+      }
+      extension {
+        url {
+          value: "http://example.org/bodysitecode"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://snomed.info/sct"
+              }
+              code {
+                value: "14975008"
+              }
+              display {
+                value: "Forearm structure"
+              }
+            }
+          }
+        }
+      }
+      identifier {
+        system {
+          value: "http://www.bmc.nl/zorgportal/identifiers/labresults"
+        }
+        value {
+          value: "L2381"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      intent {
+        value: ORIGINAL_ORDER
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "58410-2"
+          }
+          display {
+            value: "Complete blood count (hemogram) panel - Blood by Automated count"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "f001"
+        }
+        display {
+          value: "P. van den Heuvel"
+        }
+      }
+      encounter {
+        encounter_id {
+          value: "f001"
+        }
+      }
+      requester {
+        practitioner_id {
+          value: "f001"
+        }
+        display {
+          value: "E.van den Broek"
+        }
+      }
+      note {
+        text {
+          value: "patient almost fainted during procedure"
+        }
+      }
+    }
+  }
+}

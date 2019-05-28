@@ -1,0 +1,158 @@
+id {
+  value: "exclusive-breastfeeding-intervention-03"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Id: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">PlanDefinition/exclusive-breastfeeding-intervention-03</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Identifier: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <b>value: </b>\n                  <span>exclusive-breastfeeding-intervention-03</span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Title: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">Exclusive Breastfeeding Intervention-03</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Status: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">active</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Description: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">Exclusive breastfeeding intervention intended to improve outcomes for exclusive breastmilk feeding of newborns by notifying the charge and/or bedside nurse to perform the breastfeeding readiness assessment.</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Topic: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <span>\n                     <b>text: </b>\n                     <span>Exclusive Breastfeeding</span>\n                  </span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Library: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <b>reference: </b>\n                  <span>Library/library-exclusive-breastfeeding-cds-logic</span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <h2>Actions</h2>\n         <p style=\"width: 100%;\" class=\"hierarchy\">\n            <span>\n               <b>Step: </b>\n               <br/>\n               <span style=\"padding-left: 25px;\">\n                  <b>title: </b>\n                  <span>Mother should be administered a breastfeeding readiness assessment.</span>\n                  <br/>\n               </span>\n               <span style=\"padding-left: 25px;\">\n                  <b>condition: </b>\n                  <br/>\n                  <span style=\"padding-left: 50px;\">\n                     <b>type: </b>\n                     <span>applicability</span>\n                     <br/>\n                  </span>\n                  <span style=\"padding-left: 50px;\">\n                     <b>expression: </b>\n                     <span>Should Notify Nurse to Perform Assessment</span>\n                     <br/>\n                  </span>\n               </span>\n               <span style=\"padding-left: 25px;\">\n                  <span>\n                     <b>Step: </b>\n                     <br/>\n                     <span style=\"padding-left: 50px;\">\n                        <b>title: </b>\n                        <span>Notify the charge nurse to perform the assessment.</span>\n                        <br/>\n                     </span>\n                     <span style=\"padding-left: 50px;\">\n                        <b>text: </b>\n                        <span>A Breastfeeding Readiness Assessment is recommended, please administer the assessment.</span>\n                        <br/>\n                     </span>\n                     <span style=\"padding-left: 50px;\"/>\n                  </span>\n                  <span>\n                     <b>Step: </b>\n                     <br/>\n                     <span style=\"padding-left: 75px;\">\n                        <b>title: </b>\n                        <span>Notify the bedside nurse to perform the assessment.</span>\n                        <br/>\n                     </span>\n                     <span style=\"padding-left: 75px;\">\n                        <b>text: </b>\n                        <span>A Breastfeeding Readiness Assessment is recommended, please administer the assessment.</span>\n                        <br/>\n                     </span>\n                  </span>\n               </span>\n            </span>\n         </p>\n      </div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  value {
+    value: "exclusive-breastfeeding-intervention-03"
+  }
+}
+version {
+  value: "1.0.0"
+}
+title {
+  value: "Exclusive Breastfeeding Intervention-03"
+}
+status {
+  value: ACTIVE
+}
+date {
+  value_us: 1425733200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+description {
+  value: "Exclusive breastfeeding intervention intended to improve outcomes for exclusive breastmilk feeding of newborns by notifying the charge and/or bedside nurse to perform the breastfeeding readiness assessment."
+}
+topic {
+  text {
+    value: "Exclusive Breastfeeding"
+  }
+}
+related_artifact {
+  type {
+    value: DERIVED_FROM
+  }
+  resource {
+    value: "Measure/measure-exclusive-breastfeeding"
+  }
+}
+library {
+  value: "Library/library-exclusive-breastfeeding-cds-logic"
+}
+action {
+  title {
+    value: "Mother should be administered a breastfeeding readiness assessment."
+  }
+  trigger {
+    type {
+      value: NAMED_EVENT
+    }
+    name {
+      value: "Admission"
+    }
+  }
+  trigger {
+    type {
+      value: NAMED_EVENT
+    }
+    name {
+      value: "Birth"
+    }
+  }
+  trigger {
+    type {
+      value: NAMED_EVENT
+    }
+    name {
+      value: "Infant Transfer to Recovery"
+    }
+  }
+  trigger {
+    type {
+      value: NAMED_EVENT
+    }
+    name {
+      value: "Transfer to Post-Partum"
+    }
+  }
+  condition {
+    kind {
+      value: APPLICABILITY
+    }
+    expression {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Should Notify Nurse to Perform Assessment"
+      }
+    }
+  }
+  action {
+    title {
+      value: "Notify the charge nurse to perform the assessment."
+    }
+    text_equivalent {
+      value: "A Breastfeeding Readiness Assessment is recommended, please administer the assessment."
+    }
+    type {
+      coding {
+        code {
+          value: "create"
+        }
+      }
+    }
+    dynamic_value {
+      path {
+        value: "/"
+      }
+      expression {
+        language {
+          value: "text/cql"
+        }
+        expression {
+          value: "Communication Request to Charge Nurse"
+        }
+      }
+    }
+  }
+  action {
+    title {
+      value: "Notify the bedside nurse to perform the assessment."
+    }
+    text_equivalent {
+      value: "A Breastfeeding Readiness Assessment is recommended, please administer the assessment."
+    }
+    type {
+      coding {
+        code {
+          value: "create"
+        }
+      }
+    }
+    dynamic_value {
+      path {
+        value: "/"
+      }
+      expression {
+        language {
+          value: "text/cql"
+        }
+        expression {
+          value: "Communication Request to Bedside Nurse"
+        }
+      }
+    }
+  }
+}

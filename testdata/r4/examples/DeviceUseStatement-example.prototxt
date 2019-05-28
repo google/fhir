@@ -1,0 +1,40 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>identifier</b>: 51ebb7a9-4e3a-4360-9a05-0cc2d869086f</p><p><b>status</b>: active</p><p><b>subject</b>: <a>Patient/example</a></p><p><b>device</b>: <a>Device/example</a></p><p><b>reasonReference</b>: <a>Appendectomy (surgery)</a></p></div>"
+  }
+}
+identifier {
+  system {
+    value: "http:goodhealth.org/identifiers"
+  }
+  value {
+    value: "51ebb7a9-4e3a-4360-9a05-0cc2d869086f"
+  }
+}
+status {
+  value: ACTIVE
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+device {
+  device_id {
+    value: "example"
+  }
+}
+reason_reference {
+  procedure_id {
+    value: "example"
+  }
+  display {
+    value: "Appendectomy (surgery)"
+  }
+}

@@ -1,0 +1,104 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<p>\n\t\t\t\tHL7 Payer Network services for Acme Hospital from 1-Jan 2012 to 31-Mar 2012\n\t\t\t</p>\n\t\t</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.acme.org/practitioners"
+  }
+  value {
+    value: "23"
+  }
+}
+active {
+  value: true
+}
+period {
+  start {
+    value_us: 1325336400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1333112400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+organization {
+  organization_id {
+    value: "hl7pay"
+  }
+}
+participating_organization {
+  organization_id {
+    value: "f001"
+  }
+}
+network {
+  organization_id {
+    value: "hl7pay"
+  }
+  display {
+    value: "HL7 Payer Network"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/organization-role"
+    }
+    code {
+      value: "provider"
+    }
+  }
+}
+specialty {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "408443003"
+    }
+    display {
+      value: "General medical practice"
+    }
+  }
+}
+location {
+  location_id {
+    value: "1"
+  }
+  display {
+    value: "South Wing, second floor"
+  }
+}
+healthcare_service {
+  healthcare_service_id {
+    value: "example"
+  }
+}
+telecom {
+  system {
+    value: EMAIL
+  }
+  value {
+    value: "general.practice@example.org"
+  }
+  use {
+    value: WORK
+  }
+}
+endpoint {
+  endpoint_id {
+    value: "example"
+  }
+}

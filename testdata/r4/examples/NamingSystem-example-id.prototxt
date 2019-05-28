@@ -1,0 +1,105 @@
+id {
+  value: "example-id"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>\n        <b>Australian IHI Number</b>\n      </p>\n      \n      <p> oid: 1.2.36.1.2001.1003.0</p>\n      \n      <p> uri: http://ns.electronichealth.net.au/id/hi/ihi/1.0</p>\n    \n    </div>"
+  }
+}
+name {
+  value: "Austalian Healthcare Identifier - Individual"
+}
+status {
+  value: ACTIVE
+}
+kind {
+  value: IDENTIFIER
+}
+date {
+  value_us: 1440943200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "HL7 Australia on behalf of NEHTA"
+}
+contact {
+  name {
+    value: "HL7 Australia FHIR Team"
+  }
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7-australia.wikispaces.com/FHIR+Australia"
+    }
+  }
+}
+responsible {
+  value: "HI Service Operator / NEHTA"
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+    }
+    code {
+      value: "NI"
+    }
+    display {
+      value: "National unique individual identifier"
+    }
+  }
+  text {
+    value: "IHI"
+  }
+}
+description {
+  value: "Australian HI Identifier as established by relevant regulations etc."
+}
+jurisdiction {
+  coding {
+    system {
+      value: "urn:iso:std:iso:3166"
+    }
+    code {
+      value: "AU"
+    }
+  }
+}
+usage {
+  value: "Used in Australia for identifying patients"
+}
+unique_id {
+  type {
+    value: OID
+  }
+  value {
+    value: "1.2.36.1.2001.1003.0"
+  }
+  comment {
+    value: "This value is used in Australian CDA documents"
+  }
+}
+unique_id {
+  type {
+    value: URI
+  }
+  value {
+    value: "http://ns.electronichealth.net.au/id/hi/ihi/1.0"
+  }
+  preferred {
+    value: true
+  }
+  period {
+    start {
+      value_us: 1440079200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}

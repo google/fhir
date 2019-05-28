@@ -1,0 +1,94 @@
+id {
+  value: "f002"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f002</p><p><b>active</b>: true</p><p><b>type</b>: Hospital Department <span>(Details : {http://terminology.hl7.org/CodeSystem/organization-type code \'dept\' = \'Hospital Department\', given as \'Hospital Department\'})</span></p><p><b>name</b>: Burgers UMC Cardiology unit</p><p><b>telecom</b>: ph: 022-655 2320</p><p><b>address</b>: South Wing, floor 2 </p><p><b>partOf</b>: <a>Organization/f001</a></p><h3>Contacts</h3><table><tr><td>-</td><td><b>Purpose</b></td><td><b>Name</b></td><td><b>Telecom</b></td><td><b>Address</b></td></tr><tr><td>*</td><td>Administrative <span>(Details : {http://terminology.hl7.org/CodeSystem/contactentity-type code \'ADMIN\' = \'Administrative)</span></td><td>mevr. D. de Haan</td><td>ph: 022-655 2321</td><td>South Wing, floor 2 </td></tr></table></div>"
+  }
+}
+active {
+  value: true
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/organization-type"
+    }
+    code {
+      value: "dept"
+    }
+    display {
+      value: "Hospital Department"
+    }
+  }
+}
+name {
+  value: "Burgers UMC Cardiology unit"
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "022-655 2320"
+  }
+}
+address {
+  line {
+    value: "South Wing, floor 2"
+  }
+}
+part_of {
+  organization_id {
+    value: "f001"
+  }
+}
+contact {
+  purpose {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/contactentity-type"
+      }
+      code {
+        value: "ADMIN"
+      }
+    }
+  }
+  name {
+    text {
+      value: "mevr. D. de Haan"
+    }
+  }
+  telecom {
+    system {
+      value: PHONE
+    }
+    value {
+      value: "022-655 2321"
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "cardio@burgersumc.nl"
+    }
+  }
+  telecom {
+    system {
+      value: FAX
+    }
+    value {
+      value: "022-655 2322"
+    }
+  }
+  address {
+    line {
+      value: "South Wing, floor 2"
+    }
+  }
+}

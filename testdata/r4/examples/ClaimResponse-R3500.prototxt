@@ -1,0 +1,239 @@
+id {
+  value: "R3500"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the ClaimResponse</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/remittance"
+  }
+  value {
+    value: "R3500"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/claim-type"
+    }
+    code {
+      value: "oral"
+    }
+  }
+}
+sub_type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/ex-claimsubtype"
+    }
+    code {
+      value: "emergency"
+    }
+  }
+}
+use {
+  value: CLAIM
+}
+patient {
+  patient_id {
+    value: "1"
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+insurer {
+  identifier {
+    system {
+      value: "http://www.jurisdiction.org/insurers"
+    }
+    value {
+      value: "555123"
+    }
+  }
+}
+requestor {
+  organization_id {
+    value: "1"
+  }
+}
+request {
+  uri {
+    value: "http://www.BenefitsInc.com/fhir/oralhealthclaim/15476332402"
+  }
+}
+outcome {
+  value: COMPLETE
+}
+disposition {
+  value: "Claim settled as per contract."
+}
+payee_type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/payeetype"
+    }
+    code {
+      value: "provider"
+    }
+  }
+}
+item {
+  item_sequence {
+    value: 1
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "eligible"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "135.57"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "copay"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "10.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "eligpercent"
+        }
+      }
+    }
+    value {
+      value: "80.00"
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "benefit"
+        }
+      }
+    }
+    reason {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/adjudication-reason"
+        }
+        code {
+          value: "ar002"
+        }
+        display {
+          value: "Plan Limit Reached"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "90.47"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+}
+total {
+  category {
+    coding {
+      code {
+        value: "submitted"
+      }
+    }
+  }
+  amount {
+    value {
+      value: "135.57"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}
+total {
+  category {
+    coding {
+      code {
+        value: "benefit"
+      }
+    }
+  }
+  amount {
+    value {
+      value: "90.47"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}
+payment {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/ex-paymenttype"
+      }
+      code {
+        value: "complete"
+      }
+    }
+  }
+  date {
+    value_us: 1409407200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  amount {
+    value {
+      value: "100.47"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  identifier {
+    system {
+      value: "http://www.BenefitsInc.com/fhir/paymentidentifier"
+    }
+    value {
+      value: "201408-2-1569478"
+    }
+  }
+}

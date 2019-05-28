@@ -1,0 +1,118 @@
+id {
+  value: "f003"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f003</p><p><b>identifier</b>: 846100293 (OFFICIAL), 243HID3RT938 (USUAL)</p><p><b>name</b>: Marc Versteegh (OFFICIAL)</p><p><b>telecom</b>: ph: 0205562431(WORK), m.versteegh@bmc.nl(WORK), fax: 0205662948(WORK)</p><p><b>address</b>: Galapagosweg 91 Amsterdam 1105 AZ NLD (WORK)</p><p><b>gender</b>: male</p><p><b>birthDate</b>: 01/07/1963</p><p><b>communication</b>: Dutch <span>(Details : {urn:ietf:bcp:47 code \'nl\' = \'Dutch\', given as \'Dutch\'})</span></p></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "urn:oid:2.16.528.1.1007.3.1"
+  }
+  value {
+    value: "846100293"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  system {
+    value: "urn:oid:2.16.840.1.113883.2.4.6.3"
+  }
+  value {
+    value: "243HID3RT938"
+  }
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  family {
+    value: "Versteegh"
+  }
+  given {
+    value: "Marc"
+  }
+  suffix {
+    value: "MD"
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "0205562431"
+  }
+  use {
+    value: WORK
+  }
+}
+telecom {
+  system {
+    value: EMAIL
+  }
+  value {
+    value: "m.versteegh@bmc.nl"
+  }
+  use {
+    value: WORK
+  }
+}
+telecom {
+  system {
+    value: FAX
+  }
+  value {
+    value: "0205662948"
+  }
+  use {
+    value: WORK
+  }
+}
+address {
+  use {
+    value: WORK
+  }
+  line {
+    value: "Galapagosweg 91"
+  }
+  city {
+    value: "Amsterdam"
+  }
+  postal_code {
+    value: "1105 AZ"
+  }
+  country {
+    value: "NLD"
+  }
+}
+gender {
+  value: MALE
+}
+birth_date {
+  value_us: -205322400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+communication {
+  coding {
+    system {
+      value: "urn:ietf:bcp:47"
+    }
+    code {
+      value: "nl"
+    }
+    display {
+      value: "Dutch"
+    }
+  }
+}

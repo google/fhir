@@ -14,8 +14,10 @@
 
 package com.google.fhir.stu3;
 
-import com.google.fhir.stu3.proto.Element;
-import com.google.fhir.stu3.proto.Xhtml;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.Element;
+import com.google.fhir.r4.proto.Xhtml;
+import com.google.protobuf.MessageOrBuilder;
 
 /** A wrapper around the Xhtml FHIR primitive type. */
 public class XhtmlWrapper extends PrimitiveWrapper<Xhtml> {
@@ -23,6 +25,10 @@ public class XhtmlWrapper extends PrimitiveWrapper<Xhtml> {
   /** Create an XhtmlWrapper from an Xhtml. */
   public XhtmlWrapper(Xhtml xhtml) {
     super(xhtml);
+  }
+
+  public XhtmlWrapper(MessageOrBuilder message) {
+    super(ProtoUtils.fieldWiseCopy(message, Xhtml.newBuilder()).build());
   }
 
   /** Create an XhtmlWrapper from a java String, disallowing null inputs */
@@ -50,6 +56,8 @@ public class XhtmlWrapper extends PrimitiveWrapper<Xhtml> {
     if (!getWrapped().hasId()) {
       return null;
     }
-    return Element.newBuilder().setId(getWrapped().getId()).build();
+    Element.Builder builder = Element.newBuilder();
+    ProtoUtils.fieldWiseCopy(getWrapped().getId(), builder.getIdBuilder());
+    return builder.build();
   }
 }

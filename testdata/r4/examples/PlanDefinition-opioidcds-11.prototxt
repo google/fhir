@@ -1,0 +1,325 @@
+id {
+  value: "opioidcds-11"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: opioidcds-11</p><p><b>url</b>: <b>http://hl7.org/fhir/ig/opioid-cds/PlanDefinition/opioidcds-11</b></p><p><b>identifier</b>: cdc-opioid-guidance (OFFICIAL)</p><p><b>version</b>: 0.1.0</p><p><b>name</b>: cdc-opioid-11</p><p><b>title</b>: CDC Opioid Prescribing Guideline Recommendation #11</p><p><b>type</b>: ECA Rule <span>(Details : {http://terminology.hl7.org/CodeSystem/plan-definition-type code \'eca-rule\' = \'ECA Rule\', given as \'ECA Rule\'})</span></p><p><b>status</b>: draft</p><p><b>date</b>: 19/03/2018</p><p><b>publisher</b>: Centers for Disease Control and Prevention (CDC)</p><p><b>description</b>: Concurrently prescribing opioid medications with benzodiazepines increases the risk of harm for the patient.</p><p><b>useContext</b>: , </p><p><b>jurisdiction</b>: United States of America <span>(Details : {urn:iso:std:iso:3166 code \'US\' = \'United States of America\', given as \'United States of America\'})</span></p><p><b>purpose</b>: CDC\342\200\231s Guideline for Prescribing Opioids for Chronic Pain is intended to improve communication between providers and patients about the risks and benefits of opioid therapy for chronic pain, improve the safety and effectiveness of pain treatment, and reduce the risks associated with long-term opioid therapy, including opioid use disorder and overdose. The Guideline is not intended for patients who are in active cancer treatment, palliative care, or end-of-life care.</p><p><b>usage</b>: Clinicians should avoid prescribing opioid pain medication and benzodiazepines concurrently whenever possible.</p><p><b>copyright</b>: \302\251 CDC 2016+.</p><p><b>topic</b>: Opioid Prescribing <span>(Details )</span></p><p><b>author</b>: , , , </p><p><b>relatedArtifact</b>: , </p><p><b>library</b>: <a>Library/opioidcds-recommendation-11</a></p><blockquote><p><b>action</b></p><p><b>title</b>: Existing patient has concurrent opioid and benzodiazepine prescriptions.</p><p><b>description</b>: Checking if the trigger prescription meets the inclusion criteria for recommendation #11 workflow.</p><p><b>documentation</b>: </p><p><b>trigger</b>: </p><h3>Conditions</h3><table><tr><td>-</td><td><b>Kind</b></td><td><b>Expression</b></td></tr><tr><td>*</td><td>applicability</td><td/></tr></table><p><b>groupingBehavior</b>: visual-group</p><p><b>selectionBehavior</b>: exactly-one</p><blockquote><p><b>dynamicValue</b></p><p><b>path</b>: action.description</p><p><b>expression</b>: </p></blockquote><blockquote><p><b>dynamicValue</b></p><p><b>path</b>: action.title</p><p><b>expression</b>: </p></blockquote><blockquote><p><b>dynamicValue</b></p><p><b>path</b>: action.extension</p><p><b>expression</b>: </p></blockquote><h3>Actions</h3><table><tr><td>-</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr></table></blockquote></div>"
+  }
+}
+url {
+  value: "http://hl7.org/fhir/ig/opioid-cds/PlanDefinition/opioidcds-11"
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  value {
+    value: "cdc-opioid-guidance"
+  }
+}
+version {
+  value: "0.1.0"
+}
+name {
+  value: "cdc-opioid-11"
+}
+title {
+  value: "CDC Opioid Prescribing Guideline Recommendation #11"
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/plan-definition-type"
+    }
+    code {
+      value: "eca-rule"
+    }
+    display {
+      value: "ECA Rule"
+    }
+  }
+}
+status {
+  value: DRAFT
+}
+date {
+  value_us: 1521378000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "Centers for Disease Control and Prevention (CDC)"
+}
+description {
+  value: "Concurrently prescribing opioid medications with benzodiazepines increases the risk of harm for the patient."
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+    display {
+      value: "Clinical Focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "182888003"
+        }
+        display {
+          value: "Medication requested (situation)"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+    display {
+      value: "Clinical Focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "82423001"
+        }
+        display {
+          value: "Chronic pain (finding)"
+        }
+      }
+    }
+  }
+}
+jurisdiction {
+  coding {
+    system {
+      value: "urn:iso:std:iso:3166"
+    }
+    code {
+      value: "US"
+    }
+    display {
+      value: "United States of America"
+    }
+  }
+}
+purpose {
+  value: "CDC\342\200\231s Guideline for Prescribing Opioids for Chronic Pain is intended to improve communication between providers and patients about the risks and benefits of opioid therapy for chronic pain, improve the safety and effectiveness of pain treatment, and reduce the risks associated with long-term opioid therapy, including opioid use disorder and overdose. The Guideline is not intended for patients who are in active cancer treatment, palliative care, or end-of-life care."
+}
+usage {
+  value: "Clinicians should avoid prescribing opioid pain medication and benzodiazepines concurrently whenever possible."
+}
+copyright {
+  value: "\302\251 CDC 2016+."
+}
+topic {
+  text {
+    value: "Opioid Prescribing"
+  }
+}
+author {
+  name {
+    value: "Kensaku Kawamoto, MD, PhD, MHS"
+  }
+}
+author {
+  name {
+    value: "Bryn Rhodes"
+  }
+}
+author {
+  name {
+    value: "Floyd Eisenberg, MD, MPH"
+  }
+}
+author {
+  name {
+    value: "Robert McClure, MD, MPH"
+  }
+}
+related_artifact {
+  type {
+    value: DOCUMENTATION
+  }
+  display {
+    value: "CDC guideline for prescribing opioids for chronic pain"
+  }
+  url {
+    value: "https://guidelines.gov/summaries/summary/50153/cdc-guideline-for-prescribing-opioids-for-chronic-pain---united-states-2016#420"
+  }
+}
+related_artifact {
+  type {
+    value: DOCUMENTATION
+  }
+  display {
+    value: "MME Conversion Tables"
+  }
+  url {
+    value: "https://www.cdc.gov/drugoverdose/pdf/calculating_total_daily_dose-a.pdf"
+  }
+}
+library {
+  value: "Library/opioidcds-recommendation-11"
+}
+action {
+  title {
+    value: "Existing patient has concurrent opioid and benzodiazepine prescriptions."
+  }
+  description {
+    value: "Checking if the trigger prescription meets the inclusion criteria for recommendation #11 workflow."
+  }
+  documentation {
+    type {
+      value: DOCUMENTATION
+    }
+    document {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/cqf-strengthOfRecommendation"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://terminology.hl7.org/CodeSystem/recommendation-strength"
+              }
+              code {
+                value: "strong"
+              }
+              display {
+                value: "Strong"
+              }
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/cqf-qualityOfEvidence"
+        }
+        value {
+          codeable_concept {
+            coding {
+              system {
+                value: "http://terminology.hl7.org/CodeSystem/evidence-quality"
+              }
+              code {
+                value: "low"
+              }
+              display {
+                value: "Low quality"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  trigger {
+    type {
+      value: NAMED_EVENT
+    }
+    name {
+      value: "medication-prescribe"
+    }
+  }
+  condition {
+    kind {
+      value: APPLICABILITY
+    }
+    expression {
+      description {
+        value: "Check whether the existing patient is using opioids concurrently with benzodiazepines."
+      }
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Inclusion Criteria"
+      }
+    }
+  }
+  grouping_behavior {
+    value: VISUAL_GROUP
+  }
+  selection_behavior {
+    value: EXACTLY_ONE
+  }
+  dynamic_value {
+    path {
+      value: "action.description"
+    }
+    expression {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Get Detail"
+      }
+    }
+  }
+  dynamic_value {
+    path {
+      value: "action.title"
+    }
+    expression {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Get Summary"
+      }
+    }
+  }
+  dynamic_value {
+    path {
+      value: "action.extension"
+    }
+    expression {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Get Indicator"
+      }
+    }
+  }
+  action {
+    description {
+      value: "Will revise"
+    }
+  }
+  action {
+    description {
+      value: "Risk of overdose carefully considered and outweighed by benefit; snooze 3 mo"
+    }
+  }
+  action {
+    description {
+      value: "N/A - see comment; snooze 3 mo"
+    }
+  }
+}

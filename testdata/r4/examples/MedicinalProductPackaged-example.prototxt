@@ -1,0 +1,208 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>identifier</b>: {PCID}</p><p><b>description</b>: ALU-PVC/PVDC BLISTERS. CARTONS OF 10 FILM-COATED TABLETS. </p><h3>BatchIdentifiers</h3><table><tr><td>-</td><td><b>OuterPackaging</b></td></tr><tr><td>*</td><td>AAF5699</td></tr></table><blockquote><p><b>packageItem</b></p><p><b>type</b>: Carton <span>(Details : {http://ema.europa.eu/example/packageitemcontainertype code \'Carton\' = \'Carton)</span></p><p><b>quantity</b>: 1 1</p><p><b>material</b>: PVC <span>(Details : {http://ema.europa.eu/example/packageItemContainerMaterial code \'PVC\' = \'PVC)</span>, PVDC <span>(Details : {http://ema.europa.eu/example/packageItemContainerMaterial code \'PVDC\' = \'PVDC)</span>, alu <span>(Details : {http://ema.europa.eu/example/packageItemContainerMaterial code \'alu\' = \'alu)</span></p><h3>PackageItems</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table><p><b>physicalCharacteristics</b>: </p><p><b>manufacturer</b>: <a>Organization/example</a></p></blockquote></div>"
+  }
+}
+identifier {
+  system {
+    value: "http://ema.europa.eu/example/pcid"
+  }
+  value {
+    value: "{PCID}"
+  }
+}
+description {
+  value: "ALU-PVC/PVDC BLISTERS. CARTONS OF 10 FILM-COATED TABLETS. "
+}
+batch_identifier {
+  outer_packaging {
+    system {
+      value: "http://ema.europa.eu/example/baid1"
+    }
+    value {
+      value: "AAF5699"
+    }
+    period {
+      end {
+        value_us: 1465135200000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+}
+package_item {
+  type {
+    coding {
+      system {
+        value: "http://ema.europa.eu/example/packageitemcontainertype"
+      }
+      code {
+        value: "Carton"
+      }
+    }
+  }
+  quantity {
+    value {
+      value: "1"
+    }
+    unit {
+      value: "1"
+    }
+  }
+  material {
+    coding {
+      system {
+        value: "http://ema.europa.eu/example/packageItemContainerMaterial"
+      }
+      code {
+        value: "PVC"
+      }
+    }
+  }
+  material {
+    coding {
+      system {
+        value: "http://ema.europa.eu/example/packageItemContainerMaterial"
+      }
+      code {
+        value: "PVDC"
+      }
+    }
+  }
+  material {
+    coding {
+      system {
+        value: "http://ema.europa.eu/example/packageItemContainerMaterial"
+      }
+      code {
+        value: "alu"
+      }
+    }
+  }
+  package_item {
+    type {
+      coding {
+        system {
+          value: "http://ema.europa.eu/example/packageitemcontainertype"
+        }
+        code {
+          value: "Blister"
+        }
+      }
+    }
+    quantity {
+      value {
+        value: "1"
+      }
+      unit {
+        value: "1"
+      }
+    }
+    material {
+      coding {
+        system {
+          value: "http://ema.europa.eu/example/packageItemContainerMaterial"
+        }
+        code {
+          value: "Paperboard"
+        }
+      }
+    }
+    manufactured_item {
+      medicinal_product_manufactured_id {
+        value: "example"
+      }
+    }
+    physical_characteristics {
+      height {
+        value {
+          value: "125"
+        }
+        unit {
+          value: "mm"
+        }
+      }
+      width {
+        value {
+          value: "45"
+        }
+        unit {
+          value: "mm"
+        }
+      }
+    }
+    shelf_life_storage {
+      type {
+        coding {
+          system {
+            value: "http://ema.europa.eu/example/shelfLifeTypePlaceHolder"
+          }
+          code {
+            value: "ShelfLifeofPackagedMedicinalProduct"
+          }
+        }
+      }
+      period {
+        value {
+          value: "3"
+        }
+        unit {
+          value: "a"
+        }
+      }
+      special_precautions_for_storage {
+        coding {
+          system {
+            value: "http://ema.europa.eu/example/specialprecautionsforstorage"
+          }
+          code {
+            value: "Thismedicinalproductdoesnotrequireanyspecialstoragecondition."
+          }
+        }
+      }
+    }
+    manufacturer {
+      organization_id {
+        value: "example"
+      }
+    }
+  }
+  physical_characteristics {
+    height {
+      value {
+        value: "50"
+      }
+      unit {
+        value: "mm"
+      }
+    }
+    width {
+      value {
+        value: "136"
+      }
+      unit {
+        value: "mm"
+      }
+    }
+    depth {
+      value {
+        value: "23.5"
+      }
+      unit {
+        value: "mm"
+      }
+    }
+  }
+  manufacturer {
+    organization_id {
+      value: "example"
+    }
+  }
+}

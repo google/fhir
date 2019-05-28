@@ -1,0 +1,72 @@
+id {
+  value: "3ad0687e-f477-468c-afd5-fcc2bf897819"
+}
+type {
+  value: COLLECTION
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Location/2"
+  }
+  resource {
+    location {
+      id {
+        value: "2"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">USS Enterprise</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      name {
+        value: "USSS Enterprise-D"
+      }
+      mode {
+        value: INSTANCE
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Location/3"
+  }
+  resource {
+    location {
+      id {
+        value: "3"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">USSS Enterprise-D Sickbay</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      name {
+        value: "USSS Enterprise-D Sickbay"
+      }
+      mode {
+        value: INSTANCE
+      }
+      part_of {
+        location_id {
+          value: "2"
+        }
+        display {
+          value: "USS Enterprise"
+        }
+      }
+    }
+  }
+}

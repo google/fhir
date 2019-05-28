@@ -1,0 +1,124 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>contained</b>: </p><p><b>requestIdentifier</b>: guidanceRequest1</p><p><b>identifier</b>: guidanceResponse1</p><p><b>module</b>: <a>http://someguidelineprovider.org/radiology-appropriateness-guidelines.html</a></p><p><b>status</b>: success</p><p><b>subject</b>: <a>Patient/example</a></p><p><b>encounter</b>: <a>Encounter/example</a></p><p><b>occurrenceDateTime</b>: 10/03/2017 4:02:00 PM</p><p><b>performer</b>: <a>Device/software</a></p><p><b>reasonCode</b>: Guideline Appropriate Ordering Assessment <span>(Details )</span></p><p><b>outputParameters</b>: id: outputParameters1</p></div>"
+  }
+}
+contained {
+  parameters {
+    id {
+      value: "outputParameters1"
+    }
+    parameter {
+      name {
+        value: "score"
+      }
+      value {
+        decimal {
+          value: "7"
+        }
+      }
+    }
+    parameter {
+      name {
+        value: "item-assessed"
+      }
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://www.ama-assn.org/go/cpt"
+            }
+            code {
+              value: "70450"
+            }
+            display {
+              value: "CT, head, wo iv contrast"
+            }
+          }
+        }
+      }
+    }
+    parameter {
+      name {
+        value: "device"
+      }
+      value {
+        reference {
+          device_id {
+            value: "software"
+          }
+        }
+      }
+    }
+    parameter {
+      name {
+        value: "guideline-followed"
+      }
+      value {
+        uri {
+          value: "http://someguidelineprovider.org/radiology-appropriateness-guidelines.html"
+        }
+      }
+    }
+  }
+}
+request_identifier {
+  system {
+    value: "http://example.org"
+  }
+  value {
+    value: "guidanceRequest1"
+  }
+}
+identifier {
+  system {
+    value: "http://example.org"
+  }
+  value {
+    value: "guidanceResponse1"
+  }
+}
+module {
+  uri {
+    value: "http://someguidelineprovider.org/radiology-appropriateness-guidelines.html"
+  }
+}
+status {
+  value: SUCCESS
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+occurrence_date_time {
+  value_us: 1489161720000000
+  timezone: "Z"
+  precision: SECOND
+}
+performer {
+  device_id {
+    value: "software"
+  }
+}
+reason_code {
+  text {
+    value: "Guideline Appropriate Ordering Assessment"
+  }
+}
+output_parameters {
+  fragment {
+    value: "outputParameters1"
+  }
+}

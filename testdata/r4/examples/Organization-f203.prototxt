@@ -1,0 +1,82 @@
+id {
+  value: "f203"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f203</p><p><b>identifier</b>: Zorginstelling naam = Blijdorp MC (OFFICIAL)</p><p><b>active</b>: true</p><p><b>type</b>: Academic Medical Center <span>(Details : {SNOMED CT code \'405608006\' = \'Academic medical centre\', given as \'Academic Medical Center\'}; {http://terminology.hl7.org/CodeSystem/organization-type code \'prov\' = \'Healthcare Provider)</span></p><p><b>name</b>: Blijdorp Medisch Centrum (BUMC)</p><p><b>telecom</b>: ph: +31107040704(WORK)</p><p><b>address</b>: apenrots 230 Blijdorp 3056BE NLD (WORK)</p></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  type {
+    text {
+      value: "Zorginstelling naam"
+    }
+  }
+  system {
+    value: "http://www.zorgkaartnederland.nl/"
+  }
+  value {
+    value: "Blijdorp MC"
+  }
+}
+active {
+  value: true
+}
+type {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "405608006"
+    }
+    display {
+      value: "Academic Medical Center"
+    }
+  }
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/organization-type"
+    }
+    code {
+      value: "prov"
+    }
+  }
+}
+name {
+  value: "Blijdorp Medisch Centrum (BUMC)"
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "+31107040704"
+  }
+  use {
+    value: WORK
+  }
+}
+address {
+  use {
+    value: WORK
+  }
+  line {
+    value: "apenrots 230"
+  }
+  city {
+    value: "Blijdorp"
+  }
+  postal_code {
+    value: "3056BE"
+  }
+  country {
+    value: "NLD"
+  }
+}

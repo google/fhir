@@ -1,0 +1,59 @@
+id {
+  value: "benchpress"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: benchpress</p><p><b>status</b>: active</p><p><b>intent</b>: plan</p><p><b>code</b>: Bench Press (regime/therapy)  <span>(Details : {SNOMED CT code \'229115003\' = \'Bench press\', given as \'Bench Press (regime/therapy) \'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>occurrence</b>: Count 20 times, Do 3 per 1 weeks</p><p><b>patientInstruction</b>: Start with 30kg 10-15 repetitions for three sets and increase in increments of 5kg when you feel ready</p></div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: PLAN
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "229115003"
+    }
+    display {
+      value: "Bench Press (regime/therapy) "
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+occurrence {
+  timing {
+    repeat {
+      count {
+        value: 20
+      }
+      count_max {
+        value: 30
+      }
+      frequency {
+        value: 3
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: WK
+      }
+    }
+  }
+}
+patient_instruction {
+  value: "Start with 30kg 10-15 repetitions for three sets and increase in increments of 5kg when you feel ready"
+}

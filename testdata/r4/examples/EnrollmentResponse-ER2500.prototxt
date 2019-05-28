@@ -1,0 +1,48 @@
+id {
+  value: "ER2500"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the EnrollmentResponse</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/enrollmentresponse"
+  }
+  value {
+    value: "781234"
+  }
+}
+status {
+  value: ACTIVE
+}
+request {
+  uri {
+    value: "http://www.BenefitsInc.com/fhir/eligibility/225476332402"
+  }
+}
+outcome {
+  value: COMPLETE
+}
+disposition {
+  value: "Dependant added to policy."
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+organization {
+  organization_id {
+    value: "2"
+  }
+}
+request_provider {
+  organization_id {
+    value: "1"
+  }
+}

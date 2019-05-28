@@ -1,0 +1,129 @@
+id {
+  value: "patient-link-response"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Link Patients Response</div>"
+  }
+}
+url {
+  value: "http://hl7.org/fhir/MessageDefinition/patient-link-response"
+}
+identifier {
+  system {
+    value: "urn:ietf:rfc:3986"
+  }
+  value {
+    value: "urn:oid:1.3.6.1.4.1.21367.2005.3.7.9879"
+  }
+}
+version {
+  value: "1"
+}
+name {
+  value: "PATIENT-LINK-RESPONSE"
+}
+title {
+  value: "Link Patients Response"
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+date {
+  value_us: 1486040400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "Health Level Seven, Int\'l"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org"
+    }
+  }
+}
+description {
+  value: "Optional response to a patient link notification."
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/variant-state"
+        }
+        code {
+          value: "positive"
+        }
+      }
+    }
+  }
+}
+jurisdiction {
+  coding {
+    system {
+      value: "urn:iso:std:iso:3166"
+    }
+    code {
+      value: "US"
+    }
+    display {
+      value: "United States of America (the)"
+    }
+  }
+}
+purpose {
+  value: "Optional response message that may provide additional information on the outcome of the patient link operation."
+}
+copyright {
+  value: "\357\277\275 HL7.org 2011+"
+}
+base {
+  value: "MessageDefinition/example"
+}
+event {
+  coding {
+    system {
+      value: "http://example.org/fhir/message-events"
+    }
+    code {
+      value: "admin-notify"
+    }
+  }
+}
+category {
+  value: CONSEQUENCE
+}
+focus {
+  code {
+    value: PATIENT
+  }
+  profile {
+    value: "StructureDefinition/example"
+  }
+  min {
+    value: 2
+  }
+  max {
+    value: "2"
+  }
+}

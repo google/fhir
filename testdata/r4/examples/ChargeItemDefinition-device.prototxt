@@ -1,0 +1,132 @@
+id {
+  value: "device"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: device</p><p><b>url</b>: <b>http://sap.org/ChargeItemDefinition/device-123</b></p><p><b>status</b>: active</p><p><b>description</b>: Financial details for  custom made device</p><p><b>instance</b>: <a>Device/12345</a></p><h3>Applicabilities</h3><table><tr><td>-</td><td><b>Description</b></td><td><b>Language</b></td><td><b>Expression</b></td></tr><tr><td>*</td><td>Verify ChargeItem pertains to Device 12345</td><td>text/fhirpath</td><td>%context.service.suppliedItem=\'Device/12345\'</td></tr></table><blockquote><p><b>propertyGroup</b></p><h3>PriceComponents</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Code</b></td><td><b>Amount</b></td></tr><tr><td>*</td><td>base</td><td>Verkaufspreis (netto) <span>(Details : {http://fhir.de/CodeSystem/billing-attributes code \'VK\' = \'VK\', given as \'Verkaufspreis (netto)\'})</span></td><td/></tr></table></blockquote><blockquote><p><b>propertyGroup</b></p><h3>Applicabilities</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table><h3>PriceComponents</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Code</b></td><td><b>Factor</b></td></tr><tr><td>*</td><td>tax</td><td>Mehrwersteuersatz <span>(Details : {http://fhir.de/CodeSystem/billing-attributes code \'MWST\' = \'MWST\', given as \'Mehrwersteuersatz\'})</span></td><td>1.19</td></tr></table></blockquote><blockquote><p><b>propertyGroup</b></p><h3>Applicabilities</h3><table><tr><td>-</td></tr><tr><td>*</td></tr></table><h3>PriceComponents</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Code</b></td><td><b>Factor</b></td></tr><tr><td>*</td><td>tax</td><td>Mehrwersteuersatz <span>(Details : {http://fhir.de/CodeSystem/billing-attributes code \'MWST\' = \'MWST\', given as \'Mehrwersteuersatz\'})</span></td><td>1.07</td></tr></table></blockquote></div>"
+  }
+}
+url {
+  value: "http://sap.org/ChargeItemDefinition/device-123"
+}
+status {
+  value: ACTIVE
+}
+description {
+  value: "Financial details for  custom made device"
+}
+instance {
+  device_id {
+    value: "12345"
+  }
+}
+applicability {
+  description {
+    value: "Verify ChargeItem pertains to Device 12345"
+  }
+  language {
+    value: "text/fhirpath"
+  }
+  expression {
+    value: "%context.service.suppliedItem=\'Device/12345\'"
+  }
+}
+property_group {
+  price_component {
+    type {
+      value: BASE
+    }
+    code {
+      coding {
+        system {
+          value: "http://fhir.de/CodeSystem/billing-attributes"
+        }
+        code {
+          value: "VK"
+        }
+        display {
+          value: "Verkaufspreis (netto)"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "67.44"
+      }
+      currency {
+        value: "EUR"
+      }
+    }
+  }
+}
+property_group {
+  applicability {
+    description {
+      value: "G\303\274ltigkeit Steuersatz"
+    }
+    language {
+      value: "text/fhirpath"
+    }
+    expression {
+      value: "%context.occurenceDateTime > \'2018-04-01\'"
+    }
+  }
+  price_component {
+    type {
+      value: TAX
+    }
+    code {
+      coding {
+        system {
+          value: "http://fhir.de/CodeSystem/billing-attributes"
+        }
+        code {
+          value: "MWST"
+        }
+        display {
+          value: "Mehrwersteuersatz"
+        }
+      }
+    }
+    factor {
+      value: "1.19"
+    }
+  }
+}
+property_group {
+  applicability {
+    description {
+      value: "G\303\274ltigkeit Steuersatz"
+    }
+    language {
+      value: "text/fhirpath"
+    }
+    expression {
+      value: "%context.occurenceDateTime <= \'2018-04-01\'"
+    }
+  }
+  price_component {
+    type {
+      value: TAX
+    }
+    code {
+      coding {
+        system {
+          value: "http://fhir.de/CodeSystem/billing-attributes"
+        }
+        code {
+          value: "MWST"
+        }
+        display {
+          value: "Mehrwersteuersatz"
+        }
+      }
+    }
+    factor {
+      value: "1.07"
+    }
+  }
+}

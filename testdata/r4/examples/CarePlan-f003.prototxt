@@ -1,0 +1,166 @@
+id {
+  value: "f003"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f003</p><p><b>contained</b>: , </p><p><b>identifier</b>: CP3953 (OFFICIAL)</p><p><b>status</b>: completed</p><p><b>intent</b>: plan</p><p><b>subject</b>: <a>P. van de Heuvel</a></p><p><b>period</b>: 08/03/2013 9:00:10 AM --&gt; 08/03/2013 9:30:10 AM</p><p><b>careTeam</b>: id: careteam</p><p><b>addresses</b>: <a>?????</a></p><p><b>goal</b>: id: goal; lifecycleStatus: completed; Achieved <span>(Details : {http://terminology.hl7.org/CodeSystem/goal-achievement code \'achieved\' = \'Achieved\', given as \'Achieved\'})</span>; Retropharyngeal abscess removal <span>(Details )</span>; Annotation: goal accomplished without complications</p><blockquote><p><b>activity</b></p><h3>Details</h3><table><tr><td>-</td><td><b>Kind</b></td><td><b>Code</b></td><td><b>Status</b></td><td><b>DoNotPerform</b></td><td><b>Scheduled[x]</b></td><td><b>Performer</b></td></tr><tr><td>*</td><td>ServiceRequest</td><td>Incision of retropharyngeal abscess <span>(Details : {SNOMED CT code \'172960003\' = \'Incision of retropharyngeal abscess\', given as \'Incision of retropharyngeal abscess\'})</span></td><td>completed</td><td>true</td><td>2011-06-27T09:30:10+01:00</td><td><a>E.M. van den broek</a></td></tr></table></blockquote></div>"
+  }
+}
+contained {
+  care_team {
+    id {
+      value: "careteam"
+    }
+    participant {
+      member {
+        practitioner_id {
+          value: "f001"
+        }
+        display {
+          value: "E.M. van den broek"
+        }
+      }
+    }
+  }
+}
+contained {
+  goal {
+    id {
+      value: "goal"
+    }
+    lifecycle_status {
+      value: COMPLETED
+    }
+    achievement_status {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/goal-achievement"
+        }
+        code {
+          value: "achieved"
+        }
+        display {
+          value: "Achieved"
+        }
+      }
+      text {
+        value: "Achieved"
+      }
+    }
+    description {
+      text {
+        value: "Retropharyngeal abscess removal"
+      }
+    }
+    subject {
+      patient_id {
+        value: "f001"
+      }
+      display {
+        value: "P. van de Heuvel"
+      }
+    }
+    note {
+      text {
+        value: "goal accomplished without complications"
+      }
+    }
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.bmc.nl/zorgportal/identifiers/careplans"
+  }
+  value {
+    value: "CP3953"
+  }
+}
+status {
+  value: COMPLETED
+}
+intent {
+  value: PLAN
+}
+subject {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+period {
+  start {
+    value_us: 1362729610000000
+    timezone: "+01:00"
+    precision: SECOND
+  }
+  end {
+    value_us: 1362731410000000
+    timezone: "+01:00"
+    precision: SECOND
+  }
+}
+care_team {
+  fragment {
+    value: "careteam"
+  }
+}
+addresses {
+  condition_id {
+    value: "f201"
+  }
+  display {
+    value: "?????"
+  }
+}
+goal {
+  fragment {
+    value: "goal"
+  }
+}
+activity {
+  detail {
+    kind {
+      value: SERVICE_REQUEST
+    }
+    code {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "172960003"
+        }
+        display {
+          value: "Incision of retropharyngeal abscess"
+        }
+      }
+    }
+    status {
+      value: COMPLETED
+    }
+    do_not_perform {
+      value: true
+    }
+    scheduled {
+      string_value {
+        value: "2011-06-27T09:30:10+01:00"
+      }
+    }
+    performer {
+      practitioner_id {
+        value: "f001"
+      }
+      display {
+        value: "E.M. van den broek"
+      }
+    }
+  }
+}

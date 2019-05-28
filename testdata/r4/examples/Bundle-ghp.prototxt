@@ -1,0 +1,4955 @@
+id {
+  value: "ghp"
+}
+type {
+  value: COLLECTION
+}
+entry {
+  full_url {
+    value: "https://example.com/base/DiagnosticReport/ghp"
+  }
+  resource {
+    diagnostic_report {
+      id {
+        value: "ghp"
+      }
+      meta {
+        last_updated {
+          value_us: 1439721323000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: ghp</p><p><b>meta</b>: </p><p><b>identifier</b>: ghp-example</p><p><b>status</b>: final</p><p><b>code</b>: General Health Profile <span>(Details : {http://acme.com/labs/reports code \'GHP\' = \'GHP\', given as \'General Health Profile\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>effective</b>: 16/08/2015 6:40:17 AM</p><p><b>issued</b>: 17/08/2015 6:40:17 AM</p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>specimen</b>: </p><ul><li><a>Red Top Tube</a></li><li><a>Lavender Top Tube</a></li><li><a>Urine Sample</a></li></ul><p><b>result</b>: </p><ul><li><a>Chemistry Panel</a></li><li><a>CBC</a></li><li><a>Urinalysis</a></li></ul></div>"
+        }
+      }
+      identifier {
+        system {
+          value: "http://acme.com/lab/reports"
+        }
+        value {
+          value: "ghp-example"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://acme.com/labs/reports"
+          }
+          code {
+            value: "GHP"
+          }
+          display {
+            value: "General Health Profile"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1439707217000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1439793617000000
+        timezone: "Z"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "rtt"
+        }
+        display {
+          value: "Red Top Tube"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "ltt"
+        }
+        display {
+          value: "Lavender Top Tube"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "urine"
+        }
+        display {
+          value: "Urine Sample"
+        }
+      }
+      result {
+        observation_id {
+          value: "p1"
+        }
+        display {
+          value: "Chemistry Panel"
+        }
+      }
+      result {
+        observation_id {
+          value: "p2"
+        }
+        display {
+          value: "CBC"
+        }
+      }
+      result {
+        observation_id {
+          value: "p3"
+        }
+        display {
+          value: "Urinalysis"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Specimen/rtt"
+  }
+  resource {
+    specimen {
+      id {
+        value: "rtt"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: rtt</p><p><b>accessionIdentifier</b>: 20150816-00124</p><p><b>type</b>: Serum sample <span>(Details : {SNOMED CT code \'119364003\' = \'Serum specimen\', given as \'Serum sample\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><h3>Collections</h3><table><tr><td>-</td><td><b>Collector</b></td><td><b>Collected[x]</b></td></tr><tr><td>*</td><td><a>Practitioner/f202</a></td><td>16/08/2015 6:40:17 AM</td></tr></table><h3>Containers</h3><table><tr><td>-</td><td><b>Type</b></td></tr><tr><td>*</td><td>Serum Separator Tube <span>(Details : {http://acme.com/labs code \'SST\' = \'SST\', given as \'Serum Separator Tube\'})</span></td></tr></table></div>"
+        }
+      }
+      accession_identifier {
+        system {
+          value: "http://acme.com/labs/accession-ids"
+        }
+        value {
+          value: "20150816-00124"
+        }
+      }
+      type {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "119364003"
+          }
+          display {
+            value: "Serum sample"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      collection {
+        collector {
+          practitioner_id {
+            value: "f202"
+          }
+        }
+        collected {
+          date_time {
+            value_us: 1439707217000000
+            timezone: "Z"
+            precision: SECOND
+          }
+        }
+      }
+      container {
+        type {
+          coding {
+            system {
+              value: "http://acme.com/labs"
+            }
+            code {
+              value: "SST"
+            }
+            display {
+              value: "Serum Separator Tube"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Specimen/ltt"
+  }
+  resource {
+    specimen {
+      id {
+        value: "ltt"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: ltt</p><p><b>accessionIdentifier</b>: 20150816-00124</p><p><b>type</b>: Blood specimen with EDTA <span>(Details : {SNOMED CT code \'445295009\' = \'Blood specimen with EDTA\', given as \'Blood specimen with EDTA\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><h3>Collections</h3><table><tr><td>-</td><td><b>Collector</b></td><td><b>Collected[x]</b></td></tr><tr><td>*</td><td><a>Practitioner/f202</a></td><td>16/08/2015 6:40:17 AM</td></tr></table><h3>Containers</h3><table><tr><td>-</td><td><b>Type</b></td></tr><tr><td>*</td><td>Lavender Top Tube <span>(Details : {http://acme.com/labs code \'LTT\' = \'LTT\', given as \'Lavender Top Tube\'})</span></td></tr></table></div>"
+        }
+      }
+      accession_identifier {
+        system {
+          value: "http://acme.com/labs/accession-ids"
+        }
+        value {
+          value: "20150816-00124"
+        }
+      }
+      type {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "445295009"
+          }
+          display {
+            value: "Blood specimen with EDTA"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      collection {
+        collector {
+          practitioner_id {
+            value: "f202"
+          }
+        }
+        collected {
+          date_time {
+            value_us: 1439707217000000
+            timezone: "Z"
+            precision: SECOND
+          }
+        }
+      }
+      container {
+        type {
+          coding {
+            system {
+              value: "http://acme.com/labs"
+            }
+            code {
+              value: "LTT"
+            }
+            display {
+              value: "Lavender Top Tube"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Specimen/urine"
+  }
+  resource {
+    specimen {
+      id {
+        value: "urine"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: urine</p><p><b>accessionIdentifier</b>: 20150816-00124</p><p><b>type</b>: Urine specimen <span>(Details : {SNOMED CT code \'122575003\' = \'Urine specimen\', given as \'Urine specimen\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><h3>Collections</h3><table><tr><td>-</td><td><b>Collector</b></td><td><b>Collected[x]</b></td></tr><tr><td>*</td><td><a>Practitioner/f202</a></td><td>16/08/2015 6:40:17 AM</td></tr></table><h3>Containers</h3><table><tr><td>-</td><td><b>Type</b></td></tr><tr><td>*</td><td>100mL sterile cup <span>(Details : {http://acme.com/labs code \'UCUP\' = \'UCUP\', given as \'100mL sterile cup\'})</span></td></tr></table></div>"
+        }
+      }
+      accession_identifier {
+        system {
+          value: "http://acme.com/labs/accession-ids"
+        }
+        value {
+          value: "20150816-00124"
+        }
+      }
+      type {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "122575003"
+          }
+          display {
+            value: "Urine specimen"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      collection {
+        collector {
+          practitioner_id {
+            value: "f202"
+          }
+        }
+        collected {
+          date_time {
+            value_us: 1439707217000000
+            timezone: "Z"
+            precision: SECOND
+          }
+        }
+      }
+      container {
+        type {
+          coding {
+            system {
+              value: "http://acme.com/labs"
+            }
+            code {
+              value: "UCUP"
+            }
+            display {
+              value: "100mL sterile cup"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/p2"
+  }
+  resource {
+    observation {
+      id {
+        value: "p2"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: p2</p><p><b>status</b>: final</p><p><b>code</b>: Complete blood count (hemogram) panel - Blood by Automated count <span>(Details : {LOINC code \'58410-2\' = \'Complete blood count (hemogram) panel - Blood by Automated count\', given as \'Complete blood count (hemogram) panel - Blood by Automated count\'})</span></p><p><b>effective</b>: 16/08/2015 6:40:17 AM</p><p><b>issued</b>: 17/08/2015 6:40:17 AM</p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>specimen</b>: <a>Lavender Top Tube</a></p><p><b>hasMember</b>: </p><ul><li><a>Observation/r1</a></li><li><a>Observation/r2</a></li><li><a>Observation/r3</a></li><li><a>Observation/r4</a></li><li><a>Observation/r5</a></li><li><a>Observation/r6</a></li><li><a>Observation/r7</a></li><li><a>Observation/r8</a></li><li><a>Observation/r9</a></li><li><a>Observation/r10</a></li><li><a>Observation/r11</a></li><li><a>Observation/r12</a></li><li><a>Observation/r13</a></li><li><a>Observation/r14</a></li><li><a>Observation/r15</a></li><li><a>Observation/r16</a></li><li><a>Observation/r17</a></li></ul></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "58410-2"
+          }
+          display {
+            value: "Complete blood count (hemogram) panel - Blood by Automated count"
+          }
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1439707217000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1439793617000000
+        timezone: "Z"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "ltt"
+        }
+        display {
+          value: "Lavender Top Tube"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r1"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r2"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r3"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r4"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r5"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r6"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r7"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r8"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r9"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r10"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r11"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r12"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r13"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r14"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r15"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r16"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "r17"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r1"
+  }
+  resource {
+    observation {
+      id {
+        value: "r1"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r1</p><p><b>status</b>: final</p><p><b>code</b>: Haemoglobin <span>(Details : {LOINC code \'718-7\' = \'Hemoglobin [Mass/volume] in Blood\', given as \'Hemoglobin [Mass/volume] in Blood\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 176 g/L<span> (Details: UCUM code g/L = \'g/L\')</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>135 g/L<span> (Details: UCUM code g/L = \'g/L\')</span></td><td>180 g/L<span> (Details: UCUM code g/L = \'g/L\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "718-7"
+          }
+          display {
+            value: "Hemoglobin [Mass/volume] in Blood"
+          }
+        }
+        text {
+          value: "Haemoglobin"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "176"
+          }
+          unit {
+            value: "g/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "g/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "135"
+          }
+          unit {
+            value: "g/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "g/L"
+          }
+        }
+        high {
+          value {
+            value: "180"
+          }
+          unit {
+            value: "g/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "g/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r2"
+  }
+  resource {
+    observation {
+      id {
+        value: "r2"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r2</p><p><b>status</b>: final</p><p><b>code</b>: Red Cell Count <span>(Details : {LOINC code \'789-8\' = \'Erythrocytes [#/volume] in Blood by Automated count\', given as \'Erythrocytes [#/volume] in Blood by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 5.9 x10*12/L<span> (Details: UCUM code 10*12/L = \'10*12/L\')</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>4.2 x10*12/L<span> (Details: UCUM code 10*12/L = \'10*12/L\')</span></td><td>6.0 x10*12/L<span> (Details: UCUM code 10*12/L = \'10*12/L\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "789-8"
+          }
+          display {
+            value: "Erythrocytes [#/volume] in Blood by Automated count"
+          }
+        }
+        text {
+          value: "Red Cell Count"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "5.9"
+          }
+          unit {
+            value: "x10*12/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*12/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "4.2"
+          }
+          unit {
+            value: "x10*12/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*12/L"
+          }
+        }
+        high {
+          value {
+            value: "6.0"
+          }
+          unit {
+            value: "x10*12/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*12/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r3"
+  }
+  resource {
+    observation {
+      id {
+        value: "r3"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r3</p><p><b>status</b>: final</p><p><b>code</b>: Haematocrit <span>(Details : {LOINC code \'4544-3\' = \'Hematocrit [Volume Fraction] of Blood by Automated count\', given as \'Hematocrit [Volume Fraction] of Blood by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 55 %</p><p><b>interpretation</b>: High <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'H\' = \'High)</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>38 %</td><td>52 %</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "4544-3"
+          }
+          display {
+            value: "Hematocrit [Volume Fraction] of Blood by Automated count"
+          }
+        }
+        text {
+          value: "Haematocrit"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "55"
+          }
+          unit {
+            value: "%"
+          }
+        }
+      }
+      interpretation {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+          }
+          code {
+            value: "H"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "38"
+          }
+          unit {
+            value: "%"
+          }
+        }
+        high {
+          value {
+            value: "52"
+          }
+          unit {
+            value: "%"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r4"
+  }
+  resource {
+    observation {
+      id {
+        value: "r4"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r4</p><p><b>status</b>: final</p><p><b>code</b>: Mean Cell Volume <span>(Details : {LOINC code \'787-2\' = \'Erythrocyte mean corpuscular volume [Entitic volume] by Automated count\', given as \'Erythrocyte mean corpuscular volume [Entitic volume] by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 99 fL<span> (Details: UCUM code fL = \'fL\')</span></p><p><b>interpretation</b>: High <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'H\' = \'High)</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>80 fL<span> (Details: UCUM code fL = \'fL\')</span></td><td>98 fL<span> (Details: UCUM code fL = \'fL\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "787-2"
+          }
+          display {
+            value: "Erythrocyte mean corpuscular volume [Entitic volume] by Automated count"
+          }
+        }
+        text {
+          value: "Mean Cell Volume"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "99"
+          }
+          unit {
+            value: "fL"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "fL"
+          }
+        }
+      }
+      interpretation {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+          }
+          code {
+            value: "H"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "80"
+          }
+          unit {
+            value: "fL"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "fL"
+          }
+        }
+        high {
+          value {
+            value: "98"
+          }
+          unit {
+            value: "fL"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "fL"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r5"
+  }
+  resource {
+    observation {
+      id {
+        value: "r5"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r5</p><p><b>status</b>: final</p><p><b>code</b>: Mean Cell Haemoglobin <span>(Details : {LOINC code \'785-6\' = \'Erythrocyte mean corpuscular hemoglobin [Entitic mass] by Automated count\', given as \'Erythrocyte mean corpuscular hemoglobin [Entitic mass] by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 36 pg<span> (Details: UCUM code pg = \'pg\')</span></p><p><b>interpretation</b>: High <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'H\' = \'High)</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>27 pg<span> (Details: UCUM code pg = \'pg\')</span></td><td>35 pg<span> (Details: UCUM code pg = \'pg\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "785-6"
+          }
+          display {
+            value: "Erythrocyte mean corpuscular hemoglobin [Entitic mass] by Automated count"
+          }
+        }
+        text {
+          value: "Mean Cell Haemoglobin"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "36"
+          }
+          unit {
+            value: "pg"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "pg"
+          }
+        }
+      }
+      interpretation {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+          }
+          code {
+            value: "H"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "27"
+          }
+          unit {
+            value: "pg"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "pg"
+          }
+        }
+        high {
+          value {
+            value: "35"
+          }
+          unit {
+            value: "pg"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "pg"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r6"
+  }
+  resource {
+    observation {
+      id {
+        value: "r6"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r6</p><p><b>status</b>: final</p><p><b>code</b>: Platelet Count <span>(Details : {LOINC code \'777-3\' = \'Platelets [#/volume] in Blood by Automated count\', given as \'Platelets [#/volume] in Blood by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 444 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>150 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></td><td>450 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "777-3"
+          }
+          display {
+            value: "Platelets [#/volume] in Blood by Automated count"
+          }
+        }
+        text {
+          value: "Platelet Count"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "444"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "150"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+        high {
+          value {
+            value: "450"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r7"
+  }
+  resource {
+    observation {
+      id {
+        value: "r7"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r7</p><p><b>status</b>: final</p><p><b>code</b>: White Cell Count <span>(Details : {LOINC code \'6690-2\' = \'Leukocytes [#/volume] in Blood by Automated count\', given as \'Leukocytes [#/volume] in Blood by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 4.6 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>4.0 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></td><td>11.0 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "6690-2"
+          }
+          display {
+            value: "Leukocytes [#/volume] in Blood by Automated count"
+          }
+        }
+        text {
+          value: "White Cell Count"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "4.6"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "4.0"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+        high {
+          value {
+            value: "11.0"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r8"
+  }
+  resource {
+    observation {
+      id {
+        value: "r8"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r8</p><p><b>status</b>: final</p><p><b>code</b>: Neutrophils <span>(Details : {LOINC code \'770-8\' = \'Neutrophils/100 leukocytes in Blood by Automated count\', given as \'Neutrophils/100 leukocytes in Blood by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 20 %<span> (Details: UCUM code % = \'%\')</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "770-8"
+          }
+          display {
+            value: "Neutrophils/100 leukocytes in Blood by Automated count"
+          }
+        }
+        text {
+          value: "Neutrophils"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "20"
+          }
+          unit {
+            value: "%"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "%"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r9"
+  }
+  resource {
+    observation {
+      id {
+        value: "r9"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r9</p><p><b>status</b>: final</p><p><b>code</b>: Neutrophils <span>(Details : {LOINC code \'751-8\' = \'Neutrophils [#/volume] in Blood by Automated count\', given as \'Neutrophils [#/volume] in Blood by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 0.9 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></p><p><b>interpretation</b>: Critical low <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'LL\' = \'Critical low)</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>2.0 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></td><td>7.5 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "751-8"
+          }
+          display {
+            value: "Neutrophils [#/volume] in Blood by Automated count"
+          }
+        }
+        text {
+          value: "Neutrophils"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "0.9"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+      }
+      interpretation {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+          }
+          code {
+            value: "LL"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "2.0"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+        high {
+          value {
+            value: "7.5"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r10"
+  }
+  resource {
+    observation {
+      id {
+        value: "r10"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r10</p><p><b>status</b>: final</p><p><b>code</b>: Lymphocytes <span>(Details : {LOINC code \'736-9\' = \'Lymphocytes/100 leukocytes in Blood by Automated count\', given as \'Lymphocytes/100 leukocytes in Blood by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 20 %<span> (Details: UCUM code % = \'%\')</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "736-9"
+          }
+          display {
+            value: "Lymphocytes/100 leukocytes in Blood by Automated count"
+          }
+        }
+        text {
+          value: "Lymphocytes"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "20"
+          }
+          unit {
+            value: "%"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "%"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r11"
+  }
+  resource {
+    observation {
+      id {
+        value: "r11"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r11</p><p><b>status</b>: final</p><p><b>code</b>: Lymphocytes <span>(Details : {LOINC code \'731-0\' = \'Lymphocytes [#/volume] in Blood by Automated count\', given as \'Lymphocytes [#/volume] in Blood by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 0.9 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></p><p><b>interpretation</b>: Low <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'L\' = \'Low)</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>1.1 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></td><td>4.0 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "731-0"
+          }
+          display {
+            value: "Lymphocytes [#/volume] in Blood by Automated count"
+          }
+        }
+        text {
+          value: "Lymphocytes"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "0.9"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+      }
+      interpretation {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+          }
+          code {
+            value: "L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "1.1"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+        high {
+          value {
+            value: "4.0"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r12"
+  }
+  resource {
+    observation {
+      id {
+        value: "r12"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r12</p><p><b>status</b>: final</p><p><b>code</b>: Monocytes <span>(Details : {LOINC code \'5905-5\' = \'Monocytes/100 leukocytes in Blood by Automated count\', given as \'Monocytes/100 leukocytes in Blood by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 20 %<span> (Details: UCUM code % = \'%\')</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "5905-5"
+          }
+          display {
+            value: "Monocytes/100 leukocytes in Blood by Automated count"
+          }
+        }
+        text {
+          value: "Monocytes"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "20"
+          }
+          unit {
+            value: "%"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "%"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r13"
+  }
+  resource {
+    observation {
+      id {
+        value: "r13"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r13</p><p><b>status</b>: final</p><p><b>code</b>: Monocytes <span>(Details : {LOINC code \'742-7\' = \'Monocytes [#/volume] in Blood by Automated count\', given as \'Monocytes [#/volume] in Blood by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 0.9 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>0.2 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></td><td>1.0 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "742-7"
+          }
+          display {
+            value: "Monocytes [#/volume] in Blood by Automated count"
+          }
+        }
+        text {
+          value: "Monocytes"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "0.9"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "0.2"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+        high {
+          value {
+            value: "1.0"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r14"
+  }
+  resource {
+    observation {
+      id {
+        value: "r14"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r14</p><p><b>status</b>: final</p><p><b>code</b>: Eosinophils <span>(Details : {LOINC code \'713-8\' = \'Eosinophils/100 leukocytes in Blood by Automated count\', given as \'Eosinophils/100 leukocytes in Blood by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 20 %<span> (Details: UCUM code % = \'%\')</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "713-8"
+          }
+          display {
+            value: "Eosinophils/100 leukocytes in Blood by Automated count"
+          }
+        }
+        text {
+          value: "Eosinophils"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "20"
+          }
+          unit {
+            value: "%"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "%"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r15"
+  }
+  resource {
+    observation {
+      id {
+        value: "r15"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r15</p><p><b>status</b>: final</p><p><b>code</b>: Eosinophils <span>(Details : {LOINC code \'711-2\' = \'Eosinophils [#/volume] in Blood by Automated count\', given as \'Eosinophils [#/volume] in Blood by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 0.92 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></p><p><b>interpretation</b>: Critical high <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'HH\' = \'Critical high)</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>0.04 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></td><td>0.40 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "711-2"
+          }
+          display {
+            value: "Eosinophils [#/volume] in Blood by Automated count"
+          }
+        }
+        text {
+          value: "Eosinophils"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "0.92"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+      }
+      interpretation {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+          }
+          code {
+            value: "HH"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "0.04"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+        high {
+          value {
+            value: "0.40"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r16"
+  }
+  resource {
+    observation {
+      id {
+        value: "r16"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r16</p><p><b>status</b>: final</p><p><b>code</b>: Basophils <span>(Details : {LOINC code \'706-2\' = \'Basophils/100 leukocytes in Blood by Automated count\', given as \'Basophils/100 leukocytes in Blood by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 20 %<span> (Details: UCUM code % = \'%\')</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "706-2"
+          }
+          display {
+            value: "Basophils/100 leukocytes in Blood by Automated count"
+          }
+        }
+        text {
+          value: "Basophils"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "20"
+          }
+          unit {
+            value: "%"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "%"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/r17"
+  }
+  resource {
+    observation {
+      id {
+        value: "r17"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: r17</p><p><b>status</b>: final</p><p><b>code</b>: Basophils <span>(Details : {LOINC code \'704-7\' = \'Basophils [#/volume] in Blood by Automated count\', given as \'Basophils [#/volume] in Blood by Automated count\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 0.92 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>High</b></td></tr><tr><td>*</td><td>0.21 x10*9/L<span> (Details: UCUM code 10*9/L = \'10*9/L\')</span></td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "704-7"
+          }
+          display {
+            value: "Basophils [#/volume] in Blood by Automated count"
+          }
+        }
+        text {
+          value: "Basophils"
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "0.92"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+      }
+      reference_range {
+        high {
+          value {
+            value: "0.21"
+          }
+          unit {
+            value: "x10*9/L"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "10*9/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/p1"
+  }
+  resource {
+    observation {
+      id {
+        value: "p1"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: p1</p><p><b>status</b>: final</p><p><b>code</b>: Comprehensive metabolic 2000 panel - Serum or Plasma <span>(Details : {LOINC code \'24323-8\' = \'Comprehensive metabolic 2000 panel - Serum or Plasma\', given as \'Comprehensive metabolic 2000 panel - Serum or Plasma\'})</span></p><p><b>effective</b>: 16/08/2015 6:40:17 AM</p><p><b>issued</b>: 17/08/2015 6:40:17 AM</p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>specimen</b>: <a>Red Top Tube</a></p><p><b>hasMember</b>: </p><ul><li><a>Observation/o1</a></li><li><a>Observation/o2</a></li><li><a>Observation/o3</a></li><li><a>Observation/o4</a></li><li><a>Observation/o5</a></li><li><a>Observation/o6</a></li><li><a>Observation/o7</a></li><li><a>Observation/o8</a></li><li><a>Observation/o9</a></li><li><a>Observation/o10</a></li><li><a>Observation/o11</a></li><li><a>Observation/o12</a></li><li><a>Observation/o13</a></li><li><a>Observation/o14</a></li><li><a>Observation/o15</a></li><li><a>Observation/o16</a></li><li><a>Observation/o17</a></li><li><a>Observation/o18</a></li><li><a>Observation/o19</a></li><li><a>Observation/o20</a></li><li><a>Observation/o21</a></li><li><a>Observation/o22</a></li></ul></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "24323-8"
+          }
+          display {
+            value: "Comprehensive metabolic 2000 panel - Serum or Plasma"
+          }
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1439707217000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1439793617000000
+        timezone: "Z"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "rtt"
+        }
+        display {
+          value: "Red Top Tube"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o1"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o2"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o3"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o4"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o5"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o6"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o7"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o8"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o9"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o10"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o11"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o12"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o13"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o14"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o15"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o16"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o17"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o18"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o19"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o20"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o21"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "o22"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o1"
+  }
+  resource {
+    observation {
+      id {
+        value: "o1"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o1</p><p><b>status</b>: final</p><p><b>code</b>: Sodium [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code \'2951-2\' = \'Sodium [Moles/volume] in Serum or Plasma\', given as \'Sodium [Moles/volume] in Serum or Plasma\'}; {SNOMED CT code \'104934005\' = \'Sodium measurement, serum)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 140 mmol/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>137 mmol/L</td><td>147 mmol/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "2951-2"
+          }
+          display {
+            value: "Sodium [Moles/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "104934005"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "140"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "137"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+        high {
+          value {
+            value: "147"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o2"
+  }
+  resource {
+    observation {
+      id {
+        value: "o2"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o2</p><p><b>status</b>: final</p><p><b>code</b>: Potassium [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code \'2823-3\' = \'Potassium [Moles/volume] in Serum or Plasma\', given as \'Potassium [Moles/volume] in Serum or Plasma\'}; {SNOMED CT code \'59573005\' = \'Potassium measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 4.2 mmol/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>3.5 mmol/L</td><td>5.0 mmol/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "2823-3"
+          }
+          display {
+            value: "Potassium [Moles/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "59573005"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "4.2"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "3.5"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+        high {
+          value {
+            value: "5.0"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o3"
+  }
+  resource {
+    observation {
+      id {
+        value: "o3"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o3</p><p><b>status</b>: final</p><p><b>code</b>: Chloride [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code \'2075-0\' = \'Chloride [Moles/volume] in Serum or Plasma\', given as \'Chloride [Moles/volume] in Serum or Plasma\'}; {SNOMED CT code \'46511006\' = \'Chloride measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 105 mmol/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>96 mmol/L</td><td>109 mmol/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "2075-0"
+          }
+          display {
+            value: "Chloride [Moles/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "46511006"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "105"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "96"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+        high {
+          value {
+            value: "109"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o4"
+  }
+  resource {
+    observation {
+      id {
+        value: "o4"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o4</p><p><b>status</b>: final</p><p><b>code</b>: Bicarbonate [Moles/volume] in Serum <span>(Details : {LOINC code \'1963-8\' = \'Bicarbonate [Moles/volume] in Serum\', given as \'Bicarbonate [Moles/volume] in Serum\'}; {SNOMED CT code \'88645003\' = \'Bicarbonate measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 26 mmol/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>25 mmol/L</td><td>33 mmol/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "1963-8"
+          }
+          display {
+            value: "Bicarbonate [Moles/volume] in Serum"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "88645003"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "26"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "25"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+        high {
+          value {
+            value: "33"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o5"
+  }
+  resource {
+    observation {
+      id {
+        value: "o5"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o5</p><p><b>status</b>: final</p><p><b>code</b>: Anion gap 4 in Serum or Plasma <span>(Details : {LOINC code \'1863-0\' = \'Anion gap 4 in Serum or Plasma\', given as \'Anion gap 4 in Serum or Plasma\'}; {SNOMED CT code \'271057005\' = \'Serum anion gap measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 13 mmol/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>4 mmol/L</td><td>17 mmol/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "1863-0"
+          }
+          display {
+            value: "Anion gap 4 in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "271057005"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "13"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "4"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+        high {
+          value {
+            value: "17"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o6"
+  }
+  resource {
+    observation {
+      id {
+        value: "o6"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o6</p><p><b>status</b>: final</p><p><b>code</b>: Glucose [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code \'14749-6\' = \'Glucose [Moles/volume] in Serum or Plasma\', given as \'Glucose [Moles/volume] in Serum or Plasma\'}; {SNOMED CT code \'36048009\' = \'Glucose measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 7.4 mmol/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>3.0 mmol/L</td><td>7.7 mmol/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "14749-6"
+          }
+          display {
+            value: "Glucose [Moles/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "36048009"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "7.4"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "3.0"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+        high {
+          value {
+            value: "7.7"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o7"
+  }
+  resource {
+    observation {
+      id {
+        value: "o7"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o7</p><p><b>status</b>: final</p><p><b>code</b>: Urea nitrogen [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code \'14937-7\' = \'Urea nitrogen [Moles/volume] in Serum or Plasma\', given as \'Urea nitrogen [Moles/volume] in Serum or Plasma\'}; {SNOMED CT code \'273967009\' = \'Serum urea level)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 4.7 mmol/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>2.0 mmol/L</td><td>7.0 mmol/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "14937-7"
+          }
+          display {
+            value: "Urea nitrogen [Moles/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "273967009"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "4.7"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "2.0"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+        high {
+          value {
+            value: "7.0"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o8"
+  }
+  resource {
+    observation {
+      id {
+        value: "o8"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o8</p><p><b>status</b>: final</p><p><b>code</b>: Creatinine [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code \'14682-9\' = \'Creatinine [Moles/volume] in Serum or Plasma\', given as \'Creatinine [Moles/volume] in Serum or Plasma\'}; {SNOMED CT code \'70901006\' = \'Creatinine measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 0.09 mmol/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>0.04 mmol/L</td><td>0.11 mmol/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "14682-9"
+          }
+          display {
+            value: "Creatinine [Moles/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "70901006"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "0.09"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "0.04"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+        high {
+          value {
+            value: "0.11"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o9"
+  }
+  resource {
+    observation {
+      id {
+        value: "o9"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o9</p><p><b>status</b>: final</p><p><b>code</b>: Urate [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code \'14933-6\' = \'Urate [Moles/volume] in Serum or Plasma\', given as \'Urate [Moles/volume] in Serum or Plasma\'}; {SNOMED CT code \'86228006\' = \'Uric acid measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 0.39 mmol/L</p><p><b>interpretation</b>: High <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'H\' = \'High)</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>0.14 mmol/L</td><td>0.35 mmol/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "14933-6"
+          }
+          display {
+            value: "Urate [Moles/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "86228006"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "0.39"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+      interpretation {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+          }
+          code {
+            value: "H"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "0.14"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+        high {
+          value {
+            value: "0.35"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o10"
+  }
+  resource {
+    observation {
+      id {
+        value: "o10"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o10</p><p><b>status</b>: final</p><p><b>code</b>: Bilirubin.total [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code \'14631-6\' = \'Bilirubin.total [Moles/volume] in Serum or Plasma\', given as \'Bilirubin.total [Moles/volume] in Serum or Plasma\'}; {SNOMED CT code \'27171005\' = \'Urinalysis)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 7 umol/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>2 umol/L</td><td>20 umol/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "14631-6"
+          }
+          display {
+            value: "Bilirubin.total [Moles/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "27171005"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "7"
+          }
+          unit {
+            value: "umol/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "2"
+          }
+          unit {
+            value: "umol/L"
+          }
+        }
+        high {
+          value {
+            value: "20"
+          }
+          unit {
+            value: "umol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o11"
+  }
+  resource {
+    observation {
+      id {
+        value: "o11"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o11</p><p><b>status</b>: final</p><p><b>code</b>: Bilirubin.direct [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code \'14629-0\' = \'Bilirubin.direct [Moles/volume] in Serum or Plasma\', given as \'Bilirubin.direct [Moles/volume] in Serum or Plasma\'}; {SNOMED CT code \'39748002\' = \'Bilirubin, direct measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 3 umol/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>0 umol/L</td><td>8 umol/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "14629-0"
+          }
+          display {
+            value: "Bilirubin.direct [Moles/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "39748002"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "3"
+          }
+          unit {
+            value: "umol/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "0"
+          }
+          unit {
+            value: "umol/L"
+          }
+        }
+        high {
+          value {
+            value: "8"
+          }
+          unit {
+            value: "umol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o12"
+  }
+  resource {
+    observation {
+      id {
+        value: "o12"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o12</p><p><b>status</b>: final</p><p><b>code</b>: Alkaline phosphatase [Enzymatic activity/volume] in Serum or Plasma <span>(Details : {LOINC code \'6768-6\' = \'Alkaline phosphatase [Enzymatic activity/volume] in Serum or Plasma\', given as \'Alkaline phosphatase [Enzymatic activity/volume] in Serum or Plasma\'}; {SNOMED CT code \'88810008\' = \'Alkaline phosphatase measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 108 U/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>30 U/L</td><td>115 U/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "6768-6"
+          }
+          display {
+            value: "Alkaline phosphatase [Enzymatic activity/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "88810008"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "108"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "30"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+        high {
+          value {
+            value: "115"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o13"
+  }
+  resource {
+    observation {
+      id {
+        value: "o13"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o13</p><p><b>status</b>: final</p><p><b>code</b>: Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma <span>(Details : {LOINC code \'2324-2\' = \'Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma\', given as \'Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma\'}; {SNOMED CT code \'69480007\' = \'Gamma glutamyl transferase measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 35 U/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>0 U/L</td><td>45 U/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "2324-2"
+          }
+          display {
+            value: "Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "69480007"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "35"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "0"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+        high {
+          value {
+            value: "45"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o14"
+  }
+  resource {
+    observation {
+      id {
+        value: "o14"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o14</p><p><b>status</b>: final</p><p><b>code</b>: Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma <span>(Details : {LOINC code \'1742-6\' = \'Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma\', given as \'Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma\'}; {SNOMED CT code \'34608000\' = \'Alanine aminotransferase measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 54 U/L</p><p><b>interpretation</b>: High <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'H\' = \'High)</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>0 U/L</td><td>45 U/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "1742-6"
+          }
+          display {
+            value: "Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "34608000"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "54"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+      }
+      interpretation {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+          }
+          code {
+            value: "H"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "0"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+        high {
+          value {
+            value: "45"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o15"
+  }
+  resource {
+    observation {
+      id {
+        value: "o15"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o15</p><p><b>status</b>: final</p><p><b>code</b>: Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma <span>(Details : {LOINC code \'1920-8\' = \'Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma\', given as \'Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma\'}; {SNOMED CT code \'45896001\' = \'Aspartate aminotransferase measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 30 U/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>0 U/L</td><td>41 U/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "1920-8"
+          }
+          display {
+            value: "Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "45896001"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "30"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "0"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+        high {
+          value {
+            value: "41"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o16"
+  }
+  resource {
+    observation {
+      id {
+        value: "o16"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o16</p><p><b>status</b>: final</p><p><b>code</b>: Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma <span>(Details : {LOINC code \'2532-0\' = \'Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma\', given as \'Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma\'}; {SNOMED CT code \'11274001\' = \'Lactate dehydrogenase measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 131 U/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>80 U/L</td><td>250 U/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "2532-0"
+          }
+          display {
+            value: "Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "11274001"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "131"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "80"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+        high {
+          value {
+            value: "250"
+          }
+          unit {
+            value: "U/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o17"
+  }
+  resource {
+    observation {
+      id {
+        value: "o17"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o17</p><p><b>status</b>: final</p><p><b>code</b>: Calcium [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code \'2000-8\' = \'Calcium [Moles/volume] in Serum or Plasma\', given as \'Calcium [Moles/volume] in Serum or Plasma\'}; {SNOMED CT code \'71878006\' = \'Calcium measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 2.38 mmol/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>2.25 mmol/L</td><td>2.65 mmol/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "2000-8"
+          }
+          display {
+            value: "Calcium [Moles/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "71878006"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "2.38"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "2.25"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+        high {
+          value {
+            value: "2.65"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o18"
+  }
+  resource {
+    observation {
+      id {
+        value: "o18"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o18</p><p><b>status</b>: final</p><p><b>code</b>: Calcium.ionized [Moles/volume] in Serum or Plasma by calculation <span>(Details : {LOINC code \'13959-2\' = \'Calcium.ionized [Moles/volume] in Serum or Plasma by calculation\', given as \'Calcium.ionized [Moles/volume] in Serum or Plasma by calculation\'}; {SNOMED CT code \'166708003\' = \'Corrected serum calcium measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 2.39 mmol/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>2.25 mmol/L</td><td>2.65 mmol/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "13959-2"
+          }
+          display {
+            value: "Calcium.ionized [Moles/volume] in Serum or Plasma by calculation"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "166708003"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "2.39"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "2.25"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+        high {
+          value {
+            value: "2.65"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o19"
+  }
+  resource {
+    observation {
+      id {
+        value: "o19"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o19</p><p><b>status</b>: final</p><p><b>code</b>: Phosphate [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code \'14879-1\' = \'Phosphate [Moles/volume] in Serum or Plasma\', given as \'Phosphate [Moles/volume] in Serum or Plasma\'}; {SNOMED CT code \'104866001\' = \'Phosphate measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 1.5 mmol/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>0.8 mmol/L</td><td>1.5 mmol/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "14879-1"
+          }
+          display {
+            value: "Phosphate [Moles/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "104866001"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "1.5"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "0.8"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+        high {
+          value {
+            value: "1.5"
+          }
+          unit {
+            value: "mmol/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o20"
+  }
+  resource {
+    observation {
+      id {
+        value: "o20"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o20</p><p><b>status</b>: final</p><p><b>code</b>: Protein [Mass/volume] in Serum or Plasma <span>(Details : {LOINC code \'2885-2\' = \'Protein [Mass/volume] in Serum or Plasma\', given as \'Protein [Mass/volume] in Serum or Plasma\'}; {SNOMED CT code \'74040009\' = \'Protein measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 67 g/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>60 g/L</td><td>82 g/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "2885-2"
+          }
+          display {
+            value: "Protein [Mass/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "74040009"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "67"
+          }
+          unit {
+            value: "g/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "60"
+          }
+          unit {
+            value: "g/L"
+          }
+        }
+        high {
+          value {
+            value: "82"
+          }
+          unit {
+            value: "g/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o21"
+  }
+  resource {
+    observation {
+      id {
+        value: "o21"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o21</p><p><b>status</b>: final</p><p><b>code</b>: Albumin [Mass/volume] in Serum or Plasma <span>(Details : {LOINC code \'1751-7\' = \'Albumin [Mass/volume] in Serum or Plasma\', given as \'Albumin [Mass/volume] in Serum or Plasma\'}; {SNOMED CT code \'104485008\' = \'Albumin measurement, serum)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 42 g/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>35 g/L</td><td>50 g/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "1751-7"
+          }
+          display {
+            value: "Albumin [Mass/volume] in Serum or Plasma"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "104485008"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "42"
+          }
+          unit {
+            value: "g/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "35"
+          }
+          unit {
+            value: "g/L"
+          }
+        }
+        high {
+          value {
+            value: "50"
+          }
+          unit {
+            value: "g/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o22"
+  }
+  resource {
+    observation {
+      id {
+        value: "o22"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o22</p><p><b>status</b>: final</p><p><b>code</b>: Globulin [Mass/volume] in Serum by calculation <span>(Details : {LOINC code \'10834-0\' = \'Globulin [Mass/volume] in Serum by calculation\', given as \'Globulin [Mass/volume] in Serum by calculation\'}; {SNOMED CT code \'104979009\' = \'Total globulins measurement)</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 25 g/L</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>20 g/L</td><td>40 g/L</td></tr></table></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "10834-0"
+          }
+          display {
+            value: "Globulin [Mass/volume] in Serum by calculation"
+          }
+        }
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "104979009"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "25"
+          }
+          unit {
+            value: "g/L"
+          }
+        }
+      }
+      reference_range {
+        low {
+          value {
+            value: "20"
+          }
+          unit {
+            value: "g/L"
+          }
+        }
+        high {
+          value {
+            value: "40"
+          }
+          unit {
+            value: "g/L"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/p3"
+  }
+  resource {
+    observation {
+      id {
+        value: "p3"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: p3</p><p><b>status</b>: final</p><p><b>code</b>: Urinalysis macro (dipstick) panel - Urine <span>(Details : {LOINC code \'24357-6\' = \'Urinalysis macro (dipstick) panel - Urine\', given as \'Urinalysis macro (dipstick) panel - Urine\'})</span></p><p><b>effective</b>: 16/08/2015 6:40:17 AM</p><p><b>issued</b>: 17/08/2015 6:40:17 AM</p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>specimen</b>: <a>Urine Sample</a></p><p><b>hasMember</b>: </p><ul><li><a>Observation/u1</a></li><li><a>Observation/u2</a></li><li><a>Observation/u3</a></li><li><a>Observation/u4</a></li><li><a>Observation/u5</a></li><li><a>Observation/u6</a></li><li><a>Observation/u7</a></li><li><a>Observation/u8</a></li><li><a>Observation/u9</a></li></ul></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "24357-6"
+          }
+          display {
+            value: "Urinalysis macro (dipstick) panel - Urine"
+          }
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1439707217000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1439793617000000
+        timezone: "Z"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "urine"
+        }
+        display {
+          value: "Urine Sample"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "u1"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "u2"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "u3"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "u4"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "u5"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "u6"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "u7"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "u8"
+        }
+      }
+      has_member {
+        observation_id {
+          value: "u9"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/u1"
+  }
+  resource {
+    observation {
+      id {
+        value: "u1"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: u1</p><p><b>status</b>: final</p><p><b>code</b>: pH of Urine <span>(Details : {LOINC code \'2756-5\' = \'pH of Urine\', given as \'pH of Urine\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>effective</b>: 16/08/2015 6:40:17 AM</p><p><b>issued</b>: 17/08/2015 6:40:17 AM</p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 5.0 pH</p><p><b>specimen</b>: <a>Urine Sample</a></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "2756-5"
+          }
+          display {
+            value: "pH of Urine"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1439707217000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1439793617000000
+        timezone: "Z"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "5.0"
+          }
+          unit {
+            value: "pH"
+          }
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "urine"
+        }
+        display {
+          value: "Urine Sample"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/u2"
+  }
+  resource {
+    observation {
+      id {
+        value: "u2"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: u2</p><p><b>status</b>: final</p><p><b>code</b>: Protein [Presence] in Urine <span>(Details : {LOINC code \'2887-8\' = \'Protein [Presence] in Urine\', given as \'Protein [Presence] in Urine\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>effective</b>: 16/08/2015 6:40:17 AM</p><p><b>issued</b>: 17/08/2015 6:40:17 AM</p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: Negative <span>(Details : {SNOMED CT code \'260385009\' = \'Negative\', given as \'Negative\'})</span></p><p><b>specimen</b>: <a>Urine Sample</a></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "2887-8"
+          }
+          display {
+            value: "Protein [Presence] in Urine"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1439707217000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1439793617000000
+        timezone: "Z"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "260385009"
+            }
+            display {
+              value: "Negative"
+            }
+          }
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "urine"
+        }
+        display {
+          value: "Urine Sample"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/u3"
+  }
+  resource {
+    observation {
+      id {
+        value: "u3"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: u3</p><p><b>status</b>: final</p><p><b>code</b>: Specific gravity of Urine <span>(Details : {LOINC code \'2965-2\' = \'Specific gravity of Urine\', given as \'Specific gravity of Urine\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>effective</b>: 16/08/2015 6:40:17 AM</p><p><b>issued</b>: 17/08/2015 6:40:17 AM</p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 1.009</p><p><b>specimen</b>: <a>Urine Sample</a></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "2965-2"
+          }
+          display {
+            value: "Specific gravity of Urine"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1439707217000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1439793617000000
+        timezone: "Z"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "1.009"
+          }
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "urine"
+        }
+        display {
+          value: "Urine Sample"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/u4"
+  }
+  resource {
+    observation {
+      id {
+        value: "u4"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: u4</p><p><b>status</b>: final</p><p><b>code</b>: Erythrocytes [Presence] in Urine <span>(Details : {LOINC code \'33051-4\' = \'Erythrocytes [Presence] in Urine\', given as \'Erythrocytes [Presence] in Urine\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>effective</b>: 16/08/2015 6:40:17 AM</p><p><b>issued</b>: 17/08/2015 6:40:17 AM</p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: Negative <span>(Details : {SNOMED CT code \'260385009\' = \'Negative\', given as \'Negative\'})</span></p><p><b>specimen</b>: <a>Urine Sample</a></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "33051-4"
+          }
+          display {
+            value: "Erythrocytes [Presence] in Urine"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1439707217000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1439793617000000
+        timezone: "Z"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "260385009"
+            }
+            display {
+              value: "Negative"
+            }
+          }
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "urine"
+        }
+        display {
+          value: "Urine Sample"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/u5"
+  }
+  resource {
+    observation {
+      id {
+        value: "u5"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: u5</p><p><b>status</b>: final</p><p><b>code</b>: Glucose [Presence] in Urine <span>(Details : {LOINC code \'2349-9\' = \'Glucose [Presence] in Urine\', given as \'Glucose [Presence] in Urine\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>effective</b>: 16/08/2015 6:40:17 AM</p><p><b>issued</b>: 17/08/2015 6:40:17 AM</p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: Negative <span>(Details : {SNOMED CT code \'260385009\' = \'Negative\', given as \'Negative\'})</span></p><p><b>specimen</b>: <a>Urine Sample</a></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "2349-9"
+          }
+          display {
+            value: "Glucose [Presence] in Urine"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1439707217000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1439793617000000
+        timezone: "Z"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "260385009"
+            }
+            display {
+              value: "Negative"
+            }
+          }
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "urine"
+        }
+        display {
+          value: "Urine Sample"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/u6"
+  }
+  resource {
+    observation {
+      id {
+        value: "u6"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: u6</p><p><b>status</b>: final</p><p><b>code</b>: Leukocytes [Presence] in Urine <span>(Details : {LOINC code \'33052-2\' = \'Leukocytes [Presence] in Urine\', given as \'Leukocytes [Presence] in Urine\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>effective</b>: 16/08/2015 6:40:17 AM</p><p><b>issued</b>: 17/08/2015 6:40:17 AM</p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: Negative <span>(Details : {SNOMED CT code \'260385009\' = \'Negative\', given as \'Negative\'})</span></p><p><b>specimen</b>: <a>Urine Sample</a></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "33052-2"
+          }
+          display {
+            value: "Leukocytes [Presence] in Urine"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1439707217000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1439793617000000
+        timezone: "Z"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "260385009"
+            }
+            display {
+              value: "Negative"
+            }
+          }
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "urine"
+        }
+        display {
+          value: "Urine Sample"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/u7"
+  }
+  resource {
+    observation {
+      id {
+        value: "u7"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: u7</p><p><b>status</b>: final</p><p><b>code</b>: Leukocytes [#/volume] in Urine <span>(Details : {LOINC code \'30405-5\' = \'Leukocytes [#/volume] in Urine\', given as \'Leukocytes [#/volume] in Urine\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>effective</b>: 16/08/2015 6:40:17 AM</p><p><b>issued</b>: 17/08/2015 6:40:17 AM</p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: 1 /uL</p><p><b>specimen</b>: <a>Urine Sample</a></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "30405-5"
+          }
+          display {
+            value: "Leukocytes [#/volume] in Urine"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1439707217000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1439793617000000
+        timezone: "Z"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "1"
+          }
+          unit {
+            value: "/uL"
+          }
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "urine"
+        }
+        display {
+          value: "Urine Sample"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/u8"
+  }
+  resource {
+    observation {
+      id {
+        value: "u8"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: u8</p><p><b>status</b>: final</p><p><b>code</b>: Erythocytes [#/volume] in Urine <span>(Details : {LOINC code \'30391-7\' = \'Erythrocytes [#/volume] in Urine\', given as \'Erythocytes [#/volume] in Urine\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>effective</b>: 16/08/2015 6:40:17 AM</p><p><b>issued</b>: 17/08/2015 6:40:17 AM</p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: &lt;1 /uL</p><p><b>specimen</b>: <a>Urine Sample</a></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "30391-7"
+          }
+          display {
+            value: "Erythocytes [#/volume] in Urine"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1439707217000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1439793617000000
+        timezone: "Z"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "1"
+          }
+          comparator {
+            value: LESS_THAN
+          }
+          unit {
+            value: "/uL"
+          }
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "urine"
+        }
+        display {
+          value: "Urine Sample"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/u9"
+  }
+  resource {
+    observation {
+      id {
+        value: "u9"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: u9</p><p><b>status</b>: final</p><p><b>code</b>: Epithelial cells.squamous [#/volume] in Urine sediment <span>(Details : {LOINC code \'13654-9\' = \'Epithelial cells.squamous [#/volume] in Urine sediment\', given as \'Epithelial cells.squamous [#/volume] in Urine sediment\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>effective</b>: 16/08/2015 6:40:17 AM</p><p><b>issued</b>: 17/08/2015 6:40:17 AM</p><p><b>performer</b>: <a>Acme Laboratory, Inc</a></p><p><b>value</b>: &lt;1 /mL</p><p><b>specimen</b>: <a>Urine Sample</a></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "13654-9"
+          }
+          display {
+            value: "Epithelial cells.squamous [#/volume] in Urine sediment"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "pat2"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1439707217000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1439793617000000
+        timezone: "Z"
+        precision: SECOND
+      }
+      performer {
+        organization_id {
+          value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+        }
+        display {
+          value: "Acme Laboratory, Inc"
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "1"
+          }
+          comparator {
+            value: LESS_THAN
+          }
+          unit {
+            value: "/mL"
+          }
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "urine"
+        }
+        display {
+          value: "Urine Sample"
+        }
+      }
+    }
+  }
+}

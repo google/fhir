@@ -1,0 +1,55 @@
+id {
+  value: "di"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: di</p><p><b>status</b>: active</p><p><b>intent</b>: original-order</p><p><b>code</b>: Chest CT <span>(Details : {LOINC code \'24627-2\' = \'Chest CT)</span></p><p><b>subject</b>: <a>Patient/dicom</a></p><p><b>occurrence</b>: 08/05/2013 9:33:27 AM</p><p><b>requester</b>: <a>Dr. Adam Careful</a></p><p><b>reasonCode</b>: Check for metastatic disease <span>(Details )</span></p></div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: ORIGINAL_ORDER
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "24627-2"
+    }
+  }
+  text {
+    value: "Chest CT"
+  }
+}
+subject {
+  patient_id {
+    value: "dicom"
+  }
+}
+occurrence {
+  date_time {
+    value_us: 1367980407000000
+    timezone: "+07:00"
+    precision: SECOND
+  }
+}
+requester {
+  practitioner_id {
+    value: "example"
+  }
+  display {
+    value: "Dr. Adam Careful"
+  }
+}
+reason_code {
+  text {
+    value: "Check for metastatic disease"
+  }
+}

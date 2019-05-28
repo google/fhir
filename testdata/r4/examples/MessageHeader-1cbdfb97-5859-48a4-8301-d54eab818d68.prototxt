@@ -1,0 +1,102 @@
+id {
+  value: "1cbdfb97-5859-48a4-8301-d54eab818d68"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Update Person resource for Peter James CHALMERS (Jim), MRN: 12345 (Acme Healthcare)</p>\n    </div>"
+  }
+}
+event {
+  coding {
+    system {
+      value: "http://example.org/fhir/message-events"
+    }
+    code {
+      value: "admin-notify"
+    }
+  }
+}
+destination {
+  name {
+    value: "Acme Message Gateway"
+  }
+  target {
+    device_id {
+      value: "example"
+    }
+  }
+  endpoint {
+    value: "llp:10.11.12.14:5432"
+  }
+  receiver {
+    uri {
+      value: "http://acme.com/ehr/fhir/Practitioner/2323-33-4"
+    }
+  }
+}
+sender {
+  organization_id {
+    value: "1"
+  }
+}
+enterer {
+  practitioner_id {
+    value: "example"
+  }
+}
+author {
+  practitioner_id {
+    value: "example"
+  }
+}
+source {
+  name {
+    value: "Acme Central Patient Registry"
+  }
+  software {
+    value: "FooBar Patient Manager"
+  }
+  version {
+    value: "3.1.45.AABB"
+  }
+  contact {
+    system {
+      value: PHONE
+    }
+    value {
+      value: "+1 (555) 123 4567"
+    }
+  }
+  endpoint {
+    value: "llp:10.11.12.13:5432"
+  }
+}
+reason {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/message-reasons-encounter"
+    }
+    code {
+      value: "admit"
+    }
+  }
+}
+response {
+  identifier {
+    value: "5015fe84-8e76-4526-89d8-44b322e8d4fb"
+  }
+  code {
+    value: OK
+  }
+}
+focus {
+  patient_id {
+    value: "example"
+  }
+}
+definition {
+  value: "http:////acme.com/ehr/fhir/messagedefinition/patientrequest"
+}

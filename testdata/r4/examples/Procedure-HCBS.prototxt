@@ -1,0 +1,73 @@
+id {
+  value: "HCBS"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<p>\n\t\t\t\t<b> Personal care services provided at person\'s home</b>\n\t\t\t</p>\n\t\t\t<p>\n\t\t\t\t<b> Based On</b> : Peter\'s Long Term Services and Supports (LTSS) care plan</p>\n\t\t\t<p>\n\t\t\t\t<b> Status</b> : completed</p>\n\t\t\t<p>\n\t\t\t\t<b> Beneficiary</b> : Peter James</p>\n\t\t\t<p>\n\t\t\t\t<b> Service Name/Code</b> : Personal care services <span> (Details : {HCPCS code \'T1019\' = \'Personal care services, per 15 minutes\'})</span>\n\t\t\t</p>\n\t\t\t<p>\n\t\t\t\t<b> Service Date</b> : Apr 5, 2018</p>\n\t\t\t<p>\n\t\t\t\t<b> Service Provider</b> : Adam Careful</p>\n\t\t\t<p>\n\t\t\t\t<b> Service Delivery Address</b> : Peter\'s home</p>\n\t\t\t<p>\n\t\t\t\t<b> Service Comment</b> : Assisted with bathing and dressing, doing laundry, and meal preparation</p>\n\t\t</div>"
+  }
+}
+based_on {
+  display {
+    value: "Peter\'s Long Term Service and Supports (LTSS) Care Plan"
+  }
+}
+status {
+  value: COMPLETED
+}
+code {
+  coding {
+    system {
+      value: "https://www.cms.gov/Medicare/Coding/HCPCSReleaseCodeSets/Alpha-Numeric-HCPCS.html"
+    }
+    code {
+      value: "T1019"
+    }
+    display {
+      value: "Personal care services, per 15 minutes, not for an inpatient or resident of a hospital, nursing facility, icf/mr or imd, part of the individualized plan of treatment."
+    }
+  }
+  text {
+    value: "Personal care services"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter James"
+  }
+}
+performed {
+  date_time {
+    value_us: 1522850400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "example"
+    }
+    display {
+      value: "Adam Careful"
+    }
+  }
+}
+location {
+  location_id {
+    value: "ph"
+  }
+  display {
+    value: "Peter\'s Home"
+  }
+}
+note {
+  text {
+    value: "Assisted with bathing and dressing, doing laundry, and meal preparation"
+  }
+}

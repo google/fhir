@@ -1,0 +1,97 @@
+id {
+  value: "f206"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f206</p><p><b>status</b>: final</p><p><b>code</b>: Blood culture <span>(Details : {http://acmelabs.org code \'104177\' = \'104177\', given as \'Blood culture\'}; {LOINC code \'600-7\' = \'Bacteria identified in Blood by Culture\', given as \'Bacteria identified in Blood by Culture\'})</span></p><p><b>subject</b>: <a>Roel</a></p><p><b>issued</b>: 11/03/2013 10:28:00 AM</p><p><b>performer</b>: <a>Luigi Maas</a></p><p><b>value</b>: Staphylococcus aureus <span>(Details : {SNOMED CT code \'3092008\' = \'Staphylococcus aureus\', given as \'Staphylococcus aureus\'})</span></p><p><b>interpretation</b>: Positive <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'POS\' = \'Positive)</span></p><p><b>method</b>: Blood culture for bacteria, including anaerobic screen <span>(Details : {SNOMED CT code \'104177005\' = \'Blood culture for bacteria, including anaerobic screen\', given as \'Blood culture for bacteria, including anaerobic screen\'})</span></p></div>"
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "http://acmelabs.org"
+    }
+    code {
+      value: "104177"
+    }
+    display {
+      value: "Blood culture"
+    }
+  }
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "600-7"
+    }
+    display {
+      value: "Bacteria identified in Blood by Culture"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "f201"
+  }
+  display {
+    value: "Roel"
+  }
+}
+issued {
+  value_us: 1362994080000000
+  timezone: "+01:00"
+  precision: SECOND
+}
+performer {
+  practitioner_id {
+    value: "f202"
+  }
+  display {
+    value: "Luigi Maas"
+  }
+}
+value {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "3092008"
+      }
+      display {
+        value: "Staphylococcus aureus"
+      }
+    }
+  }
+}
+interpretation {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+    }
+    code {
+      value: "POS"
+    }
+  }
+}
+method {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "104177005"
+    }
+    display {
+      value: "Blood culture for bacteria, including anaerobic screen"
+    }
+  }
+}

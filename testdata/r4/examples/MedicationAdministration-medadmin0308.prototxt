@@ -1,0 +1,98 @@
+id {
+  value: "medadmin0308"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medadmin0308</p><p><b>status</b>: completed</p><p><b>medication</b>: Lantus 100 unit/ml injectable solution <span>(Details : {RxNorm code \'285018\' = \'Lantus 100 UNT/ML Injectable Solution\', given as \'Lantus 100 unit/ml injectable solution\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>effective</b>: 15/01/2015 4:30:00 AM --&gt; 15/01/2015 2:30:00 PM</p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Patrick Pump</a></td></tr></table><p><b>request</b>: <a>MedicationRequest/medrx0320</a></p><h3>Dosages</h3><table><tr><td>-</td><td><b>Text</b></td><td><b>Route</b></td><td><b>Dose</b></td></tr><tr><td>*</td><td>20 Units SC before breakfast</td><td>Subcutaneous (qualifier value) <span>(Details : {SNOMED CT code \'263887005\' = \'Subcutaneous\', given as \'Subcutaneous (qualifier value)\'})</span></td><td>20 U<span> (Details: UCUM code U = \'U\')</span></td></tr></table></div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+medication {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+      }
+      code {
+        value: "285018"
+      }
+      display {
+        value: "Lantus 100 unit/ml injectable solution"
+      }
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+effective {
+  period {
+    start {
+      value_us: 1421292600000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1421328600000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "f007"
+    }
+    display {
+      value: "Patrick Pump"
+    }
+  }
+}
+request {
+  medication_request_id {
+    value: "medrx0320"
+  }
+}
+dosage {
+  text {
+    value: "20 Units SC before breakfast"
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "263887005"
+      }
+      display {
+        value: "Subcutaneous (qualifier value)"
+      }
+    }
+  }
+  dose {
+    value {
+      value: "20"
+    }
+    unit {
+      value: "U"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "U"
+    }
+  }
+}

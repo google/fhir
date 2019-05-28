@@ -1,0 +1,157 @@
+id {
+  value: "meddisp0316"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: meddisp0316</p><p><b>status</b>: in-progress</p><p><b>medication</b>: Lantus 100 unit/ml injectable solution <span>(Details : {RxNorm code \'285018\' = \'Lantus 100 UNT/ML Injectable Solution\', given as \'Lantus 100 unit/ml injectable solution\'})</span></p><p><b>subject</b>: <a>Donald Duck </a></p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Practitioner/f006</a></td></tr></table><p><b>authorizingPrescription</b>: <a>MedicationRequest/medrx0320</a></p><p><b>type</b>: Refill - Part Fill <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ActCode code \'RFP\' = \'Refill - Part Fill\', given as \'Refill - Part Fill\'})</span></p><p><b>quantity</b>: 10 ml<span> (Details: UCUM code ml = \'ml\')</span></p><p><b>daysSupply</b>: 30 Day<span> (Details: UCUM code d = \'d\')</span></p><p><b>whenPrepared</b>: 25/06/2015 7:13:00 AM</p><p><b>dosageInstruction</b>: </p></div>"
+  }
+}
+status {
+  value: IN_PROGRESS
+}
+medication {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+      }
+      code {
+        value: "285018"
+      }
+      display {
+        value: "Lantus 100 unit/ml injectable solution"
+      }
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck "
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "f006"
+    }
+  }
+}
+authorizing_prescription {
+  medication_request_id {
+    value: "medrx0320"
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "RFP"
+    }
+    display {
+      value: "Refill - Part Fill"
+    }
+  }
+}
+quantity {
+  value {
+    value: "10"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "ml"
+  }
+}
+days_supply {
+  value {
+    value: "30"
+  }
+  unit {
+    value: "Day"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "d"
+  }
+}
+when_prepared {
+  value_us: 1435198380000000
+  timezone: "+05:00"
+  precision: SECOND
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "20 Units SC three times daily"
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 3
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "263887005"
+      }
+      display {
+        value: "Subcutaneous (qualifier value)"
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "ordered"
+        }
+        display {
+          value: "Ordered"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "20"
+        }
+        unit {
+          value: "U"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "U"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,104 @@
+id {
+  value: "benedicte"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <table>\n        <tbody>\n          <tr>\n            <td>Name</td>\n            <td>B\303\251n\303\251dicte du March\303\251</td>\n          </tr>\n          <tr>\n            <td>Address</td>\n            <td>43, Place du March\303\251 Sainte Catherine, 75004 Paris, France</td>\n          </tr>\n          <tr>\n            <td>Contacts</td>\n            <td>Phone: +33 (237) 998327</td>\n          </tr>\n        </tbody>\n      </table>\n    </div>"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  type {
+    text {
+      value: "INSEE"
+    }
+  }
+  system {
+    value: "urn:oid:1.2.250.1.61"
+  }
+  value {
+    value: "272117510400399"
+  }
+}
+active {
+  value: true
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+}
+relationship {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v2-0131"
+    }
+    code {
+      value: "N"
+    }
+  }
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+    }
+    code {
+      value: "WIFE"
+    }
+  }
+}
+name {
+  family {
+    value: "du March\303\251"
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix"
+      }
+      value {
+        string_value {
+          value: "VV"
+        }
+      }
+    }
+  }
+  given {
+    value: "B\303\251n\303\251dicte"
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "+33 (237) 998327"
+  }
+}
+gender {
+  value: FEMALE
+}
+address {
+  line {
+    value: "43, Place du March\303\251 Sainte Catherine"
+  }
+  city {
+    value: "Paris"
+  }
+  postal_code {
+    value: "75004"
+  }
+  country {
+    value: "FRA"
+  }
+}
+photo {
+  content_type {
+    value: "image/jpeg"
+  }
+  url {
+    value: "Binary/f016"
+  }
+}

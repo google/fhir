@@ -1,0 +1,171 @@
+id {
+  value: "100154"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">This example assumes a national health care scheme where patients, providers and organizations have known business identifiers.</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/claim"
+  }
+  value {
+    value: "12347"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/claim-type"
+    }
+    code {
+      value: "oral"
+    }
+  }
+}
+use {
+  value: CLAIM
+}
+patient {
+  identifier {
+    system {
+      value: "http://www.jurisdiction.com/nationalId"
+    }
+    value {
+      value: "123AB345"
+    }
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+insurer {
+  identifier {
+    system {
+      value: "http://www.jurisdiction.com/insurers"
+    }
+    value {
+      value: "123456"
+    }
+  }
+}
+provider {
+  identifier {
+    system {
+      value: "http://www.jurisdiction.com/careorganizations"
+    }
+    value {
+      value: "HOSP12345"
+    }
+  }
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+payee {
+  type {
+    coding {
+      code {
+        value: "provider"
+      }
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    identifier {
+      system {
+        value: "http://www.jurisdiction.com/providerId"
+      }
+      value {
+        value: "MD98765"
+      }
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis {
+    codeable_concept {
+      coding {
+        code {
+          value: "123456"
+        }
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    identifier {
+      system {
+        value: "http://www.jurisdiction.com/nationalplan"
+      }
+      value {
+        value: "123AB345"
+      }
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_sequence {
+    value: 1
+  }
+  product_or_service {
+    coding {
+      code {
+        value: "1200"
+      }
+    }
+  }
+  serviced {
+    date {
+      value_us: 1408111200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  unit_price {
+    value {
+      value: "135.57"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: "135.57"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}

@@ -875,7 +875,8 @@ final class ProfileGenerator {
   private static DateTime buildCreationDateTime(LocalDate localDate) {
     return new DateTimeWrapper(
             localDate.format(DateTimeFormatter.ISO_LOCAL_DATE), ZoneId.of("US/Pacific"))
-        .getWrapped();
+        .copyInto(DateTime.newBuilder())
+        .build();
   }
 
   private StructureDefinition getExtensionStructDef() {

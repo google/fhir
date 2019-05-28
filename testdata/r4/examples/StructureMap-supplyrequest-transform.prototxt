@@ -1,0 +1,305 @@
+id {
+  value: "supplyrequest-transform"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\nmap &quot;http://hl7.org/fhir/StructureMap/supplyrequest-transform&quot; = supplyRequestTransform\n\nuses &quot;http://hl7.org/fhir/StructureDefinition/ActivityDefinition&quot; as source\nuses &quot;http://hl7.org/fhir/StructureDefinition/SupplyRequest&quot; as target\n\ngroup main\n  input &quot;source&quot;: ActivityDefinition as source\n  input &quot;target&quot;: SupplyRequest as target\n\n  &quot;status&quot;: for source.id make target.status = \'draft\'\n  &quot;category&quot;: for source.id make target.category = \'non-stock\'\n  &quot;priority&quot;: for source.id make target.priority = \'routine\'\n  &quot;quantity&quot;: for source.quantity make target.orderedItem.quantity\n  &quot;item&quot;: for source.code make target.orderedItem.itemCodeableConcept\n  &quot;when&quot;: for source.id make target.occurrenceDateTime = Now()\n  &quot;authoredOn&quot;: for source.id make target.authoredOn = Now()\n    </div>"
+  }
+}
+url {
+  value: "http://hl7.org/fhir/StructureMap/supplyrequest-transform"
+}
+name {
+  value: "Transform from an ActivityDefinition to a SupplyRequest"
+}
+status {
+  value: DRAFT
+}
+structure {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/activitydefinition"
+  }
+  mode {
+    value: SOURCE
+  }
+}
+structure {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/supplyrequest"
+  }
+  mode {
+    value: TARGET
+  }
+}
+group {
+  name {
+    value: "main"
+  }
+  type_mode {
+    value: NONE
+  }
+  input {
+    name {
+      value: "source"
+    }
+    mode {
+      value: SOURCE
+    }
+  }
+  input {
+    name {
+      value: "target"
+    }
+    mode {
+      value: TARGET
+    }
+  }
+  rule {
+    name {
+      value: "status"
+    }
+    source {
+      context {
+        value: "source"
+      }
+      element {
+        value: "id"
+      }
+      variable {
+        value: "a"
+      }
+    }
+    target {
+      context {
+        value: "target"
+      }
+      context_type {
+        value: VARIABLE
+      }
+      element {
+        value: "status"
+      }
+      transform {
+        value: EVALUATE
+      }
+      parameter {
+        value {
+          string_value {
+            value: "\'draft\'"
+          }
+        }
+      }
+    }
+  }
+  rule {
+    name {
+      value: "category"
+    }
+    source {
+      context {
+        value: "source"
+      }
+      element {
+        value: "id"
+      }
+      variable {
+        value: "a"
+      }
+    }
+    target {
+      context {
+        value: "target"
+      }
+      context_type {
+        value: VARIABLE
+      }
+      element {
+        value: "category"
+      }
+      transform {
+        value: EVALUATE
+      }
+      parameter {
+        value {
+          string_value {
+            value: "\'non-stock\'"
+          }
+        }
+      }
+    }
+  }
+  rule {
+    name {
+      value: "priority"
+    }
+    source {
+      context {
+        value: "source"
+      }
+      element {
+        value: "id"
+      }
+      variable {
+        value: "a"
+      }
+    }
+    target {
+      context {
+        value: "target"
+      }
+      context_type {
+        value: VARIABLE
+      }
+      element {
+        value: "priority"
+      }
+      transform {
+        value: EVALUATE
+      }
+      parameter {
+        value {
+          string_value {
+            value: "\'routine\'"
+          }
+        }
+      }
+    }
+  }
+  rule {
+    name {
+      value: "quantity"
+    }
+    source {
+      context {
+        value: "source"
+      }
+      element {
+        value: "quantity"
+      }
+      variable {
+        value: "a"
+      }
+    }
+    target {
+      context {
+        value: "target"
+      }
+      context_type {
+        value: VARIABLE
+      }
+      element {
+        value: "category"
+      }
+      transform {
+        value: COPY
+      }
+    }
+  }
+  rule {
+    name {
+      value: "item"
+    }
+    source {
+      context {
+        value: "source"
+      }
+      element {
+        value: "code"
+      }
+      variable {
+        value: "a"
+      }
+    }
+    target {
+      context {
+        value: "target"
+      }
+      context_type {
+        value: VARIABLE
+      }
+      element {
+        value: "orderedItem.itemCodeableConcept"
+      }
+      transform {
+        value: COPY
+      }
+    }
+  }
+  rule {
+    name {
+      value: "when"
+    }
+    source {
+      context {
+        value: "source"
+      }
+      element {
+        value: "id"
+      }
+      variable {
+        value: "a"
+      }
+    }
+    target {
+      context {
+        value: "target"
+      }
+      context_type {
+        value: VARIABLE
+      }
+      element {
+        value: "occurrenceDateTime"
+      }
+      transform {
+        value: EVALUATE
+      }
+      parameter {
+        value {
+          string_value {
+            value: "now()"
+          }
+        }
+      }
+    }
+  }
+  rule {
+    name {
+      value: "authoredOn"
+    }
+    source {
+      context {
+        value: "source"
+      }
+      element {
+        value: "id"
+      }
+      variable {
+        value: "a"
+      }
+    }
+    target {
+      context {
+        value: "target"
+      }
+      context_type {
+        value: VARIABLE
+      }
+      element {
+        value: "authoredOn"
+      }
+      transform {
+        value: EVALUATE
+      }
+      parameter {
+        value {
+          string_value {
+            value: "now()"
+          }
+        }
+      }
+    }
+  }
+}

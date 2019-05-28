@@ -1,0 +1,69 @@
+id {
+  value: "7547E"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the European Health Insurance Card</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://ehic.com/insurer/123456789/member"
+  }
+  value {
+    value: "A123456780"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "EHCPOL"
+    }
+    display {
+      value: "extended healthcare"
+    }
+  }
+}
+subscriber {
+  patient_id {
+    value: "5"
+  }
+}
+beneficiary {
+  patient_id {
+    value: "5"
+  }
+}
+relationship {
+  coding {
+    code {
+      value: "self"
+    }
+  }
+}
+period {
+  end {
+    value_us: 1331902800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+payor {
+  identifier {
+    system {
+      value: "http://ehic.com/insurer"
+    }
+    value {
+      value: "123456789"
+    }
+  }
+}

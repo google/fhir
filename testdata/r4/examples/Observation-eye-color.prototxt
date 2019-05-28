@@ -1,0 +1,36 @@
+id {
+  value: "eye-color"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: eye-color</p><p><b>status</b>: final</p><p><b>code</b>: eye color <span>(Details )</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>effective</b>: 18/05/2016</p><p><b>value</b>: blue</p></div>"
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  text {
+    value: "eye color"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+effective {
+  date_time {
+    value_us: 1463493600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+value {
+  string_value {
+    value: "blue"
+  }
+}

@@ -1,0 +1,103 @@
+id {
+  value: "med0303"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: med0303</p><p><b>contained</b>: </p><p><b>code</b>: Alemtuzumab 10mg/ml (Lemtrada) <span>(Details : {RxNorm code \'1594660\' = \'alemtuzumab 10 MG/ML [Lemtrada]\', given as \'Alemtuzumab 10mg/ml (Lemtrada)\'})</span></p><p><b>manufacturer</b>: id: org6; name: Genzyme</p><p><b>form</b>: Injection solution (qualifier vallue) <span>(Details : {SNOMED CT code \'385219001\' = \'Injection solution\', given as \'Injection solution (qualifier vallue)\'})</span></p><h3>Ingredients</h3><table><tr><td>-</td><td><b>Item[x]</b></td><td><b>Strength</b></td></tr><tr><td>*</td><td>Alemtuzamab (substance) <span>(Details : {SNOMED CT code \'129472003\' = \'Alemtuzumab\', given as \'Alemtuzamab (substance)\'})</span></td><td>12 mg<span> (Details: UCUM code mg = \'mg\')</span>/1.2 mL<span> (Details: UCUM code mL = \'mL\')</span></td></tr></table><h3>Batches</h3><table><tr><td>-</td><td><b>LotNumber</b></td><td><b>ExpirationDate</b></td></tr><tr><td>*</td><td>9494788</td><td>22/05/2017</td></tr></table></div>"
+  }
+}
+contained {
+  organization {
+    id {
+      value: "org6"
+    }
+    name {
+      value: "Genzyme"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+    }
+    code {
+      value: "1594660"
+    }
+    display {
+      value: "Alemtuzumab 10mg/ml (Lemtrada)"
+    }
+  }
+}
+manufacturer {
+  fragment {
+    value: "org6"
+  }
+}
+form {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "385219001"
+    }
+    display {
+      value: "Injection solution (qualifier vallue)"
+    }
+  }
+}
+ingredient {
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "129472003"
+        }
+        display {
+          value: "Alemtuzamab (substance)"
+        }
+      }
+    }
+  }
+  strength {
+    numerator {
+      value {
+        value: "12"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mg"
+      }
+    }
+    denominator {
+      value {
+        value: "1.2"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mL"
+      }
+    }
+  }
+}
+batch {
+  lot_number {
+    value: "9494788"
+  }
+  expiration_date {
+    value_us: 1495375200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}

@@ -1,0 +1,78 @@
+id {
+  value: "orgrole2"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: orgrole2</p><p><b>identifier</b>: member hospital = hosp32 (SECONDARY)</p><p><b>active</b>: true</p><p><b>organization</b>: <a>Monument Health Information Exchange</a></p><p><b>participatingOrganization</b>: <a>Founding Fathers Memorial Hospital</a></p><p><b>code</b>: Hospital member <span>(Details : {http://hl7.org/fhir/organization-role code \'member\' = \'Member\', given as \'Member\'})</span></p><p><b>endpoint</b>: <a>Founding Fathers Memorial Hospital HIE endpoint</a></p></div>"
+  }
+}
+identifier {
+  use {
+    value: SECONDARY
+  }
+  type {
+    text {
+      value: "member hospital"
+    }
+  }
+  system {
+    value: "http://example.org/www.monumentHIE.com"
+  }
+  value {
+    value: "hosp32"
+  }
+  assigner {
+    uri {
+      value: "http://hl7.org/fhir/ig/vhdir/Organization/monumentHIE"
+    }
+    display {
+      value: "Monument Health Information Exchange"
+    }
+  }
+}
+active {
+  value: true
+}
+organization {
+  uri {
+    value: "http://hl7.org/fhir/ig/vhdir/Organization/monumentHIE"
+  }
+  display {
+    value: "Monument Health Information Exchange"
+  }
+}
+participating_organization {
+  uri {
+    value: "http://hl7.org/fhir/ig/vhdir/Organization/foundingfathers"
+  }
+  display {
+    value: "Founding Fathers Memorial Hospital"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/organization-role"
+    }
+    code {
+      value: "member"
+    }
+    display {
+      value: "Member"
+    }
+  }
+  text {
+    value: "Hospital member"
+  }
+}
+endpoint {
+  uri {
+    value: "http://hl7.org/fhir/ig/vhdir/Endpoint/foundingfathersHIE"
+  }
+  display {
+    value: "Founding Fathers Memorial Hospital HIE endpoint"
+  }
+}

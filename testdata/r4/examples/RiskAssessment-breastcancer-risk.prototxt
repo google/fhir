@@ -1,0 +1,65 @@
+id {
+  value: "breastcancer-risk"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <table>\n        <tr>\n          <td colspan=\"2\">\n            <h1>Information about your risk score:</h1>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <strong>Birthdate:</strong>\n          </td>\n          <td>1981-01-01</td>\n        </tr>\n        <tr>\n          <td>\n            <strong>Gender:</strong>\n          </td>\n          <td>female</td>\n        </tr>\n        <tr>\n          <td>\n            <strong>Ethnicity:</strong>\n          </td>\n          <td>Unknown / Not Reported</td>\n        </tr>\n      </table>\n    </div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://example.org"
+  }
+  value {
+    value: "risk-assessment-breastcancer1"
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "http://browser.ihtsdotools.org/"
+    }
+    code {
+      value: "709510001"
+    }
+    display {
+      value: "Assessment of risk for disease (procedure)"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+performer {
+  practitioner_id {
+    value: "example"
+  }
+}
+basis {
+  observation_id {
+    value: "example-genetics-brcapat"
+  }
+}
+prediction {
+  outcome {
+    text {
+      value: "Unknown risk of developing breast cancer"
+    }
+  }
+}
+note {
+  text {
+    value: "This risk assessment is based on BRCA1 and BRCA2 genetic mutation test"
+  }
+}

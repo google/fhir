@@ -1,0 +1,24 @@
+id {
+  value: "exception"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>SQL Link Communication Error (dbx = 34234)</p>\n    </div>"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: EXCEPTION
+  }
+  details {
+    text {
+      value: "SQL Link Communication Error (dbx = 34234)"
+    }
+  }
+}

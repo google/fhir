@@ -1,0 +1,250 @@
+id {
+  value: "C-2121"
+}
+meta {
+  version_id {
+    value: "1"
+  }
+  last_updated {
+    value_us: 1468966722108000
+    timezone: "-04:00"
+    precision: MILLISECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: C-2121</p><p><b>meta</b>: </p><p><b>status</b>: executed</p><p><b>contentDerivative</b>: Content Registration <span>(Details : {http://terminology.hl7.org/CodeSystem/contract-content-derivative code \'registration\' = \'Content Registration)</span></p><p><b>issued</b>: 01/11/2013 9:18:27 PM</p><p><b>applies</b>: 01/11/2013 9:18:27 PM --&gt; (ongoing)</p><p><b>subject</b>: <a>Patient/f201</a></p><p><b>type</b>: Opt-in consent directive <span>(Details : {http://mdhhs.org/fhir/consentdirective-type code \'OPTIN\' = \'OPTIN)</span></p><p><b>subType</b>: Health Care Directive <span>(Details : {http://terminology.hl7.org/CodeSystem/consentcategorycodes code \'hcd\' = \'Health Care Directive)</span></p><blockquote><p><b>term</b></p><h3>Offers</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Decision</b></td><td><b>Text</b></td></tr><tr><td>*</td><td>Statutory <span>(Details : {http://terminology.hl7.org/CodeSystem/contracttermtypecodes code \'statutory\' = \'Statutory)</span></td><td>opt-in <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ActCode code \'OPTIN\' = \'opt-in)</span></td><td>Can\'t refuse</td></tr></table><h3>Assets</h3><table><tr><td>-</td><td><b>Period</b></td></tr><tr><td>*</td><td>01/11/2013 9:18:27 PM --&gt; 01/11/2019 9:18:27 PM</td></tr></table><blockquote><p><b>action</b></p><p><b>type</b>: Action A <span>(Details : {http://terminology.hl7.org/CodeSystem/contractaction code \'action-a\' = \'Action A)</span></p><blockquote><p><b>subject</b></p><p><b>reference</b>: <a>VA Ann Arbor Healthcare System</a></p><p><b>role</b>: Recipient of restricted health information <span>(Details : {http://mdhhs.org/fhir/consent-actor-type code \'IR\' = \'IR\', given as \'Recipient\'})</span></p></blockquote><blockquote><p><b>subject</b></p><p><b>reference</b>: <a>Community Mental Health Clinic</a></p><p><b>role</b>: Sender of restricted health information <span>(Details : {http://mdhhs.org/fhir/consent-actor-type code \'IS\' = \'IS\', given as \'Sender\'})</span></p></blockquote><p><b>intent</b>: health program reporting <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ActReason code \'HPRGRP\' = \'health program reporting)</span></p><p><b>status</b>: Sample <span>(Details )</span></p></blockquote></blockquote><h3>Signers</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Party</b></td><td><b>Signature</b></td></tr><tr><td>*</td><td>SELF (Details: http://mdhhs.org/fhir/consent-signer-type code SELF = \'SELF\', stated as \'null\')</td><td><a>Alice Recruit</a></td><td/></tr></table><h3>Legals</h3><table><tr><td>-</td><td><b>Content[x]</b></td></tr><tr><td>*</td><td/></tr></table></div>"
+  }
+}
+status {
+  value: EXECUTED
+}
+content_derivative {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/contract-content-derivative"
+    }
+    code {
+      value: "registration"
+    }
+  }
+}
+issued {
+  value_us: 1383355107000000
+  timezone: "-04:00"
+  precision: SECOND
+}
+applies {
+  start {
+    value_us: 1383355107000000
+    timezone: "-04:00"
+    precision: SECOND
+  }
+}
+subject {
+  patient_id {
+    value: "f201"
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://mdhhs.org/fhir/consentdirective-type"
+    }
+    code {
+      value: "OPTIN"
+    }
+  }
+  text {
+    value: "Opt-in consent directive"
+  }
+}
+sub_type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/consentcategorycodes"
+    }
+    code {
+      value: "hcd"
+    }
+  }
+}
+term {
+  offer {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/contracttermtypecodes"
+        }
+        code {
+          value: "statutory"
+        }
+      }
+    }
+    decision {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+        }
+        code {
+          value: "OPTIN"
+        }
+      }
+    }
+    text {
+      value: "Can\'t refuse"
+    }
+  }
+  asset {
+    period {
+      start {
+        value_us: 1383355107000000
+        timezone: "-04:00"
+        precision: SECOND
+      }
+      end {
+        value_us: 1572657507000000
+        timezone: "-04:00"
+        precision: SECOND
+      }
+    }
+  }
+  action {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/contractaction"
+        }
+        code {
+          value: "action-a"
+        }
+      }
+    }
+    subject {
+      reference {
+        organization_id {
+          value: "f001"
+        }
+        display {
+          value: "VA Ann Arbor Healthcare System"
+        }
+      }
+      role {
+        coding {
+          system {
+            value: "http://mdhhs.org/fhir/consent-actor-type"
+          }
+          code {
+            value: "IR"
+          }
+          display {
+            value: "Recipient"
+          }
+        }
+        text {
+          value: "Recipient of restricted health information"
+        }
+      }
+    }
+    subject {
+      reference {
+        organization_id {
+          value: "2"
+        }
+        display {
+          value: "Community Mental Health Clinic"
+        }
+      }
+      role {
+        coding {
+          system {
+            value: "http://mdhhs.org/fhir/consent-actor-type"
+          }
+          code {
+            value: "IS"
+          }
+          display {
+            value: "Sender"
+          }
+        }
+        text {
+          value: "Sender of restricted health information"
+        }
+      }
+    }
+    intent {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+        }
+        code {
+          value: "HPRGRP"
+        }
+      }
+    }
+    status {
+      text {
+        value: "Sample"
+      }
+    }
+  }
+}
+signer {
+  type {
+    system {
+      value: "http://mdhhs.org/fhir/consent-signer-type"
+    }
+    code {
+      value: "SELF"
+    }
+  }
+  party {
+    patient_id {
+      value: "f201"
+    }
+    display {
+      value: "Alice Recruit"
+    }
+  }
+  signature {
+    type {
+      system {
+        value: "urn:iso-astm:E1762-95:2013"
+      }
+      code {
+        value: "1.2.840.10065.1.12.1.1"
+      }
+    }
+    when {
+      value_us: 1486547854000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    who {
+      patient_id {
+        value: "f201"
+      }
+    }
+  }
+}
+legal {
+  content {
+    attachment {
+      content_type {
+        value: "application/pdf"
+      }
+      language {
+        value: "en-US"
+      }
+      url {
+        value: "http://org.mihin.ecms/ConsentDirective-2121"
+      }
+      title {
+        value: "MDHHS-5515 Consent To Share Your Health Information"
+      }
+    }
+  }
+}

@@ -1,0 +1,205 @@
+id {
+  value: "cardiacdiet"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: cardiacdiet</p><p><b>identifier</b>: 123</p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>patient</b>: <a>Peter Chalmers</a></p><p><b>encounter</b>: <a>Inpatient</a></p><p><b>dateTime</b>: 17/09/2014</p><p><b>orderer</b>: <a>Dr Adam Careful</a></p><p><b>allergyIntolerance</b>: <a>Cashew Nuts</a></p><p><b>foodPreferenceModifier</b>: Dairy Free <span>(Details : {http://terminology.hl7.org/CodeSystem/diet code \'dairy-free\' = \'Dairy Free)</span></p><p><b>excludeFoodModifier</b>: Cashew Nut <span>(Details : {SNOMED CT code \'227493005\' = \'Cashew nuts\', given as \'Cashew Nut\'})</span></p><blockquote><p><b>oralDiet</b></p><p><b>type</b>: Low sodium diet <span>(Details : {SNOMED CT code \'386619000\' = \'Low sodium diet\', given as \'Low sodium diet\'}; {http://goodhealthhospital.org/diet-type-codes code \'1040\' = \'1040\', given as \'Low Sodium Diet\'})</span>, Fluid restricted diet <span>(Details : {SNOMED CT code \'226208002\' = \'Fluid restricted diet\', given as \'Fluid restricted diet\'}; {http://goodhealthhospital.org/diet-type-codes code \'1040\' = \'1040\', given as \'Fluid restricted diet\'})</span></p><blockquote><p><b>nutrient</b></p><p><b>modifier</b>: Sodium <span>(Details : {SNOMED CT code \'39972003\' = \'Sodium\', given as \'Sodium\'})</span></p><p><b>amount</b>: 2 grams<span> (Details: UCUM code g = \'g\')</span></p></blockquote><blockquote><p><b>nutrient</b></p><p><b>modifier</b>: Fluid <span>(Details : {SNOMED CT code \'33463005\' = \'Fluid\', given as \'Fluid\'})</span></p><p><b>amount</b>: 1500 milliliter<span> (Details: UCUM code mL = \'mL\')</span></p></blockquote><p><b>instruction</b>: Starting on 2/10 breakfast, maximum 400 ml fluids per meal</p></blockquote></div>"
+  }
+}
+identifier {
+  system {
+    value: "http://goodhealthhospital.org/nutrition-requests"
+  }
+  value {
+    value: "123"
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: ORDER
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter Chalmers"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+  display {
+    value: "Inpatient"
+  }
+}
+date_time {
+  value_us: 1410876000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+orderer {
+  practitioner_id {
+    value: "example"
+  }
+  display {
+    value: "Dr Adam Careful"
+  }
+}
+allergy_intolerance {
+  allergy_intolerance_id {
+    value: "example"
+  }
+  display {
+    value: "Cashew Nuts"
+  }
+}
+food_preference_modifier {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/diet"
+    }
+    code {
+      value: "dairy-free"
+    }
+  }
+}
+exclude_food_modifier {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    version {
+      value: "20140730"
+    }
+    code {
+      value: "227493005"
+    }
+    display {
+      value: "Cashew Nut"
+    }
+  }
+}
+oral_diet {
+  type {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "386619000"
+      }
+      display {
+        value: "Low sodium diet"
+      }
+    }
+    coding {
+      system {
+        value: "http://goodhealthhospital.org/diet-type-codes"
+      }
+      code {
+        value: "1040"
+      }
+      display {
+        value: "Low Sodium Diet"
+      }
+    }
+    text {
+      value: "Low sodium diet"
+    }
+  }
+  type {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "226208002"
+      }
+      display {
+        value: "Fluid restricted diet"
+      }
+    }
+    coding {
+      system {
+        value: "http://goodhealthhospital.org/diet-type-codes"
+      }
+      code {
+        value: "1040"
+      }
+      display {
+        value: "Fluid restricted diet"
+      }
+    }
+    text {
+      value: "Fluid restricted diet"
+    }
+  }
+  nutrient {
+    modifier {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "39972003"
+        }
+        display {
+          value: "Sodium"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "2"
+      }
+      unit {
+        value: "grams"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "g"
+      }
+    }
+  }
+  nutrient {
+    modifier {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "33463005"
+        }
+        display {
+          value: "Fluid"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "1500"
+      }
+      unit {
+        value: "milliliter"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mL"
+      }
+    }
+  }
+  instruction {
+    value: "Starting on 2/10 breakfast, maximum 400 ml fluids per meal"
+  }
+}

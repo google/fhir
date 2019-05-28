@@ -1,0 +1,76 @@
+id {
+  value: "bloodgroup"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: bloodgroup</p><p><b>status</b>: final</p><p><b>category</b>: Laboratory <span>(Details : {http://terminology.hl7.org/CodeSystem/observation-category code \'laboratory\' = \'Laboratory\', given as \'Laboratory\'})</span></p><p><b>code</b>: Blood Group <span>(Details : {LOINC code \'883-9\' = \'ABO group [Type] in Blood\', given as \'ABO group [Type] in Blood\'})</span></p><p><b>subject</b>: <a>Patient/infant</a></p><p><b>effective</b>: 11/03/2018 4:07:54 PM</p><p><b>value</b>: A <span>(Details : {SNOMED CT code \'112144000\' = \'Blood group A\', given as \'Blood group A (finding)\'})</span></p></div>"
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/observation-category"
+    }
+    code {
+      value: "laboratory"
+    }
+    display {
+      value: "Laboratory"
+    }
+  }
+  text {
+    value: "Laboratory"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "883-9"
+    }
+    display {
+      value: "ABO group [Type] in Blood"
+    }
+  }
+  text {
+    value: "Blood Group"
+  }
+}
+subject {
+  patient_id {
+    value: "infant"
+  }
+}
+effective {
+  date_time {
+    value_us: 1520784474000000
+    timezone: "+00:00"
+    precision: SECOND
+  }
+}
+value {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "112144000"
+      }
+      display {
+        value: "Blood group A (finding)"
+      }
+    }
+    text {
+      value: "A"
+    }
+  }
+}

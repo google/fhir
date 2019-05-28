@@ -1,0 +1,329 @@
+id {
+  value: "kdn5-example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Administer gemcitabine and carboplatin.</div>"
+  }
+}
+contained {
+  medication_request {
+    id {
+      value: "1111"
+    }
+    status {
+      value: UNKNOWN
+    }
+    intent {
+      value: PROPOSAL
+    }
+    medication {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+          }
+          code {
+            value: "12574"
+          }
+          display {
+            value: "gemcitabine"
+          }
+        }
+        text {
+          value: "gemcitabine"
+        }
+      }
+    }
+    subject {
+      patient_id {
+        value: "example"
+      }
+    }
+    dosage_instruction {
+      text {
+        value: "1250 mg/m\302\262 IV over 30 minutes"
+      }
+      timing {
+        repeat {
+          duration {
+            value: "30"
+          }
+          duration_unit {
+            value: MIN
+          }
+        }
+      }
+      route {
+        text {
+          value: "IV"
+        }
+      }
+      dose_and_rate {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+            }
+            code {
+              value: "ordered"
+            }
+            display {
+              value: "Ordered"
+            }
+          }
+        }
+        dose {
+          quantity {
+            value {
+              value: "1250"
+            }
+            unit {
+              value: "mg/m\302\262"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+contained {
+  medication_request {
+    id {
+      value: "2222"
+    }
+    status {
+      value: UNKNOWN
+    }
+    intent {
+      value: PROPOSAL
+    }
+    medication {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+          }
+          code {
+            value: "40048"
+          }
+          display {
+            value: "Carboplatin"
+          }
+        }
+        text {
+          value: "CARBOplatin"
+        }
+      }
+    }
+    subject {
+      patient_id {
+        value: "example"
+      }
+    }
+    dosage_instruction {
+      text {
+        value: "AUC 5 IV over 30 minutes"
+      }
+      timing {
+        repeat {
+          duration {
+            value: "30"
+          }
+          duration_unit {
+            value: MIN
+          }
+        }
+      }
+      route {
+        text {
+          value: "IV"
+        }
+      }
+      dose_and_rate {
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+            }
+            code {
+              value: "ordered"
+            }
+            display {
+              value: "Ordered"
+            }
+          }
+        }
+        dose {
+          quantity {
+            extension {
+              url {
+                value: "http://example.org/fhir/AUC-dose"
+              }
+              value {
+                integer {
+                  value: 5
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+identifier {
+  value {
+    value: "requestgroup-kdn5"
+  }
+}
+instantiates_canonical {
+  value: "PlanDefinition/KDN5"
+}
+status {
+  value: DRAFT
+}
+intent {
+  value: PLAN
+}
+priority {
+  value: ROUTINE
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+authored_on {
+  value_us: 1488821460000000
+  timezone: "Z"
+  precision: SECOND
+}
+author {
+  practitioner_id {
+    value: "1"
+  }
+}
+action {
+  selection_behavior {
+    value: EXACTLY_ONE
+  }
+  action {
+    selection_behavior {
+      value: ALL
+    }
+    action {
+      grouping_behavior {
+        value: SENTENCE_GROUP
+      }
+      selection_behavior {
+        value: EXACTLY_ONE
+      }
+      action {
+        id {
+          value: "cycle-definition-1"
+        }
+        text_equivalent {
+          value: "21-day cycle for 6 cycles"
+        }
+        timing {
+          timing {
+            repeat {
+              count {
+                value: 6
+              }
+              duration {
+                value: "21"
+              }
+              duration_unit {
+                value: D
+              }
+            }
+          }
+        }
+        action {
+          id {
+            value: "action-1"
+          }
+          extension {
+            url {
+              value: "http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle"
+            }
+            extension {
+              url {
+                value: "day"
+              }
+              value {
+                integer {
+                  value: 1
+                }
+              }
+            }
+            extension {
+              url {
+                value: "day"
+              }
+              value {
+                integer {
+                  value: 8
+                }
+              }
+            }
+          }
+          text_equivalent {
+            value: "Gemcitabine 1250 mg/m\302\262 IV over 30 minutes on days 1 and 8"
+          }
+          resource {
+            fragment {
+              value: "1111"
+            }
+          }
+        }
+        action {
+          id {
+            value: "action-2"
+          }
+          extension {
+            url {
+              value: "http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle"
+            }
+            extension {
+              url {
+                value: "day"
+              }
+              value {
+                integer {
+                  value: 1
+                }
+              }
+            }
+          }
+          text_equivalent {
+            value: "CARBOplatin AUC 5 IV over 30 minutes on Day 1"
+          }
+          related_action {
+            action_id {
+              value: "action-1"
+            }
+            relationship {
+              value: CONCURRENT_WITH_START
+            }
+          }
+          resource {
+            fragment {
+              value: "2222"
+            }
+          }
+        }
+      }
+    }
+  }
+}

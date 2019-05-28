@@ -1,0 +1,86 @@
+id {
+  value: "medication"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medication</p><p><b>clinicalStatus</b>: Active <span>(Details : {http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical code \'active\' = \'Active\', given as \'Active\'})</span></p><p><b>verificationStatus</b>: Unconfirmed <span>(Details : {http://terminology.hl7.org/CodeSystem/allergyintolerance-verification code \'unconfirmed\' = \'Unconfirmed\', given as \'Unconfirmed\'})</span></p><p><b>category</b>: medication</p><p><b>criticality</b>: high</p><p><b>code</b>: Penicillin G <span>(Details : {RxNorm code \'7980\' = \'Penicillin G\', given as \'Penicillin G\'})</span></p><p><b>patient</b>: <a>Patient/example</a></p><p><b>recordedDate</b>: 01/03/2010</p><p><b>recorder</b>: <a>Practitioner/13</a></p><h3>Reactions</h3><table><tr><td>-</td><td><b>Manifestation</b></td></tr><tr><td>*</td><td>Hives <span>(Details : {SNOMED CT code \'247472004\' = \'Weal\', given as \'Hives\'})</span></td></tr></table></div>"
+  }
+}
+clinical_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+    }
+    code {
+      value: "active"
+    }
+    display {
+      value: "Active"
+    }
+  }
+}
+verification_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification"
+    }
+    code {
+      value: "unconfirmed"
+    }
+    display {
+      value: "Unconfirmed"
+    }
+  }
+}
+category {
+  value: MEDICATION
+}
+criticality {
+  value: HIGH
+}
+code {
+  coding {
+    system {
+      value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+    }
+    code {
+      value: "7980"
+    }
+    display {
+      value: "Penicillin G"
+    }
+  }
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+}
+recorded_date {
+  value_us: 1267362000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+recorder {
+  practitioner_id {
+    value: "13"
+  }
+}
+reaction {
+  manifestation {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "247472004"
+      }
+      display {
+        value: "Hives"
+      }
+    }
+  }
+}

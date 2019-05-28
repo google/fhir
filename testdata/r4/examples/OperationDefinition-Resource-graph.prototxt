@@ -1,0 +1,135 @@
+id {
+  value: "Resource-graph"
+}
+meta {
+  last_updated {
+    value_us: 1545910674724000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <h2>Return a graph of resources</h2>\n            <p>OPERATION: Return a graph of resources</p>\n            <p>The official URL for this operation definition is: </p>\n            <pre>http://hl7.org/fhir/OperationDefinition/Resource-graph</pre>\n            <div>\n              <p>Return an entire graph of resources based on a \n                <a href=\"graphdefinition.html\">GraphDefinition</a>. The operation is invoked on a specific instance of a resource, and the graph definition tells the server what other resources to return in the same packaage\n              </p>\n\n            </div>\n            <p>URL: [base]/Resource/[id]/$graph</p>\n            <p>Parameters</p>\n            <table class=\"grid\">\n              <tr>\n                <td>\n                  <b>Use</b>\n                </td>\n                <td>\n                  <b>Name</b>\n                </td>\n                <td>\n                  <b>Cardinality</b>\n                </td>\n                <td>\n                  <b>Type</b>\n                </td>\n                <td>\n                  <b>Binding</b>\n                </td>\n                <td>\n                  <b>Documentation</b>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>graph</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#uri\">uri</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Servers MAY choose to allow any graph definition to be specified, but MAY require that the client choose a graph definition from a specific list of known supported definitions. The server is not required to support a formal definition of the graph on the end point</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>result</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"bundle.html\">Bundle</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The set of resources that were in the graph based on the provided definition</p>\n\n                  </div>\n                </td>\n              </tr>\n            </table>\n            <div/>\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+      value: 1
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "trial-use"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/OperationDefinition/Resource-graph"
+}
+version {
+  value: "4.0.0"
+}
+name {
+  value: "Return a graph of resources"
+}
+status {
+  value: DRAFT
+}
+kind {
+  value: OPERATION
+}
+date {
+  value_us: 1545910674000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+publisher {
+  value: "HL7 (FHIR Project)"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "fhir@lists.hl7.org"
+    }
+  }
+}
+description {
+  value: "Return an entire graph of resources based on a [GraphDefinition](graphdefinition.html). The operation is invoked on a specific instance of a resource, and the graph definition tells the server what other resources to return in the same packaage"
+}
+code {
+  value: "graph"
+}
+resource {
+  value: RESOURCE
+}
+system {
+}
+type {
+}
+instance {
+  value: true
+}
+parameter {
+  name {
+    value: "graph"
+  }
+  use {
+    value: IN
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "Servers MAY choose to allow any graph definition to be specified, but MAY require that the client choose a graph definition from a specific list of known supported definitions. The server is not required to support a formal definition of the graph on the end point"
+  }
+  type {
+    value: URI
+  }
+}
+parameter {
+  name {
+    value: "result"
+  }
+  use {
+    value: OUT
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The set of resources that were in the graph based on the provided definition"
+  }
+  type {
+    value: BUNDLE
+  }
+}

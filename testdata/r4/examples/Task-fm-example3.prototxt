@@ -1,0 +1,103 @@
+id {
+  value: "fm-example3"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<p>\n\t\t\t\t<b> Generated Narrative with Details</b>\n\t\t\t</p>\n\t\t</div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http:/happyvalley.com/task"
+  }
+  value {
+    value: "20181012-001"
+  }
+}
+status {
+  value: REQUESTED
+}
+intent {
+  value: ORDER
+}
+priority {
+  value: STAT
+}
+code {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/financialtaskcode"
+    }
+    code {
+      value: "release"
+    }
+  }
+}
+focus {
+  identifier {
+    system {
+      value: "http://happyvalley.com/claim"
+    }
+    value {
+      value: "1501"
+    }
+  }
+}
+authored_on {
+  value_us: 1538605505000000
+  timezone: "+10:00"
+  precision: SECOND
+}
+last_modified {
+  value_us: 1538605505000000
+  timezone: "+10:00"
+  precision: SECOND
+}
+requester {
+  organization_id {
+    value: "example"
+  }
+  display {
+    value: "Happy Valley Clinic"
+  }
+}
+owner {
+  identifier {
+    system {
+      value: "http://nationalinsurers.com/identifiers"
+    }
+    value {
+      value: "12345"
+    }
+  }
+}
+input {
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/financial-taskinputtype"
+      }
+      code {
+        value: "origresponse"
+      }
+    }
+  }
+  value {
+    reference {
+      identifier {
+        system {
+          value: "http://nationalinsurers.com/claimresponse"
+        }
+        value {
+          value: "CR201810040001234"
+        }
+      }
+    }
+  }
+}

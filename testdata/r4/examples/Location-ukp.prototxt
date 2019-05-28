@@ -1,0 +1,49 @@
+id {
+  value: "ukp"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">UK Pharmacies</div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+name {
+  value: "UK Pharmacies"
+}
+description {
+  value: "All Pharmacies in the United Kingdom covered by the National Pharmacy Association"
+}
+mode {
+  value: KIND
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+    }
+    code {
+      value: "PHARM"
+    }
+    display {
+      value: "Pharmacy"
+    }
+  }
+}
+physical_type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/location-physical-type"
+    }
+    code {
+      value: "jdn"
+    }
+    display {
+      value: "Jurisdiction"
+    }
+  }
+}

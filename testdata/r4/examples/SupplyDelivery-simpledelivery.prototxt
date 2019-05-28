@@ -1,0 +1,78 @@
+id {
+  value: "simpledelivery"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: simpledelivery</p><p><b>identifier</b>: Order10284</p><p><b>basedOn</b>: <a>SupplyRequest/simpleorder</a></p><p><b>partOf</b>: Central Supply Restock</p><p><b>status</b>: completed</p><p><b>type</b>: Blood collect tubes blue cap <span>(Details : {http://terminology.hl7.org/CodeSystem/supply-item-type code \'device\' = \'Device)</span></p><h3>SuppliedItems</h3><table><tr><td>-</td><td><b>Quantity</b></td><td><b>Item[x]</b></td></tr><tr><td>*</td><td>10</td><td>Blood collect tubes blue cap <span>(Details : {[not stated] code \'BlueTubes\' = \'BlueTubes\', given as \'Blood collect tubes blue cap\'})</span></td></tr></table><p><b>occurrence</b>: 31/12/2016</p><p><b>supplier</b>: Vendor1</p><p><b>destination</b>: Location 1</p></div>"
+  }
+}
+identifier {
+  value {
+    value: "Order10284"
+  }
+}
+based_on {
+  supply_request_id {
+    value: "simpleorder"
+  }
+}
+part_of {
+  display {
+    value: "Central Supply Restock"
+  }
+}
+status {
+  value: COMPLETED
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/supply-item-type"
+    }
+    code {
+      value: "device"
+    }
+  }
+  text {
+    value: "Blood collect tubes blue cap"
+  }
+}
+supplied_item {
+  quantity {
+    value {
+      value: "10"
+    }
+  }
+  item {
+    codeable_concept {
+      coding {
+        code {
+          value: "BlueTubes"
+        }
+        display {
+          value: "Blood collect tubes blue cap"
+        }
+      }
+    }
+  }
+}
+occurrence {
+  date_time {
+    value_us: 1483102800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+supplier {
+  display {
+    value: "Vendor1"
+  }
+}
+destination {
+  display {
+    value: "Location 1"
+  }
+}

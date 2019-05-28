@@ -1,0 +1,99 @@
+id {
+  value: "physical-therapy"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Assessment of passive range of motion for both knees on Sept 27, 2016 due to osteoarthritis</div>"
+  }
+}
+based_on {
+  service_request_id {
+    value: "physical-therapy"
+  }
+  display {
+    value: "Order for the assessment of passive range of motion"
+  }
+}
+status {
+  value: COMPLETED
+}
+category {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "386053000"
+    }
+    display {
+      value: "Evaluation procedure (procedure)"
+    }
+  }
+  text {
+    value: "Evaluation"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "710830005"
+    }
+    display {
+      value: "Assessment of passive range of motion (procedure)"
+    }
+  }
+  text {
+    value: "Assessment of passive range of motion"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+performed {
+  date_time {
+    value_us: 1474898400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+performer {
+  actor {
+    display {
+      value: "Paul Therapist, PT"
+    }
+  }
+}
+location {
+  display {
+    value: "Sawbones Orthopedic Clinic"
+  }
+}
+reason_code {
+  text {
+    value: "assessment of mobility limitations due to osteoarthritis"
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "36701003"
+    }
+    display {
+      value: "Both knees (body structure)"
+    }
+  }
+  text {
+    value: "Both knees"
+  }
+}

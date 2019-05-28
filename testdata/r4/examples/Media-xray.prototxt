@@ -1,0 +1,94 @@
+id {
+  value: "xray"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Xray of left hand for Patient Henry Levin (MRN 12345) 2016-03-15</div>"
+  }
+}
+based_on {
+  identifier {
+    system {
+      value: "http://someclinic.org/fhir/NamingSystem/imaging-orders"
+    }
+    value {
+      value: "111222"
+    }
+    assigner {
+      display {
+        value: "XYZ Medical Clinic"
+      }
+    }
+  }
+}
+status {
+  value: COMPLETED
+}
+modality {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "39714003"
+    }
+    display {
+      value: "Skeletal X-ray of wrist and hand"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+created {
+  date_time {
+    value_us: 1457960400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "85151006"
+    }
+    display {
+      value: "Structure of left hand (body structure)"
+    }
+  }
+}
+height {
+  value: 432
+}
+width {
+  value: 640
+}
+content {
+  id {
+    value: "a1"
+  }
+  content_type {
+    value: "image/jpeg"
+  }
+  url {
+    value: "http://someimagingcenter.org/fhir/Binary/A12345"
+  }
+  creation {
+    value_us: 1457960400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}

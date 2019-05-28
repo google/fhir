@@ -1,0 +1,163 @@
+id {
+  value: "diabeticsupplement"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: diabeticsupplement</p><p><b>identifier</b>: 123</p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>patient</b>: <a>Peter Chalmers</a></p><p><b>encounter</b>: <a>Inpatient</a></p><p><b>dateTime</b>: 17/09/2014</p><p><b>orderer</b>: <a>Dr Adam Careful</a></p><p><b>allergyIntolerance</b>: <a>Cashew Nuts</a></p><p><b>foodPreferenceModifier</b>: Kosher <span>(Details : {http://terminology.hl7.org/CodeSystem/diet code \'kosher\' = \'Kosher)</span></p><p><b>excludeFoodModifier</b>: Cashew Nut <span>(Details : {SNOMED CT code \'227493005\' = \'Cashew nuts\', given as \'Cashew Nut\'})</span></p><h3>Supplements</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>ProductName</b></td><td><b>Schedule</b></td><td><b>Quantity</b></td></tr><tr><td>*</td><td>Adult diabetic formula <span>(Details : {SNOMED CT code \'443051000124104\' = \'Adult diabetic specialty formula (product)\', given as \'Adult diabetes specialty formula\'}; {http://goodhealthhospital.org/supplement-type-codes code \'1010\' = \'1010\', given as \'Adult diabetic formula\'})</span></td><td>Glucerna</td><td>Starting 10/02/2015 3:00:00 PM, Do Once per 24 hours</td><td>1 8 oz bottle</td></tr></table></div>"
+  }
+}
+identifier {
+  system {
+    value: "http://goodhealthhospital.org/nutrition-requests"
+  }
+  value {
+    value: "123"
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: ORDER
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter Chalmers"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+  display {
+    value: "Inpatient"
+  }
+}
+date_time {
+  value_us: 1410876000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+orderer {
+  practitioner_id {
+    value: "example"
+  }
+  display {
+    value: "Dr Adam Careful"
+  }
+}
+allergy_intolerance {
+  allergy_intolerance_id {
+    value: "example"
+  }
+  display {
+    value: "Cashew Nuts"
+  }
+}
+food_preference_modifier {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/diet"
+    }
+    code {
+      value: "kosher"
+    }
+  }
+}
+exclude_food_modifier {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    version {
+      value: "20140730"
+    }
+    code {
+      value: "227493005"
+    }
+    display {
+      value: "Cashew Nut"
+    }
+  }
+}
+supplement {
+  type {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "443051000124104"
+      }
+      display {
+        value: "Adult diabetes specialty formula"
+      }
+    }
+    coding {
+      system {
+        value: "http://goodhealthhospital.org/supplement-type-codes"
+      }
+      code {
+        value: "1010"
+      }
+      display {
+        value: "Adult diabetic formula"
+      }
+    }
+    text {
+      value: "Adult diabetic formula"
+    }
+  }
+  product_name {
+    value: "Glucerna"
+  }
+  schedule {
+    repeat {
+      bounds {
+        period {
+          start {
+            value_us: 1423580400000000
+            timezone: "Z"
+            precision: SECOND
+          }
+        }
+      }
+      frequency {
+        value: 1
+      }
+      period {
+        value: "24"
+      }
+      period_unit {
+        value: H
+      }
+    }
+  }
+  schedule {
+    repeat {
+      duration {
+        value: "1"
+      }
+      duration_unit {
+        value: H
+      }
+      when {
+        value: HS
+      }
+    }
+  }
+  quantity {
+    value {
+      value: "1"
+    }
+    unit {
+      value: "8 oz bottle"
+    }
+  }
+}

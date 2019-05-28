@@ -1,0 +1,75 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\tHealth Intersections CarePlan Hub<br/>\n\t\t\tCarePlans can be uploaded to/from this loccation\n\t\t</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://example.org/enpoint-identifier"
+  }
+  value {
+    value: "epcp12"
+  }
+}
+status {
+  value: ACTIVE
+}
+connection_type {
+  system {
+    value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+  }
+  code {
+    value: "hl7-fhir-rest"
+  }
+}
+name {
+  value: "Health Intersections CarePlan Hub"
+}
+managing_organization {
+  organization_id {
+    value: "hl7"
+  }
+}
+contact {
+  system {
+    value: EMAIL
+  }
+  value {
+    value: "endpointmanager@example.org"
+  }
+  use {
+    value: WORK
+  }
+}
+period {
+  start {
+    value_us: 1409493600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+payload_type {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/resource-types"
+    }
+    code {
+      value: "CarePlan"
+    }
+  }
+}
+payload_mime_type {
+  value: "application/fhir+xml"
+}
+address {
+  value: "http://fhir3.healthintersections.com.au/open/CarePlan"
+}
+header {
+  value: "bearer-code BASGS534s4"
+}

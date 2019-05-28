@@ -1,0 +1,107 @@
+id {
+  value: "composition-example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Example of a library used as a composition of other artifacts.\n    </div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://example.org"
+  }
+  value {
+    value: "Zika Artifacts"
+  }
+}
+version {
+  value: "1.0.0"
+}
+title {
+  value: "Zika Artifacts"
+}
+status {
+  value: DRAFT
+}
+type {
+  coding {
+    code {
+      value: "asset-collection"
+    }
+  }
+}
+date {
+  value_us: 1489064400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+description {
+  value: "Artifacts required for implementation of Zika Virus Management"
+}
+topic {
+  text {
+    value: "Zika Virus Management"
+  }
+}
+related_artifact {
+  type {
+    value: COMPOSED_OF
+  }
+  resource {
+    value: "ActivityDefinition/administer-zika-virus-exposure-assessment"
+  }
+}
+related_artifact {
+  type {
+    value: COMPOSED_OF
+  }
+  resource {
+    value: "ActivityDefinition/order-serum-zika-dengue-virus-igm"
+  }
+}
+related_artifact {
+  type {
+    value: COMPOSED_OF
+  }
+  resource {
+    value: "ActivityDefinition/provide-mosquito-prevention-advice"
+  }
+}
+related_artifact {
+  type {
+    value: COMPOSED_OF
+  }
+  resource {
+    value: "Library/zika-virus-intervention-logic"
+  }
+}
+related_artifact {
+  type {
+    value: COMPOSED_OF
+  }
+  resource {
+    value: "PlanDefinition/zika-virus-intervention"
+  }
+}
+related_artifact {
+  type {
+    value: COMPOSED_OF
+  }
+  resource {
+    value: "Questionnaire/zika-virus-exposure-assessment"
+  }
+}
+related_artifact {
+  type {
+    value: DERIVED_FROM
+  }
+  url {
+    value: "https://www.cdc.gov/mmwr/volumes/65/wr/mm6539e1.htm?s_cid=mm6539e1_w"
+  }
+}

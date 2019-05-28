@@ -1,0 +1,135 @@
+id {
+  value: "f201"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <pre>Lifelines Questionnaire 1 part 1\n  1. Do you have allergies?\n  2. General Questions:\n    2.a) What is your gender?\n    2.b) What is your date of birth?\n    2.c) What is your country of birth?\n    2.d) What is your marital status?\n    3. Intoxications:\n      3.a) Do you smoke?\n      3.b) Do you drink alcohol?</pre>\n    </div>"
+  }
+}
+url {
+  value: "http://hl7.org/fhir/Questionnaire/f201"
+}
+status {
+  value: ACTIVE
+}
+subject_type {
+  value: PATIENT
+}
+date {
+  value_us: 1262264400000000
+  timezone: "Australia/Sydney"
+  precision: YEAR
+}
+code {
+  system {
+    value: "http://example.org/system/code/lifelines/nl"
+  }
+  code {
+    value: "VL 1-1, 18-65_1.2.2"
+  }
+  display {
+    value: "Lifelines Questionnaire 1 part 1"
+  }
+}
+item {
+  link_id {
+    value: "1"
+  }
+  text {
+    value: "Do you have allergies?"
+  }
+  type {
+    value: BOOLEAN
+  }
+}
+item {
+  link_id {
+    value: "2"
+  }
+  text {
+    value: "General questions"
+  }
+  type {
+    value: GROUP
+  }
+  item {
+    link_id {
+      value: "2.1"
+    }
+    text {
+      value: "What is your gender?"
+    }
+    type {
+      value: STRING
+    }
+  }
+  item {
+    link_id {
+      value: "2.2"
+    }
+    text {
+      value: "What is your date of birth?"
+    }
+    type {
+      value: DATE
+    }
+  }
+  item {
+    link_id {
+      value: "2.3"
+    }
+    text {
+      value: "What is your country of birth?"
+    }
+    type {
+      value: STRING
+    }
+  }
+  item {
+    link_id {
+      value: "2.4"
+    }
+    text {
+      value: "What is your marital status?"
+    }
+    type {
+      value: STRING
+    }
+  }
+}
+item {
+  link_id {
+    value: "3"
+  }
+  text {
+    value: "Intoxications"
+  }
+  type {
+    value: GROUP
+  }
+  item {
+    link_id {
+      value: "3.1"
+    }
+    text {
+      value: "Do you smoke?"
+    }
+    type {
+      value: BOOLEAN
+    }
+  }
+  item {
+    link_id {
+      value: "3.2"
+    }
+    text {
+      value: "Do you drink alchohol?"
+    }
+    type {
+      value: BOOLEAN
+    }
+  }
+}

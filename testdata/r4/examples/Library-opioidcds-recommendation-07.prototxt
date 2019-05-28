@@ -1,0 +1,235 @@
+id {
+  value: "opioidcds-recommendation-07"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: opioidcds-recommendation-07</p><p><b>identifier</b>: OpioidCDS_REC_07 (OFFICIAL)</p><p><b>version</b>: 0.1.0</p><p><b>title</b>: Opioid CDS Logic for recommendation #7</p><p><b>status</b>: active</p><p><b>experimental</b>: false</p><p><b>type</b>: Logic Library <span>(Details : {http://terminology.hl7.org/CodeSystem/library-type code \'logic-library\' = \'Logic Library\', given as \'Logic Library\'})</span></p><p><b>date</b>: 25/03/2018 1:49:09 PM</p><p><b>publisher</b>: Centers for Disease Control and Prevention (CDC)</p><p><b>description</b>: Opioid decision support logic to evaluate benefits and harms with patients within 1 to 4 weeks of starting opioid therapy and harms of continued therapy with patients every 3 months or more frequently.</p><p><b>useContext</b>: , </p><p><b>jurisdiction</b>: United States of America <span>(Details : {urn:iso:std:iso:3166 code \'US\' = \'United States of America\', given as \'United States of America\'})</span></p><p><b>purpose</b>: The purpose of this library is to determine whether the patient has been evaluated for benefits and harms within 1 to 4 weeks of starting opioid therapy and every 3 months or more subsequently.</p><p><b>usage</b>: This library is used to notify the prescriber/user whether an evaluation for benefits and harms associated with opioid therapy is recommended for the patient.</p><p><b>copyright</b>: \302\251 CDC 2016+.</p><p><b>topic</b>: Opioid Prescribing <span>(Details )</span></p><p><b>author</b>: , , , </p><p><b>relatedArtifact</b>: , </p><p><b>dataRequirement</b>: , , , , </p><p><b>content</b>: </p></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  value {
+    value: "OpioidCDS_REC_07"
+  }
+}
+version {
+  value: "0.1.0"
+}
+title {
+  value: "Opioid CDS Logic for recommendation #7"
+}
+status {
+  value: ACTIVE
+}
+experimental {
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/library-type"
+    }
+    code {
+      value: "logic-library"
+    }
+    display {
+      value: "Logic Library"
+    }
+  }
+}
+date {
+  value_us: 1522007349000000
+  timezone: "-06:00"
+  precision: SECOND
+}
+publisher {
+  value: "Centers for Disease Control and Prevention (CDC)"
+}
+description {
+  value: "Opioid decision support logic to evaluate benefits and harms with patients within 1 to 4 weeks of starting opioid therapy and harms of continued therapy with patients every 3 months or more frequently."
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+    display {
+      value: "Clinical Focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "182888003"
+        }
+        display {
+          value: "Medication requested (situation)"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+    display {
+      value: "Clinical Focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "82423001"
+        }
+        display {
+          value: "Chronic pain (finding)"
+        }
+      }
+    }
+  }
+}
+jurisdiction {
+  coding {
+    system {
+      value: "urn:iso:std:iso:3166"
+    }
+    code {
+      value: "US"
+    }
+    display {
+      value: "United States of America"
+    }
+  }
+}
+purpose {
+  value: "The purpose of this library is to determine whether the patient has been evaluated for benefits and harms within 1 to 4 weeks of starting opioid therapy and every 3 months or more subsequently."
+}
+usage {
+  value: "This library is used to notify the prescriber/user whether an evaluation for benefits and harms associated with opioid therapy is recommended for the patient."
+}
+copyright {
+  value: "\302\251 CDC 2016+."
+}
+topic {
+  text {
+    value: "Opioid Prescribing"
+  }
+}
+author {
+  name {
+    value: "Kensaku Kawamoto, MD, PhD, MHS"
+  }
+}
+author {
+  name {
+    value: "Bryn Rhodes"
+  }
+}
+author {
+  name {
+    value: "Floyd Eisenberg, MD, MPH"
+  }
+}
+author {
+  name {
+    value: "Robert McClure, MD, MPH"
+  }
+}
+related_artifact {
+  type {
+    value: DOCUMENTATION
+  }
+  display {
+    value: "CDC guideline for prescribing opioids for chronic pain"
+  }
+  url {
+    value: "https://guidelines.gov/summaries/summary/50153/cdc-guideline-for-prescribing-opioids-for-chronic-pain---united-states-2016#420"
+  }
+}
+related_artifact {
+  type {
+    value: DEPENDS_ON
+  }
+  resource {
+    value: "Library/opioidcds-common"
+  }
+}
+data_requirement {
+  type {
+    value: MEDICATION_REQUEST
+  }
+  code_filter {
+    path {
+      value: "medicationCodeableConcept"
+    }
+    value_set {
+      value: "http://example.org/fhir/ValueSet/opioids-indicating-end-of-life"
+    }
+  }
+}
+data_requirement {
+  type {
+    value: PROCEDURE
+  }
+  code_filter {
+    path {
+      value: "code"
+    }
+  }
+}
+data_requirement {
+  type {
+    value: PROCEDURE
+  }
+  code_filter {
+    path {
+      value: "code"
+    }
+  }
+}
+data_requirement {
+  type {
+    value: MEDICATION_REQUEST
+  }
+  code_filter {
+    path {
+      value: "medicationCodeableConcept"
+    }
+    value_set {
+      value: "http://example.org/fhir/ValueSet/opioids-abused-in-ambulatory-care"
+    }
+  }
+}
+data_requirement {
+  type {
+    value: ENCOUNTER
+  }
+}
+content {
+  content_type {
+    value: "application/elm+xml"
+  }
+  data {
+    value: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<library xmlns=\"urn:hl7-org:elm:r1\" xmlns:t=\"urn:hl7-org:elm-types:r1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:fhir=\"http://hl7.org/fhir\" xmlns:qdm43=\"urn:healthit-gov:qdm:v4_3\" xmlns:qdm53=\"urn:healthit-gov:qdm:v5_3\" xmlns:a=\"urn:hl7-org:cql-annotations:r1\">\n   <annotation startLine=\"76\" startChar=\"3\" endLine=\"76\" endChar=\"51\" message=\"Could not resolve code path medicationCodeableConcept for the type of the retrieve FHIR.MedicationRequest.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"76\" startChar=\"3\" endLine=\"76\" endChar=\"51\" message=\"Could not resolve membership operator for terminology target of the retrieve.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"85\" startChar=\"4\" endLine=\"85\" endChar=\"53\" message=\"Could not resolve membership operator for terminology target of the retrieve.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"86\" startChar=\"13\" endLine=\"86\" endChar=\"52\" message=\"Could not resolve membership operator for terminology target of the retrieve.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"95\" startChar=\"3\" endLine=\"95\" endChar=\"66\" message=\"Could not resolve code path medicationCodeableConcept for the type of the retrieve FHIR.MedicationRequest.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"95\" startChar=\"3\" endLine=\"95\" endChar=\"66\" message=\"Could not resolve membership operator for terminology target of the retrieve.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"103\" startChar=\"10\" endLine=\"103\" endChar=\"70\" message=\"List-valued expression was demoted to a singleton.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"69\" startChar=\"59\" endLine=\"69\" endChar=\"88\" message=\"List-valued expression was demoted to a singleton.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <annotation startLine=\"115\" startChar=\"6\" endLine=\"115\" endChar=\"35\" message=\"List-valued expression was demoted to a singleton.\" errorType=\"semantic\" errorSeverity=\"warning\" xsi:type=\"a:CqlToElmError\"/>\n   <identifier id=\"OpioidCDS_STU4_REC_07\" version=\"0.1.0\"/>\n   <schemaIdentifier id=\"urn:hl7-org:elm\" version=\"r1\"/>\n   <usings>\n      <def localIdentifier=\"System\" uri=\"urn:hl7-org:elm-types:r1\"/>\n      <def localIdentifier=\"FHIR\" uri=\"http://hl7.org/fhir\" version=\"3.2.0\"/>\n   </usings>\n   <includes>\n      <def localIdentifier=\"Common\" path=\"OpioidCDS_STU4_Common\" version=\"0.1.0\"/>\n   </includes>\n   <parameters>\n      <def name=\"ContextPrescriptions\" accessLevel=\"Public\">\n         <parameterTypeSpecifier xsi:type=\"ListTypeSpecifier\">\n            <elementType name=\"fhir:MedicationRequest\" xsi:type=\"NamedTypeSpecifier\"/>\n         </parameterTypeSpecifier>\n      </def>\n   </parameters>\n   <codeSystems>\n      <def name=\"SNOMED\" id=\"http://snomed.info/sct\" accessLevel=\"Public\"/>\n   </codeSystems>\n   <codes>\n      <def name=\"Assessment of risk for opioid abuse\" id=\"454281000124100\" accessLevel=\"Public\">\n         <codeSystem name=\"SNOMED\"/>\n      </def>\n      <def name=\"High risk drug monitoring\" id=\"268525008\" accessLevel=\"Public\">\n         <codeSystem name=\"SNOMED\"/>\n      </def>\n   </codes>\n   <statements>\n      <def name=\"Patient\" context=\"Patient\">\n         <expression xsi:type=\"SingletonFrom\">\n            <operand dataType=\"fhir:Patient\" xsi:type=\"Retrieve\"/>\n         </expression>\n      </def>\n      <def name=\"Risk Assessment Interval\" context=\"Patient\" accessLevel=\"Public\">\n         <expression lowClosed=\"true\" highClosed=\"true\" xsi:type=\"Interval\">\n            <low xsi:type=\"Subtract\">\n               <operand xsi:type=\"Today\"/>\n               <operand value=\"91\" unit=\"days\" xsi:type=\"Quantity\"/>\n            </low>\n            <high xsi:type=\"Subtract\">\n               <operand xsi:type=\"Today\"/>\n               <operand value=\"1\" unit=\"day\" xsi:type=\"Quantity\"/>\n            </high>\n         </expression>\n      </def>\n      <def name=\"Encounter Interval\" context=\"Patient\" accessLevel=\"Public\">\n         <expression lowClosed=\"true\" highClosed=\"true\" xsi:type=\"Interval\">\n            <low xsi:type=\"Subtract\">\n               <operand xsi:type=\"Subtract\">\n                  <operand xsi:type=\"Today\"/>\n                  <operand value=\"12\" unit=\"months\" xsi:type=\"Quantity\"/>\n               </operand>\n               <operand value=\"1\" unit=\"days\" xsi:type=\"Quantity\"/>\n            </low>\n            <high xsi:type=\"Subtract\">\n               <operand xsi:type=\"Today\"/>\n               <operand value=\"1\" unit=\"day\" xsi:type=\"Quantity\"/>\n            </high>\n         </expression>\n      </def>\n      <def name=\"Validate Trigger Event\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Exists\">\n            <operand xsi:type=\"Query\">\n               <source alias=\"triggerScript\">\n                  <expression name=\"ContextPrescriptions\" xsi:type=\"ParameterRef\"/>\n               </source>\n               <where name=\"IsOpioidWithAmbulatoryAbusePotential\" libraryName=\"Common\" xsi:type=\"FunctionRef\">\n                  <operand name=\"ToCode\" libraryName=\"Common\" xsi:type=\"FunctionRef\">\n                     <operand xsi:type=\"Indexer\">\n                        <operand path=\"coding\" xsi:type=\"Property\">\n                           <source path=\"medication\" scope=\"triggerScript\" xsi:type=\"Property\"/>\n                        </operand>\n                        <operand valueType=\"t:Integer\" value=\"0\" xsi:type=\"Literal\"/>\n                     </operand>\n                  </operand>\n               </where>\n            </operand>\n         </expression>\n      </def>\n      <def name=\"Medications Indicating End Of Life\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Query\">\n            <source alias=\"endOfLifeRx\">\n               <expression dataType=\"fhir:MedicationRequest\" codeProperty=\"medicationCodeableConcept\" xsi:type=\"Retrieve\">\n                  <codes name=\"End Of Life Opioids\" libraryName=\"Common\" xsi:type=\"ValueSetRef\"/>\n               </expression>\n            </source>\n            <where xsi:type=\"Equal\">\n               <operand path=\"value\" xsi:type=\"Property\">\n                  <source path=\"status\" scope=\"endOfLifeRx\" xsi:type=\"Property\"/>\n               </operand>\n               <operand valueType=\"t:String\" value=\"active\" xsi:type=\"Literal\"/>\n            </where>\n         </expression>\n      </def>\n      <def name=\"Exclusion Criteria\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Exists\">\n            <operand name=\"Medications Indicating End Of Life\" xsi:type=\"ExpressionRef\"/>\n         </expression>\n      </def>\n      <def name=\"Opioid Risk Assessment in Past 90 Days\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Query\">\n            <source alias=\"riskAssessment\">\n               <expression xsi:type=\"Union\">\n                  <operand dataType=\"fhir:Procedure\" codeProperty=\"code\" xsi:type=\"Retrieve\">\n                     <codes name=\"Assessment of risk for opioid abuse\" xsi:type=\"CodeRef\"/>\n                  </operand>\n                  <operand dataType=\"fhir:Procedure\" codeProperty=\"code\" xsi:type=\"Retrieve\">\n                     <codes name=\"High risk drug monitoring\" xsi:type=\"CodeRef\"/>\n                  </operand>\n               </expression>\n            </source>\n            <where xsi:type=\"In\">\n               <operand path=\"value\" xsi:type=\"Property\">\n                  <source path=\"start\" xsi:type=\"Property\">\n                     <source path=\"performed\" scope=\"riskAssessment\" xsi:type=\"Property\"/>\n                  </source>\n               </operand>\n               <operand name=\"Risk Assessment Interval\" xsi:type=\"ExpressionRef\"/>\n            </where>\n         </expression>\n      </def>\n      <def name=\"Get Active Ambulatory Opioid Rx\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Query\">\n            <source alias=\"Rx\">\n               <expression dataType=\"fhir:MedicationRequest\" codeProperty=\"medicationCodeableConcept\" xsi:type=\"Retrieve\">\n                  <codes name=\"Ambulatory Abuse Potential Opioids\" libraryName=\"Common\" xsi:type=\"ValueSetRef\"/>\n               </expression>\n            </source>\n            <where xsi:type=\"And\">\n               <operand xsi:type=\"Equal\">\n                  <operand path=\"value\" xsi:type=\"Property\">\n                     <source path=\"status\" scope=\"Rx\" xsi:type=\"Property\"/>\n                  </operand>\n                  <operand valueType=\"t:String\" value=\"active\" xsi:type=\"Literal\"/>\n               </operand>\n               <operand xsi:type=\"Equal\">\n                  <operand path=\"value\" xsi:type=\"Property\">\n                     <source path=\"code\" xsi:type=\"Property\">\n                        <source xsi:type=\"Indexer\">\n                           <operand xsi:type=\"Flatten\">\n                              <operand xsi:type=\"Query\">\n                                 <source alias=\"$this\">\n                                    <expression path=\"category\" scope=\"Rx\" xsi:type=\"Property\"/>\n                                 </source>\n                                 <where xsi:type=\"Not\">\n                                    <operand xsi:type=\"IsNull\">\n                                       <operand path=\"coding\" xsi:type=\"Property\">\n                                          <source name=\"$this\" xsi:type=\"AliasRef\"/>\n                                       </operand>\n                                    </operand>\n                                 </where>\n                                 <return>\n                                    <expression path=\"coding\" xsi:type=\"Property\">\n                                       <source name=\"$this\" xsi:type=\"AliasRef\"/>\n                                    </expression>\n                                 </return>\n                              </operand>\n                           </operand>\n                           <operand valueType=\"t:Integer\" value=\"0\" xsi:type=\"Literal\"/>\n                        </source>\n                     </source>\n                  </operand>\n                  <operand valueType=\"t:String\" value=\"outpatient\" xsi:type=\"Literal\"/>\n               </operand>\n            </where>\n         </expression>\n      </def>\n      <def name=\"Encounter in past 12 months\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"Query\">\n            <source alias=\"E\">\n               <expression dataType=\"fhir:Encounter\" xsi:type=\"Retrieve\"/>\n            </source>\n            <where xsi:type=\"In\">\n               <operand path=\"value\" xsi:type=\"Property\">\n                  <source path=\"start\" xsi:type=\"Property\">\n                     <source path=\"period\" scope=\"E\" xsi:type=\"Property\"/>\n                  </source>\n               </operand>\n               <operand name=\"Encounter Interval\" xsi:type=\"ExpressionRef\"/>\n            </where>\n         </expression>\n      </def>\n      <def name=\"Rx Active 7 of Past 10 Days With Encounter\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"And\">\n            <operand xsi:type=\"SingletonFrom\">\n               <operand name=\"ProbableDaysInRange\" libraryName=\"Common\" xsi:type=\"FunctionRef\">\n                  <operand name=\"Get Active Ambulatory Opioid Rx\" xsi:type=\"ExpressionRef\"/>\n                  <operand valueType=\"t:Integer\" value=\"10\" xsi:type=\"Literal\"/>\n                  <operand valueType=\"t:Integer\" value=\"7\" xsi:type=\"Literal\"/>\n               </operand>\n            </operand>\n            <operand xsi:type=\"Exists\">\n               <operand name=\"Encounter in past 12 months\" xsi:type=\"ExpressionRef\"/>\n            </operand>\n         </expression>\n      </def>\n      <def name=\"Rx Active 63 of Past 90 Days\" context=\"Patient\" accessLevel=\"Public\">\n         <expression name=\"ProbableDaysInRange\" libraryName=\"Common\" xsi:type=\"FunctionRef\">\n            <operand name=\"Get Active Ambulatory Opioid Rx\" xsi:type=\"ExpressionRef\"/>\n            <operand valueType=\"t:Integer\" value=\"90\" xsi:type=\"Literal\"/>\n            <operand valueType=\"t:Integer\" value=\"63\" xsi:type=\"Literal\"/>\n         </expression>\n      </def>\n      <def name=\"Inclusion Criteria\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"And\">\n            <operand xsi:type=\"And\">\n               <operand xsi:type=\"And\">\n                  <operand name=\"Validate Trigger Event\" xsi:type=\"ExpressionRef\"/>\n                  <operand xsi:type=\"Not\">\n                     <operand name=\"Exclusion Criteria\" xsi:type=\"ExpressionRef\"/>\n                  </operand>\n               </operand>\n               <operand xsi:type=\"Not\">\n                  <operand xsi:type=\"Exists\">\n                     <operand name=\"Opioid Risk Assessment in Past 90 Days\" xsi:type=\"ExpressionRef\"/>\n                  </operand>\n               </operand>\n            </operand>\n            <operand xsi:type=\"Or\">\n               <operand name=\"Rx Active 7 of Past 10 Days With Encounter\" xsi:type=\"ExpressionRef\"/>\n               <operand xsi:type=\"SingletonFrom\">\n                  <operand name=\"Rx Active 63 of Past 90 Days\" xsi:type=\"ExpressionRef\"/>\n               </operand>\n            </operand>\n         </expression>\n      </def>\n      <def name=\"Get Indicator\" context=\"Patient\" accessLevel=\"Public\">\n         <expression valueType=\"t:String\" value=\"warning\" xsi:type=\"Literal\"/>\n      </def>\n      <def name=\"Get Summary\" context=\"Patient\" accessLevel=\"Public\">\n         <expression valueType=\"t:String\" value=\"Patients on opioid therapy should be evaluated for benefits and harms within 1 to 4 weeks of starting opioid therapy and every 3 months or more subsequently.\" xsi:type=\"Literal\"/>\n      </def>\n      <def name=\"Get Detail\" context=\"Patient\" accessLevel=\"Public\">\n         <expression xsi:type=\"If\">\n            <condition xsi:type=\"SingletonFrom\">\n               <operand name=\"Rx Active 63 of Past 90 Days\" xsi:type=\"ExpressionRef\"/>\n            </condition>\n            <then valueType=\"t:String\" value=\"No evaluation for benefits and harms associated with opioid therapy has been performed for the patient in the past 3 months\" xsi:type=\"Literal\"/>\n            <else valueType=\"t:String\" value=\"No evaluation for benefits and harms has been performed for the patient starting opioid therapy\" xsi:type=\"Literal\"/>\n         </expression>\n      </def>\n   </statements>\n</library>\n"
+  }
+}

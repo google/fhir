@@ -1,0 +1,506 @@
+id {
+  value: "consent-example-pkb"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<p>\n        This example demonstrates how to encode this screen shot in a consent resource:\n\t\t\t</p>\n\t\t\t<p>\n\t\t\t\t<img src=\"pkb.png\" alt=\"Screenshot from Patient Knows Best\"/>\n\t\t\t</p>\n\t\t\t<p>\n        Thanks to <a href=\"https://www.patientsknowbest.com/\">Patients Know Best</a> for contributing this example\n\t\t\t</p>\n\t\t</div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+scope {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/consentscope"
+    }
+    code {
+      value: "patient-privacy"
+    }
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "59284-0"
+    }
+  }
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "...example patient..."
+  }
+}
+date_time {
+  value_us: 1465999200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+organization {
+  organization_id {
+    value: "f001"
+  }
+}
+policy_rule {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "OPTOUT"
+    }
+  }
+}
+provision {
+  actor {
+    role {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+        }
+        code {
+          value: "PRCP"
+        }
+      }
+    }
+    reference {
+      organization_id {
+        value: "f001"
+      }
+    }
+  }
+  action {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/consentaction"
+      }
+      code {
+        value: "access"
+      }
+    }
+  }
+  security_label {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"
+    }
+    code {
+      value: "N"
+    }
+  }
+  provision {
+    actor {
+      role {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+          }
+          code {
+            value: "PRCP"
+          }
+        }
+      }
+      reference {
+        organization_id {
+          value: "f001"
+        }
+      }
+    }
+    action {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/consentaction"
+        }
+        code {
+          value: "access"
+        }
+      }
+    }
+    security_label {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+      }
+      code {
+        value: "PSY"
+      }
+    }
+  }
+  provision {
+    actor {
+      role {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+          }
+          code {
+            value: "PRCP"
+          }
+        }
+      }
+      reference {
+        organization_id {
+          value: "f001"
+        }
+      }
+    }
+    action {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/consentaction"
+        }
+        code {
+          value: "access"
+        }
+      }
+    }
+    security_label {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+      }
+      code {
+        value: "SPI"
+      }
+    }
+  }
+  provision {
+    actor {
+      role {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+          }
+          code {
+            value: "PRCP"
+          }
+        }
+      }
+      reference {
+        organization_id {
+          value: "f001"
+        }
+      }
+    }
+    action {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/consentaction"
+        }
+        code {
+          value: "access"
+        }
+      }
+    }
+    security_label {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"
+      }
+      code {
+        value: "N"
+      }
+    }
+  }
+  provision {
+    actor {
+      role {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+          }
+          code {
+            value: "PRCP"
+          }
+        }
+      }
+      reference {
+        organization_id {
+          value: "f001"
+        }
+      }
+    }
+    action {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/consentaction"
+        }
+        code {
+          value: "access"
+        }
+      }
+    }
+    security_label {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+      }
+      code {
+        value: "PSY"
+      }
+    }
+  }
+  provision {
+    actor {
+      role {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+          }
+          code {
+            value: "PRCP"
+          }
+        }
+      }
+      reference {
+        organization_id {
+          value: "f001"
+        }
+      }
+    }
+    action {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/consentaction"
+        }
+        code {
+          value: "access"
+        }
+      }
+    }
+    security_label {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+      }
+      code {
+        value: "SPI"
+      }
+    }
+  }
+  provision {
+    actor {
+      role {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+          }
+          code {
+            value: "PRCP"
+          }
+        }
+      }
+      reference {
+        organization_id {
+          value: "f001"
+        }
+      }
+    }
+    action {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/consentaction"
+        }
+        code {
+          value: "access"
+        }
+      }
+    }
+    security_label {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+      }
+      code {
+        value: "SEX"
+      }
+    }
+  }
+  provision {
+    actor {
+      role {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+          }
+          code {
+            value: "PRCP"
+          }
+        }
+      }
+      reference {
+        organization_id {
+          value: "f001"
+        }
+      }
+    }
+    action {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/consentaction"
+        }
+        code {
+          value: "access"
+        }
+      }
+    }
+    security_label {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"
+      }
+      code {
+        value: "N"
+      }
+    }
+  }
+  provision {
+    actor {
+      role {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+          }
+          code {
+            value: "PRCP"
+          }
+        }
+      }
+      reference {
+        organization_id {
+          value: "f001"
+        }
+      }
+    }
+    action {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/consentaction"
+        }
+        code {
+          value: "access"
+        }
+      }
+    }
+    security_label {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+      }
+      code {
+        value: "PSY"
+      }
+    }
+  }
+  provision {
+    actor {
+      role {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+          }
+          code {
+            value: "PRCP"
+          }
+        }
+      }
+      reference {
+        organization_id {
+          value: "f001"
+        }
+      }
+    }
+    action {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/consentaction"
+        }
+        code {
+          value: "access"
+        }
+      }
+    }
+    security_label {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+      }
+      code {
+        value: "SPI"
+      }
+    }
+  }
+  provision {
+    actor {
+      role {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+          }
+          code {
+            value: "PRCP"
+          }
+        }
+      }
+      reference {
+        organization_id {
+          value: "f001"
+        }
+      }
+    }
+    action {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/consentaction"
+        }
+        code {
+          value: "access"
+        }
+      }
+    }
+    security_label {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+      }
+      code {
+        value: "SEX"
+      }
+    }
+  }
+  provision {
+    actor {
+      role {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+          }
+          code {
+            value: "PRCP"
+          }
+        }
+      }
+      reference {
+        organization_id {
+          value: "f001"
+        }
+      }
+    }
+    action {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/consentaction"
+        }
+        code {
+          value: "access"
+        }
+      }
+    }
+    security_label {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"
+      }
+      code {
+        value: "N"
+      }
+    }
+  }
+}

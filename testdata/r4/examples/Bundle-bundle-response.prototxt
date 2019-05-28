@@ -1,0 +1,215 @@
+id {
+  value: "bundle-response"
+}
+meta {
+  last_updated {
+    value_us: 1408326213000000
+    timezone: "Z"
+    precision: SECOND
+  }
+}
+type {
+  value: TRANSACTION_RESPONSE
+}
+entry {
+  full_url {
+    value: "http://example.org/fhir/Patient/12423"
+  }
+  resource {
+    patient {
+      id {
+        value: "12423"
+      }
+      meta {
+        version_id {
+          value: "1"
+        }
+        last_updated {
+          value_us: 1408326211000000
+          timezone: "Z"
+          precision: SECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Some narrative</div>"
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Chalmers"
+        }
+        given {
+          value: "Peter"
+        }
+        given {
+          value: "James"
+        }
+      }
+      gender {
+        value: MALE
+      }
+      birth_date {
+        value_us: 157122000000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+  response {
+    status {
+      value: "201 Created"
+    }
+    location {
+      value: "Patient/12423/_history/1"
+    }
+    etag {
+      value: "W/\"1\""
+    }
+    last_modified {
+      value_us: 1408326213000000
+      timezone: "Z"
+      precision: SECOND
+    }
+    outcome {
+      operation_outcome {
+        issue {
+          severity {
+            value: WARNING
+          }
+          code {
+            value: NOT_FOUND
+          }
+          details {
+            text {
+              value: "The Managing organization was not known and was deleted"
+            }
+          }
+          expression {
+            value: "Patient.managingOrganization"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  response {
+    status {
+      value: "200 OK"
+    }
+  }
+}
+entry {
+  response {
+    status {
+      value: "200 OK"
+    }
+    location {
+      value: "Patient/123/_history/4"
+    }
+    etag {
+      value: "W/\"4\""
+    }
+  }
+}
+entry {
+  response {
+    status {
+      value: "201 Created"
+    }
+    location {
+      value: "Patient/12424/_history/1"
+    }
+    etag {
+      value: "W/\"1\""
+    }
+  }
+}
+entry {
+  response {
+    status {
+      value: "200 ok"
+    }
+    location {
+      value: "Patient/123a/_history/3"
+    }
+    etag {
+      value: "W/\"3\""
+    }
+  }
+}
+entry {
+  response {
+    status {
+      value: "202 Accepted"
+    }
+  }
+}
+entry {
+  response {
+    status {
+      value: "DELETE"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:7f9724ed-ef8d-4434-aacb-41869db83233"
+  }
+  resource {
+    parameters {
+      parameter {
+        name {
+          value: "name"
+        }
+        value {
+          string_value {
+            value: "LOINC"
+          }
+        }
+      }
+    }
+  }
+  response {
+    status {
+      value: "200 ok"
+    }
+  }
+}
+entry {
+  full_url {
+    value: "urn:uuid:e7bcef8e-5ef9-4d2b-87d5-b42b1eec9125"
+  }
+  resource {
+    bundle {
+      id {
+        value: "fb6ed6cb-324e-4588-87cd-0c92c68986ca"
+      }
+      type {
+        value: SEARCHSET
+      }
+    }
+  }
+  response {
+    status {
+      value: "200 OK"
+    }
+  }
+}
+entry {
+  response {
+    status {
+      value: "304 Not Modified"
+    }
+  }
+}

@@ -1,0 +1,156 @@
+id {
+  value: "Composition-document"
+}
+meta {
+  last_updated {
+    value_us: 1545910674724000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <h2>Generate a Document</h2>\n            <p>OPERATION: Generate a Document</p>\n            <p>The official URL for this operation definition is: </p>\n            <pre>http://hl7.org/fhir/OperationDefinition/Composition-document</pre>\n            <div>\n              <p>A client can ask a server to generate a fully bundled document from a composition resource. The server takes the composition resource, locates all the referenced resources and other additional resources as configured or requested and either returns a full document bundle, or returns an error. Note that since this is a search operation, the document bundle is  wrapped inside the search bundle.  If some of the resources are located on other servers, it is at the discretion of the  server whether to retrieve them or return an error. If the correct version of the document  that would be generated already exists, then the server can return the existing one.</p>\n\n            </div>\n            <p>URL: [base]/Composition/$document</p>\n            <p>URL: [base]/Composition/[id]/$document</p>\n            <p>Parameters</p>\n            <table class=\"grid\">\n              <tr>\n                <td>\n                  <b>Use</b>\n                </td>\n                <td>\n                  <b>Name</b>\n                </td>\n                <td>\n                  <b>Cardinality</b>\n                </td>\n                <td>\n                  <b>Type</b>\n                </td>\n                <td>\n                  <b>Binding</b>\n                </td>\n                <td>\n                  <b>Documentation</b>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>id</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#uri\">uri</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Identifies the composition to use. This can either be a simple id, which identifies a composition, or it can be a full URL, which identifies a composition on another server.</p>\n\n                    <p>Notes:</p>\n\n                    <ul>\n\n                      <li>GET [base]/Composition/[id]/$document is identical in meaning to GET [base]/Composition/$document?id=[id]</li>\n\n                      <li>the id parameter SHALL NOT be used if the operation is requested on a particular composition (e.g.  GET [base]/Composition/[id]/$document?id=[id] is not allowed)</li>\n\n                      <li>Servers are not required to support generating documents on Compositions located on another server</li>\n\n                    </ul>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>persist</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#boolean\">boolean</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Whether to store the document at the bundle end-point (/Bundle) or not once it is generated. Value = true or false (default is for the server to decide). If the document is stored, it\'s location can be inferred from the Bundle.id, but it SHOULD be provided explicitly in the HTTP Location header in the response</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>graph</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#uri\">uri</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>Canonical reference to a GraphDefinition. If a URL is provided, it is the canonical reference to a \n                      <a href=\"graphdefinition.html\">GraphDefinition</a> that it controls what resources are to be added to the bundle when building the document. The GraphDefinition can also specify profiles that apply to the various resources\n                    </p>\n\n                  </div>\n                </td>\n              </tr>\n            </table>\n            <div>\n              <p>Note: this operation definition does not resolve the question how document signatures are created. This is an open issue during the period of trial use, and feedback is requested regarding this question</p>\n\n            </div>\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+      value: 2
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "trial-use"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/OperationDefinition/Composition-document"
+}
+version {
+  value: "4.0.0"
+}
+name {
+  value: "Generate a Document"
+}
+status {
+  value: DRAFT
+}
+kind {
+  value: OPERATION
+}
+date {
+  value_us: 1545910674000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+publisher {
+  value: "HL7 (FHIR Project)"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "fhir@lists.hl7.org"
+    }
+  }
+}
+description {
+  value: "A client can ask a server to generate a fully bundled document from a composition resource. The server takes the composition resource, locates all the referenced resources and other additional resources as configured or requested and either returns a full document bundle, or returns an error. Note that since this is a search operation, the document bundle is  wrapped inside the search bundle.  If some of the resources are located on other servers, it is at the discretion of the  server whether to retrieve them or return an error. If the correct version of the document  that would be generated already exists, then the server can return the existing one."
+}
+code {
+  value: "document"
+}
+comment {
+  value: "Note: this operation definition does not resolve the question how document signatures are created. This is an open issue during the period of trial use, and feedback is requested regarding this question"
+}
+resource {
+  value: COMPOSITION
+}
+system {
+}
+type {
+  value: true
+}
+instance {
+  value: true
+}
+parameter {
+  name {
+    value: "id"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "Identifies the composition to use. This can either be a simple id, which identifies a composition, or it can be a full URL, which identifies a composition on another server. \n\nNotes: \n\n* GET [base]/Composition/[id]/$document is identical in meaning to GET [base]/Composition/$document?id=[id]\n* the id parameter SHALL NOT be used if the operation is requested on a particular composition (e.g.  GET [base]/Composition/[id]/$document?id=[id] is not allowed)\n* Servers are not required to support generating documents on Compositions located on another server"
+  }
+  type {
+    value: URI
+  }
+}
+parameter {
+  name {
+    value: "persist"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "Whether to store the document at the bundle end-point (/Bundle) or not once it is generated. Value = true or false (default is for the server to decide). If the document is stored, it\'s location can be inferred from the Bundle.id, but it SHOULD be provided explicitly in the HTTP Location header in the response"
+  }
+  type {
+    value: BOOLEAN
+  }
+}
+parameter {
+  name {
+    value: "graph"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "Canonical reference to a GraphDefinition. If a URL is provided, it is the canonical reference to a [GraphDefinition](graphdefinition.html) that it controls what resources are to be added to the bundle when building the document. The GraphDefinition can also specify profiles that apply to the various resources"
+  }
+  type {
+    value: URI
+  }
+}

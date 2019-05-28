@@ -1,0 +1,596 @@
+id {
+  value: "R3502"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the ClaimResponse</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://thebenefitcompany.com/claimresponse"
+  }
+  value {
+    value: "CR6532875367"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/claim-type"
+    }
+    code {
+      value: "vision"
+    }
+  }
+}
+use {
+  value: CLAIM
+}
+patient {
+  patient_id {
+    value: "1"
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+requestor {
+  organization_id {
+    value: "1"
+  }
+}
+request {
+  identifier {
+    system {
+      value: "http://happysight.com/claim"
+    }
+    value {
+      value: "6612346"
+    }
+  }
+}
+outcome {
+  value: COMPLETE
+}
+disposition {
+  value: "Claim settled as per contract."
+}
+payee_type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/payeetype"
+    }
+    code {
+      value: "provider"
+    }
+  }
+}
+item {
+  item_sequence {
+    value: 1
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "eligible"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "235.40"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "copay"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "20.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "eligpercent"
+        }
+      }
+    }
+    value {
+      value: "80.00"
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "benefit"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "172.32"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  detail {
+    detail_sequence {
+      value: 1
+    }
+    note_number {
+      value: 1
+    }
+    adjudication {
+      category {
+        coding {
+          code {
+            value: "eligible"
+          }
+        }
+      }
+      amount {
+        value {
+          value: "100.00"
+        }
+        currency {
+          value: "USD"
+        }
+      }
+    }
+    adjudication {
+      category {
+        coding {
+          code {
+            value: "copay"
+          }
+        }
+      }
+      amount {
+        value {
+          value: "20.00"
+        }
+        currency {
+          value: "USD"
+        }
+      }
+    }
+    adjudication {
+      category {
+        coding {
+          code {
+            value: "eligpercent"
+          }
+        }
+      }
+      value {
+        value: "80.00"
+      }
+    }
+    adjudication {
+      category {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      amount {
+        value {
+          value: "80.00"
+        }
+        currency {
+          value: "USD"
+        }
+      }
+    }
+  }
+  detail {
+    detail_sequence {
+      value: 2
+    }
+    note_number {
+      value: 1
+    }
+    adjudication {
+      category {
+        coding {
+          code {
+            value: "eligible"
+          }
+        }
+      }
+      amount {
+        value {
+          value: "110.00"
+        }
+        currency {
+          value: "USD"
+        }
+      }
+    }
+    adjudication {
+      category {
+        coding {
+          code {
+            value: "eligpercent"
+          }
+        }
+      }
+      value {
+        value: "80.00"
+      }
+    }
+    adjudication {
+      category {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      amount {
+        value {
+          value: "88.00"
+        }
+        currency {
+          value: "USD"
+        }
+      }
+    }
+    sub_detail {
+      sub_detail_sequence {
+        value: 1
+      }
+      note_number {
+        value: 1
+      }
+      adjudication {
+        category {
+          coding {
+            code {
+              value: "eligible"
+            }
+          }
+        }
+        amount {
+          value {
+            value: "60.00"
+          }
+          currency {
+            value: "USD"
+          }
+        }
+      }
+      adjudication {
+        category {
+          coding {
+            code {
+              value: "eligpercent"
+            }
+          }
+        }
+        value {
+          value: "80.00"
+        }
+      }
+      adjudication {
+        category {
+          coding {
+            code {
+              value: "benefit"
+            }
+          }
+        }
+        amount {
+          value {
+            value: "48.00"
+          }
+          currency {
+            value: "USD"
+          }
+        }
+      }
+    }
+    sub_detail {
+      sub_detail_sequence {
+        value: 2
+      }
+      adjudication {
+        category {
+          coding {
+            code {
+              value: "eligible"
+            }
+          }
+        }
+        amount {
+          value {
+            value: "30.00"
+          }
+          currency {
+            value: "USD"
+          }
+        }
+      }
+      adjudication {
+        category {
+          coding {
+            code {
+              value: "eligpercent"
+            }
+          }
+        }
+        value {
+          value: "80.00"
+        }
+      }
+      adjudication {
+        category {
+          coding {
+            code {
+              value: "benefit"
+            }
+          }
+        }
+        amount {
+          value {
+            value: "24.00"
+          }
+          currency {
+            value: "USD"
+          }
+        }
+      }
+    }
+    sub_detail {
+      sub_detail_sequence {
+        value: 3
+      }
+      note_number {
+        value: 1
+      }
+      adjudication {
+        category {
+          coding {
+            code {
+              value: "eligible"
+            }
+          }
+        }
+        amount {
+          value {
+            value: "10.00"
+          }
+          currency {
+            value: "USD"
+          }
+        }
+      }
+      adjudication {
+        category {
+          coding {
+            code {
+              value: "eligpercent"
+            }
+          }
+        }
+        value {
+          value: "80.00"
+        }
+      }
+      adjudication {
+        category {
+          coding {
+            code {
+              value: "benefit"
+            }
+          }
+        }
+        amount {
+          value {
+            value: "8.00"
+          }
+          currency {
+            value: "USD"
+          }
+        }
+      }
+    }
+  }
+  detail {
+    detail_sequence {
+      value: 3
+    }
+    note_number {
+      value: 1
+    }
+    adjudication {
+      category {
+        coding {
+          code {
+            value: "eligible"
+          }
+        }
+      }
+      amount {
+        value {
+          value: "200.00"
+        }
+        currency {
+          value: "USD"
+        }
+      }
+    }
+    adjudication {
+      category {
+        coding {
+          code {
+            value: "eligpercent"
+          }
+        }
+      }
+      value {
+        value: "80.00"
+      }
+    }
+    adjudication {
+      category {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      amount {
+        value {
+          value: "14.00"
+        }
+        currency {
+          value: "USD"
+        }
+      }
+    }
+  }
+}
+total {
+  category {
+    coding {
+      code {
+        value: "submitted"
+      }
+    }
+  }
+  amount {
+    value {
+      value: "235.40"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}
+total {
+  category {
+    coding {
+      code {
+        value: "benefit"
+      }
+    }
+  }
+  amount {
+    value {
+      value: "182.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}
+payment {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/ex-paymenttype"
+      }
+      code {
+        value: "complete"
+      }
+    }
+  }
+  adjustment {
+    value {
+      value: "75.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  adjustment_reason {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/payment-adjustment-reason"
+      }
+      code {
+        value: "a002"
+      }
+      display {
+        value: "Prior Overpayment"
+      }
+    }
+  }
+  date {
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  amount {
+    value {
+      value: "107.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  identifier {
+    system {
+      value: "http://thebenefitcompany.com/paymentidentifier"
+    }
+    value {
+      value: "201416-123456"
+    }
+  }
+}
+process_note {
+  number {
+    value: 1
+  }
+  type {
+    value: DISPLAY
+  }
+  text {
+    value: "After hours surcharge declined"
+  }
+  language {
+    coding {
+      system {
+        value: "urn:ietf:bcp:47"
+      }
+      code {
+        value: "en-CA"
+      }
+    }
+  }
+}

@@ -15,9 +15,9 @@
 package com.google.fhir.stu3;
 
 import com.google.common.base.Ascii;
+import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
-import com.google.fhir.stu3.proto.Code;
-import com.google.fhir.stu3.proto.Extension;
+import com.google.fhir.r4.proto.Code;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProtoOrBuilder;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
@@ -42,6 +42,10 @@ public class CodeWrapper extends PrimitiveWrapper<Code> {
     super(code);
   }
 
+  public CodeWrapper(MessageOrBuilder message) {
+    super(ProtoUtils.fieldWiseCopy(message, Code.newBuilder()).build());
+  }
+
   /** Create a CodeWrapper from a java String. */
   public CodeWrapper(String input) {
     super(input == null ? NULL_CODE : parseAndValidate(input));
@@ -59,9 +63,9 @@ public class CodeWrapper extends PrimitiveWrapper<Code> {
     // Copy the Element parts.
     FieldDescriptor idField = descriptor.findFieldByName("id");
     if (code.hasField(idField)) {
-      builder.setId((com.google.fhir.stu3.proto.String) code.getField(idField));
+      builder.setId((com.google.fhir.r4.proto.String) code.getField(idField));
     }
-    builder.addAllExtension(ExtensionWrapper.fromExtensionsIn(code).build());
+    ExtensionWrapper.fromExtensionsIn(code).addToMessage(builder);
 
     FieldDescriptor valueField = descriptor.findFieldByName("value");
     if (!code.hasField(valueField)) {
@@ -84,7 +88,8 @@ public class CodeWrapper extends PrimitiveWrapper<Code> {
     Descriptor descriptor = builder.getDescriptorForType();
     // Handle standard codes.
     if (!descriptor.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
-      if (!builder.getDescriptorForType().equals(Code.getDescriptor())) {
+      if (!AnnotationUtils.getStructureDefinitionUrl(builder.getDescriptorForType())
+          .equals(AnnotationUtils.getStructureDefinitionUrl(Code.getDescriptor()))) {
         throw new IllegalArgumentException(
             "Type " + descriptor.getFullName() + " is not a FHIR code type");
       }
@@ -94,9 +99,7 @@ public class CodeWrapper extends PrimitiveWrapper<Code> {
     if (getWrapped().hasId()) {
       builder.setField(descriptor.findFieldByName("id"), getWrapped().getId());
     }
-    for (Extension e : getWrapped().getExtensionList()) {
-      builder.addRepeatedField(descriptor.findFieldByName("extension"), e);
-    }
+    ExtensionWrapper.fromExtensionsIn(getWrapped()).addToMessage(builder);
     if (!hasValue()) {
       // We're done if there is no value to parse.
       return builder;

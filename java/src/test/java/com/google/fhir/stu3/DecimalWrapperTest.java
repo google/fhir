@@ -17,7 +17,7 @@ package com.google.fhir.stu3;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.fail;
 
-import com.google.fhir.stu3.proto.Decimal;
+import com.google.fhir.r4.proto.Decimal;
 import java.math.BigDecimal;
 import org.junit.Test;
 import org.junit.runner.RunWith;

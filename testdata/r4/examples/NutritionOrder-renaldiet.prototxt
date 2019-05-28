@@ -1,0 +1,226 @@
+id {
+  value: "renaldiet"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: renaldiet</p><p><b>identifier</b>: 123</p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>patient</b>: <a>Peter Chalmers</a></p><p><b>encounter</b>: <a>Inpatient</a></p><p><b>dateTime</b>: 17/09/2014</p><p><b>orderer</b>: <a>Dr Adam Careful</a></p><p><b>allergyIntolerance</b>: <a>Cashew Nuts</a></p><p><b>foodPreferenceModifier</b>: Dairy Free <span>(Details : {http://terminology.hl7.org/CodeSystem/diet code \'dairy-free\' = \'Dairy Free)</span></p><p><b>excludeFoodModifier</b>: Cashew Nut <span>(Details : {SNOMED CT code \'227493005\' = \'Cashew nuts\', given as \'Cashew Nut\'})</span></p><blockquote><p><b>oralDiet</b></p><p><b>type</b>: Renal Diet <span>(Details : {SNOMED CT code \'33489005\' = \'Renal disease diet\', given as \'Renal diet\'}; {http://goodhealthhospital.org/diet-type-codes code \'1050\' = \'1050\', given as \'Renal\'})</span></p><p><b>schedule</b>: Starting 10/02/2015, Do 3 per 1 days</p><blockquote><p><b>nutrient</b></p><p><b>modifier</b>: Sodium <span>(Details : {SNOMED CT code \'39972003\' = \'Sodium\', given as \'Sodium\'})</span></p><p><b>amount</b>: 2 grams<span> (Details: UCUM code g = \'g\')</span></p></blockquote><blockquote><p><b>nutrient</b></p><p><b>modifier</b>: Phosphorus <span>(Details : {SNOMED CT code \'30820000\' = \'Phosphorus\', given as \'Phosphorus\'})</span></p><p><b>amount</b>: 1000 milligrams<span> (Details: UCUM code mg = \'mg\')</span></p></blockquote><blockquote><p><b>nutrient</b></p><p><b>modifier</b>: Potassium <span>(Details : {SNOMED CT code \'88480006\' = \'Potassium\', given as \'Potassium\'})</span></p><p><b>amount</b>: 2 grams<span> (Details: UCUM code g = \'g\')</span></p></blockquote></blockquote></div>"
+  }
+}
+identifier {
+  system {
+    value: "http://goodhealthhospital.org/nutrition-requests"
+  }
+  value {
+    value: "123"
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: ORDER
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter Chalmers"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+  display {
+    value: "Inpatient"
+  }
+}
+date_time {
+  value_us: 1410876000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+orderer {
+  practitioner_id {
+    value: "example"
+  }
+  display {
+    value: "Dr Adam Careful"
+  }
+}
+allergy_intolerance {
+  allergy_intolerance_id {
+    value: "example"
+  }
+  display {
+    value: "Cashew Nuts"
+  }
+}
+food_preference_modifier {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/diet"
+    }
+    code {
+      value: "dairy-free"
+    }
+  }
+}
+exclude_food_modifier {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    version {
+      value: "20140730"
+    }
+    code {
+      value: "227493005"
+    }
+    display {
+      value: "Cashew Nut"
+    }
+  }
+}
+oral_diet {
+  type {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "33489005"
+      }
+      display {
+        value: "Renal diet"
+      }
+    }
+    coding {
+      system {
+        value: "http://goodhealthhospital.org/diet-type-codes"
+      }
+      code {
+        value: "1050"
+      }
+      display {
+        value: "Renal"
+      }
+    }
+    text {
+      value: "Renal Diet"
+    }
+  }
+  schedule {
+    repeat {
+      bounds {
+        period {
+          start {
+            value_us: 1423486800000000
+            timezone: "Australia/Sydney"
+            precision: DAY
+          }
+        }
+      }
+      frequency {
+        value: 3
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  nutrient {
+    modifier {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "39972003"
+        }
+        display {
+          value: "Sodium"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "2"
+      }
+      unit {
+        value: "grams"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "g"
+      }
+    }
+  }
+  nutrient {
+    modifier {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "30820000"
+        }
+        display {
+          value: "Phosphorus"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "1000"
+      }
+      unit {
+        value: "milligrams"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mg"
+      }
+    }
+  }
+  nutrient {
+    modifier {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "88480006"
+        }
+        display {
+          value: "Potassium"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "2"
+      }
+      unit {
+        value: "grams"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "g"
+      }
+    }
+  }
+}

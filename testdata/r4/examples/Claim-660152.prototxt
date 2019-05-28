@@ -1,0 +1,684 @@
+id {
+  value: "660152"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Vision Claim for Glasses</div>"
+  }
+}
+contained {
+  device {
+    id {
+      value: "device-frame"
+    }
+  }
+}
+contained {
+  device {
+    id {
+      value: "device-lens"
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://happysight.com/claim"
+  }
+  value {
+    value: "6612347"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/claim-type"
+    }
+    code {
+      value: "vision"
+    }
+  }
+}
+use {
+  value: CLAIM
+}
+patient {
+  patient_id {
+    value: "1"
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+provider {
+  organization_id {
+    value: "1"
+  }
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+prescription {
+  uri {
+    value: "http://www.optdocs.com/prescription/12345"
+  }
+}
+payee {
+  type {
+    coding {
+      code {
+        value: "provider"
+      }
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    practitioner_id {
+      value: "example"
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis {
+    codeable_concept {
+      coding {
+        code {
+          value: "654321"
+        }
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+  }
+  coverage {
+    coverage_id {
+      value: "9876B1"
+    }
+  }
+  pre_auth_ref {
+    value: "PR7652387237"
+  }
+  claim_response {
+    claim_response_id {
+      value: "R3500"
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 2
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    coverage_id {
+      value: "9876B1"
+    }
+  }
+  pre_auth_ref {
+    value: "AB543GTD7567"
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_sequence {
+    value: 1
+  }
+  revenue {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/ex-revenue-center"
+      }
+      code {
+        value: "0010"
+      }
+      display {
+        value: "Vision Clinic"
+      }
+    }
+  }
+  category {
+    coding {
+      system {
+        value: "http://example.org/fhir/CodeSystem/benefit-subcategory"
+      }
+      code {
+        value: "F6"
+      }
+      display {
+        value: "Vision Coverage"
+      }
+    }
+  }
+  product_or_service {
+    coding {
+      system {
+        value: "http://example.org/fhir/CodeSystem/ex-visionservice"
+      }
+      code {
+        value: "glasses"
+      }
+    }
+  }
+  modifier {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/modifiers"
+      }
+      code {
+        value: "rooh"
+      }
+    }
+  }
+  program_code {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/ex-programcode"
+      }
+      code {
+        value: "none"
+      }
+    }
+  }
+  serviced {
+    date {
+      value_us: 1408111200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  unit_price {
+    value {
+      value: "235.40"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: "235.40"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  detail {
+    sequence {
+      value: 1
+    }
+    revenue {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/ex-revenue-center"
+        }
+        code {
+          value: "0010"
+        }
+        display {
+          value: "Vision Clinic"
+        }
+      }
+    }
+    category {
+      coding {
+        system {
+          value: "http://example.org/fhir/CodeSystem/benefit-subcategory"
+        }
+        code {
+          value: "F6"
+        }
+        display {
+          value: "Vision Coverage"
+        }
+      }
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://example.org/fhir/CodeSystem/ex-visionservice"
+        }
+        code {
+          value: "frame"
+        }
+      }
+    }
+    modifier {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/modifiers"
+        }
+        code {
+          value: "rooh"
+        }
+      }
+    }
+    unit_price {
+      value {
+        value: "100.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+    factor {
+      value: "1.1"
+    }
+    net {
+      value {
+        value: "110.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+    udi {
+      fragment {
+        value: "device-frame"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 2
+    }
+    revenue {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/ex-revenue-center"
+        }
+        code {
+          value: "0010"
+        }
+        display {
+          value: "Vision Clinic"
+        }
+      }
+    }
+    category {
+      coding {
+        system {
+          value: "http://example.org/fhir/CodeSystem/benefit-subcategory"
+        }
+        code {
+          value: "F6"
+        }
+        display {
+          value: "Vision Coverage"
+        }
+      }
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://example.org/fhir/CodeSystem/ex-visionservice"
+        }
+        code {
+          value: "lens"
+        }
+      }
+    }
+    program_code {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/ex-programcode"
+        }
+        code {
+          value: "none"
+        }
+      }
+    }
+    quantity {
+      value {
+        value: "2"
+      }
+    }
+    unit_price {
+      value {
+        value: "55.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+    net {
+      value {
+        value: "110.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+    sub_detail {
+      sequence {
+        value: 1
+      }
+      revenue {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/ex-revenue-center"
+          }
+          code {
+            value: "0010"
+          }
+          display {
+            value: "Vision Clinic"
+          }
+        }
+      }
+      category {
+        coding {
+          system {
+            value: "http://example.org/fhir/CodeSystem/benefit-subcategory"
+          }
+          code {
+            value: "F6"
+          }
+          display {
+            value: "Vision Coverage"
+          }
+        }
+      }
+      product_or_service {
+        coding {
+          system {
+            value: "http://example.org/fhir/CodeSystem/ex-visionservice"
+          }
+          code {
+            value: "lens"
+          }
+        }
+      }
+      modifier {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/modifiers"
+          }
+          code {
+            value: "rooh"
+          }
+        }
+      }
+      program_code {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/ex-programcode"
+          }
+          code {
+            value: "none"
+          }
+        }
+      }
+      quantity {
+        value {
+          value: "2"
+        }
+      }
+      unit_price {
+        value {
+          value: "30.00"
+        }
+        currency {
+          value: "USD"
+        }
+      }
+      factor {
+        value: "1.1"
+      }
+      net {
+        value {
+          value: "66.00"
+        }
+        currency {
+          value: "USD"
+        }
+      }
+      udi {
+        fragment {
+          value: "device-lens"
+        }
+      }
+    }
+    sub_detail {
+      sequence {
+        value: 2
+      }
+      revenue {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/ex-revenue-center"
+          }
+          code {
+            value: "0010"
+          }
+          display {
+            value: "Vision Clinic"
+          }
+        }
+      }
+      category {
+        coding {
+          system {
+            value: "http://example.org/fhir/CodeSystem/benefit-subcategory"
+          }
+          code {
+            value: "F6"
+          }
+          display {
+            value: "Vision Coverage"
+          }
+        }
+      }
+      product_or_service {
+        coding {
+          system {
+            value: "http://example.org/fhir/CodeSystem/ex-visionservice"
+          }
+          code {
+            value: "hardening"
+          }
+        }
+      }
+      modifier {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/modifiers"
+          }
+          code {
+            value: "rooh"
+          }
+        }
+      }
+      quantity {
+        value {
+          value: "2"
+        }
+      }
+      unit_price {
+        value {
+          value: "15.00"
+        }
+        currency {
+          value: "USD"
+        }
+      }
+      factor {
+        value: "1.1"
+      }
+      net {
+        value {
+          value: "33.00"
+        }
+        currency {
+          value: "USD"
+        }
+      }
+    }
+    sub_detail {
+      sequence {
+        value: 3
+      }
+      revenue {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/ex-revenue-center"
+          }
+          code {
+            value: "0010"
+          }
+          display {
+            value: "Vision Clinic"
+          }
+        }
+      }
+      category {
+        coding {
+          system {
+            value: "http://example.org/fhir/CodeSystem/benefit-subcategory"
+          }
+          code {
+            value: "F6"
+          }
+          display {
+            value: "Vision Coverage"
+          }
+        }
+      }
+      product_or_service {
+        coding {
+          system {
+            value: "http://example.org/fhir/CodeSystem/ex-visionservice"
+          }
+          code {
+            value: "UV coating"
+          }
+        }
+      }
+      modifier {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/modifiers"
+          }
+          code {
+            value: "rooh"
+          }
+        }
+      }
+      quantity {
+        value {
+          value: "2"
+        }
+      }
+      unit_price {
+        value {
+          value: "5.00"
+        }
+        currency {
+          value: "USD"
+        }
+      }
+      factor {
+        value: "1.1"
+      }
+      net {
+        value {
+          value: "11.00"
+        }
+        currency {
+          value: "USD"
+        }
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 3
+    }
+    revenue {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/ex-revenue-center"
+        }
+        code {
+          value: "0010"
+        }
+        display {
+          value: "Vision Clinic"
+        }
+      }
+    }
+    category {
+      coding {
+        system {
+          value: "http://example.org/fhir/CodeSystem/benefit-subcategory"
+        }
+        code {
+          value: "F6"
+        }
+        display {
+          value: "Vision Coverage"
+        }
+      }
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://example.org/fhir/CodeSystem/ex-visionservice"
+        }
+        code {
+          value: "fst"
+        }
+      }
+    }
+    unit_price {
+      value {
+        value: "220.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+    factor {
+      value: "0.07"
+    }
+    net {
+      value {
+        value: "15.40"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+}

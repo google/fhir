@@ -1,0 +1,76 @@
+id {
+  value: "ob"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: ob</p><p><b>status</b>: completed</p><p><b>intent</b>: order</p><p><b>category</b>: OB <span>(Details : {SNOMED CT code \'386637004\' = \'Obstetric procedure\', given as \'Obstetric procedure (procedure)\'})</span></p><p><b>code</b>: Vaginal delivery <span>(Details : {SNOMED CT code \'22633006\' = \'Vaginal delivery, medical personnel present\', given as \'Vaginal delivery, medical personnel present (procedure)\'})</span></p><p><b>subject</b>: Jane Doe</p><p><b>occurrence</b>: 02/06/2012</p><p><b>requester</b>: Women\342\200\231s Hospital</p><p><b>performer</b>: Martha Midwife, RNP</p><p><b>reasonCode</b>: term pregnancy, active labor <span>(Details )</span></p></div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+intent {
+  value: ORDER
+}
+category {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "386637004"
+    }
+    display {
+      value: "Obstetric procedure (procedure)"
+    }
+  }
+  text {
+    value: "OB"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "22633006"
+    }
+    display {
+      value: "Vaginal delivery, medical personnel present (procedure)"
+    }
+  }
+  text {
+    value: "Vaginal delivery"
+  }
+}
+subject {
+  display {
+    value: "Jane Doe"
+  }
+}
+occurrence {
+  date_time {
+    value_us: 1338559200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+requester {
+  display {
+    value: "Women\342\200\231s Hospital"
+  }
+}
+performer {
+  display {
+    value: "Martha Midwife, RNP"
+  }
+}
+reason_code {
+  text {
+    value: "term pregnancy, active labor"
+  }
+}

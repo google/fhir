@@ -1,0 +1,110 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Patient has very high serum potassium</div>"
+  }
+}
+identifier {
+  type {
+    text {
+      value: "Paging System"
+    }
+  }
+  system {
+    value: "urn:oid:1.3.4.5.6.7"
+  }
+  value {
+    value: "2345678901"
+  }
+}
+instantiates_uri {
+  value: "http://example.org/hyperkalemia"
+}
+part_of {
+  display {
+    value: "Serum Potassium Observation"
+  }
+}
+status {
+  value: COMPLETED
+}
+category {
+  coding {
+    system {
+      value: "http://acme.org/messagetypes"
+    }
+    code {
+      value: "Alert"
+    }
+  }
+  text {
+    value: "Alert"
+  }
+}
+medium {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationMode"
+    }
+    code {
+      value: "WRITTEN"
+    }
+    display {
+      value: "written"
+    }
+  }
+  text {
+    value: "written"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+sent {
+  value_us: 1418436070000000
+  timezone: "-08:00"
+  precision: SECOND
+}
+received {
+  value_us: 1418436071000000
+  timezone: "-08:00"
+  precision: SECOND
+}
+recipient {
+  practitioner_id {
+    value: "example"
+  }
+}
+sender {
+  device_id {
+    value: "f001"
+  }
+}
+payload {
+  content {
+    string_value {
+      value: "Patient 1 has a very high serum potassium value (7.2 mmol/L on 2014-Dec-12 at 5:55 pm)"
+    }
+  }
+}
+payload {
+  content {
+    reference {
+      display {
+        value: "Serum Potassium Observation"
+      }
+    }
+  }
+}

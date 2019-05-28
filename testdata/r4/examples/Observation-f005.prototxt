@@ -1,0 +1,132 @@
+id {
+  value: "f005"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f005</p><p><b>identifier</b>: 6327 (OFFICIAL)</p><p><b>status</b>: final</p><p><b>code</b>: Hemoglobin [Mass/volume] in Blood <span>(Details : {LOINC code \'718-7\' = \'Hemoglobin [Mass/volume] in Blood\', given as \'Hemoglobin [Mass/volume] in Blood\'})</span></p><p><b>subject</b>: <a>P. van de Heuvel</a></p><p><b>effective</b>: 05/04/2013 10:30:10 AM --&gt; 05/04/2013 10:30:10 AM</p><p><b>issued</b>: 05/04/2013 3:30:10 PM</p><p><b>performer</b>: <a>A. Langeveld</a></p><p><b>value</b>: 7.2 g/dl<span> (Details: UCUM code g/dL = \'g/dL\')</span></p><p><b>interpretation</b>: Low <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'L\' = \'Low\', given as \'Low\'})</span></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>7.5 g/dl<span> (Details: UCUM code g/dL = \'g/dL\')</span></td><td>10 g/dl<span> (Details: UCUM code g/dL = \'g/dL\')</span></td></tr></table></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.bmc.nl/zorgportal/identifiers/observations"
+  }
+  value {
+    value: "6327"
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "718-7"
+    }
+    display {
+      value: "Hemoglobin [Mass/volume] in Blood"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+effective {
+  period {
+    start {
+      value_us: 1365154210000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1365154210000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+  }
+}
+issued {
+  value_us: 1365172210000000
+  timezone: "+01:00"
+  precision: SECOND
+}
+performer {
+  practitioner_id {
+    value: "f005"
+  }
+  display {
+    value: "A. Langeveld"
+  }
+}
+value {
+  quantity {
+    value {
+      value: "7.2"
+    }
+    unit {
+      value: "g/dl"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "g/dL"
+    }
+  }
+}
+interpretation {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+    }
+    code {
+      value: "L"
+    }
+    display {
+      value: "Low"
+    }
+  }
+}
+reference_range {
+  low {
+    value {
+      value: "7.5"
+    }
+    unit {
+      value: "g/dl"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "g/dL"
+    }
+  }
+  high {
+    value {
+      value: "10"
+    }
+    unit {
+      value: "g/dl"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "g/dL"
+    }
+  }
+}

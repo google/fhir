@@ -1,0 +1,61 @@
+id {
+  value: "E2500"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the CoverageEligibilityResponse.</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/coverageeligibilityresponse"
+  }
+  value {
+    value: "881234"
+  }
+}
+status {
+  value: ACTIVE
+}
+purpose {
+  value: VALIDATION
+}
+patient {
+  patient_id {
+    value: "pat1"
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+request {
+  uri {
+    value: "http://www.BenefitsInc.com/fhir/coverageeligibilityrequest/225476332402"
+  }
+}
+outcome {
+  value: COMPLETE
+}
+disposition {
+  value: "Policy is currently in-force."
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+insurance {
+  coverage {
+    coverage_id {
+      value: "9876B1"
+    }
+  }
+  inforce {
+    value: true
+  }
+}

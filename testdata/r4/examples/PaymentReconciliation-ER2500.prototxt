@@ -1,0 +1,233 @@
+id {
+  value: "ER2500"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the PaymentReconciliation</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/enrollmentresponse"
+  }
+  value {
+    value: "781234"
+  }
+}
+status {
+  value: ACTIVE
+}
+period {
+  start {
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1409407200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+payment_issuer {
+  organization_id {
+    value: "2"
+  }
+}
+request {
+  uri {
+    value: "http://www.BenefitsInc.com/fhir/eligibility/225476332402"
+  }
+}
+requestor {
+  organization_id {
+    value: "1"
+  }
+}
+outcome {
+  value: COMPLETE
+}
+disposition {
+  value: "2014 August mid-month settlement."
+}
+payment_date {
+  value_us: 1406815200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+payment_amount {
+  value {
+    value: "7000.00"
+  }
+  currency {
+    value: "USD"
+  }
+}
+payment_identifier {
+  system {
+    value: "http://www.BenefitsInc.com/payment/2018"
+  }
+  value {
+    value: "10-12345"
+  }
+}
+detail {
+  identifier {
+    system {
+      value: "http://www.BenefitsInc.com/payment/2018/detail"
+    }
+    value {
+      value: "10-12345-001"
+    }
+  }
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/payment-type"
+      }
+      code {
+        value: "payment"
+      }
+    }
+  }
+  request {
+    identifier {
+      system {
+        value: "http://happyvalleyclinic.com/claim"
+      }
+      value {
+        value: "AB12345"
+      }
+    }
+  }
+  submitter {
+    organization_id {
+      value: "1"
+    }
+  }
+  response {
+    identifier {
+      system {
+        value: "http://www.BenefitsInc.com/fhir/claimresponse"
+      }
+      value {
+        value: "CR20140815-AB12345"
+      }
+    }
+  }
+  date {
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  payee {
+    organization_id {
+      value: "1"
+    }
+  }
+  amount {
+    value {
+      value: "3500.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}
+detail {
+  identifier {
+    system {
+      value: "http://www.BenefitsInc.com/payment/2018/detail"
+    }
+    value {
+      value: "10-12345-002"
+    }
+  }
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/payment-type"
+      }
+      code {
+        value: "payment"
+      }
+    }
+  }
+  request {
+    uri {
+      value: "http://www.BenefitsInc.com/fhir/oralhealthclaim/225476332699"
+    }
+  }
+  date {
+    value_us: 1407765600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  amount {
+    value {
+      value: "4000.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}
+detail {
+  identifier {
+    system {
+      value: "http://www.BenefitsInc.com/payment/2018/detail"
+    }
+    value {
+      value: "10-12345-003"
+    }
+  }
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/payment-type"
+      }
+      code {
+        value: "advance"
+      }
+    }
+  }
+  date {
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  amount {
+    value {
+      value: "-1500.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}
+form_code {
+  coding {
+    system {
+      value: "http://ncforms.org/formid"
+    }
+    code {
+      value: "PAYREC/2016/01B"
+    }
+  }
+}
+process_note {
+  type {
+    value: DISPLAY
+  }
+  text {
+    value: "Due to the year end holiday the cutoff for submissions for December will be the 28th."
+  }
+}

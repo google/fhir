@@ -9,9 +9,14 @@ licenses(["notice"])
 # definitions of codes.
 java_library(
     name = "stu3",
-    srcs = glob(["src/main/java/com/google/fhir/stu3/*.java"]),
+    srcs = glob(
+        ["src/main/java/com/google/fhir/stu3/*.java"],
+        exclude = [
+            "src/main/java/com/google/fhir/stu3/AnnotationUtils.java",
+        ],
+    ),
     deps = [
-        ":fhir_common",
+        ":common",
         ":structure_definition_transformer",
         "//external:gson",
         "//external:guava",
@@ -23,6 +28,9 @@ java_library(
         "//proto/stu3:resources_java_proto",
         "//proto/stu3:uscore_codes_java_proto",
         "//proto:annotations_java_proto",
+        "//proto/r4:codes_java_proto",
+        "//proto/r4:datatypes_java_proto",
+        "//proto/r4:resources_java_proto",
         "@com_google_apis_google_api_services_bigquery//jar",
         "@com_google_http_client_google_http_client//jar",
         "@com_google_protobuf//:protobuf_java",
@@ -36,14 +44,15 @@ java_library(
         exclude = [
             "src/main/java/com/google/fhir/examples/BigQuerySchemaGeneratorMain.java",
             "src/main/java/com/google/fhir/examples/StructureDefinitionTransformerMain.java",
+            "src/main/java/com/google/fhir/examples/ProfileGeneratorMain.java",
         ],
     ),
     deps = [
+        ":common",
         ":structure_definition_transformer",
         ":stu3",
         "//external:guava",
         "//proto/stu3:datatypes_java_proto",
-        "//proto/stu3:extensions_java_proto",
         "//proto/stu3:profile_config_java_proto",
         "//proto/stu3:resources_java_proto",
         "//proto:annotations_java_proto",
@@ -130,9 +139,11 @@ java_library(
 )
 
 java_library(
-    name = "fhir_common",
+    name = "common",
     srcs = [
         "src/main/java/com/google/fhir/common/FhirVersion.java",
+        "src/main/java/com/google/fhir/common/ProtoUtils.java",
+        "src/main/java/com/google/fhir/stu3/AnnotationUtils.java",
     ],
     deps = [
         "//external:guava",
@@ -202,6 +213,7 @@ java_test(
     srcs = ["src/test/java/com/google/fhir/stu3/AnnotationUtilsTest.java"],
     test_class = "com.google.fhir.stu3.AnnotationUtilsTest",
     deps = [
+        ":common",
         ":stu3",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:resources_java_proto",
@@ -247,6 +259,7 @@ java_test(
     deps = [
         ":stu3",
         "//proto/stu3:datatypes_java_proto",
+        "//proto/r4:datatypes_java_proto",
         "@com_google_truth_truth//jar",
         "@junit_junit//jar",
     ],
@@ -260,6 +273,7 @@ java_test(
     deps = [
         ":stu3",
         "//proto/stu3:datatypes_java_proto",
+        "//proto/r4:datatypes_java_proto",
         "@com_google_truth_truth//jar",
         "@junit_junit//jar",
     ],
@@ -273,6 +287,7 @@ java_test(
     deps = [
         ":stu3",
         "//proto/stu3:datatypes_java_proto",
+        "//proto/r4:datatypes_java_proto",
         "@com_google_truth_truth//jar",
         "@junit_junit//jar",
     ],
@@ -291,6 +306,7 @@ java_test(
         "//external:guava",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
+        "//proto/r4:datatypes_java_proto",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
         "@com_google_truth_truth//jar",
@@ -306,14 +322,30 @@ java_test(
     deps = [
         ":stu3",
         "//proto/stu3:datatypes_java_proto",
+        "//proto/r4:datatypes_java_proto",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
+    ],
+)
+
+java_library(
+    name = "json_format_test_base",
+    testonly = 1,
+    srcs = ["src/main/java/com/google/fhir/common/JsonFormatTestBase.java"],
+    deps = [
+        ":stu3",
+        "//external:gson",
+        "//external:guava",
+        "@bazel_tools//tools/java/runfiles",
+        "@com_google_protobuf//:protobuf_java",
         "@com_google_truth_truth//jar",
         "@junit_junit//jar",
     ],
 )
 
 java_test(
-    name = "JsonFormatTest",
-    size = "medium",
+    name = "JsonFormatStu3Test",
+    size = "large",
     srcs = ["src/test/java/com/google/fhir/stu3/JsonFormatTest.java"],
     data = [
         "//spec:stu3",
@@ -321,13 +353,38 @@ java_test(
         "//testdata/stu3:examples",
         "//testdata/stu3:profiles",
     ],
+    shard_count = 10,
     test_class = "com.google.fhir.stu3.JsonFormatTest",
     deps = [
+        ":json_format_test_base",
         ":stu3",
         "//external:gson",
         "//external:guava",
         "//proto/stu3:resources_java_proto",
         "//testdata/stu3/profiles:test_java_proto",
+        "@bazel_tools//tools/java/runfiles",
+        "@com_google_protobuf//:protobuf_java",
+        "@com_google_truth_truth//jar",
+        "@junit_junit//jar",
+    ],
+)
+
+java_test(
+    name = "JsonFormatR4Test",
+    size = "large",
+    srcs = ["src/test/java/com/google/fhir/r4/JsonFormatTest.java"],
+    data = [
+        "//spec:r4",
+        "//testdata/r4:examples",
+    ],
+    shard_count = 10,
+    test_class = "com.google.fhir.r4.JsonFormatTest",
+    deps = [
+        ":json_format_test_base",
+        ":stu3",
+        "//external:gson",
+        "//external:guava",
+        "//proto/r4:resources_java_proto",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
         "@com_google_truth_truth//jar",
@@ -346,7 +403,7 @@ java_test(
     ],
     test_class = "com.google.fhir.stu3.ProtoFilePrinterTest",
     deps = [
-        ":fhir_common",
+        ":common",
         ":stu3",
         "//external:gson",
         "//external:guava",
@@ -375,7 +432,7 @@ java_test(
     ],
     test_class = "com.google.fhir.stu3.ProtoGeneratorTest",
     deps = [
-        ":fhir_common",
+        ":common",
         ":stu3",
         "//external:gson",
         "//external:guava",
@@ -398,6 +455,7 @@ java_test(
     deps = [
         ":stu3",
         "//proto/stu3:datatypes_java_proto",
+        "//proto/r4:datatypes_java_proto",
         "@com_google_truth_truth//jar",
         "@junit_junit//jar",
     ],
@@ -426,7 +484,7 @@ java_library(
     name = "profile_generator_lib",
     srcs = ["src/main/java/com/google/fhir/profile/ProfileGenerator.java"],
     deps = [
-        ":fhir_common",
+        ":common",
         ":stu3",
         "//external:gson",
         "//external:guava",
@@ -454,10 +512,10 @@ java_test(
     test_class = "com.google.fhir.profile.ProfileGeneratorTest",
     deps = [
         ":profile_generator_lib",
+        ":stu3",
         "//external:guava",
         "//proto/stu3:profile_config_java_proto",
         "//proto/stu3:resources_java_proto",
-        "//java:stu3",
         "@com_google_protobuf//:protobuf_java",
         "@com_google_truth_truth//jar",
         "@junit_junit//jar",
@@ -470,10 +528,10 @@ java_binary(
     main_class = "com.google.fhir.profile.ProfileGeneratorMain",
     deps = [
         ":profile_generator_lib",
+        ":stu3",
         "//external:guava",
         "//proto/stu3:profile_config_java_proto",
         "//proto/stu3:resources_java_proto",
-        "//java:stu3",
         "@com_beust_jcommander//jar",
         "@com_google_protobuf//:protobuf_java",
     ],
@@ -483,7 +541,7 @@ java_library(
     name = "valueset_generator_lib",
     srcs = ["src/main/java/com/google/fhir/stu3/ValueSetGenerator.java"],
     deps = [
-        ":fhir_common",
+        ":common",
         ":stu3",
         "//external:guava",
         "//proto/stu3:datatypes_java_proto",

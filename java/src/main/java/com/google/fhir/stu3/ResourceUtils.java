@@ -16,10 +16,11 @@ package com.google.fhir.stu3;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.Id;
+import com.google.fhir.r4.proto.ReferenceId;
 import com.google.fhir.stu3.proto.Bundle;
-import com.google.fhir.stu3.proto.ContainedResource;
-import com.google.fhir.stu3.proto.Id;
-import com.google.fhir.stu3.proto.ReferenceId;
+import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 import java.util.ArrayList;
@@ -51,13 +52,26 @@ public final class ResourceUtils {
     return ((Id) message.getField(id)).getValue();
   }
 
-  public static Message getContainedResource(ContainedResource resource) {
+  private static Message getContainedResourceInternal(Message resource) {
     Collection<Object> values = resource.getAllFields().values();
     if (values.size() == 1) {
       return (Message) values.iterator().next();
     } else {
       return null;
     }
+  }
+
+  public static Message getContainedResource(
+      com.google.fhir.stu3.proto.ContainedResource resource) {
+    return getContainedResourceInternal(resource);
+  }
+
+  public static Message getContainedResource(com.google.fhir.r4.proto.ContainedResource resource) {
+    return getContainedResourceInternal(resource);
+  }
+
+  public static <V> V getValue(Message primitive) {
+    return (V) primitive.getField(primitive.getDescriptorForType().findFieldByName("value"));
   }
 
   /*
@@ -141,38 +155,38 @@ public final class ResourceUtils {
    * the patientId field getting the value "ABCD".
    */
   public static Message splitIfRelativeReference(Message.Builder builder) {
-    FieldDescriptor uri = builder.getDescriptorForType().findFieldByName("uri");
-    if (!builder.hasField(uri)) {
+    Descriptor descriptor = builder.getDescriptorForType();
+    FieldDescriptor uriField = descriptor.findFieldByName("uri");
+    if (!builder.hasField(uriField)) {
       return builder.build();
     }
-    String string = ((com.google.fhir.stu3.proto.String) builder.getField(uri)).getValue();
-    if (string.startsWith("#")) {
-      FieldDescriptor fragment = builder.getDescriptorForType().findFieldByName("fragment");
-      return builder
-          .setField(
-              fragment,
-              com.google.fhir.stu3.proto.String.newBuilder()
-                  .setValue(new IdWrapper(string.substring(1)).getWrapped().getValue())
-                  .build())
+    Message uri = (Message) builder.getField(uriField);
+    String uriValue = (String) uri.getField(uri.getDescriptorForType().findFieldByName("value"));
+    if (uriValue.startsWith("#")) {
+      FieldDescriptor fragmentField = descriptor.findFieldByName("fragment");
+      Message.Builder fragmentBuilder = builder.getFieldBuilder(fragmentField);
+      return ProtoUtils.fieldWiseCopy(
+              com.google.fhir.r4.proto.String.newBuilder()
+                  .setValue(new IdWrapper(uriValue.substring(1)).getWrapped().getValue()),
+              fragmentBuilder)
           .build();
     }
     // Look for references of type "ResourceType/ResourceId"
-    List<String> parts = Splitter.on('/').splitToList(string);
+    List<String> parts = Splitter.on('/').splitToList(uriValue);
     if (parts.size() == 2 || (parts.size() == 4 && "_history".equals(parts.get(2)))) {
       String resourceFieldName =
           CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, parts.get(0)) + "_id";
-      FieldDescriptor field = builder.getDescriptorForType().findFieldByName(resourceFieldName);
+      FieldDescriptor field = descriptor.findFieldByName(resourceFieldName);
       if (field == null) {
         throw new IllegalArgumentException(
             "Invalid resource type in reference: " + resourceFieldName + ":" + parts.get(0));
       } else {
-        // Parse as an Id to ensure validation.
         ReferenceId.Builder refId =
             ReferenceId.newBuilder().setValue(new IdWrapper(parts.get(1)).getWrapped().getValue());
         if (parts.size() == 4) {
           refId.setHistory(new IdWrapper(parts.get(3)).getWrapped());
         }
-        return builder.setField(field, refId.build()).build();
+        return ProtoUtils.fieldWiseCopy(refId, builder.getFieldBuilder(field)).build();
       }
     }
     // Keep the uri field.

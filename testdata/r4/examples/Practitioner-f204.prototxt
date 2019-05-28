@@ -1,0 +1,71 @@
+id {
+  value: "f204"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f204</p><p><b>identifier</b>: UZI-nummer = 12345678904 (OFFICIAL)</p><p><b>name</b>: Carla Espinosa</p><p><b>telecom</b>: ph: +31715262169(WORK)</p><p><b>address</b>: Walvisbaai 3 Den helder 2333ZA NLD (WORK)</p><p><b>gender</b>: female</p><p><b>birthDate</b>: 05/11/1967</p></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  type {
+    text {
+      value: "UZI-nummer"
+    }
+  }
+  system {
+    value: "urn:oid:2.16.528.1.1007.3.1"
+  }
+  value {
+    value: "12345678904"
+  }
+}
+name {
+  use {
+    value: USUAL
+  }
+  text {
+    value: "Carla Espinosa"
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "+31715262169"
+  }
+  use {
+    value: WORK
+  }
+}
+address {
+  use {
+    value: WORK
+  }
+  line {
+    value: "Walvisbaai 3"
+  }
+  city {
+    value: "Den helder"
+  }
+  postal_code {
+    value: "2333ZA"
+  }
+  country {
+    value: "NLD"
+  }
+}
+gender {
+  value: FEMALE
+}
+birth_date {
+  value_us: -68119200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}

@@ -1,0 +1,187 @@
+id {
+  value: "medrx0320"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medrx0320</p><p><b>identifier</b>: 12345689 (OFFICIAL)</p><p><b>status</b>: completed</p><p><b>intent</b>: order</p><p><b>medication</b>: Lantus 100 unit/ml injectable solution <span>(Details : {RxNorm code \'285018\' = \'Lantus 100 UNT/ML Injectable Solution\', given as \'Lantus 100 unit/ml injectable solution\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>authoredOn</b>: 15/01/2015</p><p><b>requester</b>: <a>Patrick Pump</a></p><p><b>reasonCode</b>: On subcutaneous insulin for diabetes mellitus (finding) <span>(Details : {SNOMED CT code \'473189005\' = \'On subcutaneous insulin for diabetes mellitus\', given as \'On subcutaneous insulin for diabetes mellitus (finding)\'})</span></p><p><b>dosageInstruction</b>: </p><h3>DispenseRequests</h3><table><tr><td>-</td><td><b>ValidityPeriod</b></td><td><b>NumberOfRepeatsAllowed</b></td><td><b>Quantity</b></td><td><b>ExpectedSupplyDuration</b></td></tr><tr><td>*</td><td>15/01/2015 --&gt; 15/01/2016</td><td>6</td><td>10 mL<span> (Details: UCUM code mL = \'mL\')</span></td><td>30 days<span> (Details: UCUM code d = \'d\')</span></td></tr></table></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.bmc.nl/portal/prescriptions"
+  }
+  value {
+    value: "12345689"
+  }
+}
+status {
+  value: COMPLETED
+}
+intent {
+  value: ORDER
+}
+medication {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+      }
+      code {
+        value: "285018"
+      }
+      display {
+        value: "Lantus 100 unit/ml injectable solution"
+      }
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+authored_on {
+  value_us: 1421240400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+requester {
+  practitioner_id {
+    value: "f007"
+  }
+  display {
+    value: "Patrick Pump"
+  }
+}
+reason_code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "473189005"
+    }
+    display {
+      value: "On subcutaneous insulin for diabetes mellitus (finding)"
+    }
+  }
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "20 Units SC three times daily"
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 3
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "263887005"
+      }
+      display {
+        value: "Subcutaneous (qualifier value)"
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "ordered"
+        }
+        display {
+          value: "Ordered"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "20"
+        }
+        unit {
+          value: "U"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "U"
+        }
+      }
+    }
+  }
+}
+dispense_request {
+  validity_period {
+    start {
+      value_us: 1421240400000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+    end {
+      value_us: 1452776400000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  number_of_repeats_allowed {
+    value: 6
+  }
+  quantity {
+    value {
+      value: "10"
+    }
+    unit {
+      value: "mL"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "mL"
+    }
+  }
+  expected_supply_duration {
+    value {
+      value: "30"
+    }
+    unit {
+      value: "days"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "d"
+    }
+  }
+}

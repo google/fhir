@@ -15,12 +15,13 @@
 package com.google.fhir.stu3;
 
 import com.google.common.io.BaseEncoding;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.Base64Binary;
 import com.google.fhir.stu3.google.Base64BinarySeparatorStride;
-import com.google.fhir.stu3.proto.Base64Binary;
 import com.google.fhir.stu3.proto.PositiveInt;
-import com.google.fhir.stu3.proto.String;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Message;
+import com.google.protobuf.MessageOrBuilder;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,12 +36,16 @@ public class Base64BinaryWrapper extends PrimitiveWrapper<Base64Binary> {
     super(base64Binary);
   }
 
+  public Base64BinaryWrapper(MessageOrBuilder base64Binary) {
+    super(ProtoUtils.fieldWiseCopy(base64Binary, Base64Binary.newBuilder()).build());
+  }
+
   /** Create an Base64BinaryWrapper from a java String. */
-  public Base64BinaryWrapper(java.lang.String input) {
+  public Base64BinaryWrapper(String input) {
     super(input == null ? NULL_BASE64_BINARY : parseAndValidate(input));
   }
 
-  private static Base64Binary parseAndValidate(java.lang.String input) {
+  private static Base64Binary parseAndValidate(String input) {
     BaseEncoding encoding = BaseEncoding.base64();
     Base64Binary.Builder builder = Base64Binary.newBuilder();
     int stride = input.indexOf(' ');
@@ -49,14 +54,14 @@ public class Base64BinaryWrapper extends PrimitiveWrapper<Base64Binary> {
       while (end < input.length() && input.charAt(end) == ' ') {
         end++;
       }
-      java.lang.String separator = input.substring(stride, end);
+      String separator = input.substring(stride, end);
       Base64BinarySeparatorStride strideExtension =
           Base64BinarySeparatorStride.newBuilder()
-              .setSeparator(String.newBuilder().setValue(separator))
+              .setSeparator(com.google.fhir.stu3.proto.String.newBuilder().setValue(separator))
               .setStride(PositiveInt.newBuilder().setValue(stride))
               .build();
       encoding = encoding.withSeparator(separator, stride);
-      builder.addAllExtension(ExtensionWrapper.of().add(strideExtension).build());
+      ExtensionWrapper.of().add(strideExtension).addToMessage(builder);
     }
     try {
       return builder.setValue(ByteString.copyFrom(encoding.decode(input))).build();
@@ -66,7 +71,7 @@ public class Base64BinaryWrapper extends PrimitiveWrapper<Base64Binary> {
   }
 
   @Override
-  protected java.lang.String printValue() {
+  protected String printValue() {
     BaseEncoding encoding = BaseEncoding.base64();
     List<Base64BinarySeparatorStride> strideExtension =
         ExtensionWrapper.fromExtensionsIn(getWrapped())

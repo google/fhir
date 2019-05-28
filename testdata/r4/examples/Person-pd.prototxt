@@ -1,0 +1,113 @@
+id {
+  value: "pd"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <table>\n        <tbody>\n          <tr>\n            <td>Name</td>\n            <td>\n              Harold <b>Hippocrates</b>\n            </td>\n          </tr>\n          <tr>\n            <td>Address</td>\n            <td>1003 Healthcare Drive, Northfield, MN</td>\n          </tr>\n        </tbody>\n      </table>\n    </div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+      }
+      code {
+        value: "SS"
+      }
+    }
+  }
+  system {
+    value: "http://hl7.org/fhir/sid/us-ssn"
+  }
+  value {
+    value: "444444444"
+  }
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  family {
+    value: "Hippocrates"
+  }
+  given {
+    value: "Harold"
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "555-555-1003"
+  }
+  use {
+    value: WORK
+  }
+}
+gender {
+  value: MALE
+}
+birth_date {
+  value_us: -337600800000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+address {
+  use {
+    value: HOME
+  }
+  line {
+    value: "1003 Healthcare Drive"
+  }
+  city {
+    value: "Northfield"
+  }
+  state {
+    value: "MN"
+  }
+}
+managing_organization {
+  uri {
+    value: "http://www.northfield-regional.com/Organization/2"
+  }
+  display {
+    value: "Northfield Regional Physician Directory"
+  }
+}
+active {
+  value: true
+}
+link {
+  target {
+    uri {
+      value: "http://www.goodhealth.com/Practitioner/98574"
+    }
+    display {
+      value: "Dr. Harold Hippocrates"
+    }
+  }
+  assurance {
+    value: LEVEL2
+  }
+}
+link {
+  target {
+    uri {
+      value: "http://www.acme-medical.com/Practitioner/ab34d"
+    }
+    display {
+      value: "Harold Hippocrates, MD"
+    }
+  }
+  assurance {
+    value: LEVEL2
+  }
+}

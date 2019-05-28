@@ -1,0 +1,83 @@
+id {
+  value: "coord-0-base"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: coord-0-base</p><p><b>type</b>: dna</p><p><b>coordinateSystem</b>: 0</p><h3>ReferenceSeqs</h3><table><tr><td>-</td><td><b>ReferenceSeqString</b></td><td><b>Strand</b></td><td><b>WindowStart</b></td><td><b>WindowEnd</b></td></tr><tr><td>*</td><td>ACGTAGTC</td><td>watson</td><td>0</td><td>8</td></tr></table><blockquote><p><b>variant</b></p><p><b>start</b>: 2</p><p><b>end</b>: 2</p><p><b>observedAllele</b>: ATG</p><p><b>referenceAllele</b>: -</p><p><b>cigar</b>: 3I</p></blockquote><blockquote><p><b>variant</b></p><p><b>start</b>: 4</p><p><b>end</b>: 5</p><p><b>observedAllele</b>: T</p><p><b>referenceAllele</b>: A</p><p><b>cigar</b>: 1M</p></blockquote><blockquote><p><b>variant</b></p><p><b>start</b>: 6</p><p><b>end</b>: 7</p><p><b>observedAllele</b>: -</p><p><b>referenceAllele</b>: T</p><p><b>cigar</b>: 1D</p></blockquote><p><b>observedSeq</b>: ACATGGTAGC</p></div>"
+  }
+}
+type {
+  value: DNA
+}
+coordinate_system {
+}
+reference_seq {
+  reference_seq_string {
+    value: "ACGTAGTC"
+  }
+  strand {
+    value: WATSON
+  }
+  window_start {
+  }
+  window_end {
+    value: 8
+  }
+}
+variant {
+  start {
+    value: 2
+  }
+  end {
+    value: 2
+  }
+  observed_allele {
+    value: "ATG"
+  }
+  reference_allele {
+    value: "-"
+  }
+  cigar {
+    value: "3I"
+  }
+}
+variant {
+  start {
+    value: 4
+  }
+  end {
+    value: 5
+  }
+  observed_allele {
+    value: "T"
+  }
+  reference_allele {
+    value: "A"
+  }
+  cigar {
+    value: "1M"
+  }
+}
+variant {
+  start {
+    value: 6
+  }
+  end {
+    value: 7
+  }
+  observed_allele {
+    value: "-"
+  }
+  reference_allele {
+    value: "T"
+  }
+  cigar {
+    value: "1D"
+  }
+}
+observed_seq {
+  value: "ACATGGTAGC"
+}

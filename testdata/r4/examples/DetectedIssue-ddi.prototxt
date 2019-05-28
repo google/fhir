@@ -1,0 +1,92 @@
+id {
+  value: "ddi"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p><b>Severity: High</b> - Risk of internal bleeding</p>\n      <p>Those who take acetaminophen along with the widely used blood-thinning drug warfarin may face the risk of serious internal bleeding. People on warfarin who take acetaminophen for at least seven days in a row should be closely watched for bleeding.</p>\n      <ul>\n        <li><a href=\"MedicationStatement/tylenol\">500 mg Acetaminophen tablet 1/day, PRN since 2010</a></li>\n        <li><a href=\"MedicationRequest/warfarin\">Warfarin 1 MG TAB prescribed Jan. 5, 2014</a></li>\n      </ul>\n      <p>Mitigation: Jan 5, 2014 by Dr. Adam Careful: </p>\n      <p>Asked patient to discontinue regular use of Tylenol and to consult with clinician if they need to resume to allow appropriate INR monitoring</p>\n    </div>"
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "DRG"
+    }
+    display {
+      value: "Drug Interaction Alert"
+    }
+  }
+}
+severity {
+  value: HIGH
+}
+identified {
+  date_time {
+    value_us: 1388840400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+author {
+  device_id {
+    value: "software"
+  }
+}
+implicated {
+  medication_statement_id {
+    value: "example001"
+  }
+  display {
+    value: "500 mg Acetaminophen tablet 1/day, PRN since 2010"
+  }
+}
+implicated {
+  medication_request_id {
+    value: "medrx0331"
+  }
+  display {
+    value: "Warfarin 1 MG TAB prescribed Jan. 15, 2015"
+  }
+}
+detail {
+  value: "Risk of internal bleeding.  Those who take acetaminophen along with the widely used blood-thinning drug warfarin may face the risk of serious internal bleeding. People on warfarin who take acetaminophen for at least seven days in a row should be closely watched for bleeding."
+}
+mitigation {
+  action {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+      }
+      code {
+        value: "13"
+      }
+      display {
+        value: "Stopped Concurrent Therapy"
+      }
+    }
+    text {
+      value: "Asked patient to discontinue regular use of Tylenol and to consult with clinician if they need to resume to allow appropriate INR monitoring"
+    }
+  }
+  date {
+    value_us: 1388840400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  author {
+    practitioner_id {
+      value: "example"
+    }
+    display {
+      value: "Dr. Adam Careful"
+    }
+  }
+}

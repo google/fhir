@@ -1,0 +1,159 @@
+id {
+  value: "f201"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f201</p><p><b>identifier</b>: 12345</p><p><b>clinicalStatus</b>: Resolved <span>(Details : {http://terminology.hl7.org/CodeSystem/condition-clinical code \'resolved\' = \'Resolved)</span></p><p><b>verificationStatus</b>: Confirmed <span>(Details : {http://terminology.hl7.org/CodeSystem/condition-ver-status code \'confirmed\' = \'Confirmed)</span></p><p><b>category</b>: Problem <span>(Details : {SNOMED CT code \'55607006\' = \'Problem\', given as \'Problem\'}; {http://terminology.hl7.org/CodeSystem/condition-category code \'problem-list-item\' = \'Problem List Item)</span></p><p><b>severity</b>: Mild <span>(Details : {SNOMED CT code \'255604002\' = \'Mild\', given as \'Mild\'})</span></p><p><b>code</b>: Fever <span>(Details : {SNOMED CT code \'386661006\' = \'Fever\', given as \'Fever\'})</span></p><p><b>bodySite</b>: Entire body as a whole <span>(Details : {SNOMED CT code \'38266002\' = \'Body as a whole\', given as \'Entire body as a whole\'})</span></p><p><b>subject</b>: <a>Roel</a></p><p><b>encounter</b>: <a>Encounter/f201</a></p><p><b>onset</b>: 02/04/2013</p><p><b>abatement</b>: around April 9, 2013</p><p><b>recordedDate</b>: 04/04/2013</p><p><b>recorder</b>: <a>Practitioner/f201</a></p><p><b>asserter</b>: <a>Practitioner/f201</a></p><h3>Evidences</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Detail</b></td></tr><tr><td>*</td><td>degrees C <span>(Details : {SNOMED CT code \'258710007\' = \'degrees C\', given as \'degrees C\'})</span></td><td><a>Temperature</a></td></tr></table></div>"
+  }
+}
+identifier {
+  value {
+    value: "12345"
+  }
+}
+clinical_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
+    }
+    code {
+      value: "resolved"
+    }
+  }
+}
+verification_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+    }
+    code {
+      value: "confirmed"
+    }
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "55607006"
+    }
+    display {
+      value: "Problem"
+    }
+  }
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/condition-category"
+    }
+    code {
+      value: "problem-list-item"
+    }
+  }
+}
+severity {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "255604002"
+    }
+    display {
+      value: "Mild"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "386661006"
+    }
+    display {
+      value: "Fever"
+    }
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "38266002"
+    }
+    display {
+      value: "Entire body as a whole"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "f201"
+  }
+  display {
+    value: "Roel"
+  }
+}
+encounter {
+  encounter_id {
+    value: "f201"
+  }
+}
+onset {
+  date_time {
+    value_us: 1364821200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+abatement {
+  string_value {
+    value: "around April 9, 2013"
+  }
+}
+recorded_date {
+  value_us: 1364994000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+recorder {
+  practitioner_id {
+    value: "f201"
+  }
+}
+asserter {
+  practitioner_id {
+    value: "f201"
+  }
+}
+evidence {
+  code {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "258710007"
+      }
+      display {
+        value: "degrees C"
+      }
+    }
+  }
+  detail {
+    observation_id {
+      value: "f202"
+    }
+    display {
+      value: "Temperature"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+id {
+  value: "breastcancer"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: breastcancer</p><p><b>type</b>: rna</p><p><b>coordinateSystem</b>: 0</p><p><b>patient</b>: <a>Patient/brcapat</a></p><h3>ReferenceSeqs</h3><table><tr><td>-</td><td><b>ReferenceSeqId</b></td><td><b>WindowStart</b></td><td><b>WindowEnd</b></td></tr><tr><td>*</td><td>Homo sapiens BRCA2, DNA repair associated (BRCA2), mRNA <span>(Details : {http://www.ncbi.nlm.nih.gov/nuccore/ code \'NM_000059.3\' = \'NM_000059.3\', given as \'Homo sapiens BRCA2, DNA repair associated (BRCA2), mRNA\'})</span></td><td>101488058</td><td>101499444</td></tr></table><h3>Variants</h3><table><tr><td>-</td><td><b>Start</b></td><td><b>End</b></td><td><b>ObservedAllele</b></td><td><b>ReferenceAllele</b></td></tr><tr><td>*</td><td>32316186</td><td>32316187</td><td>A</td><td>C</td></tr></table></div>"
+  }
+}
+type {
+  value: RNA
+}
+coordinate_system {
+}
+patient {
+  patient_id {
+    value: "brcapat"
+  }
+}
+reference_seq {
+  reference_seq_id {
+    coding {
+      system {
+        value: "http://www.ncbi.nlm.nih.gov/nuccore/"
+      }
+      code {
+        value: "NM_000059.3"
+      }
+      display {
+        value: "Homo sapiens BRCA2, DNA repair associated (BRCA2), mRNA"
+      }
+    }
+  }
+  window_start {
+    value: 101488058
+  }
+  window_end {
+    value: 101499444
+  }
+}
+variant {
+  start {
+    value: 32316186
+  }
+  end {
+    value: 32316187
+  }
+  observed_allele {
+    value: "A"
+  }
+  reference_allele {
+    value: "C"
+  }
+}

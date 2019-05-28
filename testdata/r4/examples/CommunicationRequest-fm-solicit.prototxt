@@ -1,0 +1,147 @@
+id {
+  value: "fm-solicit"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Request for Accident Report</div>"
+  }
+}
+contained {
+  organization {
+    id {
+      value: "provider"
+    }
+    identifier {
+      system {
+        value: "http://www.jurisdiction.com/provideroffices"
+      }
+      value {
+        value: "3456"
+      }
+    }
+  }
+}
+contained {
+  organization {
+    id {
+      value: "payor"
+    }
+    identifier {
+      system {
+        value: "http://www.jurisdiction.com/insurer"
+      }
+      value {
+        value: "123456"
+      }
+    }
+  }
+}
+contained {
+  practitioner {
+    id {
+      value: "requester"
+    }
+    identifier {
+      value {
+        value: "6789"
+      }
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://www.jurisdiction.com/insurer/123456"
+  }
+  value {
+    value: "ABC123"
+  }
+}
+based_on {
+  display {
+    value: "EligibilityRequest"
+  }
+}
+replaces {
+  display {
+    value: "prior CommunicationRequest"
+  }
+}
+group_identifier {
+  value {
+    value: "12345"
+  }
+}
+status {
+  value: ACTIVE
+}
+category {
+  coding {
+    system {
+      value: "http://acme.org/messagetypes"
+    }
+    code {
+      value: "SolicitedAttachmentRequest"
+    }
+  }
+}
+priority {
+  value: ROUTINE
+}
+medium {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationMode"
+    }
+    code {
+      value: "WRITTEN"
+    }
+    display {
+      value: "written"
+    }
+  }
+  text {
+    value: "written"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+payload {
+  content {
+    string_value {
+      value: "Please provide the accident report and any associated pictures to support your Claim# DEF5647."
+    }
+  }
+}
+occurrence {
+  date_time {
+    value_us: 1465585270000000
+    timezone: "-08:00"
+    precision: SECOND
+  }
+}
+authored_on {
+  value_us: 1465585270000000
+  timezone: "-08:00"
+  precision: SECOND
+}
+requester {
+  fragment {
+    value: "requester"
+  }
+}
+recipient {
+  fragment {
+    value: "provider"
+  }
+}
+sender {
+  fragment {
+    value: "payor"
+  }
+}

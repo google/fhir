@@ -1,0 +1,61 @@
+id {
+  value: "xcda"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: xcda</p><p><b>identifier</b>: 1234213.52345873 (OFFICIAL)</p><p><b>status</b>: finished</p><p><b>class</b>: ambulatory (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode code AMB = \'ambulatory\', stated as \'ambulatory\')</p><p><b>subject</b>: <a>Patient/xcda</a></p><h3>Participants</h3><table><tr><td>-</td><td><b>Individual</b></td></tr><tr><td>*</td><td><a>Practitioner/xcda1</a></td></tr></table><p><b>reasonCode</b>: Arm <span>(Details : {http://ihe.net/xds/connectathon/eventCodes code \'T-D8200\' = \'T-D8200\', given as \'Arm\'})</span></p></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://healthcare.example.org/identifiers/enocunter"
+  }
+  value {
+    value: "1234213.52345873"
+  }
+}
+status {
+  value: FINISHED
+}
+class_value {
+  system {
+    value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+  }
+  code {
+    value: "AMB"
+  }
+  display {
+    value: "ambulatory"
+  }
+}
+subject {
+  patient_id {
+    value: "xcda"
+  }
+}
+participant {
+  individual {
+    practitioner_id {
+      value: "xcda1"
+    }
+  }
+}
+reason_code {
+  coding {
+    system {
+      value: "http://ihe.net/xds/connectathon/eventCodes"
+    }
+    code {
+      value: "T-D8200"
+    }
+    display {
+      value: "Arm"
+    }
+  }
+}

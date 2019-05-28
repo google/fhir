@@ -1,0 +1,19 @@
+id {
+  value: "appendectomy-narrative"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Routine Appendectomy in April 2013 performed by Dr Cecil Surgeon</div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}

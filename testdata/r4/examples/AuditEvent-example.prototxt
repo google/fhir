@@ -1,0 +1,198 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Application Start for under service login &quot;Grahame&quot; (id: Grahame\'s Test HL7Connect)</div>"
+  }
+}
+type {
+  system {
+    value: "http://dicom.nema.org/resources/ontology/DCM"
+  }
+  code {
+    value: "110100"
+  }
+  display {
+    value: "Application Activity"
+  }
+}
+subtype {
+  system {
+    value: "http://dicom.nema.org/resources/ontology/DCM"
+  }
+  code {
+    value: "110120"
+  }
+  display {
+    value: "Application Start"
+  }
+}
+action {
+  value: E
+}
+recorded {
+  value_us: 1351163067000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+outcome {
+  value: NUM_0
+}
+agent {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/extra-security-role-type"
+      }
+      code {
+        value: "humanuser"
+      }
+      display {
+        value: "human user"
+      }
+    }
+  }
+  role {
+    text {
+      value: "Service User (Logon)"
+    }
+  }
+  who {
+    identifier {
+      value {
+        value: "Grahame"
+      }
+    }
+  }
+  requestor {
+  }
+  network {
+    address {
+      value: "127.0.0.1"
+    }
+    type {
+      value: NUM_2
+    }
+  }
+}
+agent {
+  type {
+    coding {
+      system {
+        value: "http://dicom.nema.org/resources/ontology/DCM"
+      }
+      code {
+        value: "110153"
+      }
+      display {
+        value: "Source Role ID"
+      }
+    }
+  }
+  who {
+    identifier {
+      system {
+        value: "urn:oid:2.16.840.1.113883.4.2"
+      }
+      value {
+        value: "2.16.840.1.113883.4.2"
+      }
+    }
+  }
+  alt_id {
+    value: "6580"
+  }
+  requestor {
+  }
+  network {
+    address {
+      value: "Workstation1.ehr.familyclinic.com"
+    }
+    type {
+      value: NUM_1
+    }
+  }
+}
+source {
+  site {
+    value: "Development"
+  }
+  observer {
+    display {
+      value: "Grahame\'s Laptop"
+    }
+  }
+  type {
+    system {
+      value: "http://dicom.nema.org/resources/ontology/DCM"
+    }
+    code {
+      value: "110122"
+    }
+    display {
+      value: "Login"
+    }
+  }
+}
+entity {
+  what {
+    identifier {
+      type {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+          }
+          code {
+            value: "SNO"
+          }
+        }
+        text {
+          value: "Dell Serial Number"
+        }
+      }
+      value {
+        value: "ABCDEF"
+      }
+    }
+  }
+  type {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/audit-entity-type"
+    }
+    code {
+      value: "4"
+    }
+    display {
+      value: "Other"
+    }
+  }
+  role {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/object-role"
+    }
+    code {
+      value: "4"
+    }
+    display {
+      value: "Domain Resource"
+    }
+  }
+  lifecycle {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/dicom-audit-lifecycle"
+    }
+    code {
+      value: "6"
+    }
+    display {
+      value: "Access / Use"
+    }
+  }
+  name {
+    value: "Grahame\'s Laptop"
+  }
+}

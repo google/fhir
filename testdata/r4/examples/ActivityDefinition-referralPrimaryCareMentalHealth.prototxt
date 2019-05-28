@@ -1,0 +1,394 @@
+id {
+  value: "referralPrimaryCareMentalHealth"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Id: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">ActivityDefinition/referralPrimaryCareMentalHealth</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Status: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">draft</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Description: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">refer to primary care mental-health integrated care program for evaluation and treatment of mental health conditions now</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Category: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">referral</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Code: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-right: 25px;\">\n                  <span style=\"padding-left: 25px;\">\n                     <b>text: </b>\n                     <span>Referral to service (procedure)</span>\n                     <br/>\n                  </span>\n                  <span>\n                     <span>\n                        <span style=\"padding-left: 25px;\">\n                           <b>system: </b>\n                           <span>http://snomed.info/sct</span>\n                           <br/>\n                        </span>\n                        <span style=\"padding-left: 25px;\">\n                           <b>code: </b>\n                           <span>306206005</span>\n                           <br/>\n                        </span>\n                     </span>\n                  </span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Participant: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">practitioner</td>\n            </tr>\n         </table>\n      </div>"
+  }
+}
+url {
+  value: "http://motivemi.com/artifacts/ActivityDefinition/referralPrimaryCareMentalHealth"
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://motivemi.com/artifacts"
+  }
+  value {
+    value: "referralPrimaryCareMentalHealth"
+  }
+}
+version {
+  value: "1.1.0"
+}
+name {
+  value: "ReferralPrimaryCareMentalHealth"
+}
+title {
+  value: "Referral to Primary Care Mental Health"
+}
+status {
+  value: ACTIVE
+}
+experimental {
+  value: true
+}
+date {
+  value_us: 1488549960000000
+  timezone: "Z"
+  precision: SECOND
+}
+publisher {
+  value: "Motive Medical Intelligence"
+}
+contact {
+  telecom {
+    system {
+      value: PHONE
+    }
+    value {
+      value: "415-362-4007"
+    }
+    use {
+      value: WORK
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "info@motivemi.com"
+    }
+    use {
+      value: WORK
+    }
+  }
+}
+description {
+  value: "refer to primary care mental-health integrated care program for evaluation and treatment of mental health conditions now"
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "age"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "https://meshb.nlm.nih.gov"
+        }
+        code {
+          value: "D000328"
+        }
+        display {
+          value: "Adult"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "87512008"
+        }
+        display {
+          value: "Mild major depression"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "40379007"
+        }
+        display {
+          value: "Major depression, recurrent, mild"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "225444004"
+        }
+        display {
+          value: "At risk for suicide (finding)"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "focus"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "306206005"
+        }
+        display {
+          value: "Referral to service (procedure)"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "user"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "309343006"
+        }
+        display {
+          value: "Physician"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "venue"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "440655000"
+        }
+        display {
+          value: "Outpatient environment"
+        }
+      }
+    }
+  }
+}
+jurisdiction {
+  coding {
+    system {
+      value: "urn:iso:std:iso:3166"
+    }
+    code {
+      value: "US"
+    }
+  }
+}
+purpose {
+  value: "Defines a referral to a mental-health integrated care program for use in suicide risk order sets. The definition is independent of the order set in which it appears to allow reuse of the general definition of the referrral."
+}
+usage {
+  value: "This activity definition is used as the definition of a referral request within various suicide risk order sets. Elements that apply universally are defined here, while elements that apply to the specific setting of a referral within a particular order set are defined in the order set."
+}
+copyright {
+  value: "\302\251 Copyright 2016 Motive Medical Intelligence. All rights reserved."
+}
+approval_date {
+  value_us: 1488286800000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+last_review_date {
+  value_us: 1488286800000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+effective_period {
+  start {
+    value_us: 1488286800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1514638800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+topic {
+  text {
+    value: "Mental Health Referral"
+  }
+}
+author {
+  name {
+    value: "Motive Medical Intelligence"
+  }
+  telecom {
+    system {
+      value: PHONE
+    }
+    value {
+      value: "415-362-4007"
+    }
+    use {
+      value: WORK
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "info@motivemi.com"
+    }
+    use {
+      value: WORK
+    }
+  }
+}
+related_artifact {
+  type {
+    value: CITATION
+  }
+  display {
+    value: "Practice Guideline for the Treatment of Patients with Major Depressive Disorder"
+  }
+  url {
+    value: "http://psychiatryonline.org/pb/assets/raw/sitewide/practice_guidelines/guidelines/mdd.pdf"
+  }
+}
+related_artifact {
+  type {
+    value: PREDECESSOR
+  }
+  resource {
+    value: "ActivityDefinition/referralPrimaryCareMentalHealth-initial"
+  }
+}
+kind {
+  value: SERVICE_REQUEST
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "306206005"
+    }
+  }
+  text {
+    value: "Referral to service (procedure)"
+  }
+}
+timing {
+  timing {
+    event {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/cqf-expression"
+        }
+        value {
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "Now()"
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue"
+        }
+        value {
+          boolean {
+            value: true
+          }
+        }
+      }
+    }
+  }
+}
+participant {
+  type {
+    value: PRACTITIONER
+  }
+}

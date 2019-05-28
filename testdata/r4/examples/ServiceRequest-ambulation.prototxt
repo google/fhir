@@ -1,0 +1,72 @@
+id {
+  value: "ambulation"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: ambulation</p><p><b>identifier</b>: 45678</p><p><b>basedOn</b>: <a>Maternity care plan</a></p><p><b>status</b>: completed</p><p><b>intent</b>: order</p><p><b>code</b>: Ambulation <span>(Details : {SNOMED CT code \'62013009\' = \'Ambulating patient\', given as \'Ambulating patient (procedure)\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>authoredOn</b>: 05/03/2017</p><p><b>requester</b>: <a>Dr. Beverly Crusher</a></p><p><b>reasonReference</b>: <a>Blood Pressure</a></p></div>"
+  }
+}
+identifier {
+  value {
+    value: "45678"
+  }
+}
+based_on {
+  care_plan_id {
+    value: "preg"
+  }
+  display {
+    value: "Maternity care plan"
+  }
+}
+status {
+  value: COMPLETED
+}
+intent {
+  value: ORDER
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "62013009"
+    }
+    display {
+      value: "Ambulating patient (procedure)"
+    }
+  }
+  text {
+    value: "Ambulation"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+authored_on {
+  value_us: 1488632400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+requester {
+  practitioner_id {
+    value: "3ad0687e-f477-468c-afd5-fcc2bf897809"
+  }
+  display {
+    value: "Dr. Beverly Crusher"
+  }
+}
+reason_reference {
+  observation_id {
+    value: "blood-pressure"
+  }
+  display {
+    value: "Blood Pressure"
+  }
+}

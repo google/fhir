@@ -14,10 +14,11 @@
 
 package com.google.fhir.stu3;
 
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.Element;
+import com.google.fhir.r4.proto.Extension;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;
 import com.google.fhir.stu3.proto.Boolean;
-import com.google.fhir.stu3.proto.Element;
-import com.google.fhir.stu3.proto.Extension;
 import com.google.gson.JsonPrimitive;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -38,7 +39,7 @@ public abstract class PrimitiveWrapper<T extends Message> {
   private static final PrimitiveHasNoValue PRIMITIVE_HAS_NO_VALUE =
       PrimitiveHasNoValue.newBuilder().setValueBoolean(Boolean.newBuilder().setValue(true)).build();
 
-  protected static Extension getNoValueExtension() {
+  protected static com.google.fhir.r4.proto.Extension getNoValueExtension() {
     return ExtensionWrapper.of().add(PRIMITIVE_HAS_NO_VALUE).build().get(0);
   }
 
@@ -77,7 +78,25 @@ public abstract class PrimitiveWrapper<T extends Message> {
 
   @SuppressWarnings("unchecked")
   public <B extends Message.Builder> B copyInto(B builder) {
-    return (B) builder.mergeFrom(wrapped);
+    Descriptor wrappedDescriptor = wrapped.getDescriptorForType();
+    Descriptor builderDescriptor = builder.getDescriptorForType();
+
+    if (wrappedDescriptor.getFullName().equals(builderDescriptor.getFullName())) {
+      // We're trying to copy into a builder of the same type.
+      return (B) builder.mergeFrom(wrapped);
+    }
+
+    if (wrappedDescriptor.getName().equals(builderDescriptor.getName())) {
+      // They're not the same type, but they have the same name.  (e.g., STU3 String vs R4 String).
+      // Attempt a field-wise copy.
+      return ProtoUtils.fieldWiseCopy(wrapped, builder);
+    }
+
+    throw new IllegalArgumentException(
+        "Attempted to copy incompatible primitives.  From: "
+            + wrappedDescriptor.getFullName()
+            + " into: "
+            + builderDescriptor.getFullName());
   }
 
   @Override
@@ -110,7 +129,7 @@ public abstract class PrimitiveWrapper<T extends Message> {
     }
     Element.Builder builder = Element.newBuilder();
     if (wrapped.hasField(idField)) {
-      builder.setId((com.google.fhir.stu3.proto.String) wrapped.getField(idField));
+      ProtoUtils.fieldWiseCopy((Message) wrapped.getField(idField), builder.getIdBuilder());
     }
     if (!extensions.isEmpty()) {
       builder.addAllExtension(extensions);

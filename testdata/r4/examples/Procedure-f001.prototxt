@@ -1,0 +1,116 @@
+id {
+  value: "f001"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f001</p><p><b>status</b>: completed</p><p><b>code</b>: Heart valve replacement <span>(Details : {SNOMED CT code \'34068001\' = \'Heart valve replacement\', given as \'Heart valve replacement\'})</span></p><p><b>subject</b>: <a>P. van de Heuvel</a></p><p><b>encounter</b>: <a>Encounter/f001</a></p><p><b>performed</b>: 26/06/2011 --&gt; 27/06/2011</p><h3>Performers</h3><table><tr><td>-</td><td><b>Function</b></td><td><b>Actor</b></td></tr><tr><td>*</td><td>Care role <span>(Details : {urn:oid:2.16.840.1.113883.2.4.15.111 code \'01.000\' = \'01.000\', given as \'Arts\'})</span></td><td><a>P. Voigt</a></td></tr></table><p><b>reasonCode</b>: Heart valve disorder <span>(Details )</span></p><p><b>bodySite</b>: Heart valve structure <span>(Details : {SNOMED CT code \'17401000\' = \'Cardiac valve\', given as \'Heart valve structure\'})</span></p><p><b>outcome</b>: improved blood circulation <span>(Details )</span></p><p><b>report</b>: <a>Lab results blood test</a></p><p><b>followUp</b>: described in care plan <span>(Details )</span></p></div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "34068001"
+    }
+    display {
+      value: "Heart valve replacement"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+encounter {
+  encounter_id {
+    value: "f001"
+  }
+}
+performed {
+  period {
+    start {
+      value_us: 1309010400000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+    end {
+      value_us: 1309096800000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}
+performer {
+  function {
+    coding {
+      system {
+        value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+      }
+      code {
+        value: "01.000"
+      }
+      display {
+        value: "Arts"
+      }
+    }
+    text {
+      value: "Care role"
+    }
+  }
+  actor {
+    practitioner_id {
+      value: "f002"
+    }
+    display {
+      value: "P. Voigt"
+    }
+  }
+}
+reason_code {
+  text {
+    value: "Heart valve disorder"
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "17401000"
+    }
+    display {
+      value: "Heart valve structure"
+    }
+  }
+}
+outcome {
+  text {
+    value: "improved blood circulation"
+  }
+}
+report {
+  diagnostic_report_id {
+    value: "f001"
+  }
+  display {
+    value: "Lab results blood test"
+  }
+}
+follow_up {
+  text {
+    value: "described in care plan"
+  }
+}

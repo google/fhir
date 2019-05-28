@@ -1,0 +1,41 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n    </div>"
+  }
+}
+status {
+  value: DRAFT
+}
+purpose {
+  value: "Monitor all admissions to Emergency"
+}
+trigger {
+  type {
+    value: NAMED_EVENT
+  }
+  name {
+    value: "monitor-emergency-admissions"
+  }
+  data {
+    type {
+      value: ENCOUNTER
+    }
+  }
+  condition {
+    description {
+      value: "Encounter Location = emergency (active/completed encounters, current or previous)"
+    }
+    language {
+      value: "text/fhirpath"
+    }
+    expression {
+      value: "(this | %previous).location.where(location = \'Location/emergency\' and status in {\'active\', \'completed\'}).exists()"
+    }
+  }
+}

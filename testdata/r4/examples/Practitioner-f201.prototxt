@@ -1,0 +1,101 @@
+id {
+  value: "f201"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f201</p><p><b>identifier</b>: UZI-nummer = 12345678901 (OFFICIAL)</p><p><b>active</b>: true</p><p><b>name</b>: Dokter Bronsig(OFFICIAL)</p><p><b>telecom</b>: ph: +31715269111(WORK)</p><p><b>address</b>: Walvisbaai 3 C4 - Automatisering Den helder 2333ZA NLD (WORK)</p><p><b>gender</b>: male</p><p><b>birthDate</b>: 24/12/1956</p><h3>Qualifications</h3><table><tr><td>-</td><td><b>Code</b></td></tr><tr><td>*</td><td>Pulmonologist <span>(Details : {SNOMED CT code \'41672002\' = \'Respiratory disease specialist\', given as \'Pulmonologist\'})</span></td></tr></table></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  type {
+    text {
+      value: "UZI-nummer"
+    }
+  }
+  system {
+    value: "urn:oid:2.16.528.1.1007.3.1"
+  }
+  value {
+    value: "12345678901"
+  }
+}
+active {
+  value: true
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  text {
+    value: "Dokter Bronsig"
+  }
+  family {
+    value: "Bronsig"
+  }
+  given {
+    value: "Arend"
+  }
+  prefix {
+    value: "Dr."
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "+31715269111"
+  }
+  use {
+    value: WORK
+  }
+}
+address {
+  use {
+    value: WORK
+  }
+  line {
+    value: "Walvisbaai 3"
+  }
+  line {
+    value: "C4 - Automatisering"
+  }
+  city {
+    value: "Den helder"
+  }
+  postal_code {
+    value: "2333ZA"
+  }
+  country {
+    value: "NLD"
+  }
+}
+gender {
+  value: MALE
+}
+birth_date {
+  value_us: -410954400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+qualification {
+  code {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "41672002"
+      }
+      display {
+        value: "Pulmonologist"
+      }
+    }
+  }
+}

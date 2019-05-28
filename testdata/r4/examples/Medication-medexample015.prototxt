@@ -1,0 +1,115 @@
+id {
+  value: "medexample015"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medexample015</p><p><b>contained</b>: , </p><p><b>code</b>: Capecitabine 500mg oral tablet (Xeloda) <span>(Details : {RxNorm code \'213293\' = \'Xeloda 500 MG Oral Tablet\', given as \'Capecitabine 500mg oral tablet (Xeloda)\'})</span></p><p><b>manufacturer</b>: id: org2; name: Gene Inc</p><p><b>form</b>: Tablet dose form (qualifier value) <span>(Details : {SNOMED CT code \'385055001\' = \'Tablet\', given as \'Tablet dose form (qualifier value)\'})</span></p><h3>Ingredients</h3><table><tr><td>-</td><td><b>Item[x]</b></td><td><b>Strength</b></td></tr><tr><td>*</td><td>id: sub04; Capecitabine (substance) <span>(Details : {SNOMED CT code \'386906001\' = \'Capecitabine\', given as \'Capecitabine (substance)\'})</span></td><td>500 mg<span> (Details: UCUM code mg = \'mg\')</span>/1 TAB<span> (Details: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm code TAB = \'Tablet\')</span></td></tr></table><h3>Batches</h3><table><tr><td>-</td><td><b>LotNumber</b></td><td><b>ExpirationDate</b></td></tr><tr><td>*</td><td>9494788</td><td>22/05/2017</td></tr></table></div>"
+  }
+}
+contained {
+  organization {
+    id {
+      value: "org2"
+    }
+    name {
+      value: "Gene Inc"
+    }
+  }
+}
+contained {
+  substance {
+    id {
+      value: "sub04"
+    }
+    code {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "386906001"
+        }
+        display {
+          value: "Capecitabine (substance)"
+        }
+      }
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+    }
+    code {
+      value: "213293"
+    }
+    display {
+      value: "Capecitabine 500mg oral tablet (Xeloda)"
+    }
+  }
+}
+manufacturer {
+  fragment {
+    value: "org2"
+  }
+}
+form {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "385055001"
+    }
+    display {
+      value: "Tablet dose form (qualifier value)"
+    }
+  }
+}
+ingredient {
+  item {
+    reference {
+      fragment {
+        value: "sub04"
+      }
+    }
+  }
+  strength {
+    numerator {
+      value {
+        value: "500"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mg"
+      }
+    }
+    denominator {
+      value {
+        value: "1"
+      }
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+      }
+      code {
+        value: "TAB"
+      }
+    }
+  }
+}
+batch {
+  lot_number {
+    value: "9494788"
+  }
+  expiration_date {
+    value_us: 1495375200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}

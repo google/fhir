@@ -1,0 +1,79 @@
+id {
+  value: "body-temperature"
+}
+meta {
+  profile {
+    value: "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: body-temperature</p><p><b>meta</b>: </p><p><b>status</b>: final</p><p><b>category</b>: Vital Signs <span>(Details : {http://terminology.hl7.org/CodeSystem/observation-category code \'vital-signs\' = \'Vital Signs\', given as \'Vital Signs\'})</span></p><p><b>code</b>: Body temperature <span>(Details : {LOINC code \'8310-5\' = \'Body temperature\', given as \'Body temperature\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>effective</b>: 02/07/1999</p><p><b>value</b>: 36.5 C<span> (Details: UCUM code Cel = \'Cel\')</span></p></div>"
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/observation-category"
+    }
+    code {
+      value: "vital-signs"
+    }
+    display {
+      value: "Vital Signs"
+    }
+  }
+  text {
+    value: "Vital Signs"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "8310-5"
+    }
+    display {
+      value: "Body temperature"
+    }
+  }
+  text {
+    value: "Body temperature"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+effective {
+  date_time {
+    value_us: 930837600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+value {
+  quantity {
+    value {
+      value: "36.5"
+    }
+    unit {
+      value: "C"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "Cel"
+    }
+  }
+}

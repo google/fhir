@@ -1,0 +1,26 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>"
+  }
+}
+status {
+  value: DRAFT
+}
+type {
+  value: POPULATION
+}
+characteristic {
+  definition {
+    codeable_concept {
+      text {
+        value: "Diabetic patients over 65"
+      }
+    }
+  }
+}

@@ -1,0 +1,172 @@
+id {
+  value: "heart-valve-replacement"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n    </div>"
+  }
+}
+status {
+  value: DRAFT
+}
+description {
+  value: "Heart valve replacement"
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "age"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "https://meshb.nlm.nih.gov"
+        }
+        code {
+          value: "D000328"
+        }
+        display {
+          value: "Adult"
+        }
+      }
+    }
+  }
+}
+use_context {
+  code {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/usage-context-type"
+    }
+    code {
+      value: "user"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "309343006"
+        }
+        display {
+          value: "Physician"
+        }
+      }
+    }
+  }
+}
+purpose {
+  value: "Describes the proposal to perform a Heart Valve replacement."
+}
+usage {
+  value: "This activity definition is used as the definition of a service request to perform a heart valve replacement. Elements that apply universally are defined here, while elements that apply to the specific setting of a referral within a particular order set are defined in the order set."
+}
+topic {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "34068001"
+    }
+    display {
+      value: "Heart valve replacement"
+    }
+  }
+}
+kind {
+  value: SERVICE_REQUEST
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "34068001"
+    }
+    display {
+      value: "Heart valve replacement"
+    }
+  }
+}
+timing {
+  timing {
+    event {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/cqf-expression"
+        }
+        value {
+          expression {
+            language {
+              value: "text/cql"
+            }
+            expression {
+              value: "Now()"
+            }
+          }
+        }
+      }
+      extension {
+        url {
+          value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue"
+        }
+        value {
+          boolean {
+            value: true
+          }
+        }
+      }
+    }
+  }
+}
+location {
+  location_id {
+    value: "1"
+  }
+}
+participant {
+  type {
+    value: PRACTITIONER
+  }
+  role {
+    coding {
+      system {
+        value: "http://nucc.org/provider-taxonomy"
+      }
+      code {
+        value: "207RI0011X"
+      }
+      display {
+        value: "Interventional Cardiology"
+      }
+    }
+    text {
+      value: "Interventional Cardiology"
+    }
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "17401000"
+    }
+    display {
+      value: "Heart valve structure"
+    }
+  }
+}

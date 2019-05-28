@@ -1,0 +1,162 @@
+id {
+  value: "meddisp0322"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: meddisp0322</p><p><b>status</b>: completed</p><p><b>medication</b>: Dilantin 125mg/5ml Oral Suspension <span>(Details : {http://hl7.org/fhir/sid/ndc code \'0071-2214-20\' = \'0071-2214-20\', given as \'Dilantin 125mg/5ml Oral Suspension\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Practitioner/f006</a></td></tr></table><p><b>authorizingPrescription</b>: <a>MedicationRequest/medrx0312</a></p><p><b>type</b>: Refill - Part Fill <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ActCode code \'RFP\' = \'Refill - Part Fill\', given as \'Refill - Part Fill\'})</span></p><p><b>quantity</b>: 360 ml<span> (Details: UCUM code ml = \'ml\')</span></p><p><b>daysSupply</b>: 30 Day<span> (Details: UCUM code d = \'d\')</span></p><p><b>whenPrepared</b>: 16/01/2015 7:13:00 AM</p><p><b>whenHandedOver</b>: 18/01/2015 7:13:00 AM</p><p><b>dosageInstruction</b>: </p></div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+medication {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/sid/ndc"
+      }
+      code {
+        value: "0071-2214-20"
+      }
+      display {
+        value: "Dilantin 125mg/5ml Oral Suspension"
+      }
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "f006"
+    }
+  }
+}
+authorizing_prescription {
+  medication_request_id {
+    value: "medrx0312"
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "RFP"
+    }
+    display {
+      value: "Refill - Part Fill"
+    }
+  }
+}
+quantity {
+  value {
+    value: "360"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "ml"
+  }
+}
+days_supply {
+  value {
+    value: "30"
+  }
+  unit {
+    value: "Day"
+  }
+  system {
+    value: "http://unitsofmeasure.org"
+  }
+  code {
+    value: "d"
+  }
+}
+when_prepared {
+  value_us: 1421374380000000
+  timezone: "+05:00"
+  precision: SECOND
+}
+when_handed_over {
+  value_us: 1421547180000000
+  timezone: "+05:00"
+  precision: SECOND
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "100mg (4ml) three times daily"
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 3
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "26643006"
+      }
+      display {
+        value: "Oral Route (qualifier value)"
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "ordered"
+        }
+        display {
+          value: "Ordered"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "4"
+        }
+        unit {
+          value: "ml"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "ml"
+        }
+      }
+    }
+  }
+}

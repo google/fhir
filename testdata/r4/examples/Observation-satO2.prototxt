@@ -1,0 +1,162 @@
+id {
+  value: "satO2"
+}
+meta {
+  profile {
+    value: "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: satO2</p><p><b>meta</b>: </p><p><b>identifier</b>: o1223435-10</p><p><b>partOf</b>: <a>Procedure/ob</a></p><p><b>status</b>: final</p><p><b>category</b>: Vital Signs <span>(Details : {http://terminology.hl7.org/CodeSystem/observation-category code \'vital-signs\' = \'Vital Signs\', given as \'Vital Signs\'})</span></p><p><b>code</b>: Oxygen saturation in Arterial blood <span>(Details : {LOINC code \'2708-6\' = \'Oxygen saturation in Arterial blood\', given as \'Oxygen saturation in Arterial blood\'}; {LOINC code \'59408-5\' = \'Oxygen saturation in Arterial blood by Pulse oximetry\', given as \'Oxygen saturation in Arterial blood by Pulse oximetry\'}; {urn:iso:std:iso:11073:10101 code \'150456\' = \'150456\', given as \'MDC_PULS_OXIM_SAT_O2\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>effective</b>: 05/12/2014 9:30:10 AM</p><p><b>value</b>: 95 %<span> (Details: UCUM code % = \'%\')</span></p><p><b>interpretation</b>: Normal (applies to non-numeric results) <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'N\' = \'Normal\', given as \'Normal\'})</span></p><p><b>device</b>: <a>DeviceMetric/example</a></p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td></tr><tr><td>*</td><td>90 %<span> (Details: UCUM code % = \'%\')</span></td><td>99 %<span> (Details: UCUM code % = \'%\')</span></td></tr></table></div>"
+  }
+}
+identifier {
+  system {
+    value: "http://goodcare.org/observation/id"
+  }
+  value {
+    value: "o1223435-10"
+  }
+}
+part_of {
+  procedure_id {
+    value: "ob"
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/observation-category"
+    }
+    code {
+      value: "vital-signs"
+    }
+    display {
+      value: "Vital Signs"
+    }
+  }
+  text {
+    value: "Vital Signs"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "2708-6"
+    }
+    display {
+      value: "Oxygen saturation in Arterial blood"
+    }
+  }
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "59408-5"
+    }
+    display {
+      value: "Oxygen saturation in Arterial blood by Pulse oximetry"
+    }
+  }
+  coding {
+    system {
+      value: "urn:iso:std:iso:11073:10101"
+    }
+    code {
+      value: "150456"
+    }
+    display {
+      value: "MDC_PULS_OXIM_SAT_O2"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+effective {
+  date_time {
+    value_us: 1417768210000000
+    timezone: "+01:00"
+    precision: SECOND
+  }
+}
+value {
+  quantity {
+    value {
+      value: "95"
+    }
+    unit {
+      value: "%"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "%"
+    }
+  }
+}
+interpretation {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+    }
+    code {
+      value: "N"
+    }
+    display {
+      value: "Normal"
+    }
+  }
+  text {
+    value: "Normal (applies to non-numeric results)"
+  }
+}
+device {
+  device_metric_id {
+    value: "example"
+  }
+}
+reference_range {
+  low {
+    value {
+      value: "90"
+    }
+    unit {
+      value: "%"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "%"
+    }
+  }
+  high {
+    value {
+      value: "99"
+    }
+    unit {
+      value: "%"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "%"
+    }
+  }
+}

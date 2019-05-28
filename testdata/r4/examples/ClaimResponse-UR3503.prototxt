@@ -1,0 +1,321 @@
+id {
+  value: "UR3503"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A sample unsolicited pre-authorization response which authorizes basic dental services to be performed for a patient.</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.SocialBenefitsInc.com/fhir/ClaimResponse"
+  }
+  value {
+    value: "UR3503"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/claim-type"
+    }
+    code {
+      value: "oral"
+    }
+  }
+}
+use {
+  value: PREAUTHORIZATION
+}
+patient {
+  patient_id {
+    value: "1"
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+insurer {
+  identifier {
+    system {
+      value: "http://www.jurisdiction.org/insurers"
+    }
+    value {
+      value: "444123"
+    }
+  }
+}
+requestor {
+  organization_id {
+    value: "1"
+  }
+}
+outcome {
+  value: COMPLETE
+}
+disposition {
+  value: "The enclosed services are authorized for your provision within 30 days of this notice."
+}
+pre_auth_ref {
+  value: "18SS12345"
+}
+payee_type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/payeetype"
+    }
+    code {
+      value: "provider"
+    }
+  }
+}
+add_item {
+  item_sequence {
+    value: 1
+  }
+  product_or_service {
+    coding {
+      system {
+        value: "http://example.org/fhir/oralservicecodes"
+      }
+      code {
+        value: "1101"
+      }
+    }
+  }
+  modifier {
+    coding {
+      system {
+        value: "http://example.org/fhir/modifiers"
+      }
+      code {
+        value: "x"
+      }
+      display {
+        value: "None"
+      }
+    }
+  }
+  net {
+    value {
+      value: "250.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  note_number {
+    value: 101
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "eligible"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "250.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "copay"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "10.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "eligpercent"
+        }
+      }
+    }
+    value {
+      value: "100.00"
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "benefit"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "240.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+}
+add_item {
+  item_sequence {
+    value: 1
+  }
+  product_or_service {
+    coding {
+      system {
+        value: "http://example.org/fhir/oralservicecodes"
+      }
+      code {
+        value: "2101"
+      }
+      display {
+        value: "Radiograph, series (12)"
+      }
+    }
+  }
+  net {
+    value {
+      value: "800.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "eligible"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "800.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "eligpercent"
+        }
+      }
+    }
+    value {
+      value: "100.00"
+    }
+  }
+  adjudication {
+    category {
+      coding {
+        code {
+          value: "benefit"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "800.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+}
+total {
+  category {
+    coding {
+      code {
+        value: "submitted"
+      }
+    }
+  }
+  amount {
+    value {
+      value: "1050.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}
+total {
+  category {
+    coding {
+      code {
+        value: "benefit"
+      }
+    }
+  }
+  amount {
+    value {
+      value: "1040.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+}
+process_note {
+  number {
+    value: 101
+  }
+  type {
+    value: PRINT
+  }
+  text {
+    value: "Please submit a Pre-Authorization request if a more extensive examination or urgent services are required."
+  }
+  language {
+    coding {
+      system {
+        value: "urn:ietf:bcp:47"
+      }
+      code {
+        value: "en-CA"
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    coverage_id {
+      value: "9876B1"
+    }
+  }
+}

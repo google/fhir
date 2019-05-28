@@ -1,0 +1,133 @@
+id {
+  value: "Resource-graphql"
+}
+meta {
+  last_updated {
+    value_us: 1545910674724000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <h2>Execute a graphql statement</h2>\n            <p>OPERATION: Execute a graphql statement</p>\n            <p>The official URL for this operation definition is: </p>\n            <pre>http://hl7.org/fhir/OperationDefinition/Resource-graphql</pre>\n            <div>\n              <p>Execute a graphql statement on a since resource or against the entire system. See the \n                <a href=\"graphql.html\">Using GraphQL with FHIR</a> page for further details.\n              </p>\n\n              <p>For the purposes of graphQL compatibility, this operation can also be invoked using a POST with the graphQL as the body, or a JSON body (see \n                <a href=\"http://graphql.org/\">graphQL spec</a> for details)\n              </p>\n\n            </div>\n            <p>URL: [base]/$graphql</p>\n            <p>URL: [base]/Resource/[id]/$graphql</p>\n            <p>Parameters</p>\n            <table class=\"grid\">\n              <tr>\n                <td>\n                  <b>Use</b>\n                </td>\n                <td>\n                  <b>Name</b>\n                </td>\n                <td>\n                  <b>Cardinality</b>\n                </td>\n                <td>\n                  <b>Type</b>\n                </td>\n                <td>\n                  <b>Binding</b>\n                </td>\n                <td>\n                  <b>Documentation</b>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>query</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#string\">string</a>\n                </td>\n                <td/>\n                <td/>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>result</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"binary.html\">Binary</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The content is always returned as application/json; this SHOULD be specified in the Accept header</p>\n\n                  </div>\n                </td>\n              </tr>\n            </table>\n            <div/>\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+      value: 1
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "trial-use"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/OperationDefinition/Resource-graphql"
+}
+version {
+  value: "4.0.0"
+}
+name {
+  value: "Execute a graphql statement"
+}
+status {
+  value: DRAFT
+}
+kind {
+  value: OPERATION
+}
+date {
+  value_us: 1545910674000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+publisher {
+  value: "HL7 (FHIR Project)"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "fhir@lists.hl7.org"
+    }
+  }
+}
+description {
+  value: "Execute a graphql statement on a since resource or against the entire system. See the [Using GraphQL with FHIR](graphql.html) page for further details.\n\nFor the purposes of graphQL compatibility, this operation can also be invoked using a POST with the graphQL as the body, or a JSON body (see [graphQL spec](http://graphql.org/) for details)"
+}
+code {
+  value: "graphql"
+}
+resource {
+  value: RESOURCE
+}
+system {
+  value: true
+}
+type {
+}
+instance {
+  value: true
+}
+parameter {
+  name {
+    value: "query"
+  }
+  use {
+    value: IN
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  type {
+    value: STRING
+  }
+}
+parameter {
+  name {
+    value: "result"
+  }
+  use {
+    value: OUT
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The content is always returned as application/json; this SHOULD be specified in the Accept header"
+  }
+  type {
+    value: BINARY
+  }
+}

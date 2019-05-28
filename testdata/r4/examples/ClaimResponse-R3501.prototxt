@@ -1,0 +1,125 @@
+id {
+  value: "R3501"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the ClaimResponse that demonstrates returning errors</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/remittance"
+  }
+  value {
+    value: "R3501"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/claim-type"
+    }
+    code {
+      value: "oral"
+    }
+  }
+}
+use {
+  value: CLAIM
+}
+patient {
+  patient_id {
+    value: "1"
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+insurer {
+  identifier {
+    system {
+      value: "http://www.jurisdiction.org/insurers"
+    }
+    value {
+      value: "555123"
+    }
+  }
+}
+requestor {
+  practitioner_id {
+    value: "1"
+  }
+}
+request {
+  claim_id {
+    value: "100156"
+  }
+}
+outcome {
+  value: ERROR
+}
+disposition {
+  value: "Claim could not be processed"
+}
+form_code {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/forms-codes"
+    }
+    code {
+      value: "2"
+    }
+  }
+}
+process_note {
+  number {
+    value: 1
+  }
+  type {
+    value: DISPLAY
+  }
+  text {
+    value: "Invalid claim"
+  }
+  language {
+    coding {
+      system {
+        value: "urn:ietf:bcp:47"
+      }
+      code {
+        value: "en-CA"
+      }
+    }
+  }
+}
+communication_request {
+  communication_request_id {
+    value: "fm-solicit"
+  }
+}
+error {
+  item_sequence {
+    value: 3
+  }
+  detail_sequence {
+    value: 2
+  }
+  code {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/adjudication-error"
+      }
+      code {
+        value: "a002"
+      }
+    }
+  }
+}

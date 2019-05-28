@@ -1,0 +1,59 @@
+id {
+  value: "example-empty"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>The patient is not on any medications</p>\n    </div>"
+  }
+}
+status {
+  value: CURRENT
+}
+mode {
+  value: SNAPSHOT
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "182836005"
+    }
+    display {
+      value: "Review of medication"
+    }
+  }
+  text {
+    value: "Medication Review"
+  }
+}
+date {
+  value_us: 1353875423000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+source {
+  patient_id {
+    value: "example"
+  }
+}
+empty_reason {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/list-empty-reason"
+    }
+    code {
+      value: "nilknown"
+    }
+    display {
+      value: "Nil Known"
+    }
+  }
+  text {
+    value: "The patient is not on any medications"
+  }
+}

@@ -1,0 +1,162 @@
+id {
+  value: "ChargeItemDefinition-apply"
+}
+meta {
+  last_updated {
+    value_us: 1545910674724000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <h2>Apply</h2>\n            <p>OPERATION: Apply</p>\n            <p>The official URL for this operation definition is: </p>\n            <pre>http://hl7.org/fhir/OperationDefinition/ChargeItemDefinition-apply</pre>\n            <div>\n              <p>The apply operation applies a definition in a specific context</p>\n\n            </div>\n            <p>URL: [base]/ChargeItemDefinition/[id]/$apply</p>\n            <p>Parameters</p>\n            <table class=\"grid\">\n              <tr>\n                <td>\n                  <b>Use</b>\n                </td>\n                <td>\n                  <b>Name</b>\n                </td>\n                <td>\n                  <b>Cardinality</b>\n                </td>\n                <td>\n                  <b>Type</b>\n                </td>\n                <td>\n                  <b>Binding</b>\n                </td>\n                <td>\n                  <b>Documentation</b>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>chargeItem</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"datatypes.html#Reference\">Reference</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The ChargeItem on which the definition is to ba applies</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>account</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#Reference\">Reference</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The account in context, if any</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>return</td>\n                <td>1..1</td>\n                <td>Any</td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The resource that is the result of applying the definition</p>\n\n                  </div>\n                </td>\n              </tr>\n            </table>\n            <div>\n              <p>The result of invoking this operation is a resource of the type specified by the activity definition, with all the definitions resolved as appropriate for the type of resource. Any dynamicValue elements will be evaluated (in the order in which they appear in the resource) and the results applied to the returned resource.  If the ActivityDefinition includes library references, those libraries will be available to the evaluated expressions. If those libraries have parameters, those parameters will be bound by name to the parameters given to the operation. For a more detailed description, refer to the ActivityDefinition resource</p>\n\n            </div>\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "trial-use"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/OperationDefinition/ChargeItemDefinition-apply"
+}
+version {
+  value: "4.0.0"
+}
+name {
+  value: "Apply"
+}
+status {
+  value: DRAFT
+}
+kind {
+  value: OPERATION
+}
+date {
+  value_us: 1545910674000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+publisher {
+  value: "HL7 (FHIR Project)"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "fhir@lists.hl7.org"
+    }
+  }
+}
+description {
+  value: "The apply operation applies a definition in a specific context"
+}
+code {
+  value: "apply"
+}
+comment {
+  value: "The result of invoking this operation is a resource of the type specified by the activity definition, with all the definitions resolved as appropriate for the type of resource. Any dynamicValue elements will be evaluated (in the order in which they appear in the resource) and the results applied to the returned resource.  If the ActivityDefinition includes library references, those libraries will be available to the evaluated expressions. If those libraries have parameters, those parameters will be bound by name to the parameters given to the operation. For a more detailed description, refer to the ActivityDefinition resource"
+}
+resource {
+  value: CHARGE_ITEM_DEFINITION
+}
+system {
+}
+type {
+}
+instance {
+  value: true
+}
+parameter {
+  name {
+    value: "chargeItem"
+  }
+  use {
+    value: IN
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The ChargeItem on which the definition is to ba applies"
+  }
+  type {
+    value: REFERENCE
+  }
+  target_profile {
+    value: "http://hl7.org/fhir/StructureDefinition/ChargeItem"
+  }
+}
+parameter {
+  name {
+    value: "account"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The account in context, if any"
+  }
+  type {
+    value: REFERENCE
+  }
+  target_profile {
+    value: "http://hl7.org/fhir/StructureDefinition/Account"
+  }
+}
+parameter {
+  name {
+    value: "return"
+  }
+  use {
+    value: OUT
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The resource that is the result of applying the definition"
+  }
+  type {
+    value: ANY
+  }
+}

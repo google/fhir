@@ -1,0 +1,155 @@
+id {
+  value: "CapabilityStatement-subset"
+}
+meta {
+  last_updated {
+    value_us: 1545910674724000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <h2>Fetch a subset of the CapabilityStatement resource</h2>\n            <p>OPERATION: Fetch a subset of the CapabilityStatement resource</p>\n            <p>The official URL for this operation definition is: </p>\n            <pre>http://hl7.org/fhir/OperationDefinition/CapabilityStatement-subset</pre>\n            <div>\n              <p>This operation asks the server to return a subset of the CapabilityStatement resource - just the REST parts that relate to a set of nominated resources - the resources that the client is interested in</p>\n\n            </div>\n            <p>URL: [base]/CapabilityStatement/$subset</p>\n            <p>URL: [base]/CapabilityStatement/[id]/$subset</p>\n            <p>Parameters</p>\n            <table class=\"grid\">\n              <tr>\n                <td>\n                  <b>Use</b>\n                </td>\n                <td>\n                  <b>Name</b>\n                </td>\n                <td>\n                  <b>Cardinality</b>\n                </td>\n                <td>\n                  <b>Type</b>\n                </td>\n                <td>\n                  <b>Binding</b>\n                </td>\n                <td>\n                  <b>Documentation</b>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>server</td>\n                <td>0..1</td>\n                <td>\n                  <a href=\"datatypes.html#uri\">uri</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The canonical URL - use this if the subset is not invoked on an instance (or on the /metadata end-point)</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>IN</td>\n                <td>resource</td>\n                <td>1..*</td>\n                <td>\n                  <a href=\"datatypes.html#code\">code</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>A resource that the client would like to include in the return</p>\n\n                  </div>\n                </td>\n              </tr>\n              <tr>\n                <td>OUT</td>\n                <td>return</td>\n                <td>1..1</td>\n                <td>\n                  <a href=\"capabilitystatement.html\">CapabilityStatement</a>\n                </td>\n                <td/>\n                <td>\n                  <div>\n                    <p>The subsetted CapabilityStatement resource that is returned. This should be tagged with the SUBSETTED code</p>\n\n                  </div>\n                </td>\n              </tr>\n            </table>\n            <div/>\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+      value: 5
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "trial-use"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/OperationDefinition/CapabilityStatement-subset"
+}
+version {
+  value: "4.0.0"
+}
+name {
+  value: "Fetch a subset of the CapabilityStatement resource"
+}
+status {
+  value: DRAFT
+}
+kind {
+  value: OPERATION
+}
+date {
+  value_us: 1545910674000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+publisher {
+  value: "HL7 (FHIR Project)"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "fhir@lists.hl7.org"
+    }
+  }
+}
+description {
+  value: "This operation asks the server to return a subset of the CapabilityStatement resource - just the REST parts that relate to a set of nominated resources - the resources that the client is interested in"
+}
+code {
+  value: "subset"
+}
+resource {
+  value: CAPABILITY_STATEMENT
+}
+system {
+}
+type {
+  value: true
+}
+instance {
+  value: true
+}
+parameter {
+  name {
+    value: "server"
+  }
+  use {
+    value: IN
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The canonical URL - use this if the subset is not invoked on an instance (or on the /metadata end-point)"
+  }
+  type {
+    value: URI
+  }
+}
+parameter {
+  name {
+    value: "resource"
+  }
+  use {
+    value: IN
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "*"
+  }
+  documentation {
+    value: "A resource that the client would like to include in the return"
+  }
+  type {
+    value: CODE
+  }
+}
+parameter {
+  name {
+    value: "return"
+  }
+  use {
+    value: OUT
+  }
+  min {
+    value: 1
+  }
+  max {
+    value: "1"
+  }
+  documentation {
+    value: "The subsetted CapabilityStatement resource that is returned. This should be tagged with the SUBSETTED code"
+  }
+  type {
+    value: CAPABILITY_STATEMENT
+  }
+}

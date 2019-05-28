@@ -1,0 +1,22 @@
+id {
+  value: "2.16.840.1.113883.19.5"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n      <p>Good Health Clinic</p>\n    \n    </div>"
+  }
+}
+identifier {
+  system {
+    value: "urn:ietf:rfc:3986"
+  }
+  value {
+    value: "2.16.840.1.113883.19.5"
+  }
+}
+name {
+  value: "Good Health Clinic"
+}

@@ -1,0 +1,80 @@
+id {
+  value: "ob"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Vaginal delivery of healthy male infant on June 2, 2012</div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+category {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "386637004"
+    }
+    display {
+      value: "Obstetric procedure (procedure)"
+    }
+  }
+  text {
+    value: "OB"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "22633006"
+    }
+    display {
+      value: "Vaginal delivery, medical personnel present (procedure)"
+    }
+  }
+  text {
+    value: "Vaginal delivery"
+  }
+}
+subject {
+  display {
+    value: "Jane Doe"
+  }
+}
+performed {
+  date_time {
+    value_us: 1338559200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+performer {
+  actor {
+    display {
+      value: "Martha Midwife, RNP"
+    }
+  }
+}
+location {
+  display {
+    value: "Women\342\200\231s Hospital"
+  }
+}
+reason_code {
+  text {
+    value: "term pregnancy, active labor"
+  }
+}
+outcome {
+  text {
+    value: "delivery of healthy male infant"
+  }
+}

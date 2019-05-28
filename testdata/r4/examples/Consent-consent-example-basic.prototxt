@@ -1,0 +1,83 @@
+id {
+  value: "consent-example-basic"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<p>\n\tAuthorize Normal access for Treatment\n\t\t\t</p>\n\t\t\t<p>\n    Patient &quot;P. van de Heuvel&quot; wishes to have all of the PHI collected at the Good Health Psychiatric Hospital \n   available for normal treatment use.\n\t\t\t</p>\n\t\t</div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+scope {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/consentscope"
+    }
+    code {
+      value: "patient-privacy"
+    }
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "59284-0"
+    }
+  }
+}
+patient {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+date_time {
+  value_us: 1462888800000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+organization {
+  organization_id {
+    value: "f001"
+  }
+}
+source {
+  attachment {
+    title {
+      value: "The terms of the consent in lawyer speak."
+    }
+  }
+}
+policy_rule {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "OPTIN"
+    }
+  }
+}
+provision {
+  period {
+    start {
+      value_us: -189424800000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+    end {
+      value_us: 1451566800000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}

@@ -1,0 +1,136 @@
+id {
+  value: "example006"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example006</p><p><b>status</b>: active</p><p><b>medication</b>: Amoxicillin (product) <span>(Details : {SNOMED CT code \'27658006\' = \'p-Hydroxyampicillin\', given as \'Amoxicillin (product)\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>effective</b>: 01/02/2014</p><p><b>dateAsserted</b>: 22/02/2014</p><p><b>informationSource</b>: <a>Peter Chalmers</a></p><p><b>note</b>: Father indicates they miss the occasional dose</p><p><b>dosage</b>: </p></div>"
+  }
+}
+status {
+  value: ACTIVE
+}
+medication {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "27658006"
+      }
+      display {
+        value: "Amoxicillin (product)"
+      }
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+effective {
+  date_time {
+    value_us: 1391173200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+date_asserted {
+  value_us: 1392987600000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+information_source {
+  related_person_id {
+    value: "peter"
+  }
+  display {
+    value: "Peter Chalmers"
+  }
+}
+note {
+  text {
+    value: "Father indicates they miss the occasional dose"
+  }
+}
+dosage {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "5ml three times daily"
+  }
+  as_needed {
+    boolean {
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "260548002"
+      }
+      display {
+        value: "Oral"
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "ordered"
+        }
+        display {
+          value: "Ordered"
+        }
+      }
+    }
+    dose {
+      quantity {
+        value {
+          value: "5"
+        }
+        unit {
+          value: "mL"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "mL"
+        }
+      }
+    }
+  }
+  max_dose_per_period {
+    numerator {
+      value {
+        value: "3"
+      }
+    }
+    denominator {
+      value {
+        value: "1"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "d"
+      }
+    }
+  }
+}

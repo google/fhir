@@ -1,0 +1,116 @@
+id {
+  value: "f003"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f003</p><p><b>status</b>: completed</p><p><b>code</b>: Incision of retropharyngeal abscess <span>(Details : {SNOMED CT code \'172960003\' = \'Incision of retropharyngeal abscess\', given as \'Incision of retropharyngeal abscess\'})</span></p><p><b>subject</b>: <a>P. van de Heuvel</a></p><p><b>encounter</b>: <a>Encounter/f003</a></p><p><b>performed</b>: 24/03/2013 9:30:10 AM --&gt; 24/03/2013 10:30:10 AM</p><h3>Performers</h3><table><tr><td>-</td><td><b>Function</b></td><td><b>Actor</b></td></tr><tr><td>*</td><td>Care role <span>(Details : {urn:oid:2.16.840.1.113883.2.4.15.111 code \'01.000\' = \'01.000\', given as \'Arts\'})</span></td><td><a>E.M.J.M. van den broek</a></td></tr></table><p><b>reasonCode</b>: abcess in retropharyngeal area <span>(Details )</span></p><p><b>bodySite</b>: Retropharyngeal area <span>(Details : {SNOMED CT code \'83030008\' = \'Retropharyngeal area\', given as \'Retropharyngeal area\'})</span></p><p><b>outcome</b>: removal of the retropharyngeal abscess <span>(Details )</span></p><p><b>report</b>: <a>Lab results blood test</a></p><p><b>followUp</b>: described in care plan <span>(Details )</span></p></div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "172960003"
+    }
+    display {
+      value: "Incision of retropharyngeal abscess"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van de Heuvel"
+  }
+}
+encounter {
+  encounter_id {
+    value: "f003"
+  }
+}
+performed {
+  period {
+    start {
+      value_us: 1364113810000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1364117410000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+  }
+}
+performer {
+  function {
+    coding {
+      system {
+        value: "urn:oid:2.16.840.1.113883.2.4.15.111"
+      }
+      code {
+        value: "01.000"
+      }
+      display {
+        value: "Arts"
+      }
+    }
+    text {
+      value: "Care role"
+    }
+  }
+  actor {
+    practitioner_id {
+      value: "f001"
+    }
+    display {
+      value: "E.M.J.M. van den broek"
+    }
+  }
+}
+reason_code {
+  text {
+    value: "abcess in retropharyngeal area"
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "83030008"
+    }
+    display {
+      value: "Retropharyngeal area"
+    }
+  }
+}
+outcome {
+  text {
+    value: "removal of the retropharyngeal abscess"
+  }
+}
+report {
+  diagnostic_report_id {
+    value: "f001"
+  }
+  display {
+    value: "Lab results blood test"
+  }
+}
+follow_up {
+  text {
+    value: "described in care plan"
+  }
+}

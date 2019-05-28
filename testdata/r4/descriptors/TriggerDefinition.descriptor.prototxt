@@ -1,0 +1,121 @@
+name: "TriggerDefinition"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "type"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.TriggerTypeCode"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "named-event | periodic | data-changed | data-added | data-modified | data-removed | data-accessed | data-access-ended"
+  }
+}
+field {
+  name: "name"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "Name or URI that identifies the event"
+  }
+}
+field {
+  name: "timing"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.TriggerDefinition.TimingX"
+  options {
+    [google.fhir.proto.field_description]: "Timing of the event"
+  }
+}
+field {
+  name: "data"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.DataRequirement"
+  options {
+    [google.fhir.proto.field_description]: "Triggering data of the event (multiple = \'and\')"
+  }
+}
+field {
+  name: "condition"
+  number: 7
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Expression"
+  options {
+    [google.fhir.proto.field_description]: "Whether the event triggers (boolean expression)"
+  }
+}
+nested_type {
+  name: "TimingX"
+  field {
+    name: "timing"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Timing"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Reference"
+    options {
+      [google.fhir.proto.valid_reference_type]: "Schedule"
+    }
+    oneof_index: 0
+  }
+  field {
+    name: "date"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.Date"
+    oneof_index: 0
+  }
+  field {
+    name: "date_time"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.proto.DateTime"
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for TriggerDefinition, last updated 2018-12-27T22:37:54.724+11:00.\nDefines an expected trigger for a module.\nSee http://hl7.org/fhir/StructureDefinition/TriggerDefinition"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/TriggerDefinition"
+}

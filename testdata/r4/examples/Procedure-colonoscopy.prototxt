@@ -1,0 +1,68 @@
+id {
+  value: "colonoscopy"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Colonoscopy with complication</div>"
+  }
+}
+identifier {
+  value {
+    value: "12345"
+  }
+}
+status {
+  value: COMPLETED
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "73761001"
+    }
+    display {
+      value: "Colonoscopy (procedure)"
+    }
+  }
+  text {
+    value: "Colonoscopy"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+performer {
+  actor {
+    practitioner_id {
+      value: "example"
+    }
+    display {
+      value: "Dr Adam Careful"
+    }
+  }
+}
+location {
+  location_id {
+    value: "1"
+  }
+  display {
+    value: "Burgers University Medical Center, South Wing, second floor"
+  }
+}
+complication_detail {
+  display {
+    value: "Perforated intestine condition"
+  }
+}
+used_reference {
+  display {
+    value: "Colonoscope device"
+  }
+}

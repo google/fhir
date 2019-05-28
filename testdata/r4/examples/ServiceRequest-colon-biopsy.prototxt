@@ -1,0 +1,72 @@
+id {
+  value: "colon-biopsy"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: colon-biopsy</p><p><b>identifier</b>: 12345</p><p><b>requisition</b>: req12345</p><p><b>status</b>: completed</p><p><b>intent</b>: order</p><p><b>code</b>: Biopsy of colon <span>(Details : {SNOMED CT code \'76164006\' = \'Biopsy of colon\', given as \'Biopsy of colon (procedure)\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>authoredOn</b>: 05/03/2017</p><p><b>requester</b>: <a>Dr. Beverly Crusher</a></p><p><b>performer</b>: <a>Dr Adam Careful</a></p></div>"
+  }
+}
+identifier {
+  value {
+    value: "12345"
+  }
+}
+requisition {
+  system {
+    value: "http://bumc.org/requisitions"
+  }
+  value {
+    value: "req12345"
+  }
+}
+status {
+  value: COMPLETED
+}
+intent {
+  value: ORDER
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "76164006"
+    }
+    display {
+      value: "Biopsy of colon (procedure)"
+    }
+  }
+  text {
+    value: "Biopsy of colon"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+authored_on {
+  value_us: 1488632400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+requester {
+  practitioner_id {
+    value: "3ad0687e-f477-468c-afd5-fcc2bf897809"
+  }
+  display {
+    value: "Dr. Beverly Crusher"
+  }
+}
+performer {
+  practitioner_id {
+    value: "example"
+  }
+  display {
+    value: "Dr Adam Careful"
+  }
+}

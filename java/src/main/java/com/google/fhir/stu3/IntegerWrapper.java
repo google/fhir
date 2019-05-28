@@ -14,7 +14,9 @@
 
 package com.google.fhir.stu3;
 
-import com.google.fhir.stu3.proto.Integer;
+import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.proto.Integer;
+import com.google.protobuf.MessageOrBuilder;
 import java.util.regex.Pattern;
 
 /** A wrapper around the Integer FHIR primitive type. */
@@ -28,6 +30,10 @@ public class IntegerWrapper extends NumericTypeWrapper<Integer> {
   /** Create an IntegerWrapper from an Integer. */
   public IntegerWrapper(Integer integer) {
     super(integer);
+  }
+
+  public IntegerWrapper(MessageOrBuilder message) {
+    super(ProtoUtils.fieldWiseCopy(message, Integer.newBuilder()).build());
   }
 
   /** Create an IntegerWrapper from a java String. */

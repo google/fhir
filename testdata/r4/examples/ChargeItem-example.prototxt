@@ -1,0 +1,188 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Example of ChargeItem Usage in Context of the German EBM Billing code system</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://myHospital.org/ChargeItems"
+  }
+  value {
+    value: "654321"
+  }
+}
+definition_uri {
+  value: "http://www.kbv.de/tools/ebm/html/01520_2904360860826220813632.html"
+}
+status {
+  value: BILLABLE
+}
+code {
+  coding {
+    code {
+      value: "01510"
+    }
+    display {
+      value: "Zusatzpauschale f\303\274r Beobachtung nach diagnostischer Koronarangiografie"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+context {
+  encounter_id {
+    value: "example"
+  }
+}
+occurrence {
+  period {
+    start {
+      value_us: 1485327600000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1485344100000000
+      timezone: "+01:00"
+      precision: SECOND
+    }
+  }
+}
+performer {
+  function {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "17561000"
+      }
+      display {
+        value: "Cardiologist"
+      }
+    }
+  }
+  actor {
+    practitioner_id {
+      value: "example"
+    }
+  }
+}
+performer {
+  function {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "224542009"
+      }
+      display {
+        value: "Coronary Care Nurse"
+      }
+    }
+  }
+  actor {
+    practitioner_id {
+      value: "example"
+    }
+  }
+}
+performing_organization {
+  identifier {
+    system {
+      value: "http://myhospital/NamingSystem/departments"
+    }
+    value {
+      value: "CARD_INTERMEDIATE_CARE"
+    }
+  }
+}
+requesting_organization {
+  identifier {
+    system {
+      value: "http://myhospital/NamingSystem/departments"
+    }
+    value {
+      value: "CARD_U1"
+    }
+  }
+}
+quantity {
+  value {
+    value: "1"
+  }
+}
+factor_override {
+  value: "0.8"
+}
+price_override {
+  value {
+    value: "40"
+  }
+  currency {
+    value: "EUR"
+  }
+}
+override_reason {
+  value: "Patient is Cardiologist\'s golf buddy, so he gets a 20% discount!"
+}
+enterer {
+  practitioner_id {
+    value: "example"
+  }
+}
+entered_date {
+  value_us: 1485384904000000
+  timezone: "+01:00"
+  precision: SECOND
+}
+reason {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/sid/icd-10"
+    }
+    code {
+      value: "123456"
+    }
+    display {
+      value: "DIAG-1"
+    }
+  }
+}
+service {
+  procedure_id {
+    value: "example"
+  }
+}
+account {
+  account_id {
+    value: "example"
+  }
+}
+note {
+  author {
+    reference {
+      practitioner_id {
+        value: "example"
+      }
+    }
+  }
+  time {
+    value_us: 1485384904000000
+    timezone: "+01:00"
+    precision: SECOND
+  }
+  text {
+    value: "The code is only applicable for periods longer than 4h"
+  }
+}

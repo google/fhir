@@ -1,0 +1,86 @@
+id {
+  value: "exampleloc2"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      Dr. Beverly Crusher - Starfleet HQ Sickbay Schedule\n\t\t</div>"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  system {
+    value: "http://example.org/scheduleid"
+  }
+  value {
+    value: "47"
+  }
+}
+active {
+  value: true
+}
+service_category {
+  coding {
+    code {
+      value: "31"
+    }
+    display {
+      value: "Specialist Surgical"
+    }
+  }
+}
+service_type {
+  coding {
+    code {
+      value: "221"
+    }
+    display {
+      value: "Surgery - General"
+    }
+  }
+}
+specialty {
+  coding {
+    code {
+      value: "394610002"
+    }
+    display {
+      value: "Surgery-Neurosurgery"
+    }
+  }
+}
+actor {
+  practitioner_id {
+    value: "1"
+  }
+  display {
+    value: "Dr. Beverly Crusher"
+  }
+}
+actor {
+  location_id {
+    value: "2"
+  }
+  display {
+    value: "Starfleet HQ Sickbay"
+  }
+}
+planning_horizon {
+  start {
+    value_us: 1514193300000000
+    timezone: "Z"
+    precision: SECOND
+  }
+  end {
+    value_us: 1514194200000000
+    timezone: "Z"
+    precision: SECOND
+  }
+}
+comment {
+  value: "The slots attached to this schedule are for neurosurgery operations at Starfleet HQ only."
+}

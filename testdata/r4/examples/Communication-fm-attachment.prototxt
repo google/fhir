@@ -1,0 +1,125 @@
+id {
+  value: "fm-attachment"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Attachment which is unsolicited</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.providerco.com/communication"
+  }
+  value {
+    value: "12345"
+  }
+}
+status {
+  value: COMPLETED
+}
+category {
+  coding {
+    system {
+      value: "http://acme.org/messagetypes"
+    }
+    code {
+      value: "SolicitedAttachment"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "1"
+  }
+}
+about {
+  identifier {
+    system {
+      value: "http://happyvalley.com/claim"
+    }
+    value {
+      value: "12345"
+    }
+  }
+}
+about {
+  identifier {
+    system {
+      value: "http://www.BenefitsInc.com/fhir/claimresponse"
+    }
+    value {
+      value: "R3500"
+    }
+  }
+}
+sent {
+  value_us: 1465783270000000
+  timezone: "-08:00"
+  precision: SECOND
+}
+recipient {
+  identifier {
+    system {
+      value: "http://www.jurisdiction.com/insurer"
+    }
+    value {
+      value: "123456"
+    }
+  }
+}
+sender {
+  identifier {
+    system {
+      value: "http://www.jurisdiction.com/provideroffices"
+    }
+    value {
+      value: "3456"
+    }
+  }
+}
+payload {
+  content {
+    attachment {
+      content_type {
+        value: "application/pdf"
+      }
+      data {
+        value: "Hello"
+      }
+      title {
+        value: "accident notes 20100201.pdf"
+      }
+      creation {
+        value_us: 1265043023000000
+        timezone: "-05:00"
+        precision: SECOND
+      }
+    }
+  }
+}
+payload {
+  content {
+    attachment {
+      content_type {
+        value: "application/pdf"
+      }
+      url {
+        value: "http://example.org/docs/AB12345"
+      }
+      size {
+        value: 104274
+      }
+      hash {
+        value: "Hello there"
+      }
+      creation {
+        value_us: 1265018254000000
+        timezone: "+01:00"
+        precision: SECOND
+      }
+    }
+  }
+}

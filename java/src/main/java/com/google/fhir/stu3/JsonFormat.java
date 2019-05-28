@@ -15,29 +15,17 @@
 package com.google.fhir.stu3;
 
 import com.google.common.base.CaseFormat;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.ImmutableTable;
+import com.google.common.collect.Table;
+import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
+import com.google.fhir.proto.Annotations.FhirVersion;
+import com.google.fhir.r4.proto.Element;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;
-import com.google.fhir.stu3.proto.Base64Binary;
 import com.google.fhir.stu3.proto.Boolean;
-import com.google.fhir.stu3.proto.Code;
-import com.google.fhir.stu3.proto.ContainedResource;
-import com.google.fhir.stu3.proto.Date;
-import com.google.fhir.stu3.proto.DateTime;
-import com.google.fhir.stu3.proto.Decimal;
-import com.google.fhir.stu3.proto.Element;
 import com.google.fhir.stu3.proto.Extension;
-import com.google.fhir.stu3.proto.Id;
-import com.google.fhir.stu3.proto.Instant;
-import com.google.fhir.stu3.proto.Integer;
-import com.google.fhir.stu3.proto.Markdown;
-import com.google.fhir.stu3.proto.Oid;
-import com.google.fhir.stu3.proto.PositiveInt;
 import com.google.fhir.stu3.proto.ReferenceId;
-import com.google.fhir.stu3.proto.Time;
-import com.google.fhir.stu3.proto.UnsignedInt;
-import com.google.fhir.stu3.proto.Uri;
-import com.google.fhir.stu3.proto.Xhtml;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -65,15 +53,6 @@ public final class JsonFormat {
 
   private static final PrimitiveHasNoValue PRIMITIVE_HAS_NO_VALUE =
       PrimitiveHasNoValue.newBuilder().setValueBoolean(Boolean.newBuilder().setValue(true)).build();
-  private static final ImmutableMap<String, FieldDescriptor> RESOURCE_TYPES = createResourceTypes();
-
-  private static ImmutableMap<String, FieldDescriptor> createResourceTypes() {
-    Map<String, FieldDescriptor> map = new HashMap<>();
-    for (FieldDescriptor field : ContainedResource.getDescriptor().getFields()) {
-      map.put(field.getMessageType().getName(), field);
-    }
-    return ImmutableMap.copyOf(map);
-  }
 
   private static boolean isPrimitiveType(FieldDescriptor field) {
     return field.getType() == FieldDescriptor.Type.MESSAGE
@@ -305,10 +284,15 @@ public final class JsonFormat {
           new WellKnownTypePrinter() {
             @Override
             public void print(PrinterImpl printer, MessageOrBuilder message) throws IOException {
-              printer.printContainedResource((ContainedResource) message);
+              printer.printContainedResource(message);
             }
           };
-      printers.put(ContainedResource.getDescriptor().getFullName(), containedResourcesPrinter);
+      printers.put(
+          com.google.fhir.stu3.proto.ContainedResource.getDescriptor().getFullName(),
+          containedResourcesPrinter);
+      printers.put(
+          com.google.fhir.r4.proto.ContainedResource.getDescriptor().getFullName(),
+          containedResourcesPrinter);
       // Special-case extensions for analytics use.
       WellKnownTypePrinter extensionPrinter =
           new WellKnownTypePrinter() {
@@ -323,7 +307,7 @@ public final class JsonFormat {
     }
 
     /** Prints a contained resource field. */
-    private void printContainedResource(ContainedResource message) throws IOException {
+    private void printContainedResource(MessageOrBuilder message) throws IOException {
       for (Map.Entry<FieldDescriptor, Object> field : message.getAllFields().entrySet()) {
         if (forAnalytics) {
           /* We print only the type of the contained resource here. */
@@ -350,37 +334,45 @@ public final class JsonFormat {
       }
     }
 
+    private static String referenceIdToStringUri(FieldDescriptor field, Message refId) {
+      // Convert to CamelCase and strip out the trailing "Id"
+      String type = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, field.getName());
+      type = type.substring(0, type.length() - 2);
+      Descriptor refIdDescriptor = refId.getDescriptorForType();
+      String uri = type + "/" + ResourceUtils.<String>getValue(refId);
+      FieldDescriptor historyField = refIdDescriptor.findFieldByName("history");
+      if (refId.hasField(historyField)) {
+        uri =
+            uri
+                + "/_history/"
+                + ResourceUtils.<String>getValue((Message) refId.getField(historyField));
+      }
+      return uri;
+    }
+
     /** Prints a reference field. */
     private void printReference(MessageOrBuilder reference) throws IOException {
-      FieldDescriptor uri = reference.getDescriptorForType().findFieldByName("uri");
-      if (reference.hasField(uri) || forAnalytics) {
+      FieldDescriptor uriField = reference.getDescriptorForType().findFieldByName("uri");
+      if (reference.hasField(uriField) || forAnalytics) {
         printMessage(reference);
       } else {
         // Restore the Uri field.
         String newUri = null;
         FieldDescriptor fragment = reference.getDescriptorForType().findFieldByName("fragment");
         if (reference.hasField(fragment)) {
-          newUri =
-              "#" + ((com.google.fhir.stu3.proto.String) reference.getField(fragment)).getValue();
+          newUri = "#" + ResourceUtils.<String>getValue((Message) reference.getField(fragment));
         } else {
-          for (Map.Entry<FieldDescriptor, Object> field : reference.getAllFields().entrySet()) {
-            if (field.getKey().getContainingOneof() != null) {
-              // Convert to CamelCase and strip out the trailing "Id"
-              String type =
-                  CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, field.getKey().getName());
-              type = type.substring(0, type.length() - 2);
-              ReferenceId refId = (ReferenceId) field.getValue();
-              newUri = type + "/" + refId.getValue();
-              if (refId.hasHistory()) {
-                newUri = newUri + "/_history/" + refId.getHistory().getValue();
-              }
+          for (Map.Entry<FieldDescriptor, Object> entry : reference.getAllFields().entrySet()) {
+            if (entry.getKey().getContainingOneof() != null) {
+              newUri = referenceIdToStringUri(entry.getKey(), (Message) entry.getValue());
             }
           }
         }
         if (newUri != null) {
           Message.Builder builder = ((Message) reference).toBuilder();
-          builder.setField(
-              uri, com.google.fhir.stu3.proto.String.newBuilder().setValue(newUri).build());
+          ProtoUtils.fieldWiseCopy(
+              com.google.fhir.stu3.proto.String.newBuilder().setValue(newUri).build(),
+              builder.getFieldBuilder(uriField));
           printMessage(builder);
         } else {
           printMessage(reference);
@@ -412,7 +404,12 @@ public final class JsonFormat {
 
       if (AnnotationUtils.isResource(message.getDescriptorForType()) && !forAnalytics) {
         printedField = maybeStartMessage(printedField);
-        generator.print("\"resourceType\": \"" + message.getDescriptorForType().getName() + "\"");
+        generator.print(
+            "\"resourceType\":"
+                + blankOrSpace
+                + "\""
+                + message.getDescriptorForType().getName()
+                + "\"");
       }
 
       for (Map.Entry<FieldDescriptor, Object> field : message.getAllFields().entrySet()) {
@@ -616,10 +613,22 @@ public final class JsonFormat {
           // All the contained fields go in this message.
           Map<String, FieldDescriptor> innerMap = getFieldMap(field.getMessageType());
           for (Map.Entry<String, FieldDescriptor> entry : innerMap.entrySet()) {
-            nameToDescriptorMap.put(
-                field.getJsonName()
-                    + CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, entry.getKey()),
-                field);
+            String childFieldName = entry.getKey();
+            if (childFieldName.startsWith("_")) {
+              // Convert primitive extension field name to field on choice type, e.g.,
+              // _boolean -> _valueBoolean for Extension.value.
+              nameToDescriptorMap.put(
+                  "_"
+                      + field.getJsonName()
+                      + CaseFormat.LOWER_CAMEL.to(
+                          CaseFormat.UPPER_CAMEL, entry.getKey().substring(1)),
+                  field);
+            } else {
+              nameToDescriptorMap.put(
+                  field.getJsonName()
+                      + CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, entry.getKey()),
+                  field);
+            }
           }
         } else {
           nameToDescriptorMap.put(field.getJsonName(), field);
@@ -633,7 +642,7 @@ public final class JsonFormat {
     }
 
     private void mergeMessage(JsonObject json, Message.Builder builder) {
-      if (builder.getDescriptorForType().equals(ContainedResource.getDescriptor())) {
+      if (builder.getDescriptorForType().getName().equals("ContainedResource")) {
         // We handle contained resources in a special way, since we need to inspect the input to
         // determine its type.
         parseContainedResource(json, builder);
@@ -675,7 +684,6 @@ public final class JsonFormat {
                   + names);
         }
       }
-
       if (AnnotationUtils.isReference(builder.getDescriptorForType())) {
         // Special-case the "reference" field, which was parsed into the uri field.
         ResourceUtils.splitIfRelativeReference(builder);
@@ -686,14 +694,22 @@ public final class JsonFormat {
         FieldDescriptor field, String fieldName, JsonElement json, Message.Builder builder) {
       Descriptor descriptor = field.getMessageType();
       Map<String, FieldDescriptor> nameToDescriptorMap = getFieldMap(descriptor);
-      String fieldNameSuffix =
-          CaseFormat.UPPER_CAMEL.to(
-              CaseFormat.LOWER_CAMEL, fieldName.substring(field.getJsonName().length()));
-      FieldDescriptor choiceField = nameToDescriptorMap.get(fieldNameSuffix);
+      String choiceFieldName;
+      if (fieldName.startsWith("_")) {
+        choiceFieldName =
+            "_"
+                + CaseFormat.UPPER_CAMEL.to(
+                    CaseFormat.LOWER_CAMEL, fieldName.substring(1 + field.getJsonName().length()));
+      } else {
+        choiceFieldName =
+            CaseFormat.UPPER_CAMEL.to(
+                CaseFormat.LOWER_CAMEL, fieldName.substring(field.getJsonName().length()));
+      }
+      FieldDescriptor choiceField = nameToDescriptorMap.get(choiceFieldName);
       if (choiceField == null) {
         throw new IllegalArgumentException(
             "Can't find field: "
-                + fieldNameSuffix
+                + choiceFieldName
                 + " in type "
                 + descriptor.getName()
                 + " for field "
@@ -710,21 +726,23 @@ public final class JsonFormat {
     }
 
     private void mergeField(FieldDescriptor field, JsonElement json, Message.Builder builder) {
-      if (!isPrimitiveType(field)
-          && ((field.isRepeated() && builder.getRepeatedFieldCount(field) > 0)
-              || (!field.isRepeated() && builder.hasField(field)))) {
-        throw new IllegalArgumentException(
-            "Field " + field.getFullName() + " has already been set.");
-      }
-      if (field.getContainingOneof() != null) {
-        FieldDescriptor existing = builder.getOneofFieldDescriptor(field.getContainingOneof());
-        if (existing != null) {
+      if (!isPrimitiveType(field)) {
+        if ((field.isRepeated() && builder.getRepeatedFieldCount(field) > 0)
+            || (!field.isRepeated() && builder.hasField(field))) {
           throw new IllegalArgumentException(
-              "Cannot set field "
-                  + field.getFullName()
-                  + " because another field "
-                  + existing.getFullName()
-                  + " belonging to the same oneof has already been set ");
+              "Field " + field.getFullName() + " has already been set.");
+        }
+
+        if (field.getContainingOneof() != null) {
+          FieldDescriptor existing = builder.getOneofFieldDescriptor(field.getContainingOneof());
+          if (existing != null) {
+            throw new IllegalArgumentException(
+                "Cannot set field "
+                    + field.getFullName()
+                    + " because another field "
+                    + existing.getFullName()
+                    + " belonging to the same oneof has already been set ");
+          }
         }
       }
       if (field.isRepeated()) {
@@ -756,9 +774,8 @@ public final class JsonFormat {
         if (!hasValue) {
           extensions.add(PRIMITIVE_HAS_NO_VALUE);
         }
-        FieldDescriptor extensionField =
-            fieldMerger.getDescriptorForType().findFieldByName("extension");
-        fieldMerger.setField(extensionField, extensions.build());
+        fieldMerger.clearField(fieldMerger.getDescriptorForType().findFieldByName("extension"));
+        extensions.addToMessage(fieldMerger);
       }
       return fieldMerger.build();
     }
@@ -781,9 +798,27 @@ public final class JsonFormat {
       }
     }
 
+    private static final ImmutableTable<FhirVersion, String, FieldDescriptor> RESOURCE_TYPES =
+        createResourceTypes();
+
+    private static ImmutableTable<FhirVersion, String, FieldDescriptor> createResourceTypes() {
+      Table<FhirVersion, String, FieldDescriptor> table = HashBasedTable.create();
+      for (FieldDescriptor field :
+          com.google.fhir.stu3.proto.ContainedResource.getDescriptor().getFields()) {
+        table.put(FhirVersion.STU3, field.getMessageType().getName(), field);
+      }
+      for (FieldDescriptor field :
+          com.google.fhir.r4.proto.ContainedResource.getDescriptor().getFields()) {
+        table.put(FhirVersion.R4, field.getMessageType().getName(), field);
+      }
+      return ImmutableTable.copyOf(table);
+    }
+
     private void parseContainedResource(JsonObject json, Message.Builder builder) {
       String resourceType = json.get("resourceType").getAsString();
-      FieldDescriptor resource = RESOURCE_TYPES.get(resourceType);
+      FieldDescriptor resource =
+          RESOURCE_TYPES.get(
+              AnnotationUtils.getFhirVersion(builder.getDescriptorForType()), resourceType);
       if (resource == null) {
         throw new IllegalArgumentException("Unsupported resource type: " + resourceType);
       }
@@ -840,43 +875,48 @@ public final class JsonFormat {
     }
     switch (descriptor.getName()) {
       case "Base64Binary":
-        return new Base64BinaryWrapper((Base64Binary) message);
+        return new Base64BinaryWrapper(message);
       case "Boolean":
-        return new BooleanWrapper((Boolean) message);
+        return new BooleanWrapper(message);
       case "Code":
-        return new CodeWrapper((Code) message);
+        return new CodeWrapper(message);
       case "Date":
-        return new DateWrapper((Date) message);
+        return new DateWrapper(message);
       case "DateTime":
         if (defaultTimeZone == null) {
-          return new DateTimeWrapper((DateTime) message);
+          return new DateTimeWrapper(message);
         } else {
-          return new DateTimeWrapper((DateTime) message, defaultTimeZone);
+          return new DateTimeWrapper(message, defaultTimeZone);
         }
       case "Decimal":
-        return new DecimalWrapper((Decimal) message);
+        return new DecimalWrapper(message);
       case "Id":
-        return new IdWrapper((Id) message);
+        return new IdWrapper(message);
       case "Instant":
-        return new InstantWrapper((Instant) message);
+        return new InstantWrapper(message);
       case "Integer":
-        return new IntegerWrapper((Integer) message);
+        return new IntegerWrapper(message);
       case "Markdown":
-        return new MarkdownWrapper((Markdown) message);
+        return new MarkdownWrapper(message);
       case "Oid":
-        return new OidWrapper((Oid) message);
+        return new OidWrapper(message);
       case "PositiveInt":
-        return new PositiveIntWrapper((PositiveInt) message);
+        return new PositiveIntWrapper(message);
       case "String":
-        return new StringWrapper((com.google.fhir.stu3.proto.String) message);
+        return new StringWrapper(message);
       case "Time":
-        return new TimeWrapper((Time) message);
+        return new TimeWrapper(message);
       case "UnsignedInt":
-        return new UnsignedIntWrapper((UnsignedInt) message);
+        return new UnsignedIntWrapper(message);
       case "Uri":
-        return new UriWrapper((Uri) message);
+        return new UriWrapper(message);
       case "Xhtml":
-        return new XhtmlWrapper((Xhtml) message);
+        return new XhtmlWrapper(message);
+        // R4 only
+      case "Canonical":
+        return new CanonicalWrapper(message);
+      case "Url":
+        return new UrlWrapper(message);
       default:
         throw new IllegalArgumentException(
             "Unexpected primitive FHIR type: " + descriptor.getName());
@@ -888,7 +928,7 @@ public final class JsonFormat {
     Descriptor descriptor = message.getDescriptorForType();
     if (json.isJsonArray()) {
       // JsonArrays are not allowed here
-      throw new IllegalArgumentException("Cannot wrap a JsonArray.");
+      throw new IllegalArgumentException("Cannot wrap a JsonArray.  Found: " + json.getClass());
     }
     // JSON objects represents extension on a primitive, and are treated as null values.
     if (json.isJsonObject()) {
@@ -953,6 +993,13 @@ public final class JsonFormat {
       case "Xhtml":
         checkIsString(json);
         return new XhtmlWrapper(jsonString);
+        // R4 only
+      case "Canonical":
+        checkIsString(json);
+        return new CanonicalWrapper(jsonString);
+      case "Url":
+        checkIsString(json);
+        return new UrlWrapper(jsonString);
       default:
         throw new IllegalArgumentException(
             "Unexpected primitive FHIR type: " + descriptor.getName());

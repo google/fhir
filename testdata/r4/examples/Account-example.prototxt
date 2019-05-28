@@ -1,0 +1,79 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">HACC Funded Billing for Peter James Chalmers</div>"
+  }
+}
+identifier {
+  system {
+    value: "urn:oid:0.1.2.3.4.5.6.7"
+  }
+  value {
+    value: "654321"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+    code {
+      value: "PBILLACCT"
+    }
+    display {
+      value: "patient billing account"
+    }
+  }
+  text {
+    value: "patient"
+  }
+}
+name {
+  value: "HACC Funded Billing for Peter James Chalmers"
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+service_period {
+  start {
+    value_us: 1451566800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1467208800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+coverage {
+  coverage {
+    coverage_id {
+      value: "7546D"
+    }
+  }
+  priority {
+    value: 1
+  }
+}
+owner {
+  organization_id {
+    value: "hl7"
+  }
+}
+description {
+  value: "Hospital charges"
+}

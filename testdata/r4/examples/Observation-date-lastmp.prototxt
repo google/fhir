@@ -1,0 +1,65 @@
+id {
+  value: "date-lastmp"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: date-lastmp</p><p><b>status</b>: final</p><p><b>category</b>: AOE <span>(Details : {http://terminology.hl7.org/CodeSystem/observation-category code \'survey\' = \'Survey\', given as \'Survey\'})</span></p><p><b>code</b>: Date last menstrual period <span>(Details : {LOINC code \'8665-2\' = \'Last menstrual period start date\', given as \'Date last menstrual period\'})</span></p><p><b>subject</b>: <a>Patient/pat2</a></p><p><b>effective</b>: 24/01/2016</p><p><b>value</b>: 30/12/2016</p></div>"
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/observation-category"
+    }
+    code {
+      value: "survey"
+    }
+    display {
+      value: "Survey"
+    }
+  }
+  text {
+    value: "AOE"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "8665-2"
+    }
+    display {
+      value: "Date last menstrual period"
+    }
+  }
+  text {
+    value: "Date last menstrual period"
+  }
+}
+subject {
+  patient_id {
+    value: "pat2"
+  }
+}
+effective {
+  date_time {
+    value_us: 1453554000000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+value {
+  date_time {
+    value_us: 1483016400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}

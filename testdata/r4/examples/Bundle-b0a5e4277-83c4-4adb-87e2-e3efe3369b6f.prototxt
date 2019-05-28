@@ -1,0 +1,741 @@
+id {
+  value: "b0a5e4277-83c4-4adb-87e2-e3efe3369b6f"
+}
+meta {
+  last_updated {
+    value_us: 1338335132000000
+    timezone: "Z"
+    precision: SECOND
+  }
+}
+type {
+  value: COLLECTION
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Endpoint/71"
+  }
+  resource {
+    endpoint {
+      id {
+        value: "71"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n              CarePlan repository, CarePlan<br/>\n              Address: https://sqlonfhir-dstu2.azurewebsites.net/fhir</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      connection_type {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+        }
+        code {
+          value: "hl7-fhir-rest"
+        }
+      }
+      name {
+        value: "CarePlan repository"
+      }
+      managing_organization {
+        display {
+          value: "Telstra Health"
+        }
+      }
+      payload_type {
+        coding {
+          code {
+            value: "CarePlan"
+          }
+        }
+      }
+      payload_mime_type {
+        value: "application/fhir+xml"
+      }
+      address {
+        value: "https://sqlonfhir-dstu2.azurewebsites.net/fhir"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Endpoint/72"
+  }
+  resource {
+    endpoint {
+      id {
+        value: "72"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n              Questionnaire Destination, QuestionnaireResponse<br/>\n              Address: https://sqlonfhir-dstu2.azurewebsites.net/fhir</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      connection_type {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+        }
+        code {
+          value: "hl7-fhir-rest"
+        }
+      }
+      name {
+        value: "Questionnaire Destination"
+      }
+      managing_organization {
+        display {
+          value: "Telstra Health"
+        }
+      }
+      payload_type {
+        coding {
+          code {
+            value: "QuestionnaireResponse"
+          }
+        }
+      }
+      payload_mime_type {
+        value: "application/fhir+xml"
+      }
+      address {
+        value: "https://sqlonfhir-dstu2.azurewebsites.net/fhir"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Endpoint/73"
+  }
+  resource {
+    endpoint {
+      id {
+        value: "73"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n              Referral Requests, ServiceRequest<br/>\n              Address: https://sqlonfhir-dstu2.azurewebsites.net/fhir</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      connection_type {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+        }
+        code {
+          value: "hl7-fhir-rest"
+        }
+      }
+      name {
+        value: "Referral Requests"
+      }
+      managing_organization {
+        display {
+          value: "Telstra Health"
+        }
+      }
+      payload_type {
+        coding {
+          code {
+            value: "ServiceRequest"
+          }
+        }
+      }
+      payload_mime_type {
+        value: "application/fhir+xml"
+      }
+      address {
+        value: "https://sqlonfhir-dstu2.azurewebsites.net/fhir"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Endpoint/74"
+  }
+  resource {
+    endpoint {
+      id {
+        value: "74"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n              Referral Requests, ServiceRequest QuestionnaireResponse<br/>\n              Address: https://open.epic.com/Interface/FHIR</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      connection_type {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+        }
+        code {
+          value: "hl7-fhir-rest"
+        }
+      }
+      name {
+        value: "Referral Requests"
+      }
+      managing_organization {
+        display {
+          value: "Epic demo organization"
+        }
+      }
+      payload_type {
+        coding {
+          code {
+            value: "ServiceRequest QuestionnaireResponse"
+          }
+        }
+      }
+      payload_mime_type {
+        value: "application/fhir+json"
+      }
+      address {
+        value: "https://open.epic.com/Interface/FHIR"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Endpoint/75"
+  }
+  resource {
+    endpoint {
+      id {
+        value: "75"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n              Subscription receiver, ServiceRequest<br/>\n              Address: mailto:subscriptions@example.org</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      connection_type {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+        }
+        code {
+          value: "secure-email"
+        }
+      }
+      name {
+        value: "Subscription receiver"
+      }
+      managing_organization {
+        display {
+          value: "Telstra Health"
+        }
+      }
+      payload_type {
+        coding {
+          code {
+            value: "ServiceRequest"
+          }
+        }
+      }
+      payload_mime_type {
+        value: "application/fhir+xml"
+      }
+      address {
+        value: "mailto:subscriptions@example.org"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Endpoint/76"
+  }
+  resource {
+    endpoint {
+      id {
+        value: "76"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n              valid usecase?, CDA-EventSummary<br/>\n              Address: https://sqlonfhir-dstu2.azurewebsites.net/fhir</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      connection_type {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+        }
+        code {
+          value: "hl7-fhir-msg"
+        }
+      }
+      name {
+        value: "valid usecase?"
+      }
+      managing_organization {
+        display {
+          value: "Telstra Health"
+        }
+      }
+      payload_type {
+        coding {
+          code {
+            value: "CDA-EventSummary"
+          }
+        }
+      }
+      payload_mime_type {
+        value: "application/pdf"
+      }
+      address {
+        value: "https://sqlonfhir-dstu2.azurewebsites.net/fhir"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Endpoint/77"
+  }
+  resource {
+    endpoint {
+      id {
+        value: "77"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n              v2 referral Requests, REF-I12<br/>\n              Address: 127.0.0.1</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      connection_type {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+        }
+        code {
+          value: "hl7v2-mllp"
+        }
+      }
+      name {
+        value: "v2 referral Requests"
+      }
+      managing_organization {
+        display {
+          value: "Epic demo organization"
+        }
+      }
+      payload_type {
+        coding {
+          code {
+            value: "REF-I12"
+          }
+        }
+      }
+      payload_mime_type {
+        value: "application/hl7-v2"
+      }
+      address {
+        value: "127.0.0.1"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Endpoint/78"
+  }
+  resource {
+    endpoint {
+      id {
+        value: "78"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n              xds event summaries, CDA-EventSummary<br/>\n              Address: https://open.epic.com/Interface/XDS.b</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      connection_type {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+        }
+        code {
+          value: "ihe-xds"
+        }
+      }
+      name {
+        value: "xds event summaries"
+      }
+      managing_organization {
+        display {
+          value: "Epic demo organization"
+        }
+      }
+      payload_type {
+        coding {
+          code {
+            value: "CDA-EventSummary"
+          }
+        }
+      }
+      payload_mime_type {
+        value: "application/hl7-sda+xml; variant=XDA/XDS"
+      }
+      address {
+        value: "https://open.epic.com/Interface/XDS.b"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Endpoint/79"
+  }
+  resource {
+    endpoint {
+      id {
+        value: "79"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n              Enterprise Image Archive, varies (application/dicom, application/dicom+xml, image/jpeg, and many more)<br/>\n              Address: https://pacs.hospital.org/dicomweb</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      connection_type {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+        }
+        code {
+          value: "dicom-wado-rs"
+        }
+      }
+      name {
+        value: "Enterprise Image Archive"
+      }
+      managing_organization {
+        display {
+          value: "Multi-site Co."
+        }
+      }
+      payload_type {
+        coding {
+          code {
+            value: "varies (application/dicom, application/dicom+xml, image/jpeg, and many more)"
+          }
+        }
+      }
+      payload_mime_type {
+        value: "application/dicom; variant=DICOM WADO-RS"
+      }
+      address {
+        value: "https://pacs.hospital.org/dicomweb"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Endpoint/80"
+  }
+  resource {
+    endpoint {
+      id {
+        value: "80"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n              Enterprise Image Archive, varies (application/dicom, application/dicom+xml, image/jpeg, and many more)<br/>\n              Address: https://pacs.hospital.org/dicomweb</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      connection_type {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+        }
+        code {
+          value: "dicom-qido-rs"
+        }
+      }
+      name {
+        value: "Enterprise Image Archive"
+      }
+      managing_organization {
+        display {
+          value: "Multi-site Co."
+        }
+      }
+      payload_type {
+        coding {
+          code {
+            value: "varies (application/dicom, application/dicom+xml, image/jpeg, and many more)"
+          }
+        }
+      }
+      payload_mime_type {
+        value: "application/dicom; variant=DICOM QIDO-RS"
+      }
+      address {
+        value: "https://pacs.hospital.org/dicomweb"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Endpoint/81"
+  }
+  resource {
+    endpoint {
+      id {
+        value: "81"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n              Enterprise Image Archive, varies (application/dicom, application/dicom+xml, image/jpeg, and many more)<br/>\n              Address: https://pacs.hospital.org/dicomweb</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      connection_type {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+        }
+        code {
+          value: "dicom-stow-rs"
+        }
+      }
+      name {
+        value: "Enterprise Image Archive"
+      }
+      managing_organization {
+        display {
+          value: "Multi-site Co."
+        }
+      }
+      payload_type {
+        coding {
+          code {
+            value: "varies (application/dicom, application/dicom+xml, image/jpeg, and many more)"
+          }
+        }
+      }
+      payload_mime_type {
+        value: "application/dicom; variant=DICOM STOW-RS"
+      }
+      address {
+        value: "https://pacs.hospital.org/dicomweb"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Endpoint/82"
+  }
+  resource {
+    endpoint {
+      id {
+        value: "82"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n              Enterprise Image Archive, varies (application/dicom, application/dicom+xml, image/jpeg, and many more)<br/>\n              Address: https://pacs.hospital.org/dicomweb</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      connection_type {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+        }
+        code {
+          value: "dicom-stow-rs"
+        }
+      }
+      name {
+        value: "Enterprise Image Archive"
+      }
+      managing_organization {
+        display {
+          value: "Multi-site Co."
+        }
+      }
+      payload_type {
+        coding {
+          code {
+            value: "varies (application/dicom, application/dicom+xml, image/jpeg, and many more)"
+          }
+        }
+      }
+      payload_mime_type {
+        value: "application/dicom; variant=DICOM STOW-RS"
+      }
+      address {
+        value: "https://pacs.hospital.org/dicomweb"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Endpoint/83"
+  }
+  resource {
+    endpoint {
+      id {
+        value: "83"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n              Enterprise Image Archive, varies (application/dicom, application/dicom+xml, image/jpeg, and many more)<br/>\n              Address: https://pacs.hospital.org/wadoUri</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      connection_type {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+        }
+        code {
+          value: "dicom-wado-uri"
+        }
+      }
+      name {
+        value: "Enterprise Image Archive"
+      }
+      managing_organization {
+        display {
+          value: "Multi-site Co."
+        }
+      }
+      payload_type {
+        coding {
+          code {
+            value: "varies (application/dicom, application/dicom+xml, image/jpeg, and many more)"
+          }
+        }
+      }
+      payload_mime_type {
+        value: "application/dicom; variant=DICOM WADO-URI"
+      }
+      address {
+        value: "https://pacs.hospital.org/wadoUri"
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "http://hl7.org/fhir/Endpoint/84"
+  }
+  resource {
+    endpoint {
+      id {
+        value: "84"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n              Enterprise Image Archive, varies (application/dicom, application/dicom+xml, image/jpeg, and many more)<br/>\n              Address: https://pacs.hospital.org/IHEInvokeImageDisplay</div>"
+        }
+      }
+      status {
+        value: ACTIVE
+      }
+      connection_type {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
+        }
+        code {
+          value: "ihe-iid"
+        }
+      }
+      name {
+        value: "Enterprise Image Archive"
+      }
+      managing_organization {
+        display {
+          value: "Multi-site Co."
+        }
+      }
+      payload_type {
+        coding {
+          code {
+            value: "varies (application/dicom, application/dicom+xml, image/jpeg, and many more)"
+          }
+        }
+      }
+      payload_mime_type {
+        value: "application/dicom; variant=IHE IID"
+      }
+      address {
+        value: "https://pacs.hospital.org/IHEInvokeImageDisplay"
+      }
+    }
+  }
+}

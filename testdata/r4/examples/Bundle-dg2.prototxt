@@ -1,0 +1,180 @@
+id {
+  value: "dg2"
+}
+type {
+  value: COLLECTION
+}
+entry {
+  full_url {
+    value: "https://example.com/base/DiagnosticReport/dg2"
+  }
+  resource {
+    diagnostic_report {
+      id {
+        value: "dg2"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t\t\t<h3>Genetic test Report for Marry Chalmers (MRN: 12345) </h3>\n\t\t\t\t\t\t<pre>\n              Gene                DNAVariation       Status        Interpretation\n              BRCA1                                 Negative\n              BRCA2                 185delAG        Positive         Pathogenic\n          </pre>\n\t\t\t\t\t\t<p> Method: BRACAnalysis CDx Offered by Myriad Genetic Laboratories, Inc </p>\n\t\t\t\t\t\t<p> Issued: 2015-05-26T15:30:10+01:00</p>\n\t\t\t\t\t\t<p> FamilyMemeberHistory: Mother </p>\n\t\t\t\t\t\t<pre>\n              Gene                 DNAVariation      Status\n              BRCA2                 185delAG        Positive\n          </pre>\n\t\t\t\t\t\t<p> Method: BRACAnalysis CDx Offered by Myriad Genetic Laboratories, Inc </p>\n\t\t\t\t\t</div>"
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory"
+        }
+        value {
+          reference {
+            family_member_history_id {
+              value: "f1-genetics"
+            }
+          }
+        }
+      }
+      status {
+        value: FINAL
+      }
+      category {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "15220000"
+          }
+          display {
+            value: "Laboratory test"
+          }
+        }
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v2-0074"
+          }
+          code {
+            value: "LAB"
+          }
+        }
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "55233-1"
+          }
+          display {
+            value: "Genetic analysis master panel"
+          }
+        }
+      }
+      subject {
+        patient_id {
+          value: "example"
+        }
+        display {
+          value: "Peter James Chalmers(MRN: 12345)"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1432650610000000
+          timezone: "+01:00"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1400232480000000
+        timezone: "+01:00"
+        precision: SECOND
+      }
+      performer {
+        practitioner_id {
+          value: "genetics-example2"
+        }
+        display {
+          value: "Molecular Diagnostic Laboratory"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "genetics-example2"
+        }
+        display {
+          value: "Molecular Specimen ID: MLD45-Z4-1234"
+        }
+      }
+      result {
+        observation_id {
+          value: "ob-genetics-3-1"
+        }
+        display {
+          value: "Genetic analysis for BRAC -1"
+        }
+      }
+      result {
+        observation_id {
+          value: "ob-genetics-3-2"
+        }
+        display {
+          value: "Genetic analysis for BRAC -2"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/FamilyMemberHistory/f1-genetics"
+  }
+  resource {
+    family_member_history {
+      id {
+        value: "f1-genetics"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f1-genetics</p><p><b>status</b>: completed</p><p><b>patient</b>: <a>Patient/example</a></p><p><b>relationship</b>: Mother <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-RoleCode code \'MTH\' = \'mother\', given as \'Mother\'})</span></p></div>"
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation"
+        }
+        value {
+          reference {
+            observation_id {
+              value: "dgf1"
+            }
+          }
+        }
+      }
+      status {
+        value: COMPLETED
+      }
+      patient {
+        patient_id {
+          value: "example"
+        }
+      }
+      relationship {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+          }
+          code {
+            value: "MTH"
+          }
+          display {
+            value: "Mother"
+          }
+        }
+      }
+    }
+  }
+}

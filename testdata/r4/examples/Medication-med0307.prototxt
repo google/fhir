@@ -1,0 +1,103 @@
+id {
+  value: "med0307"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: med0307</p><p><b>contained</b>: </p><p><b>code</b>: Novolog 100u/ml <span>(Details : {http://hl7.org/fhir/sid/ndc code \'0169-7501-11\' = \'0169-7501-11\', given as \'Novolog 100u/ml\'})</span></p><p><b>manufacturer</b>: id: org3; name: Novo Nordisk</p><p><b>form</b>: Injection solution (qualifier value) <span>(Details : {SNOMED CT code \'385219001\' = \'Injection solution\', given as \'Injection solution (qualifier value)\'})</span></p><h3>Ingredients</h3><table><tr><td>-</td><td><b>Item[x]</b></td><td><b>Strength</b></td></tr><tr><td>*</td><td>Insulin Aspart (substance) <span>(Details : {SNOMED CT code \'325072002\' = \'Insulin aspart\', given as \'Insulin Aspart (substance)\'})</span></td><td>100 U<span> (Details: UCUM code U = \'U\')</span>/1 mL<span> (Details: UCUM code mL = \'mL\')</span></td></tr></table><h3>Batches</h3><table><tr><td>-</td><td><b>LotNumber</b></td><td><b>ExpirationDate</b></td></tr><tr><td>*</td><td>12345</td><td>31/10/2019</td></tr></table></div>"
+  }
+}
+contained {
+  organization {
+    id {
+      value: "org3"
+    }
+    name {
+      value: "Novo Nordisk"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/sid/ndc"
+    }
+    code {
+      value: "0169-7501-11"
+    }
+    display {
+      value: "Novolog 100u/ml"
+    }
+  }
+}
+manufacturer {
+  fragment {
+    value: "org3"
+  }
+}
+form {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "385219001"
+    }
+    display {
+      value: "Injection solution (qualifier value)"
+    }
+  }
+}
+ingredient {
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "325072002"
+        }
+        display {
+          value: "Insulin Aspart (substance)"
+        }
+      }
+    }
+  }
+  strength {
+    numerator {
+      value {
+        value: "100"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "U"
+      }
+    }
+    denominator {
+      value {
+        value: "1"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mL"
+      }
+    }
+  }
+}
+batch {
+  lot_number {
+    value: "12345"
+  }
+  expiration_date {
+    value_us: 1572440400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}

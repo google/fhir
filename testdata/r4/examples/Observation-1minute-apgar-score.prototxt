@@ -1,0 +1,461 @@
+id {
+  value: "1minute-apgar-score"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: 1minute-apgar-score</p><p><b>contained</b>: </p><p><b>status</b>: final</p><p><b>category</b>: Survey <span>(Details : {http://terminology.hl7.org/CodeSystem/observation-category code \'survey\' = \'Survey\', given as \'Survey\'})</span></p><p><b>code</b>: 1 minute Apgar Score <span>(Details : {LOINC code \'9272-6\' = \'1 minute Apgar Score\', given as \'1 minute Apgar Score\'}; {SNOMED CT code \'169895004\' = \'Apgar at 1 minute\', given as \'Apgar at 1 minute\'})</span></p><p><b>subject</b>: id: newborn; 12345; active; Peter James Chalmers ; gender: male; birthDate: 18/05/2016</p><p><b>effective</b>: 18/05/2016 10:33:22 PM</p><p><b>performer</b>: <a>Practitioner/example</a></p><p><b>value</b>: 0 {score}<span> (Details: UCUM code {score} = \'{score}\')</span></p><blockquote><p><b>component</b></p><p><b>code</b>: Apgar color score <span>(Details : {LOINC code \'32406-1\' = \'1 minute Apgar Color\', given as \'1 minute Apgar Color\'}; {SNOMED CT code \'249227004\' = \'Apgar color score\', given as \'Apgar color score\'})</span></p><p><b>value</b>: 0. The baby\'s whole body is completely bluish-gray or pale <span>(Details : {LOINC code \'LA6722-8\' = \'The baby\'s whole body is completely bluish-gray or pale\', given as \'The baby\'s whole body is completely bluish-gray or pale\'}; {http://acme.ped/apgarcolor code \'0\' = \'0)</span></p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: Apgar respiratory effort score <span>(Details : {LOINC code \'32407-9\' = \'1 minute Apgar Heart rate\', given as \'1 minute Apgar Heart Rate\'}; {SNOMED CT code \'249223000\' = \'Apgar heart rate score\', given as \'Apgar heart rate score\'})</span></p><p><b>value</b>: 0. No heart rate <span>(Details : {LOINC code \'LA6716-0\' = \'No heart rate\', given as \'No heart rate\'}; {http://acme.ped/apgarheartrate code \'0\' = \'0)</span></p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: Apgar response to stimulus score <span>(Details : {LOINC code \'32409-5\' = \'1 minute Apgar Reflex irritability\', given as \'1 minute Apgar Reflex Irritability\'}; {SNOMED CT code \'249226008\' = \'Apgar response to stimulus score\', given as \'Apgar response to stimulus score\'})</span></p><p><b>value</b>: 0. No response to airways being suctioned <span>(Details : {LOINC code \'LA6719-4\' = \'No response to airways being suctioned\', given as \'No response to airways being suctioned\'}; {http://acme.ped/apgarreflexirritability code \'0\' = \'0)</span></p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: Apgar muscle tone score <span>(Details : {LOINC code \'32408-7\' = \'1 minute Apgar Muscle tone\', given as \'1 minute Apgar Muscle Tone\'}; {SNOMED CT code \'249225007\' = \'Apgar muscle tone score\', given as \'Apgar muscle tone score\'})</span></p><p><b>value</b>: 0. Limp; no movement <span>(Details : {LOINC code \'LA6713-7\' = \'Limp; no movement\', given as \'Limp; no movement\'}; {http://acme.ped/apgarmuscletone code \'0\' = \'0)</span></p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: Apgar respiratory effort score <span>(Details : {LOINC code \'32410-3\' = \'1 minute Apgar Respiratory effort\', given as \'1 minute Apgar Respiratory effort\'}; {SNOMED CT code \'249224006\' = \'Apgar respiratory effort score\', given as \'Apgar respiratory effort score\'})</span></p><p><b>value</b>: 0. Not breathing <span>(Details : {LOINC code \'LA6725-1\' = \'Not breathing\', given as \'Not breathing\'}; {http://acme.ped/apgarrespiratoryeffort code \'0\' = \'0)</span></p></blockquote></div>"
+  }
+}
+contained {
+  patient {
+    id {
+      value: "newborn"
+    }
+    identifier {
+      system {
+        value: "http://acmehealthcare/org/mrns"
+      }
+      value {
+        value: "12345"
+      }
+    }
+    active {
+      value: true
+    }
+    name {
+      family {
+        value: "Chalmers"
+      }
+      given {
+        value: "Peter"
+      }
+      given {
+        value: "James"
+      }
+    }
+    gender {
+      value: MALE
+    }
+    birth_date {
+      value_us: 1463493600000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime"
+        }
+        value {
+          date_time {
+            value_us: 1463567325000000
+            timezone: "Z"
+            precision: SECOND
+          }
+        }
+      }
+    }
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/observation-category"
+    }
+    code {
+      value: "survey"
+    }
+    display {
+      value: "Survey"
+    }
+  }
+  text {
+    value: "Survey"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "9272-6"
+    }
+    display {
+      value: "1 minute Apgar Score"
+    }
+  }
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "169895004"
+    }
+    display {
+      value: "Apgar at 1 minute"
+    }
+  }
+  text {
+    value: "1 minute Apgar Score"
+  }
+}
+subject {
+  fragment {
+    value: "newborn"
+  }
+}
+effective {
+  date_time {
+    value_us: 1463610802000000
+    timezone: "Z"
+    precision: SECOND
+  }
+}
+performer {
+  practitioner_id {
+    value: "example"
+  }
+}
+value {
+  quantity {
+    value {
+      value: "0"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "{score}"
+    }
+  }
+}
+component {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "32406-1"
+      }
+      display {
+        value: "1 minute Apgar Color"
+      }
+    }
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "249227004"
+      }
+      display {
+        value: "Apgar color score"
+      }
+    }
+    text {
+      value: "Apgar color score"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/ordinalValue"
+          }
+          value {
+            decimal {
+              value: "0"
+            }
+          }
+        }
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "LA6722-8"
+        }
+        display {
+          value: "The baby\'s whole body is completely bluish-gray or pale"
+        }
+      }
+      coding {
+        system {
+          value: "http://acme.ped/apgarcolor"
+        }
+        code {
+          value: "0"
+        }
+      }
+      text {
+        value: "0. The baby\'s whole body is completely bluish-gray or pale"
+      }
+    }
+  }
+}
+component {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "32407-9"
+      }
+      display {
+        value: "1 minute Apgar Heart Rate"
+      }
+    }
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "249223000"
+      }
+      display {
+        value: "Apgar heart rate score"
+      }
+    }
+    text {
+      value: "Apgar respiratory effort score"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/ordinalValue"
+          }
+          value {
+            decimal {
+              value: "0"
+            }
+          }
+        }
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "LA6716-0"
+        }
+        display {
+          value: "No heart rate"
+        }
+      }
+      coding {
+        system {
+          value: "http://acme.ped/apgarheartrate"
+        }
+        code {
+          value: "0"
+        }
+      }
+      text {
+        value: "0. No heart rate"
+      }
+    }
+  }
+}
+component {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "32409-5"
+      }
+      display {
+        value: "1 minute Apgar Reflex Irritability"
+      }
+    }
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "249226008"
+      }
+      display {
+        value: "Apgar response to stimulus score"
+      }
+    }
+    text {
+      value: "Apgar response to stimulus score"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/ordinalValue"
+          }
+          value {
+            decimal {
+              value: "0"
+            }
+          }
+        }
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "LA6719-4"
+        }
+        display {
+          value: "No response to airways being suctioned"
+        }
+      }
+      coding {
+        system {
+          value: "http://acme.ped/apgarreflexirritability"
+        }
+        code {
+          value: "0"
+        }
+      }
+      text {
+        value: "0. No response to airways being suctioned"
+      }
+    }
+  }
+}
+component {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "32408-7"
+      }
+      display {
+        value: "1 minute Apgar Muscle Tone"
+      }
+    }
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "249225007"
+      }
+      display {
+        value: "Apgar muscle tone score"
+      }
+    }
+    text {
+      value: "Apgar muscle tone score"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/ordinalValue"
+          }
+          value {
+            decimal {
+              value: "0"
+            }
+          }
+        }
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "LA6713-7"
+        }
+        display {
+          value: "Limp; no movement"
+        }
+      }
+      coding {
+        system {
+          value: "http://acme.ped/apgarmuscletone"
+        }
+        code {
+          value: "0"
+        }
+      }
+      text {
+        value: "0. Limp; no movement"
+      }
+    }
+  }
+}
+component {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "32410-3"
+      }
+      display {
+        value: "1 minute Apgar Respiratory effort"
+      }
+    }
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "249224006"
+      }
+      display {
+        value: "Apgar respiratory effort score"
+      }
+    }
+    text {
+      value: "Apgar respiratory effort score"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/ordinalValue"
+          }
+          value {
+            decimal {
+              value: "0"
+            }
+          }
+        }
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "LA6725-1"
+        }
+        display {
+          value: "Not breathing"
+        }
+      }
+      coding {
+        system {
+          value: "http://acme.ped/apgarrespiratoryeffort"
+        }
+        code {
+          value: "0"
+        }
+      }
+      text {
+        value: "0. Not breathing"
+      }
+    }
+  }
+}

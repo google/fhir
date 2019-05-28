@@ -1,0 +1,86 @@
+id {
+  value: "med-list"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Add hydroxocobalamin</p>\n      <p>Cancel Morphine Sulphate</p>\n    </div>"
+  }
+}
+status {
+  value: CURRENT
+}
+mode {
+  value: CHANGES
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "182836005"
+    }
+    display {
+      value: "Review of medication"
+    }
+  }
+  text {
+    value: "Medication Review"
+  }
+}
+date {
+  value_us: 1384949423000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+source {
+  patient_id {
+    value: "example"
+  }
+}
+entry {
+  flag {
+    coding {
+      system {
+        value: "http://nehta.gov.au/codes/medications/changetype"
+      }
+      code {
+        value: "01"
+      }
+      display {
+        value: "Prescribed"
+      }
+    }
+  }
+  item {
+    display {
+      value: "hydroxocobalamin"
+    }
+  }
+}
+entry {
+  flag {
+    coding {
+      system {
+        value: "http://nehta.gov.au/codes/medications/changetype"
+      }
+      code {
+        value: "02"
+      }
+      display {
+        value: "Cancelled"
+      }
+    }
+  }
+  deleted {
+    value: true
+  }
+  item {
+    display {
+      value: "Morphine Sulfate"
+    }
+  }
+}

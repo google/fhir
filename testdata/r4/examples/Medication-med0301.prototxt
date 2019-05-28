@@ -1,0 +1,109 @@
+id {
+  value: "med0301"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: med0301</p><p><b>contained</b>: </p><p><b>code</b>: Vancomycin Hydrochloride (VANCOMYCIN HYDROCHLORIDE) <span>(Details : {http://hl7.org/fhir/sid/ndc code \'0069-2587-10\' = \'0069-2587-10\', given as \'Vancomycin Hydrochloride (VANCOMYCIN HYDROCHLORIDE)\'})</span></p><p><b>status</b>: active</p><p><b>manufacturer</b>: id: org4; name: Pfizer Laboratories Div Pfizer Inc</p><p><b>form</b>: Injection Solution (qualifier value) <span>(Details : {SNOMED CT code \'385219001\' = \'Injection solution\', given as \'Injection Solution (qualifier value)\'})</span></p><h3>Ingredients</h3><table><tr><td>-</td><td><b>Item[x]</b></td><td><b>IsActive</b></td><td><b>Strength</b></td></tr><tr><td>*</td><td>Vancomycin Hydrochloride <span>(Details : {RxNorm code \'66955\' = \'Vancomycin Hydrochloride\', given as \'Vancomycin Hydrochloride\'})</span></td><td>true</td><td>500 mg<span> (Details: UCUM code mg = \'mg\')</span>/10 mL<span> (Details: UCUM code mL = \'mL\')</span></td></tr></table><h3>Batches</h3><table><tr><td>-</td><td><b>LotNumber</b></td><td><b>ExpirationDate</b></td></tr><tr><td>*</td><td>9494788</td><td>22/05/2017</td></tr></table></div>"
+  }
+}
+contained {
+  organization {
+    id {
+      value: "org4"
+    }
+    name {
+      value: "Pfizer Laboratories Div Pfizer Inc"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/sid/ndc"
+    }
+    code {
+      value: "0069-2587-10"
+    }
+    display {
+      value: "Vancomycin Hydrochloride (VANCOMYCIN HYDROCHLORIDE)"
+    }
+  }
+}
+status {
+  value: ACTIVE
+}
+manufacturer {
+  fragment {
+    value: "org4"
+  }
+}
+form {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "385219001"
+    }
+    display {
+      value: "Injection Solution (qualifier value)"
+    }
+  }
+}
+ingredient {
+  item {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+        }
+        code {
+          value: "66955"
+        }
+        display {
+          value: "Vancomycin Hydrochloride"
+        }
+      }
+    }
+  }
+  is_active {
+    value: true
+  }
+  strength {
+    numerator {
+      value {
+        value: "500"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mg"
+      }
+    }
+    denominator {
+      value {
+        value: "10"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mL"
+      }
+    }
+  }
+}
+batch {
+  lot_number {
+    value: "9494788"
+  }
+  expiration_date {
+    value_us: 1495375200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}

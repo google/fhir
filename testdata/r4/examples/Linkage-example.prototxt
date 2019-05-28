@@ -1,0 +1,42 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p><b>Source:</b> Condition/example - <i>Severe burn of left ear (Date: 24-May 2012)</i></p>\n      <p><b>Alternate:</b> Condition/condition-example - <i>Severe burn of left ear (Date: 24-May 2012)</i></p>\n    </div>"
+  }
+}
+author {
+  practitioner_id {
+    value: "f201"
+  }
+}
+item {
+  type {
+    value: SOURCE
+  }
+  resource {
+    condition_id {
+      value: "example"
+    }
+    display {
+      value: "Severe burn of left ear (Date: 24-May 2012)"
+    }
+  }
+}
+item {
+  type {
+    value: ALTERNATE
+  }
+  resource {
+    condition_id {
+      value: "condition-example"
+    }
+    display {
+      value: "Severe burn of left ear (Date: 24-May 2012)"
+    }
+  }
+}

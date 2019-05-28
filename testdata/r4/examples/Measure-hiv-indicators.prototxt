@@ -1,0 +1,698 @@
+id {
+  value: "hiv-indicators"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: hiv-indicators</p><p><b>url</b>: <b>http://ohie.org/Measure/hiv-indicators</b></p><p><b>identifier</b>: hiv-indicators</p><p><b>version</b>: 0.0.0</p><p><b>name</b>: HIV</p><p><b>title</b>: HIV Indicators</p><p><b>status</b>: draft</p><p><b>experimental</b>: true</p><p><b>date</b>: 08/03/2018</p><p><b>publisher</b>: Open HIE</p><p><b>description</b>: This ADX-HIV measure defines a common set of HIV core indicators with data elements and associated stratifiers along with instructions regarding how to leverage these to generate and exchange conformant XML messages. Interoperable message exchange will be valuable to jurisdictions such as Ministries of Health, and WHO, and to health initiatives such as the U.S. President\342\200\231s Emergency Plan for AIDS Relief (PEPFAR), the Global Fund, UNAIDS, and others.</p><p><b>relatedArtifact</b>: </p><p><b>library</b>: <a>http://ohie.org/Library/hiv-indicators</a></p><p><b>scoring</b>: cohort <span>(Details : {[not stated] code \'cohort\' = \'cohort)</span></p><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_ART1_N <span>(Details : {http://ihe.net/qrph/adx/ code \'QRPH_ADX_ART1_N\' = \'QRPH_ADX_ART1_N)</span></p><p><b>description</b>: Number of adults and children newly enrolled on antiretroviral therapy (ART) in the reporting period</p><h3>Populations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>cohort <span>(Details )</span></td><td/></tr></table><h3>Stratifiers</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>AGE_GROUP:SEX <span>(Details : {http://ihe.net/qrph/adx/ code \'AGE_GROUP:SEX\' = \'AGE_GROUP:SEX)</span></td><td/></tr></table></blockquote><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_ART1_N_PREG_BF <span>(Details : {http://ihe.net/qrph/adx/ code \'QRPH_ADX_ART1_N_PREG_BF\' = \'QRPH_ADX_ART1_N_PREG_BF)</span></p><p><b>description</b>: Number of adults and children newly enrolled on ART in the reporting period_pregnant and breastfeeding</p><h3>Populations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>cohort <span>(Details )</span></td><td/></tr></table><h3>Stratifiers</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>PREG_BF <span>(Details : {http://ihe.net/qrph/adx/ code \'PREG_BF\' = \'PREG_BF)</span></td><td/></tr></table></blockquote><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_ART3_N <span>(Details : {http://ihe.net/qrph/adx/ code \'QRPH_ADX_ART3_N\' = \'QRPH_ADX_ART3_N)</span></p><p><b>description</b>: Number of adults and children currently receiving antiretroviral therapy (ART)</p><h3>Populations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>cohort <span>(Details )</span></td><td/></tr></table></blockquote><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_ART5_N <span>(Details : {http://ihe.net/qrph/adx/ code \'QRPH_ADX_ART5_N\' = \'QRPH_ADX_ART5_N)</span></p><p><b>description</b>: Number of adults and children who are still on treatment at 12 months after initiating ART</p><h3>Populations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>cohort <span>(Details )</span></td><td/></tr></table><blockquote><p><b>stratifier</b></p><blockquote><p><b>component</b></p><p><b>code</b>: AGE_GROUP <span>(Details : {http://ihe.net/qrph/adx/ code \'AGE_GROUP\' = \'AGE_GROUP)</span></p><p><b>criteria</b>: </p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: SEX <span>(Details : {http://ihe.net/qrph/adx/ code \'SEX\' = \'SEX)</span></p><p><b>criteria</b>: </p></blockquote></blockquote></blockquote><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_ART5_N_PREG_BF <span>(Details : {http://ihe.net/qrph/adx/ code \'QRPH_ADX_ART5_N_PREG_BF\' = \'QRPH_ADX_ART5_N_PREG_BF)</span></p><p><b>description</b>: Number of adults and children who are still on treatment at 12 months after initiating ART-pregnant and breastfeeding</p><h3>Populations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>cohort <span>(Details )</span></td><td/></tr></table><h3>Stratifiers</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>PREG_BF <span>(Details : {http://ihe.net/qrph/adx/ code \'PREG_BF\' = \'PREG_BF)</span></td><td/></tr></table></blockquote><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_ART5_D <span>(Details : {http://ihe.net/qrph/adx/ code \'QRPH_ADX_ART5_D\' = \'QRPH_ADX_ART5_D)</span></p><p><b>description</b>: Number of adults and children who initiated ART in the 12 months prior to the beginning of the reporting period</p><h3>Populations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>cohort <span>(Details )</span></td><td/></tr></table><h3>Stratifiers</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>AGE_GROUP:SEX <span>(Details : {http://ihe.net/qrph/adx/ code \'AGE_GROUP:SEX\' = \'AGE_GROUP:SEX)</span></td><td/></tr></table></blockquote><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_MTCT1_D <span>(Details : {http://ihe.net/qrph/adx/ code \'QRPH_ADX_MTCT1_D\' = \'QRPH_ADX_MTCT1_D)</span></p><p><b>description</b>: Number of pregnant women who attended ANC or had a facility-based delivery in the reporting period</p><h3>Populations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>cohort <span>(Details )</span></td><td/></tr></table><h3>Stratifiers</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>PMTCT_HIV_STATUS <span>(Details : {http://ihe.net/qrph/adx/ code \'PMTCT_HIV_STATUS\' = \'PMTCT_HIV_STATUS)</span></td><td/></tr></table></blockquote><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_MTCT2_D <span>(Details : {http://ihe.net/qrph/adx/ code \'QRPH_ADX_MTCT2_D\' = \'QRPH_ADX_MTCT2_D)</span></p><p><b>description</b>: Number of HIV positive pregnant women who attended ANC or had a facility-based delivery within the reporting period</p><h3>Populations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>cohort <span>(Details )</span></td><td/></tr></table></blockquote><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_MTCT2_N <span>(Details : {http://ihe.net/qrph/adx/ code \'QRPH_ADX_MTCT2_N\' = \'QRPH_ADX_MTCT2_N)</span></p><p><b>description</b>: Number of HIV-positive pregnant women who received ART to reduce the risk of mother-to-child-transmission during pregnancy</p><h3>Populations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>cohort <span>(Details )</span></td><td/></tr></table><h3>Stratifiers</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>PMTCT_ART_STATUS <span>(Details : {http://ihe.net/qrph/adx/ code \'PMTCT_ART_STATUS\' = \'PMTCT_ART_STATUS)</span></td><td/></tr></table></blockquote><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_VLS3_N <span>(Details : {http://ihe.net/qrph/adx/ code \'QRPH_ADX_VLS3_N\' = \'QRPH_ADX_VLS3_N)</span></p><p><b>description</b>: Number of people living with HIV and on ART who have a suppressed viral load results (&lt;1000 copies/mL)</p><h3>Populations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>cohort <span>(Details )</span></td><td/></tr></table><h3>Stratifiers</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>AGE_GROUP:SEX <span>(Details : {http://ihe.net/qrph/adx/ code \'AGE_GROUP:SEX\' = \'AGE_GROUP:SEX)</span></td><td/></tr></table></blockquote><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_HTS2_N <span>(Details : {http://ihe.net/qrph/adx/ code \'QRPH_ADX_HTS2_N\' = \'QRPH_ADX_HTS2_N)</span></p><p><b>description</b>: Number of individuals who received HIV Testing Services (HTS) and received their test results</p><h3>Populations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>cohort <span>(Details )</span></td><td/></tr></table><h3>Stratifiers</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>AGE_GROUP:SEX:HIV_TEST_RESULTS <span>(Details : {http://ihe.net/qrph/adx/ code \'AGE_GROUP:SEX:HIV_TEST_RESULTS\' = \'AGE_GROUP:SEX:HIV_TEST_RESULTS)</span></td><td/></tr></table></blockquote><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_MTCT1_N <span>(Details : {http://ihe.net/qrph/adx/ code \'QRPH_ADX_MTCT1_N\' = \'QRPH_ADX_MTCT1_N)</span></p><p><b>description</b>: Number of pregnant women with known HIV status at first antenatal care visit</p><h3>Populations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>cohort <span>(Details )</span></td><td/></tr></table><h3>Stratifiers</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>PMTCT_HIV_STATUS <span>(Details : {http://ihe.net/qrph/adx/ code \'PMTCT_HIV_STATUS\' = \'PMTCT_HIV_STATUS)</span></td><td/></tr></table></blockquote><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_VLS3_D <span>(Details : {http://ihe.net/qrph/adx/ code \'QRPH_ADX_VLS3_D\' = \'QRPH_ADX_VLS3_D)</span></p><p><b>description</b>: Number of people on ART who had a VL measurement in the past 12 months</p><h3>Populations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>cohort <span>(Details )</span></td><td/></tr></table><h3>Stratifiers</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Criteria</b></td></tr><tr><td>*</td><td>AGE_GROUP:SEX <span>(Details : {http://ihe.net/qrph/adx/ code \'AGE_GROUP:SEX\' = \'AGE_GROUP:SEX)</span></td><td/></tr></table></blockquote></div>"
+  }
+}
+url {
+  value: "http://ohie.org/Measure/hiv-indicators"
+}
+identifier {
+  system {
+    value: "http://ohie.org/Measure/"
+  }
+  value {
+    value: "hiv-indicators"
+  }
+}
+version {
+  value: "0.0.0"
+}
+name {
+  value: "HIV"
+}
+title {
+  value: "HIV Indicators"
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+date {
+  value_us: 1520427600000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "Open HIE"
+}
+description {
+  value: "This ADX-HIV measure defines a common set of HIV core indicators with data elements and associated stratifiers along with instructions regarding how to leverage these to generate and exchange conformant XML messages. Interoperable message exchange will be valuable to jurisdictions such as Ministries of Health, and WHO, and to health initiatives such as the U.S. President\342\200\231s Emergency Plan for AIDS Relief (PEPFAR), the Global Fund, UNAIDS, and others."
+}
+related_artifact {
+  type {
+    value: DERIVED_FROM
+  }
+  url {
+    value: "http://wiki.ihe.net/index.php/Aggregate_Data_Exchange_-_HIV"
+  }
+}
+library {
+  value: "http://ohie.org/Library/hiv-indicators"
+}
+scoring {
+  coding {
+    code {
+      value: "cohort"
+    }
+  }
+}
+group {
+  code {
+    coding {
+      system {
+        value: "http://ihe.net/qrph/adx/"
+      }
+      code {
+        value: "QRPH_ADX_ART1_N"
+      }
+    }
+  }
+  description {
+    value: "Number of adults and children newly enrolled on antiretroviral therapy (ART) in the reporting period"
+  }
+  population {
+    code {
+      text {
+        value: "cohort"
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Newly enrolled on antiretroviral therapy (ART) during measurement period"
+      }
+    }
+  }
+  stratifier {
+    code {
+      coding {
+        system {
+          value: "http://ihe.net/qrph/adx/"
+        }
+        code {
+          value: "AGE_GROUP:SEX"
+        }
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Age Group/Sex"
+      }
+    }
+  }
+}
+group {
+  code {
+    coding {
+      system {
+        value: "http://ihe.net/qrph/adx/"
+      }
+      code {
+        value: "QRPH_ADX_ART1_N_PREG_BF"
+      }
+    }
+  }
+  description {
+    value: "Number of adults and children newly enrolled on ART in the reporting period_pregnant and breastfeeding"
+  }
+  population {
+    code {
+      text {
+        value: "cohort"
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Newly enrolled on antiretroviral therapy (ART) during measurement period (pregnant and breastfeeding)"
+      }
+    }
+  }
+  stratifier {
+    code {
+      coding {
+        system {
+          value: "http://ihe.net/qrph/adx/"
+        }
+        code {
+          value: "PREG_BF"
+        }
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Pregnant/Breastfeeding"
+      }
+    }
+  }
+}
+group {
+  code {
+    coding {
+      system {
+        value: "http://ihe.net/qrph/adx/"
+      }
+      code {
+        value: "QRPH_ADX_ART3_N"
+      }
+    }
+  }
+  description {
+    value: "Number of adults and children currently receiving antiretroviral therapy (ART)"
+  }
+  population {
+    code {
+      text {
+        value: "cohort"
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Receiving antiretroviral therapy (ART) during measurement period"
+      }
+    }
+  }
+}
+group {
+  code {
+    coding {
+      system {
+        value: "http://ihe.net/qrph/adx/"
+      }
+      code {
+        value: "QRPH_ADX_ART5_N"
+      }
+    }
+  }
+  description {
+    value: "Number of adults and children who are still on treatment at 12 months after initiating ART"
+  }
+  population {
+    code {
+      text {
+        value: "cohort"
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Receiving antiretroviral therapy (ART) at 12 months after initiating"
+      }
+    }
+  }
+  stratifier {
+    component {
+      code {
+        coding {
+          system {
+            value: "http://ihe.net/qrph/adx/"
+          }
+          code {
+            value: "AGE_GROUP"
+          }
+        }
+      }
+      criteria {
+        language {
+          value: "text/cql"
+        }
+        expression {
+          value: "Age Group"
+        }
+      }
+    }
+    component {
+      code {
+        coding {
+          system {
+            value: "http://ihe.net/qrph/adx/"
+          }
+          code {
+            value: "SEX"
+          }
+        }
+      }
+      criteria {
+        language {
+          value: "text/cql"
+        }
+        expression {
+          value: "Sex"
+        }
+      }
+    }
+  }
+}
+group {
+  code {
+    coding {
+      system {
+        value: "http://ihe.net/qrph/adx/"
+      }
+      code {
+        value: "QRPH_ADX_ART5_N_PREG_BF"
+      }
+    }
+  }
+  description {
+    value: "Number of adults and children who are still on treatment at 12 months after initiating ART-pregnant and breastfeeding"
+  }
+  population {
+    code {
+      text {
+        value: "cohort"
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Receiving antiretroviral therapy (ART) at 12 months after initiating (pregnant and breastfeeding)"
+      }
+    }
+  }
+  stratifier {
+    code {
+      coding {
+        system {
+          value: "http://ihe.net/qrph/adx/"
+        }
+        code {
+          value: "PREG_BF"
+        }
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Pregnant/Breastfeeding"
+      }
+    }
+  }
+}
+group {
+  code {
+    coding {
+      system {
+        value: "http://ihe.net/qrph/adx/"
+      }
+      code {
+        value: "QRPH_ADX_ART5_D"
+      }
+    }
+  }
+  description {
+    value: "Number of adults and children who initiated ART in the 12 months prior to the beginning of the reporting period"
+  }
+  population {
+    code {
+      text {
+        value: "cohort"
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Initiated antiretroviral therapy (ART) in the 12 months prior to measurement period"
+      }
+    }
+  }
+  stratifier {
+    code {
+      coding {
+        system {
+          value: "http://ihe.net/qrph/adx/"
+        }
+        code {
+          value: "AGE_GROUP:SEX"
+        }
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Age Group/Sex"
+      }
+    }
+  }
+}
+group {
+  code {
+    coding {
+      system {
+        value: "http://ihe.net/qrph/adx/"
+      }
+      code {
+        value: "QRPH_ADX_MTCT1_D"
+      }
+    }
+  }
+  description {
+    value: "Number of pregnant women who attended ANC or had a facility-based delivery in the reporting period"
+  }
+  population {
+    code {
+      text {
+        value: "cohort"
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Antenatal Care Visit or Live Birth during the Measurement Period"
+      }
+    }
+  }
+  stratifier {
+    code {
+      coding {
+        system {
+          value: "http://ihe.net/qrph/adx/"
+        }
+        code {
+          value: "PMTCT_HIV_STATUS"
+        }
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "PMTCT HIV Status"
+      }
+    }
+  }
+}
+group {
+  code {
+    coding {
+      system {
+        value: "http://ihe.net/qrph/adx/"
+      }
+      code {
+        value: "QRPH_ADX_MTCT2_D"
+      }
+    }
+  }
+  description {
+    value: "Number of HIV positive pregnant women who attended ANC or had a facility-based delivery within the reporting period"
+  }
+  population {
+    code {
+      text {
+        value: "cohort"
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Antenatal Care Visit or Live Birth during Measurement Period (HIV Positive)"
+      }
+    }
+  }
+}
+group {
+  code {
+    coding {
+      system {
+        value: "http://ihe.net/qrph/adx/"
+      }
+      code {
+        value: "QRPH_ADX_MTCT2_N"
+      }
+    }
+  }
+  description {
+    value: "Number of HIV-positive pregnant women who received ART to reduce the risk of mother-to-child-transmission during pregnancy"
+  }
+  population {
+    code {
+      text {
+        value: "cohort"
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "HIV-positive, pregnant, and receiving antiretroviral therapy (ART) to reduce the risk of mother-to-child-transmission during pregnancy"
+      }
+    }
+  }
+  stratifier {
+    code {
+      coding {
+        system {
+          value: "http://ihe.net/qrph/adx/"
+        }
+        code {
+          value: "PMTCT_ART_STATUS"
+        }
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "PMTCT ART Status"
+      }
+    }
+  }
+}
+group {
+  code {
+    coding {
+      system {
+        value: "http://ihe.net/qrph/adx/"
+      }
+      code {
+        value: "QRPH_ADX_VLS3_N"
+      }
+    }
+  }
+  description {
+    value: "Number of people living with HIV and on ART who have a suppressed viral load results (<1000 copies/mL)"
+  }
+  population {
+    code {
+      text {
+        value: "cohort"
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Living with HIV and on ART with suppressed viral load results (<1000 copies/mL)"
+      }
+    }
+  }
+  stratifier {
+    code {
+      coding {
+        system {
+          value: "http://ihe.net/qrph/adx/"
+        }
+        code {
+          value: "AGE_GROUP:SEX"
+        }
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Age Group/Sex"
+      }
+    }
+  }
+}
+group {
+  code {
+    coding {
+      system {
+        value: "http://ihe.net/qrph/adx/"
+      }
+      code {
+        value: "QRPH_ADX_HTS2_N"
+      }
+    }
+  }
+  description {
+    value: "Number of individuals who received HIV Testing Services (HTS) and received their test results"
+  }
+  population {
+    code {
+      text {
+        value: "cohort"
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Received HIV Testing Services (HTS) and Recevied Test Results"
+      }
+    }
+  }
+  stratifier {
+    code {
+      coding {
+        system {
+          value: "http://ihe.net/qrph/adx/"
+        }
+        code {
+          value: "AGE_GROUP:SEX:HIV_TEST_RESULTS"
+        }
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Age Group/Sex/HIV Test Results"
+      }
+    }
+  }
+}
+group {
+  code {
+    coding {
+      system {
+        value: "http://ihe.net/qrph/adx/"
+      }
+      code {
+        value: "QRPH_ADX_MTCT1_N"
+      }
+    }
+  }
+  description {
+    value: "Number of pregnant women with known HIV status at first antenatal care visit"
+  }
+  population {
+    code {
+      text {
+        value: "cohort"
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "HIV Status Known at First Antenatal Care Visit"
+      }
+    }
+  }
+  stratifier {
+    code {
+      coding {
+        system {
+          value: "http://ihe.net/qrph/adx/"
+        }
+        code {
+          value: "PMTCT_HIV_STATUS"
+        }
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "PMTCT HIV Status"
+      }
+    }
+  }
+}
+group {
+  code {
+    coding {
+      system {
+        value: "http://ihe.net/qrph/adx/"
+      }
+      code {
+        value: "QRPH_ADX_VLS3_D"
+      }
+    }
+  }
+  description {
+    value: "Number of people on ART who had a VL measurement in the past 12 months"
+  }
+  population {
+    code {
+      text {
+        value: "cohort"
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Receiving antiretroviral therapty (ART) and Viral Load Measurement in the past 12 months"
+      }
+    }
+  }
+  stratifier {
+    code {
+      coding {
+        system {
+          value: "http://ihe.net/qrph/adx/"
+        }
+        code {
+          value: "AGE_GROUP:SEX"
+        }
+      }
+    }
+    criteria {
+      language {
+        value: "text/cql"
+      }
+      expression {
+        value: "Age Group/Sex"
+      }
+    }
+  }
+}

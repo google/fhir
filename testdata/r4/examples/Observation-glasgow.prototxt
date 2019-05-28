@@ -1,0 +1,294 @@
+id {
+  value: "glasgow"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: glasgow</p><p><b>status</b>: final</p><p><b>code</b>: Glasgow Coma Scale , (GCS) <span>(Details : {LOINC code \'9269-2\' = \'Glasgow coma score total\', given as \'Glasgow coma score total\'})</span></p><p><b>subject</b>: <a>Peter James Chalmers</a></p><p><b>effective</b>: 11/12/2014 4:44:16 AM</p><p><b>value</b>: 13 {score}<span> (Details: UCUM code {score} = \'{score}\')</span></p><blockquote><p><b>referenceRange</b></p><p><b>high</b>: 8 {score}<span> (Details: UCUM code {score} = \'{score}\')</span></p><p><b>type</b>: Severe TBI <span>(Details )</span></p></blockquote><blockquote><p><b>referenceRange</b></p><p><b>low</b>: 9 {score}<span> (Details: UCUM code {score} = \'{score}\')</span></p><p><b>high</b>: 12 {score}<span> (Details: UCUM code {score} = \'{score}\')</span></p><p><b>type</b>: Moderate TBI <span>(Details )</span></p></blockquote><blockquote><p><b>referenceRange</b></p><p><b>low</b>: 13 {score}<span> (Details: UCUM code {score} = \'{score}\')</span></p><p><b>type</b>: Mild TBI <span>(Details )</span></p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: GCS Motor <span>(Details : {LOINC code \'9268-4\' = \'Glasgow coma score motor\', given as \'Glasgow coma score motor\'})</span></p><p><b>value</b>: 5 (Localizes painful stimuli) <span>(Details : {http://acme.ec/codes code \'5\' = \'5\', given as \'Localizes painful stimuli\'}; {LOINC code \'LA6566-9\' = \'Localizing pain\', given as \'Localizing pain\'})</span></p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: GSC Verbal <span>(Details : {LOINC code \'9270-0\' = \'Glasgow coma score verbal\', given as \'Glasgow coma score verbal\'})</span></p><p><b>value</b>: 4 (Confused, disoriented) <span>(Details : {http://acme.ec/codes code \'4\' = \'4\', given as \'Confused, disoriented\'}; {LOINC code \'LA6560-2\' = \'Confused\', given as \'Confused\'})</span></p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: Eyes <span>(Details : {LOINC code \'9267-6\' = \'Glasgow coma score eye opening\', given as \'Glasgow coma score eye opening\'})</span></p><p><b>value</b>: 4 (Opens eyes spontaneously) <span>(Details : {http://acme.ec/codes code \'4\' = \'4\', given as \'Opens eyes spontaneously\'}; {LOINC code \'LA6556-0\' = \'Eyes open spontaneously\', given as \'Eyes open spontaneously\'})</span></p></blockquote></div>"
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "9269-2"
+    }
+    display {
+      value: "Glasgow coma score total"
+    }
+  }
+  text {
+    value: "Glasgow Coma Scale , (GCS)"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+effective {
+  date_time {
+    value_us: 1418273056000000
+    timezone: "Z"
+    precision: SECOND
+  }
+}
+value {
+  quantity {
+    value {
+      value: "13"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "{score}"
+    }
+  }
+}
+reference_range {
+  high {
+    value {
+      value: "8"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "{score}"
+    }
+  }
+  type {
+    text {
+      value: "Severe TBI"
+    }
+  }
+}
+reference_range {
+  low {
+    value {
+      value: "9"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "{score}"
+    }
+  }
+  high {
+    value {
+      value: "12"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "{score}"
+    }
+  }
+  type {
+    text {
+      value: "Moderate TBI"
+    }
+  }
+}
+reference_range {
+  low {
+    value {
+      value: "13"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "{score}"
+    }
+  }
+  type {
+    text {
+      value: "Mild TBI"
+    }
+  }
+}
+component {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "9268-4"
+      }
+      display {
+        value: "Glasgow coma score motor"
+      }
+    }
+    text {
+      value: "GCS Motor"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://acme.ec/codes"
+        }
+        code {
+          value: "5"
+        }
+        display {
+          value: "Localizes painful stimuli"
+        }
+      }
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/ordinalValue"
+          }
+          value {
+            decimal {
+              value: "5"
+            }
+          }
+        }
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "LA6566-9"
+        }
+        display {
+          value: "Localizing pain"
+        }
+      }
+      text {
+        value: "5 (Localizes painful stimuli)"
+      }
+    }
+  }
+}
+component {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "9270-0"
+      }
+      display {
+        value: "Glasgow coma score verbal"
+      }
+    }
+    text {
+      value: "GSC Verbal"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://acme.ec/codes"
+        }
+        code {
+          value: "4"
+        }
+        display {
+          value: "Confused, disoriented"
+        }
+      }
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/ordinalValue"
+          }
+          value {
+            decimal {
+              value: "4"
+            }
+          }
+        }
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "LA6560-2"
+        }
+        display {
+          value: "Confused"
+        }
+      }
+      text {
+        value: "4 (Confused, disoriented)"
+      }
+    }
+  }
+}
+component {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "9267-6"
+      }
+      display {
+        value: "Glasgow coma score eye opening"
+      }
+    }
+    text {
+      value: "Eyes"
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://acme.ec/codes"
+        }
+        code {
+          value: "4"
+        }
+        display {
+          value: "Opens eyes spontaneously"
+        }
+      }
+      coding {
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/ordinalValue"
+          }
+          value {
+            decimal {
+              value: "4"
+            }
+          }
+        }
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "LA6556-0"
+        }
+        display {
+          value: "Eyes open spontaneously"
+        }
+      }
+      text {
+        value: "4 (Opens eyes spontaneously)"
+      }
+    }
+  }
+}

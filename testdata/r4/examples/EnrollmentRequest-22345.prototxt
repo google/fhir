@@ -1,0 +1,47 @@
+id {
+  value: "22345"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the EnrollmentRequest.</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/enrollmentrequest"
+  }
+  value {
+    value: "EN22345"
+  }
+}
+status {
+  value: ACTIVE
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+provider {
+  organization_id {
+    value: "1"
+  }
+}
+candidate {
+  patient_id {
+    value: "1"
+  }
+}
+coverage {
+  coverage_id {
+    value: "9876B1"
+  }
+}

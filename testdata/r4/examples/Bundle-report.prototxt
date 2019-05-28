@@ -1,0 +1,771 @@
+id {
+  value: "report"
+}
+type {
+  value: COLLECTION
+}
+entry {
+  full_url {
+    value: "https://example.com/base/DiagnosticReport/report"
+  }
+  resource {
+    diagnostic_report {
+      id {
+        value: "report"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: report</p><p><b>status</b>: final</p><p><b>code</b>: comprehensive bone marrow report <span>(Details )</span></p><p><b>subject</b>: <a>Everywoman, Eve A, MRN: 123456789</a></p><p><b>effective</b>: 02/01/2015 1:20:10 PM</p><p><b>issued</b>: 06/01/2015 1:20:10 PM</p><p><b>performer</b>: <a>Molecular Diagnostic Laboratory</a></p><p><b>specimen</b>: <a>Bone marrow ID: MLD45-Z4-1234</a></p><p><b>result</b>: </p><ul><li><a>Observation/o1</a></li><li><a>Observation/o2</a></li><li><a>Observation/o3</a></li><li><a>Observation/o4</a></li><li><a>Observation/o5</a></li><li><a>Observation/o6</a></li><li><a>Observation/o7</a></li><li><a>Observation/o8</a></li><li><a>Observation/o9</a></li><li><a>Observation/o10</a></li><li><a>Observation/o11</a></li><li><a>Observation/o12</a></li><li><a>Observation/o13</a></li></ul></div>"
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition"
+        }
+        value {
+          reference {
+            condition_id {
+              value: "c1"
+            }
+          }
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        text {
+          value: "comprehensive bone marrow report"
+        }
+      }
+      subject {
+        patient_id {
+          value: "genetics-example1"
+        }
+        display {
+          value: "Everywoman, Eve A, MRN: 123456789"
+        }
+      }
+      effective {
+        date_time {
+          value_us: 1420201210000000
+          timezone: "+01:00"
+          precision: SECOND
+        }
+      }
+      issued {
+        value_us: 1420546810000000
+        timezone: "+01:00"
+        precision: SECOND
+      }
+      performer {
+        practitioner_id {
+          value: "genetics-example1"
+        }
+        display {
+          value: "Molecular Diagnostic Laboratory"
+        }
+      }
+      specimen {
+        specimen_id {
+          value: "genetics-example1"
+        }
+        display {
+          value: "Bone marrow ID: MLD45-Z4-1234"
+        }
+      }
+      result {
+        observation_id {
+          value: "o1"
+        }
+      }
+      result {
+        observation_id {
+          value: "o2"
+        }
+      }
+      result {
+        observation_id {
+          value: "o3"
+        }
+      }
+      result {
+        observation_id {
+          value: "o4"
+        }
+      }
+      result {
+        observation_id {
+          value: "o5"
+        }
+      }
+      result {
+        observation_id {
+          value: "o6"
+        }
+      }
+      result {
+        observation_id {
+          value: "o7"
+        }
+      }
+      result {
+        observation_id {
+          value: "o8"
+        }
+      }
+      result {
+        observation_id {
+          value: "o9"
+        }
+      }
+      result {
+        observation_id {
+          value: "o10"
+        }
+      }
+      result {
+        observation_id {
+          value: "o11"
+        }
+      }
+      result {
+        observation_id {
+          value: "o12"
+        }
+      }
+      result {
+        observation_id {
+          value: "o13"
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o1"
+  }
+  resource {
+    observation {
+      id {
+        value: "o1"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o1</p><p><b>status</b>: final</p><p><b>code</b>: Leukocytes [#/volume] in Blood <span>(Details : {LOINC code \'26464-8\' = \'Leukocytes [#/volume] in Blood\', given as \'Leukocytes [#/volume] in Blood\'})</span></p><p><b>value</b>: 31.9 K/ul</p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "26464-8"
+          }
+          display {
+            value: "Leukocytes [#/volume] in Blood"
+          }
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "31.9"
+          }
+          unit {
+            value: "K/ul"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o2"
+  }
+  resource {
+    observation {
+      id {
+        value: "o2"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o2</p><p><b>status</b>: final</p><p><b>code</b>: Hematocrit [Volume Fraction] of Blood <span>(Details : {LOINC code \'20570-8\' = \'Hematocrit [Volume Fraction] of Blood\', given as \'Hematocrit [Volume Fraction] of Blood\'})</span></p><p><b>value</b>: 27 %</p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "20570-8"
+          }
+          display {
+            value: "Hematocrit [Volume Fraction] of Blood"
+          }
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "27"
+          }
+          unit {
+            value: "%"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o3"
+  }
+  resource {
+    observation {
+      id {
+        value: "o3"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o3</p><p><b>status</b>: final</p><p><b>code</b>: Platelets [#/volume] in Blood <span>(Details : {LOINC code \'26515-7\' = \'Platelets [#/volume] in Blood\', given as \'Platelets [#/volume] in Blood\'})</span></p><p><b>value</b>: 84 K/ul</p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "26515-7"
+          }
+          display {
+            value: "Platelets [#/volume] in Blood"
+          }
+        }
+      }
+      value {
+        quantity {
+          value {
+            value: "84"
+          }
+          unit {
+            value: "K/ul"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o4"
+  }
+  resource {
+    observation {
+      id {
+        value: "o4"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o4</p><p><b>status</b>: final</p><p><b>code</b>: NPM1 gene mutations found [Identifier] in Bone marrow by Molecular genetics method Nominal <span>(Details : {LOINC code \'75034-9\' = \'NPM1 gene mutations found [Identifier] in Bone marrow by Molecular genetics method Nominal\', given as \'NPM1 gene mutations found [Identifier] in Bone marrow by Molecular genetics method Nominal\'})</span></p><p><b>value</b>: Positive <span>(Details : {SNOMED CT code \'10828004\' = \'Positive\', given as \'Positive\'})</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "75034-9"
+          }
+          display {
+            value: "NPM1 gene mutations found [Identifier] in Bone marrow by Molecular genetics method Nominal"
+          }
+        }
+      }
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "10828004"
+            }
+            display {
+              value: "Positive"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o5"
+  }
+  resource {
+    observation {
+      id {
+        value: "o5"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o5</p><p><b>status</b>: final</p><p><b>code</b>: FLT3 gene mutation analysis in Bone marrow by Molecular genetics method Narrative <span>(Details : {LOINC code \'54447-8\' = \'FLT3 gene mutation analysis in Bone marrow by Molecular genetics method Narrative\', given as \'FLT3 gene mutation analysis in Bone marrow by Molecular genetics method Narrative\'})</span></p><p><b>value</b>: Negative <span>(Details : {SNOMED CT code \'260385009\' = \'Negative\', given as \'Negative\'})</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "54447-8"
+          }
+          display {
+            value: "FLT3 gene mutation analysis in Bone marrow by Molecular genetics method Narrative"
+          }
+        }
+      }
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "260385009"
+            }
+            display {
+              value: "Negative"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o6"
+  }
+  resource {
+    observation {
+      id {
+        value: "o6"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o6</p><p><b>status</b>: final</p><p><b>code</b>: KIT gene mutation analysis in Bone marrow by Molecular genetics method Narrative <span>(Details : {LOINC code \'55201-8\' = \'KIT gene mutation analysis in Blood or Tissue by Molecular genetics method Narrative\', given as \'KIT gene mutation analysis in Bone marrow by Molecular genetics method Narrative\'})</span></p><p><b>value</b>: Negative <span>(Details : {SNOMED CT code \'260385009\' = \'Negative\', given as \'Negative\'})</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "55201-8"
+          }
+          display {
+            value: "KIT gene mutation analysis in Bone marrow by Molecular genetics method Narrative"
+          }
+        }
+      }
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "260385009"
+            }
+            display {
+              value: "Negative"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o7"
+  }
+  resource {
+    observation {
+      id {
+        value: "o7"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o7</p><p><b>status</b>: final</p><p><b>code</b>: Myeloblasts [#/volume] in Blood <span>(Details : {LOINC code \'30444-4\' = \'Myeloblasts [#/volume] in Blood\', given as \'Myeloblasts [#/volume] in Blood\'})</span></p><p><b>value</b>: Positive <span>(Details : {SNOMED CT code \'10828004\' = \'Positive\', given as \'Positive\'})</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "30444-4"
+          }
+          display {
+            value: "Myeloblasts [#/volume] in Blood"
+          }
+        }
+      }
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "10828004"
+            }
+            display {
+              value: "Positive"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o8"
+  }
+  resource {
+    observation {
+      id {
+        value: "o8"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o8</p><p><b>status</b>: final</p><p><b>code</b>: CD4 Ag [Presence] in Tissue by Immune stain <span>(Details : {LOINC code \'47016-1\' = \'CD4 Ag [Presence] in Tissue by Immune stain\', given as \'CD4 Ag [Presence] in Tissue by Immune stain\'})</span></p><p><b>value</b>: Positive <span>(Details : {SNOMED CT code \'10828004\' = \'Positive\', given as \'Positive\'})</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "47016-1"
+          }
+          display {
+            value: "CD4 Ag [Presence] in Tissue by Immune stain"
+          }
+        }
+      }
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "10828004"
+            }
+            display {
+              value: "Positive"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o9"
+  }
+  resource {
+    observation {
+      id {
+        value: "o9"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o9</p><p><b>status</b>: final</p><p><b>code</b>: CD13 Ag [Presence] in Tissue by Immune stain <span>(Details : {LOINC code \'49464-1\' = \'CD13 Ag [Presence] in Tissue by Immune stain\', given as \'CD13 Ag [Presence] in Tissue by Immune stain\'})</span></p><p><b>value</b>: Positive <span>(Details : {SNOMED CT code \'10828004\' = \'Positive\', given as \'Positive\'})</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "49464-1"
+          }
+          display {
+            value: "CD13 Ag [Presence] in Tissue by Immune stain"
+          }
+        }
+      }
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "10828004"
+            }
+            display {
+              value: "Positive"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o10"
+  }
+  resource {
+    observation {
+      id {
+        value: "o10"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o10</p><p><b>status</b>: final</p><p><b>code</b>: CD2 Ag [Presence] in Tissue by Immune stain <span>(Details : {LOINC code \'49466-6\' = \'CD2 Ag [Presence] in Tissue by Immune stain\', given as \'CD2 Ag [Presence] in Tissue by Immune stain\'})</span></p><p><b>value</b>: Negative <span>(Details : {SNOMED CT code \'260385009\' = \'Negative\', given as \'Negative\'})</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "49466-6"
+          }
+          display {
+            value: "CD2 Ag [Presence] in Tissue by Immune stain"
+          }
+        }
+      }
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "260385009"
+            }
+            display {
+              value: "Negative"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o11"
+  }
+  resource {
+    observation {
+      id {
+        value: "o11"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o11</p><p><b>status</b>: final</p><p><b>code</b>: Karyotype [Identifier] in Bone marrow Nominal <span>(Details : {LOINC code \'33893-9\' = \'Karyotype [Identifier] in Bone marrow Nominal\', given as \'Karyotype [Identifier] in Bone marrow Nominal\'})</span></p><p><b>value</b>: 46,XX[20] <span>(Details )</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "33893-9"
+          }
+          display {
+            value: "Karyotype [Identifier] in Bone marrow Nominal"
+          }
+        }
+      }
+      value {
+        codeable_concept {
+          text {
+            value: "46,XX[20]"
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o12"
+  }
+  resource {
+    observation {
+      id {
+        value: "o12"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o12</p><p><b>status</b>: final</p><p><b>code</b>: MDS-associated genetic abnormalities <span>(Details )</span></p><p><b>value</b>: Negative <span>(Details : {SNOMED CT code \'260385009\' = \'Negative\', given as \'Negative\'})</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        text {
+          value: "MDS-associated genetic abnormalities"
+        }
+      }
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "260385009"
+            }
+            display {
+              value: "Negative"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+entry {
+  full_url {
+    value: "https://example.com/base/Observation/o13"
+  }
+  resource {
+    observation {
+      id {
+        value: "o13"
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: o13</p><p><b>status</b>: final</p><p><b>code</b>: AML-associated genetic abnormalities <span>(Details )</span></p><p><b>value</b>: Negative <span>(Details : {SNOMED CT code \'260385009\' = \'Negative\', given as \'Negative\'})</span></p></div>"
+        }
+      }
+      status {
+        value: FINAL
+      }
+      code {
+        text {
+          value: "AML-associated genetic abnormalities"
+        }
+      }
+      value {
+        codeable_concept {
+          coding {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "260385009"
+            }
+            display {
+              value: "Negative"
+            }
+          }
+        }
+      }
+    }
+  }
+}

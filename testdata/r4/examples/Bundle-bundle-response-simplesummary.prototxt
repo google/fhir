@@ -1,0 +1,847 @@
+id {
+  value: "bundle-response-simplesummary"
+}
+type {
+  value: BATCH_RESPONSE
+}
+entry {
+  resource {
+    patient {
+      id {
+        value: "example"
+      }
+      meta {
+        version_id {
+          value: "1"
+        }
+        last_updated {
+          value_us: 1541993720715000
+          timezone: "Z"
+          precision: MILLISECOND
+        }
+      }
+      text {
+        status {
+          value: GENERATED
+        }
+        div {
+          value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n                        <table>\n                            <tbody>\n                                <tr>\n                                    <td>Name</td>\n                                    <td>Peter James \n                                        <b>Chalmers</b> (&quot;Jim&quot;)\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td>Address</td>\n                                    <td>534 Erewhon, Pleasantville, Vic, 3999</td>\n                                </tr>\n                                <tr>\n                                    <td>Contacts</td>\n                                    <td>Home: unknown. Work: (03) 5555 6473</td>\n                                </tr>\n                                <tr>\n                                    <td>Id</td>\n                                    <td>MRN: 12345 (Acme Healthcare)</td>\n                                </tr>\n                            </tbody>\n                        </table>\n                    </div>"
+        }
+      }
+      identifier {
+        use {
+          value: USUAL
+        }
+        type {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+            code {
+              value: "MR"
+            }
+          }
+        }
+        system {
+          value: "urn:oid:1.2.36.146.595.217.0.1"
+        }
+        value {
+          value: "12345"
+        }
+        period {
+          start {
+            value_us: 989071200000000
+            timezone: "Australia/Sydney"
+            precision: DAY
+          }
+        }
+        assigner {
+          display {
+            value: "Acme Healthcare"
+          }
+        }
+      }
+      active {
+        value: true
+      }
+      name {
+        use {
+          value: OFFICIAL
+        }
+        family {
+          value: "Chalmers"
+        }
+        given {
+          value: "Peter"
+        }
+        given {
+          value: "James"
+        }
+      }
+      name {
+        use {
+          value: USUAL
+        }
+        given {
+          value: "Jim"
+        }
+      }
+      name {
+        use {
+          value: MAIDEN
+        }
+        family {
+          value: "Windsor"
+        }
+        given {
+          value: "Peter"
+        }
+        given {
+          value: "James"
+        }
+        period {
+          end {
+            value_us: 1009803600000000
+            timezone: "Australia/Sydney"
+            precision: YEAR
+          }
+        }
+      }
+      telecom {
+        use {
+          value: HOME
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "(03) 5555 6473"
+        }
+        use {
+          value: WORK
+        }
+        rank {
+          value: 1
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "(03) 3410 5613"
+        }
+        use {
+          value: MOBILE
+        }
+        rank {
+          value: 2
+        }
+      }
+      telecom {
+        system {
+          value: PHONE
+        }
+        value {
+          value: "(03) 5555 8834"
+        }
+        use {
+          value: OLD
+        }
+        period {
+          end {
+            value_us: 1388494800000000
+            timezone: "Australia/Sydney"
+            precision: YEAR
+          }
+        }
+      }
+      gender {
+        value: MALE
+      }
+      birth_date {
+        value_us: 157122000000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime"
+          }
+          value {
+            date_time {
+              value_us: 157232145000000
+              timezone: "-05:00"
+              precision: SECOND
+            }
+          }
+        }
+      }
+      deceased {
+        boolean {
+        }
+      }
+      address {
+        use {
+          value: HOME
+        }
+        type {
+          value: BOTH
+        }
+        text {
+          value: "534 Erewhon St PeasantVille, Rainbow, Vic  3999"
+        }
+        line {
+          value: "534 Erewhon St"
+        }
+        city {
+          value: "PleasantVille"
+        }
+        district {
+          value: "Rainbow"
+        }
+        state {
+          value: "Vic"
+        }
+        postal_code {
+          value: "3999"
+        }
+        period {
+          start {
+            value_us: 157122000000000
+            timezone: "Australia/Sydney"
+            precision: DAY
+          }
+        }
+      }
+      contact {
+        relationship {
+          coding {
+            system {
+              value: "http://terminology.hl7.org/CodeSystem/v2-0131"
+            }
+            code {
+              value: "N"
+            }
+          }
+        }
+        name {
+          family {
+            value: "du March\303\251"
+            extension {
+              url {
+                value: "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix"
+              }
+              value {
+                string_value {
+                  value: "VV"
+                }
+              }
+            }
+          }
+          given {
+            value: "B\303\251n\303\251dicte"
+          }
+        }
+        telecom {
+          system {
+            value: PHONE
+          }
+          value {
+            value: "+33 (237) 998327"
+          }
+        }
+        address {
+          use {
+            value: HOME
+          }
+          type {
+            value: BOTH
+          }
+          line {
+            value: "534 Erewhon St"
+          }
+          city {
+            value: "PleasantVille"
+          }
+          district {
+            value: "Rainbow"
+          }
+          state {
+            value: "Vic"
+          }
+          postal_code {
+            value: "3999"
+          }
+          period {
+            start {
+              value_us: 157122000000000
+              timezone: "Australia/Sydney"
+              precision: DAY
+            }
+          }
+        }
+        gender {
+          value: FEMALE
+        }
+        period {
+          start {
+            value_us: 1325336400000000
+            timezone: "Australia/Sydney"
+            precision: YEAR
+          }
+        }
+      }
+      managing_organization {
+        organization_id {
+          value: "1"
+        }
+      }
+    }
+  }
+  response {
+    status {
+      value: "200"
+    }
+    etag {
+      value: "W/1"
+    }
+    last_modified {
+      value_us: 1541993720717000
+      timezone: "Z"
+      precision: MILLISECOND
+    }
+  }
+}
+entry {
+  resource {
+    bundle {
+      id {
+        value: "2c2fb771-6c4b-4df8-89b2-47a1178e7c"
+      }
+      meta {
+        last_updated {
+          value_us: 1542001369445000
+          timezone: "Z"
+          precision: MILLISECOND
+        }
+      }
+      type {
+        value: SEARCHSET
+      }
+      total {
+        value: 4
+      }
+      link {
+        relation {
+          value: "self"
+        }
+        url {
+          value: "http://local.fhir.org:960/r4/Condition?_format=application/fhir+xml&search-id=36aac5c3-a9f6-4c3a-bf94-24d32ed604&&patient=example&_sort=_id"
+        }
+      }
+      entry {
+        full_url {
+          value: "http://local.fhir.org:960/r4/Condition/example"
+        }
+        resource {
+          condition {
+            id {
+              value: "example"
+            }
+            meta {
+              version_id {
+                value: "1"
+              }
+              last_updated {
+                value_us: 1541993686552000
+                timezone: "Z"
+                precision: MILLISECOND
+              }
+            }
+            text {
+              status {
+                value: GENERATED
+              }
+              div {
+                value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Severe burn of left ear (Date: 24-May 2012)</div>"
+              }
+            }
+            clinical_status {
+              coding {
+                system {
+                  value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
+                }
+                code {
+                  value: "active"
+                }
+              }
+            }
+            verification_status {
+              coding {
+                system {
+                  value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+                }
+                code {
+                  value: "confirmed"
+                }
+              }
+            }
+            category {
+              coding {
+                system {
+                  value: "http://terminology.hl7.org/CodeSystem/condition-category"
+                }
+                code {
+                  value: "encounter-diagnosis"
+                }
+                display {
+                  value: "Encounter Diagnosis"
+                }
+              }
+              coding {
+                system {
+                  value: "http://snomed.info/sct"
+                }
+                code {
+                  value: "439401001"
+                }
+                display {
+                  value: "Diagnosis"
+                }
+              }
+            }
+            severity {
+              coding {
+                system {
+                  value: "http://snomed.info/sct"
+                }
+                code {
+                  value: "24484000"
+                }
+                display {
+                  value: "Severe"
+                }
+              }
+            }
+            code {
+              coding {
+                system {
+                  value: "http://snomed.info/sct"
+                }
+                code {
+                  value: "39065001"
+                }
+                display {
+                  value: "Burn of ear"
+                }
+              }
+              text {
+                value: "Burnt Ear"
+              }
+            }
+            body_site {
+              coding {
+                system {
+                  value: "http://snomed.info/sct"
+                }
+                code {
+                  value: "49521004"
+                }
+                display {
+                  value: "Left external ear structure"
+                }
+              }
+              text {
+                value: "Left Ear"
+              }
+            }
+            subject {
+              patient_id {
+                value: "example"
+              }
+            }
+            onset {
+              date_time {
+                value_us: 1337781600000000
+                timezone: "Australia/Sydney"
+                precision: DAY
+              }
+            }
+          }
+        }
+        search {
+          mode {
+            value: MATCH
+          }
+        }
+      }
+      entry {
+        full_url {
+          value: "http://local.fhir.org:960/r4/Condition/example2"
+        }
+        resource {
+          condition {
+            id {
+              value: "example2"
+            }
+            meta {
+              version_id {
+                value: "1"
+              }
+              last_updated {
+                value_us: 1541993686626000
+                timezone: "Z"
+                precision: MILLISECOND
+              }
+            }
+            text {
+              status {
+                value: GENERATED
+              }
+              div {
+                value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Mild Asthma (Date: 12-Nov 2012)</div>"
+              }
+            }
+            clinical_status {
+              coding {
+                system {
+                  value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
+                }
+                code {
+                  value: "active"
+                }
+              }
+            }
+            verification_status {
+              coding {
+                system {
+                  value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+                }
+                code {
+                  value: "confirmed"
+                }
+              }
+            }
+            category {
+              coding {
+                system {
+                  value: "http://terminology.hl7.org/CodeSystem/condition-category"
+                }
+                code {
+                  value: "problem-list-item"
+                }
+                display {
+                  value: "Problem List Item"
+                }
+              }
+            }
+            severity {
+              coding {
+                system {
+                  value: "http://snomed.info/sct"
+                }
+                code {
+                  value: "255604002"
+                }
+                display {
+                  value: "Mild"
+                }
+              }
+            }
+            code {
+              text {
+                value: "Asthma"
+              }
+            }
+            subject {
+              patient_id {
+                value: "example"
+              }
+            }
+            onset {
+              string_value {
+                value: "approximately November 2012"
+              }
+            }
+          }
+        }
+        search {
+          mode {
+            value: MATCH
+          }
+        }
+      }
+      entry {
+        full_url {
+          value: "http://local.fhir.org:960/r4/Condition/family-history"
+        }
+        resource {
+          condition {
+            id {
+              value: "family-history"
+            }
+            meta {
+              version_id {
+                value: "1"
+              }
+              last_updated {
+                value_us: 1541993687274000
+                timezone: "Z"
+                precision: MILLISECOND
+              }
+            }
+            text {
+              status {
+                value: GENERATED
+              }
+              div {
+                value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Family history of cancer of colon</div>"
+              }
+            }
+            clinical_status {
+              coding {
+                system {
+                  value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
+                }
+                code {
+                  value: "active"
+                }
+              }
+            }
+            category {
+              coding {
+                system {
+                  value: "http://terminology.hl7.org/CodeSystem/condition-category"
+                }
+                code {
+                  value: "problem-list-item"
+                }
+                display {
+                  value: "Problem List Item"
+                }
+              }
+            }
+            code {
+              coding {
+                system {
+                  value: "http://snomed.info/sct"
+                }
+                code {
+                  value: "312824007"
+                }
+                display {
+                  value: "Family history of cancer of colon"
+                }
+              }
+            }
+            subject {
+              patient_id {
+                value: "example"
+              }
+            }
+          }
+        }
+        search {
+          mode {
+            value: MATCH
+          }
+        }
+      }
+      entry {
+        full_url {
+          value: "http://local.fhir.org:960/r4/Condition/stroke"
+        }
+        resource {
+          condition {
+            id {
+              value: "stroke"
+            }
+            meta {
+              version_id {
+                value: "1"
+              }
+              last_updated {
+                value_us: 1541993687337000
+                timezone: "Z"
+                precision: MILLISECOND
+              }
+            }
+            text {
+              status {
+                value: GENERATED
+              }
+              div {
+                value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Ischemic stroke, July 18, 2010</div>"
+              }
+            }
+            clinical_status {
+              coding {
+                system {
+                  value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
+                }
+                code {
+                  value: "active"
+                }
+              }
+            }
+            verification_status {
+              coding {
+                system {
+                  value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+                }
+                code {
+                  value: "confirmed"
+                }
+              }
+            }
+            category {
+              coding {
+                system {
+                  value: "http://terminology.hl7.org/CodeSystem/condition-category"
+                }
+                code {
+                  value: "encounter-diagnosis"
+                }
+                display {
+                  value: "Encounter Diagnosis"
+                }
+              }
+            }
+            code {
+              coding {
+                system {
+                  value: "http://snomed.info/sct"
+                }
+                code {
+                  value: "422504002"
+                }
+                display {
+                  value: "Ischemic stroke (disorder)"
+                }
+              }
+              text {
+                value: "Stroke"
+              }
+            }
+            subject {
+              patient_id {
+                value: "example"
+              }
+            }
+            onset {
+              date_time {
+                value_us: 1279375200000000
+                timezone: "Australia/Sydney"
+                precision: DAY
+              }
+            }
+          }
+        }
+        search {
+          mode {
+            value: MATCH
+          }
+        }
+      }
+    }
+  }
+  response {
+    status {
+      value: "200"
+    }
+    etag {
+      value: "W/1"
+    }
+    last_modified {
+      value_us: 1541993720717000
+      timezone: "Z"
+      precision: MILLISECOND
+    }
+  }
+}
+entry {
+  resource {
+    bundle {
+      id {
+        value: "86846953-60dd-47ba-b37a-7e7d7e3312"
+      }
+      meta {
+        last_updated {
+          value_us: 1542001369476000
+          timezone: "Z"
+          precision: MILLISECOND
+        }
+      }
+      type {
+        value: SEARCHSET
+      }
+      total {
+      }
+      link {
+        relation {
+          value: "self"
+        }
+        url {
+          value: "http://local.fhir.org:960/r4/MedicationStatement?_format=application/fhir+xml&search-id=0f08b401-5120-4444-9a83-3fd21d33df&&patient=example&_sort=_id"
+        }
+      }
+    }
+  }
+  response {
+    status {
+      value: "200"
+    }
+    etag {
+      value: "W/1"
+    }
+    last_modified {
+      value_us: 1541993720717000
+      timezone: "Z"
+      precision: MILLISECOND
+    }
+  }
+}
+entry {
+  resource {
+    bundle {
+      id {
+        value: "4bafe9c4-ba53-4d7b-89d0-d92ee0859a"
+      }
+      meta {
+        last_updated {
+          value_us: 1542001369498000
+          timezone: "Z"
+          precision: MILLISECOND
+        }
+      }
+      type {
+        value: SEARCHSET
+      }
+      total {
+      }
+      link {
+        relation {
+          value: "self"
+        }
+        url {
+          value: "http://local.fhir.org:960/r4/Observation?_format=application/fhir+xml&search-id=50df0414-1375-48a4-ba1e-66f580360a&&patient=example&code=http%3A//loinc.org%7C55284%2D4&date=ge2015%2D01%2D01&_sort=_id"
+        }
+      }
+    }
+  }
+  response {
+    status {
+      value: "200"
+    }
+    etag {
+      value: "W/1"
+    }
+    last_modified {
+      value_us: 1541993720717000
+      timezone: "Z"
+      precision: MILLISECOND
+    }
+  }
+}

@@ -1,0 +1,95 @@
+id {
+  value: "messagedefinition"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <h2/>\n      <div>\n        <p>Sample capability statement showing new MessageDefinition structure</p>\n\n      </div>\n    </div>"
+  }
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+date {
+  value_us: 1325595600000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "ACME Corporation"
+}
+contact {
+  name {
+    value: "System Administrator"
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "wile@acme.org"
+    }
+  }
+}
+description {
+  value: "Sample capability statement showing new MessageDefinition structure"
+}
+kind {
+  value: INSTANCE
+}
+software {
+  name {
+    value: "EHR"
+  }
+}
+implementation {
+  description {
+    value: "Acme Message endpoint"
+  }
+  url {
+    value: "http://acem.com/fhir/message-drop"
+  }
+}
+fhir_version {
+  value: NUM_4_0_0
+}
+format {
+  value: "xml"
+}
+format {
+  value: "json"
+}
+messaging {
+  endpoint {
+    protocol {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/message-transport"
+      }
+      code {
+        value: "mllp"
+      }
+    }
+    address {
+      value: "mllp:10.1.1.10:9234"
+    }
+  }
+  reliable_cache {
+    value: 30
+  }
+  documentation {
+    value: "ADT A08 equivalent for external system notifications"
+  }
+  supported_message {
+    mode {
+      value: RECEIVER
+    }
+    definition {
+      value: "MessageDefinition/example"
+    }
+  }
+}

@@ -1,0 +1,119 @@
+id {
+  value: "ebm"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: ebm</p><p><b>url</b>: <b>http://fhir.de/ChargeItemDefinition/kbv/ebm-30110</b></p><p><b>version</b>: 2-2018</p><p><b>status</b>: active</p><p><b>description</b>: Allergologisch-diagnostischer Komplex zur Diagnostik und/oder zum Ausschluss einer (Kontakt-)Allergie vom Sp\303\244ttyp (Typ IV), einschl. Kosten</p><p><b>effectivePeriod</b>: 01/04/2018 --&gt; 30/06/2018</p><p><b>code</b>: Allergologiediagnostik I <span>(Details : {http://fhir.de/CodingSystem/kbv/ebm code \'30110\' = \'30110\', given as \'Allergologiediagnostik I\'})</span></p><blockquote><p><b>applicability</b></p><p><b>description</b>: Excludes billing code 13250 for same Encounter</p><p><b>language</b>: text/cql</p><p><b>expression</b>: [some CQL expression]</p></blockquote><blockquote><p><b>applicability</b></p><p><b>description</b>: Applies only once per Encounter</p><p><b>language</b>: text/CQL</p><p><b>expression</b>: [some CQL expression]</p></blockquote><blockquote><p><b>propertyGroup</b></p><blockquote><p><b>priceComponent</b></p><p><b>type</b>: base</p><p><b>code</b>: Gesamt (Euro) <span>(Details : {http://fhir.de/CodeSystem/kbv/ebm-attribute code \'gesamt-euro\' = \'gesamt-euro\', given as \'Gesamt (Euro)\'})</span></p><p><b>amount</b>: </p></blockquote><blockquote><p><b>priceComponent</b></p><p><b>type</b>: informational</p><p><b>code</b>: Gesamt (Punkte) <span>(Details : {http://fhir.de/CodeSystem/kbv/ebm-attribute code \'gesamt-punkte\' = \'gesamt-punkte\', given as \'Gesamt (Punkte)\'})</span></p><p><b>factor</b>: 633</p></blockquote></blockquote></div>"
+  }
+}
+url {
+  value: "http://fhir.de/ChargeItemDefinition/kbv/ebm-30110"
+}
+version {
+  value: "2-2018"
+}
+status {
+  value: ACTIVE
+}
+description {
+  value: "Allergologisch-diagnostischer Komplex zur Diagnostik und/oder zum Ausschluss einer (Kontakt-)Allergie vom Sp\303\244ttyp (Typ IV), einschl. Kosten"
+}
+effective_period {
+  start {
+    value_us: 1522501200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1530280800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://fhir.de/CodingSystem/kbv/ebm"
+    }
+    code {
+      value: "30110"
+    }
+    display {
+      value: "Allergologiediagnostik I"
+    }
+  }
+}
+applicability {
+  description {
+    value: "Excludes billing code 13250 for same Encounter"
+  }
+  language {
+    value: "text/cql"
+  }
+  expression {
+    value: "[some CQL expression]"
+  }
+}
+applicability {
+  description {
+    value: "Applies only once per Encounter"
+  }
+  language {
+    value: "text/CQL"
+  }
+  expression {
+    value: "[some CQL expression]"
+  }
+}
+property_group {
+  price_component {
+    type {
+      value: BASE
+    }
+    code {
+      coding {
+        system {
+          value: "http://fhir.de/CodeSystem/kbv/ebm-attribute"
+        }
+        code {
+          value: "gesamt-euro"
+        }
+        display {
+          value: "Gesamt (Euro)"
+        }
+      }
+    }
+    amount {
+      value {
+        value: "67.44"
+      }
+      currency {
+        value: "EUR"
+      }
+    }
+  }
+  price_component {
+    type {
+      value: INFORMATIONAL
+    }
+    code {
+      coding {
+        system {
+          value: "http://fhir.de/CodeSystem/kbv/ebm-attribute"
+        }
+        code {
+          value: "gesamt-punkte"
+        }
+        display {
+          value: "Gesamt (Punkte)"
+        }
+      }
+    }
+    factor {
+      value: "633"
+    }
+  }
+}

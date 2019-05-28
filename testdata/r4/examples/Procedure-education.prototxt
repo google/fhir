@@ -1,0 +1,83 @@
+id {
+  value: "education"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Health education - breast examination for early detection of breast mass</div>"
+  }
+}
+based_on {
+  service_request_id {
+    value: "education"
+  }
+  display {
+    value: "Order for health education"
+  }
+}
+status {
+  value: COMPLETED
+}
+category {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "311401005"
+    }
+    display {
+      value: "Patient education (procedure)"
+    }
+  }
+  text {
+    value: "Education"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "48023004"
+    }
+    display {
+      value: "Breast self-examination technique education (procedure)"
+    }
+  }
+  text {
+    value: "Health education - breast examination"
+  }
+}
+subject {
+  display {
+    value: "Jane Doe"
+  }
+}
+performed {
+  date_time {
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+performer {
+  actor {
+    display {
+      value: "Pamela Educator, RN"
+    }
+  }
+}
+location {
+  display {
+    value: "Southside Community Health Center"
+  }
+}
+reason_code {
+  text {
+    value: "early detection of breast mass"
+  }
+}

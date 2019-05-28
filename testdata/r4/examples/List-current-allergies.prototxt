@@ -1,0 +1,70 @@
+id {
+  value: "current-allergies"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Patient Peter Chalmers, DOB = Dec 25, 1974, MRN = 12345 (Acme Healthcare) has the following allergies</p>\n      <ul>\n        <li>cashew nut allergenic extract Injectable Product (<b>High</b>)</li>\n        <li>Allergenic extract, penicillin (high)</li>\n      </ul>\n    </div>"
+  }
+}
+status {
+  value: CURRENT
+}
+mode {
+  value: WORKING
+}
+title {
+  value: "Current Allergy List"
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "52472-8"
+    }
+    display {
+      value: "Allergies and Adverse Drug Reactions"
+    }
+  }
+  text {
+    value: "Current Allergy List"
+  }
+}
+date {
+  value_us: 1436875823000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+source {
+  patient_id {
+    value: "example"
+  }
+}
+ordered_by {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/list-order"
+    }
+    code {
+      value: "entry-date"
+    }
+  }
+}
+entry {
+  item {
+    allergy_intolerance_id {
+      value: "example"
+    }
+  }
+}
+entry {
+  item {
+    allergy_intolerance_id {
+      value: "medication"
+    }
+  }
+}

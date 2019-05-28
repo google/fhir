@@ -1,0 +1,255 @@
+id {
+  value: "660151"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Vision Claim for Glasses</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happysight.com/claim"
+  }
+  value {
+    value: "6612346"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/claim-type"
+    }
+    code {
+      value: "vision"
+    }
+  }
+}
+use {
+  value: CLAIM
+}
+patient {
+  patient_id {
+    value: "1"
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+provider {
+  organization_id {
+    value: "1"
+  }
+}
+priority {
+  coding {
+    code {
+      value: "normal"
+    }
+  }
+}
+prescription {
+  uri {
+    value: "http://www.optdocs.com/prescription/12345"
+  }
+}
+payee {
+  type {
+    coding {
+      code {
+        value: "provider"
+      }
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    practitioner_id {
+      value: "example"
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis {
+    codeable_concept {
+      coding {
+        code {
+          value: "654321"
+        }
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    coverage_id {
+      value: "9876B1"
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_sequence {
+    value: 1
+  }
+  product_or_service {
+    coding {
+      system {
+        value: "http://example.org/fhir/CodeSystem/ex-visionservice"
+      }
+      code {
+        value: "glasses"
+      }
+    }
+  }
+  serviced {
+    date {
+      value_us: 1408111200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  unit_price {
+    value {
+      value: "214.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: "214.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  detail {
+    sequence {
+      value: 1
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://example.org/fhir/CodeSystem/ex-visionservice"
+        }
+        code {
+          value: "frame"
+        }
+      }
+    }
+    unit_price {
+      value {
+        value: "100.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+    net {
+      value {
+        value: "100.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 2
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://example.org/fhir/CodeSystem/ex-visionservice"
+        }
+        code {
+          value: "lens"
+        }
+      }
+    }
+    quantity {
+      value {
+        value: "2"
+      }
+    }
+    unit_price {
+      value {
+        value: "50.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+    net {
+      value {
+        value: "100.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 3
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://example.org/fhir/CodeSystem/ex-visionservice"
+        }
+        code {
+          value: "fst"
+        }
+      }
+    }
+    unit_price {
+      value {
+        value: "200.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+    factor {
+      value: "0.07"
+    }
+    net {
+      value {
+        value: "14.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+}

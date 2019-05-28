@@ -1,0 +1,167 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      HACC Program for Peter James Chalmers at HL7 Healthcare 15 Sept 2014 - current<br/>\n\t\t\twas on leave from 22 Sept - 24 Sept while in respite care\n    </div>"
+  }
+}
+identifier {
+  system {
+    value: "http://example.org/sampleepisodeofcare-identifier"
+  }
+  value {
+    value: "123"
+  }
+}
+status {
+  value: ACTIVE
+}
+status_history {
+  status {
+    value: PLANNED
+  }
+  period {
+    start {
+      value_us: 1409493600000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+    end {
+      value_us: 1410616800000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}
+status_history {
+  status {
+    value: ACTIVE
+  }
+  period {
+    start {
+      value_us: 1410703200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+    end {
+      value_us: 1411221600000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}
+status_history {
+  status {
+    value: ONHOLD
+  }
+  period {
+    start {
+      value_us: 1411308000000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+    end {
+      value_us: 1411480800000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}
+status_history {
+  status {
+    value: ACTIVE
+  }
+  period {
+    start {
+      value_us: 1411567200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/episodeofcare-type"
+    }
+    code {
+      value: "hacc"
+    }
+    display {
+      value: "Home and Community Care"
+    }
+  }
+}
+diagnosis {
+  condition {
+    condition_id {
+      value: "stroke"
+    }
+  }
+  role {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/diagnosis-role"
+      }
+      code {
+        value: "CC"
+      }
+      display {
+        value: "Chief complaint"
+      }
+    }
+  }
+  rank {
+    value: 1
+  }
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+}
+managing_organization {
+  organization_id {
+    value: "hl7"
+  }
+}
+period {
+  start {
+    value_us: 1409493600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+referral_request {
+  display {
+    value: "Referral from Example Aged Care Services"
+  }
+}
+care_manager {
+  practitioner_id {
+    value: "14"
+  }
+  display {
+    value: "Amanda Assigned"
+  }
+}
+team {
+  care_team_id {
+    value: "example"
+  }
+  display {
+    value: "example care team"
+  }
+}
+account {
+  account_id {
+    value: "example"
+  }
+  display {
+    value: "example account"
+  }
+}

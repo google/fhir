@@ -1,0 +1,334 @@
+id {
+  value: "760151"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the Pharmacy Claim</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://happypharma.com/claim"
+  }
+  value {
+    value: "7612345"
+  }
+}
+status {
+  value: ACTIVE
+}
+type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/claim-type"
+    }
+    code {
+      value: "pharmacy"
+    }
+  }
+}
+use {
+  value: CLAIM
+}
+patient {
+  patient_id {
+    value: "1"
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+provider {
+  organization_id {
+    value: "1"
+  }
+}
+priority {
+  coding {
+    code {
+      value: "stat"
+    }
+  }
+}
+prescription {
+  uri {
+    value: "http://pharmacy.org/MedicationRequest/AB1234G"
+  }
+}
+original_prescription {
+  uri {
+    value: "http://pharmacy.org/MedicationRequest/AB1202B"
+  }
+}
+payee {
+  type {
+    coding {
+      code {
+        value: "provider"
+      }
+    }
+  }
+}
+care_team {
+  sequence {
+    value: 1
+  }
+  provider {
+    practitioner_id {
+      value: "example"
+    }
+  }
+}
+supporting_info {
+  sequence {
+    value: 1
+  }
+  category {
+    coding {
+      code {
+        value: "pharmacyrefill"
+      }
+    }
+  }
+  code {
+    coding {
+      system {
+        value: "http://example.org/fhir/CodeSystem/pharmacy-refill"
+      }
+      code {
+        value: "new"
+      }
+    }
+  }
+}
+supporting_info {
+  sequence {
+    value: 2
+  }
+  category {
+    coding {
+      code {
+        value: "pharmacyinformation"
+      }
+    }
+  }
+  code {
+    coding {
+      system {
+        value: "http://example.org/fhir/CodeSystem/pharmacy-information"
+      }
+      code {
+        value: "refillsremaining"
+      }
+    }
+  }
+  value {
+    quantity {
+      value {
+        value: "2"
+      }
+    }
+  }
+}
+supporting_info {
+  sequence {
+    value: 3
+  }
+  category {
+    coding {
+      code {
+        value: "pharmacyinformation"
+      }
+    }
+  }
+  code {
+    coding {
+      system {
+        value: "http://example.org/fhir/CodeSystem/pharmacy-information"
+      }
+      code {
+        value: "dayssupply"
+      }
+    }
+  }
+  value {
+    quantity {
+      value {
+        value: "90"
+      }
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis {
+    codeable_concept {
+      coding {
+        code {
+          value: "654456"
+        }
+      }
+    }
+  }
+}
+insurance {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    coverage_id {
+      value: "9876B1"
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_sequence {
+    value: 1
+  }
+  information_sequence {
+    value: 1
+  }
+  information_sequence {
+    value: 2
+  }
+  information_sequence {
+    value: 3
+  }
+  product_or_service {
+    coding {
+      system {
+        value: "http://www.nlm.nih.gov/research/umls/rxnorm"
+      }
+      code {
+        value: "562721"
+      }
+      display {
+        value: "Alprazolam 0.25mg (Xanax)"
+      }
+    }
+  }
+  serviced {
+    date {
+      value_us: 1408111200000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  quantity {
+    value {
+      value: "90"
+    }
+    unit {
+      value: "TAB"
+    }
+    system {
+      value: "http://unitsofmeasure.org"
+    }
+    code {
+      value: "TAB"
+    }
+  }
+  net {
+    value {
+      value: "90.00"
+    }
+    currency {
+      value: "USD"
+    }
+  }
+  detail {
+    sequence {
+      value: 1
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-pharmaservice"
+        }
+        code {
+          value: "drugcost"
+        }
+      }
+    }
+    net {
+      value {
+        value: "45.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 2
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-pharmaservice"
+        }
+        code {
+          value: "markup"
+        }
+      }
+    }
+    net {
+      value {
+        value: "9.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+  detail {
+    sequence {
+      value: 3
+    }
+    product_or_service {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/ex-pharmaservice"
+        }
+        code {
+          value: "dispensefee"
+        }
+      }
+    }
+    net {
+      value {
+        value: "36.00"
+      }
+      currency {
+        value: "USD"
+      }
+    }
+  }
+}
+total {
+  value {
+    value: "90.00"
+  }
+  currency {
+    value: "USD"
+  }
+}

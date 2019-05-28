@@ -1,0 +1,129 @@
+id {
+  value: "vp-oyster"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: vp-oyster</p><p><b>identifier</b>: 20171014-1234 (OFFICIAL)</p><p><b>status</b>: preliminary</p><p><b>code</b>: OYSTER TESTING <span>(Details : {LOINC code \'41857-4\' = \'Vibrio parahaemolyticus DNA [Presence] in Unspecified specimen by Probe and target amplification method\', given as \'Vibrio parahaemolyticus DNA [Presence] in Unspecified specimen by Probe and target amplification method\'}; {http://sonomacounty.ca.gov/Health/Public-Health/Laboratory/test-codes code \'VP MULTI PCR\' = \'VP MULTI PCR\', given as \'VP MULTI PCR\'})</span></p><p><b>subject</b>: Sonoma oyster farm</p><p><b>effective</b>: 12/10/2017</p><p><b>issued</b>: 14/10/2017 11:11:24 PM</p><p><b>performer</b>: <a>A. Langeveld</a></p><p><b>value</b>: POSITIVE <span>(Details : {SNOMED CT code \'10828004\' = \'Positive\', given as \'Positive (qualifier value)\'}; {http://sonomacounty.ca.gov/Health/Public-Health/Laboratory/result-codes code \'POSITIVE\' = \'POSITIVE\', given as \'POSITIVE\'})</span></p><p><b>interpretation</b>: Abnormal <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'A\' = \'Abnormal\', given as \'Abnormal\'})</span></p><p><b>specimen</b>: Live Oysters Acc#20171014-1234</p><h3>ReferenceRanges</h3><table><tr><td>-</td><td><b>Text</b></td></tr><tr><td>*</td><td>NEGATIVE</td></tr></table></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://sonomacounty.ca.gov/Health/Public-Health/Laboratory"
+  }
+  value {
+    value: "20171014-1234"
+  }
+}
+status {
+  value: PRELIMINARY
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "41857-4"
+    }
+    display {
+      value: "Vibrio parahaemolyticus DNA [Presence] in Unspecified specimen by Probe and target amplification method"
+    }
+  }
+  coding {
+    system {
+      value: "http://sonomacounty.ca.gov/Health/Public-Health/Laboratory/test-codes"
+    }
+    code {
+      value: "VP MULTI PCR"
+    }
+    display {
+      value: "VP MULTI PCR"
+    }
+  }
+  text {
+    value: "OYSTER TESTING"
+  }
+}
+subject {
+  display {
+    value: "Sonoma oyster farm"
+  }
+}
+effective {
+  date_time {
+    value_us: 1507726800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+issued {
+  value_us: 1508022684000000
+  timezone: "Z"
+  precision: SECOND
+}
+performer {
+  practitioner_id {
+    value: "f005"
+  }
+  display {
+    value: "A. Langeveld"
+  }
+}
+value {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "10828004"
+      }
+      display {
+        value: "Positive (qualifier value)"
+      }
+    }
+    coding {
+      system {
+        value: "http://sonomacounty.ca.gov/Health/Public-Health/Laboratory/result-codes"
+      }
+      code {
+        value: "POSITIVE"
+      }
+      display {
+        value: "POSITIVE"
+      }
+    }
+    text {
+      value: "POSITIVE"
+    }
+  }
+}
+interpretation {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+    }
+    code {
+      value: "A"
+    }
+    display {
+      value: "Abnormal"
+    }
+  }
+}
+specimen {
+  display {
+    value: "Live Oysters Acc#20171014-1234"
+  }
+}
+reference_range {
+  text {
+    value: "NEGATIVE"
+  }
+}

@@ -1,0 +1,452 @@
+id {
+  value: "E2502"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the CoverageEligibilityResponse.</div>"
+  }
+}
+contained {
+  coverage {
+    id {
+      value: "coverage-1"
+    }
+    identifier {
+      system {
+        value: "http://benefitsinc.com/certificate"
+      }
+      value {
+        value: "12345"
+      }
+    }
+    status {
+      value: ACTIVE
+    }
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+        }
+        code {
+          value: "EHCPOL"
+        }
+      }
+    }
+    subscriber {
+      patient_id {
+        value: "f201"
+      }
+    }
+    beneficiary {
+      patient_id {
+        value: "f201"
+      }
+    }
+    dependent {
+      value: "1"
+    }
+    relationship {
+      coding {
+        code {
+          value: "self"
+        }
+      }
+    }
+    payor {
+      identifier {
+        system {
+          value: "http://www.bindb.com/bin"
+        }
+        value {
+          value: "123456"
+        }
+      }
+    }
+    class_value {
+      type {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+          }
+          code {
+            value: "EHCPOL"
+          }
+        }
+      }
+      value {
+        value: "CBI35"
+      }
+      name {
+        value: "Corporate Baker\'s Inc. Plan#35"
+      }
+    }
+    class_value {
+      type {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+          }
+          code {
+            value: "subplan"
+          }
+        }
+      }
+      value {
+        value: "123"
+      }
+      name {
+        value: "Trainee Part-time Benefits"
+      }
+    }
+    class_value {
+      type {
+        coding {
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/coverage-class"
+          }
+          code {
+            value: "sequence"
+          }
+        }
+      }
+      value {
+        value: "1"
+      }
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/coverageeligibilityresponse"
+  }
+  value {
+    value: "8812342"
+  }
+}
+status {
+  value: ACTIVE
+}
+purpose {
+  value: VALIDATION
+}
+purpose {
+  value: BENEFITS
+}
+patient {
+  patient_id {
+    value: "f201"
+  }
+}
+created {
+  value_us: 1410789600000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+requestor {
+  identifier {
+    system {
+      value: "http://national.org/clinic"
+    }
+    value {
+      value: "OR1234"
+    }
+  }
+}
+request {
+  uri {
+    value: "http://www.BenefitsInc.com/fhir/coverageeligibilityrequest/225476332405"
+  }
+}
+outcome {
+  value: COMPLETE
+}
+disposition {
+  value: "Policy is currently in-force."
+}
+insurer {
+  organization_id {
+    value: "2"
+  }
+}
+insurance {
+  coverage {
+    fragment {
+      value: "coverage-1"
+    }
+  }
+  inforce {
+    value: true
+  }
+  item {
+    category {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+        }
+        code {
+          value: "30"
+        }
+        display {
+          value: "Health Benefit Plan Coverage"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-term"
+        }
+        code {
+          value: "annual"
+        }
+      }
+    }
+    benefit {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed {
+        money {
+          value {
+            value: "500000"
+          }
+          currency {
+            value: "USD"
+          }
+        }
+      }
+      used {
+        money {
+          value {
+            value: "3748.00"
+          }
+          currency {
+            value: "USD"
+          }
+        }
+      }
+    }
+    benefit {
+      type {
+        coding {
+          code {
+            value: "copay-maximum"
+          }
+        }
+      }
+      allowed {
+        money {
+          value {
+            value: "100"
+          }
+          currency {
+            value: "USD"
+          }
+        }
+      }
+    }
+    benefit {
+      type {
+        coding {
+          code {
+            value: "copay-percent"
+          }
+        }
+      }
+      allowed {
+        unsigned_int {
+          value: 20
+        }
+      }
+    }
+  }
+  item {
+    category {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+        }
+        code {
+          value: "69"
+        }
+        display {
+          value: "Maternity"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-term"
+        }
+        code {
+          value: "annual"
+        }
+      }
+    }
+    benefit {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed {
+        money {
+          value {
+            value: "15000"
+          }
+          currency {
+            value: "USD"
+          }
+        }
+      }
+    }
+  }
+  item {
+    category {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+        }
+        code {
+          value: "F3"
+        }
+        display {
+          value: "Dental Coverage"
+        }
+      }
+    }
+    network {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-network"
+        }
+        code {
+          value: "in"
+        }
+      }
+    }
+    unit {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-unit"
+        }
+        code {
+          value: "individual"
+        }
+      }
+    }
+    term {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/benefit-term"
+        }
+        code {
+          value: "annual"
+        }
+      }
+    }
+    benefit {
+      type {
+        coding {
+          code {
+            value: "benefit"
+          }
+        }
+      }
+      allowed {
+        money {
+          value {
+            value: "2000"
+          }
+          currency {
+            value: "USD"
+          }
+        }
+      }
+    }
+  }
+  item {
+    category {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+        }
+        code {
+          value: "F6"
+        }
+        display {
+          value: "Vision Coverage"
+        }
+      }
+    }
+    excluded {
+      value: true
+    }
+    name {
+      value: "Vision"
+    }
+    description {
+      value: "Vision products and services such as exams, glasses and contact lenses."
+    }
+  }
+}
+form {
+  coding {
+    system {
+      value: "http://national.org/form"
+    }
+    code {
+      value: "ELRSP/2017/01"
+    }
+  }
+}

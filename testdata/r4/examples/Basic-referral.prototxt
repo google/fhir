@@ -1,0 +1,133 @@
+id {
+  value: "referral"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p><b>Patient:</b>Roel</p>\n      <p><b>Requestor:</b>Dokter Bronsig</p>\n      <p><b>Type:</b>Consultation</p>\n      <p><b>Target Date:</b>April 1 - April 31</p>\n      <p>COMPLETED</p>\n      <b>The patient had fever peaks over the last couple of days. He is worried about these peaks.</b>\n    </div>"
+  }
+}
+extension {
+  url {
+    value: "http://example.org/do-not-use/fhir-extensions/referral#requestingPractitioner"
+  }
+  value {
+    reference {
+      practitioner_id {
+        value: "f201"
+      }
+      display {
+        value: "Dokter Bronsig"
+      }
+    }
+  }
+}
+extension {
+  url {
+    value: "http://example.org/do-not-use/fhir-extensions/referral#notes"
+  }
+  value {
+    string_value {
+      value: "The patient had fever peaks over the last couple of days. He is worried about these peaks."
+    }
+  }
+}
+extension {
+  url {
+    value: "http://example.org/do-not-use/fhir-extensions/referral#fulfillingEncounter"
+  }
+  value {
+    reference {
+      encounter_id {
+        value: "f201"
+      }
+    }
+  }
+}
+modifier_extension {
+  url {
+    value: "http://example.org/do-not-use/fhir-extensions/referral#referredForService"
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "11429006"
+        }
+        display {
+          value: "Consultation"
+        }
+      }
+    }
+  }
+}
+modifier_extension {
+  url {
+    value: "http://example.org/do-not-use/fhir-extensions/referral#targetDate"
+  }
+  value {
+    period {
+      start {
+        value_us: 1364734800000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+      end {
+        value_us: 1365948000000000
+        timezone: "Australia/Sydney"
+        precision: DAY
+      }
+    }
+  }
+}
+modifier_extension {
+  url {
+    value: "http://example.org/do-not-use/fhir-extensions/referral#status"
+  }
+  value {
+    code {
+      value: "complete"
+    }
+  }
+}
+identifier {
+  system {
+    value: "http://goodhealth.org/basic/identifiers"
+  }
+  value {
+    value: "19283746"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/basic-resource-type"
+    }
+    code {
+      value: "referral"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "f201"
+  }
+  display {
+    value: "Roel"
+  }
+}
+created {
+  value_us: 1368453600000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+author {
+  practitioner_id {
+    value: "example"
+  }
+}

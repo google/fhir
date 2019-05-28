@@ -1,0 +1,183 @@
+id {
+  value: "blood-pressure-dar"
+}
+meta {
+  profile {
+    value: "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: blood-pressure-dar</p><p><b>meta</b>: </p><p><b>identifier</b>: urn:uuid:187e0c12-8dd2-67e2-99b2-bf273c878281</p><p><b>status</b>: final</p><p><b>category</b>: Vital Signs <span>(Details : {http://terminology.hl7.org/CodeSystem/observation-category code \'vital-signs\' = \'Vital Signs\', given as \'Vital Signs\'})</span></p><p><b>code</b>: Blood pressure systolic &amp; diastolic <span>(Details : {LOINC code \'85354-9\' = \'Blood pressure panel with all children optional\', given as \'Blood pressure panel with all children optional\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>effective</b>: 17/09/2012</p><p><b>performer</b>: <a>Practitioner/example</a></p><p><b>interpretation</b>: Below low normal <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation code \'L\' = \'Low\', given as \'low\'})</span></p><p><b>bodySite</b>: Right arm <span>(Details : {SNOMED CT code \'368209003\' = \'Right upper arm\', given as \'Right arm\'})</span></p><blockquote><p><b>component</b></p><p><b>code</b>: Systolic blood pressure <span>(Details : {LOINC code \'8480-6\' = \'Systolic blood pressure\', given as \'Systolic blood pressure\'}; {SNOMED CT code \'271649006\' = \'Systolic blood pressure\', given as \'Systolic blood pressure\'}; {http://acme.org/devices/clinical-codes code \'bp-s\' = \'bp-s\', given as \'Systolic Blood pressure\'})</span></p><p><b>value</b>: 107 mmHg<span> (Details: UCUM code mm[Hg] = \'mmHg\')</span></p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: Diastolic blood pressure <span>(Details : {LOINC code \'8462-4\' = \'Diastolic blood pressure\', given as \'Diastolic blood pressure\'})</span></p><p><b>dataAbsentReason</b>: Not Performed <span>(Details : {http://terminology.hl7.org/CodeSystem/data-absent-reason code \'not-performed\' = \'Not Performed\', given as \'Not Performed\'})</span></p></blockquote></div>"
+  }
+}
+identifier {
+  system {
+    value: "urn:ietf:rfc:3986"
+  }
+  value {
+    value: "urn:uuid:187e0c12-8dd2-67e2-99b2-bf273c878281"
+  }
+}
+status {
+  value: FINAL
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/observation-category"
+    }
+    code {
+      value: "vital-signs"
+    }
+    display {
+      value: "Vital Signs"
+    }
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "85354-9"
+    }
+    display {
+      value: "Blood pressure panel with all children optional"
+    }
+  }
+  text {
+    value: "Blood pressure systolic & diastolic"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+effective {
+  date_time {
+    value_us: 1347804000000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+performer {
+  practitioner_id {
+    value: "example"
+  }
+}
+interpretation {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+    }
+    code {
+      value: "L"
+    }
+    display {
+      value: "low"
+    }
+  }
+  text {
+    value: "Below low normal"
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "368209003"
+    }
+    display {
+      value: "Right arm"
+    }
+  }
+}
+component {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "8480-6"
+      }
+      display {
+        value: "Systolic blood pressure"
+      }
+    }
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "271649006"
+      }
+      display {
+        value: "Systolic blood pressure"
+      }
+    }
+    coding {
+      system {
+        value: "http://acme.org/devices/clinical-codes"
+      }
+      code {
+        value: "bp-s"
+      }
+      display {
+        value: "Systolic Blood pressure"
+      }
+    }
+  }
+  value {
+    quantity {
+      value {
+        value: "107"
+      }
+      unit {
+        value: "mmHg"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mm[Hg]"
+      }
+    }
+  }
+}
+component {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "8462-4"
+      }
+      display {
+        value: "Diastolic blood pressure"
+      }
+    }
+  }
+  data_absent_reason {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/data-absent-reason"
+      }
+      code {
+        value: "not-performed"
+      }
+      display {
+        value: "Not Performed"
+      }
+    }
+  }
+}

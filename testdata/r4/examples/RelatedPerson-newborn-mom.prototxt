@@ -1,0 +1,91 @@
+id {
+  value: "newborn-mom"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: newborn-mom</p><p><b>identifier</b>: Social Security number = 444222222</p><p><b>active</b>: true</p><p><b>patient</b>: <a>Patient/newborn</a></p><p><b>relationship</b>: Natural Mother <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-RoleCode code \'NMTH\' = \'natural mother\', given as \'natural mother\'})</span></p><p><b>name</b>: Eve Everywoman (OFFICIAL)</p><p><b>telecom</b>: ph: 555-555-2003(WORK)</p><p><b>gender</b>: female</p><p><b>birthDate</b>: 31/05/1973</p><p><b>address</b>: 2222 Home Street (HOME)</p></div>"
+  }
+}
+identifier {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v2-0203"
+      }
+      code {
+        value: "SS"
+      }
+    }
+  }
+  system {
+    value: "http://hl7.org/fhir/sid/us-ssn"
+  }
+  value {
+    value: "444222222"
+  }
+}
+active {
+  value: true
+}
+patient {
+  patient_id {
+    value: "newborn"
+  }
+}
+relationship {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+    }
+    code {
+      value: "NMTH"
+    }
+    display {
+      value: "natural mother"
+    }
+  }
+  text {
+    value: "Natural Mother"
+  }
+}
+name {
+  use {
+    value: OFFICIAL
+  }
+  family {
+    value: "Everywoman"
+  }
+  given {
+    value: "Eve"
+  }
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "555-555-2003"
+  }
+  use {
+    value: WORK
+  }
+}
+gender {
+  value: FEMALE
+}
+birth_date {
+  value_us: 107618400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+address {
+  use {
+    value: HOME
+  }
+  line {
+    value: "2222 Home Street"
+  }
+}

@@ -1,0 +1,137 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Authored by Joginder Madra</div>"
+  }
+}
+identifier {
+  system {
+    value: "urn:ietf:rfc:3986"
+  }
+  value {
+    value: "urn:oid:1.3.6.1.4.1.21367.2005.3.7.1235"
+  }
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+}
+date {
+  value_us: 1423497855817000
+  timezone: "-05:00"
+  precision: MILLISECOND
+}
+authority {
+  organization_id {
+    value: "hl7"
+  }
+}
+recommendation {
+  target_disease {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "40468003"
+      }
+    }
+  }
+  forecast_status {
+    text {
+      value: "Not Complete"
+    }
+  }
+  date_criterion {
+    code {
+      coding {
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "30981-5"
+        }
+        display {
+          value: "Earliest date to give"
+        }
+      }
+    }
+    value {
+      value_us: 1448946000000000
+      timezone: "-05:00"
+      precision: SECOND
+    }
+  }
+  date_criterion {
+    code {
+      coding {
+        system {
+          value: "http://example.org/fhir/CodeSystem/immunization-recommendation-date-criterion"
+        }
+        code {
+          value: "recommended"
+        }
+        display {
+          value: "Recommended"
+        }
+      }
+    }
+    value {
+      value_us: 1448946000000000
+      timezone: "-05:00"
+      precision: SECOND
+    }
+  }
+  date_criterion {
+    code {
+      coding {
+        system {
+          value: "http://example.org/fhir/CodeSystem/immunization-recommendation-date-criterion"
+        }
+        code {
+          value: "overdue"
+        }
+        display {
+          value: "Past Due Date"
+        }
+      }
+    }
+    value {
+      value_us: 1482901200000000
+      timezone: "-05:00"
+      precision: SECOND
+    }
+  }
+  description {
+    value: "First sequence in protocol"
+  }
+  series {
+    value: "Vaccination Series 1"
+  }
+  dose_number {
+    positive_int {
+      value: 1
+    }
+  }
+  series_doses {
+    positive_int {
+      value: 3
+    }
+  }
+  supporting_immunization {
+    immunization_id {
+      value: "example"
+    }
+  }
+  supporting_patient_information {
+    observation_id {
+      value: "example"
+    }
+  }
+}

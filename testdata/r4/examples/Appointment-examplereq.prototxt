@@ -1,0 +1,158 @@
+id {
+  value: "examplereq"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Brian MRI results discussion</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://example.org/sampleappointment-identifier"
+  }
+  value {
+    value: "123"
+  }
+}
+status {
+  value: PROPOSED
+}
+service_category {
+  coding {
+    system {
+      value: "http://example.org/service-category"
+    }
+    code {
+      value: "gp"
+    }
+    display {
+      value: "General Practice"
+    }
+  }
+}
+specialty {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "394814009"
+    }
+    display {
+      value: "General practice"
+    }
+  }
+}
+appointment_type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v2-0276"
+    }
+    code {
+      value: "WALKIN"
+    }
+    display {
+      value: "A previously unscheduled walk-in visit"
+    }
+  }
+}
+reason_code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "413095006"
+    }
+  }
+  text {
+    value: "Clinical Review"
+  }
+}
+priority {
+  value: 5
+}
+description {
+  value: "Discussion on the results of your recent MRI"
+}
+minutes_duration {
+  value: 15
+}
+slot {
+  slot_id {
+    value: "example"
+  }
+}
+created {
+  value_us: 1448974800000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+comment {
+  value: "Further expand on the results of the MRI and determine the next actions that may be appropriate."
+}
+participant {
+  actor {
+    patient_id {
+      value: "example"
+    }
+    display {
+      value: "Peter James Chalmers"
+    }
+  }
+  required {
+    value: REQUIRED
+  }
+  status {
+    value: NEEDS_ACTION
+  }
+}
+participant {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+      }
+      code {
+        value: "ATND"
+      }
+    }
+  }
+  required {
+    value: REQUIRED
+  }
+  status {
+    value: NEEDS_ACTION
+  }
+}
+participant {
+  actor {
+    location_id {
+      value: "1"
+    }
+    display {
+      value: "South Wing, second floor"
+    }
+  }
+  required {
+    value: REQUIRED
+  }
+  status {
+    value: ACCEPTED
+  }
+}
+requested_period {
+  start {
+    value_us: 1464789600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  end {
+    value_us: 1465394400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}

@@ -1,0 +1,185 @@
+id {
+  value: "medrx0310"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: medrx0310</p><p><b>contained</b>: </p><p><b>identifier</b>: 12345689 (OFFICIAL)</p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>medication</b>: id: med0309; Tylenol PM <span>(Details : {http://hl7.org/fhir/sid/ndc code \'50580-506-02\' = \'50580-506-02\', given as \'Tylenol PM\'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>encounter</b>: <a>encounter who leads to this prescription</a></p><p><b>authoredOn</b>: 15/01/2015</p><p><b>requester</b>: <a>Patrick Pump</a></p><p><b>dosageInstruction</b>: </p></div>"
+  }
+}
+contained {
+  medication {
+    id {
+      value: "med0309"
+    }
+    code {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/sid/ndc"
+        }
+        code {
+          value: "50580-506-02"
+        }
+        display {
+          value: "Tylenol PM"
+        }
+      }
+    }
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.bmc.nl/portal/prescriptions"
+  }
+  value {
+    value: "12345689"
+  }
+}
+status {
+  value: ACTIVE
+}
+intent {
+  value: ORDER
+}
+medication {
+  reference {
+    fragment {
+      value: "med0309"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "pat1"
+  }
+  display {
+    value: "Donald Duck"
+  }
+}
+encounter {
+  encounter_id {
+    value: "f001"
+  }
+  display {
+    value: "encounter who leads to this prescription"
+  }
+}
+authored_on {
+  value_us: 1421240400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+requester {
+  practitioner_id {
+    value: "f007"
+  }
+  display {
+    value: "Patrick Pump"
+  }
+}
+dosage_instruction {
+  sequence {
+    value: 1
+  }
+  text {
+    value: "Take 1-2 tablets once daily at bedtime as needed for restless legs"
+  }
+  additional_instruction {
+    text {
+      value: "Take at bedtime"
+    }
+  }
+  timing {
+    repeat {
+      frequency {
+        value: 1
+      }
+      period {
+        value: "1"
+      }
+      period_unit {
+        value: D
+      }
+    }
+  }
+  as_needed {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "32914008"
+        }
+        display {
+          value: "Restless Legs"
+        }
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "26643006"
+      }
+      display {
+        value: "Oral Route"
+      }
+    }
+  }
+  dose_and_rate {
+    type {
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+        }
+        code {
+          value: "ordered"
+        }
+        display {
+          value: "Ordered"
+        }
+      }
+    }
+    dose {
+      range {
+        low {
+          value {
+            value: "1"
+          }
+          unit {
+            value: "TAB"
+          }
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+          }
+          code {
+            value: "TAB"
+          }
+        }
+        high {
+          value {
+            value: "2"
+          }
+          unit {
+            value: "TAB"
+          }
+          system {
+            value: "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm"
+          }
+          code {
+            value: "TAB"
+          }
+        }
+      }
+    }
+  }
+}

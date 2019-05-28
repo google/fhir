@@ -1,0 +1,97 @@
+id {
+  value: "physical-therapy"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: physical-therapy</p><p><b>status</b>: completed</p><p><b>intent</b>: order</p><p><b>category</b>: Evaluation <span>(Details : {SNOMED CT code \'386053000\' = \'Patient evaluation procedure\', given as \'Evaluation procedure (procedure)\'})</span></p><p><b>code</b>: Assessment of passive range of motion <span>(Details : {SNOMED CT code \'710830005\' = \'Assessment of passive range of motion\', given as \'Assessment of passive range of motion (procedure)\'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>occurrence</b>: 27/09/2016</p><p><b>authoredOn</b>: 20/09/2016</p><p><b>requester</b>: Ollie Ortho, MD</p><p><b>performer</b>: Paul Therapist, PT</p><p><b>reasonCode</b>: assessment of mobility limitations due to osteoarthritis <span>(Details )</span></p><p><b>bodySite</b>: Both knees <span>(Details : {SNOMED CT code \'36701003\' = \'Both knees\', given as \'Both knees (body structure)\'})</span></p></div>"
+  }
+}
+status {
+  value: COMPLETED
+}
+intent {
+  value: ORDER
+}
+category {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "386053000"
+    }
+    display {
+      value: "Evaluation procedure (procedure)"
+    }
+  }
+  text {
+    value: "Evaluation"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "710830005"
+    }
+    display {
+      value: "Assessment of passive range of motion (procedure)"
+    }
+  }
+  text {
+    value: "Assessment of passive range of motion"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+occurrence {
+  date_time {
+    value_us: 1474898400000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+authored_on {
+  value_us: 1474293600000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+requester {
+  display {
+    value: "Ollie Ortho, MD"
+  }
+}
+performer {
+  display {
+    value: "Paul Therapist, PT"
+  }
+}
+reason_code {
+  text {
+    value: "assessment of mobility limitations due to osteoarthritis"
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "36701003"
+    }
+    display {
+      value: "Both knees (body structure)"
+    }
+  }
+  text {
+    value: "Both knees"
+  }
+}

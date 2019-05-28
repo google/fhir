@@ -1,0 +1,137 @@
+id {
+  value: "riskexample"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Risk assessment for reference only</div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://example.org"
+  }
+  value {
+    value: "risk-assessment-breastcancer1"
+  }
+}
+based_on {
+  immunization_recommendation_id {
+    value: "example"
+  }
+}
+parent {
+  diagnostic_report_id {
+    value: "example"
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "http://browser.ihtsdotools.org/"
+    }
+    code {
+      value: "709510001"
+    }
+    display {
+      value: "Assessment of risk for disease (procedure)"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+  display {
+    value: "Encounter with patient @example"
+  }
+}
+occurrence {
+  date_time {
+    value_us: 1507554000000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+condition {
+  condition_id {
+    value: "example"
+  }
+}
+performer {
+  practitioner_id {
+    value: "example"
+  }
+}
+basis {
+  diagnostic_report_id {
+    value: "example"
+  }
+}
+basis {
+  observation_id {
+    value: "example"
+  }
+}
+prediction {
+  outcome {
+    text {
+      value: "Breast Cancer"
+    }
+  }
+  probability {
+    decimal {
+      value: "0.000368"
+    }
+  }
+  when {
+    range {
+      low {
+        value {
+          value: "54"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+      high {
+        value {
+          value: "57"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+    }
+  }
+}
+note {
+  text {
+    value: "This risk assessment is for reference only"
+  }
+}

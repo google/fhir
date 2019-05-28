@@ -1,0 +1,41 @@
+id {
+  value: "example-patientlist"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>All patients primarily attributed to Practitioner 123</p>\n    </div>"
+  }
+}
+type {
+  value: PERSON
+}
+actual {
+  value: true
+}
+characteristic {
+  code {
+    coding {
+      system {
+        value: "http://example.org"
+      }
+      code {
+        value: "attributed-to"
+      }
+    }
+    text {
+      value: "Patients primarily attributed to"
+    }
+  }
+  value {
+    reference {
+      practitioner_id {
+        value: "123"
+      }
+    }
+  }
+  exclude {
+  }
+}

@@ -1,0 +1,68 @@
+id {
+  value: "101"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Herd of 25 horses</p>\n      <p>Gender: mixed</p>\n      <p>Owner: John Smith</p>\n    </div>"
+  }
+}
+identifier {
+  system {
+    value: "http://someveterinarianclinic.org/fhir/NamingSystem/herds"
+  }
+  value {
+    value: "12345"
+  }
+}
+type {
+  value: ANIMAL
+}
+actual {
+  value: true
+}
+code {
+  text {
+    value: "Horse"
+  }
+}
+name {
+  value: "John\'s herd"
+}
+quantity {
+  value: 25
+}
+characteristic {
+  code {
+    text {
+      value: "gender"
+    }
+  }
+  value {
+    codeable_concept {
+      text {
+        value: "mixed"
+      }
+    }
+  }
+  exclude {
+  }
+}
+characteristic {
+  code {
+    text {
+      value: "owner"
+    }
+  }
+  value {
+    codeable_concept {
+      text {
+        value: "John Smith"
+      }
+    }
+  }
+  exclude {
+  }
+}

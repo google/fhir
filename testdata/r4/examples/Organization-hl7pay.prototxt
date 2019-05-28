@@ -1,0 +1,14 @@
+id {
+  value: "hl7pay"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n      <p>HL7 Payer Network</p>\n    \n    </div>"
+  }
+}
+name {
+  value: "HL7 Payer network"
+}

@@ -1,0 +1,158 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Brian MRI results discussion</div>"
+  }
+}
+status {
+  value: BOOKED
+}
+service_category {
+  coding {
+    system {
+      value: "http://example.org/service-category"
+    }
+    code {
+      value: "gp"
+    }
+    display {
+      value: "General Practice"
+    }
+  }
+}
+service_type {
+  coding {
+    code {
+      value: "52"
+    }
+    display {
+      value: "General Discussion"
+    }
+  }
+}
+specialty {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "394814009"
+    }
+    display {
+      value: "General practice"
+    }
+  }
+}
+appointment_type {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/v2-0276"
+    }
+    code {
+      value: "FOLLOWUP"
+    }
+    display {
+      value: "A follow up visit from a previous appointment"
+    }
+  }
+}
+reason_reference {
+  condition_id {
+    value: "example"
+  }
+  display {
+    value: "Severe burn of left ear"
+  }
+}
+priority {
+  value: 5
+}
+description {
+  value: "Discussion on the results of your recent MRI"
+}
+start {
+  value_us: 1386666000000000
+  timezone: "Z"
+  precision: SECOND
+}
+end {
+  value_us: 1386673200000000
+  timezone: "Z"
+  precision: SECOND
+}
+created {
+  value_us: 1381323600000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+comment {
+  value: "Further expand on the results of the MRI and determine the next actions that may be appropriate."
+}
+based_on {
+  service_request_id {
+    value: "myringotomy"
+  }
+}
+participant {
+  actor {
+    patient_id {
+      value: "example"
+    }
+    display {
+      value: "Peter James Chalmers"
+    }
+  }
+  required {
+    value: REQUIRED
+  }
+  status {
+    value: ACCEPTED
+  }
+}
+participant {
+  type {
+    coding {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+      }
+      code {
+        value: "ATND"
+      }
+    }
+  }
+  actor {
+    practitioner_id {
+      value: "example"
+    }
+    display {
+      value: "Dr Adam Careful"
+    }
+  }
+  required {
+    value: REQUIRED
+  }
+  status {
+    value: ACCEPTED
+  }
+}
+participant {
+  actor {
+    location_id {
+      value: "1"
+    }
+    display {
+      value: "South Wing, second floor"
+    }
+  }
+  required {
+    value: REQUIRED
+  }
+  status {
+    value: ACCEPTED
+  }
+}
