@@ -2084,7 +2084,8 @@ message UsCoreObservationresults {
       proto.Period period = 2;
     }
   }
-  Effective effective = 16;
+  Effective effective = 16 [(.google.fhir.proto.fhir_path_constraint) =
+                                "($this as dateTime).toString().length() >= 8"];
 
   // Date/Time this was made available
   proto.Instant issued = 17;
@@ -2115,7 +2116,12 @@ message UsCoreObservationresults {
       proto.Period period = 11;
     }
   }
-  Value value = 19;
+  Value value = 19 [
+    (.google.fhir.proto.fhir_path_constraint) =
+        "valueCodeableConcept.coding.system.empty() or valueCodeableConcept.coding.system = 'http://snomed.info/sct'",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "valueQuantity.system.empty() or valueQuantity.system = 'http://unitsofmeasure.org'"
+  ];
 
   // Why the result is missing
   proto.CodeableConcept data_absent_reason = 20;

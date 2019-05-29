@@ -373,6 +373,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "The items the orderer requested"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/procedurerequest-geneticsItem"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 nested_type {

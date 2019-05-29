@@ -321,6 +321,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "DNA sequence variant"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -332,6 +333,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "DNA sequence variant ID"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNAVariantId"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -343,6 +345,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "DNA sequence variant type"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantType"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -354,6 +357,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "Amino acid change"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -365,6 +369,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "Amino Acid Change Type"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeType"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -376,6 +381,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "HGNC gene symbol"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -387,6 +393,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "DNA region name"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNARegionName"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -398,6 +405,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "Name of allele"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -409,6 +417,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "The level of occurrence of a single DNA sequence variant within a set of chromosomes: Heteroplasmic / Homoplasmic / Homozygous / Heterozygous / Hemizygous"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicState"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -420,6 +429,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "Allele frequency"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicFrequency"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -431,6 +441,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "Copy number variation"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsCopyNumberEvent"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -442,6 +453,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "Genomic source class"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -453,6 +465,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "Phase set identifier (UUID/OID)"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -464,6 +477,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "Sequence"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsSequence"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -475,6 +489,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "Clinical interpretations for variant"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsInterpretation"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 nested_type {

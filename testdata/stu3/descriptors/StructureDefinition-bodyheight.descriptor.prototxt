@@ -173,6 +173,7 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Often just a dateTime for Vital Signs"
+    [google.fhir.proto.fhir_path_constraint]: "($this as dateTime).toString().length() >= 8"
   }
 }
 field {

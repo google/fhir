@@ -134,8 +134,11 @@ message Bmi {
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "($this as dateTime).toString().length() >= 8"
+  ];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -386,8 +389,11 @@ message Bodyheight {
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "($this as dateTime).toString().length() >= 8"
+  ];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -638,8 +644,11 @@ message Bodylength {
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "($this as dateTime).toString().length() >= 8"
+  ];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -890,8 +899,11 @@ message Bodytemp {
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "($this as dateTime).toString().length() >= 8"
+  ];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -1142,8 +1154,11 @@ message Bodyweight {
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "($this as dateTime).toString().length() >= 8"
+  ];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -1394,8 +1409,11 @@ message Bp {
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "($this as dateTime).toString().length() >= 8"
+  ];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -2442,19 +2460,25 @@ message DiagnosticreportGenetics {
   // AssessedCondition
   repeated Reference assessed_condition = 26 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition"
+        "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // FamilyHistory
   repeated Reference family_member_history = 27 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory"
+        "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // Analysis
   repeated DiagnosticReportAnalysis analysis = 28 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis"
+        "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 }
 
@@ -3012,19 +3036,25 @@ message FamilymemberhistoryGenetic {
   // Extension
   repeated FamilyMemberHistoryParent parent = 27 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-parent"
+        "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-parent",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // Extension
   repeated FamilyMemberHistorySibling sibling = 28 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-sibling"
+        "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-sibling",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // Extension
   repeated Reference observation = 29 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation"
+        "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 }
 
@@ -3354,8 +3384,11 @@ message Headcircum {
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "($this as dateTime).toString().length() >= 8"
+  ];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -3606,8 +3639,11 @@ message Heartrate {
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "($this as dateTime).toString().length() >= 8"
+  ];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -3909,26 +3945,34 @@ message Hlaresult {
   // Allele Database
   CodeableConcept allele_database = 26 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-allele-database"
+        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-allele-database",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // Glstring
   DiagnosticReportGlstring glstring = 27 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-glstring"
+        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-glstring",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // Haploid
   repeated DiagnosticReportHaploid haploid = 28 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-haploid"
+        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-haploid",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // The platform, methodology and software applied at the time of the
   // genotyping
   CodeableConcept method = 29 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-method"
+        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-method",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 }
 
@@ -4644,48 +4688,65 @@ message ObservationGenetics {
   // DNA sequence variant
   CodeableConcept d_n_a_sequence_variant_name = 30 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName"
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // DNA sequence variant ID
   CodeableConcept d_n_a_variant_id = 31 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNAVariantId"
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNAVariantId",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // DNA sequence variant type
   CodeableConcept d_n_a_sequence_variant_type = 32 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantType"
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantType",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // Amino acid change
   CodeableConcept amino_acid_change_name = 33 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName"
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // Amino Acid Change Type
   CodeableConcept amino_acid_change_type = 34 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeType"
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeType",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // HGNC gene symbol
-  CodeableConcept gene_symbol = 35
-      [(.google.fhir.proto.fhir_inlined_extension_url) =
-           "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"];
+  CodeableConcept gene_symbol = 35 [
+    (.google.fhir.proto.fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
 
   // DNA region name
   String d_n_a_region_name = 36 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNARegionName"
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNARegionName",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // Name of allele
   CodeableConcept allele_name = 37 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName"
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // The level of occurrence of a single DNA sequence variant within a set of
@@ -4693,43 +4754,57 @@ message ObservationGenetics {
   // Hemizygous
   CodeableConcept allelic_state = 38 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicState"
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicState",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // Allele frequency
   Decimal allelic_frequency = 39 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicFrequency"
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicFrequency",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // Copy number variation
   CodeableConcept copy_number_event = 40 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsCopyNumberEvent"
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsCopyNumberEvent",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // Genomic source class
   CodeableConcept genomic_source_class = 41 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // Phase set identifier (UUID/OID)
   Uri phase_set = 42 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet"
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // Sequence
   repeated Reference sequence = 43 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsSequence"
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsSequence",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 
   // Clinical interpretations for variant
   Reference interpretation_slice = 44 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/observation-geneticsInterpretation"
+        "http://hl7.org/fhir/StructureDefinition/observation-geneticsInterpretation",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 }
 
@@ -4840,8 +4915,11 @@ message Oxygensat {
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "($this as dateTime).toString().length() >= 8"
+  ];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -5169,7 +5247,9 @@ message ProcedurerequestGenetics {
   // The items the orderer requested
   repeated DiagnosticReportItem item = 35 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/procedurerequest-geneticsItem"
+        "http://hl7.org/fhir/StructureDefinition/procedurerequest-geneticsItem",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 }
 
@@ -5280,8 +5360,11 @@ message Resprate {
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "($this as dateTime).toString().length() >= 8"
+  ];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -6289,8 +6372,11 @@ message Vitalsigns {
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "($this as dateTime).toString().length() >= 8"
+  ];
 
   // Date/Time this was made available
   Instant issued = 17;
@@ -6541,8 +6627,11 @@ message Vitalspanel {
       Period period = 2;
     }
   }
-  Effective effective = 16
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  Effective effective = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "($this as dateTime).toString().length() >= 8"
+  ];
 
   // Date/Time this was made available
   Instant issued = 17;

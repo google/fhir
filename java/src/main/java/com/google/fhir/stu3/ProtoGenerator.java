@@ -1088,6 +1088,8 @@ public class ProtoGenerator {
       options.setExtension(Annotations.fieldDescription, element.getShort().getValue());
     }
 
+    addFhirPathConstraints(element, options);
+
     // Is this field required?
     if (element.getMin().getValue() == 1) {
       options.setExtension(
@@ -1178,7 +1180,19 @@ public class ProtoGenerator {
       }
     }
 
-    // Add any FHIRPath constraints from the definition.
+    return buildFieldInternal(
+            jsonFieldNameString,
+            fieldType.type,
+            fieldType.packageName,
+            nextTag,
+            fieldSize,
+            options.build())
+        .build();
+  }
+
+  // Adds any FHIRPath constraints from the definition.
+  private static void addFhirPathConstraints(
+      ElementDefinition element, FieldOptions.Builder options) {
     List<String> expressions =
         element.getConstraintList().stream()
             .filter(constraint -> constraint.hasExpression())
@@ -1189,15 +1203,6 @@ public class ProtoGenerator {
     if (!expressions.isEmpty()) {
       options.setExtension(Annotations.fhirPathConstraint, expressions);
     }
-
-    return buildFieldInternal(
-            jsonFieldNameString,
-            fieldType.type,
-            fieldType.packageName,
-            nextTag,
-            fieldSize,
-            options.build())
-        .build();
   }
 
   private FieldDescriptorProto.Label getFieldSize(ElementDefinition element) {

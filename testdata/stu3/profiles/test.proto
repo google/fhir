@@ -399,7 +399,9 @@ message TestPatient {
   proto.Decimal dec_ext = 26 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://test/url/base/SimpleDecimalExt"
+        "http://test/url/base/SimpleDecimalExt",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
   ];
 }
 
@@ -716,16 +718,22 @@ message TestObservation {
     repeated ReferenceRange reference_range = 8;
 
     //
-    proto.Decimal on_nested = 9
-        [(.google.fhir.proto.fhir_inlined_extension_url) =
-             "http://test/url/base/SimpleDecimalExt"];
+    proto.Decimal on_nested = 9 [
+      (.google.fhir.proto.fhir_inlined_extension_url) =
+          "http://test/url/base/SimpleDecimalExt",
+      (.google.fhir.proto.fhir_path_constraint) =
+          "extension.exists() != value.exists()"
+    ];
   }
   repeated Component component = 29;
 
   //
-  ComplexExt my_complex_extension = 30
-      [(.google.fhir.proto.fhir_inlined_extension_url) =
-           "http://test/url/base/ComplexExt"];
+  ComplexExt my_complex_extension = 30 [
+    (.google.fhir.proto.fhir_inlined_extension_url) =
+        "http://test/url/base/ComplexExt",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
 }
 
 // Auto-generated from StructureDefinition for TestObservationLvl2.
@@ -1047,20 +1055,30 @@ message TestObservationLvl2 {
     repeated ReferenceRange reference_range = 8;
 
     //
-    proto.Decimal on_nested = 9
-        [(.google.fhir.proto.fhir_inlined_extension_url) =
-             "http://test/url/base/SimpleDecimalExt"];
+    proto.Decimal on_nested = 9 [
+      (.google.fhir.proto.fhir_inlined_extension_url) =
+          "http://test/url/base/SimpleDecimalExt",
+      (.google.fhir.proto.fhir_path_constraint) =
+          "extension.exists() != value.exists()"
+    ];
   }
   repeated Component component = 29;
 
   //
-  ComplexExt my_complex_extension = 30
-      [(.google.fhir.proto.fhir_inlined_extension_url) =
-           "http://test/url/base/ComplexExt"];
+  ComplexExt my_complex_extension = 30 [
+    (.google.fhir.proto.fhir_inlined_extension_url) =
+        "http://test/url/base/ComplexExt",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
 
   //
-  proto.Decimal new_ext = 31 [(.google.fhir.proto.fhir_inlined_extension_url) =
-                                  "http://test/url/base/SimpleDecimalExt"];
+  proto.Decimal new_ext = 31 [
+    (.google.fhir.proto.fhir_inlined_extension_url) =
+        "http://test/url/base/SimpleDecimalExt",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
 }
 
 message ContainedResource {
