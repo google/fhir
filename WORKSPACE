@@ -30,6 +30,15 @@ http_archive(
     urls = ["https://github.com/bazelbuild/rules_python/archive/8b5d0683a7d878b28fffe464779c8a53659fc645.tar.gz"],
 )
 
+# Used for the FHIRPath parser runtime.
+http_archive(
+    name = "antlr_cc_runtime",
+    url = "https://www.antlr.org/download/antlr4-cpp-runtime-4.7.1-source.zip",
+    sha256 = "23bebc0411052a260f43ae097aa1ab39869eb6b6aa558b046c367a4ea33d1ccc",
+    strip_prefix = "runtime/src",
+    build_file = "//bazel:antlr.BUILD",
+)
+
 load("@io_bazel_rules_python//python:pip.bzl", "pip_repositories")
 
 pip_repositories()
@@ -57,6 +66,7 @@ http_archive(
     strip_prefix = "migration-tooling-0f25a7e83f2f4b776fad9c8cb929ec9fa7cac87f",
 )
 
+# TODO: Update this to the newer, maintained rules_jvm_external as done below.
 load("@transitive_maven_jar_http//transitive_maven_jar:transitive_maven_jar.bzl", "transitive_maven_jar")
 
 transitive_maven_jar(
@@ -80,6 +90,23 @@ transitive_maven_jar(
 
 load("@dependencies//:generate_workspace.bzl", "generated_maven_jars")
 generated_maven_jars()
+
+http_archive(
+    name = "rules_jvm_external",
+    strip_prefix = "rules_jvm_external-2.1",
+    sha256 = "515ee5265387b88e4547b34a57393d2bcb1101314bcc5360ec7a482792556f42",
+    url = "https://github.com/bazelbuild/rules_jvm_external/archive/2.1.zip",
+)
+
+load("@rules_jvm_external//:defs.bzl", "maven_install")
+
+maven_install(
+    artifacts = ["org.antlr:antlr4:jar:4.7.1"],
+    repositories = [
+        "https://maven.google.com",
+        "https://repo1.maven.org/maven2",
+    ],
+)
 
 maven_jar(
     name = "guava_maven",
