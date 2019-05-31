@@ -2955,16 +2955,16 @@ message FamilymemberhistoryGenetic {
   Born born = 19;
 
   // (approximate) age
-  message Age {
+  message AgeType {
     option (.google.fhir.proto.is_choice_type) = true;
 
     oneof age {
-      .google.fhir.stu3.proto.Age age_value = 1 [json_name = "age"];
+      Age age_value = 1 [json_name = "age"];
       Range range = 2;
       String string_value = 3 [json_name = "string"];
     }
   }
-  Age age = 20;
+  AgeType age = 20;
 
   // Age is estimated?
   Boolean estimated_age = 21;

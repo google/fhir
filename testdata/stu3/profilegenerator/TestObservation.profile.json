@@ -19,7 +19,11 @@
   "fhirVersion": "3.0.1",
   "kind": "resource",
   "abstract": false,
-  "contextType": "resource",
+  "context": [
+    {
+      "type": "element"
+    }
+  ],
   "type": "Observation",
   "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Observation",
   "derivation": "constraint",
@@ -211,9 +215,7 @@
           ],
           "strength": "extensible",
           "description": "A human language.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/languages"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/languages"
         }
       },
       {
@@ -386,31 +388,45 @@
         "type": [
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/CarePlan"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/CarePlan"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/DeviceRequest"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/DeviceRequest"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/MedicationRequest"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/MedicationRequest"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/NutritionOrder"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/NutritionOrder"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+            ]
           }
         ],
         "isSummary": true,
@@ -460,9 +476,7 @@
           ],
           "strength": "required",
           "description": "Codes providing the status of an observation.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/observation-status"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/observation-status"
         },
         "mapping": [
           {
@@ -510,9 +524,7 @@
           ],
           "strength": "preferred",
           "description": "Codes for high level observation categories.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/observation-category"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/observation-category"
         },
         "mapping": [
           {
@@ -551,9 +563,7 @@
           ],
           "strength": "example",
           "description": "Codes identifying names of simple observations.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/observation-codes"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/observation-codes"
         },
         "mapping": [
           {
@@ -594,7 +604,9 @@
         "type": [
           {
             "code": "Reference",
-            "targetProfile": "http://test/url/base/TestPatient"
+            "targetProfile": [
+              "http://test/url/base/TestPatient"
+            ]
           }
         ],
         "isSummary": true,
@@ -632,11 +644,15 @@
         "type": [
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/Encounter"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Encounter"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+            ]
           }
         ],
         "mapping": [
@@ -735,19 +751,27 @@
         "type": [
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/Practitioner"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Practitioner"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/Organization"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Organization"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/Patient"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Patient"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+            ]
           }
         ],
         "isSummary": true,
@@ -840,9 +864,7 @@
           ],
           "strength": "extensible",
           "description": "Codes specifying why the result (Observation.value[x]) is missing.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/observation-valueabsentreason"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/observation-valueabsentreason"
         },
         "mapping": [
           {
@@ -884,9 +906,7 @@
           ],
           "strength": "extensible",
           "description": "Codes identifying interpretations of observations.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/observation-interpretation"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/observation-interpretation"
         },
         "mapping": [
           {
@@ -957,9 +977,7 @@
           ],
           "strength": "example",
           "description": "Codes describing anatomical locations. May include laterality.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/body-site"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/body-site"
         },
         "mapping": [
           {
@@ -1003,9 +1021,7 @@
           ],
           "strength": "example",
           "description": "Methods for simple observations.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/observation-methods"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/observation-methods"
         },
         "mapping": [
           {
@@ -1029,7 +1045,9 @@
         "type": [
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/Specimen"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Specimen"
+            ]
           }
         ],
         "mapping": [
@@ -1062,11 +1080,15 @@
         "type": [
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/Device"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Device"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+            ]
           }
         ],
         "mapping": [
@@ -1228,7 +1250,9 @@
         "type": [
           {
             "code": "Quantity",
-            "profile": "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
+            "profile": [
+              "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
+            ]
           }
         ],
         "condition": [
@@ -1255,7 +1279,9 @@
         "type": [
           {
             "code": "Quantity",
-            "profile": "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
+            "profile": [
+              "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
+            ]
           }
         ],
         "condition": [
@@ -1295,9 +1321,7 @@
           ],
           "strength": "extensible",
           "description": "Code for the meaning of a reference range.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/referencerange-meaning"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/referencerange-meaning"
         },
         "mapping": [
           {
@@ -1337,9 +1361,7 @@
           ],
           "strength": "example",
           "description": "Codes identifying the population the reference range applies to.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/referencerange-appliesto"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/referencerange-appliesto"
         },
         "mapping": [
           {
@@ -1546,9 +1568,7 @@
           ],
           "strength": "required",
           "description": "Codes specifying how two observations are related.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/observation-relationshiptypes"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/observation-relationshiptypes"
         },
         "mapping": [
           {
@@ -1571,15 +1591,21 @@
         "type": [
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/Observation"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Observation"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/Sequence"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Sequence"
+            ]
           }
         ],
         "mapping": [
@@ -1736,9 +1762,7 @@
           ],
           "strength": "example",
           "description": "Codes identifying names of simple observations.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/observation-codes"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/observation-codes"
         },
         "mapping": [
           {
@@ -1846,9 +1870,7 @@
           ],
           "strength": "extensible",
           "description": "Codes specifying why the result (Observation.value[x]) is missing.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/observation-valueabsentreason"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/observation-valueabsentreason"
         },
         "mapping": [
           {
@@ -1887,9 +1909,7 @@
           ],
           "strength": "extensible",
           "description": "Codes identifying interpretations of observations.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/observation-interpretation"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/observation-interpretation"
         },
         "mapping": [
           {
@@ -2179,9 +2199,7 @@
         "isSummary": true,
         "binding": {
           "strength": "required",
-          "valueSetReference": {
-            "reference": "http://loinc.org"
-          }
+          "valueSet": "http://loinc.org"
         },
         "mapping": [
           {
@@ -2284,7 +2302,9 @@
         "type": [
           {
             "code": "Reference",
-            "targetProfile": "http://test/url/base/TestPatient"
+            "targetProfile": [
+              "http://test/url/base/TestPatient"
+            ]
           }
         ]
       },
@@ -2356,9 +2376,7 @@
         "path": "Observation.code.coding.code",
         "binding": {
           "strength": "required",
-          "valueSetReference": {
-            "reference": "http://loinc.org"
-          }
+          "valueSet": "http://loinc.org"
         }
       },
       {

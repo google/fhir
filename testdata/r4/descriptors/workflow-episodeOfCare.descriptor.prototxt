@@ -1,4 +1,4 @@
-name: "EpisodeOfCare"
+name: "EpisodeOfCareExtension"
 field {
   name: "id"
   number: 1

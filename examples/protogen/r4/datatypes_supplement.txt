@@ -1,0 +1,1064 @@
+
+// Optional Extensions Element. See
+// http://hl7.org/fhir/StructureDefinition/Extension
+message Extension {
+  option (.google.fhir.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+
+  // Unique id for inter-element referencing
+  String id = 1;
+
+  // identifies the meaning of the extension
+  Uri url = 2
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
+
+  // Value of extension
+  message Value {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof value {
+      Base64Binary base64_binary = 1;
+      Boolean boolean = 2;
+      Canonical canonical = 3;
+      Code code = 4;
+      Date date = 5;
+      DateTime date_time = 6;
+      Decimal decimal = 7;
+      Id id = 8;
+      Instant instant = 9;
+      Integer integer = 10;
+      Markdown markdown = 11;
+      Oid oid = 12;
+      PositiveInt positive_int = 13;
+      String string_value = 14 [json_name = "string"];
+      Time time = 15;
+      UnsignedInt unsigned_int = 16;
+      Uri uri = 17;
+      Url url = 18;
+      Uuid uuid = 19;
+      Address address = 20;
+      Age age = 21;
+      Annotation annotation = 22;
+      Attachment attachment = 23;
+      CodeableConcept codeable_concept = 24;
+      Coding coding = 25;
+      ContactPoint contact_point = 26;
+      Count count = 27;
+      Distance distance = 28;
+      Duration duration = 29;
+      HumanName human_name = 30;
+      Identifier identifier = 31;
+      Money money = 32;
+      Period period = 33;
+      Quantity quantity = 34;
+      Range range = 35;
+      Ratio ratio = 36;
+      Reference reference = 37;
+      SampledData sampled_data = 38;
+      Signature signature = 39;
+      Timing timing = 40;
+      ContactDetail contact_detail = 41;
+      Contributor contributor = 42;
+      DataRequirement data_requirement = 43;
+      Expression expression = 44;
+      ParameterDefinition parameter_definition = 45;
+      RelatedArtifact related_artifact = 46;
+      TriggerDefinition trigger_definition = 47;
+      UsageContext usage_context = 48;
+      Dosage dosage = 49;
+    }
+  }
+  Value value = 4;
+}
+
+// TODO: autogenerate this.
+// A reference from one resource to another
+// See https://www.hl7.org/fhir/datatypes.html#Reference
+message Reference {
+  option (.google.fhir.proto.structure_definition_kind) =
+      KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_reference_type) = "Resource";
+
+  // xml:id (or equivalent in JSON)
+  String id = 1;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 2;
+
+  Uri type = 3;
+
+  // Literal reference, Relative, internal or absolute URL
+  oneof reference {
+    option (.google.fhir.proto.fhir_oneof_is_optional) = true;
+
+    // Absolute URIs are untyped.
+    String uri = 4 [json_name = "reference"];
+
+    // Fragments (internal references) are untyped, and represented here
+    // without the leading '#'.
+    String fragment = 5;
+
+    // Typed relative urls are represented here.
+    ReferenceId resource_id = 6 [(.google.fhir.proto.referenced_fhir_type) = "Resource"];
+    ReferenceId account_id = 7 [(.google.fhir.proto.referenced_fhir_type) = "Account"];
+    ReferenceId activity_definition_id = 8 [(.google.fhir.proto.referenced_fhir_type) = "ActivityDefinition"];
+    ReferenceId adverse_event_id = 9 [(.google.fhir.proto.referenced_fhir_type) = "AdverseEvent"];
+    ReferenceId allergy_intolerance_id = 10 [(.google.fhir.proto.referenced_fhir_type) = "AllergyIntolerance"];
+    ReferenceId appointment_id = 11 [(.google.fhir.proto.referenced_fhir_type) = "Appointment"];
+    ReferenceId appointment_response_id = 12 [(.google.fhir.proto.referenced_fhir_type) = "AppointmentResponse"];
+    ReferenceId audit_event_id = 13 [(.google.fhir.proto.referenced_fhir_type) = "AuditEvent"];
+    ReferenceId basic_id = 14 [(.google.fhir.proto.referenced_fhir_type) = "Basic"];
+    ReferenceId binary_id = 15 [(.google.fhir.proto.referenced_fhir_type) = "Binary"];
+    ReferenceId biologically_derived_product_id = 16 [(.google.fhir.proto.referenced_fhir_type) = "BiologicallyDerivedProduct"];
+    ReferenceId body_structure_id = 17 [(.google.fhir.proto.referenced_fhir_type) = "BodyStructure"];
+    ReferenceId bundle_id = 18 [(.google.fhir.proto.referenced_fhir_type) = "Bundle"];
+    ReferenceId capability_statement_id = 19 [(.google.fhir.proto.referenced_fhir_type) = "CapabilityStatement"];
+    ReferenceId care_plan_id = 20 [(.google.fhir.proto.referenced_fhir_type) = "CarePlan"];
+    ReferenceId care_team_id = 21 [(.google.fhir.proto.referenced_fhir_type) = "CareTeam"];
+    ReferenceId catalog_entry_id = 22 [(.google.fhir.proto.referenced_fhir_type) = "CatalogEntry"];
+    ReferenceId charge_item_id = 23 [(.google.fhir.proto.referenced_fhir_type) = "ChargeItem"];
+    ReferenceId charge_item_definition_id = 24 [(.google.fhir.proto.referenced_fhir_type) = "ChargeItemDefinition"];
+    ReferenceId claim_id = 25 [(.google.fhir.proto.referenced_fhir_type) = "Claim"];
+    ReferenceId claim_response_id = 26 [(.google.fhir.proto.referenced_fhir_type) = "ClaimResponse"];
+    ReferenceId clinical_impression_id = 27 [(.google.fhir.proto.referenced_fhir_type) = "ClinicalImpression"];
+    ReferenceId code_system_id = 28 [(.google.fhir.proto.referenced_fhir_type) = "CodeSystem"];
+    ReferenceId communication_id = 29 [(.google.fhir.proto.referenced_fhir_type) = "Communication"];
+    ReferenceId communication_request_id = 30 [(.google.fhir.proto.referenced_fhir_type) = "CommunicationRequest"];
+    ReferenceId compartment_definition_id = 31 [(.google.fhir.proto.referenced_fhir_type) = "CompartmentDefinition"];
+    ReferenceId composition_id = 32 [(.google.fhir.proto.referenced_fhir_type) = "Composition"];
+    ReferenceId concept_map_id = 33 [(.google.fhir.proto.referenced_fhir_type) = "ConceptMap"];
+    ReferenceId condition_id = 34 [(.google.fhir.proto.referenced_fhir_type) = "Condition"];
+    ReferenceId consent_id = 35 [(.google.fhir.proto.referenced_fhir_type) = "Consent"];
+    ReferenceId contract_id = 36 [(.google.fhir.proto.referenced_fhir_type) = "Contract"];
+    ReferenceId coverage_id = 37 [(.google.fhir.proto.referenced_fhir_type) = "Coverage"];
+    ReferenceId coverage_eligibility_request_id = 38 [(.google.fhir.proto.referenced_fhir_type) = "CoverageEligibilityRequest"];
+    ReferenceId coverage_eligibility_response_id = 39 [(.google.fhir.proto.referenced_fhir_type) = "CoverageEligibilityResponse"];
+    ReferenceId detected_issue_id = 40 [(.google.fhir.proto.referenced_fhir_type) = "DetectedIssue"];
+    ReferenceId device_id = 41 [(.google.fhir.proto.referenced_fhir_type) = "Device"];
+    ReferenceId device_definition_id = 42 [(.google.fhir.proto.referenced_fhir_type) = "DeviceDefinition"];
+    ReferenceId device_metric_id = 43 [(.google.fhir.proto.referenced_fhir_type) = "DeviceMetric"];
+    ReferenceId device_request_id = 44 [(.google.fhir.proto.referenced_fhir_type) = "DeviceRequest"];
+    ReferenceId device_use_statement_id = 45 [(.google.fhir.proto.referenced_fhir_type) = "DeviceUseStatement"];
+    ReferenceId diagnostic_report_id = 46 [(.google.fhir.proto.referenced_fhir_type) = "DiagnosticReport"];
+    ReferenceId document_manifest_id = 47 [(.google.fhir.proto.referenced_fhir_type) = "DocumentManifest"];
+    ReferenceId document_reference_id = 48 [(.google.fhir.proto.referenced_fhir_type) = "DocumentReference"];
+    ReferenceId domain_resource_id = 49 [(.google.fhir.proto.referenced_fhir_type) = "DomainResource"];
+    ReferenceId effect_evidence_synthesis_id = 50 [(.google.fhir.proto.referenced_fhir_type) = "EffectEvidenceSynthesis"];
+    ReferenceId encounter_id = 51 [(.google.fhir.proto.referenced_fhir_type) = "Encounter"];
+    ReferenceId endpoint_id = 52 [(.google.fhir.proto.referenced_fhir_type) = "Endpoint"];
+    ReferenceId enrollment_request_id = 53 [(.google.fhir.proto.referenced_fhir_type) = "EnrollmentRequest"];
+    ReferenceId enrollment_response_id = 54 [(.google.fhir.proto.referenced_fhir_type) = "EnrollmentResponse"];
+    ReferenceId episode_of_care_id = 55 [(.google.fhir.proto.referenced_fhir_type) = "EpisodeOfCare"];
+    ReferenceId event_definition_id = 56 [(.google.fhir.proto.referenced_fhir_type) = "EventDefinition"];
+    ReferenceId evidence_id = 57 [(.google.fhir.proto.referenced_fhir_type) = "Evidence"];
+    ReferenceId evidence_variable_id = 58 [(.google.fhir.proto.referenced_fhir_type) = "EvidenceVariable"];
+    ReferenceId example_scenario_id = 59 [(.google.fhir.proto.referenced_fhir_type) = "ExampleScenario"];
+    ReferenceId explanation_of_benefit_id = 60 [(.google.fhir.proto.referenced_fhir_type) = "ExplanationOfBenefit"];
+    ReferenceId family_member_history_id = 61 [(.google.fhir.proto.referenced_fhir_type) = "FamilyMemberHistory"];
+    ReferenceId flag_id = 62 [(.google.fhir.proto.referenced_fhir_type) = "Flag"];
+    ReferenceId goal_id = 63 [(.google.fhir.proto.referenced_fhir_type) = "Goal"];
+    ReferenceId graph_definition_id = 64 [(.google.fhir.proto.referenced_fhir_type) = "GraphDefinition"];
+    ReferenceId group_id = 65 [(.google.fhir.proto.referenced_fhir_type) = "Group"];
+    ReferenceId guidance_response_id = 66 [(.google.fhir.proto.referenced_fhir_type) = "GuidanceResponse"];
+    ReferenceId healthcare_service_id = 67 [(.google.fhir.proto.referenced_fhir_type) = "HealthcareService"];
+    ReferenceId imaging_study_id = 68 [(.google.fhir.proto.referenced_fhir_type) = "ImagingStudy"];
+    ReferenceId immunization_id = 69 [(.google.fhir.proto.referenced_fhir_type) = "Immunization"];
+    ReferenceId immunization_evaluation_id = 70 [(.google.fhir.proto.referenced_fhir_type) = "ImmunizationEvaluation"];
+    ReferenceId immunization_recommendation_id = 71 [(.google.fhir.proto.referenced_fhir_type) = "ImmunizationRecommendation"];
+    ReferenceId implementation_guide_id = 72 [(.google.fhir.proto.referenced_fhir_type) = "ImplementationGuide"];
+    ReferenceId insurance_plan_id = 73 [(.google.fhir.proto.referenced_fhir_type) = "InsurancePlan"];
+    ReferenceId invoice_id = 74 [(.google.fhir.proto.referenced_fhir_type) = "Invoice"];
+    ReferenceId library_id = 75 [(.google.fhir.proto.referenced_fhir_type) = "Library"];
+    ReferenceId linkage_id = 76 [(.google.fhir.proto.referenced_fhir_type) = "Linkage"];
+    ReferenceId list_id = 77 [(.google.fhir.proto.referenced_fhir_type) = "List"];
+    ReferenceId location_id = 78 [(.google.fhir.proto.referenced_fhir_type) = "Location"];
+    ReferenceId measure_id = 79 [(.google.fhir.proto.referenced_fhir_type) = "Measure"];
+    ReferenceId measure_report_id = 80 [(.google.fhir.proto.referenced_fhir_type) = "MeasureReport"];
+    ReferenceId media_id = 81 [(.google.fhir.proto.referenced_fhir_type) = "Media"];
+    ReferenceId medication_id = 82 [(.google.fhir.proto.referenced_fhir_type) = "Medication"];
+    ReferenceId medication_administration_id = 83 [(.google.fhir.proto.referenced_fhir_type) = "MedicationAdministration"];
+    ReferenceId medication_dispense_id = 84 [(.google.fhir.proto.referenced_fhir_type) = "MedicationDispense"];
+    ReferenceId medication_knowledge_id = 85 [(.google.fhir.proto.referenced_fhir_type) = "MedicationKnowledge"];
+    ReferenceId medication_request_id = 86 [(.google.fhir.proto.referenced_fhir_type) = "MedicationRequest"];
+    ReferenceId medication_statement_id = 87 [(.google.fhir.proto.referenced_fhir_type) = "MedicationStatement"];
+    ReferenceId medicinal_product_id = 88 [(.google.fhir.proto.referenced_fhir_type) = "MedicinalProduct"];
+    ReferenceId medicinal_product_authorization_id = 89 [(.google.fhir.proto.referenced_fhir_type) = "MedicinalProductAuthorization"];
+    ReferenceId medicinal_product_contraindication_id = 90 [(.google.fhir.proto.referenced_fhir_type) = "MedicinalProductContraindication"];
+    ReferenceId medicinal_product_indication_id = 91 [(.google.fhir.proto.referenced_fhir_type) = "MedicinalProductIndication"];
+    ReferenceId medicinal_product_ingredient_id = 92 [(.google.fhir.proto.referenced_fhir_type) = "MedicinalProductIngredient"];
+    ReferenceId medicinal_product_interaction_id = 93 [(.google.fhir.proto.referenced_fhir_type) = "MedicinalProductInteraction"];
+    ReferenceId medicinal_product_manufactured_id = 94 [(.google.fhir.proto.referenced_fhir_type) = "MedicinalProductManufactured"];
+    ReferenceId medicinal_product_packaged_id = 95 [(.google.fhir.proto.referenced_fhir_type) = "MedicinalProductPackaged"];
+    ReferenceId medicinal_product_pharmaceutical_id = 96 [(.google.fhir.proto.referenced_fhir_type) = "MedicinalProductPharmaceutical"];
+    ReferenceId medicinal_product_undesirable_effect_id = 97 [(.google.fhir.proto.referenced_fhir_type) = "MedicinalProductUndesirableEffect"];
+    ReferenceId message_definition_id = 98 [(.google.fhir.proto.referenced_fhir_type) = "MessageDefinition"];
+    ReferenceId message_header_id = 99 [(.google.fhir.proto.referenced_fhir_type) = "MessageHeader"];
+    ReferenceId molecular_sequence_id = 100 [(.google.fhir.proto.referenced_fhir_type) = "MolecularSequence"];
+    ReferenceId naming_system_id = 101 [(.google.fhir.proto.referenced_fhir_type) = "NamingSystem"];
+    ReferenceId nutrition_order_id = 102 [(.google.fhir.proto.referenced_fhir_type) = "NutritionOrder"];
+    ReferenceId observation_id = 103 [(.google.fhir.proto.referenced_fhir_type) = "Observation"];
+    ReferenceId observation_definition_id = 104 [(.google.fhir.proto.referenced_fhir_type) = "ObservationDefinition"];
+    ReferenceId operation_definition_id = 105 [(.google.fhir.proto.referenced_fhir_type) = "OperationDefinition"];
+    ReferenceId operation_outcome_id = 106 [(.google.fhir.proto.referenced_fhir_type) = "OperationOutcome"];
+    ReferenceId organization_id = 107 [(.google.fhir.proto.referenced_fhir_type) = "Organization"];
+    ReferenceId organization_affiliation_id = 108 [(.google.fhir.proto.referenced_fhir_type) = "OrganizationAffiliation"];
+    ReferenceId parameters_id = 109 [(.google.fhir.proto.referenced_fhir_type) = "Parameters"];
+    ReferenceId patient_id = 110 [(.google.fhir.proto.referenced_fhir_type) = "Patient"];
+    ReferenceId payment_notice_id = 111 [(.google.fhir.proto.referenced_fhir_type) = "PaymentNotice"];
+    ReferenceId payment_reconciliation_id = 112 [(.google.fhir.proto.referenced_fhir_type) = "PaymentReconciliation"];
+    ReferenceId person_id = 113 [(.google.fhir.proto.referenced_fhir_type) = "Person"];
+    ReferenceId plan_definition_id = 114 [(.google.fhir.proto.referenced_fhir_type) = "PlanDefinition"];
+    ReferenceId practitioner_id = 115 [(.google.fhir.proto.referenced_fhir_type) = "Practitioner"];
+    ReferenceId practitioner_role_id = 116 [(.google.fhir.proto.referenced_fhir_type) = "PractitionerRole"];
+    ReferenceId procedure_id = 117 [(.google.fhir.proto.referenced_fhir_type) = "Procedure"];
+    ReferenceId provenance_id = 118 [(.google.fhir.proto.referenced_fhir_type) = "Provenance"];
+    ReferenceId questionnaire_id = 119 [(.google.fhir.proto.referenced_fhir_type) = "Questionnaire"];
+    ReferenceId questionnaire_response_id = 120 [(.google.fhir.proto.referenced_fhir_type) = "QuestionnaireResponse"];
+    ReferenceId related_person_id = 121 [(.google.fhir.proto.referenced_fhir_type) = "RelatedPerson"];
+    ReferenceId request_group_id = 122 [(.google.fhir.proto.referenced_fhir_type) = "RequestGroup"];
+    ReferenceId research_definition_id = 123 [(.google.fhir.proto.referenced_fhir_type) = "ResearchDefinition"];
+    ReferenceId research_element_definition_id = 124 [(.google.fhir.proto.referenced_fhir_type) = "ResearchElementDefinition"];
+    ReferenceId research_study_id = 125 [(.google.fhir.proto.referenced_fhir_type) = "ResearchStudy"];
+    ReferenceId research_subject_id = 126 [(.google.fhir.proto.referenced_fhir_type) = "ResearchSubject"];
+    ReferenceId risk_assessment_id = 127 [(.google.fhir.proto.referenced_fhir_type) = "RiskAssessment"];
+    ReferenceId risk_evidence_synthesis_id = 128 [(.google.fhir.proto.referenced_fhir_type) = "RiskEvidenceSynthesis"];
+    ReferenceId schedule_id = 129 [(.google.fhir.proto.referenced_fhir_type) = "Schedule"];
+    ReferenceId search_parameter_id = 130 [(.google.fhir.proto.referenced_fhir_type) = "SearchParameter"];
+    ReferenceId service_request_id = 131 [(.google.fhir.proto.referenced_fhir_type) = "ServiceRequest"];
+    ReferenceId slot_id = 132 [(.google.fhir.proto.referenced_fhir_type) = "Slot"];
+    ReferenceId specimen_id = 133 [(.google.fhir.proto.referenced_fhir_type) = "Specimen"];
+    ReferenceId specimen_definition_id = 134 [(.google.fhir.proto.referenced_fhir_type) = "SpecimenDefinition"];
+    ReferenceId structure_definition_id = 135 [(.google.fhir.proto.referenced_fhir_type) = "StructureDefinition"];
+    ReferenceId structure_map_id = 136 [(.google.fhir.proto.referenced_fhir_type) = "StructureMap"];
+    ReferenceId subscription_id = 137 [(.google.fhir.proto.referenced_fhir_type) = "Subscription"];
+    ReferenceId substance_id = 138 [(.google.fhir.proto.referenced_fhir_type) = "Substance"];
+    ReferenceId substance_nucleic_acid_id = 139 [(.google.fhir.proto.referenced_fhir_type) = "SubstanceNucleicAcid"];
+    ReferenceId substance_polymer_id = 140 [(.google.fhir.proto.referenced_fhir_type) = "SubstancePolymer"];
+    ReferenceId substance_protein_id = 141 [(.google.fhir.proto.referenced_fhir_type) = "SubstanceProtein"];
+    ReferenceId substance_reference_information_id = 142 [(.google.fhir.proto.referenced_fhir_type) = "SubstanceReferenceInformation"];
+    ReferenceId substance_source_material_id = 143 [(.google.fhir.proto.referenced_fhir_type) = "SubstanceSourceMaterial"];
+    ReferenceId substance_specification_id = 144 [(.google.fhir.proto.referenced_fhir_type) = "SubstanceSpecification"];
+    ReferenceId supply_delivery_id = 145 [(.google.fhir.proto.referenced_fhir_type) = "SupplyDelivery"];
+    ReferenceId supply_request_id = 146 [(.google.fhir.proto.referenced_fhir_type) = "SupplyRequest"];
+    ReferenceId task_id = 147 [(.google.fhir.proto.referenced_fhir_type) = "Task"];
+    ReferenceId terminology_capabilities_id = 148 [(.google.fhir.proto.referenced_fhir_type) = "TerminologyCapabilities"];
+    ReferenceId test_report_id = 149 [(.google.fhir.proto.referenced_fhir_type) = "TestReport"];
+    ReferenceId test_script_id = 150 [(.google.fhir.proto.referenced_fhir_type) = "TestScript"];
+    ReferenceId value_set_id = 151 [(.google.fhir.proto.referenced_fhir_type) = "ValueSet"];
+    ReferenceId verification_result_id = 152 [(.google.fhir.proto.referenced_fhir_type) = "VerificationResult"];
+    ReferenceId vision_prescription_id = 153 [(.google.fhir.proto.referenced_fhir_type) = "VisionPrescription"];
+    ReferenceId metadata_resource_id = 154 [(.google.fhir.proto.referenced_fhir_type) = "MetadataResource"];
+  }
+
+  // Logical reference, when literal reference is not known
+  Identifier identifier = 155;
+
+  // Text alternative for the resource
+  String display = 156;
+}
+
+message ReferenceId {
+  option (.google.fhir.proto.structure_definition_kind) =
+      KIND_PRIMITIVE_TYPE;
+
+  // Primitive value for id
+  string value = 1;
+
+  // History version, if present.
+  Id history = 2;
+
+  // xml:id (or equivalent in JSON)
+  String id = 3;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 4;
+}
+
+// The type of an address (physical / postal).
+// See http://hl7.org/fhir/ValueSet/address-type
+message AddressTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/address-type";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    POSTAL = 1;
+    PHYSICAL = 2;
+    BOTH = 3;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// The use of an address.
+// See http://hl7.org/fhir/ValueSet/address-use
+message AddressUseCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/address-use";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    HOME = 1;
+    WORK = 2;
+    TEMP = 3;
+    OLD = 4;
+    BILLING = 5;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// How resource references can be aggregated.
+// See http://hl7.org/fhir/ValueSet/resource-aggregation-mode
+message AggregationModeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/resource-aggregation-mode";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    CONTAINED = 1;
+    REFERENCED = 2;
+    BUNDLED = 3;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// Indication of the degree of conformance expectations associated with a binding.
+// See http://hl7.org/fhir/ValueSet/binding-strength
+message BindingStrengthCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/binding-strength";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    REQUIRED = 1;
+    EXTENSIBLE = 2;
+    PREFERRED = 3;
+    EXAMPLE = 4;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// SHALL applications comply with this constraint?
+// See http://hl7.org/fhir/ValueSet/constraint-severity
+message ConstraintSeverityCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/constraint-severity";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ERROR = 1;
+    WARNING = 2;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// Telecommunications form for contact point.
+// See http://hl7.org/fhir/ValueSet/contact-point-system
+message ContactPointSystemCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/contact-point-system";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PHONE = 1;
+    FAX = 2;
+    EMAIL = 3;
+    PAGER = 4;
+    URL = 5;
+    SMS = 6;
+    OTHER = 7;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// Use of contact point.
+// See http://hl7.org/fhir/ValueSet/contact-point-use
+message ContactPointUseCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/contact-point-use";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    HOME = 1;
+    WORK = 2;
+    TEMP = 3;
+    OLD = 4;
+    MOBILE = 5;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// The type of contributor.
+// See http://hl7.org/fhir/ValueSet/contributor-type
+message ContributorTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/contributor-type";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    AUTHOR = 1;
+    EDITOR = 2;
+    REVIEWER = 3;
+    ENDORSER = 4;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// Currency codes from ISO 4217 (see https://www.iso.org/iso-4217-currency-codes.html).
+// See http://hl7.org/fhir/ValueSet/currencies
+message CurrenciesCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/currencies";
+
+  // Field 1 reserved to allow enumeration in the future.
+  reserved 1;
+
+  // This valueset is not enumerable, and so is represented as a string.
+  string value = 4;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+}
+
+// The days of the week.
+// See http://hl7.org/fhir/ValueSet/days-of-week
+message DaysOfWeekCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/days-of-week";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    MON = 1;
+    TUE = 2;
+    WED = 3;
+    THU = 4;
+    FRI = 5;
+    SAT = 6;
+    SUN = 7;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// How an element value is interpreted when discrimination is evaluated.
+// See http://hl7.org/fhir/ValueSet/discriminator-type
+message DiscriminatorTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/discriminator-type";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    VALUE = 1;
+    EXISTS = 2;
+    PATTERN = 3;
+    TYPE = 4;
+    PROFILE = 5;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// Real world event relating to the schedule.
+// See http://hl7.org/fhir/ValueSet/event-timing
+message EventTimingCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/event-timing";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    MORN = 1 [(.google.fhir.proto.fhir_original_code) = "MORN"];
+    MORN_EARLY = 2 [(.google.fhir.proto.fhir_original_code) = "MORN.early"];
+    MORN_LATE = 3 [(.google.fhir.proto.fhir_original_code) = "MORN.late"];
+    NOON = 4 [(.google.fhir.proto.fhir_original_code) = "NOON"];
+    AFT = 5 [(.google.fhir.proto.fhir_original_code) = "AFT"];
+    AFT_EARLY = 6 [(.google.fhir.proto.fhir_original_code) = "AFT.early"];
+    AFT_LATE = 7 [(.google.fhir.proto.fhir_original_code) = "AFT.late"];
+    EVE = 8 [(.google.fhir.proto.fhir_original_code) = "EVE"];
+    EVE_EARLY = 9 [(.google.fhir.proto.fhir_original_code) = "EVE.early"];
+    EVE_LATE = 10 [(.google.fhir.proto.fhir_original_code) = "EVE.late"];
+    NIGHT = 11 [(.google.fhir.proto.fhir_original_code) = "NIGHT"];
+    PHS = 12 [(.google.fhir.proto.fhir_original_code) = "PHS"];
+    HS = 13 [(.google.fhir.proto.fhir_original_code) = "HS"];
+    WAKE = 14 [(.google.fhir.proto.fhir_original_code) = "WAKE"];
+    C = 15 [(.google.fhir.proto.fhir_original_code) = "C"];
+    CM = 16 [(.google.fhir.proto.fhir_original_code) = "CM"];
+    CD = 17 [(.google.fhir.proto.fhir_original_code) = "CD"];
+    CV = 18 [(.google.fhir.proto.fhir_original_code) = "CV"];
+    AC = 19 [(.google.fhir.proto.fhir_original_code) = "AC"];
+    ACM = 20 [(.google.fhir.proto.fhir_original_code) = "ACM"];
+    ACD = 21 [(.google.fhir.proto.fhir_original_code) = "ACD"];
+    ACV = 22 [(.google.fhir.proto.fhir_original_code) = "ACV"];
+    PC = 23 [(.google.fhir.proto.fhir_original_code) = "PC"];
+    PCM = 24 [(.google.fhir.proto.fhir_original_code) = "PCM"];
+    PCD = 25 [(.google.fhir.proto.fhir_original_code) = "PCD"];
+    PCV = 26 [(.google.fhir.proto.fhir_original_code) = "PCV"];
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// A list of all the concrete types defined in this version of the FHIR specification - Abstract Types, Data Types and Resource Types.
+// See http://hl7.org/fhir/ValueSet/all-types
+message FHIRAllTypesCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/all-types";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ADDRESS = 1 [(.google.fhir.proto.fhir_original_code) = "Address"];
+    AGE = 2 [(.google.fhir.proto.fhir_original_code) = "Age"];
+    ANNOTATION = 3 [(.google.fhir.proto.fhir_original_code) = "Annotation"];
+    ATTACHMENT = 4 [(.google.fhir.proto.fhir_original_code) = "Attachment"];
+    BACKBONE_ELEMENT = 5 [(.google.fhir.proto.fhir_original_code) = "BackboneElement"];
+    CODEABLE_CONCEPT = 6 [(.google.fhir.proto.fhir_original_code) = "CodeableConcept"];
+    CODING = 7 [(.google.fhir.proto.fhir_original_code) = "Coding"];
+    CONTACT_DETAIL = 8 [(.google.fhir.proto.fhir_original_code) = "ContactDetail"];
+    CONTACT_POINT = 9 [(.google.fhir.proto.fhir_original_code) = "ContactPoint"];
+    CONTRIBUTOR = 10 [(.google.fhir.proto.fhir_original_code) = "Contributor"];
+    COUNT = 11 [(.google.fhir.proto.fhir_original_code) = "Count"];
+    DATA_REQUIREMENT = 12 [(.google.fhir.proto.fhir_original_code) = "DataRequirement"];
+    DISTANCE = 13 [(.google.fhir.proto.fhir_original_code) = "Distance"];
+    DOSAGE = 14 [(.google.fhir.proto.fhir_original_code) = "Dosage"];
+    DURATION = 15 [(.google.fhir.proto.fhir_original_code) = "Duration"];
+    ELEMENT = 16 [(.google.fhir.proto.fhir_original_code) = "Element"];
+    ELEMENT_DEFINITION = 17 [(.google.fhir.proto.fhir_original_code) = "ElementDefinition"];
+    EXPRESSION = 18 [(.google.fhir.proto.fhir_original_code) = "Expression"];
+    EXTENSION = 19 [(.google.fhir.proto.fhir_original_code) = "Extension"];
+    HUMAN_NAME = 20 [(.google.fhir.proto.fhir_original_code) = "HumanName"];
+    IDENTIFIER = 21 [(.google.fhir.proto.fhir_original_code) = "Identifier"];
+    MARKETING_STATUS = 22 [(.google.fhir.proto.fhir_original_code) = "MarketingStatus"];
+    META = 23 [(.google.fhir.proto.fhir_original_code) = "Meta"];
+    MONEY = 24 [(.google.fhir.proto.fhir_original_code) = "Money"];
+    MONEY_QUANTITY = 25 [(.google.fhir.proto.fhir_original_code) = "MoneyQuantity"];
+    NARRATIVE = 26 [(.google.fhir.proto.fhir_original_code) = "Narrative"];
+    PARAMETER_DEFINITION = 27 [(.google.fhir.proto.fhir_original_code) = "ParameterDefinition"];
+    PERIOD = 28 [(.google.fhir.proto.fhir_original_code) = "Period"];
+    POPULATION = 29 [(.google.fhir.proto.fhir_original_code) = "Population"];
+    PROD_CHARACTERISTIC = 30 [(.google.fhir.proto.fhir_original_code) = "ProdCharacteristic"];
+    PRODUCT_SHELF_LIFE = 31 [(.google.fhir.proto.fhir_original_code) = "ProductShelfLife"];
+    QUANTITY = 32 [(.google.fhir.proto.fhir_original_code) = "Quantity"];
+    RANGE = 33 [(.google.fhir.proto.fhir_original_code) = "Range"];
+    RATIO = 34 [(.google.fhir.proto.fhir_original_code) = "Ratio"];
+    REFERENCE = 35 [(.google.fhir.proto.fhir_original_code) = "Reference"];
+    RELATED_ARTIFACT = 36 [(.google.fhir.proto.fhir_original_code) = "RelatedArtifact"];
+    SAMPLED_DATA = 37 [(.google.fhir.proto.fhir_original_code) = "SampledData"];
+    SIGNATURE = 38 [(.google.fhir.proto.fhir_original_code) = "Signature"];
+    SIMPLE_QUANTITY = 39 [(.google.fhir.proto.fhir_original_code) = "SimpleQuantity"];
+    SUBSTANCE_AMOUNT = 40 [(.google.fhir.proto.fhir_original_code) = "SubstanceAmount"];
+    TIMING = 41 [(.google.fhir.proto.fhir_original_code) = "Timing"];
+    TRIGGER_DEFINITION = 42 [(.google.fhir.proto.fhir_original_code) = "TriggerDefinition"];
+    USAGE_CONTEXT = 43 [(.google.fhir.proto.fhir_original_code) = "UsageContext"];
+    BASE64_BINARY = 44 [(.google.fhir.proto.fhir_original_code) = "base64Binary"];
+    BOOLEAN = 45;
+    CANONICAL = 46;
+    CODE = 47;
+    DATE = 48;
+    DATE_TIME = 49 [(.google.fhir.proto.fhir_original_code) = "dateTime"];
+    DECIMAL = 50;
+    ID = 51;
+    INSTANT = 52;
+    INTEGER = 53;
+    MARKDOWN = 54;
+    OID = 55;
+    POSITIVE_INT = 56 [(.google.fhir.proto.fhir_original_code) = "positiveInt"];
+    STRING = 57;
+    TIME = 58;
+    UNSIGNED_INT = 59 [(.google.fhir.proto.fhir_original_code) = "unsignedInt"];
+    URI = 60;
+    URL = 61;
+    UUID = 62;
+    XHTML = 63;
+    ACCOUNT = 64 [(.google.fhir.proto.fhir_original_code) = "Account"];
+    ACTIVITY_DEFINITION = 65 [(.google.fhir.proto.fhir_original_code) = "ActivityDefinition"];
+    ADVERSE_EVENT = 66 [(.google.fhir.proto.fhir_original_code) = "AdverseEvent"];
+    ALLERGY_INTOLERANCE = 67 [(.google.fhir.proto.fhir_original_code) = "AllergyIntolerance"];
+    APPOINTMENT = 68 [(.google.fhir.proto.fhir_original_code) = "Appointment"];
+    APPOINTMENT_RESPONSE = 69 [(.google.fhir.proto.fhir_original_code) = "AppointmentResponse"];
+    AUDIT_EVENT = 70 [(.google.fhir.proto.fhir_original_code) = "AuditEvent"];
+    BASIC = 71 [(.google.fhir.proto.fhir_original_code) = "Basic"];
+    BINARY = 72 [(.google.fhir.proto.fhir_original_code) = "Binary"];
+    BIOLOGICALLY_DERIVED_PRODUCT = 73 [(.google.fhir.proto.fhir_original_code) = "BiologicallyDerivedProduct"];
+    BODY_STRUCTURE = 74 [(.google.fhir.proto.fhir_original_code) = "BodyStructure"];
+    BUNDLE = 75 [(.google.fhir.proto.fhir_original_code) = "Bundle"];
+    CAPABILITY_STATEMENT = 76 [(.google.fhir.proto.fhir_original_code) = "CapabilityStatement"];
+    CARE_PLAN = 77 [(.google.fhir.proto.fhir_original_code) = "CarePlan"];
+    CARE_TEAM = 78 [(.google.fhir.proto.fhir_original_code) = "CareTeam"];
+    CATALOG_ENTRY = 79 [(.google.fhir.proto.fhir_original_code) = "CatalogEntry"];
+    CHARGE_ITEM = 80 [(.google.fhir.proto.fhir_original_code) = "ChargeItem"];
+    CHARGE_ITEM_DEFINITION = 81 [(.google.fhir.proto.fhir_original_code) = "ChargeItemDefinition"];
+    CLAIM = 82 [(.google.fhir.proto.fhir_original_code) = "Claim"];
+    CLAIM_RESPONSE = 83 [(.google.fhir.proto.fhir_original_code) = "ClaimResponse"];
+    CLINICAL_IMPRESSION = 84 [(.google.fhir.proto.fhir_original_code) = "ClinicalImpression"];
+    CODE_SYSTEM = 85 [(.google.fhir.proto.fhir_original_code) = "CodeSystem"];
+    COMMUNICATION = 86 [(.google.fhir.proto.fhir_original_code) = "Communication"];
+    COMMUNICATION_REQUEST = 87 [(.google.fhir.proto.fhir_original_code) = "CommunicationRequest"];
+    COMPARTMENT_DEFINITION = 88 [(.google.fhir.proto.fhir_original_code) = "CompartmentDefinition"];
+    COMPOSITION = 89 [(.google.fhir.proto.fhir_original_code) = "Composition"];
+    CONCEPT_MAP = 90 [(.google.fhir.proto.fhir_original_code) = "ConceptMap"];
+    CONDITION = 91 [(.google.fhir.proto.fhir_original_code) = "Condition"];
+    CONSENT = 92 [(.google.fhir.proto.fhir_original_code) = "Consent"];
+    CONTRACT = 93 [(.google.fhir.proto.fhir_original_code) = "Contract"];
+    COVERAGE = 94 [(.google.fhir.proto.fhir_original_code) = "Coverage"];
+    COVERAGE_ELIGIBILITY_REQUEST = 95 [(.google.fhir.proto.fhir_original_code) = "CoverageEligibilityRequest"];
+    COVERAGE_ELIGIBILITY_RESPONSE = 96 [(.google.fhir.proto.fhir_original_code) = "CoverageEligibilityResponse"];
+    DETECTED_ISSUE = 97 [(.google.fhir.proto.fhir_original_code) = "DetectedIssue"];
+    DEVICE = 98 [(.google.fhir.proto.fhir_original_code) = "Device"];
+    DEVICE_DEFINITION = 99 [(.google.fhir.proto.fhir_original_code) = "DeviceDefinition"];
+    DEVICE_METRIC = 100 [(.google.fhir.proto.fhir_original_code) = "DeviceMetric"];
+    DEVICE_REQUEST = 101 [(.google.fhir.proto.fhir_original_code) = "DeviceRequest"];
+    DEVICE_USE_STATEMENT = 102 [(.google.fhir.proto.fhir_original_code) = "DeviceUseStatement"];
+    DIAGNOSTIC_REPORT = 103 [(.google.fhir.proto.fhir_original_code) = "DiagnosticReport"];
+    DOCUMENT_MANIFEST = 104 [(.google.fhir.proto.fhir_original_code) = "DocumentManifest"];
+    DOCUMENT_REFERENCE = 105 [(.google.fhir.proto.fhir_original_code) = "DocumentReference"];
+    DOMAIN_RESOURCE = 106 [(.google.fhir.proto.fhir_original_code) = "DomainResource"];
+    EFFECT_EVIDENCE_SYNTHESIS = 107 [(.google.fhir.proto.fhir_original_code) = "EffectEvidenceSynthesis"];
+    ENCOUNTER = 108 [(.google.fhir.proto.fhir_original_code) = "Encounter"];
+    ENDPOINT = 109 [(.google.fhir.proto.fhir_original_code) = "Endpoint"];
+    ENROLLMENT_REQUEST = 110 [(.google.fhir.proto.fhir_original_code) = "EnrollmentRequest"];
+    ENROLLMENT_RESPONSE = 111 [(.google.fhir.proto.fhir_original_code) = "EnrollmentResponse"];
+    EPISODE_OF_CARE = 112 [(.google.fhir.proto.fhir_original_code) = "EpisodeOfCare"];
+    EVENT_DEFINITION = 113 [(.google.fhir.proto.fhir_original_code) = "EventDefinition"];
+    EVIDENCE = 114 [(.google.fhir.proto.fhir_original_code) = "Evidence"];
+    EVIDENCE_VARIABLE = 115 [(.google.fhir.proto.fhir_original_code) = "EvidenceVariable"];
+    EXAMPLE_SCENARIO = 116 [(.google.fhir.proto.fhir_original_code) = "ExampleScenario"];
+    EXPLANATION_OF_BENEFIT = 117 [(.google.fhir.proto.fhir_original_code) = "ExplanationOfBenefit"];
+    FAMILY_MEMBER_HISTORY = 118 [(.google.fhir.proto.fhir_original_code) = "FamilyMemberHistory"];
+    FLAG = 119 [(.google.fhir.proto.fhir_original_code) = "Flag"];
+    GOAL = 120 [(.google.fhir.proto.fhir_original_code) = "Goal"];
+    GRAPH_DEFINITION = 121 [(.google.fhir.proto.fhir_original_code) = "GraphDefinition"];
+    GROUP = 122 [(.google.fhir.proto.fhir_original_code) = "Group"];
+    GUIDANCE_RESPONSE = 123 [(.google.fhir.proto.fhir_original_code) = "GuidanceResponse"];
+    HEALTHCARE_SERVICE = 124 [(.google.fhir.proto.fhir_original_code) = "HealthcareService"];
+    IMAGING_STUDY = 125 [(.google.fhir.proto.fhir_original_code) = "ImagingStudy"];
+    IMMUNIZATION = 126 [(.google.fhir.proto.fhir_original_code) = "Immunization"];
+    IMMUNIZATION_EVALUATION = 127 [(.google.fhir.proto.fhir_original_code) = "ImmunizationEvaluation"];
+    IMMUNIZATION_RECOMMENDATION = 128 [(.google.fhir.proto.fhir_original_code) = "ImmunizationRecommendation"];
+    IMPLEMENTATION_GUIDE = 129 [(.google.fhir.proto.fhir_original_code) = "ImplementationGuide"];
+    INSURANCE_PLAN = 130 [(.google.fhir.proto.fhir_original_code) = "InsurancePlan"];
+    INVOICE = 131 [(.google.fhir.proto.fhir_original_code) = "Invoice"];
+    LIBRARY = 132 [(.google.fhir.proto.fhir_original_code) = "Library"];
+    LINKAGE = 133 [(.google.fhir.proto.fhir_original_code) = "Linkage"];
+    LIST = 134 [(.google.fhir.proto.fhir_original_code) = "List"];
+    LOCATION = 135 [(.google.fhir.proto.fhir_original_code) = "Location"];
+    MEASURE = 136 [(.google.fhir.proto.fhir_original_code) = "Measure"];
+    MEASURE_REPORT = 137 [(.google.fhir.proto.fhir_original_code) = "MeasureReport"];
+    MEDIA = 138 [(.google.fhir.proto.fhir_original_code) = "Media"];
+    MEDICATION = 139 [(.google.fhir.proto.fhir_original_code) = "Medication"];
+    MEDICATION_ADMINISTRATION = 140 [(.google.fhir.proto.fhir_original_code) = "MedicationAdministration"];
+    MEDICATION_DISPENSE = 141 [(.google.fhir.proto.fhir_original_code) = "MedicationDispense"];
+    MEDICATION_KNOWLEDGE = 142 [(.google.fhir.proto.fhir_original_code) = "MedicationKnowledge"];
+    MEDICATION_REQUEST = 143 [(.google.fhir.proto.fhir_original_code) = "MedicationRequest"];
+    MEDICATION_STATEMENT = 144 [(.google.fhir.proto.fhir_original_code) = "MedicationStatement"];
+    MEDICINAL_PRODUCT = 145 [(.google.fhir.proto.fhir_original_code) = "MedicinalProduct"];
+    MEDICINAL_PRODUCT_AUTHORIZATION = 146 [(.google.fhir.proto.fhir_original_code) = "MedicinalProductAuthorization"];
+    MEDICINAL_PRODUCT_CONTRAINDICATION = 147 [(.google.fhir.proto.fhir_original_code) = "MedicinalProductContraindication"];
+    MEDICINAL_PRODUCT_INDICATION = 148 [(.google.fhir.proto.fhir_original_code) = "MedicinalProductIndication"];
+    MEDICINAL_PRODUCT_INGREDIENT = 149 [(.google.fhir.proto.fhir_original_code) = "MedicinalProductIngredient"];
+    MEDICINAL_PRODUCT_INTERACTION = 150 [(.google.fhir.proto.fhir_original_code) = "MedicinalProductInteraction"];
+    MEDICINAL_PRODUCT_MANUFACTURED = 151 [(.google.fhir.proto.fhir_original_code) = "MedicinalProductManufactured"];
+    MEDICINAL_PRODUCT_PACKAGED = 152 [(.google.fhir.proto.fhir_original_code) = "MedicinalProductPackaged"];
+    MEDICINAL_PRODUCT_PHARMACEUTICAL = 153 [(.google.fhir.proto.fhir_original_code) = "MedicinalProductPharmaceutical"];
+    MEDICINAL_PRODUCT_UNDESIRABLE_EFFECT = 154 [(.google.fhir.proto.fhir_original_code) = "MedicinalProductUndesirableEffect"];
+    MESSAGE_DEFINITION = 155 [(.google.fhir.proto.fhir_original_code) = "MessageDefinition"];
+    MESSAGE_HEADER = 156 [(.google.fhir.proto.fhir_original_code) = "MessageHeader"];
+    MOLECULAR_SEQUENCE = 157 [(.google.fhir.proto.fhir_original_code) = "MolecularSequence"];
+    NAMING_SYSTEM = 158 [(.google.fhir.proto.fhir_original_code) = "NamingSystem"];
+    NUTRITION_ORDER = 159 [(.google.fhir.proto.fhir_original_code) = "NutritionOrder"];
+    OBSERVATION = 160 [(.google.fhir.proto.fhir_original_code) = "Observation"];
+    OBSERVATION_DEFINITION = 161 [(.google.fhir.proto.fhir_original_code) = "ObservationDefinition"];
+    OPERATION_DEFINITION = 162 [(.google.fhir.proto.fhir_original_code) = "OperationDefinition"];
+    OPERATION_OUTCOME = 163 [(.google.fhir.proto.fhir_original_code) = "OperationOutcome"];
+    ORGANIZATION = 164 [(.google.fhir.proto.fhir_original_code) = "Organization"];
+    ORGANIZATION_AFFILIATION = 165 [(.google.fhir.proto.fhir_original_code) = "OrganizationAffiliation"];
+    PARAMETERS = 166 [(.google.fhir.proto.fhir_original_code) = "Parameters"];
+    PATIENT = 167 [(.google.fhir.proto.fhir_original_code) = "Patient"];
+    PAYMENT_NOTICE = 168 [(.google.fhir.proto.fhir_original_code) = "PaymentNotice"];
+    PAYMENT_RECONCILIATION = 169 [(.google.fhir.proto.fhir_original_code) = "PaymentReconciliation"];
+    PERSON = 170 [(.google.fhir.proto.fhir_original_code) = "Person"];
+    PLAN_DEFINITION = 171 [(.google.fhir.proto.fhir_original_code) = "PlanDefinition"];
+    PRACTITIONER = 172 [(.google.fhir.proto.fhir_original_code) = "Practitioner"];
+    PRACTITIONER_ROLE = 173 [(.google.fhir.proto.fhir_original_code) = "PractitionerRole"];
+    PROCEDURE = 174 [(.google.fhir.proto.fhir_original_code) = "Procedure"];
+    PROVENANCE = 175 [(.google.fhir.proto.fhir_original_code) = "Provenance"];
+    QUESTIONNAIRE = 176 [(.google.fhir.proto.fhir_original_code) = "Questionnaire"];
+    QUESTIONNAIRE_RESPONSE = 177 [(.google.fhir.proto.fhir_original_code) = "QuestionnaireResponse"];
+    RELATED_PERSON = 178 [(.google.fhir.proto.fhir_original_code) = "RelatedPerson"];
+    REQUEST_GROUP = 179 [(.google.fhir.proto.fhir_original_code) = "RequestGroup"];
+    RESEARCH_DEFINITION = 180 [(.google.fhir.proto.fhir_original_code) = "ResearchDefinition"];
+    RESEARCH_ELEMENT_DEFINITION = 181 [(.google.fhir.proto.fhir_original_code) = "ResearchElementDefinition"];
+    RESEARCH_STUDY = 182 [(.google.fhir.proto.fhir_original_code) = "ResearchStudy"];
+    RESEARCH_SUBJECT = 183 [(.google.fhir.proto.fhir_original_code) = "ResearchSubject"];
+    RESOURCE = 184 [(.google.fhir.proto.fhir_original_code) = "Resource"];
+    RISK_ASSESSMENT = 185 [(.google.fhir.proto.fhir_original_code) = "RiskAssessment"];
+    RISK_EVIDENCE_SYNTHESIS = 186 [(.google.fhir.proto.fhir_original_code) = "RiskEvidenceSynthesis"];
+    SCHEDULE = 187 [(.google.fhir.proto.fhir_original_code) = "Schedule"];
+    SEARCH_PARAMETER = 188 [(.google.fhir.proto.fhir_original_code) = "SearchParameter"];
+    SERVICE_REQUEST = 189 [(.google.fhir.proto.fhir_original_code) = "ServiceRequest"];
+    SLOT = 190 [(.google.fhir.proto.fhir_original_code) = "Slot"];
+    SPECIMEN = 191 [(.google.fhir.proto.fhir_original_code) = "Specimen"];
+    SPECIMEN_DEFINITION = 192 [(.google.fhir.proto.fhir_original_code) = "SpecimenDefinition"];
+    STRUCTURE_DEFINITION = 193 [(.google.fhir.proto.fhir_original_code) = "StructureDefinition"];
+    STRUCTURE_MAP = 194 [(.google.fhir.proto.fhir_original_code) = "StructureMap"];
+    SUBSCRIPTION = 195 [(.google.fhir.proto.fhir_original_code) = "Subscription"];
+    SUBSTANCE = 196 [(.google.fhir.proto.fhir_original_code) = "Substance"];
+    SUBSTANCE_NUCLEIC_ACID = 197 [(.google.fhir.proto.fhir_original_code) = "SubstanceNucleicAcid"];
+    SUBSTANCE_POLYMER = 198 [(.google.fhir.proto.fhir_original_code) = "SubstancePolymer"];
+    SUBSTANCE_PROTEIN = 199 [(.google.fhir.proto.fhir_original_code) = "SubstanceProtein"];
+    SUBSTANCE_REFERENCE_INFORMATION = 200 [(.google.fhir.proto.fhir_original_code) = "SubstanceReferenceInformation"];
+    SUBSTANCE_SOURCE_MATERIAL = 201 [(.google.fhir.proto.fhir_original_code) = "SubstanceSourceMaterial"];
+    SUBSTANCE_SPECIFICATION = 202 [(.google.fhir.proto.fhir_original_code) = "SubstanceSpecification"];
+    SUPPLY_DELIVERY = 203 [(.google.fhir.proto.fhir_original_code) = "SupplyDelivery"];
+    SUPPLY_REQUEST = 204 [(.google.fhir.proto.fhir_original_code) = "SupplyRequest"];
+    TASK = 205 [(.google.fhir.proto.fhir_original_code) = "Task"];
+    TERMINOLOGY_CAPABILITIES = 206 [(.google.fhir.proto.fhir_original_code) = "TerminologyCapabilities"];
+    TEST_REPORT = 207 [(.google.fhir.proto.fhir_original_code) = "TestReport"];
+    TEST_SCRIPT = 208 [(.google.fhir.proto.fhir_original_code) = "TestScript"];
+    VALUE_SET = 209 [(.google.fhir.proto.fhir_original_code) = "ValueSet"];
+    VERIFICATION_RESULT = 210 [(.google.fhir.proto.fhir_original_code) = "VerificationResult"];
+    VISION_PRESCRIPTION = 211 [(.google.fhir.proto.fhir_original_code) = "VisionPrescription"];
+    TYPE = 212 [(.google.fhir.proto.fhir_original_code) = "Type"];
+    ANY = 213 [(.google.fhir.proto.fhir_original_code) = "Any"];
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// Identifies the purpose for this identifier, if known .
+// See http://hl7.org/fhir/ValueSet/identifier-use
+message IdentifierUseCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/identifier-use";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    USUAL = 1;
+    OFFICIAL = 2;
+    TEMP = 3;
+    SECONDARY = 4;
+    OLD = 5;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// This value set includes all possible codes from BCP-13 (http://tools.ietf.org/html/bcp13).
+// See http://hl7.org/fhir/ValueSet/mimetypes
+message MimeTypesCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/mimetypes";
+
+  // Field 1 reserved to allow enumeration in the future.
+  reserved 1;
+
+  // This valueset is not enumerable, and so is represented as a string.
+  string value = 4;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+}
+
+// The use of a human name.
+// See http://hl7.org/fhir/ValueSet/name-use
+message NameUseCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/name-use";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    USUAL = 1;
+    OFFICIAL = 2;
+    TEMP = 3;
+    NICKNAME = 4;
+    ANONYMOUS = 5;
+    OLD = 6;
+    MAIDEN = 7;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// The status of a resource narrative.
+// See http://hl7.org/fhir/ValueSet/narrative-status
+message NarrativeStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/narrative-status";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    GENERATED = 1;
+    EXTENSIONS = 2;
+    ADDITIONAL = 3;
+    EMPTY = 4;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// Whether an operation parameter is an input or an output parameter.
+// See http://hl7.org/fhir/ValueSet/operation-parameter-use
+message OperationParameterUseCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/operation-parameter-use";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    IN = 1;
+    OUT = 2;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// How a property is represented when serialized.
+// See http://hl7.org/fhir/ValueSet/property-representation
+message PropertyRepresentationCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/property-representation";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    XML_ATTR = 1 [(.google.fhir.proto.fhir_original_code) = "xmlAttr"];
+    XML_TEXT = 2 [(.google.fhir.proto.fhir_original_code) = "xmlText"];
+    TYPE_ATTR = 3 [(.google.fhir.proto.fhir_original_code) = "typeAttr"];
+    CDA_TEXT = 4 [(.google.fhir.proto.fhir_original_code) = "cdaText"];
+    XHTML = 5;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// How the Quantity should be understood and represented.
+// See http://hl7.org/fhir/ValueSet/quantity-comparator
+message QuantityComparatorCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/quantity-comparator";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    LESS_THAN = 1 [(.google.fhir.proto.fhir_original_code) = "<"];
+    LESS_THAN_OR_EQUAL_TO = 2 [(.google.fhir.proto.fhir_original_code) = "<="];
+    GREATER_THAN_OR_EQUAL_TO = 3 [(.google.fhir.proto.fhir_original_code) = ">="];
+    GREATER_THAN = 4 [(.google.fhir.proto.fhir_original_code) = ">"];
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// Whether a reference needs to be version specific or version independent, or whether either can be used.
+// See http://hl7.org/fhir/ValueSet/reference-version-rules
+message ReferenceVersionRulesCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/reference-version-rules";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    EITHER = 1;
+    INDEPENDENT = 2;
+    SPECIFIC = 3;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// The type of relationship to the related artifact.
+// See http://hl7.org/fhir/ValueSet/related-artifact-type
+message RelatedArtifactTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/related-artifact-type";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    DOCUMENTATION = 1;
+    JUSTIFICATION = 2;
+    CITATION = 3;
+    PREDECESSOR = 4;
+    SUCCESSOR = 5;
+    DERIVED_FROM = 6;
+    DEPENDS_ON = 7;
+    COMPOSED_OF = 8;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// How slices are interpreted when evaluating an instance.
+// See http://hl7.org/fhir/ValueSet/resource-slicing-rules
+message SlicingRulesCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/resource-slicing-rules";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    CLOSED = 1;
+    OPEN = 2;
+    OPEN_AT_END = 3 [(.google.fhir.proto.fhir_original_code) = "openAtEnd"];
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// The possible sort directions, ascending or descending.
+// See http://hl7.org/fhir/ValueSet/sort-direction
+message SortDirectionCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/sort-direction";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ASCENDING = 1;
+    DESCENDING = 2;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// The type of trigger.
+// See http://hl7.org/fhir/ValueSet/trigger-type
+message TriggerTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/trigger-type";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    NAMED_EVENT = 1;
+    PERIODIC = 2;
+    DATA_CHANGED = 3;
+    DATA_ADDED = 4;
+    DATA_MODIFIED = 5;
+    DATA_REMOVED = 6;
+    DATA_ACCESSED = 7;
+    DATA_ACCESS_ENDED = 8;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}
+
+// A unit of time (units from UCUM).
+// See http://hl7.org/fhir/ValueSet/units-of-time
+message UnitsOfTimeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) = "http://hl7.org/fhir/ValueSet/units-of-time";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    S = 1;
+    MIN = 2;
+    H = 3;
+    D = 4;
+    WK = 5;
+    MO = 6;
+    A = 7;
+  }
+  Value value = 1;
+
+  String id = 2;
+
+  repeated Extension extension = 3;
+
+}

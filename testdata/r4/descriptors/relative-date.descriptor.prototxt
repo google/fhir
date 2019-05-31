@@ -53,7 +53,7 @@ field {
   }
 }
 nested_type {
-  name: "ValueX"
+  name: "Event"
   field {
     name: "reference"
     number: 1

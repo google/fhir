@@ -15,7 +15,6 @@
 package com.google.fhir.stu3;
 
 import com.google.common.base.CaseFormat;
-import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -23,18 +22,21 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.MoreCollectors;
 import com.google.fhir.common.FhirVersion;
+import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
-import com.google.fhir.stu3.proto.CodeableConcept;
+import com.google.fhir.r4.proto.Canonical;
+import com.google.fhir.r4.proto.CodeableConcept;
+import com.google.fhir.r4.proto.ElementDefinition;
+import com.google.fhir.r4.proto.ExtensionContextTypeCode;
+import com.google.fhir.r4.proto.StructureDefinition;
+import com.google.fhir.r4.proto.StructureDefinitionKindCode;
+import com.google.fhir.r4.proto.TypeDerivationRuleCode;
+import com.google.fhir.r4.proto.Uri;
 import com.google.fhir.stu3.proto.CodingWithFixedCode;
 import com.google.fhir.stu3.proto.CodingWithFixedSystem;
-import com.google.fhir.stu3.proto.ElementDefinition;
 import com.google.fhir.stu3.proto.ElementDefinitionExplicitTypeName;
-import com.google.fhir.stu3.proto.ElementDefinitionRegex;
-import com.google.fhir.stu3.proto.StructureDefinition;
-import com.google.fhir.stu3.proto.StructureDefinitionKindCode;
-import com.google.fhir.stu3.proto.TypeDerivationRuleCode;
-import com.google.fhir.stu3.proto.Uri;
+import com.google.fhir.stu3.proto.Instant;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
@@ -68,7 +70,6 @@ import java.util.stream.Collectors;
 public class ProtoGenerator {
 
   // The path for annotation definition of proto options.
-  // TODO: Move the annotation to a general location.
   static final String ANNOTATION_PATH = "proto";
 
   // Map of time-like primitive type ids to supported granularity
@@ -212,7 +213,7 @@ public class ProtoGenerator {
   public ProtoGenerator(
       PackageInfo packageInfo,
       String fhirProtoRootPath,
-      Map<StructureDefinition, String> knownTypes) {
+      ImmutableMap<StructureDefinition, String> knownTypes) {
     this.packageInfo = packageInfo;
     this.fhirProtoRootPath = fhirProtoRootPath;
     this.fhirVersion = FhirVersion.fromAnnotation(packageInfo.getFhirVersion());
@@ -240,12 +241,13 @@ public class ProtoGenerator {
         throw new IllegalArgumentException(
             "Invalid FHIR structure definition: " + def.getId().getValue() + " has no url");
       }
-      boolean isSimpleInternalExtension =
-          isSimpleInternalExtension(
-              def.getSnapshot().getElement(0), def.getSnapshot().getElementList());
+      boolean isSimpleExtensionProfile =
+          isExtensionProfile(def)
+              && isSimpleInternalExtension(
+                  def.getSnapshot().getElement(0), def.getSnapshot().getElementList());
       String inlineType;
       String structDefPackage;
-      if (isSimpleInternalExtension) {
+      if (isSimpleExtensionProfile) {
         QualifiedType qualifiedType = getSimpleExtensionDefinitionType(def);
         inlineType = qualifiedType.type;
         structDefPackage = qualifiedType.packageName;
@@ -260,10 +262,14 @@ public class ProtoGenerator {
     }
     this.structDefDataByUrl = ImmutableMap.copyOf(mutableStructDefDataByUrl);
 
+    // Used to ensure each structure definition is unique by url.
+    final Set<String> knownUrls = new HashSet<>();
+
     this.baseStructDefsById =
         knownTypes.keySet().stream()
             .filter(
                 def -> def.getDerivation().getValue() != TypeDerivationRuleCode.Value.CONSTRAINT)
+            .filter(def -> knownUrls.add(def.getUrl().getValue()))
             .collect(ImmutableMap.toImmutableMap(def -> def.getId().getValue(), def -> def));
   }
 
@@ -279,18 +285,41 @@ public class ProtoGenerator {
   // This is necessary for cases where the generated name type is problematic, e.g., when two
   // generated name types collide, or just to provide nicer names.
   private static final ImmutableMap<String, String> STRUCTURE_DEFINITION_RENAMINGS =
-      ImmutableMap.of(
-          "http://hl7.org/fhir/StructureDefinition/valueset-reference", "ValueSetReference",
-          "http://hl7.org/fhir/StructureDefinition/codesystem-reference", "CodeSystemReference");
+      new ImmutableMap.Builder<String, String>()
+          .put("http://hl7.org/fhir/StructureDefinition/valueset-reference", "ValueSetReference")
+          .put(
+              "http://hl7.org/fhir/StructureDefinition/codesystem-reference", "CodeSystemReference")
+          .put(
+              "http://hl7.org/fhir/StructureDefinition/request-statusReason",
+              "StatusReasonExtension")
+          .put(
+              "http://hl7.org/fhir/StructureDefinition/workflow-relatedArtifact",
+              "RelatedArtifactExtension")
+          .put("http://hl7.org/fhir/StructureDefinition/event-location", "LocationExtension")
+          .put(
+              "http://hl7.org/fhir/StructureDefinition/workflow-episodeOfCare",
+              "EpisodeOfCareExtension")
+          .put(
+              "http://hl7.org/fhir/StructureDefinition/workflow-researchStudy",
+              "ResearchStudyExtension")
+          .put(
+              "http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition",
+              "UsCoreCondition")
+          .build();
 
   // Given a structure definition, gets the name of the top-level message that will be generated.
-  public static String getTypeName(StructureDefinition def) {
+  public String getTypeName(StructureDefinition def) {
+    return getTypeName(def, packageInfo.getFhirVersion());
+  }
+
+  // Given a structure definition, gets the name of the top-level message that will be generated.
+  public static String getTypeName(StructureDefinition def, Annotations.FhirVersion version) {
     if (STRUCTURE_DEFINITION_RENAMINGS.containsKey(def.getUrl().getValue())) {
       return STRUCTURE_DEFINITION_RENAMINGS.get(def.getUrl().getValue());
     }
-    return isExtensionProfile(def)
-        ? getProfileTypeName(def)
-        : getTypeNameFromId(def.getId().getValue());
+    boolean useProfileTypeName =
+        useLegacyTypeNaming(version) ? isExtensionProfile(def) : isProfile(def);
+    return useProfileTypeName ? getProfileTypeName(def) : getTypeNameFromId(def.getId().getValue());
   }
 
   // Given an id string, gets the name of the top-level message that will be generated.
@@ -335,7 +364,12 @@ public class ProtoGenerator {
             .append("Auto-generated from StructureDefinition for ")
             .append(def.getName().getValue());
     if (def.getMeta().hasLastUpdated()) {
-      comment.append(", last updated ").append(new InstantWrapper(def.getMeta().getLastUpdated()));
+      comment
+          .append(", last updated ")
+          .append(
+              new InstantWrapper(
+                  ProtoUtils.fieldWiseCopy(def.getMeta().getLastUpdated(), Instant.newBuilder())
+                      .build()));
     }
     comment.append(".");
     if (root.hasShort()) {
@@ -408,13 +442,14 @@ public class ProtoGenerator {
       DescriptorProto proto = generateProto(def);
       builder.addMessageType(proto);
     }
-    // Add imports. Annotations is always needed; datatypes is needed unless we are building them.
+    // Add imports. Annotations is always needed.
     builder.addDependency(new File(ANNOTATION_PATH, "annotations.proto").toString());
     // Add the remaining FHIR dependencies if the file uses a type from the FHIR dep, but does not
     // define a type from that dep.
     for (Map.Entry<String, Set<String>> entry : coreTypeDefinitionsByFile.entrySet()) {
       String filename = entry.getKey();
       Set<String> types = entry.getValue();
+
       if (needsDep(builder, types)) {
         builder.addDependency(new File(fhirProtoRootPath, filename).toString());
       }
@@ -426,8 +461,11 @@ public class ProtoGenerator {
   // Returns true if the file proto uses a type from a set of types, but does not define it.
   private boolean needsDep(FileDescriptorProtoOrBuilder fileProto, Set<String> types) {
     for (DescriptorProto descriptor : fileProto.getMessageTypeList()) {
-      if (types.contains(fhirVersion.coreFhirPackage + "." + descriptor.getName())) {
+      if (types.contains(fhirVersion.coreFhirPackage + "." + descriptor.getName())
+          && !descriptor.getName().equals("RelatedArtifact")) {
         // This file defines a type from the set.  It can't depend on itself.
+        // TODO: We don't pay attention to RelatedArtifact because there's an extension
+        // with that name.  This is a hack, we should do something cleverer.
         return false;
       }
     }
@@ -576,7 +614,8 @@ public class ProtoGenerator {
       }
 
       if (lastIdToken(element.getId().getValue()).slicename != null) {
-        // This is a slie this field until the end of the message.
+        // This is a slice.  Defer this field until the end of the message, to keep base field
+        // numbers consistent across profiles.
         deferredElements.add(element);
       } else {
         buildAndAddField(element, elementList, nextTag++, builder);
@@ -586,7 +625,6 @@ public class ProtoGenerator {
     for (ElementDefinition deferredElement : deferredElements) {
       buildAndAddField(deferredElement, elementList, nextTag++, builder);
     }
-
     return builder.build();
   }
 
@@ -598,8 +636,9 @@ public class ProtoGenerator {
     // Generate the field. If this field doesn't actually exist in this version of the
     // message, for example, the max attribute is 0, buildField returns null and no field
     // should be added.
-    FieldDescriptorProto field = buildField(element, elementList, tag);
-    if (field != null) {
+    Optional<FieldDescriptorProto> fieldOptional = buildField(element, elementList, tag);
+    if (fieldOptional.isPresent()) {
+      FieldDescriptorProto field = fieldOptional.get();
       Optional<DescriptorProto> optionalNestedType =
           buildNestedTypeIfNeeded(element, elementList, field);
       if (optionalNestedType.isPresent()) {
@@ -660,7 +699,17 @@ public class ProtoGenerator {
   private Optional<DescriptorProto> getChoiceTypeIfRequired(
       ElementDefinition element, List<ElementDefinition> elementList, FieldDescriptorProto field) {
     if (isChoiceTypeExtension(element, elementList)) {
-      return Optional.of(makeChoiceType(getExtensionValueElement(element, elementList), field));
+      DescriptorProto choiceType =
+          makeChoiceType(getExtensionValueElement(element, elementList), elementList, field);
+      // Note that we make the choice time from the "value" element that is a child of this element,
+      // but use THIS element to get the name of the choice type message.
+      // This is consistent with the philosophy of inlining extension types by their url name,
+      // rather than the "value" field of the extension.
+      String containerType = getContainerType(element, elementList);
+      return Optional.of(
+          choiceType.toBuilder()
+              .setName(containerType.substring(containerType.lastIndexOf('.') + 1))
+              .build());
     }
     Optional<ElementDefinition> choiceTypeBase = getChoiceTypeBase(element);
     if (choiceTypeBase.isPresent()) {
@@ -674,7 +723,7 @@ public class ProtoGenerator {
           baseTypesToIndex.put(code, i);
         }
       }
-      DescriptorProto baseChoiceType = makeChoiceType(choiceTypeBase.get(), field);
+      DescriptorProto baseChoiceType = makeChoiceType(choiceTypeBase.get(), elementList, field);
       final Set<String> uniqueTypes = new HashSet<>();
       List<FieldDescriptorProto> matchingFields =
           element.getTypeList().stream()
@@ -687,7 +736,7 @@ public class ProtoGenerator {
           baseChoiceType.toBuilder().clearField().addAllField(matchingFields).build());
     }
     if (isChoiceType(element)) {
-      return Optional.of(makeChoiceType(element, field));
+      return Optional.of(makeChoiceType(element, elementList, field));
     }
     return Optional.empty();
   }
@@ -794,6 +843,30 @@ public class ProtoGenerator {
   private static final ElementDefinition.TypeRef STRING_TYPE =
       ElementDefinition.TypeRef.newBuilder().setCode(Uri.newBuilder().setValue("string")).build();
 
+  private Optional<String> getPrimitiveRegex(ElementDefinition element) {
+    switch (packageInfo.getFhirVersion()) {
+      case DSTU2:
+        // DSTU2 and STU3 have the same regex extension url, so just use the STU3 one.
+      case STU3:
+        List<com.google.fhir.stu3.proto.ElementDefinitionRegex> stu3Regex =
+            ExtensionWrapper.fromExtensionsIn(element.getType(0))
+                .getMatchingExtensions(
+                    com.google.fhir.stu3.proto.ElementDefinitionRegex.getDefaultInstance());
+        return stu3Regex.size() == 1
+            ? Optional.of(stu3Regex.get(0).getValueString().getValue())
+            : Optional.empty();
+      case R4:
+        List<com.google.fhir.r4.proto.Regex> r4Regex =
+            ExtensionWrapper.fromExtensionsIn(element.getType(0))
+                .getMatchingExtensions(com.google.fhir.r4.proto.Regex.getDefaultInstance());
+        return r4Regex.size() == 1
+            ? Optional.of(r4Regex.get(0).getValueString().getValue())
+            : Optional.empty();
+      default:
+        throw new IllegalArgumentException(
+            "Unrecognized fhir version: " + packageInfo.getFhirVersion());
+    }
+  }
   /** Generate the primitive value part of a datatype. */
   private void generatePrimitiveValue(StructureDefinition def, DescriptorProto.Builder builder) {
     String defId = def.getId().getValue();
@@ -803,15 +876,11 @@ public class ProtoGenerator {
         getElementDefinitionById(valueFieldId, def.getSnapshot().getElementList());
     // If a regex for this primitive type is present, add it as a message-level annotation.
     if (valueElement.getTypeCount() == 1) {
-      List<ElementDefinitionRegex> regex =
-          ExtensionWrapper.fromExtensionsIn(valueElement.getType(0))
-              .getMatchingExtensions(ElementDefinitionRegex.getDefaultInstance());
-      if (regex.size() == 1) {
+      Optional<String> regexOptional = getPrimitiveRegex(valueElement);
+      if (regexOptional.isPresent()) {
         builder.setOptions(
-            builder
-                .getOptions()
-                .toBuilder()
-                .setExtension(Annotations.valueRegex, regex.get(0).getValueString().getValue())
+            builder.getOptions().toBuilder()
+                .setExtension(Annotations.valueRegex, regexOptional.get())
                 .build());
       }
     }
@@ -820,12 +889,13 @@ public class ProtoGenerator {
     // to succeed.  This will get overridden with the correct time,
     ElementDefinition elementWithType =
         valueElement.toBuilder().clearType().addType(STRING_TYPE).build();
-    FieldDescriptorProto field =
+    Optional<FieldDescriptorProto> fieldOptional =
         buildField(
             elementWithType,
             new ArrayList<ElementDefinition>() /* no child ElementDefinition */,
             1 /* nextTag */);
-    if (field != null) {
+    if (fieldOptional.isPresent()) {
+      FieldDescriptorProto field = fieldOptional.get();
       if (TIME_LIKE_PRECISION_MAP.containsKey(defId)) {
         // Handle time-like types differently.
         EnumDescriptorProto.Builder enumBuilder = PRECISION_ENUM.toBuilder();
@@ -911,7 +981,7 @@ public class ProtoGenerator {
   private static boolean isExternalExtension(ElementDefinition element) {
     return element.getTypeCount() == 1
         && element.getType(0).getCode().getValue().equals("Extension")
-        && element.getType(0).hasProfile();
+        && element.getType(0).getProfileCount() == 1;
   }
 
   private static boolean isExtensionProfile(StructureDefinition def) {
@@ -963,27 +1033,43 @@ public class ProtoGenerator {
     // Use explicit type name if present.  Otherwise, use the field_name, converted to FieldType
     // casing, as the submessage name.
     String typeName =
-        explicitTypeNames.isEmpty()
-            ? toFieldTypeCase(getJsonNameForElement(element))
-            : explicitTypeNames.get(0).getValueString().getValue();
+        toFieldTypeCase(
+            explicitTypeNames.isEmpty()
+                ? getJsonNameForElement(element)
+                : explicitTypeNames.get(0).getValueString().getValue());
 
     int lastDotIndex = id.lastIndexOf('.');
+    String packageString = "";
     if (lastDotIndex != -1) {
-      String packageString =
+      packageString =
           getContainerType(
                   getElementDefinitionById(id.substring(0, lastDotIndex), elementList), elementList)
               + ".";
-      // TODO: better renaming logic.  Using ChoiceTypeX (with an X at the end)
-      // will get rid of the vast majority of the necessary renamings without changing much else
+    }
+    if (useLegacyTypeNaming()) {
+      // TODO: For historical reasons we have a different naming convention for choice
+      // types in stu3.  Remove this exception before releasing V1.0
+      typeName = legacyRenaming(typeName, packageString);
+    } else {
+      if (isChoiceType(element)) {
+        typeName = typeName + "X";
+      }
       if (packageString.startsWith(typeName + ".")
-          || packageString.contains("." + typeName + ".")
-          || typeName.equals("Timing")
-          || typeName.equals("Age")) {
+          || packageString.contains("." + typeName + ".")) {
         typeName = typeName + "Type";
       }
-      return addToContainerTypeCache(id, packageString + typeName);
     }
-    return addToContainerTypeCache(id, typeName);
+    return addToContainerTypeCache(id, packageString + typeName);
+  }
+
+  private String legacyRenaming(String typeName, String packageString) {
+    return packageString.contains(".")
+            && (packageString.startsWith(typeName + ".")
+                || packageString.contains("." + typeName + ".")
+                || typeName.equals("Timing")
+                || typeName.equals("Age"))
+        ? typeName + "Type"
+        : typeName;
   }
 
   /**
@@ -1058,10 +1144,7 @@ public class ProtoGenerator {
   }
 
   private Optional<Descriptor> getBindingValueSetType(ElementDefinition element) {
-    String url = element.getBinding().getValueSet().getReference().getUri().getValue();
-    if (url.isEmpty()) {
-      url = element.getBinding().getValueSet().getUri().getValue();
-    }
+    String url = CanonicalWrapper.getUri(element.getBinding().getValueSet());
     if (url.isEmpty()) {
       return Optional.empty();
     }
@@ -1073,12 +1156,12 @@ public class ProtoGenerator {
   }
 
   /** Build a single field for the proto. */
-  private FieldDescriptorProto buildField(
+  private Optional<FieldDescriptorProto> buildField(
       ElementDefinition element, List<ElementDefinition> elementList, int nextTag) {
     FieldDescriptorProto.Label fieldSize = getFieldSize(element);
     if (fieldSize == null) {
       // This field has a max size of zero.  Do not emit a field.
-      return null;
+      return Optional.empty();
     }
 
     FieldOptions.Builder options = FieldOptions.newBuilder();
@@ -1099,10 +1182,12 @@ public class ProtoGenerator {
     }
     String jsonFieldNameString = getJsonNameForElement(element);
 
+    addFhirPathConstraints(element, options);
+
     if (isExternalExtension(element)) {
-      // This is an extension with a type defined by an external profile.
+      // This is an extension with a single type defined by an external profile.
       // If we know about it, we'll inline a field for it.
-      String profileUrl = element.getType(0).getProfile().getValue();
+      String profileUrl = element.getType(0).getProfile(0).getValue();
       StructureDefinitionData profileData = structDefDataByUrl.get(profileUrl);
       if (profileData == null) {
         // Unrecognized url.
@@ -1110,36 +1195,38 @@ public class ProtoGenerator {
         throw new IllegalArgumentException("Encountered unknown extension url: " + profileUrl);
       }
       jsonFieldNameString = resolveSliceNameConflicts(jsonFieldNameString, element, elementList);
-      options.setExtension(
-          Annotations.fhirInlinedExtensionUrl, element.getType(0).getProfile().getValue());
+      options.setExtension(Annotations.fhirInlinedExtensionUrl, profileUrl);
 
-      return buildFieldInternal(
-              jsonFieldNameString,
-              profileData.inlineType,
-              profileData.protoPackage,
-              nextTag,
-              fieldSize,
-              options.build())
-          .build();
+      return Optional.of(
+          buildFieldInternal(
+                  jsonFieldNameString,
+                  profileData.inlineType,
+                  profileData.protoPackage,
+                  nextTag,
+                  fieldSize,
+                  options.build())
+              .build());
     }
 
     Optional<ElementDefinition> choiceTypeBase = getChoiceTypeBase(element);
     if (choiceTypeBase.isPresent()) {
       ElementDefinition choiceTypeBaseElement = choiceTypeBase.get();
-      String jsonName = getJsonNameForElement(choiceTypeBaseElement);
+      String baseJsonName = getJsonNameForElement(choiceTypeBaseElement);
+      String baseContainerType = getContainerType(choiceTypeBaseElement, elementList);
       String containerType = getContainerType(element, elementList);
       containerType =
           containerType.substring(0, containerType.lastIndexOf(".") + 1)
-              + toFieldTypeCase(jsonName);
+              + baseContainerType.substring(baseContainerType.lastIndexOf(".") + 1);
 
-      return buildFieldInternal(
-              jsonName,
-              containerType,
-              packageInfo.getProtoPackage(),
-              nextTag,
-              fieldSize,
-              options.build())
-          .build();
+      return Optional.of(
+          buildFieldInternal(
+                  baseJsonName,
+                  containerType,
+                  packageInfo.getProtoPackage(),
+                  nextTag,
+                  fieldSize,
+                  options.build())
+              .build());
     }
 
     if (isExtensionBackboneElement(element)) {
@@ -1173,21 +1260,25 @@ public class ProtoGenerator {
         && element.getTypeCount() > 0
         && element.getType(0).getCode().getValue().equals("Reference")) {
       for (ElementDefinition.TypeRef type : element.getTypeList()) {
-        String referenceType = type.getTargetProfile().getValue();
-        if (!referenceType.isEmpty()) {
-          addReferenceType(options, referenceType);
+        if (type.getCode().getValue().equals("Reference") && type.getTargetProfileCount() > 0) {
+          for (Canonical referenceType : type.getTargetProfileList()) {
+            if (!referenceType.getValue().isEmpty()) {
+              addReferenceType(options, referenceType.getValue());
+            }
+          }
         }
       }
     }
 
-    return buildFieldInternal(
-            jsonFieldNameString,
-            fieldType.type,
-            fieldType.packageName,
-            nextTag,
-            fieldSize,
-            options.build())
-        .build();
+    return Optional.of(
+        buildFieldInternal(
+                jsonFieldNameString,
+                fieldType.type,
+                fieldType.packageName,
+                nextTag,
+                fieldSize,
+                options.build())
+            .build());
   }
 
   // Adds any FHIRPath constraints from the definition.
@@ -1309,20 +1400,39 @@ public class ProtoGenerator {
       if (!baseStructDefsById.containsKey(baseType)) {
         throw new IllegalArgumentException("Unknown StructureDefinition id: " + baseType);
       }
-      return getChoiceTypeBase(
+      ElementDefinition baseElement =
           getElementDefinitionById(
-              basePath, baseStructDefsById.get(baseType).getSnapshot().getElementList()));
+              basePath, baseStructDefsById.get(baseType).getSnapshot().getElementList());
+      if (baseElement.getId().equals(element.getId())) {
+        // Starting with r4, elements that don't inherit from anything list themselves as base :/
+        return Optional.empty();
+      }
+      return getChoiceTypeBase(baseElement);
     }
     return Optional.empty();
   }
 
+  private boolean useLegacyTypeNaming() {
+    return useLegacyTypeNaming(packageInfo.getFhirVersion());
+  }
+
+  private static boolean useLegacyTypeNaming(Annotations.FhirVersion version) {
+    return version != Annotations.FhirVersion.R4;
+  }
+
   /** Add a choice type container message to the proto. */
-  private DescriptorProto makeChoiceType(ElementDefinition element, FieldDescriptorProto field) {
-    List<String> typeNameParts = Splitter.on('.').splitToList(field.getTypeName());
+  private DescriptorProto makeChoiceType(
+      ElementDefinition element, List<ElementDefinition> elementList, FieldDescriptorProto field) {
+    List<String> typeNameParts =
+        Splitter.on('.').splitToList(getContainerType(element, elementList));
     DescriptorProto.Builder choiceType =
         DescriptorProto.newBuilder().setName(typeNameParts.get(typeNameParts.size() - 1));
     choiceType.getOptionsBuilder().setExtension(Annotations.isChoiceType, true);
-    OneofDescriptorProto.Builder oneof = choiceType.addOneofDeclBuilder().setName(field.getName());
+    // TODO: Remove legacy renaming rules prior to V1.0
+    OneofDescriptorProto.Builder oneof =
+        choiceType
+            .addOneofDeclBuilder()
+            .setName(useLegacyTypeNaming() ? field.getName() : "choice");
 
     int nextTag = 1;
     // Group types.
@@ -1335,10 +1445,11 @@ public class ProtoGenerator {
         foundTypes.add(type.getCode().getValue());
       }
 
-      if (type.getCode().getValue().equals("Reference")) {
-        String referenceType = type.getTargetProfile().getValue();
-        if (!referenceType.isEmpty()) {
-          referenceTypes.add(referenceType);
+      if (type.getCode().getValue().equals("Reference") && type.getTargetProfileCount() > 0) {
+        for (Canonical referenceType : type.getTargetProfileList()) {
+          if (!referenceType.getValue().isEmpty()) {
+            referenceTypes.add(referenceType.getValue());
+          }
         }
       }
     }
@@ -1403,12 +1514,7 @@ public class ProtoGenerator {
             .setNumber(tag)
             .setType(FieldDescriptorProto.Type.TYPE_MESSAGE);
     builder.setLabel(size);
-
-    List<String> fieldTypeParts = new ArrayList<>();
-    for (String part : Splitter.on('.').split(fieldType)) {
-      fieldTypeParts.add(part);
-    }
-    builder.setTypeName("." + fieldPackage + "." + Joiner.on('.').join(fieldTypeParts));
+    builder.setTypeName("." + fieldPackage + "." + fieldType);
 
     if (RESERVED_FIELD_NAMES.contains(fieldJsonName)) {
       builder.setName(toFieldNameCase(fieldJsonName + "Value")).setJsonName(fieldJsonName);
@@ -1424,17 +1530,18 @@ public class ProtoGenerator {
   }
 
   private String normalizeType(ElementDefinition.TypeRef type) {
-    if (!type.hasProfile()) {
+    if (type.getProfileCount() != 1 || type.getProfile(0).getValue().isEmpty()) {
       return toFieldTypeCase(type.getCode().getValue());
-    } else if (structDefDataByUrl.containsKey(type.getProfile().getValue())) {
-      return structDefDataByUrl.get(type.getProfile().getValue()).inlineType;
-    } else {
-      throw new IllegalArgumentException(
-          "Unable to deduce typename for profile: " + type.getProfile().getValue());
     }
+    String profileUrl = type.getProfile(0).getValue();
+    if (structDefDataByUrl.containsKey(profileUrl)) {
+      return structDefDataByUrl.get(profileUrl).inlineType;
+    }
+    throw new IllegalArgumentException(
+        "Unable to deduce typename for profile: " + profileUrl + " on " + type);
   }
 
-  private static final Pattern WORD_BREAK_PATTERN = Pattern.compile("[-_ ]([A-Za-z])");
+  private static final Pattern WORD_BREAK_PATTERN = Pattern.compile("[-_ ]+([A-Za-z])");
 
   // Converts a FHIR id strings to UpperCamelCasing for FieldTypes using a regex pattern that
   // considers hyphen, underscore and space to be word breaks.
@@ -1481,11 +1588,13 @@ public class ProtoGenerator {
   }
 
   private String getTypedReferenceName(List<ElementDefinition.TypeRef> typeList) {
-    // Sort.
-    Set<String> refTypes = new TreeSet<>();
-    for (ElementDefinition.TypeRef type : typeList) {
-      refTypes.add(type.getTargetProfile().getValue());
-    }
+    // Use a Tree Set to have a stable sort.
+    TreeSet<String> refTypes =
+        typeList.stream()
+            .flatMap(type -> type.getTargetProfileList().stream())
+            .map(profile -> profile.getValue())
+            .collect(Collectors.toCollection(TreeSet::new));
+
     String refType = null;
     for (String r : refTypes) {
       if (!r.isEmpty()) {
@@ -1515,7 +1624,7 @@ public class ProtoGenerator {
     return (element.getId().getValue().equals("Extension") && element.hasBase())
         || (element.getBase().getPath().getValue().endsWith(".extension")
             && lastIdToken(element.getId().getValue()).slicename != null
-            && !element.getType(0).hasProfile());
+            && element.getType(0).getProfileCount() == 0);
   }
 
   // Returns the QualifiedType (type + package) of a simple extension as a string.
@@ -1629,9 +1738,11 @@ public class ProtoGenerator {
     String name = toFieldTypeCase(def.getName().getValue());
     Set<String> contexts = new HashSet<>();
     Splitter splitter = Splitter.on('.').limit(2);
-    for (com.google.fhir.stu3.proto.String context : def.getContextList()) {
+    for (StructureDefinition.Context context : def.getContextList()) {
       // Only interest in the top-level resource.
-      contexts.add(splitter.splitToList(context.getValue()).get(0));
+      if (context.getType().getValue() == ExtensionContextTypeCode.Value.ELEMENT) {
+        contexts.add(splitter.splitToList(context.getExpression().getValue()).get(0));
+      }
     }
     if (contexts.size() == 1) {
       String context = Iterables.getOnlyElement(contexts);

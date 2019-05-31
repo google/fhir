@@ -20,9 +20,9 @@ import com.google.common.io.Files;
 import com.google.fhir.proto.Extensions;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.Profiles;
+import com.google.fhir.r4.proto.Bundle;
+import com.google.fhir.r4.proto.StructureDefinition;
 import com.google.fhir.stu3.JsonFormat;
-import com.google.fhir.stu3.proto.Bundle;
-import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.protobuf.TextFormat;
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +40,8 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class ProfileGeneratorTest {
 
-  private final JsonFormat.Parser jsonParser = JsonFormat.Parser.newBuilder().build();
+  private final JsonFormat.Parser jsonParser =
+      JsonFormat.getEarlyVersionStructureDefinitionParser();
   private final JsonFormat.Printer jsonPrinter = JsonFormat.getPrinter();
 
   private ProfileGenerator generator;

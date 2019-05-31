@@ -1,4 +1,4 @@
-name: "ResearchStudy"
+name: "ResearchStudyExtension"
 field {
   name: "id"
   number: 1

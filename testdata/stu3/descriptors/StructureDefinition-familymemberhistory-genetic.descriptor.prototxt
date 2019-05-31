@@ -200,7 +200,7 @@ field {
   number: 20
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.FamilymemberhistoryGenetic.Age"
+  type_name: ".google.fhir.stu3.proto.FamilymemberhistoryGenetic.AgeType"
   options {
     [google.fhir.proto.field_description]: "(approximate) age"
   }
@@ -340,7 +340,7 @@ nested_type {
   }
 }
 nested_type {
-  name: "Age"
+  name: "AgeType"
   field {
     name: "age_value"
     number: 1

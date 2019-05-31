@@ -21,7 +21,12 @@ import com.google.common.collect.Table;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
+import com.google.fhir.r4.proto.Canonical;
 import com.google.fhir.r4.proto.Element;
+import com.google.fhir.r4.proto.ElementDefinition;
+import com.google.fhir.r4.proto.ElementDefinition.ElementDefinitionBinding;
+import com.google.fhir.r4.proto.ExtensionContextTypeCode;
+import com.google.fhir.r4.proto.StructureDefinition;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;
 import com.google.fhir.stu3.proto.Boolean;
 import com.google.fhir.stu3.proto.Extension;
@@ -531,14 +536,21 @@ public final class JsonFormat {
     }
   }
 
-  private static final Parser PARSER = Parser.newBuilder().build();
-
   /**
    * Return a {@link Parser} instance which can parse json-format FHIR messages. The returned
    * instance is thread-safe.
    */
   public static Parser getParser() {
-    return PARSER;
+    return Parser.newBuilder().build();
+  }
+
+  /**
+   * Returns a specialized parser that is able of parsing STU3 structure definitions into R4
+   * (normalized) structure definitions. This is *NOT* an all-purpose STU3 -> R4 converter, and
+   * should *NOT* be used for any data other than structure definitions.
+   */
+  public static Parser getEarlyVersionStructureDefinitionParser() {
+    return new Parser(true, ZoneId.systemDefault());
   }
 
   /**
@@ -548,12 +560,12 @@ public final class JsonFormat {
    * control the parser behavior.
    */
   public static final class Parser {
-    private final boolean useLenientJsonReader;
+    private final boolean convertEarlyVersionStructDefinitions;
     private final JsonParser jsonParser;
     private final ZoneId defaultTimeZone;
 
-    private Parser(boolean useLenientJsonReader, ZoneId defaultTimeZone) {
-      this.useLenientJsonReader = useLenientJsonReader;
+    private Parser(boolean convertEarlyVersionStructDefinitions, ZoneId defaultTimeZone) {
+      this.convertEarlyVersionStructDefinitions = convertEarlyVersionStructDefinitions;
       this.jsonParser = new JsonParser();
       this.defaultTimeZone = defaultTimeZone;
     }
@@ -588,22 +600,23 @@ public final class JsonFormat {
     /**
      * Parse a text-format message from {@code input} and merge the contents into {@code builder}.
      */
-    public void merge(final Reader input, final Message.Builder builder) {
+    public <T extends Message.Builder> T merge(final Reader input, final T builder) {
       JsonReader reader = new JsonReader(input);
-      reader.setLenient(useLenientJsonReader);
       JsonElement json = jsonParser.parse(reader);
       if (json.isJsonObject()) {
         mergeMessage(json.getAsJsonObject(), builder);
       } else {
         parseAndWrap(json, builder, defaultTimeZone).copyInto(builder);
       }
+      return builder;
     }
 
     /**
      * Parse a text-format message from {@code input} and merge the contents into {@code builder}.
      */
-    public void merge(final CharSequence input, final Message.Builder builder) {
+    public <T extends Message.Builder> T merge(final CharSequence input, final T builder) {
       merge(new StringReader(input.toString()), builder);
+      return builder;
     }
 
     private Map<String, FieldDescriptor> getFieldMap(Descriptor descriptor) {
@@ -654,14 +667,19 @@ public final class JsonFormat {
       Map<String, FieldDescriptor> nameToDescriptorMap = getFieldMap(descriptor);
 
       for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
-        if (nameToDescriptorMap.containsKey(entry.getKey())) {
-          FieldDescriptor field = nameToDescriptorMap.get(entry.getKey());
+        String fieldName = entry.getKey();
+        if (convertEarlyVersionStructDefinitions
+            && performSpecializedConversion(json, fieldName, builder)) {
+          continue;
+        }
+        if (nameToDescriptorMap.containsKey(fieldName)) {
+          FieldDescriptor field = nameToDescriptorMap.get(fieldName);
           if (AnnotationUtils.isChoiceType(field)) {
-            mergeChoiceField(field, entry.getKey(), entry.getValue(), builder);
+            mergeChoiceField(field, fieldName, entry.getValue(), builder);
           } else {
             mergeField(field, entry.getValue(), builder);
           }
-        } else if (entry.getKey().equals("resourceType")) {
+        } else if (fieldName.equals("resourceType")) {
           String inputType = entry.getValue().getAsString();
           if (!AnnotationUtils.isResource(descriptor) || !inputType.equals(descriptor.getName())) {
             throw new IllegalArgumentException(
@@ -677,7 +695,7 @@ public final class JsonFormat {
           }
           throw new IllegalArgumentException(
               "Unknown field "
-                  + entry.getKey()
+                  + fieldName
                   + " in input of expected type "
                   + builder.getDescriptorForType().getFullName()
                   + ", known fields: "
@@ -726,6 +744,11 @@ public final class JsonFormat {
     }
 
     private void mergeField(FieldDescriptor field, JsonElement json, Message.Builder builder) {
+      if (convertEarlyVersionStructDefinitions && json == JsonNull.INSTANCE) {
+        // Sometimes when converting structure definition version, we need to null out a field.
+        // Skip over any field that has been nulled out.
+        return;
+      }
       if (!isPrimitiveType(field)) {
         if ((field.isRepeated() && builder.getRepeatedFieldCount(field) > 0)
             || (!field.isRepeated() && builder.hasField(field))) {
@@ -746,6 +769,10 @@ public final class JsonFormat {
         }
       }
       if (field.isRepeated()) {
+        if (!json.isJsonArray()) {
+          throw new IllegalArgumentException(
+              "Expected JsonArray for repeated field: " + field.getFullName());
+        }
         mergeRepeatedField(field, json.getAsJsonArray(), builder);
       } else {
         Message value = parseFieldValue(field, json, builder);
@@ -865,6 +892,81 @@ public final class JsonFormat {
         return subBuilder.build();
       }
     }
+  }
+
+  private static boolean isSpecialCase(
+      String fieldName, Message.Builder builder, String testFieldName, Descriptor testDescriptor) {
+    return fieldName.equals(testFieldName)
+        && AnnotationUtils.sameFhirType(builder.getDescriptorForType(), testDescriptor);
+  }
+
+  private static boolean performSpecializedConversion(
+      JsonObject json, String fieldName, Message.Builder builder) {
+    if (isSpecialCase(
+        fieldName, builder, "valueSetReference", ElementDefinitionBinding.getDescriptor())) {
+      ((ElementDefinitionBinding.Builder) builder)
+          .getValueSetBuilder()
+          .setValue(
+              json.getAsJsonObject("valueSetReference")
+                  .getAsJsonPrimitive("reference")
+                  .getAsString());
+      return true;
+    }
+    if (isSpecialCase(
+        fieldName, builder, "valueSetUri", ElementDefinitionBinding.getDescriptor())) {
+      ((ElementDefinitionBinding.Builder) builder)
+          .getValueSetBuilder()
+          .setValue(json.getAsJsonPrimitive("valueSetUri").getAsString());
+      return true;
+    }
+    if (isSpecialCase(fieldName, builder, "contextType", StructureDefinition.getDescriptor())) {
+      String contextTypeString = json.getAsJsonPrimitive("contextType").getAsString();
+      ExtensionContextTypeCode contextType;
+      if (contextTypeString.equals("resource") || contextTypeString.equals("datatype")) {
+        contextType =
+            ExtensionContextTypeCode.newBuilder()
+                .setValue(ExtensionContextTypeCode.Value.ELEMENT)
+                .build();
+      } else if (contextTypeString.equals("extension")) {
+        contextType =
+            ExtensionContextTypeCode.newBuilder()
+                .setValue(ExtensionContextTypeCode.Value.EXTENSION)
+                .build();
+      } else {
+        throw new IllegalArgumentException("Unrecognized Context type: " + contextTypeString);
+      }
+      if (json.has("context")) {
+        for (JsonElement contextElement : json.getAsJsonArray("context")) {
+          StructureDefinition.Context.Builder contextBuilder =
+              StructureDefinition.Context.newBuilder();
+          contextBuilder
+              .setType(contextType)
+              .getExpressionBuilder()
+              .setValue(contextElement.getAsJsonPrimitive().getAsString());
+          ((StructureDefinition.Builder) builder).addContext(contextBuilder);
+        }
+        // Null out context array to prevent trying to merge into context field on proto.
+        json.add("context", JsonNull.INSTANCE);
+      }
+      return true;
+    }
+    if (isSpecialCase(
+            fieldName, builder, "targetProfile", ElementDefinition.TypeRef.getDescriptor())
+        && json.get("targetProfile").isJsonPrimitive()) {
+      ((ElementDefinition.TypeRef.Builder) builder)
+          .addTargetProfile(
+              Canonical.newBuilder()
+                  .setValue(json.getAsJsonPrimitive("targetProfile").getAsString()));
+      return true;
+    }
+    if (isSpecialCase(fieldName, builder, "profile", ElementDefinition.TypeRef.getDescriptor())
+        && json.get("profile").isJsonPrimitive()) {
+      ((ElementDefinition.TypeRef.Builder) builder)
+          .addProfile(
+              Canonical.newBuilder().setValue(json.getAsJsonPrimitive("profile").getAsString()));
+      return true;
+    }
+    return false;
   }
 
   public static PrimitiveWrapper primitiveWrapperOf(

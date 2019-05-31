@@ -2949,6 +2949,48 @@ message BasicEncounterClass {
   CodeableConcept value_codeable_concept = 3;
 }
 
+// Auto-generated from StructureDefinition for relativeDateTime.
+// A date/time that is specified relative to another event.
+// See http://hl7.org/fhir/StructureDefinition/cqf-relativeDateTime
+message ElementRelativeDateTime {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cqf-relativeDateTime";
+
+  // Unique id for inter-element referencing
+  String id = 1;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 2;
+
+  // Relative to what event
+  Reference target = 4
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Relative to which element on the event
+  String target_path = 5
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // before-start | before | before-end | concurrent-with-start | concurrent |
+  // concurrent-with-end | after-start | after | after-end
+  ActionRelationshipTypeCode relationship = 6
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // How long
+  message Offset {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Duration duration = 1;
+      Range range = 2;
+    }
+  }
+  Offset offset = 7
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+}
+
 // Auto-generated from StructureDefinition for http-response-header.
 // HTTP header returned by the interaction.
 // See http://hl7.org/fhir/StructureDefinition/http-response-header
@@ -3884,7 +3926,7 @@ message ValueSetExtensible {
 // Auto-generated from StructureDefinition for statusReason.
 // Reason for current status.
 // See http://hl7.org/fhir/StructureDefinition/request-statusReason
-message StatusReasonException {
+message StatusReasonExtension {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
@@ -5472,6 +5514,39 @@ message ElementOriginalText {
 
   // Value of extension
   String value_string = 3;
+}
+
+// Auto-generated from StructureDefinition for Translation.
+// Language Translation (Localization).
+// See http://hl7.org/fhir/StructureDefinition/translation
+message Translation {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/translation";
+
+  // Unique id for inter-element referencing
+  String id = 1;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 2;
+
+  // Code for Language
+  Code lang = 4
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Content in other Language
+  message Content {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Markdown markdown = 2;
+    }
+  }
+  Content content = 5
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for relationship.
@@ -7132,6 +7207,45 @@ message OrdinalValue {
 
   // Value of extension
   Decimal value_decimal = 3;
+}
+
+// Auto-generated from StructureDefinition for Relative Date Criteria.
+// Relative Date Criteria.
+// See http://hl7.org/fhir/StructureDefinition/relative-date
+message RelativeDateCriteria {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/relative-date";
+
+  // Unique id for inter-element referencing
+  String id = 1;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 2;
+
+  // Event that the date is relative to
+  message Event {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Reference reference = 1
+          [(.google.fhir.proto.valid_reference_type) = "Resource"];
+      CodeableConcept codeable_concept = 2;
+    }
+  }
+  Event event = 4
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // before-start | before | before-end | concurrent-with-start | concurrent |
+  // concurrent-with-end | after-start | after | after-end
+  ActionRelationshipTypeCode relationship = 5
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Duration after the event
+  Duration offset = 6
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for effectiveDate.

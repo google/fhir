@@ -1,4 +1,4 @@
-name: "Location"
+name: "LocationExtension"
 field {
   name: "id"
   number: 1

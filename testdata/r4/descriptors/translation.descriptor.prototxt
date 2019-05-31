@@ -42,7 +42,7 @@ field {
   }
 }
 nested_type {
-  name: "ValueX"
+  name: "Content"
   field {
     name: "string_value"
     number: 1

@@ -20,8 +20,8 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 import com.google.fhir.dstu2.StructureDefinitionTransformer;
 import com.google.fhir.proto.Annotations.FhirVersion;
-import com.google.fhir.stu3.proto.Bundle;
-import com.google.fhir.stu3.proto.StructureDefinition;
+import com.google.fhir.r4.proto.Bundle;
+import com.google.fhir.r4.proto.StructureDefinition;
 import com.google.protobuf.Message;
 import com.google.protobuf.TextFormat;
 import java.io.File;
@@ -54,40 +54,32 @@ public final class FileUtils {
 
   public static List<StructureDefinition> loadStructureDefinitionsInZip(
       String zip, FhirVersion fhirVersion) throws IOException {
-    JsonFormat.Parser parser = JsonFormat.Parser.newBuilder().build();
+    JsonFormat.Parser parser =
+        fhirVersion == FhirVersion.DSTU2 || fhirVersion == fhirVersion.STU3
+            ? JsonFormat.getEarlyVersionStructureDefinitionParser()
+            : JsonFormat.getParser();
     List<StructureDefinition> structDefs = new ArrayList<>();
     ZipFile zipFile = new ZipFile(new File(zip));
     Enumeration<? extends ZipEntry> entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       String json =
           new String(ByteStreams.toByteArray(zipFile.getInputStream(entries.nextElement())), UTF_8);
+      if (fhirVersion == FhirVersion.DSTU2) {
+        json = StructureDefinitionTransformer.transformDstu2ToStu3(json);
+      }
       try {
         StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
-        switch (fhirVersion) {
-          case DSTU2:
-            json = StructureDefinitionTransformer.transformDstu2ToStu3(json);
-            break;
-          case STU3:
-            break;
-          default:
-            throw new IllegalArgumentException("Unrecognized FhirVersion: " + fhirVersion);
-        }
         parser.merge(json, structDefBuilder);
         structDefs.add(structDefBuilder.build());
       } catch (IllegalArgumentException e) {
-        // Couldn't parse as structure definitions.  Check if it's a bundle of structure definitions
+        // Couldn't parse as structure definitions.  Check if it's a bundle of structure
+        // definitions
         Bundle.Builder bundleBuilder = Bundle.newBuilder();
         parser.merge(json, bundleBuilder);
         for (Bundle.Entry entry : bundleBuilder.getEntryList()) {
-          if (!entry.getResource().hasStructureDefinition()) {
-            throw new IllegalArgumentException(
-                "Zip "
-                    + zip
-                    + " must be a zip of either"
-                    + "structure definitions, or bundles of structure definitions.",
-                e);
+          if (entry.getResource().hasStructureDefinition()) {
+            structDefs.add(entry.getResource().getStructureDefinition());
           }
-          structDefs.add(entry.getResource().getStructureDefinition());
         }
       }
     }

@@ -121,8 +121,9 @@ fhir_proto_library(
         "profile_config.proto",
     ],
     proto_deps = [
-        ":codes_proto",
         "//proto:annotations_proto",
+        "//proto/r4:codes_proto",
+        "//proto/r4:datatypes_proto",
     ],
     proto_library_prefix = "profile_config",
 )

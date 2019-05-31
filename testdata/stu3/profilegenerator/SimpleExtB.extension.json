@@ -19,7 +19,11 @@
   "fhirVersion": "3.0.1",
   "kind": "complex-type",
   "abstract": false,
-  "contextType": "resource",
+  "context": [
+    {
+      "type": "element"
+    }
+  ],
   "type": "Extension",
   "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
   "derivation": "constraint",
@@ -190,9 +194,7 @@
             }
           ],
           "strength": "required",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
         },
         "mapping": [
           {
@@ -250,9 +252,7 @@
             }
           ],
           "strength": "required",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
         }
       }
     ]

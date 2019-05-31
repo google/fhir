@@ -14,14 +14,17 @@
 
 package com.google.fhir.stu3;
 
-import static com.google.common.truth.Truth.assertThat;
 
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.fail;
+
+import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
-import com.google.fhir.stu3.proto.StructureDefinition;
+import com.google.fhir.r4.proto.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.ExtensionRegistry;
@@ -46,7 +49,7 @@ public class ProtoGeneratorTest {
   private ProtoGenerator protoGenerator;
   private Runfiles runfiles;
 
-  private static Map<StructureDefinition, String> knownStructDefs = null;
+  private static ImmutableMap<StructureDefinition, String> knownStructDefs = null;
 
   /** Read the specifed file from the testdata directory into a String. */
   private String loadFile(String relativePath) throws IOException {
@@ -62,6 +65,10 @@ public class ProtoGeneratorTest {
       case STU3:
         pathPrefix =
             "com_google_fhir/spec/hl7.fhir.core/3.0.1/package/StructureDefinition-";
+        break;
+      case R4:
+        pathPrefix =
+            "com_google_fhir/spec/hl7.fhir.core/4.0.0/package/StructureDefinition-";
         break;
       default:
         throw new IllegalArgumentException("unrecognized FHIR version " + version);
@@ -92,6 +99,9 @@ public class ProtoGeneratorTest {
     switch (version) {
       case STU3:
         pathPrefix = "com_google_fhir/testdata/stu3/descriptors/StructureDefinition-";
+        break;
+      case R4:
+        pathPrefix = "com_google_fhir/testdata/r4/descriptors/";
         break;
       default:
         throw new IllegalArgumentException("unrecognized FHIR version " + version);
@@ -143,47 +153,44 @@ public class ProtoGeneratorTest {
                 (listDir, name) ->
                     name.endsWith(".json") && !name.endsWith("consentdirective.profile.json"))) {
       String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
-      switch (version) {
-        case STU3:
-          // No-op.
-          break;
-        default:
-          throw new IllegalArgumentException("unrecognized FHIR version " + version);
-      }
       StructureDefinition.Builder builder = StructureDefinition.newBuilder();
       jsonParser.merge(json, builder);
       knownStructDefs.put(builder.build(), protoPackage);
     }
   }
 
-  public Map<StructureDefinition, String> getKnownStructDefs() throws IOException {
+  public ImmutableMap<StructureDefinition, String> getKnownStructDefs() throws IOException {
     if (knownStructDefs != null) {
       return knownStructDefs;
     }
-    knownStructDefs = new HashMap<>();
+    Map<StructureDefinition, String> mutableKnownStructDefs = new HashMap<>();
     addPackage(
-        knownStructDefs,
+        mutableKnownStructDefs,
         "spec/hl7.fhir.core/3.0.1/package",
         "google.fhir.stu3.proto",
         FhirVersion.STU3);
     addPackage(
-        knownStructDefs,
+        mutableKnownStructDefs,
         "spec/hl7.fhir.core/3.0.1/modified",
         "google.fhir.stu3.proto",
         FhirVersion.STU3);
     addPackage(
-        knownStructDefs, "testdata/stu3/google", "google.fhir.stu3.google", FhirVersion.STU3);
+        mutableKnownStructDefs,
+        "testdata/stu3/google",
+        "google.fhir.stu3.google",
+        FhirVersion.STU3);
     addPackage(
-        knownStructDefs,
+        mutableKnownStructDefs,
         "spec/hl7.fhir.us.core/1.0.1/package",
         "google.fhir.stu3.uscore",
         FhirVersion.STU3);
+    knownStructDefs = ImmutableMap.copyOf(mutableKnownStructDefs);
     return knownStructDefs;
   }
 
   @Before
   public void setUp() throws IOException {
-    jsonParser = JsonFormat.getParser();
+    jsonParser = JsonFormat.getEarlyVersionStructureDefinitionParser();
     textParser = TextFormat.getParser();
     runfiles = Runfiles.create();
     protoGenerator =
@@ -1476,5 +1483,56 @@ public class ProtoGeneratorTest {
   @Test
   public void generateTimingDaysofcycle() throws Exception {
     testExtension("timing-daysOfCycle");
+  }
+
+  /** Test generating the timing-daysofcycle extension. */
+  @Test
+  public void generateTranslate() throws Exception {
+    testExtension("translation");
+  }
+
+  private void testGeneratedR4Proto(ProtoGenerator protoGenerator, String resourceName)
+      throws IOException {
+    StructureDefinition resource = readStructureDefinition(resourceName, FhirVersion.R4);
+    DescriptorProto generatedProto = protoGenerator.generateProto(resource);
+    DescriptorProto golden = readDescriptorProto(resourceName, FhirVersion.R4);
+    if (!generatedProto.equals(golden)) {
+      System.out.println("Failed on: " + resourceName);
+      assertThat(generatedProto).isEqualTo(golden);
+    }
+  }
+
+  private static final int EXPECTED_R4_COUNT = 604;
+
+  /** Test generating R4 proto files. */
+  @Test
+  public void generateR4() throws Exception {
+    Map<StructureDefinition, String> knownStructDefs = new HashMap<>();
+    addPackage(
+        knownStructDefs,
+        "spec/hl7.fhir.core/4.0.0/package",
+        "google.fhir.r4.proto",
+        FhirVersion.R4);
+    ProtoGenerator protoGenerator =
+        new ProtoGenerator(
+            PackageInfo.newBuilder()
+                .setProtoPackage("google.fhir.r4.proto")
+                .setJavaProtoPackage("com.google.fhir.r4.proto")
+                .setFhirVersion(FhirVersion.R4)
+                .build(),
+            "proto/r4",
+            ImmutableMap.copyOf(knownStructDefs));
+    String suffix = ".descriptor.prototxt";
+    int fileCount = 0;
+    for (File file :
+        new File(runfiles.rlocation("com_google_fhir/testdata/r4/descriptors/"))
+            .listFiles((listDir, name) -> name.endsWith(suffix))) {
+      String resourceName = file.getName().substring(0, file.getName().indexOf(suffix));
+      testGeneratedR4Proto(protoGenerator, resourceName);
+      fileCount++;
+    }
+    if (fileCount != EXPECTED_R4_COUNT) {
+      fail("Expected " + EXPECTED_R4_COUNT + " R4 descriptors to test, but found " + fileCount);
+    }
   }
 }

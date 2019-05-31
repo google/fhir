@@ -75,6 +75,29 @@ filegroup(
     ]),
 )
 
+filegroup(
+    name = "fhir_r4_structure_definitions_filegroup",
+    srcs = glob(
+        ["hl7.fhir.core/4.0.0/package/StructureDefinition-*.json"],
+        exclude = [
+            "hl7.fhir.core/4.0.0/package/StructureDefinition-example-*.json",
+            "hl7.fhir.core/4.0.0/package/StructureDefinition-*.*.json",
+        ],
+    ),
+)
+
+# Structure Definitions for the R4 core types.
+zip_file(
+    name = "fhir_r4_structure_definitions.zip",
+    filegroup = ":fhir_r4_structure_definitions_filegroup",
+)
+
+structure_definition_package(
+    package_name = "fhir_r4_package",
+    package_info = "fhir_r4_package_info.prototxt",
+    structure_definitions_zip = "fhir_r4_structure_definitions.zip",
+)
+
 # Structure Definitions for the US-Core profiles.
 filegroup(
     name = "uscore_stu3_structure_definitions_filegroup",

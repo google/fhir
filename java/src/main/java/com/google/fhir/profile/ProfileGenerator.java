@@ -34,36 +34,36 @@ import com.google.fhir.proto.Profiles;
 import com.google.fhir.proto.ReferenceRestriction;
 import com.google.fhir.proto.SimpleExtension;
 import com.google.fhir.proto.SizeRestriction;
+import com.google.fhir.r4.proto.BindingStrengthCode;
+import com.google.fhir.r4.proto.Bundle;
+import com.google.fhir.r4.proto.Canonical;
+import com.google.fhir.r4.proto.Code;
+import com.google.fhir.r4.proto.CodeableConcept;
+import com.google.fhir.r4.proto.Coding;
+import com.google.fhir.r4.proto.ContactDetail;
+import com.google.fhir.r4.proto.ContactPoint;
+import com.google.fhir.r4.proto.ContactPointSystemCode;
+import com.google.fhir.r4.proto.ContainedResource;
+import com.google.fhir.r4.proto.DateTime;
+import com.google.fhir.r4.proto.DiscriminatorTypeCode;
+import com.google.fhir.r4.proto.ElementDefinition;
+import com.google.fhir.r4.proto.ElementDefinition.ElementDefinitionBinding;
+import com.google.fhir.r4.proto.ElementDefinitionBindingName;
+import com.google.fhir.r4.proto.ElementDefinitionOrBuilder;
+import com.google.fhir.r4.proto.Extension;
+import com.google.fhir.r4.proto.ExtensionContextTypeCode;
+import com.google.fhir.r4.proto.FHIRVersionCode;
+import com.google.fhir.r4.proto.Id;
+import com.google.fhir.r4.proto.Markdown;
+import com.google.fhir.r4.proto.SlicingRulesCode;
+import com.google.fhir.r4.proto.StructureDefinition;
+import com.google.fhir.r4.proto.StructureDefinition.Differential;
+import com.google.fhir.r4.proto.StructureDefinition.Snapshot;
+import com.google.fhir.r4.proto.StructureDefinitionKindCode;
+import com.google.fhir.r4.proto.TypeDerivationRuleCode;
+import com.google.fhir.r4.proto.UnsignedInt;
+import com.google.fhir.r4.proto.Uri;
 import com.google.fhir.stu3.DateTimeWrapper;
-import com.google.fhir.stu3.proto.BindingStrengthCode;
-import com.google.fhir.stu3.proto.Bundle;
-import com.google.fhir.stu3.proto.Code;
-import com.google.fhir.stu3.proto.CodeableConcept;
-import com.google.fhir.stu3.proto.Coding;
-import com.google.fhir.stu3.proto.ContactDetail;
-import com.google.fhir.stu3.proto.ContactPoint;
-import com.google.fhir.stu3.proto.ContactPointSystemCode;
-import com.google.fhir.stu3.proto.ContainedResource;
-import com.google.fhir.stu3.proto.DateTime;
-import com.google.fhir.stu3.proto.DiscriminatorTypeCode;
-import com.google.fhir.stu3.proto.ElementDefinition;
-import com.google.fhir.stu3.proto.ElementDefinition.ElementDefinitionBinding;
-import com.google.fhir.stu3.proto.ElementDefinitionBindingName;
-import com.google.fhir.stu3.proto.ElementDefinitionOrBuilder;
-import com.google.fhir.stu3.proto.Extension;
-import com.google.fhir.stu3.proto.ExtensionContextCode;
-import com.google.fhir.stu3.proto.FHIRDefinedTypeExtCode;
-import com.google.fhir.stu3.proto.Id;
-import com.google.fhir.stu3.proto.Markdown;
-import com.google.fhir.stu3.proto.Reference;
-import com.google.fhir.stu3.proto.SlicingRulesCode;
-import com.google.fhir.stu3.proto.StructureDefinition;
-import com.google.fhir.stu3.proto.StructureDefinition.Differential;
-import com.google.fhir.stu3.proto.StructureDefinition.Snapshot;
-import com.google.fhir.stu3.proto.StructureDefinitionKindCode;
-import com.google.fhir.stu3.proto.TypeDerivationRuleCode;
-import com.google.fhir.stu3.proto.UnsignedInt;
-import com.google.fhir.stu3.proto.Uri;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
@@ -156,7 +156,7 @@ final class ProfileGenerator {
     setMetadata(
         structDefBuilder,
         baseStructDef.getSnapshot().getElement(0).getPath().getValue(),
-        fhirUri(profile.getBaseUrl()),
+        profile.getBaseUrl(),
         elementData,
         packageInfo,
         StructureDefinitionKindCode.Value.RESOURCE);
@@ -232,7 +232,7 @@ final class ProfileGenerator {
     setMetadata(
         structDefBuilder,
         "Extension",
-        getExtensionStructDef().getUrl(),
+        getExtensionStructDef().getUrl().getValue(),
         elementData,
         packageInfo,
         StructureDefinitionKindCode.Value.COMPLEX_TYPE);
@@ -288,7 +288,7 @@ final class ProfileGenerator {
     setMetadata(
         structDefBuilder,
         "Extension",
-        getExtensionStructDef().getUrl(),
+        getExtensionStructDef().getUrl().getValue(),
         elementData,
         packageInfo,
         StructureDefinitionKindCode.Value.COMPLEX_TYPE);
@@ -567,7 +567,8 @@ final class ProfileGenerator {
     Set<String> originalReferenceTargets =
         originalTypes.stream()
             .filter(type -> type.getCode().getValue().equals("Reference"))
-            .map(type -> type.getTargetProfile().getValue())
+            .flatMap(
+                type -> type.getTargetProfileList().stream().map(canonical -> canonical.getValue()))
             .collect(Collectors.toSet());
     if (originalReferenceTargets.isEmpty()) {
       throw new IllegalArgumentException(
@@ -587,7 +588,7 @@ final class ProfileGenerator {
         newTypes.add(
             ElementDefinition.TypeRef.newBuilder()
                 .setCode(Uri.newBuilder().setValue("Reference"))
-                .setTargetProfile(Uri.newBuilder().setValue(referenceTarget))
+                .addTargetProfile(Canonical.newBuilder().setValue(referenceTarget))
                 .build());
       } else {
         invalidReferenceTargets.add(referenceTarget);
@@ -642,7 +643,7 @@ final class ProfileGenerator {
         .addType(
             ElementDefinition.TypeRef.newBuilder()
                 .setCode(fhirUri("Extension"))
-                .setProfile(fhirUri(extensionSlice.getUrl())));
+                .addProfile(fhirCanonical(extensionSlice.getUrl())));
     return extensionElement.build();
   }
 
@@ -690,7 +691,7 @@ final class ProfileGenerator {
   private void setMetadata(
       StructureDefinition.Builder structureDefinitionBuilder,
       String type,
-      Uri baseDefinitionUrl,
+      String baseDefinitionUrl,
       ElementData elementData,
       PackageInfo packageInfo,
       StructureDefinitionKindCode.Value structureDefinitionKind) {
@@ -711,14 +712,17 @@ final class ProfileGenerator {
                         .setValue(fhirString(packageInfo.getTelcomUrl()))))
         .setDescription(Markdown.newBuilder().setValue(elementData.getDescription()))
         .setFhirVersion(
-            Id.newBuilder()
+            FHIRVersionCode.newBuilder()
                 .setValue(FhirVersion.fromAnnotation(packageInfo.getFhirVersion()).minorVersion))
         .setKind(StructureDefinitionKindCode.newBuilder().setValue(structureDefinitionKind))
         .setAbstract(fhirBoolean(false))
-        .setContextType(
-            ExtensionContextCode.newBuilder().setValue(ExtensionContextCode.Value.RESOURCE))
-        .setType(FHIRDefinedTypeExtCode.newBuilder().setValue(type))
-        .setBaseDefinition(baseDefinitionUrl)
+        .addContext(
+            StructureDefinition.Context.newBuilder()
+                .setType(
+                    ExtensionContextTypeCode.newBuilder()
+                        .setValue(ExtensionContextTypeCode.Value.ELEMENT)))
+        .setType(fhirUri(type))
+        .setBaseDefinition(fhirCanonical(baseDefinitionUrl))
         .setDerivation(
             TypeDerivationRuleCode.newBuilder().setValue(TypeDerivationRuleCode.Value.CONSTRAINT));
   }
@@ -828,9 +832,7 @@ final class ProfileGenerator {
   private static ElementDefinitionBinding buildCodeBinding(CodeData codeData) {
     ElementDefinitionBinding.Builder binding =
         ElementDefinitionBinding.newBuilder()
-            .setValueSet(
-                ElementDefinitionBinding.ValueSet.newBuilder()
-                    .setReference(Reference.newBuilder().setUri(fhirString(codeData.getSystem()))))
+            .setValueSet(fhirCanonical(codeData.getSystem()))
             .setStrength(
                 BindingStrengthCode.newBuilder()
                     .setValue(
@@ -856,16 +858,20 @@ final class ProfileGenerator {
     return element.setId(fhirString(rootId + tail)).setPath(fhirString(rootPath + tail));
   }
 
-  private static com.google.fhir.stu3.proto.String fhirString(String value) {
-    return com.google.fhir.stu3.proto.String.newBuilder().setValue(value).build();
+  private static com.google.fhir.r4.proto.String fhirString(String value) {
+    return com.google.fhir.r4.proto.String.newBuilder().setValue(value).build();
   }
 
-  private static com.google.fhir.stu3.proto.Boolean fhirBoolean(boolean value) {
-    return com.google.fhir.stu3.proto.Boolean.newBuilder().setValue(value).build();
+  private static com.google.fhir.r4.proto.Boolean fhirBoolean(boolean value) {
+    return com.google.fhir.r4.proto.Boolean.newBuilder().setValue(value).build();
   }
 
   private static Uri fhirUri(String value) {
     return Uri.newBuilder().setValue(value).build();
+  }
+
+  private static Canonical fhirCanonical(String value) {
+    return Canonical.newBuilder().setValue(value).build();
   }
 
   private static Code fhirCode(String value) {
@@ -979,7 +985,7 @@ final class ProfileGenerator {
     }
   }
 
-  private static com.google.fhir.stu3.proto.String maxSize(SizeRestriction size) {
+  private static com.google.fhir.r4.proto.String maxSize(SizeRestriction size) {
     switch (size) {
       case ABSENT:
         return fhirString("0");

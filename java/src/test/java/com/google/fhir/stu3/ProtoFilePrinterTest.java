@@ -18,6 +18,7 @@ import static com.google.common.truth.Truth.assertWithMessage;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
@@ -25,10 +26,10 @@ import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
+import com.google.fhir.r4.proto.StructureDefinition;
 import com.google.fhir.stu3.proto.ContactDetail;
 import com.google.fhir.stu3.proto.ContainedResource;
 import com.google.fhir.stu3.proto.Extension;
-import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -59,7 +60,7 @@ public final class ProtoFilePrinterTest {
   private ProtoFilePrinter protoPrinter;
   private Runfiles runfiles;
 
-  private static Map<StructureDefinition, String> knownStructDefs = null;
+  private static ImmutableMap<StructureDefinition, String> knownStructDefs = null;
 
   /** Read and parse the specified StructureDefinition. */
   private StructureDefinition readStructureDefinition(String resourceName) throws IOException {
@@ -92,7 +93,7 @@ public final class ProtoFilePrinterTest {
     return builder.build();
   }
 
-  public Map<StructureDefinition, String> getKnownStructDefs() throws IOException {
+  public ImmutableMap<StructureDefinition, String> getKnownStructDefs() throws IOException {
     if (knownStructDefs != null) {
       return knownStructDefs;
     }
@@ -111,13 +112,14 @@ public final class ProtoFilePrinterTest {
         structDefs,
         new File(runfiles.rlocation("com_google_fhir/spec/hl7.fhir.core/3.0.1/modified/"))
             .listFiles(jsonFilter));
-    knownStructDefs = new HashMap<>();
+    Map<StructureDefinition, String> mutableKnownStructDefs = new HashMap<>();
     for (File file : structDefs) {
       String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
       StructureDefinition.Builder builder = StructureDefinition.newBuilder();
       jsonParser.merge(json, builder);
-      knownStructDefs.put(builder.build(), "google.fhir.stu3.proto");
+      mutableKnownStructDefs.put(builder.build(), "google.fhir.stu3.proto");
     }
+    knownStructDefs = ImmutableMap.copyOf(mutableKnownStructDefs);
     return knownStructDefs;
   }
 
@@ -235,7 +237,7 @@ public final class ProtoFilePrinterTest {
   @Before
   public void setUp() throws IOException {
     String packageName = "google.fhir.stu3.proto";
-    jsonParser = JsonFormat.getParser();
+    jsonParser = JsonFormat.getEarlyVersionStructureDefinitionParser();
     runfiles = Runfiles.create();
     PackageInfo packageInfo =
         PackageInfo.newBuilder()

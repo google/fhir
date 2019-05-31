@@ -17,6 +17,7 @@ package com.google.fhir.common;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.fhir.proto.Annotations;
+import com.google.fhir.r4.proto.FHIRVersionCode;
 import com.google.fhir.stu3.proto.AbstractTypeCode;
 import com.google.fhir.stu3.proto.AddressTypeCode;
 import com.google.fhir.stu3.proto.Decimal;
@@ -40,7 +41,16 @@ public enum FhirVersion {
           "metadatatypes.proto", ElementDefinition.getDescriptor().getFile(),
           "extensions.proto", ElementDefinitionBindingName.getDescriptor().getFile(),
           "codes.proto", AbstractTypeCode.getDescriptor().getFile()),
-      "3.0.1");
+      FHIRVersionCode.Value.NUM_3_0_1),
+  R4(
+      "google.fhir.r4.proto",
+      ImmutableList.of(
+          com.google.fhir.r4.proto.AccountStatusCode.getDescriptor().getFile(),
+          com.google.fhir.r4.proto.AddressTypeCode.getDescriptor().getFile()),
+      ImmutableMap.of(
+          "datatypes.proto", com.google.fhir.r4.proto.Decimal.getDescriptor().getFile(),
+          "codes.proto", com.google.fhir.r4.proto.AccountStatusCode.getDescriptor().getFile()),
+      FHIRVersionCode.Value.NUM_4_0_0);
 
   // The package of the core FHIR structures.
   public final String coreFhirPackage;
@@ -49,13 +59,13 @@ public enum FhirVersion {
   // A map of all the FHIR core types to their corresponding files.
   public final ImmutableMap<String, FileDescriptor> coreTypeMap;
 
-  public final String minorVersion;
+  public final FHIRVersionCode.Value minorVersion;
 
   private FhirVersion(
       String coreFhirPackage,
       ImmutableList<FileDescriptor> codeTypeList,
       ImmutableMap<String, FileDescriptor> coreTypeMap,
-      String minorVersion) {
+      FHIRVersionCode.Value minorVersion) {
     this.coreFhirPackage = coreFhirPackage;
     this.codeTypeList = codeTypeList;
     this.coreTypeMap = coreTypeMap;
@@ -67,6 +77,8 @@ public enum FhirVersion {
     switch (protoEnum) {
       case STU3:
         return STU3;
+      case R4:
+        return R4;
       default:
         throw new IllegalArgumentException("FHIR version unknown or unsupported: " + protoEnum);
     }
@@ -77,6 +89,8 @@ public enum FhirVersion {
     switch (this) {
       case STU3:
         return Annotations.FhirVersion.STU3;
+      case R4:
+        return Annotations.FhirVersion.R4;
     }
     throw new IllegalArgumentException("Unhandled FHIR version: " + this);
   }

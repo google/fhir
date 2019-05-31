@@ -19,7 +19,11 @@
   "fhirVersion": "3.0.1",
   "kind": "resource",
   "abstract": false,
-  "contextType": "resource",
+  "context": [
+    {
+      "type": "element"
+    }
+  ],
   "type": "Patient",
   "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Patient",
   "derivation": "constraint",
@@ -185,9 +189,7 @@
           ],
           "strength": "extensible",
           "description": "A human language.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/languages"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/languages"
         }
       },
       {
@@ -466,9 +468,7 @@
           ],
           "strength": "required",
           "description": "The gender of a person used for administrative purposes.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/administrative-gender"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/administrative-gender"
         },
         "mapping": [
           {
@@ -609,9 +609,7 @@
           ],
           "strength": "extensible",
           "description": "The domestic partnership status of a person.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/marital-status"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/marital-status"
         },
         "mapping": [
           {
@@ -846,9 +844,7 @@
           ],
           "strength": "extensible",
           "description": "The nature of the relationship between a patient and a contact person for that patient.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/v2-0131"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/v2-0131"
         },
         "mapping": [
           {
@@ -976,9 +972,7 @@
           ],
           "strength": "required",
           "description": "The gender of a person used for administrative purposes.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/administrative-gender"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/administrative-gender"
         },
         "mapping": [
           {
@@ -1006,7 +1000,9 @@
         "type": [
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/Organization"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Organization"
+            ]
           }
         ],
         "condition": [
@@ -1205,9 +1201,7 @@
           ],
           "strength": "example",
           "description": "The species of an animal.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/animal-species"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/animal-species"
         },
         "mapping": [
           {
@@ -1248,9 +1242,7 @@
           ],
           "strength": "example",
           "description": "The breed of an animal.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/animal-breeds"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/animal-breeds"
         },
         "mapping": [
           {
@@ -1290,9 +1282,7 @@
           ],
           "strength": "example",
           "description": "The state of the animal's reproductive organs.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/animal-genderstatus"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/animal-genderstatus"
         },
         "mapping": [
           {
@@ -1465,9 +1455,7 @@
           ],
           "strength": "extensible",
           "description": "A human language.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/languages"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/languages"
         },
         "mapping": [
           {
@@ -1527,11 +1515,15 @@
         "type": [
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/Organization"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Organization"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/Practitioner"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Practitioner"
+            ]
           }
         ],
         "mapping": [
@@ -1561,7 +1553,9 @@
         "type": [
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/Organization"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Organization"
+            ]
           }
         ],
         "isSummary": true,
@@ -1712,11 +1706,15 @@
         "type": [
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/Patient"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Patient"
+            ]
           },
           {
             "code": "Reference",
-            "targetProfile": "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+            ]
           }
         ],
         "isSummary": true,
@@ -1757,9 +1755,7 @@
           ],
           "strength": "required",
           "description": "The type of link between this patient resource and another patient resource.",
-          "valueSetReference": {
-            "reference": "http://hl7.org/fhir/ValueSet/link-type"
-          }
+          "valueSet": "http://hl7.org/fhir/ValueSet/link-type"
         },
         "mapping": [
           {
@@ -1788,7 +1784,9 @@
         "type": [
           {
             "code": "Extension",
-            "profile": "http://hl7.org/fhir/StructureDefinition/birthPlace"
+            "profile": [
+              "http://hl7.org/fhir/StructureDefinition/birthPlace"
+            ]
           }
         ],
         "condition": [
@@ -1829,7 +1827,9 @@
         "type": [
           {
             "code": "Extension",
-            "profile": "http://hl7.org/fhir/StructureDefinition/iso21090-TEL-address"
+            "profile": [
+              "http://hl7.org/fhir/StructureDefinition/iso21090-TEL-address"
+            ]
           }
         ],
         "condition": [
@@ -1886,7 +1886,9 @@
         "type": [
           {
             "code": "Extension",
-            "profile": "http://hl7.org/fhir/StructureDefinition/birthPlace"
+            "profile": [
+              "http://hl7.org/fhir/StructureDefinition/birthPlace"
+            ]
           }
         ],
         "condition": [
@@ -1921,7 +1923,9 @@
         "type": [
           {
             "code": "Extension",
-            "profile": "http://hl7.org/fhir/StructureDefinition/iso21090-TEL-address"
+            "profile": [
+              "http://hl7.org/fhir/StructureDefinition/iso21090-TEL-address"
+            ]
           }
         ],
         "condition": [

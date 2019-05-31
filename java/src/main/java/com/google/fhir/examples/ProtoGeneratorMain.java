@@ -21,19 +21,17 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
 import com.google.fhir.dstu2.StructureDefinitionTransformer;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
-import com.google.fhir.stu3.AnnotationUtils;
+import com.google.fhir.r4.proto.Bundle;
+import com.google.fhir.r4.proto.StructureDefinition;
 import com.google.fhir.stu3.FileUtils;
 import com.google.fhir.stu3.JsonFormat;
 import com.google.fhir.stu3.ProtoFilePrinter;
 import com.google.fhir.stu3.ProtoGenerator;
-import com.google.fhir.stu3.proto.Bundle;
-import com.google.fhir.stu3.proto.ContainedResource;
-import com.google.fhir.stu3.proto.Extension;
-import com.google.fhir.stu3.proto.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.TextFormat;
@@ -47,6 +45,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * A class that runs ProtoGenerator on the specified inputs, turning FHIR StructureDefinition files
@@ -63,7 +62,7 @@ class ProtoGeneratorMain {
   private static final Map<String, String> typeToSourceFileBaseName = new HashMap<>();
 
   private static final String EXTENSION_STRUCTURE_DEFINITION_URL =
-      AnnotationUtils.getStructureDefinitionUrl(Extension.getDescriptor());
+      "http://hl7.org/fhir/StructureDefinition/Extension";
 
   private static class Args {
     @Parameter(
@@ -148,6 +147,11 @@ class ProtoGeneratorMain {
         description = "Input Zip of StructureDefinitions")
     private String inputZipFile = null;
 
+    @Parameter(
+        names = {"--exclude"},
+        description = "Ids of input StructureDefinitions to ignore.")
+    private List<String> excludeIds = new ArrayList<>();
+
     @Parameter(description = "List of input StructureDefinitions")
     private List<String> inputFiles = new ArrayList<>();
 
@@ -175,14 +179,18 @@ class ProtoGeneratorMain {
 
   private static StructureDefinition loadStructureDefinition(
       String fullFilename, FhirVersion fhirVersion) throws IOException {
-    if (FhirVersion.STU3.equals(fhirVersion)) {
-      return FileUtils.loadStructureDefinition(new File(fullFilename));
-    }
     String json = Files.asCharSource(new File(fullFilename), StandardCharsets.UTF_8).read();
-    String transformed = StructureDefinitionTransformer.transformDstu2ToStu3(json);
     StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
-    JsonFormat.Parser.newBuilder().build().merge(transformed, structDefBuilder);
-    return structDefBuilder.build();
+    switch (fhirVersion) {
+      case STU3:
+        return JsonFormat.getEarlyVersionStructureDefinitionParser()
+            .merge(json, structDefBuilder)
+            .build();
+      case R4:
+        return JsonFormat.getParser().merge(json, structDefBuilder).build();
+      default:
+        throw new IllegalArgumentException("Unrecognized FHIR version: " + fhirVersion);
+    }
   }
 
   ProtoGeneratorMain(PrintWriter writer) {
@@ -218,7 +226,7 @@ class ProtoGeneratorMain {
     }
 
     // Read the inputs in sequence.
-    ArrayList<StructureDefinition> definitions = new ArrayList<>();
+    List<StructureDefinition> definitions = new ArrayList<>();
     for (String filename : args.inputFiles) {
       StructureDefinition definition =
           loadStructureDefinition(filename, packageInfo.getFhirVersion());
@@ -230,7 +238,8 @@ class ProtoGeneratorMain {
       // File base name is the last token, stripped of any extension
       // e.g., my-oddly_namedFile from foo/bar/my-oddly_namedFile.profile.json
       String fileBaseName = Splitter.on('.').splitToList(new File(filename).getName()).get(0);
-      typeToSourceFileBaseName.put(ProtoGenerator.getTypeName(definition), fileBaseName);
+      typeToSourceFileBaseName.put(
+          ProtoGenerator.getTypeName(definition, packageInfo.getFhirVersion()), fileBaseName);
 
       // Add in anything currently being generated as a known type.
       knownTypes.put(definition, packageInfo.getProtoPackage());
@@ -239,11 +248,14 @@ class ProtoGeneratorMain {
     if (args.inputBundleFile != null) {
       Bundle bundle = (Bundle) FileUtils.loadFhir(args.inputBundleFile, Bundle.newBuilder());
       for (Bundle.Entry entry : bundle.getEntryList()) {
-        StructureDefinition structDef = entry.getResource().getStructureDefinition();
-        definitions.add(structDef);
-        typeToSourceFileBaseName.put(
-            ProtoGenerator.getTypeName(structDef), structDef.getId().getValue());
-        knownTypes.put(structDef, packageInfo.getProtoPackage());
+        if (entry.getResource().hasStructureDefinition()) {
+          StructureDefinition structDef = entry.getResource().getStructureDefinition();
+          definitions.add(structDef);
+          typeToSourceFileBaseName.put(
+              ProtoGenerator.getTypeName(structDef, packageInfo.getFhirVersion()),
+              structDef.getId().getValue());
+          knownTypes.put(structDef, packageInfo.getProtoPackage());
+        }
       }
     }
 
@@ -252,16 +264,23 @@ class ProtoGeneratorMain {
           FileUtils.loadStructureDefinitionsInZip(args.inputZipFile)) {
         definitions.add(structDef);
         typeToSourceFileBaseName.put(
-            ProtoGenerator.getTypeName(structDef), structDef.getId().getValue());
+            ProtoGenerator.getTypeName(structDef, packageInfo.getFhirVersion()),
+            structDef.getId().getValue());
         knownTypes.put(structDef, packageInfo.getProtoPackage());
       }
     }
+
+    definitions =
+        definitions.stream()
+            .filter(def -> !args.excludeIds.contains(def.getId().getValue()))
+            .collect(Collectors.toList());
 
     // Generate the proto file.
     writer.println("Generating proto descriptors...");
     writer.flush();
 
-    ProtoGenerator generator = new ProtoGenerator(packageInfo, args.fhirProtoRoot, knownTypes);
+    ProtoGenerator generator =
+        new ProtoGenerator(packageInfo, args.fhirProtoRoot, ImmutableMap.copyOf(knownTypes));
     ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
 
     if (args.separateExtensions) {
@@ -321,7 +340,7 @@ class ProtoGeneratorMain {
       writer.println("Writing individual descriptors to " + args.descriptorOutputDirectory + "...");
       writer.flush();
       for (DescriptorProto descriptor : proto.getMessageTypeList()) {
-        if (descriptor.getName().equals(ContainedResource.getDescriptor().getName())) {
+        if (descriptor.getName().equals("ContainedResource")) {
           continue;
         }
         String fileBaseName = typeToSourceFileBaseName.get(descriptor.getName());

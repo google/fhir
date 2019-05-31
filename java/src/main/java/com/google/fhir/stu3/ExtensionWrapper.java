@@ -430,8 +430,14 @@ public final class ExtensionWrapper {
       if (AnnotationUtils.sameFhirType(
           extensionValueField.getMessageType(), choiceField.getMessageType())) {
         addValueToMessage(value, choiceTypeBuilder.getFieldBuilder(choiceField));
+        return;
       }
     }
+    throw new IllegalArgumentException(
+        "Unable to add value to choice type.\nValue: "
+            + value
+            + "\nChoice Type: "
+            + choiceDescriptor.getFullName());
   }
 
   private static void addValueToMessage(Extension.Value value, Message.Builder builder) {
