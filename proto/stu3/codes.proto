@@ -29,7 +29,6 @@ message AbstractTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/abstract-types";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     TYPE = 1 [(.google.fhir.proto.fhir_original_code) = "Type"];
@@ -37,10 +36,8 @@ message AbstractTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -51,7 +48,6 @@ message AggregationModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/resource-aggregation-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CONTAINED = 1;
@@ -60,10 +56,8 @@ message AggregationModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -74,7 +68,6 @@ message BindingStrengthCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/binding-strength";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     REQUIRED = 1;
@@ -84,10 +77,8 @@ message BindingStrengthCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -98,7 +89,6 @@ message ConstraintSeverityCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/constraint-severity";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ERROR = 1;
@@ -106,10 +96,8 @@ message ConstraintSeverityCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -120,7 +108,6 @@ message SlicingRulesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/resource-slicing-rules";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CLOSED = 1;
@@ -129,10 +116,8 @@ message SlicingRulesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -143,7 +128,6 @@ message DiscriminatorTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/discriminator-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     VALUE = 1;
@@ -154,10 +138,8 @@ message DiscriminatorTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -168,7 +150,6 @@ message PropertyRepresentationCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/property-representation";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     XML_ATTR = 1 [(.google.fhir.proto.fhir_original_code) = "xmlAttr"];
@@ -179,10 +160,8 @@ message PropertyRepresentationCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -194,7 +173,6 @@ message ReferenceVersionRulesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/reference-version-rules";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     EITHER = 1;
@@ -203,10 +181,8 @@ message ReferenceVersionRulesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -217,7 +193,6 @@ message AccountStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/account-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -226,10 +201,8 @@ message AccountStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -240,7 +213,6 @@ message ActionCardinalityBehaviorCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/action-cardinality-behavior";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     SINGLE = 1;
@@ -248,10 +220,8 @@ message ActionCardinalityBehaviorCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -262,7 +232,6 @@ message ActionConditionKindCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/action-condition-kind";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     APPLICABILITY = 1;
@@ -271,10 +240,8 @@ message ActionConditionKindCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -285,7 +252,6 @@ message ActionGroupingBehaviorCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/action-grouping-behavior";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     VISUAL_GROUP = 1;
@@ -294,10 +260,8 @@ message ActionGroupingBehaviorCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -308,7 +272,6 @@ message ActionListCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/actionlist";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CANCEL = 1;
@@ -318,10 +281,8 @@ message ActionListCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -332,7 +293,6 @@ message ActionParticipantTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/action-participant-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PATIENT = 1;
@@ -341,10 +301,8 @@ message ActionParticipantTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -355,7 +313,6 @@ message ActionPrecheckBehaviorCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/action-precheck-behavior";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     YES = 1;
@@ -363,10 +320,8 @@ message ActionPrecheckBehaviorCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -377,7 +332,6 @@ message ActionRelationshipTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/action-relationship-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     BEFORE_START = 1;
@@ -392,10 +346,8 @@ message ActionRelationshipTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -406,7 +358,6 @@ message ActionRequiredBehaviorCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/action-required-behavior";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     MUST = 1;
@@ -415,10 +366,8 @@ message ActionRequiredBehaviorCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -429,7 +378,6 @@ message ActionSelectionBehaviorCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/action-selection-behavior";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ANY = 1;
@@ -441,10 +389,8 @@ message ActionSelectionBehaviorCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -455,7 +401,6 @@ message ActionTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/action-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CREATE = 1;
@@ -465,10 +410,8 @@ message ActionTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -479,7 +422,6 @@ message ActivityDefinitionCategoryCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/activity-definition-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     TREATMENT = 1;
@@ -488,10 +430,8 @@ message ActivityDefinitionCategoryCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -502,7 +442,6 @@ message AdministrativeGenderCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/administrative-gender";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     MALE = 1;
@@ -512,10 +451,8 @@ message AdministrativeGenderCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -526,7 +463,6 @@ message AdverseEventCategoryCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/adverse-event-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     AE = 1 [(.google.fhir.proto.fhir_original_code) = "AE"];
@@ -534,10 +470,8 @@ message AdverseEventCategoryCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -548,7 +482,6 @@ message AdverseEventCausalityAssessmentCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/adverse-event-causality-assess";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ASSESS1 = 1;
@@ -556,10 +489,8 @@ message AdverseEventCausalityAssessmentCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -570,7 +501,6 @@ message AdverseEventCausalityCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/adverse-event-causality";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CAUSALITY1 = 1;
@@ -578,10 +508,8 @@ message AdverseEventCausalityCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -592,7 +520,6 @@ message AdverseEventCausalityMethodCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/adverse-event-causality-method";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     METHOD1 = 1;
@@ -600,10 +527,8 @@ message AdverseEventCausalityMethodCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -614,7 +539,6 @@ message AdverseEventCausalityResultCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/adverse-event-causality-result";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     RESULT1 = 1;
@@ -622,10 +546,8 @@ message AdverseEventCausalityResultCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -636,7 +558,6 @@ message AdverseEventOutcomeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/adverse-event-outcome";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     RESOLVED = 1;
@@ -649,10 +570,8 @@ message AdverseEventOutcomeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -663,7 +582,6 @@ message AdverseEventSeriousnessCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/adverse-event-seriousness";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     MILD = 1 [(.google.fhir.proto.fhir_original_code) = "Mild"];
@@ -672,10 +590,8 @@ message AdverseEventSeriousnessCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -687,7 +603,6 @@ message AllergyIntoleranceSubstanceExposureRiskCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/allerg-intol-substance-exp-risk";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     KNOWN_REACTION_RISK = 1;
@@ -695,10 +610,8 @@ message AllergyIntoleranceSubstanceExposureRiskCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -709,7 +622,6 @@ message AllergyIntoleranceClinicalStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/allergy-clinical-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -718,10 +630,8 @@ message AllergyIntoleranceClinicalStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -732,7 +642,6 @@ message AllergyIntoleranceCategoryCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/allergy-intolerance-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     FOOD = 1;
@@ -742,10 +651,8 @@ message AllergyIntoleranceCategoryCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -757,7 +664,6 @@ message AllergyIntoleranceCriticalityCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     LOW = 1;
@@ -766,10 +672,8 @@ message AllergyIntoleranceCriticalityCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -780,7 +684,6 @@ message AllergyIntoleranceTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/allergy-intolerance-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ALLERGY = 1;
@@ -788,10 +691,8 @@ message AllergyIntoleranceTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -803,7 +704,6 @@ message AllergyIntoleranceVerificationStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/allergy-verification-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     UNCONFIRMED = 1;
@@ -813,10 +713,8 @@ message AllergyIntoleranceVerificationStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -828,7 +726,6 @@ message GenderStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/animal-genderstatus";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NEUTERED = 1;
@@ -837,10 +734,8 @@ message GenderStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -851,7 +746,6 @@ message AppointmentStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/appointmentstatus";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PROPOSED = 1;
@@ -865,10 +759,8 @@ message AppointmentStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -879,7 +771,6 @@ message AssertionDirectionTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/assert-direction-codes";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     RESPONSE = 1;
@@ -887,10 +778,8 @@ message AssertionDirectionTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -901,7 +790,6 @@ message AssertionOperatorTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/assert-operator-codes";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     EQUALS = 1;
@@ -918,10 +806,8 @@ message AssertionOperatorTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -932,7 +818,6 @@ message AssertionResponseTypesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/assert-response-code-types";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     OKAY = 1;
@@ -952,10 +837,8 @@ message AssertionResponseTypesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -966,7 +849,6 @@ message AuditEventActionCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/audit-event-action";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     C = 1 [(.google.fhir.proto.fhir_original_code) = "C"];
@@ -977,10 +859,8 @@ message AuditEventActionCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -991,7 +871,6 @@ message AuditEventOutcomeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/audit-event-outcome";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     SUCCESS = 1 [(.google.fhir.proto.fhir_original_code) = "0"];
@@ -1000,10 +879,8 @@ message AuditEventOutcomeCode {
     MAJOR_FAILURE = 4 [(.google.fhir.proto.fhir_original_code) = "12"];
   }
   Value value = 1;
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1019,7 +896,6 @@ message BasicResourceTypesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/basic-resource-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CONSENT = 1;
@@ -1041,10 +917,8 @@ message BasicResourceTypesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1055,7 +929,6 @@ message BundleTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/bundle-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DOCUMENT = 1;
@@ -1070,10 +943,8 @@ message BundleTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1084,7 +955,6 @@ message CapabilityStatementKindCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/capability-statement-kind";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     INSTANCE = 1;
@@ -1093,10 +963,8 @@ message CapabilityStatementKindCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1107,7 +975,6 @@ message CarePlanActivityCategoryCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/care-plan-activity-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DIET = 1;
@@ -1120,10 +987,8 @@ message CarePlanActivityCategoryCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1134,7 +999,6 @@ message CarePlanActivityStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/care-plan-activity-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NOT_STARTED = 1;
@@ -1147,10 +1011,8 @@ message CarePlanActivityStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1161,7 +1023,6 @@ message CarePlanIntentCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/care-plan-intent";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PROPOSAL = 1;
@@ -1171,10 +1032,8 @@ message CarePlanIntentCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1186,7 +1045,6 @@ message CarePlanStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/care-plan-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DRAFT = 1;
@@ -1199,10 +1057,8 @@ message CarePlanStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1213,7 +1069,6 @@ message CareTeamCategoryCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/care-team-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     EVENT = 1;
@@ -1225,10 +1080,8 @@ message CareTeamCategoryCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1239,7 +1092,6 @@ message CareTeamStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/care-team-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PROPOSED = 1;
@@ -1250,10 +1102,8 @@ message CareTeamStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1264,7 +1114,6 @@ message ChargeItemStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/chargeitem-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PLANNED = 1;
@@ -1277,10 +1126,8 @@ message ChargeItemStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1291,7 +1138,6 @@ message ChoiceListOrientationCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/choice-list-orientation";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     HORIZONTAL = 1;
@@ -1299,10 +1145,8 @@ message ChoiceListOrientationCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1313,7 +1157,6 @@ message UseCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/claim-use";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     COMPLETE = 1;
@@ -1323,10 +1166,8 @@ message UseCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1337,7 +1178,6 @@ message ClassificationOrContextCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/classification-or-context";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CLASSIFICATION = 1;
@@ -1345,10 +1185,8 @@ message ClassificationOrContextCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1359,7 +1197,6 @@ message ClinicalImpressionStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/clinical-impression-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DRAFT = 1;
@@ -1368,10 +1205,8 @@ message ClinicalImpressionStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1383,7 +1218,6 @@ message CodeSystemContentModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/codesystem-content-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NOT_PRESENT = 1;
@@ -1393,10 +1227,8 @@ message CodeSystemContentModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1407,7 +1239,6 @@ message CodeSystemHierarchyMeaningCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/codesystem-hierarchy-meaning";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     GROUPED_BY = 1;
@@ -1417,10 +1248,8 @@ message CodeSystemHierarchyMeaningCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1431,17 +1260,14 @@ message CommonTagsCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/common-tags";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIONABLE = 1;
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1452,7 +1278,6 @@ message CommunicationCategoryCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/communication-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ALERT = 1;
@@ -1462,10 +1287,8 @@ message CommunicationCategoryCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1476,7 +1299,6 @@ message CommunicationNotDoneReasonCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/communication-not-done-reason";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     UNKNOWN = 1;
@@ -1488,10 +1310,8 @@ message CommunicationNotDoneReasonCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1502,7 +1322,6 @@ message CompartmentTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/compartment-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PATIENT = 1 [(.google.fhir.proto.fhir_original_code) = "Patient"];
@@ -1514,10 +1333,8 @@ message CompartmentTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1528,7 +1345,6 @@ message CompositeMeasureScoringCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/composite-measure-scoring";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     OPPORTUNITY = 1;
@@ -1538,10 +1354,8 @@ message CompositeMeasureScoringCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1552,7 +1366,6 @@ message CompositionAttestationModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/composition-attestation-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PERSONAL = 1;
@@ -1562,10 +1375,8 @@ message CompositionAttestationModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1576,7 +1387,6 @@ message CompositionStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/composition-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PRELIMINARY = 1;
@@ -1586,10 +1396,8 @@ message CompositionStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1600,7 +1408,6 @@ message ConceptMapEquivalenceCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/concept-map-equivalence";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     RELATEDTO = 1;
@@ -1616,10 +1423,8 @@ message ConceptMapEquivalenceCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1630,7 +1435,6 @@ message ConceptMapGroupUnmappedModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/conceptmap-unmapped-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PROVIDED = 1;
@@ -1639,10 +1443,8 @@ message ConceptMapGroupUnmappedModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1653,7 +1455,6 @@ message PropertyTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/concept-property-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CODE = 1;
@@ -1665,10 +1466,8 @@ message PropertyTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1679,7 +1478,6 @@ message ConditionalDeleteStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/conditional-delete-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NOT_SUPPORTED = 1;
@@ -1688,10 +1486,8 @@ message ConditionalDeleteStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1702,7 +1498,6 @@ message ConditionalReadStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/conditional-read-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NOT_SUPPORTED = 1;
@@ -1712,10 +1507,8 @@ message ConditionalReadStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1726,7 +1519,6 @@ message ConditionCategoryCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/condition-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PROBLEM_LIST_ITEM = 1;
@@ -1734,10 +1526,8 @@ message ConditionCategoryCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1748,7 +1538,6 @@ message ConditionClinicalStatusCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/condition-clinical";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -1759,10 +1548,8 @@ message ConditionClinicalStatusCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1773,7 +1560,6 @@ message ConditionStateCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/condition-state";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -1782,10 +1568,8 @@ message ConditionStateCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1797,7 +1581,6 @@ message ConditionVerificationStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/condition-ver-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PROVISIONAL = 1;
@@ -1809,10 +1592,8 @@ message ConditionVerificationStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1824,7 +1605,6 @@ message ConformanceExpectationCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/conformance-expectation";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     SHALL = 1 [(.google.fhir.proto.fhir_original_code) = "SHALL"];
@@ -1834,10 +1614,8 @@ message ConformanceExpectationCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1848,7 +1626,6 @@ message ConsentDataMeaningCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/consent-data-meaning";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     INSTANCE = 1;
@@ -1858,10 +1635,8 @@ message ConsentDataMeaningCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1872,7 +1647,6 @@ message ConsentExceptTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/consent-except-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DENY = 1;
@@ -1880,10 +1654,8 @@ message ConsentExceptTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1894,7 +1666,6 @@ message ConsentStateCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/consent-state-codes";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DRAFT = 1;
@@ -1906,10 +1677,8 @@ message ConsentStateCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1921,7 +1690,6 @@ message ContactEntityTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/contactentity-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     BILL = 1 [(.google.fhir.proto.fhir_original_code) = "BILL"];
@@ -1933,10 +1701,8 @@ message ContactEntityTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1947,7 +1713,6 @@ message ContentTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/content-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     XML = 1;
@@ -1957,10 +1722,8 @@ message ContentTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -1971,7 +1734,6 @@ message ContractResourceStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/contract-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     AMENDED = 1;
@@ -1992,10 +1754,8 @@ message ContractResourceStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2006,7 +1766,6 @@ message ContributorTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/contributor-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     AUTHOR = 1;
@@ -2016,10 +1775,8 @@ message ContributorTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2030,7 +1787,6 @@ message CopyNumberEventCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/copy-number-event";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     AMP = 1;
@@ -2039,10 +1795,8 @@ message CopyNumberEventCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2053,7 +1807,6 @@ message DataAbsentReasonCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/data-absent-reason";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     UNKNOWN = 1;
@@ -2069,10 +1822,8 @@ message DataAbsentReasonCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2083,7 +1834,6 @@ message DataElementStringencyCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/dataelement-stringency";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     COMPARABLE = 1;
@@ -2095,10 +1845,8 @@ message DataElementStringencyCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2109,7 +1857,6 @@ message TriggerTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/trigger-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NAMED_EVENT = 1;
@@ -2122,10 +1869,8 @@ message TriggerTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2136,7 +1881,6 @@ message DataTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/data-types";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ADDRESS = 1 [(.google.fhir.proto.fhir_original_code) = "Address"];
@@ -2208,10 +1952,8 @@ message DataTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2222,7 +1964,6 @@ message FHIRAllTypesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/all-types";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ADDRESS = 1 [(.google.fhir.proto.fhir_original_code) = "Address"];
@@ -2486,10 +2227,8 @@ message FHIRAllTypesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2500,7 +2239,6 @@ message FHIRDefinedTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/defined-types";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ADDRESS = 1 [(.google.fhir.proto.fhir_original_code) = "Address"];
@@ -2762,10 +2500,8 @@ message FHIRDefinedTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2781,13 +2517,10 @@ message FHIRDefinedTypeExtCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/defined-types#ext";
 
-  // Primitive value for code
   string value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2798,7 +2531,6 @@ message DefinitionStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/definition-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DRAFT = 1;
@@ -2808,10 +2540,8 @@ message DefinitionStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2822,7 +2552,6 @@ message DefinitionTopicCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/definition-topic";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     TREATMENT = 1;
@@ -2831,10 +2560,8 @@ message DefinitionTopicCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2845,7 +2572,6 @@ message DetectedIssueSeverityCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/detectedissue-severity";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     HIGH = 1;
@@ -2854,10 +2580,8 @@ message DetectedIssueSeverityCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2868,7 +2592,6 @@ message DeviceUseStatementStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/device-statement-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -2880,10 +2603,8 @@ message DeviceUseStatementStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2894,7 +2615,6 @@ message FHIRDeviceStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/device-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -2904,10 +2624,8 @@ message FHIRDeviceStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2919,7 +2637,6 @@ message DiagnosisRoleCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/diagnosis-role";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     AD = 1 [(.google.fhir.proto.fhir_original_code) = "AD"];
@@ -2932,10 +2649,8 @@ message DiagnosisRoleCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2946,7 +2661,6 @@ message DiagnosticReportStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/diagnostic-report-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     REGISTERED = 1;
@@ -2962,10 +2676,8 @@ message DiagnosticReportStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2976,7 +2688,6 @@ message DigitalMediaTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/digital-media-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PHOTO = 1;
@@ -2985,10 +2696,8 @@ message DigitalMediaTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -2999,7 +2708,6 @@ message DocumentModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/document-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PRODUCER = 1;
@@ -3007,10 +2715,8 @@ message DocumentModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3021,7 +2727,6 @@ message DocumentReferenceStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/document-reference-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CURRENT = 1;
@@ -3030,10 +2735,8 @@ message DocumentReferenceStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3044,7 +2747,6 @@ message DocumentRelationshipTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/document-relationship-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     REPLACES = 1;
@@ -3054,10 +2756,8 @@ message DocumentRelationshipTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3069,7 +2769,6 @@ message AdmitSourceCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/encounter-admit-source";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     HOSP_TRANS = 1;
@@ -3085,10 +2784,8 @@ message AdmitSourceCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3100,7 +2797,6 @@ message DietCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/encounter-diet";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     VEGETARIAN = 1;
@@ -3113,10 +2809,8 @@ message DietCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3128,7 +2822,6 @@ message DischargeDispositionCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/encounter-discharge-disposition";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     HOME = 1;
@@ -3144,10 +2837,8 @@ message DischargeDispositionCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3158,7 +2849,6 @@ message EncounterLocationStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/encounter-location-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PLANNED = 1;
@@ -3168,10 +2858,8 @@ message EncounterLocationStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3183,7 +2871,6 @@ message SpecialArrangementsCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/encounter-special-arrangements";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     WHEEL = 1;
@@ -3194,10 +2881,8 @@ message SpecialArrangementsCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3208,7 +2893,6 @@ message EncounterStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/encounter-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PLANNED = 1;
@@ -3223,10 +2907,8 @@ message EncounterStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3238,7 +2920,6 @@ message EncounterTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/encounter-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ADMS = 1 [(.google.fhir.proto.fhir_original_code) = "ADMS"];
@@ -3248,10 +2929,8 @@ message EncounterTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3262,7 +2941,6 @@ message EndpointStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/endpoint-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -3274,10 +2952,8 @@ message EndpointStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3289,7 +2965,6 @@ message EntityNamePartQualifierCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/name-part-qualifier";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     LS = 1 [(.google.fhir.proto.fhir_original_code) = "LS"];
@@ -3306,10 +2981,8 @@ message EntityNamePartQualifierCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3322,7 +2995,6 @@ message EnteralFormulaAdditiveTypeCodeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/entformula-additive";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     LIPID = 1;
@@ -3333,10 +3005,8 @@ message EnteralFormulaAdditiveTypeCodeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3347,7 +3017,6 @@ message EpisodeOfCareStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/episode-of-care-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PLANNED = 1;
@@ -3360,10 +3029,8 @@ message EpisodeOfCareStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3375,7 +3042,6 @@ message EpisodeOfCareTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/episodeofcare-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     HACC = 1;
@@ -3386,10 +3052,8 @@ message EpisodeOfCareTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3400,7 +3064,6 @@ message EventCapabilityModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/event-capability-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     SENDER = 1;
@@ -3408,10 +3071,8 @@ message EventCapabilityModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3422,7 +3083,6 @@ message EventStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/event-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PREPARATION = 1;
@@ -3435,10 +3095,8 @@ message EventStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3449,7 +3107,6 @@ message ClaimPayeeResourceTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/ex-payee-resource-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ORGANIZATION = 1;
@@ -3459,10 +3116,8 @@ message ClaimPayeeResourceTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3473,7 +3128,6 @@ message ExplanationOfBenefitStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/explanationofbenefit-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -3483,10 +3137,8 @@ message ExplanationOfBenefitStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3497,7 +3149,6 @@ message ExtensionContextCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/extension-context";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     RESOURCE = 1;
@@ -3506,10 +3157,8 @@ message ExtensionContextCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3520,7 +3169,6 @@ message FilterOperatorCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/filter-operator";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     EQUALS = 1 [(.google.fhir.proto.fhir_original_code) = "="];
@@ -3535,10 +3183,8 @@ message FilterOperatorCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3549,7 +3195,6 @@ message FlagCategoryCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/flag-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DIET = 1;
@@ -3560,10 +3205,8 @@ message FlagCategoryCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3575,7 +3218,6 @@ message FlagPriorityCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/flag-priority";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PN = 1 [(.google.fhir.proto.fhir_original_code) = "PN"];
@@ -3585,10 +3227,8 @@ message FlagPriorityCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3600,7 +3240,6 @@ message FlagStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/flag-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -3609,10 +3248,8 @@ message FlagStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3623,7 +3260,6 @@ message FinancialResourceStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/fm-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -3633,10 +3269,8 @@ message FinancialResourceStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3647,7 +3281,6 @@ message GoalAcceptanceStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/goal-acceptance-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     AGREE = 1;
@@ -3656,10 +3289,8 @@ message GoalAcceptanceStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3670,7 +3301,6 @@ message GoalCategoryCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/goal-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DIETARY = 1;
@@ -3681,10 +3311,8 @@ message GoalCategoryCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3695,7 +3323,6 @@ message GoalPriorityCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/goal-priority";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     HIGH_PRIORITY = 1;
@@ -3704,10 +3331,8 @@ message GoalPriorityCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3718,7 +3343,6 @@ message GoalRelationshipTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/goal-relationship-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PREDECESSOR = 1;
@@ -3729,10 +3353,8 @@ message GoalRelationshipTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3743,7 +3365,6 @@ message GoalStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/goal-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PROPOSED = 1;
@@ -3762,10 +3383,8 @@ message GoalStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3777,7 +3396,6 @@ message GoalStatusReasonCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/goal-status-reason";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     SURGERY = 1;
@@ -3792,10 +3410,8 @@ message GoalStatusReasonCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3806,7 +3422,6 @@ message GraphCompartmentRuleCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/graph-compartment-rule";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     IDENTICAL = 1;
@@ -3816,10 +3431,8 @@ message GraphCompartmentRuleCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3830,7 +3443,6 @@ message GroupTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/group-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PERSON = 1;
@@ -3842,10 +3454,8 @@ message GroupTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3856,7 +3466,6 @@ message GuidanceResponseStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/guidance-response-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     SUCCESS = 1;
@@ -3868,10 +3477,8 @@ message GuidanceResponseStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3882,7 +3489,6 @@ message GuideDependencyTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/guide-dependency-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     REFERENCE = 1;
@@ -3890,10 +3496,8 @@ message GuideDependencyTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3904,7 +3508,6 @@ message GuidePageKindCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/guide-page-kind";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PAGE = 1;
@@ -3918,10 +3521,8 @@ message GuidePageKindCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3932,7 +3533,6 @@ message FamilyHistoryNotDoneReasonCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/history-not-done-reason";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     SUBJECT_UNKNOWN = 1;
@@ -3942,10 +3542,8 @@ message FamilyHistoryNotDoneReasonCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3956,7 +3554,6 @@ message FamilyHistoryStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/history-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PARTIAL = 1;
@@ -3966,10 +3563,8 @@ message FamilyHistoryStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -3980,7 +3575,6 @@ message HL7WorkgroupCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/hl7-work-group";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CBCC = 1;
@@ -4009,10 +3603,8 @@ message HL7WorkgroupCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4023,7 +3615,6 @@ message TestScriptRequestMethodCodeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/http-operations";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DELETE = 1;
@@ -4035,10 +3626,8 @@ message TestScriptRequestMethodCodeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4049,7 +3638,6 @@ message HTTPVerbCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/http-verb";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     GET = 1 [(.google.fhir.proto.fhir_original_code) = "GET"];
@@ -4059,10 +3647,8 @@ message HTTPVerbCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4074,7 +3660,6 @@ message IdentityAssuranceLevelCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/identity-assuranceLevel";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     LEVEL1 = 1;
@@ -4084,10 +3669,8 @@ message IdentityAssuranceLevelCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4102,7 +3685,6 @@ message ImmunizationOriginCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/immunization-origin";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PROVIDER = 1;
@@ -4112,10 +3694,8 @@ message ImmunizationOriginCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4130,7 +3710,6 @@ message ImmunizationRecommendationDateCriterionCodesCode {
       "http://hl7.org/fhir/ValueSet/"
       "immunization-recommendation-date-criterion";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DUE = 1;
@@ -4141,10 +3720,8 @@ message ImmunizationRecommendationDateCriterionCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4159,7 +3736,6 @@ message ImmunizationRecommendationStatusCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/immunization-recommendation-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DUE = 1;
@@ -4167,10 +3743,8 @@ message ImmunizationRecommendationStatusCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4183,7 +3757,6 @@ message ImmunizationStatusCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/immunization-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     COMPLETED = 1;
@@ -4191,10 +3764,8 @@ message ImmunizationStatusCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4205,7 +3776,6 @@ message ImplantStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/implant-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     FUNCTIONAL = 1;
@@ -4215,10 +3785,8 @@ message ImplantStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4229,7 +3797,6 @@ message InstanceAvailabilityCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/instance-availability";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ONLINE = 1 [(.google.fhir.proto.fhir_original_code) = "ONLINE"];
@@ -4239,10 +3806,8 @@ message InstanceAvailabilityCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4253,7 +3818,6 @@ message IssueSeverityCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/issue-severity";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     FATAL = 1;
@@ -4263,10 +3827,8 @@ message IssueSeverityCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4277,7 +3839,6 @@ message IssueTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/issue-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     INVALID = 1;
@@ -4312,10 +3873,8 @@ message IssueTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4326,7 +3885,6 @@ message QuestionnaireItemTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/item-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     GROUP = 1;
@@ -4349,10 +3907,8 @@ message QuestionnaireItemTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4363,7 +3919,6 @@ message LibraryTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/library-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     LOGIC_LIBRARY = 1;
@@ -4373,10 +3928,8 @@ message LibraryTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4387,7 +3940,6 @@ message LinkageTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/linkage-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     SOURCE = 1;
@@ -4396,10 +3948,8 @@ message LinkageTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4410,7 +3960,6 @@ message LinkTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/link-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     REPLACED_BY = 1;
@@ -4420,10 +3969,8 @@ message LinkTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4436,7 +3983,6 @@ message ListEmptyReasonsCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/list-empty-reason";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NILKNOWN = 1;
@@ -4448,10 +3994,8 @@ message ListEmptyReasonsCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4462,7 +4006,6 @@ message ExampleUseCodesforListCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/list-example-codes";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ALERTS = 1;
@@ -4477,10 +4020,8 @@ message ExampleUseCodesforListCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4491,7 +4032,6 @@ message ListModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/list-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     WORKING = 1;
@@ -4500,10 +4040,8 @@ message ListModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4514,7 +4052,6 @@ message ListOrderCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/list-order";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     USER = 1;
@@ -4528,10 +4065,8 @@ message ListOrderCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4542,7 +4077,6 @@ message ListStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/list-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CURRENT = 1;
@@ -4551,10 +4085,8 @@ message ListStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4565,7 +4097,6 @@ message LocationModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/location-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     INSTANCE = 1;
@@ -4573,10 +4104,8 @@ message LocationModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4588,7 +4117,6 @@ message LocationTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/location-physical-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     SI = 1;
@@ -4608,10 +4136,8 @@ message LocationTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4622,7 +4148,6 @@ message LocationStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/location-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -4631,10 +4156,8 @@ message LocationStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4645,7 +4168,6 @@ message ProbabilityDistributionTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/probability-distribution-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     B = 1 [(.google.fhir.proto.fhir_original_code) = "B"];
@@ -4660,10 +4182,8 @@ message ProbabilityDistributionTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4674,7 +4194,6 @@ message StructureMapContextTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/map-context-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     TYPE = 1;
@@ -4682,10 +4201,8 @@ message StructureMapContextTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4696,7 +4213,6 @@ message StructureMapGroupTypeModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/map-group-type-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NONE = 1;
@@ -4705,10 +4221,8 @@ message StructureMapGroupTypeModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4719,7 +4233,6 @@ message StructureMapInputModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/map-input-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     SOURCE = 1;
@@ -4727,10 +4240,8 @@ message StructureMapInputModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4741,7 +4252,6 @@ message StructureMapModelModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/map-model-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     SOURCE = 1;
@@ -4751,10 +4261,8 @@ message StructureMapModelModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4765,7 +4273,6 @@ message StructureMapSourceListModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/map-source-list-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     FIRST = 1;
@@ -4776,10 +4283,8 @@ message StructureMapSourceListModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4790,7 +4295,6 @@ message StructureMapTargetListModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/map-target-list-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     FIRST = 1;
@@ -4800,10 +4304,8 @@ message StructureMapTargetListModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4814,7 +4316,6 @@ message StructureMapTransformCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/map-transform";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CREATE = 1;
@@ -4837,10 +4338,8 @@ message StructureMapTransformCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4851,7 +4350,6 @@ message MatchGradeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/match-grade";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CERTAIN = 1;
@@ -4861,10 +4359,8 @@ message MatchGradeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4875,7 +4371,6 @@ message MeasureDataUsageCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/measure-data-usage";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     SUPPLEMENTAL_DATA = 1;
@@ -4883,10 +4378,8 @@ message MeasureDataUsageCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4897,7 +4390,6 @@ message MeasmntPrincipleCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/measurement-principle";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     OTHER = 1;
@@ -4914,10 +4406,8 @@ message MeasmntPrincipleCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4928,7 +4418,6 @@ message MeasurePopulationTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/measure-population";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     INITIAL_POPULATION = 1;
@@ -4943,10 +4432,8 @@ message MeasurePopulationTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4957,7 +4444,6 @@ message MeasureReportStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/measure-report-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     COMPLETE = 1;
@@ -4966,10 +4452,8 @@ message MeasureReportStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -4980,7 +4464,6 @@ message MeasureReportTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/measure-report-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     INDIVIDUAL = 1;
@@ -4989,10 +4472,8 @@ message MeasureReportTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5003,7 +4484,6 @@ message MeasureScoringCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/measure-scoring";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PROPORTION = 1;
@@ -5013,10 +4493,8 @@ message MeasureScoringCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5027,7 +4505,6 @@ message MeasureTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/measure-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PROCESS = 1;
@@ -5038,10 +4515,8 @@ message MeasureTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5052,7 +4527,6 @@ message MedicationAdministrationCategoryCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/medication-admin-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     INPATIENT = 1;
@@ -5061,10 +4535,8 @@ message MedicationAdministrationCategoryCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5075,7 +4547,6 @@ message MedicationAdministrationStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/medication-admin-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     IN_PROGRESS = 1;
@@ -5087,10 +4558,8 @@ message MedicationAdministrationStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5102,7 +4571,6 @@ message MedicationDispenseCategoryCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/medication-dispense-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     INPATIENT = 1;
@@ -5111,10 +4579,8 @@ message MedicationDispenseCategoryCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5125,7 +4591,6 @@ message MedicationDispenseStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/medication-dispense-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PREPARATION = 1;
@@ -5137,10 +4602,8 @@ message MedicationDispenseStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5151,7 +4614,6 @@ message MedicationContainerCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/medication-package-form";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     AMPOULE = 1;
@@ -5165,10 +4627,8 @@ message MedicationContainerCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5180,7 +4640,6 @@ message MedicationRequestCategoryCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/medication-request-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     INPATIENT = 1;
@@ -5189,10 +4648,8 @@ message MedicationRequestCategoryCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5203,7 +4660,6 @@ message MedicationRequestIntentCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/medication-request-intent";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PROPOSAL = 1;
@@ -5213,10 +4669,8 @@ message MedicationRequestIntentCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5227,7 +4681,6 @@ message MedicationRequestPriorityCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/medication-request-priority";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ROUTINE = 1;
@@ -5237,10 +4690,8 @@ message MedicationRequestPriorityCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5252,7 +4703,6 @@ message MedicationRequestStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/medication-request-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -5266,10 +4716,8 @@ message MedicationRequestStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5281,7 +4729,6 @@ message MedicationStatementCategoryCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/medication-statement-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     INPATIENT = 1;
@@ -5291,10 +4738,8 @@ message MedicationStatementCategoryCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5305,7 +4750,6 @@ message MedicationStatementStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/medication-statement-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -5317,10 +4761,8 @@ message MedicationStatementStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5332,7 +4774,6 @@ message MedicationStatementTakenCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/medication-statement-taken";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     Y = 1;
@@ -5342,10 +4783,8 @@ message MedicationStatementTakenCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5356,7 +4795,6 @@ message MedicationStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/medication-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -5365,10 +4803,8 @@ message MedicationStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5379,7 +4815,6 @@ message MessageEventCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/message-events";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CODE_SYSTEM_EXPAND = 1
@@ -5406,10 +4841,8 @@ message MessageEventCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5420,7 +4853,6 @@ message MessageHeaderResponseRequestCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/messageheader-response-request";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ALWAYS = 1;
@@ -5430,10 +4862,8 @@ message MessageHeaderResponseRequestCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5445,7 +4875,6 @@ message ExampleMessageReasonCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/message-reason-encounter";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ADMIT = 1;
@@ -5457,10 +4886,8 @@ message ExampleMessageReasonCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5471,7 +4898,6 @@ message MessageSignificanceCategoryCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/message-significance-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CONSEQUENCE = 1 [(.google.fhir.proto.fhir_original_code) = "Consequence"];
@@ -5480,10 +4906,8 @@ message MessageSignificanceCategoryCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5494,7 +4918,6 @@ message MessageTransportCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/message-transport";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     HTTP = 1;
@@ -5503,10 +4926,8 @@ message MessageTransportCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5517,7 +4938,6 @@ message DeviceMetricCalibrationStateCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/metric-calibration-state";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NOT_CALIBRATED = 1;
@@ -5527,10 +4947,8 @@ message DeviceMetricCalibrationStateCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5541,7 +4959,6 @@ message DeviceMetricCalibrationTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/metric-calibration-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     UNSPECIFIED = 1;
@@ -5551,10 +4968,8 @@ message DeviceMetricCalibrationTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5565,7 +4980,6 @@ message DeviceMetricCategoryCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/metric-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     MEASUREMENT = 1;
@@ -5575,10 +4989,8 @@ message DeviceMetricCategoryCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5589,7 +5001,6 @@ message DeviceMetricColorCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/metric-color";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     BLACK = 1;
@@ -5603,10 +5014,8 @@ message DeviceMetricColorCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5617,7 +5026,6 @@ message DeviceMetricOperationalStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/metric-operational-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ON = 1;
@@ -5627,10 +5035,8 @@ message DeviceMetricOperationalStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5641,7 +5047,6 @@ message HumanNameAssemblyOrderCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/name-assembly-order";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NL1 = 1 [(.google.fhir.proto.fhir_original_code) = "NL1"];
@@ -5651,10 +5056,8 @@ message HumanNameAssemblyOrderCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5665,7 +5068,6 @@ message NameRepresentationUseCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/name-v3-representation";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ABC = 1 [(.google.fhir.proto.fhir_original_code) = "ABC"];
@@ -5674,10 +5076,8 @@ message NameRepresentationUseCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5688,7 +5088,6 @@ message NamingSystemIdentifierTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/namingsystem-identifier-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     OID = 1;
@@ -5698,10 +5097,8 @@ message NamingSystemIdentifierTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5712,7 +5109,6 @@ message NamingSystemTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/namingsystem-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CODESYSTEM = 1;
@@ -5721,10 +5117,8 @@ message NamingSystemTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5735,7 +5129,6 @@ message AuditEventAgentNetworkTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/network-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     MACHINE_NAME = 1 [(.google.fhir.proto.fhir_original_code) = "1"];
@@ -5746,10 +5139,8 @@ message AuditEventAgentNetworkTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5760,7 +5151,6 @@ message NoteTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/note-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DISPLAY = 1;
@@ -5769,10 +5159,8 @@ message NoteTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5783,7 +5171,6 @@ message NullFlavorCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/v3-NullFlavor";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NI = 1 [(.google.fhir.proto.fhir_original_code) = "NI"];
@@ -5806,10 +5193,8 @@ message NullFlavorCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5820,7 +5205,6 @@ message NutritionOrderStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/nutrition-request-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PROPOSED = 1;
@@ -5835,10 +5219,8 @@ message NutritionOrderStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5849,7 +5231,6 @@ message ObservationCategoryCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/observation-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     SOCIAL_HISTORY = 1;
@@ -5863,10 +5244,8 @@ message ObservationCategoryCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5877,7 +5256,6 @@ message ObservationRelationshipTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/observation-relationshiptypes";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     HAS_MEMBER = 1;
@@ -5889,10 +5267,8 @@ message ObservationRelationshipTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5903,7 +5279,6 @@ message StatisticsCodeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/observation-statistics";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     AVERAGE = 1;
@@ -5932,10 +5307,8 @@ message StatisticsCodeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5946,7 +5319,6 @@ message ObservationStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/observation-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     REGISTERED = 1;
@@ -5960,10 +5332,8 @@ message ObservationStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -5974,7 +5344,6 @@ message DeviceComponentOperationalStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/operational-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     OFF = 1;
@@ -5987,10 +5356,8 @@ message DeviceComponentOperationalStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6001,7 +5368,6 @@ message OperationKindCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/operation-kind";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     OPERATION = 1;
@@ -6009,10 +5375,8 @@ message OperationKindCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6023,7 +5387,6 @@ message OperationOutcomeCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/operation-outcome";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     MSG_AUTH_REQUIRED = 1
@@ -6126,10 +5489,8 @@ message OperationOutcomeCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6140,7 +5501,6 @@ message NarrativeStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/narrative-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     GENERATED = 1;
@@ -6150,10 +5510,8 @@ message NarrativeStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6164,7 +5522,6 @@ message OperationParameterUseCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/operation-parameter-use";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     IN = 1;
@@ -6172,10 +5529,8 @@ message OperationParameterUseCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6186,7 +5541,6 @@ message OrganizationTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/organization-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PROV = 1;
@@ -6203,10 +5557,8 @@ message OrganizationTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6217,7 +5569,6 @@ message DeviceComponentParameterGroupCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/parameter-group";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     HAEMODYNAMIC = 1;
@@ -6232,10 +5583,8 @@ message DeviceComponentParameterGroupCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6246,7 +5595,6 @@ message ParticipantRequiredCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/participantrequired";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     REQUIRED = 1;
@@ -6255,10 +5603,8 @@ message ParticipantRequiredCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6269,7 +5615,6 @@ message ParticipationStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/participationstatus";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACCEPTED = 1;
@@ -6279,10 +5624,8 @@ message ParticipationStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6293,7 +5636,6 @@ message PlanDefinitionTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/plan-definition-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ORDER_SET = 1;
@@ -6302,10 +5644,8 @@ message PlanDefinitionTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6316,7 +5656,6 @@ message PostalAddressUseTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/postal-address-use";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     BAD_ADDRESS = 1 [(.google.fhir.proto.fhir_original_code) = "BAD"];
@@ -6331,10 +5670,8 @@ message PostalAddressUseTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6346,7 +5683,6 @@ message PractitionerRoleCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/practitioner-role";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DOCTOR = 1;
@@ -6358,10 +5694,8 @@ message PractitionerRoleCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6373,7 +5707,6 @@ message PractitionerSpecialtyCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/practitioner-specialty";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CARDIO = 1;
@@ -6384,10 +5717,8 @@ message PractitionerSpecialtyCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6400,7 +5731,6 @@ message ProcedureProgressStatusCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/procedure-progress-status-codes";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     IN_OPERATING_ROOM = 1;
@@ -6412,10 +5742,8 @@ message ProcedureProgressStatusCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6426,7 +5754,6 @@ message ProvenanceEntityRoleCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/provenance-entity-role";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DERIVATION = 1;
@@ -6437,10 +5764,8 @@ message ProvenanceEntityRoleCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6451,7 +5776,6 @@ message PublicationStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/publication-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DRAFT = 1;
@@ -6461,10 +5785,8 @@ message PublicationStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6475,7 +5797,6 @@ message QualityTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/quality-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     INDEL = 1;
@@ -6484,10 +5805,8 @@ message QualityTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6498,17 +5817,14 @@ message MaxOccursCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/question-max-occurs";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     MAX = 1 [(.google.fhir.proto.fhir_original_code) = "*"];
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6519,7 +5835,6 @@ message QuestionnaireResponseStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/questionnaire-answers-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     IN_PROGRESS = 1;
@@ -6530,10 +5845,8 @@ message QuestionnaireResponseStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6544,7 +5857,6 @@ message QuestionnaireTextCategoriesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/questionnaire-display-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     INSTRUCTIONS = 1;
@@ -6552,10 +5864,8 @@ message QuestionnaireTextCategoriesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6567,7 +5877,6 @@ message QuestionnaireItemUIControlCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/questionnaire-item-control";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     LIST = 1;
@@ -6592,10 +5901,8 @@ message QuestionnaireItemUIControlCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6607,7 +5914,6 @@ message QuestionnaireItemUsageModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/questionnaire-usage-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CAPTURE_DISPLAY = 1;
@@ -6618,10 +5924,8 @@ message QuestionnaireItemUsageModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6633,7 +5937,6 @@ message AllergyIntoleranceCertaintyCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/reaction-event-certainty";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     UNLIKELY = 1;
@@ -6643,10 +5946,8 @@ message AllergyIntoleranceCertaintyCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6658,7 +5959,6 @@ message AllergyIntoleranceSeverityCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/reaction-event-severity";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     MILD = 1;
@@ -6667,10 +5967,8 @@ message AllergyIntoleranceSeverityCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6683,7 +5981,6 @@ message ReasonMedicationGivenCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/reason-medication-given-codes";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     A = 1;
@@ -6692,10 +5989,8 @@ message ReasonMedicationGivenCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6706,7 +6001,6 @@ message ReferenceHandlingPolicyCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/reference-handling-policy";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     LITERAL = 1;
@@ -6717,10 +6011,8 @@ message ReferenceHandlingPolicyCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6731,7 +6023,6 @@ message RelatedArtifactTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/related-artifact-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DOCUMENTATION = 1;
@@ -6745,10 +6036,8 @@ message RelatedArtifactTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6760,7 +6049,6 @@ message ObservationReferenceRangeMeaningCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/referencerange-meaning";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NORMAL = 1;
@@ -6777,10 +6065,8 @@ message ObservationReferenceRangeMeaningCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6791,7 +6077,6 @@ message TestReportActionResultCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/report-action-result-codes";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PASS = 1;
@@ -6802,10 +6087,8 @@ message TestReportActionResultCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6816,7 +6099,6 @@ message TestReportParticipantTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/report-participant-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     TEST_ENGINE = 1;
@@ -6825,10 +6107,8 @@ message TestReportParticipantTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6839,7 +6119,6 @@ message TestReportResultCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/report-result-codes";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PASS = 1;
@@ -6848,10 +6127,8 @@ message TestReportResultCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6862,7 +6139,6 @@ message TestReportStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/report-status-codes";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     COMPLETED = 1;
@@ -6873,10 +6149,8 @@ message TestReportStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6887,7 +6161,6 @@ message RepositoryTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/repository-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DIRECTLINK = 1;
@@ -6898,10 +6171,8 @@ message RepositoryTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6912,7 +6183,6 @@ message RequestIntentCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/request-intent";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PROPOSAL = 1;
@@ -6926,10 +6196,8 @@ message RequestIntentCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6940,7 +6208,6 @@ message RequestPriorityCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/request-priority";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ROUTINE = 1;
@@ -6950,10 +6217,8 @@ message RequestPriorityCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6964,7 +6229,6 @@ message RequestStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/request-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DRAFT = 1;
@@ -6977,10 +6241,8 @@ message RequestStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -6991,7 +6253,6 @@ message ResearchStudyStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/research-study-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DRAFT = 1;
@@ -7003,10 +6264,8 @@ message ResearchStudyStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7017,7 +6276,6 @@ message ResearchSubjectStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/research-subject-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CANDIDATE = 1;
@@ -7029,10 +6287,8 @@ message ResearchSubjectStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7043,7 +6299,6 @@ message PayeeResourceTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/resource-type-link";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ORGANIZATION = 1;
@@ -7053,10 +6308,8 @@ message PayeeResourceTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7067,7 +6320,6 @@ message ResourceTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/resource-types";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACCOUNT = 1 [(.google.fhir.proto.fhir_original_code) = "Account"];
@@ -7263,10 +6515,8 @@ message ResourceTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7277,7 +6527,6 @@ message ResourceValidationModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/resource-validation-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CREATE = 1;
@@ -7286,10 +6535,8 @@ message ResourceValidationModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7300,7 +6547,6 @@ message ResponseTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/response-code";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     OK = 1;
@@ -7309,10 +6555,8 @@ message ResponseTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7323,7 +6567,6 @@ message RestfulCapabilityModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/restful-capability-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CLIENT = 1;
@@ -7331,10 +6574,8 @@ message RestfulCapabilityModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7345,7 +6586,6 @@ message RestfulSecurityServiceCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/restful-security-service";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     OAUTH = 1 [(.google.fhir.proto.fhir_original_code) = "OAuth"];
@@ -7358,10 +6598,8 @@ message RestfulSecurityServiceCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7372,7 +6610,6 @@ message RiskProbabilityCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/risk-probability";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NEGLIGIBLE = 1;
@@ -7383,10 +6620,8 @@ message RiskProbabilityCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7397,7 +6632,6 @@ message SearchComparatorCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/search-comparator";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     EQ = 1;
@@ -7412,10 +6646,8 @@ message SearchComparatorCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7427,7 +6659,6 @@ message SearchEntryModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/search-entry-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     MATCH = 1;
@@ -7436,10 +6667,8 @@ message SearchEntryModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7450,7 +6679,6 @@ message SearchModifierCodeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/search-modifier-code";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     MISSING = 1;
@@ -7466,10 +6694,8 @@ message SearchModifierCodeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7480,7 +6706,6 @@ message SearchParamTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/search-param-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NUMBER = 1;
@@ -7494,10 +6719,8 @@ message SearchParamTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7509,7 +6732,6 @@ message XPathUsageTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/search-xpath-usage";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NORMAL = 1;
@@ -7520,10 +6742,8 @@ message XPathUsageTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7534,7 +6754,6 @@ message SequenceTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/sequence-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     AA = 1;
@@ -7543,10 +6762,8 @@ message SequenceTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7558,7 +6775,6 @@ message ServiceProvisionConditionsCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/service-provision-conditions";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     FREE = 1;
@@ -7567,10 +6783,8 @@ message ServiceProvisionConditionsCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7582,7 +6796,6 @@ message ReferralMethodCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/service-referral-method";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     FAX = 1;
@@ -7593,10 +6806,8 @@ message ReferralMethodCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7607,7 +6818,6 @@ message SlotStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/slotstatus";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     BUSY = 1;
@@ -7618,10 +6828,8 @@ message SlotStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7632,7 +6840,6 @@ message SpecialValuesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/special-values";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     TRUE = 1;
@@ -7644,10 +6851,8 @@ message SpecialValuesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7659,7 +6864,6 @@ message DeviceSpecificationSpecTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/specification-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     UNSPECIFIED = 1;
@@ -7673,10 +6877,8 @@ message DeviceSpecificationSpecTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7687,7 +6889,6 @@ message SpecimenStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/specimen-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     AVAILABLE = 1;
@@ -7697,10 +6898,8 @@ message SpecimenStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7711,7 +6910,6 @@ message StructureDefinitionKindCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/structure-definition-kind";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PRIMITIVE_TYPE = 1;
@@ -7721,10 +6919,8 @@ message StructureDefinitionKindCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7735,7 +6931,6 @@ message SubscriptionChannelTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/subscription-channel-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     REST_HOOK = 1;
@@ -7746,10 +6941,8 @@ message SubscriptionChannelTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7760,7 +6953,6 @@ message SubscriptionStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/subscription-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     REQUESTED = 1;
@@ -7770,10 +6962,8 @@ message SubscriptionStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7784,7 +6974,6 @@ message SubscriptionTagCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/subscription-tag";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     QUEUED = 1;
@@ -7792,10 +6981,8 @@ message SubscriptionTagCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7806,7 +6993,6 @@ message SubstanceCategoryCodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/substance-category";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ALLERGEN = 1;
@@ -7819,10 +7005,8 @@ message SubstanceCategoryCodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7833,7 +7017,6 @@ message FHIRSubstanceStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/substance-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ACTIVE = 1;
@@ -7842,10 +7025,8 @@ message FHIRSubstanceStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7856,7 +7037,6 @@ message SupplyDeliveryStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/supplydelivery-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     IN_PROGRESS = 1;
@@ -7866,10 +7046,8 @@ message SupplyDeliveryStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7880,7 +7058,6 @@ message SupplyItemTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/supplydelivery-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     MEDICATION = 1;
@@ -7888,10 +7065,8 @@ message SupplyItemTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7902,7 +7077,6 @@ message SupplyTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/supplyrequest-kind";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     CENTRAL = 1;
@@ -7910,10 +7084,8 @@ message SupplyTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7924,7 +7096,6 @@ message SupplyRequestReasonCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/supplyrequest-reason";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     PATIENT_CARE = 1;
@@ -7932,10 +7103,8 @@ message SupplyRequestReasonCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7946,7 +7115,6 @@ message SupplyRequestStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/supplyrequest-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DRAFT = 1;
@@ -7959,10 +7127,8 @@ message SupplyRequestStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7973,7 +7139,6 @@ message SystemRestfulInteractionCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/system-restful-interaction";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     TRANSACTION = 1;
@@ -7983,10 +7148,8 @@ message SystemRestfulInteractionCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -7998,7 +7161,6 @@ message SystemVersionProcessingModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/system-version-processing-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DEFAULT = 1;
@@ -8007,10 +7169,8 @@ message SystemVersionProcessingModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8021,7 +7181,6 @@ message TaskPerformerTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/task-performer-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     REQUESTER = 1;
@@ -8035,10 +7194,8 @@ message TaskPerformerTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8050,7 +7207,6 @@ message TemplateStatusCodeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/template-status-code";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DRAFT = 1;
@@ -8064,10 +7220,8 @@ message TemplateStatusCodeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8078,7 +7232,6 @@ message TaskStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/task-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     DRAFT = 1;
@@ -8096,10 +7249,8 @@ message TaskStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8111,7 +7262,6 @@ message TestScriptOperationCodeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/testscript-operation-codes";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     READ = 1;
@@ -8173,10 +7323,8 @@ message TestScriptOperationCodeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8188,7 +7336,6 @@ message TestScriptProfileDestinationTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/testscript-profile-destination-types";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     FHIR_SERVER = 1 [(.google.fhir.proto.fhir_original_code) = "FHIR-Server"];
@@ -8201,10 +7348,8 @@ message TestScriptProfileDestinationTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8216,7 +7361,6 @@ message TestScriptProfileOriginTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/testscript-profile-origin-types";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     FHIR_CLIENT = 1 [(.google.fhir.proto.fhir_original_code) = "FHIR-Client"];
@@ -8225,10 +7369,8 @@ message TestScriptProfileOriginTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8239,7 +7381,6 @@ message TransactionModeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/transaction-mode";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NOT_SUPPORTED = 1;
@@ -8249,10 +7390,8 @@ message TransactionModeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8263,7 +7402,6 @@ message TypeDerivationRuleCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/type-derivation-rule";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     SPECIALIZATION = 1;
@@ -8271,10 +7409,8 @@ message TypeDerivationRuleCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8285,7 +7421,6 @@ message TypeRestfulInteractionCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/type-restful-interaction";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     READ = 1;
@@ -8300,10 +7435,8 @@ message TypeRestfulInteractionCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8314,7 +7447,6 @@ message UDIEntryTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/udi-entry-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     BARCODE = 1;
@@ -8326,10 +7458,8 @@ message UDIEntryTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8341,7 +7471,6 @@ message UnknownContentCodeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/unknown-content-code";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NO = 1;
@@ -8351,10 +7480,8 @@ message UnknownContentCodeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8365,7 +7492,6 @@ message UsageContextTypeCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/usage-context-type";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     GENDER = 1;
@@ -8379,10 +7505,8 @@ message UsageContextTypeCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8395,7 +7519,6 @@ message ConfidentialityClassificationCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/v3-ConfidentialityClassification";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     U = 1 [(.google.fhir.proto.fhir_original_code) = "U"];
@@ -8407,10 +7530,8 @@ message ConfidentialityClassificationCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8424,7 +7545,6 @@ message VaccinationProtocolDoseStatuscodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/vaccination-protocol-dose-status";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     COUNT = 1;
@@ -8432,10 +7552,8 @@ message VaccinationProtocolDoseStatuscodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8450,7 +7568,6 @@ message VaccinationProtocolDoseStatusReasoncodesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/vaccination-protocol-dose-status-reason";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     ADVSTORAGE = 1;
@@ -8461,10 +7578,8 @@ message VaccinationProtocolDoseStatusReasoncodesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8475,7 +7590,6 @@ message sequenceStatusCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/variant-state";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     POSITIVE = 1;
@@ -8484,10 +7598,8 @@ message sequenceStatusCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8498,7 +7610,6 @@ message ResourceVersionPolicyCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/versioning-policy";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     NO_VERSION = 1;
@@ -8507,10 +7618,8 @@ message ResourceVersionPolicyCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8521,7 +7630,6 @@ message VisionBaseCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/vision-base-codes";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     UP = 1;
@@ -8531,10 +7639,8 @@ message VisionBaseCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
 
@@ -8545,7 +7651,6 @@ message VisionEyesCode {
   option (.google.fhir.proto.fhir_valueset_url) =
       "http://hl7.org/fhir/ValueSet/vision-eye-codes";
 
-  // Primitive value for code
   enum Value {
     INVALID_UNINITIALIZED = 0;
     RIGHT = 1;
@@ -8553,9 +7658,7 @@ message VisionEyesCode {
   }
   Value value = 1;
 
-  // xml:id (or equivalent in JSON)
   String id = 2;
 
-  // Additional Content defined by implementations
   repeated Extension extension = 3;
 }
