@@ -112,13 +112,11 @@ void GetContextFeatures(const std::pair<ExampleKey, Features>& labels,
                            : encounter_start_times[encounter_index - 1];
   (*feature_map)[kLabelEncounterIdFeatureKey].mutable_int64_list()->add_value(
       absl::ToUnixSeconds(current_encounter_time));
+  (*feature_map)[kSequenceLengthFeatureKey].mutable_int64_list()->add_value(
+      sequence_length);
 
-  // Do not add sequence length and context labels when generating sequence
-  // label.
+  // Add labels to context when not generating sequence labels.
   if (!generate_sequence_label) {
-    (*feature_map)[kSequenceLengthFeatureKey].mutable_int64_list()->add_value(
-        sequence_length);
-    // Add labels to context.
     for (const auto& label : labels.second.feature()) {
       (*feature_map)[label.first] = label.second;
     }
