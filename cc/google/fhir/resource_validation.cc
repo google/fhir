@@ -91,7 +91,8 @@ Status ValidateReference(const Message& message, const FieldDescriptor* field,
       }
       if (!is_allowed) {
         return FailedPrecondition("invalid-reference-", base_name, ".",
-                                  field->name(), "-", reference_type);
+                                  field->name(), "-disallowed-type-",
+                                  reference_type);
       }
     }
   }
