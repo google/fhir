@@ -13,9 +13,9 @@
 // limitations under the License.
 
 #include "google/fhir/fhir_path/fhir_path.h"
-#include "google/fhir/stu3/proto_util.h"
 
 #include "google/protobuf/wrappers.pb.h"
+#include "google/fhir/proto_util.h"
 
 // Include the ANTLR-generated visitor, lexer and parser files.
 #include "google/fhir/fhir_path/FhirPathBaseVisitor.h"
@@ -43,8 +43,8 @@ using antlr_parser::FhirPathBaseVisitor;
 using antlr_parser::FhirPathLexer;
 using antlr_parser::FhirPathParser;
 
+using ::google::fhir::IsMessageType;
 using ::google::fhir::StatusOr;
-using ::google::fhir::stu3::IsMessageType;
 using internal::ExpressionNode;
 
 using ::tensorflow::errors::InvalidArgument;

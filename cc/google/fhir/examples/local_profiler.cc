@@ -18,8 +18,8 @@
 
 #include "absl/strings/str_cat.h"
 #include "absl/time/time.h"
-#include "google/fhir/stu3/json_format.h"
-#include "google/fhir/stu3/profiles.h"
+#include "google/fhir/json_format.h"
+#include "google/fhir/profiles.h"
 #include "examples/profiles/demo.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
@@ -28,9 +28,9 @@
 using std::string;
 
 using ::company::fhir::stu3::demo::DemoPatient;
-using ::google::fhir::stu3::ConvertToProfileLenient;
-using ::google::fhir::stu3::JsonFhirStringToProto;
-using ::google::fhir::stu3::PrintFhirToJsonStringForAnalytics;
+using ::google::fhir::ConvertToProfileLenient;
+using ::google::fhir::JsonFhirStringToProto;
+using ::google::fhir::PrintFhirToJsonStringForAnalytics;
 using ::google::fhir::stu3::proto::Patient;
 
 template <typename R, typename P>

@@ -26,13 +26,13 @@
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_split.h"
 #include "absl/time/time.h"
+#include "google/fhir/bundle_to_versioned_resources_converter.h"
 #include "google/fhir/seqex/example_key.h"
 #include "google/fhir/seqex/feature_keys.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "google/fhir/stu3/bundle_to_versioned_resources_converter.h"
-#include "google/fhir/stu3/util.h"
 #include "google/fhir/systems/systems.h"
+#include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
@@ -297,7 +297,7 @@ StatusOr<ExampleKey> ConvertTriggerEventToExampleKey(
 
   key.trigger_timestamp = absl::FromUnixMicros(trigger.event_time().value_us());
   if (trigger.has_source()) {
-    key.source = stu3::ReferenceProtoToString(trigger.source()).ValueOrDie();
+    key.source = ReferenceProtoToString(trigger.source()).ValueOrDie();
   }
   // ExampleKey here only used in testing code, thus without start / end is OK,
   // but may make production debugging easier.
@@ -330,15 +330,14 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
         }
         if (label.class_value().has_decimal()) {
           double value;
-          CHECK(stu3::GetDecimalValue(label.class_value().decimal(), &value)
-                    .ok());
+          CHECK(GetDecimalValue(label.class_value().decimal(), &value).ok());
           floats.mutable_float_list()->add_value(value);
         }
         if (label.class_value().has_date_time()) {
-           ::absl::Time date_time = stu3::GetTimeFromTimelikeElement(
-               label.class_value().date_time());
-           datetime_secs.mutable_int64_list()->add_value(
-               absl::ToUnixSeconds(date_time));
+          ::absl::Time date_time =
+              GetTimeFromTimelikeElement(label.class_value().date_time());
+          datetime_secs.mutable_int64_list()->add_value(
+              absl::ToUnixSeconds(date_time));
         }
         CHECK(!label.class_value().has_boolean());  // TODO: implement
         label_value_types++;
@@ -352,7 +351,7 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
     (*result.mutable_feature())[absl::StrCat(label_prefix, ".class")] =
         class_names;
     ::absl::Time event_time =
-        stu3::GetTimeFromTimelikeElement(event_label.event_time());
+        GetTimeFromTimelikeElement(event_label.event_time());
     (*result.mutable_feature())[absl::StrCat(label_prefix, ".timestamp_secs")]
         .mutable_int64_list()
         ->add_value(absl::ToUnixSeconds(event_time));

@@ -28,12 +28,12 @@
 #include "absl/strings/str_replace.h"
 #include "absl/strings/str_split.h"
 #include "absl/time/time.h"
+#include "google/fhir/codeable_concepts.h"
+#include "google/fhir/proto_util.h"
 #include "google/fhir/seqex/text_tokenizer.h"
 #include "google/fhir/status/status.h"
-#include "google/fhir/stu3/codeable_concepts.h"
-#include "google/fhir/stu3/proto_util.h"
-#include "google/fhir/stu3/util.h"
 #include "google/fhir/systems/systems.h"
+#include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/example/example.pb.h"
@@ -147,7 +147,7 @@ void AddValueAndOrTokensToExample(
 Status ExtractCodeBySystem(const Message& codeable_concept,
                            absl::string_view system_value, string* result) {
   auto status_or_result =
-      stu3::ExtractCodeBySystem(codeable_concept, system_value);
+      google::fhir::ExtractCodeBySystem(codeable_concept, system_value);
   if (status_or_result.ok()) {
     *result = status_or_result.ValueOrDie();
     return Status::OK();
@@ -157,7 +157,8 @@ Status ExtractCodeBySystem(const Message& codeable_concept,
 
 Status ExtractIcdCode(const Message& codeable_concept,
                       const std::vector<string>& schemes, string* result) {
-  auto status_or_result = stu3::ExtractIcdCode(codeable_concept, schemes);
+  auto status_or_result =
+      google::fhir::ExtractIcdCode(codeable_concept, schemes);
   if (status_or_result.ok()) {
     *result = status_or_result.ValueOrDie();
     return Status::OK();
@@ -166,7 +167,7 @@ Status ExtractIcdCode(const Message& codeable_concept,
 }
 
 absl::optional<string> GetCodeFromConceptText(const Message& concept) {
-  if (stu3::CodingSize(concept) > 0) {
+  if (CodingSize(concept) > 0) {
     return absl::nullopt;
   }
   const google::protobuf::FieldDescriptor* text_field =
@@ -174,11 +175,11 @@ absl::optional<string> GetCodeFromConceptText(const Message& concept) {
   if (!text_field) {
     return absl::nullopt;
   }
-  if (!stu3::FieldHasValue(concept, text_field)) {
+  if (!FieldHasValue(concept, text_field)) {
     return absl::nullopt;
   }
   const auto& statusor_text =
-      stu3::GetMessageInField<stu3::proto::String>(concept, text_field);
+      GetMessageInField<stu3::proto::String>(concept, text_field);
   if (!statusor_text.ok()) {
     return absl::nullopt;
   }
@@ -277,7 +278,7 @@ void AddCodeableConceptToExample(
       .mutable_bytes_list()
       ->add_value(code);
   const StatusOr<String>& statusor_text =
-      stu3::GetMessageInField<String>(concept, "text");
+      GetMessageInField<String>(concept, "text");
   if (statusor_text.ok() && !statusor_text.ValueOrDie().value().empty()) {
     const string full_name = absl::StrCat(name, ".text");
     if (FLAGS_tokenize_code_text_features) {
@@ -287,7 +288,7 @@ void AddCodeableConceptToExample(
         *tokenize_feature_set, add_tokenize_feature_set, full_name,
         statusor_text.ValueOrDie().value(), example, enable_attribution);
   }
-  stu3::ForEachCoding(concept, [&](const Coding& coding) {
+  ForEachCoding(concept, [&](const Coding& coding) {
     CHECK(coding.has_system() && coding.has_code());
     const string system = systems::ToShortSystemName(coding.system().value());
     (*example->mutable_features()
@@ -442,7 +443,7 @@ void MessageToExample(const google::protobuf::Message& message, const string& pr
           (*example->mutable_features()->mutable_feature())[name]
               .mutable_float_list()
               ->add_value(value_as_double);
-        } else if (stu3::IsCodeableConceptLike(field->message_type())) {
+        } else if (IsCodeableConceptLike(field->message_type())) {
           // Codeable concepts are emitted using the preferred coding systems.
           AddCodeableConceptToExample(
               child, name, example, &tokenize_feature_set,

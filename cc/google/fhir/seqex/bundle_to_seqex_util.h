@@ -22,10 +22,10 @@
 #include <vector>
 
 #include "google/protobuf/reflection.h"
+#include "google/fhir/extensions.h"
 #include "google/fhir/seqex/bundle_to_seqex_converter.h"
 #include "google/fhir/status/statusor.h"
-#include "google/fhir/stu3/extensions.h"
-#include "google/fhir/stu3/util.h"
+#include "google/fhir/util.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "proto/stu3/resources.pb.h"
@@ -65,7 +65,7 @@ void GetTriggerLabelsPair(const BundleLike& bundle,
                           std::vector<TriggerLabelsPair>* trigger_labels_pair,
                           int* num_triggers_filtered) {
   for (const auto& entry : bundle.entry()) {
-    auto result = stu3::GetResourceExtensionsFromBundleEntry(entry);
+    auto result = GetResourceExtensionsFromBundleEntry(entry);
     if (!result.ok()) {
       continue;
     }
@@ -81,7 +81,7 @@ std::vector<stu3::google::EventLabel> ExtractLabelsFromBundle(
     const BundleLike& bundle, const std::set<string>& label_names) {
   std::vector<stu3::google::EventLabel> labels;
   for (const auto& entry : bundle.entry()) {
-    auto result = stu3::GetResourceExtensionsFromBundleEntry(entry);
+    auto result = GetResourceExtensionsFromBundleEntry(entry);
     if (!result.ok()) {
       continue;
     }

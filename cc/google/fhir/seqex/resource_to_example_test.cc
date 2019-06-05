@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "google/fhir/seqex/resource_to_example.h"
+
 #include <memory>
 
 #include "gflags/gflags.h"
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "google/fhir/seqex/resource_to_example.h"
-#include "google/fhir/stu3/test_helper.h"
+#include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/resources.pb.h"
 #include "tensorflow/core/example/example.pb.h"

@@ -37,8 +37,8 @@ cc_library(
     deps = [
         ":fhir_path_grammar",
         ":fhir_path_lexer",
+        "//cc/google/fhir:proto_util",
         "//cc/google/fhir/status:statusor",
-        "//cc/google/fhir/stu3:proto_util",
         "@com_google_absl//absl/memory",
         "@org_tensorflow//tensorflow/core:lib",
         "@protobuf_archive//:protobuf",

@@ -15,15 +15,16 @@
 #include "google/fhir/seqex/bundle_to_seqex_util.h"
 
 #include <sys/types.h>
+
 #include <map>
 #include <memory>
 #include <utility>
 
 #include "google/protobuf/reflection.h"
 #include "absl/time/time.h"
+#include "google/fhir/extensions.h"
 #include "google/fhir/status/statusor.h"
-#include "google/fhir/stu3/extensions.h"
-#include "google/fhir/stu3/util.h"
+#include "google/fhir/util.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "proto/stu3/resources.pb.h"
@@ -49,7 +50,7 @@ StatusOr<std::vector<EventLabel>> ExtractLabelsFromExtensions(
     google::protobuf::RepeatedFieldRef<Extension> extensions) {
   std::vector<EventLabel> labels;
   TF_RETURN_IF_ERROR(
-      google::fhir::stu3::GetRepeatedFromExtension(extensions, &labels));
+      google::fhir::GetRepeatedFromExtension(extensions, &labels));
   std::vector<EventLabel> target_labels;
   for (const auto& label : labels) {
     if (label_names.count(label.type().code().value()) > 0) {
@@ -65,8 +66,7 @@ void GetTriggerLabelsPairFromExtensions(
     std::vector<TriggerLabelsPair>* trigger_labels_pair,
     int* num_triggers_filtered) {
   std::vector<stu3::google::EventTrigger> triggers;
-  TF_CHECK_OK(
-      google::fhir::stu3::GetRepeatedFromExtension(extensions, &triggers));
+  TF_CHECK_OK(google::fhir::GetRepeatedFromExtension(extensions, &triggers));
   // Note that this only joins triggers and labels within the same resource.
   auto labels_result = ExtractLabelsFromExtensions(label_names, extensions);
   std::vector<EventLabel> labels = labels_result.ValueOrDie();
@@ -75,12 +75,11 @@ void GetTriggerLabelsPairFromExtensions(
       continue;
     }
     absl::Time trigger_time =
-        google::fhir::stu3::GetTimeFromTimelikeElement(trigger.event_time());
+        google::fhir::GetTimeFromTimelikeElement(trigger.event_time());
     bool should_keep = true;
     for (const EventLabel& label : labels) {
-      if (label.has_event_time() &&
-          google::fhir::stu3::GetTimeFromTimelikeElement(label.event_time()) <
-              trigger_time) {
+      if (label.has_event_time() && google::fhir::GetTimeFromTimelikeElement(
+                                        label.event_time()) < trigger_time) {
         should_keep = false;
         break;
       }
@@ -115,7 +114,7 @@ void GetTriggerLabelsPairFromInputLabels(
           << label.DebugString();
     }
     CHECK(label.has_type()) << label.DebugString();
-    absl::Time time = stu3::GetTimeFromTimelikeElement(label.event_time());
+    absl::Time time = GetTimeFromTimelikeElement(label.event_time());
     if (trigger_index_for_time.find(time) == trigger_index_for_time.end()) {
       trigger_labels_pair->emplace_back();
       *trigger_labels_pair->back().first.mutable_event_time() =

@@ -29,13 +29,13 @@
 #include "google/protobuf/message.h"
 #include "absl/strings/str_split.h"
 #include "absl/time/time.h"
+#include "google/fhir/bundle_to_versioned_resources_converter.h"
 #include "google/fhir/seqex/example_key.h"
 #include "google/fhir/seqex/feature_keys.h"
 #include "google/fhir/seqex/resource_to_example.h"
 #include "google/fhir/status/status.h"
-#include "google/fhir/stu3/bundle_to_versioned_resources_converter.h"
-#include "google/fhir/stu3/util.h"
 #include "google/fhir/systems/systems.h"
+#include "google/fhir/util.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "proto/stu3/resources.pb.h"
@@ -210,19 +210,18 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
       std::vector<std::pair<std::pair<absl::Time, string>,
                             ::tensorflow::Example>>* event_sequence) {
     // Conversion from versioned resource to example is 1-1.
-    const absl::Time version_time =
-        google::fhir::stu3::GetTimeFromTimelikeElement(
-            resource.meta().last_updated());
+    const absl::Time version_time = google::fhir::GetTimeFromTimelikeElement(
+        resource.meta().last_updated());
     ::tensorflow::Example example;
     seqex::ResourceToExample(resource, &example, enable_attribution_);
     if (enable_attribution_) {
       (*example.mutable_features()
             ->mutable_feature())[seqex::kResourceIdFeatureKey]
           .mutable_bytes_list()
-          ->add_value(stu3::GetReferenceToResource(resource));
+          ->add_value(GetReferenceToResource(resource));
     }
     event_sequence->push_back(std::make_pair(
-        std::make_pair(version_time, stu3::GetReferenceToResource(resource)),
+        std::make_pair(version_time, GetReferenceToResource(resource)),
         example));
   }
 };
@@ -247,7 +246,7 @@ bool BundleToSeqexConverter<BundleLike>::Begin(
     return false;
   }
   BundleLike versioned_bundle =
-      stu3::BundleToVersionedBundle(bundle, version_config_, counter_stats_);
+      BundleToVersionedBundle(bundle, version_config_, counter_stats_);
   BundleToExamples(versioned_bundle);
   BundleToContext(versioned_bundle);
   return Next();
@@ -386,9 +385,8 @@ void BundleToSeqexConverter<BundleLike>::BundleToContext(
   for (const auto& entry : bundle.entry()) {
     if (entry.resource().has_patient()) {
       auto patient = entry.resource().patient();
-      if (google::fhir::stu3::GetMetadataFromResource(patient)
-              .version_id()
-              .value() != "0") {
+      if (google::fhir::GetMetadataFromResource(patient).version_id().value() !=
+          "0") {
         // We're only interested in the V0 patient for the context.
         continue;
       }
