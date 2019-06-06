@@ -1,0 +1,76 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "condition-criticality",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><h2>QICore Condition Criticality Codes</h2><div><p>Value Set for QICore Condition Criticality (Example)</p>\n</div><p>This code system http://hl7.org/fhir/us/qicore/CodeSystem/condition-criticality defines the following codes:</p><table class=\"codes\"><tr><td style=\"white-space:nowrap\"><b>Code</b></td><td><b>Display</b></td><td><b>Definition</b></td></tr><tr><td style=\"white-space:nowrap\">unspecified<a name=\"condition-criticality-unspecified\"> </a></td><td>Not Specified</td><td>The criticality of the condition is not specified</td></tr><tr><td style=\"white-space:nowrap\">self-resolving<a name=\"condition-criticality-self-resolving\"> </a></td><td>Expected to Self-Resolve</td><td>The condition is expected to resolve on its own</td></tr><tr><td style=\"white-space:nowrap\">controllable<a name=\"condition-criticality-controllable\"> </a></td><td>Controllable</td><td>The condition is considered to be controllable</td></tr><tr><td style=\"white-space:nowrap\">functional-loss<a name=\"condition-criticality-functional-loss\"> </a></td><td>Potential loss of function or capacity</td><td>The condition may result in partial or full loss of function or capacity</td></tr><tr><td style=\"white-space:nowrap\">life-threatening<a name=\"condition-criticality-life-threatening\"> </a></td><td>Life Threatening</td><td>The condition is considered to be life-threatening</td></tr><tr><td style=\"white-space:nowrap\">requires-hospitalization<a name=\"condition-criticality-requires-hospitalization\"> </a></td><td>Requires Hospitalization</td><td>The condition requires hospitalization</td></tr></table></div>"
+  },
+  "url": "http://hl7.org/fhir/us/qicore/CodeSystem/condition-criticality",
+  "version": "3.2.0",
+  "name": "ConditionCriticality",
+  "title": "QICore Condition Criticality Codes",
+  "status": "draft",
+  "experimental": false,
+  "date": "2018-08-22T00:00:00+10:00",
+  "publisher": "Health Level Seven, Inc. - CQI WG",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://hl7.org/special/committees/CQI"
+        }
+      ]
+    }
+  ],
+  "description": "Value Set for QICore Condition Criticality (Example)",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "us"
+        }
+      ]
+    }
+  ],
+  "caseSensitive": true,
+  "content": "complete",
+  "concept": [
+    {
+      "code": "unspecified",
+      "display": "Not Specified",
+      "definition": "The criticality of the condition is not specified"
+    },
+    {
+      "code": "self-resolving",
+      "display": "Expected to Self-Resolve",
+      "definition": "The condition is expected to resolve on its own"
+    },
+    {
+      "code": "controllable",
+      "display": "Controllable",
+      "definition": "The condition is considered to be controllable"
+    },
+    {
+      "code": "functional-loss",
+      "display": "Potential loss of function or capacity",
+      "definition": "The condition may result in partial or full loss of function or capacity"
+    },
+    {
+      "code": "life-threatening",
+      "display": "Life Threatening",
+      "definition": "The condition is considered to be life-threatening"
+    },
+    {
+      "code": "requires-hospitalization",
+      "display": "Requires Hospitalization",
+      "definition": "The condition requires hospitalization"
+    }
+  ]
+}

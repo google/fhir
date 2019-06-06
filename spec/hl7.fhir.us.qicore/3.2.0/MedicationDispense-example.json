@@ -1,0 +1,154 @@
+{
+  "resourceType": "MedicationDispense",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-medicationdispense"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>status</b>: completed</p><p><b>medication</b>: <a href=\"Medication-example.html\">Generated Summary: id: example; <span title=\"Codes: {http://www.nlm.nih.gov/research/umls/rxnorm 1594660}\">alemtuzumab 10 MG/ML [Lemtrada]</span>; isBrand; <span title=\"Codes: {http://snomed.info/sct 385219001}\">Injection solution (qualifier value)</span></a></p><p><b>subject</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><h3>Performers</h3><table class=\"grid\"><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a href=\"Practitioner-example.html\">Generated Summary: id: example; 23; active; Adam Careful </a></td></tr></table><p><b>authorizingPrescription</b>: <a href=\"MedicationRequest-example.html\">Generated Summary: id: example; status: active; intent: order; ????; authoredOn: 26/03/2015 11:32:52 AM; </a></p><p><b>quantity</b>: 100 ml<span style=\"background: LightGoldenRodYellow\"> (Details: UCUM code ml = 'ml')</span></p><p><b>daysSupply</b>: 30 Day<span style=\"background: LightGoldenRodYellow\"> (Details: UCUM code d = 'd')</span></p><p><b>whenPrepared</b>: 31/05/2012 2:20:00 AM</p><p><b>whenHandedOver</b>: 31/05/2012 8:20:00 PM</p><p><b>destination</b>: <a href=\"Location-example.html\">Generated Summary: id: example; B1-S.F2; status: active; name: South Wing, second floor; description: Second floor of the Old South Wing, formerly in use by Psychiatry; mode: instance; <span title=\"Codes: {http://hl7.org/fhir/v3/RoleCode HOSP}\">Hospital</span>; ph: 2328(WORK), fax: 2329(WORK), second wing admissions, http://sampleorg.com/southwing(WORK); <span title=\"Codes: {http://hl7.org/fhir/location-physical-type wi}\">Wing</span></a></p><p><b>receiver</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>dosageInstruction</b>: </p><h3>Substitutions</h3><table class=\"grid\"><tr><td>-</td><td><b>WasSubstituted</b></td><td><b>Type</b></td></tr><tr><td>*</td><td>false</td><td>No substitution made or expected <span style=\"background: LightGoldenRodYellow\">(Details : {http://example.org/MedDispSubType code 'NoSub' = 'NoSub', given as 'No substitution made or expected'})</span></td></tr></table></div>"
+  },
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/pharmacy-core-refillsRemaining",
+      "valueInteger": 0
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/medicationdispense-validityPeriod",
+      "valuePeriod": {
+        "start": "2012-05-30",
+        "end": "2012-06-10"
+      }
+    }
+  ],
+  "status": "completed",
+  "medicationReference": {
+    "reference": "Medication/example"
+  },
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "performer": [
+    {
+      "actor": {
+        "reference": "Practitioner/example"
+      }
+    }
+  ],
+  "authorizingPrescription": [
+    {
+      "reference": "MedicationRequest/example"
+    }
+  ],
+  "quantity": {
+    "value": 100,
+    "unit": "ml",
+    "system": "http://unitsofmeasure.org",
+    "code": "ml"
+  },
+  "daysSupply": {
+    "value": 30,
+    "unit": "Day",
+    "system": "http://unitsofmeasure.org",
+    "code": "d"
+  },
+  "whenPrepared": "2012-05-30T16:20:00+00:00",
+  "whenHandedOver": "2012-05-31T10:20:00+00:00",
+  "destination": {
+    "reference": "Location/example"
+  },
+  "receiver": [
+    {
+      "reference": "Patient/example"
+    }
+  ],
+  "dosageInstruction": [
+    {
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/pharmacy-core-doseType",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "440231000124106",
+                "display": "Maintenance dose"
+              }
+            ]
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/pharmacy-core-infuseOver",
+          "valueDuration": {
+            "value": 1,
+            "unit": "min",
+            "system": "http://unitsofmeasure.org",
+            "code": "min"
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/pharmacy-core-minDosePerPeriod",
+          "valueRatio": {
+            "numerator": {
+              "value": 15,
+              "unit": "ml",
+              "system": "http://unitsofmeasure.org",
+              "code": "ml"
+            },
+            "denominator": {
+              "value": 1,
+              "unit": "day",
+              "system": "http://unitsofmeasure.org",
+              "code": "day"
+            }
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/pharmacy-core-maxDeliveryVolume",
+          "valueQuantity": {
+            "value": 15,
+            "unit": "ml",
+            "system": "http://unitsofmeasure.org",
+            "code": "ml"
+          }
+        }
+      ],
+      "timing": {
+        "repeat": {
+          "frequency": 3,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "394899003",
+            "display": "oral administration of treatment"
+          }
+        ]
+      },
+      "doseQuantity": {
+        "value": 5,
+        "unit": "ml",
+        "system": "http://unitsofmeasure.org",
+        "code": "ml"
+      }
+    }
+  ],
+  "substitution": {
+    "wasSubstituted": false,
+    "type": {
+      "coding": [
+        {
+          "system": "http://example.org/MedDispSubType",
+          "code": "NoSub",
+          "display": "No substitution made or expected"
+        }
+      ]
+    }
+  }
+}

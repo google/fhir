@@ -1,0 +1,66 @@
+{
+  "resourceType": "Device",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-device"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: 345675, Serial Number = AMID-342135-8464</p><h3>Udis</h3><table class=\"grid\"><tr><td>-</td><td><b>DeviceIdentifier</b></td></tr><tr><td>*</td><td>AMID-342135-8464</td></tr></table><p><b>status</b>: active</p><p><b>type</b>: ECG <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '86184003' = 'Electrocardiographic monitor and recorder', given as 'Electrocardiographic monitor and recorder'})</span></p><p><b>lotNumber</b>: 43453424</p><p><b>manufacturer</b>: Acme Devices, Inc</p><p><b>model</b>: AB 45-J</p><p><b>patient</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>contact</b>: ph: ext 4352</p><p><b>note</b>: QA Checked</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://goodcare.org/devices/id",
+      "value": "345675"
+    },
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/identifier-type",
+            "code": "SNO"
+          }
+        ],
+        "text": "Serial Number"
+      },
+      "value": "AMID-342135-8464"
+    }
+  ],
+  "udi": {
+    "deviceIdentifier": "AMID-342135-8464"
+  },
+  "status": "active",
+  "type": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "86184003",
+        "display": "Electrocardiographic monitor and recorder"
+      }
+    ],
+    "text": "ECG"
+  },
+  "lotNumber": "43453424",
+  "manufacturer": "Acme Devices, Inc",
+  "model": "AB 45-J",
+  "patient": {
+    "reference": "Patient/example"
+  },
+  "contact": [
+    {
+      "system": "phone",
+      "value": "ext 4352"
+    }
+  ],
+  "note": [
+    {
+      "authorReference": {
+        "reference": "Practitioner/example"
+      },
+      "time": "2015-06-28T14:03:32+10:00",
+      "text": "QA Checked"
+    }
+  ]
+}

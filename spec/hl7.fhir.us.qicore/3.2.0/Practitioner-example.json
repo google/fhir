@@ -1,0 +1,68 @@
+{
+  "resourceType": "Practitioner",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-practitioner"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: 23</p><p><b>active</b>: true</p><p><b>name</b>: Adam Careful </p><p><b>address</b>: 534 Erewhon St PleasantVille Vic 3999 (HOME)</p><h3>Qualifications</h3><table class=\"grid\"><tr><td>-</td><td><b>Identifier</b></td><td><b>Code</b></td><td><b>Period</b></td><td><b>Issuer</b></td></tr><tr><td>*</td><td>12345</td><td>Bachelor of Science <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v2/0360/2.7 code 'BS' = 'Bachelor of Science', given as 'Bachelor of Science'})</span></td><td>01/01/1995 12:00:00 AM --&gt; (ongoing)</td><td>Example University</td></tr></table></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://www.acme.org/practitioners",
+      "value": "23"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "family": "Careful",
+      "given": [
+        "Adam"
+      ],
+      "prefix": [
+        "Dr"
+      ]
+    }
+  ],
+  "address": [
+    {
+      "use": "home",
+      "line": [
+        "534 Erewhon St"
+      ],
+      "city": "PleasantVille",
+      "state": "Vic",
+      "postalCode": "3999"
+    }
+  ],
+  "qualification": [
+    {
+      "identifier": [
+        {
+          "system": "http://example.org/UniversityIdentifier",
+          "value": "12345"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0360/2.7",
+            "code": "BS",
+            "display": "Bachelor of Science"
+          }
+        ],
+        "text": "Bachelor of Science"
+      },
+      "period": {
+        "start": "1995"
+      },
+      "issuer": {
+        "display": "Example University"
+      }
+    }
+  ]
+}

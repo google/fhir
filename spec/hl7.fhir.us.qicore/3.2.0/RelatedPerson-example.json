@@ -1,0 +1,62 @@
+{
+  "resourceType": "RelatedPerson",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-relatedperson"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>patient</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>relationship</b>: Emergency Contact <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v2/0131 code 'C' = 'Emergency Contact)</span></p><p><b>name</b>: Peter James Chalmers (OFFICIAL)</p><p><b>telecom</b>: ph: (03) 5555 6473(WORK)</p><p><b>gender</b>: male</p><p><b>address</b>: 534 Erewhon St PleasantVille Vic 3999 (HOME)</p><p><b>photo</b>: </p><p><b>period</b>: 11/03/2012 12:00:00 AM --&gt; (ongoing)</p></div>"
+  },
+  "patient": {
+    "reference": "Patient/example"
+  },
+  "relationship": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v2/0131",
+        "code": "C"
+      }
+    ]
+  },
+  "name": [
+    {
+      "use": "official",
+      "family": "Chalmers",
+      "given": [
+        "Peter",
+        "James"
+      ]
+    }
+  ],
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "(03) 5555 6473",
+      "use": "work"
+    }
+  ],
+  "gender": "male",
+  "address": [
+    {
+      "use": "home",
+      "line": [
+        "534 Erewhon St"
+      ],
+      "city": "PleasantVille",
+      "state": "Vic",
+      "postalCode": "3999"
+    }
+  ],
+  "photo": [
+    {
+      "contentType": "image/jpeg",
+      "url": "Binary/f012"
+    }
+  ],
+  "period": {
+    "start": "2012-03-11"
+  }
+}

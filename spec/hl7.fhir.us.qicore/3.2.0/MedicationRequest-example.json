@@ -1,0 +1,118 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-medicationrequest"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>medication</b>: <a href=\"Medication-example.html\">Generated Summary: id: example; <span title=\"Codes: {http://www.nlm.nih.gov/research/umls/rxnorm 1594660}\">alemtuzumab 10 MG/ML [Lemtrada]</span>; isBrand; <span title=\"Codes: {http://snomed.info/sct 385219001}\">Injection solution (qualifier value)</span></a></p><p><b>subject</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>authoredOn</b>: 26/03/2015 11:32:52 AM</p><h3>Requesters</h3><table class=\"grid\"><tr><td>-</td><td><b>Agent</b></td></tr><tr><td>*</td><td><a href=\"Practitioner-example.html\">Generated Summary: id: example; 23; active; Adam Careful </a></td></tr></table><p><b>dosageInstruction</b>: </p><h3>DispenseRequests</h3><table class=\"grid\"><tr><td>-</td><td><b>Quantity</b></td></tr><tr><td>*</td><td>100 ml<span style=\"background: LightGoldenRodYellow\"> (Details: UCUM code ml = 'ml')</span></td></tr></table></div>"
+  },
+  "status": "active",
+  "intent": "order",
+  "medicationReference": {
+    "reference": "Medication/example"
+  },
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "authoredOn": "2015-03-25T19:32:52-05:00",
+  "requester": {
+    "agent": {
+      "reference": "Practitioner/example"
+    }
+  },
+  "dosageInstruction": [
+    {
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/pharmacy-core-doseType",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "440231000124106",
+                "display": "Maintenance dose"
+              }
+            ]
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/pharmacy-core-infuseOver",
+          "valueDuration": {
+            "value": 1,
+            "unit": "min",
+            "system": "http://unitsofmeasure.org",
+            "code": "m"
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/pharmacy-core-minDosePerPeriod",
+          "valueRatio": {
+            "numerator": {
+              "value": 15,
+              "unit": "ml",
+              "system": "http://unitsofmeasure.org",
+              "code": "ml"
+            },
+            "denominator": {
+              "value": 1,
+              "unit": "day",
+              "system": "http://unitsofmeasure.org",
+              "code": "day"
+            }
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/pharmacy-core-maxDeliveryVolume",
+          "valueQuantity": {
+            "value": 15,
+            "unit": "ml",
+            "system": "http://unitsofmeasure.org",
+            "code": "ml"
+          }
+        }
+      ],
+      "timing": {
+        "repeat": {
+          "frequency": 3,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "site": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "447964005"
+          }
+        ]
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "394899003",
+            "display": "oral administration of treatment"
+          }
+        ]
+      },
+      "doseQuantity": {
+        "value": 5,
+        "unit": "ml",
+        "system": "http://unitsofmeasure.org",
+        "code": "ml"
+      }
+    }
+  ],
+  "dispenseRequest": {
+    "quantity": {
+      "value": 100,
+      "unit": "ml",
+      "system": "http://unitsofmeasure.org",
+      "code": "ml"
+    }
+  }
+}

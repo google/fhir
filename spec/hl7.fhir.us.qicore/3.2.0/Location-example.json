@@ -1,0 +1,89 @@
+{
+  "resourceType": "Location",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-location"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: B1-S.F2</p><p><b>status</b>: active</p><p><b>name</b>: South Wing, second floor</p><p><b>description</b>: Second floor of the Old South Wing, formerly in use by Psychiatry</p><p><b>mode</b>: instance</p><p><b>type</b>: Hospital <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v3/RoleCode code 'HOSP' = 'Hospital', given as 'Hospital'})</span></p><p><b>telecom</b>: ph: 2328(WORK), fax: 2329(WORK), second wing admissions, http://sampleorg.com/southwing(WORK)</p><p><b>address</b>: Iron Curtain 75, Building A Pittsburgh PA 15016 US (WORK)</p><p><b>physicalType</b>: Wing <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/location-physical-type code 'wi' = 'Wing', given as 'Wing'})</span></p><h3>Positions</h3><table class=\"grid\"><tr><td>-</td><td><b>Longitude</b></td><td><b>Latitude</b></td><td><b>Altitude</b></td></tr><tr><td>*</td><td>-83.6945691</td><td>42.25475478</td><td>0</td></tr></table><p><b>managingOrganization</b>: <a href=\"Organization-example.html\">Generated Summary: id: example; ??; active; <span title=\"Codes: {http://hl7.org/fhir/organization-type team}\">Organizational team</span>; name: Health Level Seven International; ph: (+1) 734-677-7777, fax: (+1) 734-677-6622, hq@HL7.org</a></p></div>"
+  },
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/location-alias",
+      "valueString": "Mean Joe Greene University Medical Center, South Wing, second floor"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/location-alias",
+      "valueString": "BU MC, SW, F2"
+    }
+  ],
+  "identifier": [
+    {
+      "value": "B1-S.F2"
+    }
+  ],
+  "status": "active",
+  "name": "South Wing, second floor",
+  "description": "Second floor of the Old South Wing, formerly in use by Psychiatry",
+  "mode": "instance",
+  "type": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v3/RoleCode",
+        "code": "HOSP",
+        "display": "Hospital"
+      }
+    ]
+  },
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "2328",
+      "use": "work"
+    },
+    {
+      "system": "fax",
+      "value": "2329",
+      "use": "work"
+    },
+    {
+      "system": "email",
+      "value": "second wing admissions"
+    },
+    {
+      "system": "url",
+      "value": "http://sampleorg.com/southwing",
+      "use": "work"
+    }
+  ],
+  "address": {
+    "use": "work",
+    "line": [
+      "Iron Curtain 75, Building A"
+    ],
+    "city": "Pittsburgh",
+    "state": "PA",
+    "postalCode": "15016",
+    "country": "US"
+  },
+  "physicalType": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/location-physical-type",
+        "code": "wi",
+        "display": "Wing"
+      }
+    ]
+  },
+  "position": {
+    "longitude": -83.6945691,
+    "latitude": 42.25475478,
+    "altitude": 0
+  },
+  "managingOrganization": {
+    "reference": "Organization/example"
+  }
+}

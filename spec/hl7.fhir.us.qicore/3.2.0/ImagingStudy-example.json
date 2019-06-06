@@ -1,0 +1,44 @@
+{
+  "resourceType": "ImagingStudy",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-imagingstudy"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p><strong>CT Chest. John Smith (MRN: 09236). Accession: W12342398. Performed: 2011-01-01. 3 series, 12 images.</strong></p>\n      <p>\n        <strong>uid</strong>: urn:oid:2.16.124.113543.6003.1154777499.30246.19789.3503430045\n      </p>\n      <p>\n        <strong>patient</strong>: \n        <a href=\"Patient-example.html\">Patient/example</a>\n      </p>\n      <p>\n        <strong>started</strong>: 01/01/2011\n      </p>\n      <p>\n        <strong>numberOfSeries</strong>: 1\n      </p>\n      <p>\n        <strong>numberOfInstances</strong>: 1\n      </p>\n      <blockquote>\n        <p><strong>series</strong></p>\n        <p>\n          <strong>uid</strong>: urn:oid:2.16.124.113543.6003.2588828330.45298.17418.2723805630\n        </p>\n        <p>\n          <strong>number</strong>: 3\n        </p>\n        <p>\n          <strong>modality</strong>: CT\n        </p>\n        <p>\n          <strong>description</strong>: CT Surview 180\n        </p>\n        <p>\n          <strong>numberOfInstances</strong>: 1\n        </p>\n        <p>\n          <strong>bodySite</strong>: { SNOMED CT code '67734004' = 'Upper Trunk Structure' })\n        </p>\n        <blockquote>\n          <p><strong>instance</strong></p>\n          <p>\n            <strong>uid</strong>: urn:oid:2.16.124.113543.6003.189642796.63084.16748.2599092903\n          </p>\n          <p>\n            <strong>number</strong>: 1\n          </p>\n          <p>\n            <strong>sopClass</strong>: urn:oid:1.2.840.10008.5.1.4.1.1.2\n          </p>\n        </blockquote>\n      </blockquote>\n    </div>"
+  },
+  "uid": "urn:oid:2.16.124.113543.6003.1154777499.30246.19789.3503430045",
+  "patient": {
+    "reference": "Patient/example"
+  },
+  "started": "2011-01-01T11:01:20+03:00",
+  "numberOfSeries": 1,
+  "numberOfInstances": 1,
+  "series": [
+    {
+      "uid": "urn:oid:2.16.124.113543.6003.2588828330.45298.17418.2723805630",
+      "number": 3,
+      "modality": {
+        "system": "http://dicom.nema.org/resources/ontology/DCM",
+        "code": "CT"
+      },
+      "description": "CT Surview 180",
+      "numberOfInstances": 1,
+      "bodySite": {
+        "system": "http://snomed.info/sct",
+        "code": "67734004",
+        "display": "Upper Trunk Structure"
+      },
+      "instance": [
+        {
+          "uid": "urn:oid:2.16.124.113543.6003.189642796.63084.16748.2599092903",
+          "number": 1,
+          "sopClass": "urn:oid:1.2.840.10008.5.1.4.1.1.2"
+        }
+      ]
+    }
+  ]
+}

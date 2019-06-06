@@ -1,0 +1,162 @@
+{
+  "resourceType": "Immunization",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-immunization"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: urn:oid:1.3.6.1.4.1.21367.2005.3.7.1234</p><p><b>status</b>: completed</p><p><b>notGiven</b>: false</p><p><b>vaccineCode</b>: Fluvax (Influenza) <span style=\"background: LightGoldenRodYellow\">(Details : {urn:oid:1.2.36.1.2001.1005.17 code 'FLUVAX' = 'Fluvax)</span></p><p><b>patient</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>encounter</b>: <a href=\"Encounter-example.html\">Generated Summary: id: example; status: in-progress; <span title=\"{http://hl7.org/fhir/v3/ActCode IMP}\">inpatient encounter</span>; <span title=\"Codes: {http://www.ama-assn.org/go/cpt 99223}\">Inpatient Hospital Care</span></a></p><p><b>date</b>: 10/01/2013</p><p><b>primarySource</b>: true</p><p><b>location</b>: <a href=\"Location-example.html\">Generated Summary: id: example; B1-S.F2; status: active; name: South Wing, second floor; description: Second floor of the Old South Wing, formerly in use by Psychiatry; mode: instance; <span title=\"Codes: {http://hl7.org/fhir/v3/RoleCode HOSP}\">Hospital</span>; ph: 2328(WORK), fax: 2329(WORK), second wing admissions, http://sampleorg.com/southwing(WORK); <span title=\"Codes: {http://hl7.org/fhir/location-physical-type wi}\">Wing</span></a></p><p><b>manufacturer</b>: <a href=\"Organization-example.html\">Generated Summary: id: example; ??; active; <span title=\"Codes: {http://hl7.org/fhir/organization-type team}\">Organizational team</span>; name: Health Level Seven International; ph: (+1) 734-677-7777, fax: (+1) 734-677-6622, hq@HL7.org</a></p><p><b>lotNumber</b>: AAJN11K</p><p><b>expirationDate</b>: 15/02/2015</p><p><b>site</b>: left arm <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v3/ActSite code 'LA' = 'left arm', given as 'left arm'})</span></p><p><b>route</b>: Injection, intramuscular <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v3/RouteOfAdministration code 'IM' = 'Injection, intramuscular', given as 'Injection, intramuscular'})</span></p><p><b>doseQuantity</b>: 5 mg<span style=\"background: LightGoldenRodYellow\"> (Details: UCUM code mg = 'mg')</span></p><blockquote><p><b>practitioner</b></p><p><b>role</b>: Ordering Provider <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v2/0443 code 'OP' = 'Ordering Provider)</span></p><p><b>actor</b>: <a href=\"Practitioner-example.html\">Generated Summary: id: example; 23; active; Adam Careful </a></p></blockquote><blockquote><p><b>practitioner</b></p><p><b>role</b>: Administering Provider <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v2/0443 code 'AP' = 'Administering Provider)</span></p><p><b>actor</b>: <a href=\"Practitioner-example.html\">Generated Summary: id: example; 23; active; Adam Careful </a></p></blockquote><p><b>note</b>: Notes on adminstration of vaccine</p><h3>Explanations</h3><table class=\"grid\"><tr><td>-</td><td><b>Reason</b></td></tr><tr><td>*</td><td>Procedure to meet occupational requirement <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '429060002' = 'Procedure to meet occupational requirement)</span></td></tr></table><h3>Reactions</h3><table class=\"grid\"><tr><td>-</td><td><b>Date</b></td><td><b>Detail</b></td><td><b>Reported</b></td></tr><tr><td>*</td><td>10/01/2013</td><td><a href=\"Observation-example.html\">Generated Summary: id: example; <span title=\"Codes: {http://hl7.org/fhir/observation-category vital-signs}\">Vital Signs</span>; <span title=\"Codes: {http://loinc.org 30350-3}\">Hemoglobin [Mass/volume] in Venous blood</span>; effective: 02/04/2013 8:30:10 PM --&gt; 05/04/2013 8:30:10 PM; issued: 04/04/2013 1:30:10 AM; 7.2 g/dl; <span title=\"Codes: {http://hl7.org/fhir/v2/0078 L}\">Below low normal</span>; <span title=\"Codes: {http://snomed.info/sct 308046002}\">Superficial forearm vein</span>; <span title=\"Codes: {http://snomed.info/sct 120220003}\">Injection to forearm</span></a></td><td>true</td></tr></table><h3>VaccinationProtocols</h3><table class=\"grid\"><tr><td>-</td><td><b>DoseSequence</b></td><td><b>Description</b></td><td><b>Authority</b></td><td><b>Series</b></td><td><b>SeriesDoses</b></td><td><b>TargetDisease</b></td><td><b>DoseStatus</b></td><td><b>DoseStatusReason</b></td></tr><tr><td>*</td><td>1</td><td>Vaccination Protocol Sequence 1</td><td><a href=\"Organization-example.html\">Generated Summary: id: example; ??; active; <span title=\"Codes: {http://hl7.org/fhir/organization-type team}\">Organizational team</span>; name: Health Level Seven International; ph: (+1) 734-677-7777, fax: (+1) 734-677-6622, hq@HL7.org</a></td><td>Vaccination Series 1</td><td>2</td><td>Congenital rubella syndrome <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '1857005' = 'Congenital rubella syndrome)</span></td><td>Counts <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/vaccination-protocol-dose-status code 'count' = 'Counts', given as 'Counts'})</span></td><td>Cold chain break <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/vaccination-protocol-dose-status-reason code 'coldchbrk' = 'Cold chain break', given as 'Cold chain break'})</span></td></tr></table></div>"
+  },
+  "identifier": [
+    {
+      "system": "urn:ietf:rfc:3986",
+      "value": "urn:oid:1.3.6.1.4.1.21367.2005.3.7.1234"
+    }
+  ],
+  "status": "completed",
+  "notGiven": false,
+  "vaccineCode": {
+    "coding": [
+      {
+        "system": "urn:oid:1.2.36.1.2001.1005.17",
+        "code": "FLUVAX"
+      }
+    ],
+    "text": "Fluvax (Influenza)"
+  },
+  "patient": {
+    "reference": "Patient/example"
+  },
+  "encounter": {
+    "reference": "Encounter/example"
+  },
+  "date": "2013-01-10",
+  "primarySource": true,
+  "location": {
+    "reference": "Location/example"
+  },
+  "manufacturer": {
+    "reference": "Organization/example"
+  },
+  "lotNumber": "AAJN11K",
+  "expirationDate": "2015-02-15",
+  "site": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v3/ActSite",
+        "code": "LA",
+        "display": "left arm"
+      }
+    ]
+  },
+  "route": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v3/RouteOfAdministration",
+        "code": "IM",
+        "display": "Injection, intramuscular"
+      }
+    ]
+  },
+  "doseQuantity": {
+    "value": 5,
+    "system": "http://unitsofmeasure.org",
+    "code": "mg"
+  },
+  "practitioner": [
+    {
+      "role": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0443",
+            "code": "OP"
+          }
+        ]
+      },
+      "actor": {
+        "reference": "Practitioner/example"
+      }
+    },
+    {
+      "role": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0443",
+            "code": "AP"
+          }
+        ]
+      },
+      "actor": {
+        "reference": "Practitioner/example"
+      }
+    }
+  ],
+  "note": [
+    {
+      "text": "Notes on adminstration of vaccine"
+    }
+  ],
+  "explanation": {
+    "reason": [
+      {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "429060002"
+          }
+        ]
+      }
+    ]
+  },
+  "reaction": [
+    {
+      "date": "2013-01-10",
+      "detail": {
+        "reference": "Observation/example"
+      },
+      "reported": true
+    }
+  ],
+  "vaccinationProtocol": [
+    {
+      "doseSequence": 1,
+      "description": "Vaccination Protocol Sequence 1",
+      "authority": {
+        "reference": "Organization/example"
+      },
+      "series": "Vaccination Series 1",
+      "seriesDoses": 2,
+      "targetDisease": [
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "1857005"
+            }
+          ]
+        }
+      ],
+      "doseStatus": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/vaccination-protocol-dose-status",
+            "code": "count",
+            "display": "Counts"
+          }
+        ]
+      },
+      "doseStatusReason": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/vaccination-protocol-dose-status-reason",
+            "code": "coldchbrk",
+            "display": "Cold chain break"
+          }
+        ]
+      }
+    }
+  ]
+}

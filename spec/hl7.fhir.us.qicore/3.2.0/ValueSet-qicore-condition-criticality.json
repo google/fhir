@@ -1,0 +1,49 @@
+{
+  "resourceType": "ValueSet",
+  "id": "qicore-condition-criticality",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/StructureDefinition/shareablevalueset"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><h2>QICore Condition Criticality Codes</h2><div><p>Value Set for QICore Condition Criticality (Example)</p>\n</div><p>This value set includes codes from the following code systems:</p><ul><li>Include all codes defined in <a href=\"CodeSystem-condition-criticality.html\"><code>http://hl7.org/fhir/us/qicore/CodeSystem/condition-criticality</code></a></li></ul></div>"
+  },
+  "url": "http://hl7.org/fhir/us/qicore/ValueSet/qicore-condition-criticality",
+  "version": "3.2.0",
+  "name": "QICoreConditionCriticality",
+  "title": "QICore Condition Criticality Codes",
+  "status": "draft",
+  "experimental": false,
+  "date": "2018-08-22T00:00:00+10:00",
+  "publisher": "Health Level Seven, Inc. - CQI WG",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://hl7.org/special/committees/CQI"
+        }
+      ]
+    }
+  ],
+  "description": "Value Set for QICore Condition Criticality (Example)",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "us"
+        }
+      ]
+    }
+  ],
+  "compose": {
+    "include": [
+      {
+        "system": "http://hl7.org/fhir/us/qicore/CodeSystem/condition-criticality"
+      }
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "resourceType": "Organization",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-organization"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: ??</p><p><b>active</b>: true</p><p><b>type</b>: Organizational team <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/organization-type code 'team' = 'Organizational team', given as 'Organizational team'})</span></p><p><b>name</b>: Health Level Seven International</p><p><b>telecom</b>: ph: (+1) 734-677-7777, fax: (+1) 734-677-6622, hq@HL7.org</p><p><b>address</b>: 3300 Washtenaw Avenue, Suite 227 Ann Arbor MI 48104 USA </p></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://hl7.org"
+    }
+  ],
+  "active": true,
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/organization-type",
+          "code": "team",
+          "display": "Organizational team"
+        }
+      ]
+    }
+  ],
+  "name": "Health Level Seven International",
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "(+1) 734-677-7777"
+    },
+    {
+      "system": "fax",
+      "value": "(+1) 734-677-6622"
+    },
+    {
+      "system": "email",
+      "value": "hq@HL7.org"
+    }
+  ],
+  "address": [
+    {
+      "line": [
+        "3300 Washtenaw Avenue, Suite 227"
+      ],
+      "city": "Ann Arbor",
+      "state": "MI",
+      "postalCode": "48104",
+      "country": "USA"
+    }
+  ]
+}

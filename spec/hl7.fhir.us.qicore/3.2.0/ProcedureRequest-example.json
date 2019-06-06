@@ -1,0 +1,65 @@
+{
+  "resourceType": "ProcedureRequest",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-procedurerequest"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>status</b>: completed</p><p><b>intent</b>: order</p><p><b>priority</b>: urgent</p><p><b>code</b>: Appendectomy <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '80146002' = 'Appendectomy', given as 'Appendectomy (Procedure)'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>context</b>: <a href=\"Encounter-example.html\">Generated Summary: id: example; status: in-progress; <span title=\"{http://hl7.org/fhir/v3/ActCode IMP}\">inpatient encounter</span>; <span title=\"Codes: {http://www.ama-assn.org/go/cpt 99223}\">Inpatient Hospital Care</span></a></p><p><b>occurrence</b>: 05/04/2013</p><p><b>asNeeded</b>: true</p><p><b>authoredOn</b>: 04/04/2013</p><p><b>reasonCode</b>: On examination - abdominal pain - right iliac <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '163220003' = 'On examination - abdominal pain - right iliac (finding)', given as 'On examination - abdominal pain - right iliac'})</span></p><p><b>bodySite</b>: Appendix structure <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '66754008' = 'Appendix', given as 'Appendix structure'})</span></p></div>"
+  },
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/procedurerequest-authorizedBy",
+      "valueReference": {
+        "reference": "Practitioner/example"
+      }
+    }
+  ],
+  "status": "completed",
+  "intent": "order",
+  "priority": "urgent",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "80146002",
+        "display": "Appendectomy (Procedure)"
+      }
+    ],
+    "text": "Appendectomy"
+  },
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "context": {
+    "reference": "Encounter/example"
+  },
+  "occurrenceDateTime": "2013-04-05",
+  "asNeededBoolean": true,
+  "authoredOn": "2013-04-04",
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "163220003",
+          "display": "On examination - abdominal pain - right iliac"
+        }
+      ]
+    }
+  ],
+  "bodySite": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "66754008",
+          "display": "Appendix structure"
+        }
+      ]
+    }
+  ]
+}

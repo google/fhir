@@ -1,0 +1,95 @@
+{
+  "resourceType": "Condition",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-condition"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>clinicalStatus</b>: active</p><p><b>verificationStatus</b>: confirmed</p><p><b>category</b>: Problem List Item <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/condition-category code 'problem-list-item' = 'Problem List Item', given as 'Problem List Item'}; {SNOMED CT code '439401001' = 'Diagnosis (observable entity)', given as 'Diagnosis'})</span></p><p><b>severity</b>: Severe (severity modifier) <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '24484000' = 'Severe (severity modifier)', given as 'Severe (severity modifier)'})</span></p><p><b>code</b>: Burnt Ear <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '39065001' = 'Burn of ear structure', given as 'Burn of ear'})</span></p><p><b>bodySite</b>: Left Ear <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '49521004' = 'Left external ear structure', given as 'Left external ear structure'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>context</b>: <a href=\"Encounter-example.html\">Generated Summary: id: example; status: in-progress; <span title=\"{http://hl7.org/fhir/v3/ActCode IMP}\">inpatient encounter</span>; <span title=\"Codes: {http://www.ama-assn.org/go/cpt 99223}\">Inpatient Hospital Care</span></a></p><p><b>onset</b>: 24/05/2012 10:00:00 AM</p><p><b>assertedDate</b>: 24/05/2012 10:00:00 AM</p><h3>Stages</h3><table class=\"grid\"><tr><td>-</td><td><b>Summary</b></td></tr><tr><td>*</td><td>stage II <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '258219007' = 'Stage 2', given as 'stage II'})</span></td></tr></table></div>"
+  },
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/condition-criticality",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "399166001",
+            "display": "Fatal"
+          }
+        ]
+      }
+    }
+  ],
+  "clinicalStatus": "active",
+  "verificationStatus": "confirmed",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/condition-category",
+          "code": "problem-list-item",
+          "display": "Problem List Item"
+        },
+        {
+          "system": "http://snomed.info/sct",
+          "code": "439401001",
+          "display": "Diagnosis"
+        }
+      ]
+    }
+  ],
+  "severity": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "24484000",
+        "display": "Severe (severity modifier)"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "39065001",
+        "display": "Burn of ear"
+      }
+    ],
+    "text": "Burnt Ear"
+  },
+  "bodySite": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "49521004",
+          "display": "Left external ear structure"
+        }
+      ],
+      "text": "Left Ear"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "context": {
+    "reference": "Encounter/example"
+  },
+  "onsetDateTime": "2012-05-24T00:00:00+00:00",
+  "assertedDate": "2012-05-24T00:00:00+00:00",
+  "stage": {
+    "summary": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "258219007",
+          "display": "stage II"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "resourceType": "AdverseEvent",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-adverseevent"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: 49476534</p><p><b>category</b>: AE</p><p><b>type</b>: O/E - itchy rash <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '304386008' = 'On examination - itchy rash (disorder)', given as 'O/E - itchy rash'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>date</b>: 29/01/2017 11:34:56 PM</p><p><b>seriousness</b>: Mild <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/adverse-event-seriousness code 'Mild' = 'Mild', given as 'Mild'})</span></p><p><b>recorder</b>: <a href=\"Practitioner-example.html\">Generated Summary: id: example; 23; active; Adam Careful </a></p><p><b>description</b>: This was a mild rash on the left forearm</p><h3>SuspectEntities</h3><table class=\"grid\"><tr><td>-</td><td><b>Instance</b></td></tr><tr><td>*</td><td><a href=\"Medication-example.html\">Generated Summary: id: example; <span title=\"Codes: {http://www.nlm.nih.gov/research/umls/rxnorm 1594660}\">alemtuzumab 10 MG/ML [Lemtrada]</span>; isBrand; <span title=\"Codes: {http://snomed.info/sct 385219001}\">Injection solution (qualifier value)</span></a></td></tr></table></div>"
+  },
+  "identifier": {
+    "system": "http://acme.com/ids/patients/risks",
+    "value": "49476534"
+  },
+  "category": "AE",
+  "type": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "304386008",
+        "display": "O/E - itchy rash"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "date": "2017-01-29T12:34:56+00:00",
+  "seriousness": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/adverse-event-seriousness",
+        "code": "Mild",
+        "display": "Mild"
+      }
+    ]
+  },
+  "recorder": {
+    "reference": "Practitioner/example"
+  },
+  "description": "This was a mild rash on the left forearm",
+  "suspectEntity": [
+    {
+      "instance": {
+        "reference": "Medication/example"
+      }
+    }
+  ]
+}

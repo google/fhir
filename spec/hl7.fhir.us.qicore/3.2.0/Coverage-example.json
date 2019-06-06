@@ -1,0 +1,70 @@
+{
+  "resourceType": "Coverage",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-coverage"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: 12345</p><p><b>status</b>: active</p><p><b>type</b>: extended healthcare <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v3/ActCode code 'EHCPOL' = 'extended healthcare', given as 'extended healthcare'})</span></p><p><b>policyHolder</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>subscriber</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>beneficiary</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>relationship</b>: self <span style=\"background: LightGoldenRodYellow\">(Details : {[not stated] code 'self' = 'self)</span></p><p><b>period</b>: 23/05/2011 12:00:00 AM --&gt; 23/05/2012 12:00:00 AM</p><p><b>payor</b>: <a href=\"Organization-example.html\">Generated Summary: id: example; ??; active; <span title=\"Codes: {http://hl7.org/fhir/organization-type team}\">Organizational team</span>; name: Health Level Seven International; ph: (+1) 734-677-7777, fax: (+1) 734-677-6622, hq@HL7.org</a></p><h3>Groupings</h3><table class=\"grid\"><tr><td>-</td><td><b>Group</b></td><td><b>GroupDisplay</b></td><td><b>SubGroup</b></td><td><b>SubGroupDisplay</b></td><td><b>Plan</b></td><td><b>PlanDisplay</b></td><td><b>SubPlan</b></td><td><b>SubPlanDisplay</b></td><td><b>Class</b></td><td><b>ClassDisplay</b></td><td><b>SubClass</b></td><td><b>SubClassDisplay</b></td></tr><tr><td>*</td><td>CBI35</td><td>Corporate Baker's Inc. Local #35</td><td>123</td><td>Trainee Part-time Benefits</td><td>B37FC</td><td>Full Coverage: Medical, Dental, Pharmacy, Vision, EHC</td><td>P7</td><td>Includes afterlife benefits</td><td>SILVER</td><td>Silver: Family Plan spouse only</td><td>Tier2</td><td>Low deductable, max $20 copay</td></tr></table><p><b>dependent</b>: 0</p><p><b>sequence</b>: 9</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://benefitsinc.com/certificate",
+      "value": "12345"
+    }
+  ],
+  "status": "active",
+  "type": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v3/ActCode",
+        "code": "EHCPOL",
+        "display": "extended healthcare"
+      }
+    ]
+  },
+  "policyHolder": {
+    "reference": "Patient/example"
+  },
+  "subscriber": {
+    "reference": "Patient/example"
+  },
+  "beneficiary": {
+    "reference": "Patient/example"
+  },
+  "relationship": {
+    "coding": [
+      {
+        "code": "self"
+      }
+    ]
+  },
+  "period": {
+    "start": "2011-05-23",
+    "end": "2012-05-23"
+  },
+  "payor": [
+    {
+      "reference": "Organization/example"
+    }
+  ],
+  "grouping": {
+    "group": "CBI35",
+    "groupDisplay": "Corporate Baker's Inc. Local #35",
+    "subGroup": "123",
+    "subGroupDisplay": "Trainee Part-time Benefits",
+    "plan": "B37FC",
+    "planDisplay": "Full Coverage: Medical, Dental, Pharmacy, Vision, EHC",
+    "subPlan": "P7",
+    "subPlanDisplay": "Includes afterlife benefits",
+    "class": "SILVER",
+    "classDisplay": "Silver: Family Plan spouse only",
+    "subClass": "Tier2",
+    "subClassDisplay": "Low deductable, max $20 copay"
+  },
+  "dependent": "0",
+  "sequence": "9"
+}

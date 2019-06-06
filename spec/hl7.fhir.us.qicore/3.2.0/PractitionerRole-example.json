@@ -1,0 +1,63 @@
+{
+  "resourceType": "PractitionerRole",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-practitionerrole"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: 31</p><p><b>active</b>: true</p><p><b>period</b>: 01/01/1995 12:00:00 AM --&gt; (ongoing)</p><p><b>practitioner</b>: <a href=\"Practitioner-example.html\">Dr Adam Careful. Generated Summary: id: example; 23; active; Adam Careful </a></p><p><b>organization</b>: <a href=\"Organization-example.html\">Generated Summary: id: example; ??; active; <span title=\"Codes: {http://hl7.org/fhir/organization-type team}\">Organizational team</span>; name: Health Level Seven International; ph: (+1) 734-677-7777, fax: (+1) 734-677-6622, hq@HL7.org</a></p><p><b>code</b>: General Practice <span style=\"background: LightGoldenRodYellow\">(Details : {http://nucc.org/provider-taxonomy code '208D00000X' = '208D00000X', given as 'General Practice'})</span></p><p><b>specialty</b>: General Practice <span style=\"background: LightGoldenRodYellow\">(Details : {http://nucc.org/provider-taxonomy code '208D00000X' = '208D00000X', given as 'General Practice'})</span></p><p><b>location</b>: <a href=\"Location-example.html\">Generated Summary: id: example; B1-S.F2; status: active; name: South Wing, second floor; description: Second floor of the Old South Wing, formerly in use by Psychiatry; mode: instance; <span title=\"Codes: {http://hl7.org/fhir/v3/RoleCode HOSP}\">Hospital</span>; ph: 2328(WORK), fax: 2329(WORK), second wing admissions, http://sampleorg.com/southwing(WORK); <span title=\"Codes: {http://hl7.org/fhir/location-physical-type wi}\">Wing</span></a></p><p><b>telecom</b>: ph: 801-123-4567</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://www.acme.org/practitionerroles",
+      "value": "31"
+    }
+  ],
+  "active": true,
+  "period": {
+    "start": "1995"
+  },
+  "practitioner": {
+    "reference": "Practitioner/example",
+    "display": "Dr Adam Careful"
+  },
+  "organization": {
+    "reference": "Organization/example"
+  },
+  "code": [
+    {
+      "coding": [
+        {
+          "system": "http://nucc.org/provider-taxonomy",
+          "code": "208D00000X",
+          "display": "General Practice"
+        }
+      ]
+    }
+  ],
+  "specialty": [
+    {
+      "coding": [
+        {
+          "system": "http://nucc.org/provider-taxonomy",
+          "code": "208D00000X",
+          "display": "General Practice"
+        }
+      ]
+    }
+  ],
+  "location": [
+    {
+      "reference": "Location/example"
+    }
+  ],
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "801-123-4567"
+    }
+  ]
+}

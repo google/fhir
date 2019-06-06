@@ -1,0 +1,74 @@
+{
+  "resourceType": "CommunicationRequest",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-communicationrequest"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: ABC123</p><p><b>basedOn</b>: EligibilityRequest</p><p><b>replaces</b>: prior CommunicationRequest</p><p><b>groupIdentifier</b>: 12345</p><p><b>status</b>: active</p><p><b>category</b>: SolicitedAttachmentRequest <span style=\"background: LightGoldenRodYellow\">(Details : {http://acme.org/messagetypes code 'SolicitedAttachmentRequest' = 'SolicitedAttachmentRequest)</span></p><p><b>priority</b>: routine</p><p><b>medium</b>: written <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v3/ParticipationMode code 'WRITTEN' = 'written', given as 'written'})</span></p><p><b>recipient</b>: <a href=\"Organization-example.html\">Generated Summary: id: example; ??; active; <span title=\"Codes: {http://hl7.org/fhir/organization-type team}\">Organizational team</span>; name: Health Level Seven International; ph: (+1) 734-677-7777, fax: (+1) 734-677-6622, hq@HL7.org</a></p><p><b>context</b>: <a href=\"Encounter-example.html\">Generated Summary: id: example; status: in-progress; <span title=\"{http://hl7.org/fhir/v3/ActCode IMP}\">inpatient encounter</span>; <span title=\"Codes: {http://www.ama-assn.org/go/cpt 99223}\">Inpatient Hospital Care</span></a></p><h3>Payloads</h3><table class=\"grid\"><tr><td>-</td><td><b>Content[x]</b></td></tr><tr><td>*</td><td>Please provide the accident report and any associated pictures to support your Claim #DEF5647.</td></tr></table><p><b>occurrence</b>: 11/06/2016 5:01:10 AM</p><p><b>authoredOn</b>: 11/06/2016 5:01:10 AM</p><p><b>sender</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://www.jurisdiction.com/insurer/123456",
+      "value": "ABC123"
+    }
+  ],
+  "basedOn": [
+    {
+      "display": "EligibilityRequest"
+    }
+  ],
+  "replaces": [
+    {
+      "display": "prior CommunicationRequest"
+    }
+  ],
+  "groupIdentifier": {
+    "value": "12345"
+  },
+  "status": "active",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://acme.org/messagetypes",
+          "code": "SolicitedAttachmentRequest"
+        }
+      ]
+    }
+  ],
+  "priority": "routine",
+  "medium": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/v3/ParticipationMode",
+          "code": "WRITTEN",
+          "display": "written"
+        }
+      ],
+      "text": "written"
+    }
+  ],
+  "recipient": [
+    {
+      "reference": "Organization/example"
+    }
+  ],
+  "context": {
+    "reference": "Encounter/example"
+  },
+  "payload": [
+    {
+      "contentString": "Please provide the accident report and any associated pictures to support your Claim #DEF5647."
+    }
+  ],
+  "occurrenceDateTime": "2016-06-10T11:01:10-08:00",
+  "authoredOn": "2016-06-10T11:01:10-08:00",
+  "sender": {
+    "reference": "Patient/example"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "resourceType": "Communication",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-communication"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: Paging System = 2345678901</p><p><b>definition</b>: Hyperkalemia</p><p><b>partOf</b>: Serum Potassium Observation</p><p><b>status</b>: completed</p><p><b>notDone</b>: true</p><p><b>notDoneReason</b>: Recipient Unavailable <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/communication-not-done-reason code 'recipient-unavailable' = 'Recipient Unavailable)</span></p><p><b>category</b>: Alert <span style=\"background: LightGoldenRodYellow\">(Details : {http://acme.org/messagetypes code 'Alert' = 'Alert)</span></p><p><b>medium</b>: written <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v3/ParticipationMode code 'WRITTEN' = 'written', given as 'written'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>recipient</b>: <a href=\"Practitioner-example.html\">Generated Summary: id: example; 23; active; Adam Careful </a></p><p><b>context</b>: <a href=\"Encounter-example.html\">Generated Summary: id: example; status: in-progress; <span title=\"{http://hl7.org/fhir/v3/ActCode IMP}\">inpatient encounter</span>; <span title=\"Codes: {http://www.ama-assn.org/go/cpt 99223}\">Inpatient Hospital Care</span></a></p><p><b>sent</b>: 13/12/2014 1:01:10 PM</p><p><b>received</b>: 13/12/2014 1:01:11 PM</p><p><b>sender</b>: <a href=\"Device-example.html\">Generated Summary: id: example; 345675, Serial Number = AMID-342135-8464; status: active; <span title=\"Codes: {http://snomed.info/sct 86184003}\">ECG</span>; lotNumber: 43453424; manufacturer: Acme Devices, Inc; model: AB 45-J; ph: ext 4352; Author: Practitioner/example; Made: 28/06/2015 2:03:32 PM; Annotation: QA Checked</a></p><blockquote><p><b>payload</b></p><p><b>content</b>: Patient 1 has a very high serum potassium value (7.2 mmol/L on 2014-Dec-12 at 5:55 pm)</p></blockquote><blockquote><p><b>payload</b></p><p><b>content</b>: Serum Potassium Observation</p></blockquote></div>"
+  },
+  "identifier": [
+    {
+      "type": {
+        "text": "Paging System"
+      },
+      "system": "urn:oid:1.3.4.5.6.7",
+      "value": "2345678901"
+    }
+  ],
+  "definition": [
+    {
+      "display": "Hyperkalemia"
+    }
+  ],
+  "partOf": [
+    {
+      "display": "Serum Potassium Observation"
+    }
+  ],
+  "status": "completed",
+  "notDone": true,
+  "notDoneReason": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/communication-not-done-reason",
+        "code": "recipient-unavailable"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://acme.org/messagetypes",
+          "code": "Alert"
+        }
+      ],
+      "text": "Alert"
+    }
+  ],
+  "medium": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/v3/ParticipationMode",
+          "code": "WRITTEN",
+          "display": "written"
+        }
+      ],
+      "text": "written"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "recipient": [
+    {
+      "reference": "Practitioner/example"
+    }
+  ],
+  "context": {
+    "reference": "Encounter/example"
+  },
+  "sent": "2014-12-12T18:01:10-08:00",
+  "received": "2014-12-12T18:01:11-08:00",
+  "sender": {
+    "reference": "Device/example"
+  },
+  "payload": [
+    {
+      "contentString": "Patient 1 has a very high serum potassium value (7.2 mmol/L on 2014-Dec-12 at 5:55 pm)"
+    },
+    {
+      "contentReference": {
+        "display": "Serum Potassium Observation"
+      }
+    }
+  ]
+}

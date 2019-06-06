@@ -1,0 +1,181 @@
+{
+  "resourceType": "Observation",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-observation"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>status</b>: final</p><p><b>category</b>: Vital Signs <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/observation-category code 'vital-signs' = 'Vital Signs', given as 'Vital Signs'})</span></p><p><b>code</b>: Hemoglobin [Mass/volume] in Venous blood <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '30350-3' = 'Hemoglobin [Mass/volume] in Venous blood', given as 'Hemoglobin [Mass/volume] in Venous blood'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>context</b>: <a href=\"Encounter-example.html\">Generated Summary: id: example; status: in-progress; <span title=\"{http://hl7.org/fhir/v3/ActCode IMP}\">inpatient encounter</span>; <span title=\"Codes: {http://www.ama-assn.org/go/cpt 99223}\">Inpatient Hospital Care</span></a></p><p><b>effective</b>: 02/04/2013 8:30:10 PM --&gt; 05/04/2013 8:30:10 PM</p><p><b>issued</b>: 04/04/2013 1:30:10 AM</p><p><b>value</b>: 7.2 g/dl<span style=\"background: LightGoldenRodYellow\"> (Details: UCUM code g/dL = 'g/dL')</span></p><p><b>interpretation</b>: Below low normal <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v2/0078 code 'L' = 'Low', given as 'Low'})</span></p><p><b>bodySite</b>: Superficial forearm vein <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '308046002' = 'Structure of superficial forearm vein (body structure)', given as 'Superficial forearm vein'})</span></p><p><b>method</b>: Injection to forearm <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '120220003' = 'Injection to forearm', given as 'Injection to forearm'})</span></p><p><b>specimen</b>: <a href=\"Specimen-example.html\">Generated Summary: id: example; <span title=\"Codes: {http://snomed.info/sct 122555007}\">Venous blood specimen</span>; receivedTime: 04/03/2011 6:03:00 PM</a></p><h3>Relateds</h3><table class=\"grid\"><tr><td>-</td><td><b>Target</b></td></tr><tr><td>*</td><td><a href=\"Observation-example.html\">Generated Summary: id: example; <span title=\"Codes: {http://hl7.org/fhir/observation-category vital-signs}\">Vital Signs</span>; <span title=\"Codes: {http://loinc.org 30350-3}\">Hemoglobin [Mass/volume] in Venous blood</span>; effective: 02/04/2013 8:30:10 PM --&gt; 05/04/2013 8:30:10 PM; issued: 04/04/2013 1:30:10 AM; 7.2 g/dl; <span title=\"Codes: {http://hl7.org/fhir/v2/0078 L}\">Below low normal</span>; <span title=\"Codes: {http://snomed.info/sct 308046002}\">Superficial forearm vein</span>; <span title=\"Codes: {http://snomed.info/sct 120220003}\">Injection to forearm</span></a></td></tr></table><blockquote><p><b>component</b></p><p><b>code</b>: Systolic blood pressure <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '8480-6' = 'Systolic blood pressure', given as 'Systolic blood pressure'}; {SNOMED CT code '271649006' = 'SAP - Systolic arterial pressure', given as 'Systolic blood pressure'}; {http://acme.org/devices/clinical-codes code 'bp-s' = 'bp-s', given as 'Systolic Blood pressure'})</span></p><p><b>value</b>: 107 mmHg<span style=\"background: LightGoldenRodYellow\"> (Details: UCUM code mm[Hg] = 'mm[Hg]')</span></p><p><b>interpretation</b>: Normal <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v2/0078 code 'N' = 'Normal', given as 'normal'})</span></p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: Diastolic blood pressure <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '8462-4' = 'Diastolic blood pressure', given as 'Diastolic blood pressure'})</span></p><p><b>value</b>: 60 mmHg<span style=\"background: LightGoldenRodYellow\"> (Details: UCUM code mm[Hg] = 'mm[Hg]')</span></p><p><b>interpretation</b>: Below low normal <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v2/0078 code 'L' = 'Low', given as 'low'})</span></p></blockquote></div>"
+  },
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/observation-bodyPosition",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "33586001",
+            "display": "Sitting position (finding)"
+          }
+        ]
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/observation-delta",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "1250004",
+            "display": "Decreased (qualifier value)"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/observation-category",
+          "code": "vital-signs",
+          "display": "Vital Signs"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "30350-3",
+        "display": "Hemoglobin [Mass/volume] in Venous blood"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "context": {
+    "reference": "Encounter/example"
+  },
+  "effectivePeriod": {
+    "start": "2013-04-02T10:30:10+01:00",
+    "end": "2013-04-05T10:30:10+01:00"
+  },
+  "issued": "2013-04-03T15:30:10+01:00",
+  "valueQuantity": {
+    "value": 7.2,
+    "unit": "g/dl",
+    "system": "http://unitsofmeasure.org",
+    "code": "g/dL"
+  },
+  "interpretation": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v2/0078",
+        "code": "L",
+        "display": "Low"
+      }
+    ],
+    "text": "Below low normal"
+  },
+  "bodySite": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "308046002",
+        "display": "Superficial forearm vein"
+      }
+    ]
+  },
+  "method": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "120220003",
+        "display": "Injection to forearm"
+      }
+    ]
+  },
+  "specimen": {
+    "reference": "Specimen/example"
+  },
+  "related": [
+    {
+      "target": {
+        "reference": "Observation/example"
+      }
+    }
+  ],
+  "component": [
+    {
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "8480-6",
+            "display": "Systolic blood pressure"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "271649006",
+            "display": "Systolic blood pressure"
+          },
+          {
+            "system": "http://acme.org/devices/clinical-codes",
+            "code": "bp-s",
+            "display": "Systolic Blood pressure"
+          }
+        ]
+      },
+      "valueQuantity": {
+        "value": 107,
+        "unit": "mmHg",
+        "system": "http://unitsofmeasure.org",
+        "code": "mm[Hg]"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "N",
+            "display": "normal"
+          }
+        ],
+        "text": "Normal"
+      }
+    },
+    {
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "8462-4",
+            "display": "Diastolic blood pressure"
+          }
+        ]
+      },
+      "valueQuantity": {
+        "value": 60,
+        "unit": "mmHg",
+        "system": "http://unitsofmeasure.org",
+        "code": "mm[Hg]"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "L",
+            "display": "low"
+          }
+        ],
+        "text": "Below low normal"
+      }
+    }
+  ]
+}

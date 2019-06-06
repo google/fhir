@@ -1,0 +1,78 @@
+{
+  "resourceType": "ReferralRequest",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-referralrequest"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>status</b>: cancelled</p><p><b>intent</b>: order</p><p><b>type</b>: Referral for procedure <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '700274009' = 'Referral for procedure', given as 'Referral for procedure'})</span></p><p><b>priority</b>: routine</p><p><b>serviceRequested</b>: Myringotomy and insertion of short-term tympanic ventilation tube (procedure) <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '172676009' = 'Myringotomy and insertion of short-term grommet', given as 'Myringotomy and insertion of short-term tympanic ventilation tube (procedure)'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>context</b>: <a href=\"Encounter-example.html\">Generated Summary: id: example; status: in-progress; <span title=\"{http://hl7.org/fhir/v3/ActCode IMP}\">inpatient encounter</span>; <span title=\"Codes: {http://www.ama-assn.org/go/cpt 99223}\">Inpatient Hospital Care</span></a></p><p><b>occurrence</b>: 13/02/2014</p><p><b>authoredOn</b>: 14/02/2014</p><p><b>specialty</b>: Pediatric otolaryngology <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '417887005' = 'Pediatric otolaryngology', given as 'Pediatric otolaryngology'})</span></p><p><b>reasonCode</b>: Otitis media <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '65363002' = 'Otitis media', given as 'Otitis media'})</span></p></div>"
+  },
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/referralrequest-reasonRefused",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "609589008",
+            "display": "Refused by parents of subject"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "cancelled",
+  "intent": "order",
+  "type": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "700274009",
+        "display": "Referral for procedure"
+      }
+    ]
+  },
+  "priority": "routine",
+  "serviceRequested": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "172676009",
+          "display": "Myringotomy and insertion of short-term tympanic ventilation tube (procedure)"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "context": {
+    "reference": "Encounter/example"
+  },
+  "occurrenceDateTime": "2014-02-13",
+  "authoredOn": "2014-02-14",
+  "specialty": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "417887005",
+        "display": "Pediatric otolaryngology"
+      }
+    ]
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "65363002",
+          "display": "Otitis media"
+        }
+      ]
+    }
+  ]
+}

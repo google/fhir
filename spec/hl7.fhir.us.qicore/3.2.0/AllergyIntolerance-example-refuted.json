@@ -1,0 +1,58 @@
+{
+  "resourceType": "AllergyIntolerance",
+  "id": "example-refuted",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-allergyintolerance"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-refuted</p><p><b>meta</b>: </p><p><b>identifier</b>: 49476534</p><p><b>clinicalStatus</b>: inactive</p><p><b>verificationStatus</b>: refuted</p><p><b>type</b>: allergy</p><p><b>category</b>: food</p><p><b>code</b>: Cashew nuts <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '227493005' = 'Cashew nuts', given as 'Cashew nuts'})</span></p><p><b>patient</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>assertedDate</b>: 09/10/2014 2:58:00 PM</p><p><b>recorder</b>: <a href=\"Practitioner-example.html\">Generated Summary: id: example; 23; active; Adam Careful </a></p><p><b>asserter</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p></div>"
+  },
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/allergyintolerance-reasonRefuted",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v3/ActReason",
+            "code": "MED",
+            "display": "Medical Status Altered"
+          }
+        ]
+      }
+    }
+  ],
+  "identifier": [
+    {
+      "system": "http://acme.com/ids/patients/risks",
+      "value": "49476534"
+    }
+  ],
+  "clinicalStatus": "inactive",
+  "verificationStatus": "refuted",
+  "type": "allergy",
+  "category": [
+    "food"
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "227493005",
+        "display": "Cashew nuts"
+      }
+    ]
+  },
+  "patient": {
+    "reference": "Patient/example"
+  },
+  "assertedDate": "2014-10-09T14:58:00+11:00",
+  "recorder": {
+    "reference": "Practitioner/example"
+  },
+  "asserter": {
+    "reference": "Patient/example"
+  }
+}

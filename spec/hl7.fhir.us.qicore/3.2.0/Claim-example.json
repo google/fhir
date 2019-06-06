@@ -1,0 +1,189 @@
+{
+  "resourceType": "Claim",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-claim"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: 6612346</p><p><b>status</b>: active</p><p><b>type</b>: Vision <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/ex-claimtype code 'vision' = 'Vision)</span></p><p><b>use</b>: complete</p><p><b>patient</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>created</b>: 16/08/2014</p><p><b>insurer</b>: <a href=\"Organization-example.html\">Generated Summary: id: example; ??; active; <span title=\"Codes: {http://hl7.org/fhir/organization-type team}\">Organizational team</span>; name: Health Level Seven International; ph: (+1) 734-677-7777, fax: (+1) 734-677-6622, hq@HL7.org</a></p><p><b>provider</b>: <a href=\"Practitioner-example.html\">Generated Summary: id: example; 23; active; Adam Careful </a></p><p><b>organization</b>: <a href=\"Organization-example.html\">Generated Summary: id: example; ??; active; <span title=\"Codes: {http://hl7.org/fhir/organization-type team}\">Organizational team</span>; name: Health Level Seven International; ph: (+1) 734-677-7777, fax: (+1) 734-677-6622, hq@HL7.org</a></p><p><b>priority</b>: normal <span style=\"background: LightGoldenRodYellow\">(Details : {[not stated] code 'normal' = 'normal)</span></p><p><b>prescription</b>: <a href=\"MedicationRequest-example.html\">Generated Summary: id: example; status: active; intent: order; ????; authoredOn: 26/03/2015 11:32:52 AM; </a></p><h3>Payees</h3><table class=\"grid\"><tr><td>-</td><td><b>Type</b></td><td><b>Party</b></td></tr><tr><td>*</td><td>provider <span style=\"background: LightGoldenRodYellow\">(Details : {[not stated] code 'provider' = 'provider)</span></td><td><a href=\"Practitioner-example.html\">Generated Summary: id: example; 23; active; Adam Careful </a></td></tr></table><h3>CareTeams</h3><table class=\"grid\"><tr><td>-</td><td><b>Sequence</b></td><td><b>Provider</b></td></tr><tr><td>*</td><td>1</td><td><a href=\"Practitioner-example.html\">Generated Summary: id: example; 23; active; Adam Careful </a></td></tr></table><h3>Diagnoses</h3><table class=\"grid\"><tr><td>-</td><td><b>Sequence</b></td><td><b>Diagnosis[x]</b></td></tr><tr><td>*</td><td>1</td><td>654321 <span style=\"background: LightGoldenRodYellow\">(Details : {[not stated] code '654321' = '654321)</span></td></tr></table><h3>Insurances</h3><table class=\"grid\"><tr><td>-</td><td><b>Sequence</b></td><td><b>Focal</b></td><td><b>Coverage</b></td></tr><tr><td>*</td><td>1</td><td>true</td><td><a href=\"Coverage-example.html\">Generated Summary: id: example; 12345; status: active; <span title=\"Codes: {http://hl7.org/fhir/v3/ActCode EHCPOL}\">extended healthcare</span>; <span title=\"Codes: \">self</span>; period: 23/05/2011 12:00:00 AM --&gt; 23/05/2012 12:00:00 AM; dependent: 0; sequence: 9</a></td></tr></table><blockquote><p><b>item</b></p><p><b>sequence</b>: 1</p><p><b>careTeamLinkId</b>: 1</p><p><b>service</b>: glasses <span style=\"background: LightGoldenRodYellow\">(Details : {http://example.org/fhir/CodeSystem/ex-visionservice code 'glasses' = 'glasses)</span></p><p><b>serviced</b>: 16/08/2014</p><p><b>unitPrice</b>: </p><p><b>net</b>: </p><blockquote><p><b>detail</b></p><p><b>sequence</b>: 1</p><p><b>service</b>: frame <span style=\"background: LightGoldenRodYellow\">(Details : {http://example.org/fhir/CodeSystem/ex-visionservice code 'frame' = 'frame)</span></p><p><b>unitPrice</b>: </p><p><b>net</b>: </p></blockquote><blockquote><p><b>detail</b></p><p><b>sequence</b>: 2</p><p><b>service</b>: lens <span style=\"background: LightGoldenRodYellow\">(Details : {http://example.org/fhir/CodeSystem/ex-visionservice code 'lens' = 'lens)</span></p><p><b>quantity</b>: 2</p><p><b>unitPrice</b>: </p><p><b>net</b>: </p></blockquote><blockquote><p><b>detail</b></p><p><b>sequence</b>: 3</p><p><b>service</b>: fst <span style=\"background: LightGoldenRodYellow\">(Details : {http://example.org/fhir/CodeSystem/ex-visionservice code 'fst' = 'fst)</span></p><p><b>unitPrice</b>: </p><p><b>factor</b>: 0.07</p><p><b>net</b>: </p></blockquote></blockquote></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://happysight.com/claim",
+      "value": "6612346"
+    }
+  ],
+  "status": "active",
+  "type": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/ex-claimtype",
+        "code": "vision"
+      }
+    ]
+  },
+  "use": "complete",
+  "patient": {
+    "reference": "Patient/example"
+  },
+  "created": "2014-08-16",
+  "insurer": {
+    "reference": "Organization/example"
+  },
+  "provider": {
+    "reference": "Practitioner/example"
+  },
+  "organization": {
+    "reference": "Organization/example"
+  },
+  "priority": {
+    "coding": [
+      {
+        "code": "normal"
+      }
+    ]
+  },
+  "prescription": {
+    "reference": "MedicationRequest/example"
+  },
+  "payee": {
+    "type": {
+      "coding": [
+        {
+          "code": "provider"
+        }
+      ]
+    },
+    "party": {
+      "reference": "Practitioner/example"
+    }
+  },
+  "careTeam": [
+    {
+      "sequence": 1,
+      "provider": {
+        "reference": "Practitioner/example"
+      }
+    }
+  ],
+  "diagnosis": [
+    {
+      "sequence": 1,
+      "diagnosisCodeableConcept": {
+        "coding": [
+          {
+            "code": "654321"
+          }
+        ]
+      }
+    }
+  ],
+  "insurance": [
+    {
+      "sequence": 1,
+      "focal": true,
+      "coverage": {
+        "reference": "Coverage/example"
+      }
+    }
+  ],
+  "item": [
+    {
+      "sequence": 1,
+      "careTeamLinkId": [
+        1
+      ],
+      "service": {
+        "coding": [
+          {
+            "system": "http://example.org/fhir/CodeSystem/ex-visionservice",
+            "code": "glasses"
+          }
+        ]
+      },
+      "servicedDate": "2014-08-16",
+      "unitPrice": {
+        "value": 214.00,
+        "system": "urn:iso:std:iso:4217",
+        "code": "USD"
+      },
+      "net": {
+        "value": 214.00,
+        "system": "urn:iso:std:iso:4217",
+        "code": "USD"
+      },
+      "detail": [
+        {
+          "sequence": 1,
+          "service": {
+            "coding": [
+              {
+                "system": "http://example.org/fhir/CodeSystem/ex-visionservice",
+                "code": "frame"
+              }
+            ]
+          },
+          "unitPrice": {
+            "value": 100.00,
+            "system": "urn:iso:std:iso:4217",
+            "code": "USD"
+          },
+          "net": {
+            "value": 100.00,
+            "system": "urn:iso:std:iso:4217",
+            "code": "USD"
+          }
+        },
+        {
+          "sequence": 2,
+          "service": {
+            "coding": [
+              {
+                "system": "http://example.org/fhir/CodeSystem/ex-visionservice",
+                "code": "lens"
+              }
+            ]
+          },
+          "quantity": {
+            "value": 2
+          },
+          "unitPrice": {
+            "value": 50.00,
+            "system": "urn:iso:std:iso:4217",
+            "code": "USD"
+          },
+          "net": {
+            "value": 100.00,
+            "system": "urn:iso:std:iso:4217",
+            "code": "USD"
+          }
+        },
+        {
+          "sequence": 3,
+          "service": {
+            "coding": [
+              {
+                "system": "http://example.org/fhir/CodeSystem/ex-visionservice",
+                "code": "fst"
+              }
+            ]
+          },
+          "unitPrice": {
+            "value": 200.00,
+            "system": "urn:iso:std:iso:4217",
+            "code": "USD"
+          },
+          "factor": 0.07,
+          "net": {
+            "value": 14.00,
+            "system": "urn:iso:std:iso:4217",
+            "code": "USD"
+          }
+        }
+      ]
+    }
+  ]
+}

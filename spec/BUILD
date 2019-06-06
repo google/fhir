@@ -116,3 +116,22 @@ structure_definition_package(
     package_info = "uscore_stu3_package_info.prototxt",
     structure_definitions_zip = "uscore_stu3_structure_definitions.zip",
 )
+
+# Structure Definitions for the US QI core profiles.
+filegroup(
+    name = "qicore_stu3_structure_definitions_filegroup",
+    srcs = glob([
+        "hl7.fhir.us.qicore/3.2.0/StructureDefinition-*.json",
+    ]),
+)
+
+zip_file(
+    name = "qicore_stu3_structure_definitions.zip",
+    filegroup = ":qicore_stu3_structure_definitions_filegroup",
+)
+
+structure_definition_package(
+    package_name = "qicore-package",
+    package_info = "qicore_stu3_package_info.prototxt",
+    structure_definitions_zip = "qicore_stu3_structure_definitions.zip",
+)

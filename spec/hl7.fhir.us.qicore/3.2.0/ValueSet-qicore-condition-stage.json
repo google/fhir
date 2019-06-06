@@ -1,0 +1,57 @@
+{
+  "resourceType": "ValueSet",
+  "id": "qicore-condition-stage",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/StructureDefinition/shareablevalueset"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><h2>Disease Stage Value Set</h2><div><p>A period or phase in the course of a disease, or the degree of involvement or severity of a disease. Stage acts as a qualifier for the condition.</p>\n</div><p><b>Copyright Statement:</b> This value set includes content from SNOMED CT, which is copyright © 2002+ International Health Terminology Standards Development Organisation (IHTSDO), and distributed by agreement between IHTSDO and HL7. Implementer use of SNOMED CT is not covered by this agreement</p><p>This value set includes codes from the following code systems:</p><ul><li>Include codes from <a href=\"http://www.snomed.org/\"><code>http://snomed.info/sct</code></a> where concept  is-a  261612004 (Stages)</li></ul></div>"
+  },
+  "url": "http://hl7.org/fhir/us/qicore/ValueSet/qicore-condition-stage",
+  "version": "3.2.0",
+  "name": "QICoreConditionStage",
+  "title": "Disease Stage Value Set",
+  "status": "active",
+  "experimental": false,
+  "date": "2018-08-22T00:00:00+10:00",
+  "publisher": "Health Level Seven, Inc. - CQI WG",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://hl7.org/special/committees/CQI"
+        }
+      ]
+    }
+  ],
+  "description": "A period or phase in the course of a disease, or the degree of involvement or severity of a disease. Stage acts as a qualifier for the condition.",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "us"
+        }
+      ]
+    }
+  ],
+  "copyright": "This value set includes content from SNOMED CT, which is copyright © 2002+ International Health Terminology Standards Development Organisation (IHTSDO), and distributed by agreement between IHTSDO and HL7. Implementer use of SNOMED CT is not covered by this agreement",
+  "compose": {
+    "include": [
+      {
+        "system": "http://snomed.info/sct",
+        "filter": [
+          {
+            "property": "concept",
+            "op": "is-a",
+            "value": "261612004"
+          }
+        ]
+      }
+    ]
+  }
+}

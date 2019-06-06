@@ -1,0 +1,32 @@
+{
+  "resourceType": "Task",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-task"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: 19009</p><p><b>status</b>: draft</p><p><b>intent</b>: proposal</p><p><b>priority</b>: routine</p><p><b>code</b>: Medication Reconciliation <span style=\"background: LightGoldenRodYellow\">(Details )</span></p><p><b>for</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>executionPeriod</b>: 11/06/2018 12:00:00 AM --&gt; 11/06/2018 12:00:00 AM</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://www.acme.org/tasks",
+      "value": "19009"
+    }
+  ],
+  "status": "draft",
+  "intent": "proposal",
+  "priority": "routine",
+  "code": {
+    "text": "Medication Reconciliation"
+  },
+  "for": {
+    "reference": "Patient/example"
+  },
+  "executionPeriod": {
+    "start": "2018-06-11",
+    "end": "2018-06-11"
+  }
+}

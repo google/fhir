@@ -1,0 +1,90 @@
+{
+  "resourceType": "Goal",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-goal"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: 123</p><p><b>status</b>: on-hold</p><p><b>category</b>: Dietary <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/goal-category code 'dietary' = 'Dietary)</span></p><p><b>priority</b>: high <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/goal-priority code 'high-priority' = 'High Priority', given as 'High Priority'})</span></p><p><b>description</b>: Target weight is 160 to 180 lbs. <span style=\"background: LightGoldenRodYellow\">(Details )</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Peter James Chalmers. Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>start</b>: 05/04/2015</p><h3>Targets</h3><table class=\"grid\"><tr><td>-</td><td><b>Measure</b></td><td><b>Detail[x]</b></td><td><b>Due[x]</b></td></tr><tr><td>*</td><td>Weight Measured <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '3141-9' = 'Body weight Measured', given as 'Weight Measured'})</span></td><td>160-180 lbs</td><td>05/04/2016</td></tr></table><p><b>statusDate</b>: 14/02/2016</p><p><b>statusReason</b>: Patient wants to defer weight loss until after honeymoon.</p><p><b>expressedBy</b>: <a href=\"Patient-example.html\">Peter James Chalmers. Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>addresses</b>: obesity condition</p><p><b>outcomeReference</b>: <a href=\"Observation-example.html\">Body Weight Measured. Generated Summary: id: example; <span title=\"Codes: {http://hl7.org/fhir/observation-category vital-signs}\">Vital Signs</span>; <span title=\"Codes: {http://loinc.org 30350-3}\">Hemoglobin [Mass/volume] in Venous blood</span>; effective: 02/04/2013 8:30:10 PM --&gt; 05/04/2013 8:30:10 PM; issued: 04/04/2013 1:30:10 AM; 7.2 g/dl; <span title=\"Codes: {http://hl7.org/fhir/v2/0078 L}\">Below low normal</span>; <span title=\"Codes: {http://snomed.info/sct 308046002}\">Superficial forearm vein</span>; <span title=\"Codes: {http://snomed.info/sct 120220003}\">Injection to forearm</span></a></p></div>"
+  },
+  "identifier": [
+    {
+      "value": "123"
+    }
+  ],
+  "status": "on-hold",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/goal-category",
+          "code": "dietary"
+        }
+      ]
+    }
+  ],
+  "priority": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/goal-priority",
+        "code": "high-priority",
+        "display": "High Priority"
+      }
+    ],
+    "text": "high"
+  },
+  "description": {
+    "text": "Target weight is 160 to 180 lbs."
+  },
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Peter James Chalmers"
+  },
+  "startDate": "2015-04-05",
+  "target": {
+    "measure": {
+      "coding": [
+        {
+          "system": "http://loinc.org",
+          "code": "3141-9",
+          "display": "Weight Measured"
+        }
+      ]
+    },
+    "detailRange": {
+      "low": {
+        "value": 160,
+        "unit": "lbs",
+        "system": "http://unitsofmeasure.org",
+        "code": "[lb_av]"
+      },
+      "high": {
+        "value": 180,
+        "unit": "lbs",
+        "system": "http://unitsofmeasure.org",
+        "code": "[lb_av]"
+      }
+    },
+    "dueDate": "2016-04-05"
+  },
+  "statusDate": "2016-02-14",
+  "statusReason": "Patient wants to defer weight loss until after honeymoon.",
+  "expressedBy": {
+    "reference": "Patient/example",
+    "display": "Peter James Chalmers"
+  },
+  "addresses": [
+    {
+      "display": "obesity condition"
+    }
+  ],
+  "outcomeReference": [
+    {
+      "reference": "Observation/example",
+      "display": "Body Weight Measured"
+    }
+  ]
+}

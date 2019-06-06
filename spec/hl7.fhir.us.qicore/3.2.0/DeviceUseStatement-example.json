@@ -1,0 +1,26 @@
+{
+  "resourceType": "DeviceUseStatement",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-deviceusestatement"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: 51ebb7a9-4e3a-4360-9a05-0cc2d869086f</p><p><b>status</b>: active</p><p><b>subject</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>device</b>: <a href=\"Device-example.html\">Generated Summary: id: example; 345675, Serial Number = AMID-342135-8464; status: active; <span title=\"Codes: {http://snomed.info/sct 86184003}\">ECG</span>; lotNumber: 43453424; manufacturer: Acme Devices, Inc; model: AB 45-J; ph: ext 4352; Author: Practitioner/example; Made: 28/06/2015 2:03:32 PM; Annotation: QA Checked</a></p></div>"
+  },
+  "identifier": [
+    {
+      "system": "http:goodhealth.org/identifiers",
+      "value": "51ebb7a9-4e3a-4360-9a05-0cc2d869086f"
+    }
+  ],
+  "status": "active",
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "device": {
+    "reference": "Device/example"
+  }
+}

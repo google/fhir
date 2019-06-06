@@ -1,0 +1,51 @@
+{
+  "resourceType": "Flag",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-flag"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: 12345</p><p><b>status</b>: inactive</p><p><b>category</b>: admin <span style=\"background: LightGoldenRodYellow\">(Details : {http://example.org/local code 'admin' = 'admin', given as 'Admin'})</span></p><p><b>code</b>: Patient has a big dog at his home. Always always wear a suit of armor or take other active      counter-measures <span style=\"background: LightGoldenRodYellow\">(Details : {http://example.org/local code 'bigdog' = 'bigdog', given as 'Big dog'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Peter Patient. Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>period</b>: 17/01/2015 12:00:00 AM --&gt; 01/12/2016 12:00:00 AM</p><p><b>author</b>: <a href=\"Practitioner-example.html\">Nancy Nurse. Generated Summary: id: example; 23; active; Adam Careful </a></p></div>"
+  },
+  "identifier": [
+    {
+      "value": "12345"
+    }
+  ],
+  "status": "inactive",
+  "category": {
+    "coding": [
+      {
+        "system": "http://example.org/local",
+        "code": "admin",
+        "display": "Admin"
+      }
+    ],
+    "text": "admin"
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://example.org/local",
+        "code": "bigdog",
+        "display": "Big dog"
+      }
+    ],
+    "text": "Patient has a big dog at his home. Always always wear a suit of armor or take other active      counter-measures"
+  },
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Peter Patient"
+  },
+  "period": {
+    "start": "2015-01-17",
+    "end": "2016-12-01"
+  },
+  "author": {
+    "reference": "Practitioner/example",
+    "display": "Nancy Nurse"
+  }
+}

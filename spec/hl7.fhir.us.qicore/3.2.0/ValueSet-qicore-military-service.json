@@ -1,0 +1,75 @@
+{
+  "resourceType": "ValueSet",
+  "id": "qicore-military-service",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/StructureDefinition/shareablevalueset"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><h2>QiCore Military Service Value Set</h2><div><p>Codes indicating status of current or former military service.</p>\n</div><p>This value set includes codes from the following code systems:</p><ul><li>Include these codes as defined in <a href=\"CodeSystem-military-service.html\"><code>http://hl7.org/fhir/us/qicore/CodeSystem/military-service</code></a><table class=\"none\"><tr><td style=\"white-space:nowrap\"><b>Code</b></td><td><b>Display</b></td></tr><tr><td><a href=\"CodeSystem-military-service.html#military-service-not-indicated\">not-indicated</a></td><td>Not Indicated</td><td>The military status is not indicated</td></tr><tr><td><a href=\"CodeSystem-military-service.html#military-service-no-military-service\">no-military-service</a></td><td>No Military Service</td><td>The subject has no history of military service</td></tr><tr><td><a href=\"CodeSystem-military-service.html#military-service-veteran\">veteran</a></td><td>Veteran</td><td>The subject is has served in the military but is no longer active</td></tr><tr><td><a href=\"CodeSystem-military-service.html#military-service-active-duty\">active-duty</a></td><td>Active Duty</td><td>The subject is not a reserve member and is currently engaged in full-time military activity</td></tr><tr><td><a href=\"CodeSystem-military-service.html#military-service-active-reserve\">active-reserve</a></td><td>Active Reserve</td><td>The subject is a reserve member and is currently engaged in full-time military activity</td></tr><tr><td><a href=\"CodeSystem-military-service.html#military-service-inactive-reserve\">inactive-reserve</a></td><td>Inactive Reserve</td><td>The subject is a reserve member and is not currently engaged in full-time military activity</td></tr></table></li></ul></div>"
+  },
+  "url": "http://hl7.org/fhir/us/qicore/ValueSet/qicore-military-service",
+  "version": "3.2.0",
+  "name": "QICoreMilitaryService",
+  "title": "QiCore Military Service Value Set",
+  "status": "active",
+  "experimental": false,
+  "date": "2018-08-22T00:00:00+10:00",
+  "publisher": "Health Level Seven, Inc. - CQI WG",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://hl7.org/special/committees/CQI"
+        }
+      ]
+    }
+  ],
+  "description": "Codes indicating status of current or former military service.",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "us"
+        }
+      ]
+    }
+  ],
+  "compose": {
+    "include": [
+      {
+        "system": "http://hl7.org/fhir/us/qicore/CodeSystem/military-service",
+        "concept": [
+          {
+            "code": "not-indicated",
+            "display": "Not Indicated"
+          },
+          {
+            "code": "no-military-service",
+            "display": "No Military Service"
+          },
+          {
+            "code": "veteran",
+            "display": "Veteran"
+          },
+          {
+            "code": "active-duty",
+            "display": "Active Duty"
+          },
+          {
+            "code": "active-reserve",
+            "display": "Active Reserve"
+          },
+          {
+            "code": "inactive-reserve",
+            "display": "Inactive Reserve"
+          }
+        ]
+      }
+    ]
+  }
+}

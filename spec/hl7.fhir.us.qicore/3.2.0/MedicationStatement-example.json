@@ -1,0 +1,57 @@
+{
+  "resourceType": "MedicationStatement",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-medicationstatement"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>status</b>: completed</p><p><b>medication</b>: <a href=\"Medication-example.html\">Generated Summary: id: example; <span title=\"Codes: {http://www.nlm.nih.gov/research/umls/rxnorm 1594660}\">alemtuzumab 10 MG/ML [Lemtrada]</span>; isBrand; <span title=\"Codes: {http://snomed.info/sct 385219001}\">Injection solution (qualifier value)</span></a></p><p><b>effective</b>: 01/06/2012 10:30:00 AM</p><p><b>dateAsserted</b>: 14/05/2012 11:00:00 AM</p><p><b>informationSource</b>: <a href=\"Practitioner-example.html\">Generated Summary: id: example; 23; active; Adam Careful </a></p><p><b>subject</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>derivedFrom</b>: <a href=\"MedicationRequest-example.html\">Generated Summary: id: example; status: active; intent: order; ????; authoredOn: 26/03/2015 11:32:52 AM; </a></p><p><b>taken</b>: n</p><p><b>dosage</b>: </p></div>"
+  },
+  "status": "completed",
+  "medicationReference": {
+    "reference": "Medication/example"
+  },
+  "effectiveDateTime": "2012-06-01T14:30:00+14:00",
+  "dateAsserted": "2012-05-14T15:00:00+14:00",
+  "informationSource": {
+    "reference": "Practitioner/example"
+  },
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "derivedFrom": [
+    {
+      "reference": "MedicationRequest/example"
+    }
+  ],
+  "taken": "n",
+  "dosage": [
+    {
+      "timing": {
+        "repeat": {
+          "frequency": 3,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "394899003",
+            "display": "oral administration of treatment"
+          }
+        ]
+      },
+      "doseQuantity": {
+        "value": 10,
+        "unit": "ml",
+        "system": "http://unitsofmeasure.org",
+        "code": "ml"
+      }
+    }
+  ]
+}

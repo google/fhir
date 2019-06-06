@@ -1,0 +1,27 @@
+{
+    "package-id": "hl7.fhir.us.qicore",
+    "canonical": "http://hl7.org/fhir/us/qicore",
+    "list": [
+        {
+            "version": "current",
+            "date": "n/a",
+            "desc": "Continuous Integration Build (latest in version control)",
+            "path": "http://build.fhir.org/ig/cqframework/qi-core",
+            "status": "ci-build"
+        },
+        {
+            "version": "3.0.0",
+            "date": "2017-12-20",
+            "desc": "STU3 Ballot",
+            "path": "http://hl7.org/fhir/us/qicore/2018Jan",
+            "status": "ballot"
+        },
+        {
+            "version": "2.0.0",
+            "date": "2017-12-12",
+            "desc": "Release 2.0.0 (STU2) - The current official published version of this IG. This version corrects the technical errata",
+            "path": "http://hl7.org/fhir/us/qicore/STU2",
+            "status": "trial-use"
+        }
+    ]
+}

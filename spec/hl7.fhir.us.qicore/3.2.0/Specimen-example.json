@@ -1,0 +1,125 @@
+{
+  "resourceType": "Specimen",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-specimen"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>type</b>: Venous blood specimen <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '122555007' = 'Venous blood sample', given as 'Venous blood specimen'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>receivedTime</b>: 04/03/2011 6:03:00 PM</p><h3>Collections</h3><table class=\"grid\"><tr><td>-</td><td><b>Extension</b></td><td><b>Collected[x]</b></td><td><b>Quantity</b></td><td><b>BodySite</b></td></tr><tr><td>*</td><td/><td>06/03/2011 5:15:00 PM</td><td>6 mL</td><td>Anterior surface of arm <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '7311008' = 'Anterior surface of arm', given as 'Anterior surface of arm'})</span></td></tr></table><h3>Processings</h3><table class=\"grid\"><tr><td>-</td><td><b>Extension</b></td><td><b>Description</b></td><td><b>Procedure</b></td><td><b>Additive</b></td></tr><tr><td>*</td><td/><td>Treated with anticoagulants.</td><td>Defibrination <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v2/0373 code 'DEFB' = 'Defibrination', given as 'Defibrination'})</span></td><td><a href=\"Substance-example.html\">Generated Summary: id: example; 1463; status: active; <span title=\"Codes: {http://hl7.org.fhir/substance-category allergen}\">Allergen</span>; <span title=\"Codes: \">apitoxin (Honey Bee Venom)</span></a></td></tr></table><h3>Containers</h3><table class=\"grid\"><tr><td>-</td><td><b>Extension</b></td><td><b>Type</b></td><td><b>Capacity</b></td></tr><tr><td>*</td><td/><td>Specimen vial <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '434746001' = 'Specimen vial (physical object)', given as 'Specimen vial'})</span></td><td>10 mL</td></tr></table></div>"
+  },
+  "type": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "122555007",
+        "display": "Venous blood specimen"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "receivedTime": "2011-03-04T07:03:00Z",
+  "collection": {
+    "extension": [
+      {
+        "url": "http://hl7.org/fhir/StructureDefinition/specimen-collectionPriority",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://example.com",
+              "code": "5",
+              "display": "ROUTINE"
+            }
+          ]
+        }
+      },
+      {
+        "url": "http://hl7.org/fhir/StructureDefinition/specimen-specialHandling",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/v3/ActCode",
+              "code": "NOPERSISTP",
+              "display": "no collection beyond purpose of use"
+            }
+          ]
+        }
+      }
+    ],
+    "collectedDateTime": "2011-03-06T06:15:00Z",
+    "quantity": {
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/specimen-isDryWeight",
+          "valueBoolean": false
+        }
+      ],
+      "value": 6,
+      "unit": "mL"
+    },
+    "bodySite": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "7311008",
+          "display": "Anterior surface of arm"
+        }
+      ]
+    }
+  },
+  "processing": [
+    {
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/specimen-processingTime",
+          "valuePeriod": {
+            "start": "2011-03-04T07:03:00Z",
+            "end": "2011-03-04T07:03:00Z"
+          }
+        }
+      ],
+      "description": "Treated with anticoagulants.",
+      "procedure": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0373",
+            "code": "DEFB",
+            "display": "Defibrination"
+          }
+        ]
+      },
+      "additive": [
+        {
+          "reference": "Substance/example"
+        }
+      ]
+    }
+  ],
+  "container": [
+    {
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/specimen-sequenceNumber",
+          "valueInteger": 1
+        }
+      ],
+      "type": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "434746001",
+            "display": "Specimen vial"
+          }
+        ]
+      },
+      "capacity": {
+        "value": 10,
+        "unit": "mL"
+      }
+    }
+  ]
+}

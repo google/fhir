@@ -1,0 +1,70 @@
+{
+  "resourceType": "MedicationAdministration",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-medicationadministration"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>status</b>: on-hold</p><p><b>medication</b>: <a href=\"Medication-example.html\">Generated Summary: id: example; <span title=\"Codes: {http://www.nlm.nih.gov/research/umls/rxnorm 1594660}\">alemtuzumab 10 MG/ML [Lemtrada]</span>; isBrand; <span title=\"Codes: {http://snomed.info/sct 385219001}\">Injection solution (qualifier value)</span></a></p><p><b>subject</b>: <a href=\"Patient-example.html\">Donald Duck. Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><p><b>context</b>: <a href=\"Encounter-example.html\">Generated Summary: id: example; status: in-progress; <span title=\"{http://hl7.org/fhir/v3/ActCode IMP}\">inpatient encounter</span>; <span title=\"Codes: {http://www.ama-assn.org/go/cpt 99223}\">Inpatient Hospital Care</span></a></p><p><b>supportingInformation</b>: <a href=\"Condition-example.html\">Generated Summary: id: example; clinicalStatus: active; verificationStatus: confirmed; <span title=\"Codes: {http://hl7.org/fhir/condition-category problem-list-item}, {http://snomed.info/sct 439401001}\">Problem List Item</span>; <span title=\"Codes: {http://snomed.info/sct 24484000}\">Severe (severity modifier)</span>; <span title=\"Codes: {http://snomed.info/sct 39065001}\">Burnt Ear</span>; <span title=\"Codes: {http://snomed.info/sct 49521004}\">Left Ear</span>; onset: 24/05/2012 10:00:00 AM; assertedDate: 24/05/2012 10:00:00 AM</a></p><p><b>effective</b>: 16/01/2015 12:30:00 AM --&gt; 16/01/2015 12:30:00 AM</p><p><b>notGiven</b>: true</p><p><b>reasonNotGiven</b>: Administration of medication not done due to contraindication (situation) <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '373147003' = 'Medication not administered because contraindicated', given as 'Administration of medication not done due to contraindication (situation)'})</span></p><p><b>prescription</b>: <a href=\"MedicationRequest-example.html\">Generated Summary: id: example; status: active; intent: order; ????; authoredOn: 26/03/2015 11:32:52 AM; </a></p><p><b>note</b>: Patient started Bupropion this morning - will administer in a reduced dose tomorrow</p><h3>Dosages</h3><table class=\"grid\"><tr><td>-</td><td><b>Route</b></td><td><b>Dose</b></td></tr><tr><td>*</td><td>Intravenous route (qualifier value) <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '47625008' = 'Intravenous use', given as 'Intravenous route (qualifier value)'})</span></td><td>3 mg<span style=\"background: LightGoldenRodYellow\"> (Details: UCUM code mg = 'mg')</span></td></tr></table></div>"
+  },
+  "status": "on-hold",
+  "medicationReference": {
+    "reference": "Medication/example"
+  },
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Donald Duck"
+  },
+  "context": {
+    "reference": "Encounter/example"
+  },
+  "supportingInformation": [
+    {
+      "reference": "Condition/example"
+    }
+  ],
+  "effectivePeriod": {
+    "start": "2015-01-15T14:30:00+01:00",
+    "end": "2015-01-15T14:30:00+01:00"
+  },
+  "notGiven": true,
+  "reasonNotGiven": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "373147003",
+          "display": "Administration of medication not done due to contraindication (situation)"
+        }
+      ]
+    }
+  ],
+  "prescription": {
+    "reference": "MedicationRequest/example"
+  },
+  "note": [
+    {
+      "text": "Patient started Bupropion this morning - will administer in a reduced dose tomorrow"
+    }
+  ],
+  "dosage": {
+    "route": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "47625008",
+          "display": "Intravenous route (qualifier value)"
+        }
+      ]
+    },
+    "dose": {
+      "value": 3,
+      "unit": "mg",
+      "system": "http://unitsofmeasure.org",
+      "code": "mg"
+    }
+  }
+}

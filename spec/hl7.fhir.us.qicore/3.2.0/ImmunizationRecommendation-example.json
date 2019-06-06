@@ -1,0 +1,96 @@
+{
+  "resourceType": "ImmunizationRecommendation",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-immunizationrec"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>identifier</b>: urn:oid:1.3.6.1.4.1.21367.2005.3.7.1235</p><p><b>patient</b>: <a href=\"Patient-example.html\">Generated Summary: id: example; Medical record number = 12345 (USUAL); active; Peter James Chalmers (OFFICIAL), Jim Chalmers , Peter James Windsor (MAIDEN); -unknown-(HOME), ph: (03) 5555 6473(WORK), ph: (03) 3410 5613(MOBILE), ph: (03) 5555 8834(OLD); gender: male; birthDate: 25/12/1974; </a></p><blockquote><p><b>recommendation</b></p><p><b>date</b>: 10/02/2015 3:04:15 AM</p><p><b>vaccineCode</b>: Hepatitis A vaccine <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '14745005' = 'Hepatitis A virus vaccine (product)', given as 'Hepatitis A vaccine'})</span></p><p><b>doseNumber</b>: 1</p><p><b>forecastStatus</b>: Not Complete <span style=\"background: LightGoldenRodYellow\">(Details )</span></p><blockquote><p><b>dateCriterion</b></p><p><b>code</b>: Earliest Date <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/immunization-recommendation-date-criterion code 'earliest' = 'Earliest Date', given as 'Earliest Date'})</span></p><p><b>value</b>: 01/12/2015 4:00:00 PM</p></blockquote><blockquote><p><b>dateCriterion</b></p><p><b>code</b>: Recommended <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/immunization-recommendation-date-criterion code 'recommended' = 'Recommended', given as 'Recommended'})</span></p><p><b>value</b>: 01/12/2015 4:00:00 PM</p></blockquote><blockquote><p><b>dateCriterion</b></p><p><b>code</b>: Past Due Date <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/immunization-recommendation-date-criterion code 'overdue' = 'Past Due Date', given as 'Past Due Date'})</span></p><p><b>value</b>: 28/12/2016 4:00:00 PM</p></blockquote><h3>Protocols</h3><table class=\"grid\"><tr><td>-</td><td><b>DoseSequence</b></td><td><b>Description</b></td><td><b>Authority</b></td><td><b>Series</b></td></tr><tr><td>*</td><td>1</td><td>First sequence in protocol</td><td><a href=\"Organization-example.html\">Generated Summary: id: example; ??; active; <span title=\"Codes: {http://hl7.org/fhir/organization-type team}\">Organizational team</span>; name: Health Level Seven International; ph: (+1) 734-677-7777, fax: (+1) 734-677-6622, hq@HL7.org</a></td><td>Vaccination Series 1</td></tr></table><p><b>supportingImmunization</b>: <a href=\"Immunization-example.html\">Generated Summary: id: example; urn:oid:1.3.6.1.4.1.21367.2005.3.7.1234; status: completed; <span title=\"Codes: {urn:oid:1.2.36.1.2001.1005.17 FLUVAX}\">Fluvax (Influenza)</span>; date: 10/01/2013; primarySource; lotNumber: AAJN11K; expirationDate: 15/02/2015; <span title=\"Codes: {http://hl7.org/fhir/v3/ActSite LA}\">left arm</span>; <span title=\"Codes: {http://hl7.org/fhir/v3/RouteOfAdministration IM}\">Injection, intramuscular</span>; 5 mg; Annotation: Notes on adminstration of vaccine</a></p><p><b>supportingPatientInformation</b>: <a href=\"Observation-example.html\">Generated Summary: id: example; <span title=\"Codes: {http://hl7.org/fhir/observation-category vital-signs}\">Vital Signs</span>; <span title=\"Codes: {http://loinc.org 30350-3}\">Hemoglobin [Mass/volume] in Venous blood</span>; effective: 02/04/2013 8:30:10 PM --&gt; 05/04/2013 8:30:10 PM; issued: 04/04/2013 1:30:10 AM; 7.2 g/dl; <span title=\"Codes: {http://hl7.org/fhir/v2/0078 L}\">Below low normal</span>; <span title=\"Codes: {http://snomed.info/sct 308046002}\">Superficial forearm vein</span>; <span title=\"Codes: {http://snomed.info/sct 120220003}\">Injection to forearm</span></a></p></blockquote></div>"
+  },
+  "identifier": [
+    {
+      "system": "urn:ietf:rfc:3986",
+      "value": "urn:oid:1.3.6.1.4.1.21367.2005.3.7.1235"
+    }
+  ],
+  "patient": {
+    "reference": "Patient/example"
+  },
+  "recommendation": [
+    {
+      "date": "2015-02-09T11:04:15.817-05:00",
+      "vaccineCode": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "14745005",
+            "display": "Hepatitis A vaccine"
+          }
+        ]
+      },
+      "doseNumber": 1,
+      "forecastStatus": {
+        "text": "Not Complete"
+      },
+      "dateCriterion": [
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/immunization-recommendation-date-criterion",
+                "code": "earliest",
+                "display": "Earliest Date"
+              }
+            ]
+          },
+          "value": "2015-12-01T00:00:00-05:00"
+        },
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/immunization-recommendation-date-criterion",
+                "code": "recommended",
+                "display": "Recommended"
+              }
+            ]
+          },
+          "value": "2015-12-01T00:00:00-05:00"
+        },
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/immunization-recommendation-date-criterion",
+                "code": "overdue",
+                "display": "Past Due Date"
+              }
+            ]
+          },
+          "value": "2016-12-28T00:00:00-05:00"
+        }
+      ],
+      "protocol": {
+        "doseSequence": 1,
+        "description": "First sequence in protocol",
+        "authority": {
+          "reference": "Organization/example"
+        },
+        "series": "Vaccination Series 1"
+      },
+      "supportingImmunization": [
+        {
+          "reference": "Immunization/example"
+        }
+      ],
+      "supportingPatientInformation": [
+        {
+          "reference": "Observation/example"
+        }
+      ]
+    }
+  ]
+}
