@@ -1,5 +1,7 @@
 licenses(["notice"])
 
+package(default_visibility = ["//visibility:public"])
+
 load("//bazel:antlr4_cc.bzl", "antlr4_cc_lexer", "antlr4_cc_parser")
 
 antlr4_cc_lexer(
@@ -37,9 +39,13 @@ cc_library(
     deps = [
         ":fhir_path_grammar",
         ":fhir_path_lexer",
+        "//cc/google/fhir:annotations",
         "//cc/google/fhir:proto_util",
+        "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/synchronization",
         "@org_tensorflow//tensorflow/core:lib",
         "@protobuf_archive//:protobuf",
     ],
@@ -55,13 +61,16 @@ cc_test(
     features = ["-use_header_modules"],  # Incompatible with -fexceptions.
     deps = [
         ":fhir_path",
+        "//cc/google/fhir/status",
         "//proto/stu3:codes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:extensions_cc_proto",
         "//proto/stu3:resources_cc_proto",
         "//proto/stu3:version_config_cc_proto",
+        "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:optional",
         "@com_google_googletest//:gtest_main",
+        "@org_tensorflow//tensorflow/core:lib",
         "@protobuf_archive//:protobuf",
     ],
 )

@@ -14,16 +14,21 @@
 
 #include "google/fhir/fhir_path/fhir_path.h"
 
+#include <utility>
+
 #include "google/protobuf/wrappers.pb.h"
-#include "google/fhir/proto_util.h"
+#include "absl/strings/str_cat.h"
 
 // Include the ANTLR-generated visitor, lexer and parser files.
+#include "absl/memory/memory.h"
+#include "google/fhir/annotations.h"
 #include "google/fhir/fhir_path/FhirPathBaseVisitor.h"
 #include "google/fhir/fhir_path/FhirPathLexer.h"
 #include "google/fhir/fhir_path/FhirPathParser.h"
+#include "google/fhir/proto_util.h"
+#include "google/fhir/status/status.h"
+#include "google/fhir/status/statusor.h"
 #include "tensorflow/core/lib/core/errors.h"
-
-#include "absl/memory/memory.h"
 
 namespace google {
 namespace fhir {
@@ -43,8 +48,11 @@ using antlr_parser::FhirPathBaseVisitor;
 using antlr_parser::FhirPathLexer;
 using antlr_parser::FhirPathParser;
 
+using ::google::fhir::ForEachMessage;
+using ::google::fhir::ForEachMessageHalting;
 using ::google::fhir::IsMessageType;
 using ::google::fhir::StatusOr;
+
 using internal::ExpressionNode;
 
 using ::tensorflow::errors::InvalidArgument;
@@ -132,13 +140,9 @@ class InvokeExpressionNode : public ExpressionNode {
     // Iterate through the results of the child expression and invoke
     // the appropriate field.
     for (const Message* child_message : child_results) {
-      const Reflection* refl = child_message->GetReflection();
-
-      if (refl->HasField(*child_message, field_)) {
-        const Message& result = refl->GetMessage(*child_message, field_);
-
-        results->push_back(&result);
-      }
+      ForEachMessage<Message>(
+          *child_message, field_,
+          [&](const Message& result) { results->push_back(&result); });
     }
 
     return Status::OK();
@@ -389,6 +393,20 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     }
   }
 
+  antlrcpp::Any visitEqualityExpression(
+      FhirPathParser::EqualityExpressionContext* ctx) override {
+    // TODO: Implement this.
+    SetError("Equality operator not yet implemented");
+    return nullptr;
+  }
+
+  antlrcpp::Any visitInequalityExpression(
+      FhirPathParser::InequalityExpressionContext* ctx) override {
+    // TODO: Implement this.
+    SetError("Inequality operator not yet implemented.");
+    return nullptr;
+  }
+
   antlrcpp::Any visitMemberInvocation(
       FhirPathParser::MemberInvocationContext* ctx) override {
     string text = ctx->identifier()->IDENTIFIER()->getSymbol()->getText();
@@ -398,6 +416,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitFunctionInvocation(
       FhirPathParser::FunctionInvocationContext* ctx) override {
+    if (!CheckOk()) {
+      return nullptr;
+    }
+
     string text =
         ctx->function()->identifier()->IDENTIFIER()->getSymbol()->getText();
 
@@ -435,6 +457,12 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
 
     return ToAny(std::make_shared<AndOperator>(left, right));
+  }
+
+  antlrcpp::Any visitParenthesizedTerm(
+      FhirPathParser::ParenthesizedTermContext* ctx) override {
+    // Simply propagate the value of the parenthesized term.
+    return ctx->children[1]->accept(this);
   }
 
   antlrcpp::Any defaultResult() override { return nullptr; }
@@ -498,27 +526,33 @@ StatusOr<bool> EvaluationResult::GetBoolean() const {
 }
 
 CompiledExpression::CompiledExpression(CompiledExpression&& other)
-    : root_expression_(std::move(other.root_expression_)) {}
+    : fhir_path_(std::move(other.fhir_path_)),
+      root_expression_(std::move(other.root_expression_)) {}
 
 CompiledExpression& CompiledExpression::operator=(CompiledExpression&& other) {
-  root_expression_ = other.root_expression_;
+  fhir_path_ = std::move(other.fhir_path_);
+  root_expression_ = std::move(other.root_expression_);
 
   return *this;
 }
 
 CompiledExpression::CompiledExpression(const CompiledExpression& other)
-    : root_expression_(other.root_expression_) {}
+    : fhir_path_(other.fhir_path_), root_expression_(other.root_expression_) {}
 
 CompiledExpression& CompiledExpression::operator=(
     const CompiledExpression& other) {
+  fhir_path_ = other.fhir_path_;
   root_expression_ = other.root_expression_;
 
   return *this;
 }
 
+const string& CompiledExpression::fhir_path() const { return fhir_path_; }
+
 CompiledExpression::CompiledExpression(
+    const string& fhir_path,
     std::shared_ptr<internal::ExpressionNode> root_expression)
-    : root_expression_(root_expression) {}
+    : fhir_path_(fhir_path), root_expression_(root_expression) {}
 
 StatusOr<CompiledExpression> CompiledExpression::Compile(
     const Descriptor* descriptor, const string& fhir_path) {
@@ -532,7 +566,7 @@ StatusOr<CompiledExpression> CompiledExpression::Compile(
 
   if (result.isNotNull()) {
     auto root_node = result.as<std::shared_ptr<internal::ExpressionNode>>();
-    return CompiledExpression(root_node);
+    return CompiledExpression(fhir_path, root_node);
 
   } else {
     return InvalidArgument(visitor.GetError());
@@ -550,6 +584,176 @@ StatusOr<EvaluationResult> CompiledExpression::Evaluate(
   work_space->SetResultMessages(results);
 
   return EvaluationResult(std::move(work_space));
+}
+
+MessageValidator::MessageValidator() {}
+MessageValidator::~MessageValidator() {}
+
+// Build the constraints for the given message type and
+// add it to the constraints cache.
+StatusOr<MessageValidator::MessageConstraints*>
+MessageValidator::ConstraintsFor(const Descriptor* descriptor) {
+  // Simply return the cached constraint if it exists.
+  auto iter = constraints_cache_.find(descriptor->full_name());
+
+  if (iter != constraints_cache_.end()) {
+    return iter->second.get();
+  }
+
+  auto constraints = absl::make_unique<MessageConstraints>();
+
+  for (int i = 0; i < descriptor->field_count(); i++) {
+    const FieldDescriptor* field = descriptor->field(i);
+
+    const Descriptor* field_type = field->message_type();
+
+    // Constraints only apply to non-primitives.
+    if (field_type != nullptr) {
+      int ext_size =
+          field->options().ExtensionSize(proto::fhir_path_constraint);
+
+      for (int j = 0; j < ext_size; ++j) {
+        const string& fhir_path =
+            field->options().GetExtension(proto::fhir_path_constraint, j);
+
+        auto constraint = CompiledExpression::Compile(field_type, fhir_path);
+
+        if (constraint.ok()) {
+          constraints->expressions_.push_back(
+              std::make_pair(field, constraint.ValueOrDie()));
+        }
+
+        // TODO: Unsupported FHIRPath expressions are simply not
+        // validated for now; this should produce an error once we support
+        // all of FHIRPath.
+      }
+    }
+  }
+
+  // Add the successful constraints to the cache while keeping a local
+  // reference.
+  MessageConstraints* constraints_local = constraints.get();
+  constraints_cache_[descriptor->full_name()] = std::move(constraints);
+
+  // Now we recursively look for fields with constraints.
+  for (int i = 0; i < descriptor->field_count(); i++) {
+    const FieldDescriptor* field = descriptor->field(i);
+
+    const Descriptor* field_type = field->message_type();
+
+    // Constraints only apply to non-primitives.
+    if (field_type != nullptr) {
+      // Validate the field type.
+      FHIR_ASSIGN_OR_RETURN(auto child_constraints, ConstraintsFor(field_type));
+
+      // Nested fields that directly or transitively have constraints
+      // are retained and used when applying constraints.
+      if (!child_constraints->expressions_.empty() ||
+          !child_constraints->nested_with_constraints_.empty()) {
+        constraints_local->nested_with_constraints_.push_back(field);
+      }
+    }
+  }
+
+  return constraints_local;
+}
+
+// Default handler halts on first error
+bool HaltOnErrorHandler(const Message& message, const FieldDescriptor* field,
+                        const string& constraint) {
+  return true;
+}
+
+Status MessageValidator::Validate(const Message& message) {
+  return Validate(message, HaltOnErrorHandler);
+}
+
+// Validates that the given field in the given parent satisfies the
+// the given FHIRPath expression, invoking the handler in case
+// of failure.
+Status ValidateConstraint(const Message& parent, const FieldDescriptor* field,
+                          const Message& field_value,
+                          const CompiledExpression& expression,
+                          const ViolationHandlerFunc handler,
+                          bool* halt_validation) {
+  FHIR_ASSIGN_OR_RETURN(const EvaluationResult expr_result,
+                        expression.Evaluate(field_value));
+
+  if (!expr_result.GetBoolean().ValueOrDie()) {
+    string err_msg =
+        absl::StrCat("fhirpath-constraint-violation-",
+                     field->containing_type()->name(), ".", field->json_name());
+
+    *halt_validation = handler(parent, field, expression.fhir_path());
+    return ::tensorflow::errors::FailedPrecondition(err_msg);
+  }
+
+  return Status::OK();
+}
+
+// Store the first detected failure in the accumulative status.
+void UpdateStatus(Status* accumulative_status, const Status& current_status) {
+  if (accumulative_status->ok() && !current_status.ok()) {
+    *accumulative_status = current_status;
+  }
+}
+
+Status MessageValidator::Validate(const Message& message,
+                                  ViolationHandlerFunc handler) {
+  bool halt_validation = false;
+  return Validate(message, handler, &halt_validation);
+}
+
+Status MessageValidator::Validate(const Message& message,
+                                  ViolationHandlerFunc handler,
+                                  bool* halt_validation) {
+  // ConstraintsFor may recursively build constraints so
+  // we lock the mutex here to ensure thread safety.
+  mutex_.Lock();
+  auto status_or_constraints = ConstraintsFor(message.GetDescriptor());
+  mutex_.Unlock();
+
+  if (!status_or_constraints.ok()) {
+    return status_or_constraints.status();
+  }
+
+  auto constraints = status_or_constraints.ValueOrDie();
+
+  // Keep the first failure to return to the caller.
+  Status accumulative_status = Status::OK();
+
+  // Validate the constraints attached to the message's fields.
+  for (auto expression : constraints->expressions_) {
+    if (*halt_validation) {
+      return accumulative_status;
+    }
+
+    const FieldDescriptor* field = expression.first;
+    const CompiledExpression& expr = expression.second;
+
+    ForEachMessageHalting<Message>(message, field, [&](const Message& child) {
+      UpdateStatus(&accumulative_status,
+                   ValidateConstraint(message, field, child, expr, handler,
+                                      halt_validation));
+
+      return *halt_validation;
+    });
+  }
+
+  // Recursively validate constraints for nested messages that have them.
+  for (const FieldDescriptor* field : constraints->nested_with_constraints_) {
+    if (*halt_validation) {
+      return accumulative_status;
+    }
+
+    ForEachMessageHalting<Message>(message, field, [&](const Message& child) {
+      UpdateStatus(&accumulative_status,
+                   Validate(child, handler, halt_validation));
+      return *halt_validation;
+    });
+  }
+
+  return accumulative_status;
 }
 
 }  // namespace fhir_path

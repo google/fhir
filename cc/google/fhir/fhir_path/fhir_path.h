@@ -15,17 +15,15 @@
 #ifndef GOOGLE_FHIR_FHIR_PATH_FHIR_PATH_H_
 #define GOOGLE_FHIR_FHIR_PATH_FHIR_PATH_H_
 
+#include <unordered_map>
+
 #include "google/protobuf/message.h"
+#include "absl/synchronization/mutex.h"
 #include "google/fhir/status/statusor.h"
 
 namespace google {
 namespace fhir {
 namespace fhir_path {
-
-using ::google::protobuf::Descriptor;
-using ::google::protobuf::Message;
-
-using ::google::fhir::StatusOr;
 
 using std::string;
 
@@ -43,35 +41,37 @@ class WorkSpace {
   // (generally the resource against which the expression is run),
   // the accumulated results, and tracks temporary data to be deleted
   // when the evaluation result is destroyed.
-  explicit WorkSpace(const Message* message_context)
+  explicit WorkSpace(const ::google::protobuf::Message* message_context)
       : message_context_(message_context) {}
 
   // Gets the message context the FHIRPath expression is evaluated against.
-  const Message* MessageContext() { return message_context_; }
+  const ::google::protobuf::Message* MessageContext() { return message_context_; }
 
   // Sets the results to be returned to the caller.
-  void SetResultMessages(std::vector<const Message*> messages) {
+  void SetResultMessages(std::vector<const ::google::protobuf::Message*> messages) {
     messages_ = messages;
   }
 
   // Gets the results to return to the caller.
-  const std::vector<const Message*>& GetResultMessages() { return messages_; }
+  const std::vector<const ::google::protobuf::Message*>& GetResultMessages() {
+    return messages_;
+  }
 
   // Mark the message to be deleted when the workspace goes out of scope.
   // This is necessary because some messages are created on the fly,
   // while others simply return nested messages in the user-provided
   // protocol buffers, so we need to explicitly track which we need
   // to delete.
-  void DeleteWhenFinished(Message* message) {
-    to_delete_.push_back(std::unique_ptr<Message>(message));
+  void DeleteWhenFinished(::google::protobuf::Message* message) {
+    to_delete_.push_back(std::unique_ptr<::google::protobuf::Message>(message));
   }
 
  private:
-  std::vector<const Message*> messages_;
+  std::vector<const ::google::protobuf::Message*> messages_;
 
-  const Message* message_context_;
+  const ::google::protobuf::Message* message_context_;
 
-  std::vector<std::unique_ptr<Message>> to_delete_;
+  std::vector<std::unique_ptr<::google::protobuf::Message>> to_delete_;
 };
 
 // Abstract base class of "compiled" FHIRPath expressions. In this
@@ -96,11 +96,12 @@ class ExpressionNode {
   // The work_space parameter is used to access information about the
   // root message and any temporary data needed for this specific evaluation,
   // so a new work_space is provided on each call.
-  virtual Status Evaluate(WorkSpace* work_space,
-                          std::vector<const Message*>* results) const = 0;
+  virtual Status Evaluate(
+      WorkSpace* work_space,
+      std::vector<const ::google::protobuf::Message*>* results) const = 0;
 
   // The descriptor of the message type returned by the expression.
-  virtual const Descriptor* ReturnType() const = 0;
+  virtual const ::google::protobuf::Descriptor* ReturnType() const = 0;
 };
 
 }  // namespace internal
@@ -145,7 +146,7 @@ class EvaluationResult {
   // of the original Message against which the evaluation was performed,
   // or temporary messages produced by the evaluation that will be
   // deleted when the EvaluationResult goes out of scope.
-  const std::vector<const Message*>& GetMessages() const;
+  const std::vector<const ::google::protobuf::Message*>& GetMessages() const;
 
   // Returns success with a boolean value if the EvaluationResult represents
   // a boolean value per FHIRPath. That is, if it has a single message
@@ -175,19 +176,91 @@ class CompiledExpression {
   CompiledExpression(const CompiledExpression& other);
   CompiledExpression& operator=(const CompiledExpression& other);
 
+  // Returns the FHIRPath string used to compile this expression.
+  const string& fhir_path() const;
+
   // Compiles a FHIRPath expression into a structure that will efficiently
   // execute that expression.
-  static StatusOr<CompiledExpression> Compile(const Descriptor* descriptor,
-                                              const string& fhir_path);
+  static StatusOr<CompiledExpression> Compile(
+      const ::google::protobuf::Descriptor* descriptor, const string& fhir_path);
 
   // Evaluates the compiled expression against the given message.
-  StatusOr<EvaluationResult> Evaluate(const Message& message) const;
+  StatusOr<EvaluationResult> Evaluate(const ::google::protobuf::Message& message) const;
 
  private:
   explicit CompiledExpression(
+      const string& fhir_path,
       std::shared_ptr<internal::ExpressionNode> root_expression);
 
+  string fhir_path_;
   std::shared_ptr<const internal::ExpressionNode> root_expression_;
+};
+
+// Handler callback function invoked for each FHIRPath constraint violation.
+// Users may accumulate these or write them to an appropriate
+// reporting mechanism.
+//
+// Users should return true to halt validation of the resource,
+// or false to continue the evaluation.
+//
+// The handler is provided with:
+// * The message on which the FHIRPath violation occurred. This
+//   may be the root message or a child structure.
+// * The field in the above message that caused the violation.
+//   This is the field on which the FHIRPath constraint is defined.
+// * The FHIRPath constraint expression that triggered the violation.
+typedef std::function<bool(const ::google::protobuf::Message& message,
+                           const ::google::protobuf::FieldDescriptor* field,
+                           const string& constraint)>
+    ViolationHandlerFunc;
+
+// This class validates that all fhir_path_constraint annotations on
+// the given messages are valid. It will compile and cache the
+// constraint expressions as it encounters them, so users are encouraged
+// to create a single instance of this for the lifetime of the process.
+// This class is thread safe.
+class MessageValidator {
+ public:
+  MessageValidator();
+  ~MessageValidator();
+
+  // Validates the fhir_path_constraint annotations on the given message.
+  // Returns Status::OK or the status of the first constraint violation
+  // encountered. Users needing more details should use the overloaded
+  // version of with a callback handler for each violation.
+  Status Validate(const ::google::protobuf::Message& message);
+
+  // Validates the fhir_path_constraint annotations on the given message.
+  // Returns Status::OK or the status of the first constraint failure
+  // encountered. Details on all failures are passed to the given handler
+  // function.
+  Status Validate(const ::google::protobuf::Message& message,
+                  ViolationHandlerFunc handler);
+
+ private:
+  // A cache of constraints for a given message definition, defined
+  // by the fields that directly have constraint expressions and
+  // nested fields that have constraints to recursively evaluate.
+  struct MessageConstraints {
+    std::vector<
+        std::pair<const ::google::protobuf::FieldDescriptor*, const CompiledExpression>>
+        expressions_;
+
+    std::vector<const ::google::protobuf::FieldDescriptor*> nested_with_constraints_;
+  };
+
+  // Loads constraints for the given descriptor.
+  StatusOr<MessageConstraints*> ConstraintsFor(
+      const ::google::protobuf::Descriptor* descriptor);
+
+  // Recursively called validation method that can terminate
+  // validation based on the callback.
+  Status Validate(const ::google::protobuf::Message& message,
+                  ViolationHandlerFunc handler, bool* halt_validation);
+
+  absl::Mutex mutex_;
+  std::unordered_map<string, std::unique_ptr<MessageConstraints>>
+      constraints_cache_;
 };
 
 }  // namespace fhir_path
