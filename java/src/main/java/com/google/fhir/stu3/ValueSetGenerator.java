@@ -16,23 +16,31 @@ package com.google.fhir.stu3;
 
 import com.google.common.base.Ascii;
 import com.google.common.base.CaseFormat;
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
-import com.google.fhir.common.FhirVersion;
+import com.google.common.collect.Iterables;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
+import com.google.fhir.r4.proto.BindingStrengthCode;
 import com.google.fhir.r4.proto.Bundle;
+import com.google.fhir.r4.proto.Code;
 import com.google.fhir.r4.proto.CodeSystem.ConceptDefinition;
+import com.google.fhir.r4.proto.ElementDefinition;
 import com.google.fhir.r4.proto.ValueSet;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
+import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
+import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileOptions;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,14 +51,10 @@ public class ValueSetGenerator {
   private final PackageInfo packageInfo;
   private final String fhirProtoRootPath;
   private final Map<String, List<EnumValueDescriptorProto.Builder>> codesByUrl;
-  private final List<ValueSet> valueSets;
-  private final Set<String> valueSetsToSkip;
+  private final Map<String, ValueSet> valueSetsByUrl;
 
   public ValueSetGenerator(
-      PackageInfo packageInfo,
-      String fhirProtoRootPath,
-      Set<Bundle> valuesetBundles,
-      boolean includeCodesInDatatypes) {
+      PackageInfo packageInfo, String fhirProtoRootPath, Set<Bundle> valuesetBundles) {
     this.packageInfo = packageInfo;
     this.fhirProtoRootPath = fhirProtoRootPath;
     List<Bundle.Entry> allEntries =
@@ -64,21 +68,24 @@ public class ValueSetGenerator {
             .collect(
                 Collectors.toMap(
                     cs -> cs.getUrl().getValue(), cs -> buildEnumValues(cs.getConceptList())));
-    this.valueSets =
+    this.valueSetsByUrl =
         allEntries.stream()
             .filter(e -> e.getResource().hasValueSet())
             .map(e -> e.getResource().getValueSet())
-            .collect(Collectors.toList());
+            .collect(Collectors.toMap(vs -> vs.getUrl().getValue(), vs -> vs));
+  }
 
-    FhirVersion fhirVersion = FhirVersion.fromAnnotation(packageInfo.getFhirVersion());
-    valueSetsToSkip =
-        includeCodesInDatatypes
-            ? new HashSet<>()
-            : ProtoGenerator.loadCodeTypesFromFile(fhirVersion.coreTypeMap.get("datatypes.proto"))
-                .keySet();
+  public FileDescriptorProto forCodesUsedIn(Set<Bundle> codeUsers, Set<Bundle> excludingCodesIn) {
+    Set<ValueSet> valueSetsToGenerate = getValueSetsUsedInBundles(codeUsers);
+    valueSetsToGenerate.removeAll(getValueSetsUsedInBundles(excludingCodesIn));
+    return generateValueSetFile(valueSetsToGenerate);
   }
 
   public FileDescriptorProto generateValueSetFile() {
+    return generateValueSetFile(valueSetsByUrl.values());
+  }
+
+  private FileDescriptorProto generateValueSetFile(Collection<ValueSet> valueSetsToGenerate) {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
     builder.setPackage(packageInfo.getProtoPackage()).setSyntax("proto3");
     builder.addDependency(new File(fhirProtoRootPath, "datatypes.proto").toString());
@@ -91,38 +98,74 @@ public class ValueSetGenerator {
       options.setGoPackage(packageInfo.getGoProtoPackage());
     }
     builder.setOptions(options);
-
     List<DescriptorProto> messages = new ArrayList<>();
-    int unhandledTypes = 0;
-    for (ValueSet valueSet : valueSets) {
-      if (valueSet == null) {
-        continue;
-      }
-      if (valueSetsToSkip.contains(valueSet.getUrl().getValue())) {
-        continue;
-      }
-      try {
-        messages.add(generateValueSetProto(valueSet));
-      } catch (IllegalArgumentException e) {
-        System.out.println(
-            "Could not build ValueSet for " + valueSet.getId().getValue() + ": " + e.getMessage());
-        unhandledTypes++;
-      }
+    for (ValueSet valueSet : valueSetsToGenerate) {
+      messages.add(generateValueSetProto(valueSet));
     }
+
     messages.stream()
         .sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
         .forEach(proto -> builder.addMessageType(proto));
-
-    System.out.println("Unhandled ValueSets: " + unhandledTypes + "/" + valueSets.size());
 
     return builder.build();
   }
 
   private DescriptorProto generateValueSetProto(ValueSet valueSet) {
     String valueSetName = getValueSetName(valueSet);
-    EnumDescriptorProto valueEnum = buildValueEnum(valueSet);
-    DescriptorProto.Builder descriptor =
-        DescriptorProto.newBuilder().setName(valueSetName).addEnumType(valueEnum);
+    DescriptorProto.Builder descriptor = DescriptorProto.newBuilder().setName(valueSetName);
+
+    Optional<EnumDescriptorProto> valueEnumOptional = buildValueEnum(valueSet);
+    if (valueEnumOptional.isPresent()) {
+      descriptor
+          .addEnumType(valueEnumOptional.get())
+          .addField(
+              FieldDescriptorProto.newBuilder()
+                  .setNumber(1)
+                  .setName("value")
+                  .setTypeName(
+                      "."
+                          + packageInfo.getProtoPackage()
+                          + "."
+                          + valueSetName
+                          + "."
+                          + valueEnumOptional.get().getName())
+                  .setType(FieldDescriptorProto.Type.TYPE_ENUM));
+    } else {
+      descriptor
+          .addField(
+              FieldDescriptorProto.newBuilder()
+                  .setNumber(1)
+                  .setOptions(
+                      FieldOptions.newBuilder()
+                          .setExtension(
+                              Annotations.reservedReason,
+                              "Field 1 reserved to allow enumeration in the future.")))
+          .addField(
+              FieldDescriptorProto.newBuilder()
+                  .setNumber(4)
+                  .setName("value")
+                  .setType(FieldDescriptorProto.Type.TYPE_STRING)
+                  .setOptions(
+                      FieldOptions.newBuilder()
+                          .setExtension(
+                              Annotations.fieldDescription,
+                              "This valueset is not enumerable, and so is represented as a"
+                                  + " string.")));
+    }
+    descriptor
+        .addField(
+            FieldDescriptorProto.newBuilder()
+                .setNumber(2)
+                .setName("id")
+                .setTypeName("String")
+                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE))
+        .addField(
+            FieldDescriptorProto.newBuilder()
+                .setNumber(3)
+                .setName("extension")
+                .setTypeName("Extension")
+                .setLabel(FieldDescriptorProto.Label.LABEL_REPEATED)
+                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE));
 
     // Build a top-level message description.
     StringBuilder comment = new StringBuilder();
@@ -152,65 +195,85 @@ public class ValueSetGenerator {
     }
   }
 
-  private EnumDescriptorProto buildValueEnum(ValueSet valueSet) {
+  private Optional<EnumDescriptorProto> buildValueEnum(ValueSet valueSet) {
+    String url = valueSet.getUrl().getValue();
     List<ValueSet.Compose.ConceptSet> includes = valueSet.getCompose().getIncludeList();
     if (!valueSet.getCompose().getExcludeList().isEmpty()) {
-      throw new IllegalArgumentException("Excludes not yet implemented");
+      printNoEnumWarning(url, "Excludes is not yet implemented");
+      return Optional.empty();
     }
-    EnumDescriptorProto.Builder builder = EnumDescriptorProto.newBuilder().setName("Code");
+    EnumDescriptorProto.Builder builder = EnumDescriptorProto.newBuilder().setName("Value");
     builder.addValue(
         EnumValueDescriptorProto.newBuilder().setNumber(0).setName("INVALID_UNINITIALIZED"));
     int enumNumber = 1;
     Set<String> codes = new HashSet<>();
     for (ValueSet.Compose.ConceptSet conceptSet : includes) {
       if (!conceptSet.getValueSetList().isEmpty() || !conceptSet.getFilterList().isEmpty()) {
-        throw new IllegalArgumentException("Complex ConceptSets not yet implemented");
+        printNoEnumWarning(url, "Complex ConceptSets are not yet implemented");
+        return Optional.empty();
       }
-      String system = conceptSet.getSystem().getValue();
-      if (!codesByUrl.containsKey(system)) {
-        throw new IllegalArgumentException("Unrecognized system: " + system);
-      }
-      List<EnumValueDescriptorProto.Builder> enums = codesByUrl.get(system);
-      if (!conceptSet.getConceptList().isEmpty()) {
-        final Map<String, EnumValueDescriptorProto.Builder> valuesByCode =
-            codesByUrl.get(system).stream()
-                .collect(Collectors.toMap(c -> JsonFormat.getOriginalCode(c), c -> c));
-        enums =
-            conceptSet.getConceptList().stream()
-                .map(concept -> valuesByCode.get(concept.getCode().getValue()))
-                .collect(Collectors.toList());
-      }
+      List<EnumValueDescriptorProto.Builder> enums = getEnumsForConceptSet(conceptSet);
 
       for (EnumValueDescriptorProto.Builder valueBuilder : enums) {
         if (valueBuilder == null) {
-          throw new IllegalArgumentException("Unable to find codes for system: " + system);
+          printNoEnumWarning(
+              url, "Unable to find all codes for system: " + conceptSet.getSystem().getValue());
+          return Optional.empty();
         }
         if (!codes.add(valueBuilder.getName())) {
-          throw new IllegalArgumentException("Valueset contains duplicate code");
+          printNoEnumWarning(url, "Valueset contains duplicate code");
+          return Optional.empty();
         }
         builder.addValue(valueBuilder.setNumber(enumNumber++));
       }
     }
-    if (builder.getValueCount() == 0) {
-      throw new IllegalArgumentException("Invalid ValueSet: No codes found");
+    if (builder.getValueCount() == 1) {
+      // Note: 1 because we start by adding the INVALID_UNINITIALIZED code
+      printNoEnumWarning(url, "no codes found");
+      return Optional.empty();
     }
-    return builder.build();
+    return Optional.of(builder.build());
   }
 
-  private List<EnumValueDescriptorProto.Builder> buildEnumValues(List<ConceptDefinition> concepts) {
+  private static void printNoEnumWarning(String url, String warning) {
+    System.out.println("Warning: Not generating enum for " + url + " - " + warning);
+  }
+
+  private List<EnumValueDescriptorProto.Builder> getEnumsForConceptSet(
+      ValueSet.Compose.ConceptSet conceptSet) {
+    String system = conceptSet.getSystem().getValue();
+    boolean isKnownSystem = codesByUrl.containsKey(system);
+    if (isKnownSystem) {
+      if (conceptSet.getConceptList().isEmpty()) {
+        // There is no explicit concept list, so default to all codes from that system.
+        return codesByUrl.get(system);
+      }
+      // Only take the codes from that system that are explicitly listed.
+      final Map<String, EnumValueDescriptorProto.Builder> valuesByCode =
+          codesByUrl.get(system).stream()
+              .collect(Collectors.toMap(c -> JsonFormat.getOriginalCode(c), c -> c));
+      return conceptSet.getConceptList().stream()
+          .map(concept -> valuesByCode.get(concept.getCode().getValue()))
+          .collect(Collectors.toList());
+    } else {
+      return conceptSet.getConceptList().stream()
+          .map(concept -> buildEnumValue(concept.getCode()))
+          .collect(Collectors.toList());
+    }
+  }
+
+  private static List<EnumValueDescriptorProto.Builder> buildEnumValues(
+      List<ConceptDefinition> concepts) {
     List<EnumValueDescriptorProto.Builder> valueList = new ArrayList<>();
     for (ConceptDefinition concept : concepts) {
-      if (concept.getConceptList().isEmpty()) {
-        valueList.add(buildEnumValue(concept));
-      } else {
-        valueList.addAll(buildEnumValues(concept.getConceptList()));
-      }
+      valueList.add(buildEnumValue(concept.getCode()));
+      valueList.addAll(buildEnumValues(concept.getConceptList()));
     }
     return valueList;
   }
 
-  private EnumValueDescriptorProto.Builder buildEnumValue(ConceptDefinition concept) {
-    String originalCode = concept.getCode().getValue();
+  private static EnumValueDescriptorProto.Builder buildEnumValue(Code code) {
+    String originalCode = code.getValue();
     String enumCase = toEnumCase(originalCode);
     String fhirCase = JsonFormat.enumCodeToFhirCase(enumCase);
 
@@ -229,7 +292,9 @@ public class ValueSetGenerator {
           .put("<=", "LESS_THAN_OR_EQUAL_TO")
           .put(">=", "GREATER_THAN_OR_EQUAL_TO")
           .put(">", "GREATER_THAN")
+          .put("!=", "NOT_EQUAL_TO")
           .put("*", "STAR")
+          .put("%", "PERCENT")
           .put("NaN", "NOT_A_NUMBER")
           .put("…", "DOT_DOT_DOT")
           .put("ANS+", "ANS_PLUS")
@@ -237,7 +302,7 @@ public class ValueSetGenerator {
 
   private static final Pattern ACRONYM_PATTERN = Pattern.compile("([A-Z])([A-Z]+)(?![a-z])");
 
-  private String toEnumCase(String rawCode) {
+  private static String toEnumCase(String rawCode) {
     if (CODE_RENAMES.containsKey(rawCode)) {
       return CODE_RENAMES.get(rawCode);
     }
@@ -246,6 +311,12 @@ public class ValueSetGenerator {
             .replaceAll("[',]", "")
             .replace('\u00c2' /* Â */, 'A')
             .replaceAll("[^A-Za-z0-9]", "_");
+    if (sanitizedCode.startsWith("_")) {
+      sanitizedCode = sanitizedCode.substring(1);
+    }
+    if (sanitizedCode.endsWith("_")) {
+      sanitizedCode = sanitizedCode.substring(0, sanitizedCode.length() - 1);
+    }
     if (Character.isDigit(rawCode.charAt(0))) {
       return Ascii.toUpperCase("NUM_" + sanitizedCode);
     }
@@ -269,8 +340,45 @@ public class ValueSetGenerator {
         .replaceAll("__+", "_");
   }
 
+  // ValueSets that we hard-code to specific names, e.g., to avoid a colision.
+  private static final ImmutableMap<String, String> VALUE_SET_RENAMES =
+      ImmutableMap.of(
+          "http://hl7.org/fhir/ValueSet/medication-statement-status", "MedicationStatementStatus");
+
   public String getValueSetName(ValueSet valueSet) {
+    if (VALUE_SET_RENAMES.containsKey(valueSet.getUrl().getValue())) {
+      return VALUE_SET_RENAMES.get(valueSet.getUrl().getValue());
+    }
     String name = ProtoGenerator.getTypeNameFromId(valueSet.getName().getValue());
-    return name.replaceAll("[',]", "").replaceAll("[^A-Za-z0-9]", "_");
+    return name.replaceAll("[^A-Za-z0-9]", "") + "Code";
+  }
+
+  private Set<ValueSet> getValueSetsUsedInBundles(Set<Bundle> bundles) {
+    final Set<String> valueSetUrls = new HashSet<>();
+    for (Bundle bundle : bundles) {
+      for (Bundle.Entry entry : bundle.getEntryList()) {
+        if (entry.getResource().hasStructureDefinition()) {
+          entry.getResource().getStructureDefinition().getSnapshot().getElementList().stream()
+              .map(element -> getBindingValueSetUrl(element))
+              .filter(optionalUrl -> optionalUrl.isPresent())
+              .forEach(
+                  optionalUrl ->
+                      valueSetUrls.add(
+                          Iterables.get(Splitter.on('|').split(optionalUrl.get()), 0)));
+        }
+      }
+    }
+    return valueSetUrls.stream()
+        .map(url -> valueSetsByUrl.get(url))
+        .filter(vs -> vs != null)
+        .collect(Collectors.toSet());
+  }
+
+  private static Optional<String> getBindingValueSetUrl(ElementDefinition element) {
+    if (element.getBinding().getStrength().getValue() != BindingStrengthCode.Value.REQUIRED) {
+      return Optional.empty();
+    }
+    String url = CanonicalWrapper.getUri(element.getBinding().getValueSet());
+    return url.isEmpty() ? Optional.empty() : Optional.<String>of(url);
   }
 }

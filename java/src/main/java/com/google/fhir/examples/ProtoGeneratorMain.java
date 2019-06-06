@@ -183,9 +183,7 @@ class ProtoGeneratorMain {
     StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
     switch (fhirVersion) {
       case STU3:
-        return JsonFormat.getEarlyVersionStructureDefinitionParser()
-            .merge(json, structDefBuilder)
-            .build();
+        return JsonFormat.getEarlyVersionGeneratorParser().merge(json, structDefBuilder).build();
       case R4:
         return JsonFormat.getParser().merge(json, structDefBuilder).build();
       default:

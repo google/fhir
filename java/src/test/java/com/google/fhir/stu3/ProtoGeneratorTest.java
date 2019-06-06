@@ -190,7 +190,7 @@ public class ProtoGeneratorTest {
 
   @Before
   public void setUp() throws IOException {
-    jsonParser = JsonFormat.getEarlyVersionStructureDefinitionParser();
+    jsonParser = JsonFormat.getEarlyVersionGeneratorParser();
     textParser = TextFormat.getParser();
     runfiles = Runfiles.create();
     protoGenerator =

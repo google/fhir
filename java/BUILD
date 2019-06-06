@@ -151,6 +151,7 @@ java_library(
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
         "//proto/stu3:metadatatypes_java_proto",
+        "//proto/stu3:profile_config_java_proto",
         "//proto/stu3:resources_java_proto",
         "//proto/stu3:uscore_codes_java_proto",
         "//proto:annotations_java_proto",
@@ -537,7 +538,6 @@ java_library(
     name = "valueset_generator_lib",
     srcs = ["src/main/java/com/google/fhir/stu3/ValueSetGenerator.java"],
     deps = [
-        ":common",
         ":stu3",
         "//external:guava",
         "//proto/stu3:profile_config_java_proto",
@@ -555,10 +555,12 @@ java_binary(
     srcs = ["src/main/java/com/google/fhir/examples/ValueSetGeneratorMain.java"],
     main_class = "com.google.fhir.examples.ValueSetGeneratorMain",
     deps = [
+        ":common",
         ":stu3",
         ":valueset_generator_lib",
         "//external:guava",
         "//proto/stu3:profile_config_java_proto",
+        "//proto:annotations_java_proto",
         "//proto/r4:resources_java_proto",
         "@com_beust_jcommander//jar",
         "@com_google_protobuf//:protobuf_java",

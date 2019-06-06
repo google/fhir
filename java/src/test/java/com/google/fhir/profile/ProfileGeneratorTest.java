@@ -40,8 +40,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class ProfileGeneratorTest {
 
-  private final JsonFormat.Parser jsonParser =
-      JsonFormat.getEarlyVersionStructureDefinitionParser();
+  private final JsonFormat.Parser jsonParser = JsonFormat.getEarlyVersionGeneratorParser();
   private final JsonFormat.Printer jsonPrinter = JsonFormat.getPrinter();
 
   private ProfileGenerator generator;

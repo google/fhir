@@ -22,14 +22,20 @@ import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.r4.proto.Canonical;
+import com.google.fhir.r4.proto.CapabilityStatement;
+import com.google.fhir.r4.proto.CodeSystem;
+import com.google.fhir.r4.proto.CompartmentDefinition;
+import com.google.fhir.r4.proto.ConceptMap;
 import com.google.fhir.r4.proto.Element;
 import com.google.fhir.r4.proto.ElementDefinition;
 import com.google.fhir.r4.proto.ElementDefinition.ElementDefinitionBinding;
 import com.google.fhir.r4.proto.ExtensionContextTypeCode;
+import com.google.fhir.r4.proto.Identifier;
+import com.google.fhir.r4.proto.OperationDefinition;
+import com.google.fhir.r4.proto.ResourceTypeCode;
 import com.google.fhir.r4.proto.StructureDefinition;
+import com.google.fhir.r4.proto.ValueSet;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;
-import com.google.fhir.stu3.proto.Boolean;
-import com.google.fhir.stu3.proto.Extension;
 import com.google.fhir.stu3.proto.ReferenceId;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -56,8 +62,11 @@ public final class JsonFormat {
 
   private JsonFormat() {}
 
+  // TODO: Use r4 extension once generated.
   private static final PrimitiveHasNoValue PRIMITIVE_HAS_NO_VALUE =
-      PrimitiveHasNoValue.newBuilder().setValueBoolean(Boolean.newBuilder().setValue(true)).build();
+      PrimitiveHasNoValue.newBuilder()
+          .setValueBoolean(com.google.fhir.stu3.proto.Boolean.newBuilder().setValue(true))
+          .build();
 
   private static boolean isPrimitiveType(FieldDescriptor field) {
     return field.getType() == FieldDescriptor.Type.MESSAGE
@@ -299,14 +308,16 @@ public final class JsonFormat {
           com.google.fhir.r4.proto.ContainedResource.getDescriptor().getFullName(),
           containedResourcesPrinter);
       // Special-case extensions for analytics use.
+      // TODO: Add extensionPrinter for R4 (or else make generic)
       WellKnownTypePrinter extensionPrinter =
           new WellKnownTypePrinter() {
             @Override
             public void print(PrinterImpl printer, MessageOrBuilder message) throws IOException {
-              printer.printExtension((Extension) message);
+              printer.printExtension((com.google.fhir.stu3.proto.Extension) message);
             }
           };
-      printers.put(Extension.getDescriptor().getFullName(), extensionPrinter);
+      printers.put(
+          com.google.fhir.stu3.proto.Extension.getDescriptor().getFullName(), extensionPrinter);
 
       return printers;
     }
@@ -331,7 +342,7 @@ public final class JsonFormat {
     }
 
     /** Prints an extension field. */
-    private void printExtension(Extension extension) throws IOException {
+    private void printExtension(com.google.fhir.stu3.proto.Extension extension) throws IOException {
       if (forAnalytics) {
         generator.print("\"" + extension.getUrl().getValue() + "\"");
       } else {
@@ -493,6 +504,7 @@ public final class JsonFormat {
         }
       } else if (forAnalytics
           && ((Message) value).getDescriptorForType().equals(ReferenceId.getDescriptor())) {
+        // TODO: ForAnalytics for r4
         generator.print(
             "\"" + name + "\":" + blankOrSpace + "\"" + ((ReferenceId) value).getValue() + "\"");
       } else {
@@ -549,7 +561,9 @@ public final class JsonFormat {
    * (normalized) structure definitions. This is *NOT* an all-purpose STU3 -> R4 converter, and
    * should *NOT* be used for any data other than structure definitions.
    */
-  public static Parser getEarlyVersionStructureDefinitionParser() {
+  // TODO: Once packages have been rearranged, make this package-private, since
+  // it should only be used by generators.
+  public static Parser getEarlyVersionGeneratorParser() {
     return new Parser(true, ZoneId.systemDefault());
   }
 
@@ -560,12 +574,12 @@ public final class JsonFormat {
    * control the parser behavior.
    */
   public static final class Parser {
-    private final boolean convertEarlyVersionStructDefinitions;
+    private final boolean convertEarlyVersions;
     private final JsonParser jsonParser;
     private final ZoneId defaultTimeZone;
 
-    private Parser(boolean convertEarlyVersionStructDefinitions, ZoneId defaultTimeZone) {
-      this.convertEarlyVersionStructDefinitions = convertEarlyVersionStructDefinitions;
+    private Parser(boolean convertEarlyVersions, ZoneId defaultTimeZone) {
+      this.convertEarlyVersions = convertEarlyVersions;
       this.jsonParser = new JsonParser();
       this.defaultTimeZone = defaultTimeZone;
     }
@@ -668,8 +682,7 @@ public final class JsonFormat {
 
       for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
         String fieldName = entry.getKey();
-        if (convertEarlyVersionStructDefinitions
-            && performSpecializedConversion(json, fieldName, builder)) {
+        if (convertEarlyVersions && performSpecializedConversion(json, fieldName, builder)) {
           continue;
         }
         if (nameToDescriptorMap.containsKey(fieldName)) {
@@ -744,7 +757,7 @@ public final class JsonFormat {
     }
 
     private void mergeField(FieldDescriptor field, JsonElement json, Message.Builder builder) {
-      if (convertEarlyVersionStructDefinitions && json == JsonNull.INSTANCE) {
+      if (convertEarlyVersions && json == JsonNull.INSTANCE) {
         // Sometimes when converting structure definition version, we need to null out a field.
         // Skip over any field that has been nulled out.
         return;
@@ -892,82 +905,165 @@ public final class JsonFormat {
         return subBuilder.build();
       }
     }
-  }
 
-  private static boolean isSpecialCase(
-      String fieldName, Message.Builder builder, String testFieldName, Descriptor testDescriptor) {
-    return fieldName.equals(testFieldName)
-        && AnnotationUtils.sameFhirType(builder.getDescriptorForType(), testDescriptor);
-  }
+    private static class EarlyVersionFieldConversionTester {
+      private final JsonObject json;
+      private final String fieldName;
+      private final Descriptor type;
 
-  private static boolean performSpecializedConversion(
-      JsonObject json, String fieldName, Message.Builder builder) {
-    if (isSpecialCase(
-        fieldName, builder, "valueSetReference", ElementDefinitionBinding.getDescriptor())) {
-      ((ElementDefinitionBinding.Builder) builder)
-          .getValueSetBuilder()
-          .setValue(
-              json.getAsJsonObject("valueSetReference")
-                  .getAsJsonPrimitive("reference")
-                  .getAsString());
-      return true;
-    }
-    if (isSpecialCase(
-        fieldName, builder, "valueSetUri", ElementDefinitionBinding.getDescriptor())) {
-      ((ElementDefinitionBinding.Builder) builder)
-          .getValueSetBuilder()
-          .setValue(json.getAsJsonPrimitive("valueSetUri").getAsString());
-      return true;
-    }
-    if (isSpecialCase(fieldName, builder, "contextType", StructureDefinition.getDescriptor())) {
-      String contextTypeString = json.getAsJsonPrimitive("contextType").getAsString();
-      ExtensionContextTypeCode contextType;
-      if (contextTypeString.equals("resource") || contextTypeString.equals("datatype")) {
-        contextType =
-            ExtensionContextTypeCode.newBuilder()
-                .setValue(ExtensionContextTypeCode.Value.ELEMENT)
-                .build();
-      } else if (contextTypeString.equals("extension")) {
-        contextType =
-            ExtensionContextTypeCode.newBuilder()
-                .setValue(ExtensionContextTypeCode.Value.EXTENSION)
-                .build();
-      } else {
-        throw new IllegalArgumentException("Unrecognized Context type: " + contextTypeString);
+      EarlyVersionFieldConversionTester(JsonObject json, String fieldName, Descriptor type) {
+        this.json = json;
+        this.fieldName = fieldName;
+        this.type = type;
       }
-      if (json.has("context")) {
-        for (JsonElement contextElement : json.getAsJsonArray("context")) {
-          StructureDefinition.Context.Builder contextBuilder =
-              StructureDefinition.Context.newBuilder();
-          contextBuilder
-              .setType(contextType)
-              .getExpressionBuilder()
-              .setValue(contextElement.getAsJsonPrimitive().getAsString());
-          ((StructureDefinition.Builder) builder).addContext(contextBuilder);
+
+      boolean isSpecialCase(String testFieldName, Descriptor testDescriptor) {
+        return fieldName.equals(testFieldName)
+            && testDescriptor.getFullName().equals(type.getFullName());
+      }
+
+      boolean fieldIsPrimitive() {
+        return json.get(fieldName).isJsonPrimitive();
+      }
+
+      String getAsString() {
+        return json.getAsJsonPrimitive(fieldName).getAsString();
+      }
+
+      Canonical referenceToCanonical() {
+        return Canonical.newBuilder()
+            .setValue(json.getAsJsonObject(fieldName).getAsJsonPrimitive("reference").getAsString())
+            .build();
+      }
+    }
+
+    // TODO: pull this logic into a separate file.
+    private boolean performSpecializedConversion(
+        JsonObject json, String fieldName, Message.Builder builder) {
+      EarlyVersionFieldConversionTester tester =
+          new EarlyVersionFieldConversionTester(json, fieldName, builder.getDescriptorForType());
+      if (tester.isSpecialCase("valueSetReference", ElementDefinitionBinding.getDescriptor())) {
+        ((ElementDefinitionBinding.Builder) builder).setValueSet(tester.referenceToCanonical());
+        return true;
+      }
+      if (tester.isSpecialCase("valueSetUri", ElementDefinitionBinding.getDescriptor())) {
+        ((ElementDefinitionBinding.Builder) builder)
+            .getValueSetBuilder()
+            .setValue(tester.getAsString());
+        return true;
+      }
+      if (tester.isSpecialCase("contextType", StructureDefinition.getDescriptor())) {
+        String contextTypeString = json.getAsJsonPrimitive("contextType").getAsString();
+        ExtensionContextTypeCode contextType;
+        if (contextTypeString.equals("resource") || contextTypeString.equals("datatype")) {
+          contextType =
+              ExtensionContextTypeCode.newBuilder()
+                  .setValue(ExtensionContextTypeCode.Value.ELEMENT)
+                  .build();
+        } else if (contextTypeString.equals("extension")) {
+          contextType =
+              ExtensionContextTypeCode.newBuilder()
+                  .setValue(ExtensionContextTypeCode.Value.EXTENSION)
+                  .build();
+        } else {
+          throw new IllegalArgumentException("Unrecognized Context type: " + contextTypeString);
         }
-        // Null out context array to prevent trying to merge into context field on proto.
-        json.add("context", JsonNull.INSTANCE);
+        if (json.has("context")) {
+          for (JsonElement contextElement : json.getAsJsonArray("context")) {
+            StructureDefinition.Context.Builder contextBuilder =
+                StructureDefinition.Context.newBuilder();
+            contextBuilder
+                .setType(contextType)
+                .getExpressionBuilder()
+                .setValue(contextElement.getAsJsonPrimitive().getAsString());
+            ((StructureDefinition.Builder) builder).addContext(contextBuilder);
+          }
+          // Null out context array to prevent trying to merge into context field on proto.
+          json.add("context", JsonNull.INSTANCE);
+        }
+        return true;
       }
-      return true;
+      if (tester.isSpecialCase("targetProfile", ElementDefinition.TypeRef.getDescriptor())
+          && tester.fieldIsPrimitive()) {
+        ((ElementDefinition.TypeRef.Builder) builder)
+            .addTargetProfile(Canonical.newBuilder().setValue(tester.getAsString()));
+        return true;
+      }
+      if (tester.isSpecialCase("profile", ElementDefinition.TypeRef.getDescriptor())
+          && tester.fieldIsPrimitive()) {
+        ((ElementDefinition.TypeRef.Builder) builder)
+            .addProfile(
+                Canonical.newBuilder().setValue(json.getAsJsonPrimitive("profile").getAsString()));
+        return true;
+      }
+      if (tester.isSpecialCase("identifier", CodeSystem.getDescriptor())
+          && json.get("identifier").isJsonObject()) {
+        Identifier.Builder identifierBuilder = Identifier.newBuilder();
+        mergeMessage(json.get("identifier").getAsJsonObject(), identifierBuilder);
+        ((CodeSystem.Builder) builder).addIdentifier(identifierBuilder);
+        return true;
+      }
+      if (tester.isSpecialCase("extensible", ValueSet.getDescriptor())) {
+        // Field was dropped in R4.  We don't do anything with it anyway, so ignore.
+        return true;
+      }
+      if (tester.isSpecialCase("sourceReference", ConceptMap.getDescriptor())) {
+        ((ConceptMap.Builder) builder)
+            .getSourceBuilder()
+            .setCanonical(tester.referenceToCanonical());
+        return true;
+      }
+      if (tester.isSpecialCase("targetReference", ConceptMap.getDescriptor())) {
+        ((ConceptMap.Builder) builder)
+            .getTargetBuilder()
+            .setCanonical(tester.referenceToCanonical());
+        return true;
+      }
+      if (tester.isSpecialCase("acceptUnknown", CapabilityStatement.getDescriptor())) {
+        // Field was dropped in R4.  We don't do anything with it anyway, so ignore.
+        return true;
+      }
+      if (tester.isSpecialCase("type", CapabilityStatement.Rest.Resource.getDescriptor())) {
+        // The code BodySite was renamed BodyStructure in R4.
+        if (tester.getAsString().equals("BodySite")) {
+          ((CapabilityStatement.Rest.Resource.Builder) builder)
+              .getTypeBuilder()
+              .setValue(ResourceTypeCode.Value.BODY_STRUCTURE);
+        }
+        return true;
+      }
+      if (tester.isSpecialCase("code", CompartmentDefinition.Resource.getDescriptor())) {
+        // The code BodySite was renamed BodyStructure in R4.
+        if (tester.getAsString().equals("BodySite")) {
+          ((CompartmentDefinition.Resource.Builder) builder)
+              .getCodeBuilder()
+              .setValue(ResourceTypeCode.Value.BODY_STRUCTURE);
+        }
+        return true;
+      }
+      if (tester.isSpecialCase("resource", OperationDefinition.getDescriptor())) {
+        // Some OperationDefinition codes have been changed in R4, but we don't use them, so ignore.
+        return true;
+      }
+      if (tester.isSpecialCase("profile", OperationDefinition.Parameter.getDescriptor())) {
+        ((OperationDefinition.Parameter.Builder) builder)
+            .addTargetProfile(tester.referenceToCanonical());
+        return true;
+      }
+      if (tester.isSpecialCase(
+          "valueSetReference", OperationDefinition.Parameter.Binding.getDescriptor())) {
+        ((OperationDefinition.Parameter.Binding.Builder) builder)
+            .setValueSet(tester.referenceToCanonical());
+        return true;
+      }
+      if (tester.isSpecialCase("reference", Canonical.getDescriptor())) {
+        ((Canonical.Builder) builder).setValue(tester.getAsString());
+        return true;
+      }
+
+      return false;
     }
-    if (isSpecialCase(
-            fieldName, builder, "targetProfile", ElementDefinition.TypeRef.getDescriptor())
-        && json.get("targetProfile").isJsonPrimitive()) {
-      ((ElementDefinition.TypeRef.Builder) builder)
-          .addTargetProfile(
-              Canonical.newBuilder()
-                  .setValue(json.getAsJsonPrimitive("targetProfile").getAsString()));
-      return true;
-    }
-    if (isSpecialCase(fieldName, builder, "profile", ElementDefinition.TypeRef.getDescriptor())
-        && json.get("profile").isJsonPrimitive()) {
-      ((ElementDefinition.TypeRef.Builder) builder)
-          .addProfile(
-              Canonical.newBuilder().setValue(json.getAsJsonPrimitive("profile").getAsString()));
-      return true;
-    }
-    return false;
-  }
+  } // End JsonFormat class
 
   public static PrimitiveWrapper primitiveWrapperOf(
       MessageOrBuilder message, ZoneId defaultTimeZone) {

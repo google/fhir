@@ -56,7 +56,7 @@ public final class FileUtils {
       String zip, FhirVersion fhirVersion) throws IOException {
     JsonFormat.Parser parser =
         fhirVersion == FhirVersion.DSTU2 || fhirVersion == fhirVersion.STU3
-            ? JsonFormat.getEarlyVersionStructureDefinitionParser()
+            ? JsonFormat.getEarlyVersionGeneratorParser()
             : JsonFormat.getParser();
     List<StructureDefinition> structDefs = new ArrayList<>();
     ZipFile zipFile = new ZipFile(new File(zip));
