@@ -1,0 +1,72 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "uscore-mo2",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: uscore-mo2</p><p><b>meta</b>: </p><p><b>contained</b>: </p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>medication</b>: Nizatidine 15 MG/ML Oral Solution [Axid]. Generated Summary: unknown resource contained</p><p><b>subject</b>: <a href=\"Patient-example.html\">Amy Shaw. Generated Summary: id: example; Medical Record Number = 1032702 (USUAL); active; Amy V. Shaw ; ph: 555-555-5555(HOME), amy.shaw@example.com; gender: female; birthDate: 20/02/2007</a></p><p><b>authoredOn</b>: 05/04/2008</p><h3>Requesters</h3><table class=\"grid\"><tr><td>-</td><td><b>Agent</b></td></tr><tr><td>*</td><td>Ronald Bone, MD</td></tr></table><p><b>dosageInstruction</b>: </p><h3>DispenseRequests</h3><table class=\"grid\"><tr><td>-</td><td><b>NumberOfRepeatsAllowed</b></td><td><b>Quantity</b></td><td><b>ExpectedSupplyDuration</b></td></tr><tr><td>*</td><td>1</td><td>480 mL<span style=\"background: LightGoldenRodYellow\"> (Details: UCUM code mL = 'mL')</span></td><td>30 days<span style=\"background: LightGoldenRodYellow\"> (Details: UCUM code d = 'd')</span></td></tr></table></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Medication",
+      "id": "med2",
+      "code": {
+        "coding": [
+          {
+            "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+            "code": "582620",
+            "display": "Nizatidine 15 MG/ML Oral Solution [Axid]"
+          }
+        ],
+        "text": "Nizatidine 15 MG/ML Oral Solution [Axid]"
+      }
+    }
+  ],
+  "status": "active",
+  "intent": "order",
+  "medicationReference": {
+    "reference": "#med2",
+    "display": "Nizatidine 15 MG/ML Oral Solution [Axid]"
+  },
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Amy Shaw"
+  },
+  "authoredOn": "2008-04-05",
+  "requester": {
+    "agent": {
+      "display": "Ronald Bone, MD"
+    }
+  },
+  "dosageInstruction": [
+    {
+      "text": "10 mL bid",
+      "timing": {
+        "repeat": {
+          "boundsPeriod": {
+            "start": "2008-04-05"
+          }
+        }
+      }
+    }
+  ],
+  "dispenseRequest": {
+    "numberOfRepeatsAllowed": 1,
+    "quantity": {
+      "value": 480,
+      "unit": "mL",
+      "system": "http://unitsofmeasure.org",
+      "code": "mL"
+    },
+    "expectedSupplyDuration": {
+      "value": 30,
+      "unit": "days",
+      "system": "http://unitsofmeasure.org",
+      "code": "d"
+    }
+  }
+}

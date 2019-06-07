@@ -1,0 +1,60 @@
+{
+  "resourceType": "ValueSet",
+  "id": "us-core-encounter-type",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<h2>US Core Encounter Type</h2>\n\t\t\t<p>The type of encounter: a specific code indicating type of service provided, from\n\t\t\t\tSNOMED CT and CPT</p>\n\t\t\t<p>\n\t\t\t\t<b>Copyright Statement:</b> This value set includes content from SNOMED CT, which is\n\t\t\t\tcopyright © 2002+ International Health Terminology Standards Development\n\t\t\t\tOrganisation (IHTSDO), and distributed by agreement between IHTSDO and HL7.\n\t\t\t\tImplementer use of SNOMED CT is not covered by this agreement. CPT copyright 2014\n\t\t\t\tAmerican Medical Association. All rights reserved. </p>\n\t\t\t<p>This value set includes codes from SNOMED CT decending from 308335008 patient\n\t\t\t\tencounter procedure (procedure) and codes from the Current Procedure and Terminology\n\t\t\t\tdesignated for Evaluation and Management (99200 – 99607) (subscription to AMA\n\t\t\t\tRequired). Code systems included:</p>\n\t\t\t<ul>\n\t\t\t\t<li>http://snomed.info/sct</li>\n\t\t\t\t<li>http://www.ama-assn.org/go/cpt</li>\n\t\t\t</ul>\n\t\t</div>"
+  },
+  "url": "http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type",
+  "identifier": [
+    {
+      "system": "urn:ietf:rfc:3986",
+      "value": "urn:oid:2.16.840.1.113883.3.88.12.80.32"
+    }
+  ],
+  "version": "2.0.0",
+  "name": "US Core Encounter Type",
+  "status": "draft",
+  "date": "2017-12-10T00:00:00+11:00",
+  "publisher": "HL7 US Realm Steering Committee",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "other",
+          "value": "http://hl7.org/fhir"
+        }
+      ]
+    }
+  ],
+  "description": "The type of encounter: a specific code indicating type of service provided, from SNOMED CT and CPT",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "US",
+          "display": "United States of America"
+        }
+      ]
+    }
+  ],
+  "copyright": "This value set includes content from SNOMED CT, which is copyright © 2002+ International Health Terminology Standards Development Organisation (IHTSDO), and distributed by agreement between IHTSDO and HL7. Implementer use of SNOMED CT is not covered by this agreement. CPT copyright 2014 American Medical Association. All rights reserved.",
+  "compose": {
+    "include": [
+      {
+        "system": "http://snomed.info/sct",
+        "filter": [
+          {
+            "property": "concept",
+            "op": "is-a",
+            "value": "308335008"
+          }
+        ]
+      },
+      {
+        "system": "http://www.ama-assn.org/go/cpt"
+      }
+    ]
+  }
+}

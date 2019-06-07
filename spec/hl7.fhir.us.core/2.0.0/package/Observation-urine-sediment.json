@@ -1,0 +1,44 @@
+{
+  "resourceType": "Observation",
+  "id": "urine-sediment",
+  "meta": {
+    "versionId": "206577",
+    "lastUpdated": "2016-04-18T04:07:12.383+00:00",
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observationresults"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: urine-sediment</p><p><b>meta</b>: </p><p><b>status</b>: final</p><p><b>category</b>: Laboratory <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/observation-category code 'laboratory' = 'Laboratory', given as 'Laboratory'})</span></p><p><b>code</b>: COMMENT <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '11279-7' = 'Urine sediment comments by Light microscopy Narrative', given as 'Urine sediment comments by Light microscopy Narrative'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Amy Shaw. Generated Summary: id: example; Medical Record Number = 1032702 (USUAL); active; Amy V. Shaw ; ph: 555-555-5555(HOME), amy.shaw@example.com; gender: female; birthDate: 20/02/2007</a></p><p><b>effective</b>: 05/07/2005</p><p><b>value</b>: Recommend Urine Culture</p></div>"
+  },
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ],
+      "text": "Laboratory"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "11279-7",
+        "display": "Urine sediment comments by Light microscopy Narrative"
+      }
+    ],
+    "text": "COMMENT"
+  },
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Amy Shaw"
+  },
+  "effectiveDateTime": "2005-07-05",
+  "valueString": "Recommend Urine Culture"
+}

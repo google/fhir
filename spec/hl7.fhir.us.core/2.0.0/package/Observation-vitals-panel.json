@@ -1,0 +1,67 @@
+{
+  "resourceType": "Observation",
+  "id": "vitals-panel",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: vitals-panel</p><p><b>meta</b>: </p><p><b>status</b>: final</p><p><b>category</b>: Vital Signs <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/observation-category code 'vital-signs' = 'Vital Signs', given as 'Vital Signs'})</span></p><p><b>code</b>: Vital signs panel <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '85353-1' = 'Vital signs, weight, height, head circumference, oxygen saturation and BMI panel', given as 'Vital signs, weight, height, head circumference, oxygen saturation and BMI panel'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Amy Shaw. Generated Summary: id: example; Medical Record Number = 1032702 (USUAL); active; Amy V. Shaw ; ph: 555-555-5555(HOME), amy.shaw@example.com; gender: female; birthDate: 20/02/2007</a></p><p><b>context</b>: GP Visit</p><p><b>effective</b>: 02/07/1999</p><blockquote><p><b>related</b></p><p><b>type</b>: has-member</p><p><b>target</b>: <a href=\"Observation-respiratory-rate.html\">Respiratory rate. Generated Summary: id: respiratory-rate; <span title=\"Codes: {http://hl7.org/fhir/observation-category vital-signs}\">Vital Signs</span>; <span title=\"Codes: {http://loinc.org 9279-1}\">respiratory_rate</span>; effective: 02/07/1999; 26.0 breaths per minute</a></p></blockquote><blockquote><p><b>related</b></p><p><b>type</b>: has-member</p><p><b>target</b>: <a href=\"Observation-heart-rate.html\">Heart rate. Generated Summary: id: heart-rate; <span title=\"Codes: {http://hl7.org/fhir/observation-category vital-signs}\">Vital Signs</span>; <span title=\"Codes: {http://loinc.org 8867-4}\">heart_rate</span>; effective: 02/07/1999; 44.0 {beats}/min</a></p></blockquote><blockquote><p><b>related</b></p><p><b>type</b>: has-member</p><p><b>target</b>: <a href=\"Observation-blood-pressure.html\">Blood Pressure. Generated Summary: id: blood-pressure; <span title=\"Codes: {http://hl7.org/fhir/observation-category vital-signs}\">Vital Signs</span>; <span title=\"Codes: {http://loinc.org 85354-9}\">Blood pressure systolic and diastolic</span>; effective: 02/07/1999</a></p></blockquote></div>"
+  },
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/observation-category",
+          "code": "vital-signs",
+          "display": "Vital Signs"
+        }
+      ],
+      "text": "Vital Signs"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "85353-1",
+        "display": "Vital signs, weight, height, head circumference, oxygen saturation and BMI panel"
+      }
+    ],
+    "text": "Vital signs panel"
+  },
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Amy Shaw"
+  },
+  "context": {
+    "display": "GP Visit"
+  },
+  "effectiveDateTime": "1999-07-02",
+  "related": [
+    {
+      "type": "has-member",
+      "target": {
+        "reference": "Observation/respiratory-rate",
+        "display": "Respiratory rate"
+      }
+    },
+    {
+      "type": "has-member",
+      "target": {
+        "reference": "Observation/heart-rate",
+        "display": "Heart rate"
+      }
+    },
+    {
+      "type": "has-member",
+      "target": {
+        "reference": "Observation/blood-pressure",
+        "display": "Blood Pressure"
+      }
+    }
+  ]
+}

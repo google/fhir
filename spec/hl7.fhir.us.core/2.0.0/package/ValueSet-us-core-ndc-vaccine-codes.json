@@ -1,0 +1,34 @@
+{
+  "resourceType": "ValueSet",
+  "id": "us-core-ndc-vaccine-codes",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><h2>Vaccine National Drug Code (NDC)</h2><div><p>This value set includes all the Vaccine National Drug Codes (NDC).  This source of this data is provided by the <a href=\"https://www2a.cdc.gov/vaccines/iis/iisstandards/ndc_crosswalk.asp\">CDC</a>. A crosswalk between NDC and CVX is available in the <a href=\"https://www2a.cdc.gov/vaccines/iis/iisstandards/vaccines.asp?rpt=ndc\">CDC NDC Lookup Crosswalk</a></p>\n</div><p>This value set includes codes from the following code systems:</p><ul><li>Include all codes defined in <code>http://hl7.org/fhir/sid/ndc</code></li></ul></div>"
+  },
+  "url": "http://hl7.org/fhir/us/core/ValueSet/us-core-ndc-vaccine-codes",
+  "version": "2.0.0",
+  "name": "Vaccine National Drug Code (NDC)",
+  "status": "draft",
+  "date": "2016-08-10T00:00:00+10:00",
+  "publisher": "HL7 US Realm Steering Committee",
+  "description": "This value set includes all the Vaccine National Drug Codes (NDC).  This source of this data is provided by the [CDC](https://www2a.cdc.gov/vaccines/iis/iisstandards/ndc_crosswalk.asp). A crosswalk between NDC and CVX is available in the [CDC NDC Lookup Crosswalk](https://www2a.cdc.gov/vaccines/iis/iisstandards/vaccines.asp?rpt=ndc)",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "US",
+          "display": "United States of America"
+        }
+      ]
+    }
+  ],
+  "purpose": "Codes that are used as translations for CVX code for implementation of the Argonaut Immunization IG and MU2015 certification.",
+  "compose": {
+    "include": [
+      {
+        "system": "http://hl7.org/fhir/sid/ndc"
+      }
+    ]
+  }
+}

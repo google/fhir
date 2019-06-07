@@ -1,0 +1,34 @@
+{
+  "resourceType": "Procedure",
+  "id": "rehab",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-procedure"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: rehab</p><p><b>meta</b>: </p><p><b>status</b>: completed</p><p><b>code</b>: Alcohol rehabilitation <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '35637008' = 'Alcohol rehabilitation (regime/therapy)', given as 'Alcohol rehabilitation'}; {http://www.icd10data.com/icd10pcs code 'HZ30ZZZ' = 'HZ30ZZZ', given as 'Individual Counseling for Substance Abuse Treatment, Cognitive'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Amy Shaw. Generated Summary: id: example; Medical Record Number = 1032702 (USUAL); active; Amy V. Shaw ; ph: 555-555-5555(HOME), amy.shaw@example.com; gender: female; birthDate: 20/02/2007</a></p><p><b>performed</b>: 23/05/2002</p></div>"
+  },
+  "status": "completed",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "35637008",
+        "display": "Alcohol rehabilitation"
+      },
+      {
+        "system": "http://www.icd10data.com/icd10pcs",
+        "code": "HZ30ZZZ",
+        "display": "Individual Counseling for Substance Abuse Treatment, Cognitive"
+      }
+    ],
+    "text": "Alcohol rehabilitation"
+  },
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Amy Shaw"
+  },
+  "performedDateTime": "2002-05-23"
+}

@@ -1,0 +1,45 @@
+{
+  "resourceType": "Practitioner",
+  "id": "practitioner-1",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: practitioner-1</p><p><b>meta</b>: </p><p><b>identifier</b>: 9941339108, 25456</p><p><b>name</b>: Ronald Bone </p><p><b>address</b>: 1003 Healthcare Drive Amherst MA 01002 (HOME)</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://hl7.org.fhir/sid/us-npi",
+      "value": "9941339108"
+    },
+    {
+      "system": "http://www.acme.org/practitioners",
+      "value": "25456"
+    }
+  ],
+  "name": [
+    {
+      "family": "Bone",
+      "given": [
+        "Ronald"
+      ],
+      "prefix": [
+        "Dr"
+      ]
+    }
+  ],
+  "address": [
+    {
+      "use": "home",
+      "line": [
+        "1003 Healthcare Drive"
+      ],
+      "city": "Amherst",
+      "state": "MA",
+      "postalCode": "01002"
+    }
+  ]
+}

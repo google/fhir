@@ -1,0 +1,949 @@
+{
+  "resourceType": "CapabilityStatement",
+  "id": "us-core-client",
+  "text": {
+    "status": "additional",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<ul>\n\t\t\t\t<li>FHIR Version: 3.0.1</li>\n\t\t\t\t<li>Supported formats: xml, json</li>\n\t\t\t\t<li>Published: 2017-12-22</li>\n\t\t\t\t<li>Published by: Health Level Seven International US Realm Steering Committee</li>\n\t\t\t</ul>\n\t\t\t<p>The Section describes the expected capabilities of the  US Core Client which is responsible for creating and initiating the queries for information about an individual patient. The complete list of FHIR profiles, RESTful operations, and search parameters supported by US Core Servers are defined in the <a href=\"http://hl7.org/fhir/us/core/CapabilityStatement/server\">Conformance requirements for the US Core Server section</a>. US Core Clients have the option of choosing from this list to access necessary data based on their local use cases and other contextual requirements.</p>\n\t\t\t<h4 id=\"behavior-1\">Behavior</h4>\n\t\t\t<p>Description:</p>\n\t\t\t<p>The US Core Client <strong>SHOULD</strong>:</p>\n\t\t\t<ul>\n\t\t\t\t<li>Support fetching and querying of one or more US Core profile(s), using the supported RESTful interactions and search parameters declared in the US Core Server CapabilityStatement.</li>\n\t\t\t</ul>\n\t\t\t<p>security:</p>\n\t\t\t<p>The US Core Client <strong>SHALL</strong>:</p>\n\t\t\t<ul>\n\t\t\t\t<li>implement the <a href=\"security.html\">security requirements</a> documented in the US Core IG.</li>\n\t\t\t</ul>\n\t\t\t<h4 id=\"resource--details-1\">Resource  Details:</h4>\n\t\t\t<p>\n\t\t\t\t<strong>Contents:</strong>\n\t\t\t</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#patient-1\">Patient</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#allergyintolerance-1\">AllergyIntolerance</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#careplan-1\">CarePlan</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#careteam-1\">CareTeam</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#condition-1\">Condition</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#device-1\">Device</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#diagnosticreport-1\">DiagnosticReport</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#documentreference-1\">DocumentReference</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#encounter-1\">Encounter</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#goal-1\">Goal</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#immunization-1\">Immunization</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#location-1\">Location</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#medication-1\">Medication</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#medicationstatement-1\">MedicationStatement</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#medicationrequest-1\">MedicationRequest</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#observation-1\">Observation</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#organization-1\">Organization</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#practitioner-1\">Practitioner</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#practitionerrole-1\">PractitionerRole</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href=\"#procedure-1\">Procedure</a>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"patient-1\" class=\"no_toc\">Patient</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-patient.html\">US Core Patient Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ul>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching a patient using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Patient/[id]</code>.</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching a patient by identifier using</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Patient?identifier=[system]|[code]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t\t<ol>\n\t\t\t\t<li>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching a patient by supporting at a minimum the following search parameters when at least 2 are present. To limit overly broad search results, a client search with gender should include family and given name search parameters.:\n    <ul>\n\t\t\t\t\t\t<li>name</li>\n\t\t\t\t\t\t<li>gender</li>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<p>birthdate</p>\n\t\t\t\t\t\t\t<ul>\n\t\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t\t<p>for example:</p>\n\t\t\t\t\t\t\t\t\t<p>\n\t\t\t\t\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Patient?family=[name]&amp;?given=[name]&amp;gender=[gender]</code>\n\t\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"allergyintolerance-1\" class=\"no_toc\">AllergyIntolerance</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-allergyintolerance.html\">US Core AllergyIntolerance Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all patient’s allergies using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/AllergyIntolerance?patient=[id]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"careplan-1\" class=\"no_toc\">CarePlan</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-careplan.html\">US Core CarePlan Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s Assessment and Plan of Treatment information using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/CarePlan?patient=[id]&amp;category=assess-plan</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching a patient’s Assessment and Plan of Treatment information over a specified time period using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/CarePlan?patient=[id]&amp;category=assess-plan&amp;date=[date]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s active Assessment and Plan of Treatment information using</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/CarePlan?patient=[id]&amp;category=assess-plan&amp;status=active</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching a patient’s active Assessment and Plan of Treatment information over a specified time period using</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/CarePlan?patient=[id]&amp;category=assess-plan&amp;status=active&amp;date=[date]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"careteam-1\" class=\"no_toc\">CareTeam</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-careteam.html\">US Core CareTeam Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching  a patient’s current care team members using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/CareTeam?patient=[id]&amp;status=active</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"condition-1\" class=\"no_toc\">Condition</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-condition.html\">US Core Condition Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of fetching all problems and health concerns for a patient, including current as well as historical problems and health concerns using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Condition?patient=[id]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s <em>active</em> problems and health concerns using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Condition?patient=[id]&amp;clinicalstatus=active,recurrance,remission</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s problems <em>or</em> all of patient’s health concerns using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Condition?patient=[id]&amp;category=[problem|health-concern]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"device-1\" class=\"no_toc\">Device</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-device.html\">US Core Device Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all Unique device identifier(s)(UDI) for a patient’s implanted device(s):</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Device?patient=[id]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"diagnosticreport-1\" class=\"no_toc\">DiagnosticReport</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-diagnosticreport.html\">US Core DiagnosticReport Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s laboratory diagnostic reports queried by category using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/DiagnosticReport?patient=[id]&amp;category=LAB</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s laboratory diagnostic reports queried by category code and date range using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/DiagnosticReport?patient=[id]&amp;category=LAB&amp;date=[date]{&amp;date=[date]}</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s laboratory diagnostic reports queried by category and code using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/DiagnosticReport?patient=[id]&amp;category=LAB&amp;code=[LOINC]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s laboratory diagnostic reports queried by category and one or more codes and date range using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/DiagnosticReport?patient=[id]&amp;category=LAB&amp;code=[LOINC1{,LOINC2,LOINC3,…}]&amp;date=[date]{&amp;date=[date]}</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"documentreference-1\" class=\"no_toc\">DocumentReference</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-documentreference.html\">US Core DocumentReference Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s DocumentReferences using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/DocumentReference?patient=[id]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server to execute the <a href=\"OperationDefinition-docref.html\">$docref</a> operation:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/DocumentReference/$docref?patient=[id]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s DocumentReferences for a given time period and document type:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/DocumentReference?patient=[id]&amp;type=[type]&amp;period=[date]{&amp;date=[date]}</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"encounter-1\" class=\"no_toc\">Encounter</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-encounter.html\">US Core Encounter Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s encounters using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Encounter?patient=[id]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of all of a patient’s encounters over a specified time period using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Encounter?patient=[id]&amp;date=[date]{&amp;date=[date]}</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"goal-1\" class=\"no_toc\">Goal</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-goal.html\">US Core Goal Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s goals using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Goal?patient=[id]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of all of a patient’s goals over a specified time period using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Goal?patient=[id]&amp;date=[date]{&amp;date=[date]}</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"immunization-1\" class=\"no_toc\">Immunization</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-immunization.html\">US Core Immunization Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all immunizations for a patient using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Immunization?patient=[id]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"location-1\" class=\"no_toc\">Location</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-location.html\">US Core Location Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching a location by name using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Location?name=[string]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching a location by address using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Location?address=[string]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"medication-1\" class=\"no_toc\">Medication</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-medication.html\">US Core Medication Profile</a>\n\t\t\t</p>\n\t\t\t<p>The MedicationStatement and MedicationRequest resources can represent a medication, using an external reference to a Medication resource. If an external Medication Resource is used in a MedicationStatement or a MedicationRequest, then the READ and SEARCH Criteria SHOULD be supported.</p>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"medicationstatement-1\" class=\"no_toc\">MedicationStatement</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-medicationstatement.html\">US Core MedicationStatement Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<p>The MedicationStatement resources can represent a medication using either a code or refer to the Medication resource.  When referencing a Medication resource, the resource may be <a href=\"http://hl7.org/fhir/STU3/references.html#contained\">contained</a> or an external resource. IF, an external reference to Medication is used, the server <strong>SHALL</strong> support the <a href=\"http://hl7.org/fhir/STU3/references.html#include\">\n\t\t\t\t\t<code class=\"highlighter-rouge\">_include</code>\n\t\t\t\t</a> parameter for searching this element. The client application <strong>SHALL</strong> support all methods.</p>\n\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all medications for a patient using both:</p>\n\t\t\t<p>\n\t\t\t\t<code class=\"highlighter-rouge\">GET /MedicationStatement?patient=[id]</code>\n\t\t\t</p>\n\t\t\t<p>and</p>\n\t\t\t<p>\n\t\t\t\t<code class=\"highlighter-rouge\">GET /MedicationStatement?patient=[id]&amp;_include=MedicationStatement:medication</code>\n\t\t\t</p>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"medicationrequest-1\" class=\"no_toc\">MedicationRequest</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-medicationrequest.html\">US Core MedicationRequest Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<p>The MedicationRequest resources can represent a medication using either a code or refer to the Medication resource.  When referencing a Medication resource, the resource may be <a href=\"http://hl7.org/fhir/STU3/references.html#contained\">contained</a> or an external resource. If, an external reference to Medication is used, the server <strong>SHALL</strong> support the <a href=\"http://hl7.org/fhir/STU3/references.html#include\">\n\t\t\t\t\t<code class=\"highlighter-rouge\">_include</code>\n\t\t\t\t</a> parameter for searching this element. The client application <strong>SHALL</strong> support all methods.</p>\n\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all medications for a patient using both:</p>\n\t\t\t<p>\n\t\t\t\t<code class=\"highlighter-rouge\">GET /MedicationRequest?patient=[id]</code>\n\t\t\t</p>\n\t\t\t<p>and</p>\n\t\t\t<p>\n\t\t\t\t<code class=\"highlighter-rouge\">GET /MedicationRequest?patient=[id]&amp;_include=MedicationRequest:medication</code>\n\t\t\t</p>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"observation-1\" class=\"no_toc\">Observation</h4>\n\t\t\t<p>Supported Profiles:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-observationresults.html\">US Core Result Observation Profile</a>\n\t\t\t\t\t</p>\n\t\t\t\t\t<p>Search Criteria:</p>\n\t\t\t\t\t<ol>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s laboratory results queried by category using:</p>\n\t\t\t\t\t\t\t<p>\n\t\t\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Observation?patient=[id]&amp;category=laboratory</code>\n\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s laboratory results queried by category code and date range using:</p>\n\t\t\t\t\t\t\t<p>\n\t\t\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Observation?patient=[id]&amp;category=laboratory&amp;date=[date]{&amp;date=[date]}</code>\n\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s laboratory results queried by category and code using:</p>\n\t\t\t\t\t\t\t<p>\n\t\t\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Observation?patient=[id]&amp;category=laboratory&amp;code=[LOINC]</code>\n\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s laboratory results queried by category and one or more codes and date range using:</p>\n\t\t\t\t\t\t\t<p>\n\t\t\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Observation?patient=[id]&amp;category=laboratory&amp;code=[LOINC1{,LOINC2,LOINC3,...}]&amp;date=[date]{&amp;date=[date]}</code>\n\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ol>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<a href=\"http://hl7.org/fhir/STU3/vitalsigns.html\">Vital Signs Profile</a>\n\t\t\t\t\t</p>\n\t\t\t\t\t<p>Search Criteria</p>\n\t\t\t\t\t<ol>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s vital signs that it supports using:</p>\n\t\t\t\t\t\t\t<p>\n\t\t\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Observation?patient=[id]&amp;category=vital-signs</code>\n\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s vital signs queried by date range using:</p>\n\t\t\t\t\t\t\t<p>\n\t\t\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Observation?patient=[id]&amp;category=vital-signs&amp;date=[date]{&amp;date=[date]}</code>\n\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching any of a patient’s vital signs queried by one or more of the codes listed below using:</p>\n\t\t\t\t\t\t\t<p>\n\t\t\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Observation?patient=[id]&amp;code[vital sign LOINC{,LOINC2,LOINC3,…}]</code>\n\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching any of a patient’s vital signs queried by one or more of the codes listed below and date range using:</p>\n\t\t\t\t\t\t\t<p>\n\t\t\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Observation?patient=[id]&amp;code=[LOINC{,LOINC2…}]vital-signs&amp;date=[date]{&amp;date=[date]}</code>\n\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ol>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-smokingstatus.html\">US Core Smoking Status Observation Profile</a>\n\t\t\t\t\t</p>\n\t\t\t\t\t<p>Search Criteria:</p>\n\t\t\t\t\t<ol>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching a patient’s smoking status using:</p>\n\t\t\t\t\t\t\t<p>\n\t\t\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Observation?patient=[id]&amp;code=72166-2</code>\n\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ol>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"organization-1\" class=\"no_toc\">Organization</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-organization.html\">US Core Organization Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching an organization by identifier using:</p>\n\t\t\t\t\t<table>\n\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<td>`GET [base]/Organization?identifier=[system]</td>\n\t\t\t\t\t\t\t\t<td>[code]’</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</tbody>\n\t\t\t\t\t</table>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching an organization by name using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Organization?name=[string]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching an organization by address using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Organization?address=[string]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"practitioner-1\" class=\"no_toc\">Practitioner</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-practitioner.html\">US Core Practitioner Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching a practitioner by identifier using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Practitioner?identifier=[system]|[code]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching a practitioner by name using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/Practitioner?family=[string]&amp;given=[string]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"practitionerrole-1\" class=\"no_toc\">PractitionerRole</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-practitionerrole.html\">US Core PractitionerRole Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching PractitionerRoles by identifier using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/PractitionerRole?practitioner.identifier=[system]|[code]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching a PractitionerRoles by name using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/PractitionerRole?practitioner.family=[string]&amp;given=[string]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching a PractitionerRoles by specialty using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET [base]/PractitionerRole?specialty=[system]|[code]]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<hr/>\n\t\t\t<h4 id=\"procedure-1\" class=\"no_toc\">Procedure</h4>\n\t\t\t<p>Supported Profiles:  <a href=\"http://hl7.org/fhir/us/core/StructureDefinition-us-core-procedure.html\">US Core Procedure Profile</a>\n\t\t\t</p>\n\t\t\t<p>Search Criteria:</p>\n\t\t\t<ol>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching a patient’s procedures using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET/Procedure?patient=[id]</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<p>A client <strong>SHOULD</strong> be capable of connecting to a server and fetching all of a patient’s procedures over a specified time period using:</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<code class=\"highlighter-rouge\">GET /Procedure?patient=[id]&amp;date=[date]{&amp;date=[date]}</code>\n\t\t\t\t\t</p>\n\t\t\t\t</li>\n\t\t\t</ol>\n\t\t\t<p/>\n\t\t\t<p/>\n\t\t\t\n\t\t\t<p/>\n\t\t</div>"
+  },
+  "url": "http://hl7.org/fhir/us/core/CapabilityStatement/us-core-client",
+  "version": "2.0.0",
+  "name": "US Core Client",
+  "status": "draft",
+  "date": "2017-03-20T00:00:00+11:00",
+  "publisher": "HL7 US Realm Steering Committee",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "other",
+          "value": "http://www.hl7.org/SpecialCommittees/usrealm/index.cfm"
+        }
+      ]
+    }
+  ],
+  "description": "This profile defines the expected capabilities of the US Core Client conforming to the US Core IG.",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "US",
+          "display": "United States of America"
+        }
+      ]
+    }
+  ],
+  "kind": "requirements",
+  "fhirVersion": "3.0.1",
+  "format": [
+    "xml",
+    "json"
+  ],
+  "rest": [
+    {
+      "mode": "client",
+      "resource": [
+        {
+          "type": "Patient",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core patient resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core patients by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core patient instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core patient instance"
+            }
+          ]
+        },
+        {
+          "type": "AllergyIntolerance",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core AllergyIntolerance resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core AllergyIntolerance by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core AllergyIntolerance instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core AllergyIntolerance instance"
+            }
+          ]
+        },
+        {
+          "type": "CarePlan",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core careplan resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core careplan by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core careplan instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core careplan instance"
+            }
+          ]
+        },
+        {
+          "type": "CareTeam",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core careteam resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core careteam by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core careteam instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core careteam instance"
+            }
+          ]
+        },
+        {
+          "type": "Condition",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core condition resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core condition by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core condition instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core condition instance"
+            }
+          ]
+        },
+        {
+          "type": "Device",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core device resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core device by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core device instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core device instance"
+            }
+          ]
+        },
+        {
+          "type": "DocumentReference",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core DocumentReference resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core DocumentReference by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core DocumentReference instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core DocumentReference instance"
+            }
+          ]
+        },
+        {
+          "type": "Encounter",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core Encounter resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core Encounter by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core Encounter instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core Encounter instance"
+            }
+          ]
+        },
+        {
+          "type": "Goal",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core goal resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core goal by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core goal instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core goal instance"
+            }
+          ]
+        },
+        {
+          "type": "Immunization",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core immunization resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core immunization by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core immunization instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core immunization instance"
+            }
+          ]
+        },
+        {
+          "type": "DiagnosticReport",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core diagnosticreport resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core diagnosticreport by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core diagnosticreport instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core diagnosticreport instance"
+            }
+          ]
+        },
+        {
+          "type": "Observation",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core resultobs resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core resultobs by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core resultobs instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core resultobs instance"
+            }
+          ]
+        },
+        {
+          "type": "Location",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core location resources using different search criteria."
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a historical version of a US Core location instance"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core Medication instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core Medication instance"
+            }
+          ]
+        },
+        {
+          "type": "Medication",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "IF the Medication Resource is used in a MedicationStatement or a MedicationRequest.   Allows discovery of existing US Core Medication resources using different search criteria."
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "IF the Medication Resource is used in a MedicationStatement or a MedicationRequest.  Allows retrieval of a specific US Core Medication by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core Medication instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core Medication instance"
+            }
+          ]
+        },
+        {
+          "type": "MedicationStatement",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core medicationstatement resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core medicationstatement by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core medicationstatement instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core medicationstatement instance"
+            }
+          ]
+        },
+        {
+          "type": "MedicationRequest",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core medicationorder resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core medicationorder by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core medicationorder instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core medicationorder instance"
+            }
+          ]
+        },
+        {
+          "type": "Organization",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core organization resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core organization by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core organization instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core organization instance"
+            }
+          ]
+        },
+        {
+          "type": "Practitioner",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core practitioner resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core practitioner by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core practitioner instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Afllows retrieval of a historical version of a US Core practitioner instance"
+            }
+          ]
+        },
+        {
+          "type": "PractitionerRole",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core PractitionerRole resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core PractitionerRole by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core PractitionerRole instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Afllows retrieval of a historical version of a US Core PractitionerRole instance"
+            }
+          ]
+        },
+        {
+          "type": "Procedure",
+          "interaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "search-type",
+              "documentation": "Allows discovery of existing US Core procedure resources using different search criteria"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "read",
+              "documentation": "Allows retrieval of a specific US Core procedure by id"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "history-instance",
+              "documentation": "Allows review of changes to US Core procedure instance over time"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation",
+                  "valueCode": "SHOULD"
+                }
+              ],
+              "code": "vread",
+              "documentation": "Allows retrieval of a historical version of a US Core procedure instance"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

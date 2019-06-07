@@ -1,0 +1,15 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "description": "This profile defines the expected capabilities of the US Core Client conforming to the US Core IG.",
+    "license": {
+      "name": "CC0-1.0"
+    },
+    "version": "2.0.0",
+    "contact": {}
+  },
+  "externalDocs": {
+    "url": "http://hl7.org/fhir/us/core/CapabilityStatement/us-core-client",
+    "description": "FHIR CapabilityStatement"
+  }
+}

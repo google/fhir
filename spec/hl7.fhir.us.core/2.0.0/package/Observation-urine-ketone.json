@@ -1,0 +1,58 @@
+{
+  "resourceType": "Observation",
+  "id": "urine-ketone",
+  "meta": {
+    "versionId": "206468",
+    "lastUpdated": "2016-04-18T03:39:00.812+00:00",
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observationresults"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: urine-ketone</p><p><b>meta</b>: </p><p><b>status</b>: final</p><p><b>category</b>: Laboratory <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/observation-category code 'laboratory' = 'Laboratory', given as 'Laboratory'})</span></p><p><b>code</b>: KETONE <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '2514-8' = 'Ketones [Presence] in Urine by Test strip', given as 'Ketones [Presence] in Urine by Test strip'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Amy Shaw. Generated Summary: id: example; Medical Record Number = 1032702 (USUAL); active; Amy V. Shaw ; ph: 555-555-5555(HOME), amy.shaw@example.com; gender: female; birthDate: 20/02/2007</a></p><p><b>effective</b>: 05/07/2005</p><p><b>value</b>: Negative <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '260385009' = 'Negative', given as 'Negative'})</span></p><h3>ReferenceRanges</h3><table class=\"grid\"><tr><td>-</td><td><b>Text</b></td></tr><tr><td>*</td><td>Negative</td></tr></table></div>"
+  },
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ],
+      "text": "Laboratory"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "2514-8",
+        "display": "Ketones [Presence] in Urine by Test strip"
+      }
+    ],
+    "text": "KETONE"
+  },
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Amy Shaw"
+  },
+  "effectiveDateTime": "2005-07-05",
+  "valueCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "260385009",
+        "display": "Negative"
+      }
+    ],
+    "text": "Negative"
+  },
+  "referenceRange": [
+    {
+      "text": "Negative"
+    }
+  ]
+}

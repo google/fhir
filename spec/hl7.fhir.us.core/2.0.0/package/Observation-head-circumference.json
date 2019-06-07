@@ -1,0 +1,50 @@
+{
+  "resourceType": "Observation",
+  "id": "head-circumference",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: head-circumference</p><p><b>meta</b>: </p><p><b>status</b>: final</p><p><b>category</b>: Vital Signs <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/observation-category code 'vital-signs' = 'Vital Signs', given as 'Vital Signs'})</span></p><p><b>code</b>: head_circumference <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '8287-5' = 'Head Occipital-frontal circumference by Tape measure', given as 'Head Occipital-frontal circumference by Tape measure'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Amy V Shaw. Generated Summary: id: example; Medical Record Number = 1032702 (USUAL); active; Amy V. Shaw ; ph: 555-555-5555(HOME), amy.shaw@example.com; gender: female; birthDate: 20/02/2007</a></p><p><b>context</b>: <a href=\"Encounter-1036.html\">Generated Summary: id: 1036; status: in-progress; <span title=\"{http://hl7.org/fhir/v3/ActCode IMP}\">inpatient encounter</span></a></p><p><b>effective</b>: 12/08/2010</p><p><b>value</b>: 51.2 cm<span style=\"background: LightGoldenRodYellow\"> (Details: UCUM code cm = 'cm')</span></p></div>"
+  },
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/observation-category",
+          "code": "vital-signs",
+          "display": "Vital Signs"
+        }
+      ],
+      "text": "Vital Signs"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "8287-5",
+        "display": "Head Occipital-frontal circumference by Tape measure"
+      }
+    ],
+    "text": "head_circumference"
+  },
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Amy V Shaw"
+  },
+  "context": {
+    "reference": "Encounter/1036"
+  },
+  "effectiveDateTime": "2010-08-12",
+  "valueQuantity": {
+    "value": 51.2,
+    "unit": "cm",
+    "system": "http://unitsofmeasure.org",
+    "code": "cm"
+  }
+}

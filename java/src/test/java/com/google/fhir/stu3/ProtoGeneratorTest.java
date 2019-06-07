@@ -181,7 +181,7 @@ public class ProtoGeneratorTest {
         FhirVersion.STU3);
     addPackage(
         mutableKnownStructDefs,
-        "spec/hl7.fhir.us.core/1.0.1/package",
+        "spec/hl7.fhir.us.core/2.0.0/package",
         "google.fhir.stu3.uscore",
         FhirVersion.STU3);
     knownStructDefs = ImmutableMap.copyOf(mutableKnownStructDefs);

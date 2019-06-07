@@ -1,0 +1,76 @@
+{
+  "resourceType": "Observation",
+  "id": "neutrophils",
+  "meta": {
+    "versionId": "1106",
+    "lastUpdated": "2016-03-09T15:29:58.052+00:00",
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observationresults"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: neutrophils</p><p><b>meta</b>: </p><p><b>status</b>: final</p><p><b>category</b>: Laboratory <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/observation-category code 'laboratory' = 'Laboratory', given as 'Laboratory'})</span></p><p><b>code</b>: Neutrophils % <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '770-8' = 'Neutrophils/100 leukocytes in Blood by Automated count', given as 'Neutrophils/100 leukocytes in Blood by Automated count'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Amy Shaw. Generated Summary: id: example; Medical Record Number = 1032702 (USUAL); active; Amy V. Shaw ; ph: 555-555-5555(HOME), amy.shaw@example.com; gender: female; birthDate: 20/02/2007</a></p><p><b>effective</b>: 05/07/2005</p><p><b>value</b>: 40.0 %</p><h3>ReferenceRanges</h3><table class=\"grid\"><tr><td>-</td><td><b>Low</b></td><td><b>High</b></td><td><b>AppliesTo</b></td></tr><tr><td>*</td><td>37.0 %<span style=\"background: LightGoldenRodYellow\"> (Details: UCUM code % = '%')</span></td><td>67.0 %<span style=\"background: LightGoldenRodYellow\"> (Details: UCUM code % = '%')</span></td><td>Normal Range <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/referencerange-meaning code 'normal' = 'Normal Range', given as 'Normal Range'})</span></td></tr></table></div>"
+  },
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ],
+      "text": "Laboratory"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "770-8",
+        "display": "Neutrophils/100 leukocytes in Blood by Automated count"
+      }
+    ],
+    "text": "Neutrophils %"
+  },
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Amy Shaw"
+  },
+  "effectiveDateTime": "2005-07-05",
+  "valueQuantity": {
+    "value": 40.0,
+    "unit": "%",
+    "system": "http://unitsofmeasure.org"
+  },
+  "referenceRange": [
+    {
+      "low": {
+        "value": 37.0,
+        "unit": "%",
+        "system": "http://unitsofmeasure.org",
+        "code": "%"
+      },
+      "high": {
+        "value": 67.0,
+        "unit": "%",
+        "system": "http://unitsofmeasure.org",
+        "code": "%"
+      },
+      "appliesTo": [
+        {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/referencerange-meaning",
+              "code": "normal",
+              "display": "Normal Range"
+            }
+          ],
+          "text": "Normal Range"
+        }
+      ]
+    }
+  ]
+}

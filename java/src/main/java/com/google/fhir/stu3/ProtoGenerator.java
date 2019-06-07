@@ -305,6 +305,8 @@ public class ProtoGenerator {
           .put(
               "http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition",
               "UsCoreCondition")
+          .put(
+              "http://hl7.org/fhir/us/core/StructureDefinition/us-core-direct", "UsCoreDirectEmail")
           .build();
 
   // Given a structure definition, gets the name of the top-level message that will be generated.
@@ -1541,7 +1543,7 @@ public class ProtoGenerator {
         "Unable to deduce typename for profile: " + profileUrl + " on " + type);
   }
 
-  private static final Pattern WORD_BREAK_PATTERN = Pattern.compile("[-_ ]+([A-Za-z])");
+  private static final Pattern WORD_BREAK_PATTERN = Pattern.compile("[^A-Za-z0-9]+([A-Za-z0-9])");
 
   // Converts a FHIR id strings to UpperCamelCasing for FieldTypes using a regex pattern that
   // considers hyphen, underscore and space to be word breaks.

@@ -1,0 +1,45 @@
+{
+  "resourceType": "Practitioner",
+  "id": "practitioner-2",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: practitioner-2</p><p><b>meta</b>: </p><p><b>identifier</b>: 1245319599, 456789</p><p><b>name</b>: Fielding Kathy </p><p><b>address</b>: 1080 FIRST COLONIAL RD Virginia Beach VA 21454-2406 (WORK)</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://hl7.org.fhir/sid/us-npi",
+      "value": "1245319599"
+    },
+    {
+      "system": "http://www.acme.org/practitioners",
+      "value": "456789"
+    }
+  ],
+  "name": [
+    {
+      "family": "Kathy",
+      "given": [
+        "Fielding"
+      ],
+      "prefix": [
+        "Dr"
+      ]
+    }
+  ],
+  "address": [
+    {
+      "use": "work",
+      "line": [
+        "1080 FIRST COLONIAL RD"
+      ],
+      "city": "Virginia Beach",
+      "state": "VA",
+      "postalCode": "21454-2406"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "resourceType": "AllergyIntolerance",
+  "id": "example",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-allergyintolerance"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>meta</b>: </p><p><b>clinicalStatus</b>: active</p><p><b>verificationStatus</b>: confirmed</p><p><b>category</b>: medication</p><p><b>criticality</b>: high</p><p><b>code</b>: sulfonamide antibacterial <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/ndfrt code 'N0000175503' = 'N0000175503', given as 'sulfonamide antibacterial'})</span></p><p><b>patient</b>: <a href=\"Patient-example.html\">Amy V. Shaw. Generated Summary: id: example; Medical Record Number = 1032702 (USUAL); active; Amy V. Shaw ; ph: 555-555-5555(HOME), amy.shaw@example.com; gender: female; birthDate: 20/02/2007</a></p><p><b>assertedDate</b>: 01/01/2000</p><h3>Reactions</h3><table class=\"grid\"><tr><td>-</td><td><b>Manifestation</b></td><td><b>Severity</b></td></tr><tr><td>*</td><td>skin rash <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '271807003' = 'Eruption of skin (disorder)', given as 'skin rash'})</span></td><td>mild</td></tr></table></div>"
+  },
+  "clinicalStatus": "active",
+  "verificationStatus": "confirmed",
+  "category": [
+    "medication"
+  ],
+  "criticality": "high",
+  "code": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/ndfrt",
+        "code": "N0000175503",
+        "display": "sulfonamide antibacterial"
+      }
+    ],
+    "text": "sulfonamide antibacterial"
+  },
+  "patient": {
+    "reference": "Patient/example",
+    "display": "Amy V. Shaw"
+  },
+  "assertedDate": "2000",
+  "reaction": [
+    {
+      "manifestation": [
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "271807003",
+              "display": "skin rash"
+            }
+          ],
+          "text": "skin rash"
+        }
+      ],
+      "severity": "mild"
+    }
+  ]
+}

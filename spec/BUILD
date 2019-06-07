@@ -102,7 +102,7 @@ structure_definition_package(
 filegroup(
     name = "uscore_stu3_structure_definitions_filegroup",
     srcs = glob([
-        "hl7.fhir.us.core/1.0.1/package/StructureDefinition-*.json",
+        "hl7.fhir.us.core/2.0.0/package/StructureDefinition-*.json",
     ]),
 )
 

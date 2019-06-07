@@ -1,0 +1,43 @@
+{
+  "resourceType": "MedicationStatement",
+  "id": "uscore-ms2",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationstatement"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: uscore-ms2</p><p><b>meta</b>: </p><p><b>contained</b>: </p><p><b>status</b>: active</p><p><b>medication</b>: lisinopril oral 10 mg. Generated Summary: unknown resource contained</p><p><b>effective</b>: 01/05/2010 12:00:00 AM --&gt; (ongoing)</p><p><b>dateAsserted</b>: 01/05/2016 4:13:03 PM</p><p><b>subject</b>: <a href=\"Patient-example.html\">Amy Shaw. Generated Summary: id: example; Medical Record Number = 1032702 (USUAL); active; Amy V. Shaw ; ph: 555-555-5555(HOME), amy.shaw@example.com; gender: female; birthDate: 20/02/2007</a></p><p><b>taken</b>: y</p></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Medication",
+      "id": "med1",
+      "code": {
+        "coding": [
+          {
+            "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+            "code": "206765",
+            "display": "Lisinopril 10 MG Oral Tablet [Prinivil]"
+          }
+        ],
+        "text": "Lisinopril 10 MG Oral Tablet [Prinivil]"
+      }
+    }
+  ],
+  "status": "active",
+  "medicationReference": {
+    "reference": "#med1",
+    "display": "lisinopril oral 10 mg"
+  },
+  "effectivePeriod": {
+    "start": "2010-05-01"
+  },
+  "dateAsserted": "2016-05-01T16:13:03Z",
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Amy Shaw"
+  },
+  "taken": "y"
+}

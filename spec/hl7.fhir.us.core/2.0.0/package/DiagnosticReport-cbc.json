@@ -1,0 +1,66 @@
+{
+  "resourceType": "DiagnosticReport",
+  "id": "cbc",
+  "meta": {
+    "versionId": "205814",
+    "lastUpdated": "2016-03-09T15:35:58.045+00:00",
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-diagnosticreport"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: cbc</p><p><b>meta</b>: </p><p><b>status</b>: final</p><p><b>category</b>: Hematology <span style=\"background: LightGoldenRodYellow\">(Details : {http://hl7.org/fhir/v2/0074 code 'HM' = 'Hematology', given as 'Hematology'})</span></p><p><b>code</b>: Complete blood count (hemogram) panel - Blood by Automated count <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '58410-2' = 'Complete blood count (hemogram) panel - Blood by Automated count', given as 'Complete blood count (hemogram) panel - Blood by Automated count'})</span></p><p><b>subject</b>: <a href=\"Patient-example.html\">Amy Shaw. Generated Summary: id: example; Medical Record Number = 1032702 (USUAL); active; Amy V. Shaw ; ph: 555-555-5555(HOME), amy.shaw@example.com; gender: female; birthDate: 20/02/2007</a></p><p><b>effective</b>: 05/07/2005</p><p><b>issued</b>: 06/07/2005 11:45:33 AM</p><h3>Performers</h3><table class=\"grid\"><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a href=\"Organization-acme-lab.html\">Acme Laboratory, Inc. Generated Summary: id: acme-lab; 1144221847, 2523423456; active; <span title=\"Codes: {http://hl7.org/fhir/organization-type prov}\">Healthcare Provider</span>; name: Acme Labs; ph: (+1) 734-677-7777, hq@acme.org</a></td></tr></table><p><b>result</b>: </p><ul><li><a href=\"Observation-neutrophils.html\">NEUTROPHILS. Generated Summary: id: neutrophils; <span title=\"Codes: {http://hl7.org/fhir/observation-category laboratory}\">Laboratory</span>; <span title=\"Codes: {http://loinc.org 770-8}\">Neutrophils %</span>; effective: 05/07/2005; 40.0 %</a></li><li><a href=\"Observation-mchc.html\">MCHC. Generated Summary: id: mchc; <span title=\"Codes: {http://hl7.org/fhir/observation-category laboratory}\">Laboratory</span>; <span title=\"Codes: {http://loinc.org 786-4}\">MCHC RBC Auto-mCnc</span>; effective: 05/07/2005; 34.7 g/dL</a></li><li><a href=\"Observation-hemoglobin.html\">HEMOGLOBIN. Generated Summary: id: hemoglobin; <span title=\"Codes: {http://hl7.org/fhir/observation-category laboratory}\">Laboratory</span>; <span title=\"Codes: {http://loinc.org 718-7}\">Hgb Bld-mCnc</span>; effective: 05/07/2005; 17.0 g/dL</a></li><li><a href=\"Observation-erythrocytes.html\">ERYTHROCYTES. Generated Summary: id: erythrocytes; <span title=\"Codes: {http://hl7.org/fhir/observation-category laboratory}\">Laboratory</span>; <span title=\"Codes: {http://loinc.org 789-8}\">RBC # Bld Auto</span>; effective: 05/07/2005; 4.58 10*6/uL</a></li></ul></div>"
+  },
+  "status": "final",
+  "category": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/v2/0074",
+        "code": "HM",
+        "display": "Hematology"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "58410-2",
+        "display": "Complete blood count (hemogram) panel - Blood by Automated count"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Amy Shaw"
+  },
+  "effectiveDateTime": "2005-07-05",
+  "issued": "2005-07-06T11:45:33+11:00",
+  "performer": [
+    {
+      "actor": {
+        "reference": "Organization/acme-lab",
+        "display": "Acme Laboratory, Inc"
+      }
+    }
+  ],
+  "result": [
+    {
+      "reference": "Observation/neutrophils",
+      "display": "NEUTROPHILS"
+    },
+    {
+      "reference": "Observation/mchc",
+      "display": "MCHC"
+    },
+    {
+      "reference": "Observation/hemoglobin",
+      "display": "HEMOGLOBIN"
+    },
+    {
+      "reference": "Observation/erythrocytes",
+      "display": "ERYTHROCYTES"
+    }
+  ]
+}
