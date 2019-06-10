@@ -630,17 +630,32 @@ Status ValidateCodelike(const Message& message) {
     return FailedPrecondition(descriptor->full_name(),
                               " must have either extensions or value.");
   }
-  const bool has_enum_value =
-      reflection->GetEnumValue(message, value_field) != 0;
-  if (has_no_value_extension && has_enum_value) {
-    return FailedPrecondition(
-        descriptor->full_name(),
-        " has both PrimitiveHasNoValue extension and an enum value.");
+  bool has_value = false;
+  switch (value_field->cpp_type()) {
+    case google::protobuf::FieldDescriptor::CPPTYPE_ENUM:
+      has_value = reflection->GetEnumValue(message, value_field) != 0;
+      break;
+    case google::protobuf::FieldDescriptor::CPPTYPE_STRING: {
+      string str;
+      has_value =
+          !reflection->GetStringReference(message, value_field, &str).empty();
+      break;
+    }
+    default:
+      return FailedPrecondition(
+          descriptor->full_name(),
+          " should have a value field of type ENUM or STRING.");
   }
-  if (!has_no_value_extension && !has_enum_value) {
+
+  if (has_no_value_extension && has_value) {
     return FailedPrecondition(
         descriptor->full_name(),
-        " has no enum value, and no PrimitiveHasNoValue extension.");
+        " has both PrimitiveHasNoValue extension and a value.");
+  }
+  if (!has_no_value_extension && !has_value) {
+    return FailedPrecondition(
+        descriptor->full_name(),
+        " has no value, and no PrimitiveHasNoValue extension.");
   }
   return Status::OK();
 }

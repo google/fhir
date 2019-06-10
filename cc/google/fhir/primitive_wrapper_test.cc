@@ -251,6 +251,10 @@ TEST(PrimitiveValidationTestProto, TypedCode) {
   TestProtoValidation<AdministrativeGenderCode>();
 }
 
+TEST(PrimitiveValidationTestProto, StringCode) {
+  TestProtoValidation<MimeTypeCode>();
+}
+
 }  // namespace
 
 }  // namespace fhir
