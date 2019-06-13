@@ -263,6 +263,19 @@ class MessageValidator {
       constraints_cache_;
 };
 
+// Validates the fhir_path_constraint annotations on the given message.
+// Returns Status::OK or the status of the first constraint violation
+// encountered. Users needing more details should use the overloaded
+// version of with a callback handler for each violation.
+Status ValidateMessage(const ::google::protobuf::Message& message);
+
+// Validates the fhir_path_constraint annotations on the given message.
+// Returns Status::OK or the status of the first constraint failure
+// encountered. Details on all failures are passed to the given handler
+// function.
+Status ValidateMessage(const ::google::protobuf::Message& message,
+                       ViolationHandlerFunc handler);
+
 }  // namespace fhir_path
 }  // namespace fhir
 }  // namespace google

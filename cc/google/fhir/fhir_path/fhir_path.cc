@@ -756,6 +756,18 @@ Status MessageValidator::Validate(const Message& message,
   return accumulative_status;
 }
 
+// Common validator instance for the lifetime of the process.
+static MessageValidator* validator = new MessageValidator();
+
+Status ValidateMessage(const ::google::protobuf::Message& message) {
+  return validator->Validate(message);
+}
+
+Status ValidateMessage(const ::google::protobuf::Message& message,
+                       ViolationHandlerFunc handler) {
+  return validator->Validate(message, handler);
+}
+
 }  // namespace fhir_path
 }  // namespace fhir
 }  // namespace google
