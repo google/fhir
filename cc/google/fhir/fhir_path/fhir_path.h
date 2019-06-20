@@ -154,6 +154,24 @@ class EvaluationResult {
   // did not resolve to a boolean value.
   StatusOr<bool> GetBoolean() const;
 
+  // Returns success with an integer value if the EvaluationResult represents
+  // a integer value per FHIRPath. That is, if it has a single message
+  // that contains an integer. A failure status is returned if the expression
+  // did not resolve to an integer value.
+  StatusOr<int32_t> GetInteger() const;
+
+  // Returns success with a decimal value if the EvaluationResult represents
+  // a decimal value per FHIRPath. That is, if it has a single message
+  // that contains a decimal. A failure status is returned if the expression
+  // did not resolve to a decimal value.
+  StatusOr<string> GetDecimal() const;
+
+  // Returns success with a string value if the EvaluationResult represents
+  // a string value per FHIRPath. That is, if it has a single message
+  // that contains a string. A failure status is returned if the expression
+  // did not resolve to a string value.
+  StatusOr<string> GetString() const;
+
  private:
   friend class CompiledExpression;
 
@@ -280,4 +298,4 @@ Status ValidateMessage(const ::google::protobuf::Message& message,
 }  // namespace fhir
 }  // namespace google
 
-#endif  // EXPERIMENTAL_USERS_RBRUSH_FHIRPATH_FHIR_PATH_H_
+#endif  // GOOGLE_FHIR_FHIR_PATH_FHIR_PATH_H_

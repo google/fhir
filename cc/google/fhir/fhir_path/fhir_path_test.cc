@@ -33,6 +33,7 @@ using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::util::MessageDifferencer;
 
+using google::fhir::Status;
 using google::fhir::fhir_path::CompiledExpression;
 using google::fhir::fhir_path::EvaluationResult;
 using google::fhir::fhir_path::MessageValidator;
@@ -77,6 +78,19 @@ ValueSet ValidValueSet() {
   return ParseFromString<ValueSet>(R"proto(
     url { value: "http://example.com/valueset" }
   )proto");
+}
+
+bool EvaluateBoolExpression(const string& expression) {
+  // FHIRPath assumes a context object during evaluation, so we use an encounter
+  // as a placeholder.
+  auto numbers_equal =
+      CompiledExpression::Compile(Encounter::descriptor(), expression)
+          .ValueOrDie();
+
+  Encounter test_encounter = ValidEncounter();
+  EvaluationResult result = numbers_equal.Evaluate(test_encounter).ValueOrDie();
+
+  return result.GetBoolean().ValueOrDie();
 }
 
 TEST(FhirPathTest, TestMalformed) {
@@ -252,6 +266,115 @@ TEST(FhirPathTest, TestAndBothAreTrue) {
   EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
 
   EXPECT_TRUE(result.GetBoolean().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestIntegerLiteral) {
+  auto expr =
+      CompiledExpression::Compile(Encounter::descriptor(), "42").ValueOrDie();
+
+  Encounter test_encounter = ValidEncounter();
+  EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
+  EXPECT_EQ(42, result.GetInteger().ValueOrDie());
+
+  // Ensure evaluation of an out-of-range literal fails.
+  const char* overflow_value = "10000000000";
+  Status bad_int_status =
+      CompiledExpression::Compile(Encounter::descriptor(), overflow_value)
+          .status();
+
+  EXPECT_FALSE(bad_int_status.ok());
+  // Failure message should contain the bad string.
+  EXPECT_TRUE(bad_int_status.error_message().find(overflow_value) !=
+              std::string::npos);
+}
+
+TEST(FhirPathTest, TestIntegerComparisons) {
+  EXPECT_TRUE(EvaluateBoolExpression("42 = 42"));
+  EXPECT_FALSE(EvaluateBoolExpression("42 = 43"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("42 != 43"));
+  EXPECT_FALSE(EvaluateBoolExpression("42 != 42"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("42 < 43"));
+  EXPECT_FALSE(EvaluateBoolExpression("42 < 42"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("43 > 42"));
+  EXPECT_FALSE(EvaluateBoolExpression("42 > 42"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("42 >= 42"));
+  EXPECT_TRUE(EvaluateBoolExpression("43 >= 42"));
+  EXPECT_FALSE(EvaluateBoolExpression("42 >= 43"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("42 <= 42"));
+  EXPECT_TRUE(EvaluateBoolExpression("42 <= 43"));
+  EXPECT_FALSE(EvaluateBoolExpression("43 <= 42"));
+}
+
+TEST(FhirPathTest, TestDecimalLiteral) {
+  auto expr =
+      CompiledExpression::Compile(Encounter::descriptor(), "1.25").ValueOrDie();
+
+  Encounter test_encounter = ValidEncounter();
+  EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
+
+  EXPECT_EQ("1.25", result.GetDecimal().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestDecimalComparisons) {
+  EXPECT_TRUE(EvaluateBoolExpression("1.25 = 1.25"));
+  EXPECT_FALSE(EvaluateBoolExpression("1.25 = 1.3"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("1.25 != 1.26"));
+  EXPECT_FALSE(EvaluateBoolExpression("1.25 != 1.25"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("1.25 < 1.26"));
+  EXPECT_TRUE(EvaluateBoolExpression("1 < 1.26"));
+  EXPECT_FALSE(EvaluateBoolExpression("1.25 < 1.25"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("1.26 > 1.25"));
+  EXPECT_TRUE(EvaluateBoolExpression("1.26 > 1"));
+  EXPECT_FALSE(EvaluateBoolExpression("1.25 > 1.25"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("1.25 >= 1.25"));
+  EXPECT_TRUE(EvaluateBoolExpression("1.25 >= 1"));
+  EXPECT_TRUE(EvaluateBoolExpression("1.26 >= 1.25"));
+  EXPECT_FALSE(EvaluateBoolExpression("1.25 >= 1.26"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("1.25 <= 1.25"));
+  EXPECT_TRUE(EvaluateBoolExpression("1.25 <= 1.26"));
+  EXPECT_FALSE(EvaluateBoolExpression("1.26 <= 1.25"));
+  EXPECT_FALSE(EvaluateBoolExpression("1.26 <= 1"));
+}
+
+TEST(FhirPathTest, TestStringLiteral) {
+  auto expr = CompiledExpression::Compile(Encounter::descriptor(), "'foo'")
+                  .ValueOrDie();
+
+  Encounter test_encounter = ValidEncounter();
+  EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
+  EXPECT_EQ("foo", result.GetString().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestStringComparisons) {
+  EXPECT_TRUE(EvaluateBoolExpression("'foo' = 'foo'"));
+  EXPECT_FALSE(EvaluateBoolExpression("'foo' = 'bar'"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("'foo' != 'bar'"));
+  EXPECT_FALSE(EvaluateBoolExpression("'foo' != 'foo'"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("'bar' < 'foo'"));
+  EXPECT_FALSE(EvaluateBoolExpression("'foo' < 'foo'"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("'foo' > 'bar'"));
+  EXPECT_FALSE(EvaluateBoolExpression("'foo' > 'foo'"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("'foo' >= 'foo'"));
+  EXPECT_TRUE(EvaluateBoolExpression("'foo' >= 'bar'"));
+  EXPECT_FALSE(EvaluateBoolExpression("'bar' >= 'foo'"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("'foo' <= 'foo'"));
+  EXPECT_TRUE(EvaluateBoolExpression("'bar' <= 'foo'"));
+  EXPECT_FALSE(EvaluateBoolExpression("'foo' <= 'bar'"));
 }
 
 TEST(FhirPathTest, ConstraintViolation) {

@@ -16,11 +16,12 @@
 
 #include <utility>
 
-#include "google/protobuf/wrappers.pb.h"
+#include "google/protobuf/util/message_differencer.h"
 #include "absl/strings/str_cat.h"
 
 // Include the ANTLR-generated visitor, lexer and parser files.
 #include "absl/memory/memory.h"
+#include "absl/strings/numbers.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/fhir_path/FhirPathBaseVisitor.h"
 #include "google/fhir/fhir_path/FhirPathLexer.h"
@@ -28,6 +29,7 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "proto/r4/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
@@ -38,11 +40,18 @@ using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
+using ::google::protobuf::util::MessageDifferencer;
 
-using ::google::protobuf::BoolValue;
+// Used to wrap primitives in protobuf messages, and
+// can be used against multiple versions of FHIR, not just R4.
+using ::google::fhir::r4::proto::Boolean;
+using ::google::fhir::r4::proto::Decimal;
+using ::google::fhir::r4::proto::Integer;
+using ::google::fhir::r4::proto::String;
 
 using antlr4::ANTLRInputStream;
 using antlr4::CommonTokenStream;
+using antlr4::tree::TerminalNode;
 
 using antlr_parser::FhirPathBaseVisitor;
 using antlr_parser::FhirPathLexer;
@@ -65,14 +74,14 @@ namespace internal {
 // a boolean value per FHIRPath conventions; that is it
 // has exactly one item that is boolean.
 bool IsSingleBoolean(const std::vector<const Message*>& messages) {
-  return messages.size() == 1 && IsMessageType<BoolValue>(*messages[0]);
+  return messages.size() == 1 && IsMessageType<Boolean>(*messages[0]);
 }
 
 // Returns success with a boolean value if the message collection
 // represents a single boolean, or a failure status otherwise.
 StatusOr<bool> MessagesToBoolean(const std::vector<const Message*>& messages) {
   if (IsSingleBoolean(messages)) {
-    return dynamic_cast<const BoolValue*>(messages[0])->value();
+    return dynamic_cast<const Boolean*>(messages[0])->value();
   }
 
   return InvalidArgument("Expression did not evaluate to boolean");
@@ -81,6 +90,31 @@ StatusOr<bool> MessagesToBoolean(const std::vector<const Message*>& messages) {
 // Supported funtions.
 const char kExistsFunction[] = "exists";
 const char kNotFunction[] = "not";
+
+// Expression node that returns literals wrapped in the corresponding
+// protbuf wrapper
+template <typename ProtoType, typename PrimitiveType>
+class Literal : public ExpressionNode {
+ public:
+  explicit Literal(PrimitiveType value) : value_(value) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    auto value = new ProtoType();
+    value->set_value(value_);
+    work_space->DeleteWhenFinished(value);
+    results->push_back(value);
+
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return ProtoType::descriptor();
+  }
+
+ private:
+  const PrimitiveType value_;
+};
 
 // Implements the InvocationTerm from the FHIRPath grammar,
 // producing a term from the root context message.
@@ -168,7 +202,7 @@ class ExistsFunction : public ExpressionNode {
     std::vector<const Message*> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
-    BoolValue* result = new BoolValue();
+    Boolean* result = new Boolean();
     work_space->DeleteWhenFinished(result);
     result->set_value(!child_results.empty());
     results->push_back(result);
@@ -177,7 +211,7 @@ class ExistsFunction : public ExpressionNode {
   }
 
   const Descriptor* ReturnType() const override {
-    return BoolValue::descriptor();
+    return Boolean::descriptor();
   }
 
  private:
@@ -209,7 +243,7 @@ class NotFunction : public ExpressionNode {
       FHIR_ASSIGN_OR_RETURN(bool child_result,
                             MessagesToBoolean(child_results));
 
-      BoolValue* result = new BoolValue();
+      Boolean* result = new Boolean();
       work_space->DeleteWhenFinished(result);
       result->set_value(!child_result);
 
@@ -220,15 +254,15 @@ class NotFunction : public ExpressionNode {
   }
 
   const Descriptor* ReturnType() const override {
-    return BoolValue::descriptor();
+    return Boolean::descriptor();
   }
 
  private:
   const std::shared_ptr<ExpressionNode> child_;
 };
 
-// Base class for FHIRPath binary boolean operators.
-class BooleanOperator : public ExpressionNode {
+// Base class for FHIRPath binary operators.
+class BinaryOperator : public ExpressionNode {
  public:
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -238,6 +272,250 @@ class BooleanOperator : public ExpressionNode {
     std::vector<const Message*> right_results;
     FHIR_RETURN_IF_ERROR(right_->Evaluate(work_space, &right_results));
 
+    return EvaluateOperator(left_results, right_results, work_space, results);
+  }
+
+  BinaryOperator(std::shared_ptr<ExpressionNode> left,
+                 std::shared_ptr<ExpressionNode> right)
+      : left_(left), right_(right) {}
+
+  // Perform the actual boolean evaluation.
+  virtual Status EvaluateOperator(
+      const std::vector<const Message*>& left_results,
+      const std::vector<const Message*>& right_results, WorkSpace* work_space,
+      std::vector<const Message*>* out_results) const = 0;
+
+ private:
+  const std::shared_ptr<ExpressionNode> left_;
+
+  const std::shared_ptr<ExpressionNode> right_;
+};
+
+class EqualsOperator : public BinaryOperator {
+ public:
+  Status EvaluateOperator(
+      const std::vector<const Message*>& left_results,
+      const std::vector<const Message*>& right_results, WorkSpace* work_space,
+      std::vector<const Message*>* out_results) const override {
+    Boolean* result = new Boolean();
+    work_space->DeleteWhenFinished(result);
+
+    if (left_results.size() != right_results.size()) {
+      result->set_value(false);
+    } else {
+      // Scan for unequal messages.
+      result->set_value(true);
+      for (int i = 0; i < left_results.size(); ++i) {
+        if (!MessageDifferencer::Equals(*left_results.at(i),
+                                        *right_results.at(i))) {
+          result->set_value(false);
+          break;
+        }
+      }
+    }
+
+    out_results->push_back(result);
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Boolean::descriptor();
+  }
+
+  EqualsOperator(std::shared_ptr<ExpressionNode> left,
+                 std::shared_ptr<ExpressionNode> right)
+      : BinaryOperator(left, right) {}
+};
+
+// Converts decimal or integer container messages to a double value
+static Status MessageToDouble(const Message& message, double* value) {
+  if (IsMessageType<Decimal>(message)) {
+    const Decimal* decimal = dynamic_cast<const Decimal*>(&message);
+
+    if (!absl::SimpleAtod(decimal->value(), value)) {
+      return InvalidArgument(
+          absl::StrCat("Could not convert to numeric: ", decimal->value()));
+    }
+
+    return Status::OK();
+
+  } else if (IsMessageType<Integer>(message)) {
+    const Integer* integer = dynamic_cast<const Integer*>(&message);
+
+    *value = integer->value();
+    return Status::OK();
+  }
+
+  return InvalidArgument(
+      absl::StrCat("Message type cannot be converted to double: ",
+                   message.GetDescriptor()->full_name()));
+}
+
+class ComparisonOperator : public BinaryOperator {
+ public:
+  // Types of comparisons supported by this operator.
+  enum ComparisonType {
+    kLessThan,
+    kGreaterThan,
+    kLessThanEqualTo,
+    kGreaterThanEqualTo
+  };
+
+  Status EvaluateOperator(
+      const std::vector<const Message*>& left_results,
+      const std::vector<const Message*>& right_results, WorkSpace* work_space,
+      std::vector<const Message*>* out_results) const override {
+    // Per the FHIRPath spec, comparison operators propagate empty results.
+    if (left_results.empty() || right_results.empty()) {
+      return Status::OK();
+    }
+
+    if (left_results.size() > 1 || right_results.size() > 1) {
+      return InvalidArgument(
+          "Comparison operators must have one element on each side.");
+    }
+
+    const Message* left_result = left_results[0];
+    const Message* right_result = right_results[0];
+
+    Boolean* result = new Boolean();
+    work_space->DeleteWhenFinished(result);
+
+    if (IsMessageType<Integer>(*left_result) &&
+        IsMessageType<Integer>(*right_result)) {
+      EvalIntegerComparison(dynamic_cast<const Integer*>(left_result),
+                            dynamic_cast<const Integer*>(right_result), result);
+
+    } else if (IsMessageType<Decimal>(*left_result) ||
+               IsMessageType<Decimal>(*right_result)) {
+      FHIR_RETURN_IF_ERROR(
+          EvalDecimalComparison(left_result, right_result, result));
+
+    } else if (IsMessageType<String>(*left_result) &&
+               IsMessageType<String>(*right_result)) {
+      EvalStringComparison(dynamic_cast<const String*>(left_result),
+                           dynamic_cast<const String*>(right_result), result);
+    } else {
+      return InvalidArgument("Unsupported comparison value types");
+    }
+
+    out_results->push_back(result);
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Boolean::descriptor();
+  }
+
+  ComparisonOperator(std::shared_ptr<ExpressionNode> left,
+                     std::shared_ptr<ExpressionNode> right,
+                     ComparisonType comparison_type)
+      : BinaryOperator(left, right), comparison_type_(comparison_type) {}
+
+ private:
+  void EvalIntegerComparison(const Integer* left_wrapper,
+                             const Integer* right_wrapper,
+                             Boolean* result) const {
+    int32_t left = left_wrapper->value();
+    int32_t right = right_wrapper->value();
+
+    switch (comparison_type_) {
+      case kLessThan:
+        result->set_value(left < right);
+        break;
+      case kGreaterThan:
+        result->set_value(left > right);
+        break;
+      case kLessThanEqualTo:
+        result->set_value(left <= right);
+        break;
+      case kGreaterThanEqualTo:
+        result->set_value(left >= right);
+        break;
+    }
+  }
+
+  Status EvalDecimalComparison(const Message* left_message,
+                               const Message* right_message,
+                               Boolean* result) const {
+    // Handle decimal comparisons, converting integer types
+    // if necessary.
+    double left;
+    FHIR_RETURN_IF_ERROR(MessageToDouble(*left_message, &left));
+    double right;
+    FHIR_RETURN_IF_ERROR(MessageToDouble(*right_message, &right));
+
+    switch (comparison_type_) {
+      case kLessThan:
+        result->set_value(left < right);
+        break;
+      case kGreaterThan:
+        result->set_value(left > right);
+        break;
+      case kLessThanEqualTo:
+        // Fallback to literal comparison for equality to avoid
+        // rounding errors.
+        result->set_value(
+            left <= right ||
+            (left_message->GetDescriptor() == right_message->GetDescriptor() &&
+             MessageDifferencer::Equals(*left_message, *right_message)));
+        break;
+      case kGreaterThanEqualTo:
+        // Fallback to literal comparison for equality to avoid
+        // rounding errors.
+        result->set_value(
+            left >= right ||
+            (left_message->GetDescriptor() == right_message->GetDescriptor() &&
+             MessageDifferencer::Equals(*left_message, *right_message)));
+        break;
+    }
+
+    return Status::OK();
+  }
+
+  void EvalStringComparison(const String* left_message,
+                            const String* right_message,
+                            Boolean* result) const {
+    const string& left = left_message->value();
+    const string& right = right_message->value();
+
+    // FHIR defines string comparisons to be based on unicode values,
+    // so simply comparison operators are not sufficient.
+    static const std::locale locale("en_US.UTF-8");
+
+    static const std::collate<char>& coll =
+        std::use_facet<std::collate<char>>(locale);
+
+    int compare_result =
+        coll.compare(left.data(), left.data() + left.length(), right.data(),
+                     right.data() + right.length());
+
+    switch (comparison_type_) {
+      case kLessThan:
+        result->set_value(compare_result < 0);
+        break;
+      case kGreaterThan:
+        result->set_value(compare_result > 0);
+        break;
+      case kLessThanEqualTo:
+        result->set_value(compare_result <= 0);
+        break;
+      case kGreaterThanEqualTo:
+        result->set_value(compare_result >= 0);
+        break;
+    }
+  }
+
+  ComparisonType comparison_type_;
+};
+
+// Base class for FHIRPath binary boolean operators.
+class BooleanOperator : public BinaryOperator {
+ public:
+  Status EvaluateOperator(
+      const std::vector<const Message*>& left_results,
+      const std::vector<const Message*>& right_results, WorkSpace* work_space,
+      std::vector<const Message*>* out_results) const override {
     // Per the FHIRPath spec, boolean operators propagate empty results.
     if (left_results.empty() || right_results.empty()) {
       return Status::OK();
@@ -247,22 +525,22 @@ class BooleanOperator : public ExpressionNode {
     FHIR_ASSIGN_OR_RETURN(bool right_result, MessagesToBoolean(right_results));
     bool eval_result = EvaluateBool(left_result, right_result);
 
-    BoolValue* result = new BoolValue();
+    Boolean* result = new Boolean();
     work_space->DeleteWhenFinished(result);
     result->set_value(eval_result);
 
-    results->push_back(result);
+    out_results->push_back(result);
 
     return Status::OK();
   }
 
   const Descriptor* ReturnType() const override {
-    return BoolValue::descriptor();
+    return Boolean::descriptor();
   }
 
   BooleanOperator(std::shared_ptr<ExpressionNode> left,
                   std::shared_ptr<ExpressionNode> right)
-      : left_(left), right_(right) {}
+      : BinaryOperator(left, right) {}
 
   // Perform the actual boolean evaluation.
   virtual bool EvaluateBool(bool left, bool right) const = 0;
@@ -363,7 +641,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
           descriptor->FindFieldByName(definition->name);
 
       if (field == nullptr) {
-        SetError("Unable to find field" + definition->name);
+        SetError(absl::StrCat("Unable to find field", definition->name));
         return nullptr;
       }
 
@@ -385,7 +663,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
         descriptor_->FindFieldByName(definition->name);
 
     if (field == nullptr) {
-      SetError("Unable to find field" + definition->name);
+      SetError(absl::StrCat("Unable to find field", definition->name));
       return nullptr;
 
     } else {
@@ -395,16 +673,59 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitEqualityExpression(
       FhirPathParser::EqualityExpressionContext* ctx) override {
-    // TODO: Implement this.
-    SetError("Equality operator not yet implemented");
+    antlrcpp::Any left_any = ctx->children[0]->accept(this);
+    string op = ctx->children[1]->getText();
+    antlrcpp::Any right_any = ctx->children[2]->accept(this);
+
+    if (!CheckOk()) {
+      return nullptr;
+    }
+
+    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
+    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+
+    if (op == "=") {
+      return ToAny(std::make_shared<EqualsOperator>(left, right));
+    }
+    if (op == "!=") {
+      // Negate the equals function to implement !=
+      auto equals_op = std::make_shared<EqualsOperator>(left, right);
+      return ToAny(std::make_shared<NotFunction>(equals_op));
+    }
+
+    SetError(absl::StrCat("Unsupported equality operator: ", op));
     return nullptr;
   }
 
   antlrcpp::Any visitInequalityExpression(
       FhirPathParser::InequalityExpressionContext* ctx) override {
-    // TODO: Implement this.
-    SetError("Inequality operator not yet implemented.");
-    return nullptr;
+    antlrcpp::Any left_any = ctx->children[0]->accept(this);
+    string op = ctx->children[1]->getText();
+    antlrcpp::Any right_any = ctx->children[2]->accept(this);
+
+    if (!CheckOk()) {
+      return nullptr;
+    }
+
+    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
+    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+
+    ComparisonOperator::ComparisonType op_type;
+
+    if (op == "<") {
+      op_type = ComparisonOperator::kLessThan;
+    } else if (op == ">") {
+      op_type = ComparisonOperator::kGreaterThan;
+    } else if (op == "<=") {
+      op_type = ComparisonOperator::kLessThanEqualTo;
+    } else if (op == ">=") {
+      op_type = ComparisonOperator::kGreaterThanEqualTo;
+    } else {
+      SetError(absl::StrCat("Unsupported comparison operator: ", op));
+      return nullptr;
+    }
+
+    return ToAny(std::make_shared<ComparisonOperator>(left, right, op_type));
   }
 
   antlrcpp::Any visitMemberInvocation(
@@ -465,6 +786,40 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     return ctx->children[1]->accept(this);
   }
 
+  antlrcpp::Any visitTerminal(TerminalNode* node) override {
+    const string& text = node->getSymbol()->getText();
+
+    switch (node->getSymbol()->getType()) {
+      case FhirPathLexer::NUMBER:
+        // Determine if the number is an integer or decimal, propagating
+        // decimal types in string form to preserve precision.
+        if (text.find(".") != string::npos) {
+          return ToAny(std::make_shared<Literal<Decimal, string>>(text));
+        } else {
+          int32_t value;
+          if (!absl::SimpleAtoi(text, &value)) {
+            SetError(absl::StrCat("Malformed integer ", text));
+            return nullptr;
+          }
+
+          return ToAny(std::make_shared<Literal<Integer, int32_t>>(value));
+        }
+
+      case FhirPathLexer::STRING:
+        // The lexer keeps the quotes around string literals,
+        // so we remove them here. The following assert simply reflects
+        // the lexer's guarantees as defined.
+        assert(text.length() >= 2);
+        return ToAny(std::make_shared<Literal<String, string>>(
+            text.substr(1, text.length() - 2)));
+
+      default:
+
+        SetError(absl::StrCat("Unknown terminal type: ", text));
+        return nullptr;
+    }
+  }
+
   antlrcpp::Any defaultResult() override { return nullptr; }
 
   bool CheckOk() { return error_message_.empty(); }
@@ -523,6 +878,36 @@ StatusOr<bool> EvaluationResult::GetBoolean() const {
   }
 
   return InvalidArgument("Expression did not evaluate to boolean");
+}
+
+StatusOr<int32_t> EvaluationResult::GetInteger() const {
+  auto messages = work_space_->GetResultMessages();
+
+  if (messages.size() == 1 && IsMessageType<Integer>(*messages[0])) {
+    return dynamic_cast<const Integer*>(messages[0])->value();
+  }
+
+  return InvalidArgument("Expression did not evaluate to integer");
+}
+
+StatusOr<string> EvaluationResult::GetDecimal() const {
+  auto messages = work_space_->GetResultMessages();
+
+  if (messages.size() == 1 && IsMessageType<Decimal>(*messages[0])) {
+    return dynamic_cast<const Decimal*>(messages[0])->value();
+  }
+
+  return InvalidArgument("Expression did not evaluate to decimal");
+}
+
+StatusOr<string> EvaluationResult::GetString() const {
+  auto messages = work_space_->GetResultMessages();
+
+  if (messages.size() == 1 && IsMessageType<String>(*messages[0])) {
+    return dynamic_cast<const String*>(messages[0])->value();
+  }
+
+  return InvalidArgument("Expression did not evaluate to string");
 }
 
 CompiledExpression::CompiledExpression(CompiledExpression&& other)
