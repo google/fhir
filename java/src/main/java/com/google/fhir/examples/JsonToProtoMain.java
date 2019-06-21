@@ -44,7 +44,7 @@ public class JsonToProtoMain {
 
       // Extract and print the parsed resource.
       Message parsed = ResourceUtils.getContainedResource(builder.build());
-      Files.asCharSink(entry.output, UTF_8).write(TextFormat.printToString(parsed));
+      Files.asCharSink(entry.output, UTF_8).write(TextFormat.printer().printToString(parsed));
     }
   }
 }

@@ -351,7 +351,7 @@ class ProtoGeneratorMain {
         }
         File outputFile =
             new File(args.descriptorOutputDirectory, fileBaseName + ".descriptor.prototxt");
-        Files.asCharSink(outputFile, UTF_8).write(TextFormat.printToString(descriptor));
+        Files.asCharSink(outputFile, UTF_8).write(TextFormat.printer().printToString(descriptor));
       }
     }
   }
