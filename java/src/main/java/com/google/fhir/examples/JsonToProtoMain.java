@@ -21,7 +21,6 @@ import com.google.fhir.stu3.JsonFormat.Parser;
 import com.google.fhir.stu3.ResourceUtils;
 import com.google.fhir.stu3.proto.ContainedResource;
 import com.google.protobuf.Message;
-import com.google.protobuf.TextFormat;
 import java.io.IOException;
 
 /**
@@ -44,7 +43,7 @@ public class JsonToProtoMain {
 
       // Extract and print the parsed resource.
       Message parsed = ResourceUtils.getContainedResource(builder.build());
-      Files.asCharSink(entry.output, UTF_8).write(TextFormat.printer().printToString(parsed));
+      Files.asCharSink(entry.output, UTF_8).write(parsed.toString());
     }
   }
 }

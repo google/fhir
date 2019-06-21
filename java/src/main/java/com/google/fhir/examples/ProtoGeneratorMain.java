@@ -34,7 +34,6 @@ import com.google.fhir.stu3.ProtoFilePrinter;
 import com.google.fhir.stu3.ProtoGenerator;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
-import com.google.protobuf.TextFormat;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -351,7 +350,7 @@ class ProtoGeneratorMain {
         }
         File outputFile =
             new File(args.descriptorOutputDirectory, fileBaseName + ".descriptor.prototxt");
-        Files.asCharSink(outputFile, UTF_8).write(TextFormat.printer().printToString(descriptor));
+        Files.asCharSink(outputFile, UTF_8).write(descriptor.toString());
       }
     }
   }
