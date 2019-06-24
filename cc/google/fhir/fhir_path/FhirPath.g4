@@ -89,6 +89,7 @@ identifier
         | QUOTEDIDENTIFIER
         | 'as'
         | 'is'
+        | 'contains'
         ;
 
 
