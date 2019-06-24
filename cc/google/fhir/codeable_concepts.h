@@ -27,6 +27,7 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/annotations.pb.h"
+#include "proto/r4/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 
@@ -119,6 +120,7 @@ StatusOr<const string> GetOnlyCodeWithSystem(const ::google::protobuf::Message& 
 // fit into two different slices, but might be useful, e.g., if you want
 // to specify a required ICD9 code, but make it easy to add other ICD9 codes.
 Status AddCoding(::google::protobuf::Message* concept, const stu3::proto::Coding& coding);
+Status AddCoding(::google::protobuf::Message* concept, const r4::proto::Coding& coding);
 
 Status AddCoding(::google::protobuf::Message* concept, const string& system,
                  const string& code);

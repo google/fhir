@@ -26,6 +26,7 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/systems/systems.h"
+#include "proto/r4/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
@@ -213,13 +214,19 @@ StatusOr<string> GetResourceId(const Message& message) {
     return ::tensorflow::errors::InvalidArgument(
         "No id field found on message");
   }
-  if (field->message_type()->full_name() != Id::descriptor()->full_name()) {
-    return ::tensorflow::errors::InvalidArgument(absl::StrCat(
-        "id field is not a singular STU3 String: ", desc->full_name()));
+  if (field->message_type()->full_name() == Id::descriptor()->full_name()) {
+    const auto* id_message =
+        dynamic_cast<const Id*>(&ref->GetMessage(message, field));
+    return id_message->value();
+  } else if (field->message_type()->full_name() ==
+             google::fhir::r4::proto::Id::descriptor()->full_name()) {
+    const auto* id_message = dynamic_cast<const google::fhir::r4::proto::Id*>(
+        &ref->GetMessage(message, field));
+    return id_message->value();
+  } else {
+    return ::tensorflow::errors::InvalidArgument(
+        absl::StrCat("id field is not a valid Id type: ", desc->full_name()));
   }
-  const auto* id_message =
-      dynamic_cast<const Id*>(&ref->GetMessage(message, field));
-  return id_message->value();
 }
 
 StatusOr<Reference> ReferenceStringToProto(const string& input) {

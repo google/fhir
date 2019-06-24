@@ -26,10 +26,6 @@ namespace fhir {
 
 namespace {
 
-using ::google::fhir::stu3::proto::CodeableConcept;
-using ::google::fhir::stu3::proto::Coding;
-using ::google::fhir::stu3::proto::CodingWithFixedCode;
-using ::google::fhir::stu3::proto::CodingWithFixedSystem;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::tensorflow::errors::AlreadyExists;
@@ -41,9 +37,10 @@ using ::tensorflow::errors::NotFound;
 // CodeableConcept, regardless of how they are internally stored.
 
 typedef std::function<bool(const FieldDescriptor*,
-                           const CodingWithFixedSystem&)>
+                           const stu3::proto::CodingWithFixedSystem&)>
     FixedSystemFieldBoolFunc;
-typedef std::function<bool(const FieldDescriptor*, const CodingWithFixedCode&)>
+typedef std::function<bool(const FieldDescriptor*,
+                           const stu3::proto::CodingWithFixedCode&)>
     FixedCodeFieldBoolFunc;
 
 template <typename SrcCodingLike, typename DestCodingLike>
@@ -61,20 +58,22 @@ void CopyCommonCodingFields(const SrcCodingLike& src, DestCodingLike* dest) {
 // callers to work with references and pointers to codings without caring
 // if the underlying objects are synthetic, or owned by the CodeableConcept
 // proto.
-std::unique_ptr<Coding> CodingFromFixedSystemCoding(
+std::unique_ptr<stu3::proto::Coding> CodingFromFixedSystemCoding(
     const google::protobuf::FieldDescriptor* field,
-    const CodingWithFixedSystem fixed_system_coding) {
-  std::unique_ptr<Coding> coding = absl::make_unique<Coding>();
+    const stu3::proto::CodingWithFixedSystem fixed_system_coding) {
+  std::unique_ptr<stu3::proto::Coding> coding =
+      absl::make_unique<stu3::proto::Coding>();
   CopyCommonCodingFields(fixed_system_coding, coding.get());
   coding->mutable_system()->set_value(GetInlinedCodingSystem(field));
   *coding->mutable_code() = fixed_system_coding.code();
   return coding;
 }
 
-std::unique_ptr<Coding> CodingFromFixedCodeCoding(
+std::unique_ptr<stu3::proto::Coding> CodingFromFixedCodeCoding(
     const google::protobuf::FieldDescriptor* field,
-    const CodingWithFixedCode fixed_code_coding) {
-  std::unique_ptr<Coding> coding = absl::make_unique<Coding>();
+    const stu3::proto::CodingWithFixedCode fixed_code_coding) {
+  std::unique_ptr<stu3::proto::Coding> coding =
+      absl::make_unique<stu3::proto::Coding>();
   CopyCommonCodingFields(fixed_code_coding, coding.get());
   coding->mutable_system()->set_value(GetInlinedCodingSystem(field));
   coding->mutable_code()->set_value(GetInlinedCodingCode(field));
@@ -96,12 +95,13 @@ const bool ForEachInternalCodingHalting(
   // Check base Coding fields.
   const FieldDescriptor* coding_field =
       concept.GetDescriptor()->FindFieldByName("coding");
-  if (ForEachMessageHalting<Coding>(concept, coding_field, coding_func)) {
+  if (ForEachMessageHalting<stu3::proto::Coding>(concept, coding_field,
+                                                 coding_func)) {
     return true;
   }
 
   // If there are no profiled fields to check, return.
-  if (IsMessageType<CodeableConcept>(concept)) return false;
+  if (IsMessageType<stu3::proto::CodeableConcept>(concept)) return false;
 
   // Check for profiled fields.
   const ::google::protobuf::Descriptor* descriptor = concept.GetDescriptor();
@@ -109,19 +109,23 @@ const bool ForEachInternalCodingHalting(
     const FieldDescriptor* field = descriptor->field(i);
     if (field->type() != FieldDescriptor::TYPE_MESSAGE) continue;
 
-    if (IsMessageType<CodingWithFixedSystem>(field->message_type())) {
-      const bool stop = ForEachMessageHalting<CodingWithFixedSystem>(
-          concept, field,
-          [&fixed_system_func,
-           &field](const CodingWithFixedSystem& fixed_system_coding) {
-            return fixed_system_func(field, fixed_system_coding);
-          });
+    if (IsMessageType<stu3::proto::CodingWithFixedSystem>(
+            field->message_type())) {
+      const bool stop =
+          ForEachMessageHalting<stu3::proto::CodingWithFixedSystem>(
+              concept, field,
+              [&fixed_system_func,
+               &field](const stu3::proto::CodingWithFixedSystem&
+                           fixed_system_coding) {
+                return fixed_system_func(field, fixed_system_coding);
+              });
       if (stop) return true;
-    } else if (IsMessageType<CodingWithFixedCode>(field->message_type())) {
-      const bool stop = ForEachMessageHalting<CodingWithFixedCode>(
+    } else if (IsMessageType<stu3::proto::CodingWithFixedCode>(
+                   field->message_type())) {
+      const bool stop = ForEachMessageHalting<stu3::proto::CodingWithFixedCode>(
           concept, field,
           [&fixed_code_func,
-           &field](const CodingWithFixedCode& fixed_code_coding) {
+           &field](const stu3::proto::CodingWithFixedCode& fixed_code_coding) {
             return fixed_code_func(field, fixed_code_coding);
           });
       if (stop) return true;
@@ -155,7 +159,7 @@ namespace internal {
 // unprofiled.
 const FieldDescriptor* ProfiledFieldForSystem(const Message& concept,
                                               const string& system) {
-  if (IsMessageType<CodeableConcept>(concept)) return nullptr;
+  if (IsMessageType<stu3::proto::CodeableConcept>(concept)) return nullptr;
 
   const ::google::protobuf::Descriptor* descriptor = concept.GetDescriptor();
   for (int i = 0; i < descriptor->field_count(); i++) {
@@ -175,7 +179,7 @@ const bool FindSystemCodeStringPair(const Message& concept,
                                     const string** found_code) {
   return ForEachInternalCodingHalting(
       concept,
-      [&func, &found_system, &found_code](const Coding& coding) {
+      [&func, &found_system, &found_code](const stu3::proto::Coding& coding) {
         const string& system = coding.system().value();
         const string& code = coding.code().value();
         if (func(system, code)) {
@@ -185,8 +189,9 @@ const bool FindSystemCodeStringPair(const Message& concept,
         }
         return false;
       },
-      [&func, &found_system, &found_code](const FieldDescriptor* field,
-                                          const CodingWithFixedSystem& coding) {
+      [&func, &found_system, &found_code](
+          const FieldDescriptor* field,
+          const stu3::proto::CodingWithFixedSystem& coding) {
         const string& system = GetInlinedCodingSystem(field);
         const string& code = coding.code().value();
         if (func(system, code)) {
@@ -196,8 +201,9 @@ const bool FindSystemCodeStringPair(const Message& concept,
         }
         return false;
       },
-      [&func, &found_system, &found_code](const FieldDescriptor* field,
-                                          const CodingWithFixedCode& coding) {
+      [&func, &found_system, &found_code](
+          const FieldDescriptor* field,
+          const stu3::proto::CodingWithFixedCode& coding) {
         const string& system = GetInlinedCodingSystem(field);
         const string& code = GetInlinedCodingCode(field);
         if (func(system, code)) {
@@ -253,18 +259,18 @@ StatusOr<const string> GetOnlyCodeWithSystem(const Message& concept,
   return codes.front();
 }
 
-Status AddCoding(Message* concept, const Coding& coding) {
-  if (!IsTypeOrProfileOf<CodeableConcept>(*concept)) {
+Status AddCoding(Message* concept, const stu3::proto::Coding& coding) {
+  if (!IsTypeOrProfileOf<stu3::proto::CodeableConcept>(*concept)) {
     return InvalidArgument(
         "Error adding coding: ", concept->GetDescriptor()->full_name(),
         " is not CodeableConcept-like.");
   }
   const string& system = coding.system().value();
-  if (IsProfileOf<CodeableConcept>(*concept)) {
+  if (IsProfileOf<stu3::proto::CodeableConcept>(*concept)) {
     const FieldDescriptor* profiled_field =
         internal::ProfiledFieldForSystem(*concept, system);
     if (profiled_field != nullptr) {
-      if (IsMessageType<CodingWithFixedSystem>(
+      if (IsMessageType<stu3::proto::CodingWithFixedSystem>(
               profiled_field->message_type())) {
         if (!profiled_field->is_repeated() &&
             FieldHasValue(*concept, profiled_field)) {
@@ -274,12 +280,12 @@ Status AddCoding(Message* concept, const Coding& coding) {
               profiled_field->full_name(), ", System: ", system);
         }
         Message* target_coding = MutableOrAddMessage(concept, profiled_field);
-        CodingWithFixedSystem* fixed_system_coding =
-            static_cast<CodingWithFixedSystem*>(target_coding);
+        stu3::proto::CodingWithFixedSystem* fixed_system_coding =
+            static_cast<stu3::proto::CodingWithFixedSystem*>(target_coding);
         CopyCommonCodingFields(coding, fixed_system_coding);
         *fixed_system_coding->mutable_code() = coding.code();
         return Status::OK();
-      } else if (IsMessageType<CodingWithFixedCode>(
+      } else if (IsMessageType<stu3::proto::CodingWithFixedCode>(
                      profiled_field->message_type())) {
         const string& fixed_code = GetInlinedCodingCode(profiled_field);
         if (fixed_code == coding.code().value()) {
@@ -292,8 +298,8 @@ Status AddCoding(Message* concept, const Coding& coding) {
                 ", Code:", fixed_code);
           }
           Message* target_coding = MutableOrAddMessage(concept, profiled_field);
-          CodingWithFixedCode* fixed_system_code =
-              static_cast<CodingWithFixedCode*>(target_coding);
+          stu3::proto::CodingWithFixedCode* fixed_system_code =
+              static_cast<stu3::proto::CodingWithFixedCode*>(target_coding);
           CopyCommonCodingFields(coding, fixed_system_code);
           return Status::OK();
         }
@@ -306,31 +312,67 @@ Status AddCoding(Message* concept, const Coding& coding) {
   return Status::OK();
 }
 
-Status AddCoding(Message* concept, const string& system, const string& code) {
-  Coding coding;
-  coding.mutable_system()->set_value(system);
-  coding.mutable_code()->set_value(code);
-  return AddCoding(concept, coding);
+// It is currently a runtime error to add an stu3 coding to an r4 resource or
+// profile. TODO: handle this case more gracefully.
+Status AddCoding(Message* concept, const r4::proto::Coding& coding) {
+  if (!IsTypeOrProfileOf<r4::proto::CodeableConcept>(*concept)) {
+    return InvalidArgument(
+        "Error adding coding: ", concept->GetDescriptor()->full_name(),
+        " is not CodeableConcept-like.");
+  }
+  concept->GetReflection()
+      ->AddMessage(concept, concept->GetDescriptor()->FindFieldByName("coding"))
+      ->CopyFrom(coding);
+  return Status::OK();
 }
 
-std::shared_ptr<const Coding> FindCoding(const Message& concept,
-                                         const CodingBoolFunc& func) {
-  std::shared_ptr<const Coding> found_coding = nullptr;
+Status AddCoding(Message* concept, const string& system, const string& code) {
+  const google::protobuf::FieldDescriptor* field_descriptor =
+      concept->GetDescriptor()->FindFieldByName("coding");
+  if (field_descriptor == nullptr ||
+      field_descriptor->type() != google::protobuf::FieldDescriptor::TYPE_MESSAGE) {
+    return InvalidArgument(
+        "Error adding coding: ", concept->GetDescriptor()->full_name(),
+        " is not CodeableConcept-like.");
+  }
+  const google::protobuf::Descriptor* descriptor = field_descriptor->message_type();
+  // Use STU3 or R4 as needed.
+  if (descriptor->full_name() ==
+      stu3::proto::Coding::descriptor()->full_name()) {
+    stu3::proto::Coding coding;
+    coding.mutable_system()->set_value(system);
+    coding.mutable_code()->set_value(code);
+    return AddCoding(concept, coding);
+  } else if (descriptor->full_name() ==
+             r4::proto::Coding::descriptor()->full_name()) {
+    r4::proto::Coding coding;
+    coding.mutable_system()->set_value(system);
+    coding.mutable_code()->set_value(code);
+    return AddCoding(concept, coding);
+  } else {
+    return InvalidArgument("Error adding coding: ", descriptor->full_name(),
+                           " is not a supported Coding type.");
+  }
+}
+
+std::shared_ptr<const stu3::proto::Coding> FindCoding(
+    const Message& concept, const CodingBoolFunc& func) {
+  std::shared_ptr<const stu3::proto::Coding> found_coding = nullptr;
   ForEachInternalCodingHalting(
       concept,
-      [&func, &found_coding](const Coding& coding) {
+      [&func, &found_coding](const stu3::proto::Coding& coding) {
         if (func(coding)) {
           // Use a shared_ptr with a no-op Deleter, since the lifecyle of the
           // Coding should be controlled by the CodeableConcept it lives in.
-          found_coding =
-              std::shared_ptr<const Coding>(&coding, [](const Coding*) {});
+          found_coding = std::shared_ptr<const stu3::proto::Coding>(
+              &coding, [](const stu3::proto::Coding*) {});
           return true;
         }
         return false;
       },
       [&func, &found_coding](const FieldDescriptor* field,
-                             const CodingWithFixedSystem& coding) {
-        std::shared_ptr<Coding> synth_coding =
+                             const stu3::proto::CodingWithFixedSystem& coding) {
+        std::shared_ptr<stu3::proto::Coding> synth_coding =
             CodingFromFixedSystemCoding(field, coding);
         if (func(*synth_coding)) {
           found_coding = std::move(synth_coding);
@@ -339,8 +381,8 @@ std::shared_ptr<const Coding> FindCoding(const Message& concept,
         return false;
       },
       [&func, &found_coding](const FieldDescriptor* field,
-                             const CodingWithFixedCode& coding) {
-        std::shared_ptr<Coding> synth_coding =
+                             const stu3::proto::CodingWithFixedCode& coding) {
+        std::shared_ptr<stu3::proto::Coding> synth_coding =
             CodingFromFixedCodeCoding(field, coding);
         if (func(*synth_coding)) {
           found_coding = std::move(synth_coding);
@@ -352,7 +394,7 @@ std::shared_ptr<const Coding> FindCoding(const Message& concept,
 }
 
 void ForEachCoding(const Message& concept, const CodingFunc& func) {
-  FindCoding(concept, [&func](const Coding& coding) {
+  FindCoding(concept, [&func](const stu3::proto::Coding& coding) {
     func(coding);
     // Return false for all codings, to ensure this iterates over all codings
     // without "finding" anything.
@@ -363,14 +405,15 @@ void ForEachCoding(const Message& concept, const CodingFunc& func) {
 Status ForEachCodingWithStatus(const Message& concept,
                                const CodingStatusFunc& func) {
   Status return_status = Status::OK();
-  FindCoding(concept, [&func, &return_status](const Coding& coding) {
-    Status status = func(coding);
-    if (status.ok()) {
-      return false;
-    }
-    return_status = status;
-    return true;
-  });
+  FindCoding(concept,
+             [&func, &return_status](const stu3::proto::Coding& coding) {
+               Status status = func(coding);
+               if (status.ok()) {
+                 return false;
+               }
+               return_status = status;
+               return true;
+             });
   return return_status;
 }
 
@@ -387,13 +430,14 @@ Status CopyCodeableConcept(const Message& source, Message* target) {
   FHIR_RETURN_IF_ERROR(CopyFieldIfPresent(source, target, "extension"));
 
   // Copy all codings.
-  return ForEachCodingWithStatus(source, [&target](const Coding& coding) {
-    return AddCoding(target, coding);
-  });
+  return ForEachCodingWithStatus(source,
+                                 [&target](const stu3::proto::Coding& coding) {
+                                   return AddCoding(target, coding);
+                                 });
 }
 
 bool IsCodeableConceptLike(const ::google::protobuf::Descriptor* descriptor) {
-  return IsTypeOrProfileOf<CodeableConcept>(descriptor);
+  return IsTypeOrProfileOf<stu3::proto::CodeableConcept>(descriptor);
 }
 
 bool IsCodeableConceptLike(const Message& message) {

@@ -18,6 +18,8 @@
 #include "gtest/gtest.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
+#include "proto/r4/datatypes.pb.h"
+#include "proto/stu3/datatypes.pb.h"
 #include "testdata/stu3/profiles/test.pb.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
 
@@ -444,6 +446,36 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
   TF_ASSERT_OK(CopyCodeableConcept(concept_for_code, &profiled_to_profiled));
   ASSERT_THAT(concept_for_cat,
               testutil::EqualsProtoIgnoringReordering(profiled_to_profiled));
+}
+
+TEST(CodeableConceptsTest, AddCodingFromStringsSTU3) {
+  stu3::proto::CodeableConcept concept;
+
+  TF_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode1"));
+  TF_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode2"));
+  TF_CHECK_OK(AddCoding(&concept, "http://sysr.org", "rcode"));
+
+  EXPECT_EQ(concept.coding_size(), 3);
+  string code_accum = "";
+  ForEachCoding(concept, [&code_accum](const Coding& coding) {
+    code_accum = absl::StrCat(code_accum, coding.code().value(), ",");
+  });
+  EXPECT_EQ(code_accum, "qcode1,qcode2,rcode,");
+}
+
+TEST(CodeableConceptsTest, AddCodingFromStringsR4) {
+  r4::proto::CodeableConcept concept;
+
+  TF_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode1"));
+  TF_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode2"));
+  TF_CHECK_OK(AddCoding(&concept, "http://sysr.org", "rcode"));
+
+  EXPECT_EQ(concept.coding_size(), 3);
+  string code_accum = "";
+  ForEachCoding(concept, [&code_accum](const Coding& coding) {
+    code_accum = absl::StrCat(code_accum, coding.code().value(), ",");
+  });
+  EXPECT_EQ(code_accum, "qcode1,qcode2,rcode,");
 }
 
 }  // namespace
