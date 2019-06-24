@@ -1,0 +1,14 @@
+{
+  "name": "hl7.fhir.us.core.r4",
+  "version": "4.0.0",
+  "tools-version": 3,
+  "type": "fhir.ig",
+  "license": "CC0-1.0",
+  "canonical": "http://hl7.org/fhir/us/core",
+  "url": "https://build.fhir.org/ig/HL7/US-Core-R4/",
+  "title": "US Core R4",
+  "dependencies": {
+    "hl7.fhir.core": "4.0.0"
+  },
+  "author": "HL7 International - US Realm Steering Committee"
+}

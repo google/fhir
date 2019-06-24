@@ -98,7 +98,7 @@ structure_definition_package(
     structure_definitions_zip = "fhir_r4_structure_definitions.zip",
 )
 
-# Structure Definitions for the US-Core profiles.
+# Structure Definitions for the STU3 US-Core profiles.
 filegroup(
     name = "uscore_stu3_structure_definitions_filegroup",
     srcs = glob([
@@ -112,9 +112,28 @@ zip_file(
 )
 
 structure_definition_package(
-    package_name = "uscore-package",
+    package_name = "uscore-stu3-package",
     package_info = "uscore_stu3_package_info.prototxt",
     structure_definitions_zip = "uscore_stu3_structure_definitions.zip",
+)
+
+# Structure Definitions for the R4 US-Core Profiles
+filegroup(
+    name = "uscore_r4_structure_definitions_filegroup",
+    srcs = glob([
+        "hl7.fhir.us.core/3.0.0/package/StructureDefinition-*.json",
+    ]),
+)
+
+zip_file(
+    name = "uscore_r4_structure_definitions.zip",
+    filegroup = ":uscore_r4_structure_definitions_filegroup",
+)
+
+structure_definition_package(
+    package_name = "uscore-r4-package",
+    package_info = "uscore_r4_package_info.prototxt",
+    structure_definitions_zip = "uscore_r4_structure_definitions.zip",
 )
 
 # Structure Definitions for the US QI core profiles.
