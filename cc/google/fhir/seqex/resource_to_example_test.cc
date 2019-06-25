@@ -244,6 +244,50 @@ TEST_F(ResourceToExampleTest, PositiveInt) {
   EXPECT_THAT(output, EqualsProto(expected));
 }
 
+TEST_F(ResourceToExampleTest, HandlesCodeValueAsString) {
+  stu3::proto::Binary input;
+  ASSERT_TRUE(parser_.ParseFromString(R"proto(
+                                        content_type { value: "bin" }
+                                      )proto",
+                                      &input));
+  ::tensorflow::Example expected;
+  ASSERT_TRUE(parser_.ParseFromString(
+      R"proto(
+        features {
+          feature {
+            key: "Binary.contentType"
+            value { bytes_list { value: "bin" } }
+          }
+        })proto",
+      &expected));
+  ::tensorflow::Example output;
+  ResourceToExample(input, &output, false);
+  EXPECT_THAT(output, EqualsProto(expected));
+}
+
+
+TEST_F(ResourceToExampleTest, BinaryResourceWithContent) {
+  stu3::proto::Binary input;
+  ASSERT_TRUE(parser_.ParseFromString(R"proto(
+                                        content_type { value: "bin" }
+                                        content { value: "09832982033" }
+                                      )proto",
+                                      &input));
+  ::tensorflow::Example expected;
+  ASSERT_TRUE(parser_.ParseFromString(
+      R"proto(
+        features {
+          feature {
+            key: "Binary.contentType"
+            value { bytes_list { value: "bin" } }
+          }
+        })proto",
+      &expected));
+  ::tensorflow::Example output;
+  ResourceToExample(input, &output, false);
+  EXPECT_THAT(output, EqualsProto(expected));
+}
+
 }  // namespace seqex
 }  // namespace fhir
 }  // namespace google

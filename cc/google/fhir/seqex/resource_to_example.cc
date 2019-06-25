@@ -62,6 +62,7 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
+using ::google::fhir::stu3::proto::Base64Binary;
 using ::google::fhir::stu3::proto::Boolean;
 using ::google::fhir::stu3::proto::CodeableConcept;
 using ::google::fhir::stu3::proto::Coding;
@@ -359,14 +360,31 @@ void MessageToExample(const google::protobuf::Message& message, const string& pr
         } else if (field->message_type()->options().HasExtension(
                        proto::fhir_valueset_url)) {
           // Valueset-constrained codes are emitted without tokenization.
+          // Note: some codes (i.e. MimeTypeCode) are represented as non
+          // enumerated strings - handled here.
           const google::protobuf::Reflection* reflection = child.GetReflection();
-          const google::protobuf::FieldDescriptor* enum_field =
+          const google::protobuf::FieldDescriptor* value_field =
               field->message_type()->FindFieldByName("value");
-          const google::protobuf::EnumValueDescriptor* enum_value =
-              reflection->GetEnum(child, enum_field);
-          (*example->mutable_features()->mutable_feature())[name]
-              .mutable_bytes_list()
-              ->add_value(absl::AsciiStrToLower(enum_value->name()));
+          auto* bytes_list =
+              (*example->mutable_features()->mutable_feature())[name]
+                  .mutable_bytes_list();
+          switch (value_field->cpp_type()) {
+            case google::protobuf::FieldDescriptor::CPPTYPE_ENUM: {
+              const google::protobuf::EnumValueDescriptor* enum_value =
+                  reflection->GetEnum(child, value_field);
+              bytes_list->add_value(absl::AsciiStrToLower(enum_value->name()));
+              break;
+            }
+            case google::protobuf::FieldDescriptor::CPPTYPE_STRING: {
+              string str;
+              str = reflection->GetStringReference(child, value_field, &str);
+              bytes_list->add_value(absl::AsciiStrToLower(str));
+              break;
+            }
+            default:
+              LOG(FATAL)
+                  << "Unrecognized code type found in resource_to_example.";
+          }
         } else if (field->message_type()->full_name() ==
                    Date::descriptor()->full_name()) {
           Date date;
@@ -462,6 +480,12 @@ void MessageToExample(const google::protobuf::Message& message, const string& pr
                    field->message_type()->full_name() ==
                        Id::descriptor()->full_name()) {
           // We don't emit identifiers.
+          // TODO: are there situations where we should?
+        } else if (field->message_type()->full_name() ==
+                       stu3::proto::Base64Binary::descriptor()->full_name() ||
+                   field->message_type()->full_name() ==
+                       Base64Binary::descriptor()->full_name()) {
+          // We don't emit Base64Binary.
           // TODO: are there situations where we should?
         } else if (field->message_type()->full_name() ==
                        Reference::descriptor()->full_name() ||
