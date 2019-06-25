@@ -31,6 +31,7 @@ import com.google.protobuf.Descriptors.FileDescriptor;
 public enum FhirVersion {
   STU3(
       "google.fhir.stu3.proto",
+      "proto/stu3",
       ImmutableList.of(
           AbstractTypeCode.getDescriptor().getFile(),
           AddressTypeCode.getDescriptor().getFile(),
@@ -44,6 +45,7 @@ public enum FhirVersion {
       FHIRVersionCode.Value.NUM_3_0_1),
   R4(
       "google.fhir.r4.proto",
+      "proto/r4",
       ImmutableList.of(
           com.google.fhir.r4.proto.AccountStatusCode.getDescriptor().getFile(),
           com.google.fhir.r4.proto.AddressTypeCode.getDescriptor().getFile()),
@@ -52,8 +54,10 @@ public enum FhirVersion {
           "codes.proto", com.google.fhir.r4.proto.AccountStatusCode.getDescriptor().getFile()),
       FHIRVersionCode.Value.NUM_4_0_0);
 
-  // The package of the core FHIR structures.
-  public final String coreFhirPackage;
+  // The proto package of the core FHIR structures.
+  public final String coreProtoPackage;
+  // The import location of the core FHIR proto package.
+  public final String coreProtoImportRoot;
   // A list of all the FHIR code files.
   public final ImmutableList<FileDescriptor> codeTypeList;
   // A map of all the FHIR core types to their corresponding files.
@@ -62,11 +66,13 @@ public enum FhirVersion {
   public final FHIRVersionCode.Value minorVersion;
 
   private FhirVersion(
-      String coreFhirPackage,
+      String coreProtoPackage,
+      String coreProtoImportRoot,
       ImmutableList<FileDescriptor> codeTypeList,
       ImmutableMap<String, FileDescriptor> coreTypeMap,
       FHIRVersionCode.Value minorVersion) {
-    this.coreFhirPackage = coreFhirPackage;
+    this.coreProtoPackage = coreProtoPackage;
+    this.coreProtoImportRoot = coreProtoImportRoot;
     this.codeTypeList = codeTypeList;
     this.coreTypeMap = coreTypeMap;
     this.minorVersion = minorVersion;

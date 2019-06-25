@@ -102,17 +102,21 @@ class ProtoGeneratorMain {
     private String packageInfo = null;
 
     @Parameter(
-        names = {"--fhir_proto_root"},
-        description = "Generated proto import root path",
-        required = true)
-    private String fhirProtoRoot = null;
+        names = {"--stu3_struct_def_zip"},
+        description = "Zip file containing core STU3 Structure Definitions.")
+    private String stu3StructDefZip = null;
+
+    @Parameter(
+        names = {"--r4_struct_def_zip"},
+        description = "Zip file containing core R4 Structure Definitions.")
+    private String r4StructDefZip = null;
 
     @Parameter(
         names = {"--struct_def_dep_pkg"},
         description =
-            "For StructureDefinitions that are dependencies of the types being "
+            "For StructureDefinitions that are non-core dependencies of the types being "
                 + "generated, this is a pipe-delimited tuple of target|PackageInfo. "
-                + "The target can be either a directory or a zip archive, and the PackageInfo "
+                + "The target must be a zip archive, and the PackageInfo "
                 + "should be a path to a prototxt file containing a google.fhir.proto.PackageInfo "
                 + "proto.")
     private List<String> structDefDepPkgList = new ArrayList<>();
@@ -156,10 +160,11 @@ class ProtoGeneratorMain {
 
     /**
      * For StructureDefinitions that are dependencies of the input StructureDefinitions, returns a
-     * map from directory of StructureDefinitions to the proto package they were (previously)
-     * generated in.
+     * map from zip archive of StructureDefinitions to proto package those types were generated in.
+     * E.g., { "path/to/stu3/uscore_structuredefinitions.zip" -> "google.fhir.stu3.uscore" } This
+     * allows inlining an externally-defined proto based on its structure definition url.
      */
-    private Map<String, String> getDependencyPackagesMap() {
+    private Map<String, String> getDependencyPackagesMap() throws IOException {
       Splitter keyValueSplitter = Splitter.on("|");
       Map<String, String> packages = new HashMap<>();
       for (String structDefDepPkg : structDefDepPkgList) {
@@ -168,9 +173,15 @@ class ProtoGeneratorMain {
           throw new IllegalArgumentException(
               "Invalid struct_def_dep_pkg entry ["
                   + structDefDepPkg
-                  + "].  Should be of the form: your/directory|proto.package.name");
+                  + "].  Should be of the form: your/archive.zip|your/package_info.prototxt");
         }
-        packages.put(keyValuePair.get(0), keyValuePair.get(1));
+        PackageInfo depPackageInfo =
+            FileUtils.mergeText(new File(keyValuePair.get(1)), PackageInfo.newBuilder()).build();
+        if (depPackageInfo.getProtoPackage().isEmpty()) {
+          throw new IllegalArgumentException(
+              "Missing proto_package from PackageInfo: " + keyValuePair.get(1));
+        }
+        packages.put(keyValuePair.get(0), depPackageInfo.getProtoPackage());
       }
       return packages;
     }
@@ -198,28 +209,52 @@ class ProtoGeneratorMain {
     PackageInfo packageInfo =
         FileUtils.mergeText(new File(args.packageInfo), PackageInfo.newBuilder()).build();
 
+    if (packageInfo.getProtoPackage().isEmpty()
+        || packageInfo.getFhirVersion() == FhirVersion.FHIR_VERSION_UNKNOWN) {
+      throw new IllegalArgumentException(
+          "package_info must contain at least a proto_package and fhir_version.");
+    }
+
+    // Map representing all packages that are dependencies of this package.
+    // This map is of the form
+    // {location of zip archive of structure definitions -> proto package to inlined those types as}
+    Map<String, String> dependencyPackagesMap = args.getDependencyPackagesMap();
+
+    // Add in core FHIR types (e.g., datatypes and unprofiled resources)
+    switch (packageInfo.getFhirVersion()) {
+      case STU3:
+        if (args.stu3StructDefZip == null) {
+          throw new IllegalArgumentException(
+              "Profile is for STU3, but --stu3_struct_def_zip is not specified.");
+        }
+        dependencyPackagesMap.put(
+            args.stu3StructDefZip, com.google.fhir.common.FhirVersion.STU3.coreProtoPackage);
+        break;
+      case R4:
+        if (args.r4StructDefZip == null) {
+          throw new IllegalArgumentException(
+              "Profile is for R4, but --r4_struct_def_zip is not specified.");
+        }
+        dependencyPackagesMap.put(
+            args.r4StructDefZip, com.google.fhir.common.FhirVersion.R4.coreProtoPackage);
+        break;
+      default:
+        throw new IllegalArgumentException(
+            "FHIR version not supported by ProfileGenerator: " + packageInfo.getFhirVersion());
+    }
+
     // Read all structure definitions that should be inlined into the
     // output protos.  This will not generate proto definitions for these extensions -
     // that must be done separately.
-    // Generate a Pair of {StructureDefinition, proto_package} for each.
+    // Generate a Pair of {StructureDefinition, proto package string} for each.
     Map<StructureDefinition, String> knownTypes = new HashMap<>();
-    for (Map.Entry<String, String> dirPackagePair : args.getDependencyPackagesMap().entrySet()) {
+    for (Map.Entry<String, String> zipPackagePair : dependencyPackagesMap.entrySet()) {
       List<StructureDefinition> structDefs =
           FileUtils.loadStructureDefinitionsInZip(
-              dirPackagePair.getKey(), packageInfo.getFhirVersion());
-      PackageInfo depPackageInfo =
-          FileUtils.mergeText(new File(dirPackagePair.getValue()), PackageInfo.newBuilder())
-              .build();
-      if (depPackageInfo.getProtoPackage().isEmpty()) {
-        throw new IllegalArgumentException(
-            "PackageInfo has no proto_package: " + dirPackagePair.getValue());
-      }
+              zipPackagePair.getKey(), packageInfo.getFhirVersion());
       for (StructureDefinition structDef : structDefs) {
-        knownTypes.put(structDef, depPackageInfo.getProtoPackage());
+        knownTypes.put(structDef, zipPackagePair.getValue());
       }
-    }
-    if (packageInfo.getProtoPackage().isEmpty()) {
-      throw new IllegalArgumentException("package_info must contain at least a proto_package.");
     }
 
     // Read the inputs in sequence.
@@ -276,8 +311,7 @@ class ProtoGeneratorMain {
     writer.println("Generating proto descriptors...");
     writer.flush();
 
-    ProtoGenerator generator =
-        new ProtoGenerator(packageInfo, args.fhirProtoRoot, ImmutableMap.copyOf(knownTypes));
+    ProtoGenerator generator = new ProtoGenerator(packageInfo, ImmutableMap.copyOf(knownTypes));
     ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
 
     if (args.separateExtensions) {

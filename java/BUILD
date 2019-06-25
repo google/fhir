@@ -48,6 +48,7 @@ java_library(
         ],
     ),
     deps = [
+        ":common",
         ":structure_definition_transformer",
         ":stu3",
         "//external:guava",
@@ -538,6 +539,7 @@ java_library(
     name = "valueset_generator_lib",
     srcs = ["src/main/java/com/google/fhir/stu3/ValueSetGenerator.java"],
     deps = [
+        ":common",
         ":stu3",
         "//external:guava",
         "//proto/stu3:profile_config_java_proto",

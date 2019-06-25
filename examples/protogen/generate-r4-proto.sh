@@ -19,14 +19,12 @@ PROTO_GENERATOR=$ROOT_PATH/bazel-bin/java/ProtoGenerator
 
 OUTPUT_PATH="$(dirname $0)/../../proto/r4/"
 DESCRIPTOR_OUTPUT_PATH="$(dirname $0)/../../testdata/r4/descriptors/"
-FHIR_PROTO_ROOT="proto/r4"
 FHIR_STRUCT_DEF_ZIP="$ROOT_PATH/bazel-genfiles/spec/fhir_r4_structure_definitions.zip"
 FHIR_PACKAGE_INFO="$ROOT_PATH//spec/fhir_r4_package_info.prototxt"
 
 COMMON_FLAGS=" \
   --emit_proto \
   --emit_descriptors \
-  --fhir_proto_root $FHIR_PROTO_ROOT \
   --package_info $FHIR_PACKAGE_INFO \
   --struct_def_dep_pkg $FHIR_STRUCT_DEF_ZIP|$FHIR_PACKAGE_INFO \
   --output_directory $OUTPUT_PATH \

@@ -200,7 +200,6 @@ public class ProtoGeneratorTest {
                 .setJavaProtoPackage("com.google.fhir.stu3.proto")
                 .setFhirVersion(FhirVersion.STU3)
                 .build(),
-            "proto/stu3",
             getKnownStructDefs());
 
     registry = ExtensionRegistry.newInstance();
@@ -1520,7 +1519,6 @@ public class ProtoGeneratorTest {
                 .setJavaProtoPackage("com.google.fhir.r4.proto")
                 .setFhirVersion(FhirVersion.R4)
                 .build(),
-            "proto/r4",
             ImmutableMap.copyOf(knownStructDefs));
     String suffix = ".descriptor.prototxt";
     int fileCount = 0;

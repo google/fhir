@@ -17,8 +17,8 @@ ROOT_PATH=$(dirname $0)/../..
 INPUT_PATH=$ROOT_PATH/spec/hl7.fhir.core/3.0.1/package/
 PROTO_GENERATOR=$ROOT_PATH/bazel-bin/java/ProtoGenerator
 
-OUTPUT_PATH=$ROOT_PATH/proto/stu3/
-DESCRIPTOR_OUTPUT_PATH=$ROOT_PATH/testdata/stu3/descriptors/
+OUTPUT_PATH="$(dirname $0)/../../proto/stu3/"
+DESCRIPTOR_OUTPUT_PATH="$(dirname $0)/../../testdata/stu3/descriptors/"
 
 PRIMITIVES="base64Binary boolean code date dateTime decimal id instant integer markdown oid positiveInt string time unsignedInt uri uuid xhtml"
 DATATYPES="Address Age Annotation Attachment CodeableConcept Coding ContactPoint Count Distance Dosage Duration HumanName Identifier Meta Money Period Quantity Range Ratio SampledData Signature SimpleQuantity Timing"
@@ -38,15 +38,13 @@ function get_location() {
   fi
   echo "$INPUT_PATH/StructureDefinition-$1.json"
 }
-FHIR_PROTO_ROOT="proto/stu3"
 FHIR_STRUCT_DEF_ZIP="$ROOT_PATH/bazel-genfiles/spec/fhir_stu3_structure_definitions.zip"
 FHIR_PACKAGE_INFO="$ROOT_PATH//spec/fhir_stu3_package_info.prototxt"
 
 COMMON_FLAGS=" \
   --emit_proto \
   --emit_descriptors \
-  --struct_def_dep_pkg $FHIR_STRUCT_DEF_ZIP|$FHIR_PACKAGE_INFO \
-  --fhir_proto_root $FHIR_PROTO_ROOT \
+  --stu3_struct_def_zip $FHIR_STRUCT_DEF_ZIP \
   --package_info $FHIR_PACKAGE_INFO \
   --output_directory $OUTPUT_PATH \
   --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH" \
@@ -75,7 +73,7 @@ $PROTO_GENERATOR \
 if [ $? -eq 0 ]
 then
   echo -e "\n//End of auto-generated messages.\n" >> $OUTPUT_PATH/datatypes.proto
-  cat stu3/datatypes_supplement_proto.txt >> $OUTPUT_PATH/datatypes.proto
+  cat "$(dirname $0)/stu3/datatypes_supplement_proto.txt" >> $OUTPUT_PATH/datatypes.proto
 fi
 
 # generate metadatatypes.proto

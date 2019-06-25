@@ -71,6 +71,16 @@ public class ProfileGeneratorMain {
         names = {"--struct_def_dep_zip"},
         description = "Zip file containing structure definitions that profiles might depend on.")
     private List<String> structDefDepZips = new ArrayList<>();
+
+    @Parameter(
+        names = {"--stu3_struct_def_zip"},
+        description = "Zip file containing core STU3 Structure Definitions.")
+    private String stu3StructDefZip = null;
+
+    @Parameter(
+        names = {"--r4_struct_def_zip"},
+        description = "Zip file containing core R4 Structure Definitions.")
+    private String r4StructDefZip = null;
   }
 
   private ProfileGeneratorMain() {}
@@ -110,14 +120,36 @@ public class ProfileGeneratorMain {
       combinedExtensionsBuilder.addAllComplexExtension(extensions.getComplexExtensionList());
     }
 
+    PackageInfo packageInfo = readPackageInfo(args.packageInfo);
+
     List<StructureDefinition> baseStructDefPool = new ArrayList<>();
     for (String zip : args.structDefDepZips) {
       baseStructDefPool.addAll(FileUtils.loadStructureDefinitionsInZip(zip));
     }
 
+    switch (packageInfo.getFhirVersion()) {
+      case STU3:
+        if (args.stu3StructDefZip == null) {
+          throw new IllegalArgumentException(
+              "Profile is for STU3, but --stu3_struct_def_zip is not specified.");
+        }
+        baseStructDefPool.addAll(FileUtils.loadStructureDefinitionsInZip(args.stu3StructDefZip));
+        break;
+      case R4:
+        if (args.r4StructDefZip == null) {
+          throw new IllegalArgumentException(
+              "Profile is for R4, but --r4_struct_def_zip is not specified.");
+        }
+        baseStructDefPool.addAll(FileUtils.loadStructureDefinitionsInZip(args.r4StructDefZip));
+        break;
+      default:
+        throw new IllegalArgumentException(
+            "FHIR version not supported by ProfileGenerator: " + packageInfo.getFhirVersion());
+    }
+
     ProfileGenerator profileGenerator =
         new ProfileGenerator(
-            readPackageInfo(args.packageInfo),
+            packageInfo,
             combinedProfilesBuilder.build(),
             combinedExtensionsBuilder.build(),
             baseStructDefPool,

@@ -138,7 +138,6 @@ public class ProtoGenerator {
 
   // The package to write new protos to.
   private final PackageInfo packageInfo;
-  private final String fhirProtoRootPath;
   // The fhir version to use (e.g., DSTU2, STU3, R4).
   // This determines which core dependencies (e.g., datatypes.proto) to use.
   private final FhirVersion fhirVersion;
@@ -211,11 +210,8 @@ public class ProtoGenerator {
   }
 
   public ProtoGenerator(
-      PackageInfo packageInfo,
-      String fhirProtoRootPath,
-      ImmutableMap<StructureDefinition, String> knownTypes) {
+      PackageInfo packageInfo, ImmutableMap<StructureDefinition, String> knownTypes) {
     this.packageInfo = packageInfo;
-    this.fhirProtoRootPath = fhirProtoRootPath;
     this.fhirVersion = FhirVersion.fromAnnotation(packageInfo.getFhirVersion());
 
     // TODO: Do this with ValueSet resources once we have them.
@@ -453,7 +449,7 @@ public class ProtoGenerator {
       Set<String> types = entry.getValue();
 
       if (needsDep(builder, types)) {
-        builder.addDependency(new File(fhirProtoRootPath, filename).toString());
+        builder.addDependency(new File(fhirVersion.coreProtoImportRoot, filename).toString());
       }
     }
 
@@ -463,7 +459,7 @@ public class ProtoGenerator {
   // Returns true if the file proto uses a type from a set of types, but does not define it.
   private boolean needsDep(FileDescriptorProtoOrBuilder fileProto, Set<String> types) {
     for (DescriptorProto descriptor : fileProto.getMessageTypeList()) {
-      if (types.contains(fhirVersion.coreFhirPackage + "." + descriptor.getName())
+      if (types.contains(fhirVersion.coreProtoPackage + "." + descriptor.getName())
           && !descriptor.getName().equals("RelatedArtifact")) {
         // This file defines a type from the set.  It can't depend on itself.
         // TODO: We don't pay attention to RelatedArtifact because there's an extension
@@ -522,7 +518,7 @@ public class ProtoGenerator {
         DescriptorProto.newBuilder()
             .setName("ContainedResource")
             .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource"));
-    if (packageInfo.getProtoPackage().equals(fhirVersion.coreFhirPackage)) {
+    if (packageInfo.getProtoPackage().equals(fhirVersion.coreProtoPackage)) {
       // When generating contained resources for the core type (resources.proto),
       // just iterate through all the non-abstract types, assigning tag numbers as you go
       int tagNumber = 1;
@@ -648,12 +644,11 @@ public class ProtoGenerator {
         // The nested type is defined in the local package, so replace the core FHIR package
         // with the local packageName in the field type.
         field =
-            field
-                .toBuilder()
+            field.toBuilder()
                 .setTypeName(
                     field
                         .getTypeName()
-                        .replace(fhirVersion.coreFhirPackage, packageInfo.getProtoPackage()))
+                        .replace(fhirVersion.coreProtoPackage, packageInfo.getProtoPackage()))
                 .build();
       }
       builder.addField(field);
@@ -1089,13 +1084,13 @@ public class ProtoGenerator {
           getContainerType(element, elementList),
           isLocalContentReference(element)
               ? packageInfo.getProtoPackage()
-              : fhirVersion.coreFhirPackage);
+              : fhirVersion.coreProtoPackage);
     } else if (isExtensionBackboneElement(element)) {
       return getInternalExtensionType(element, elementList);
     } else if (element.getType(0).getCode().getValue().equals("Reference")) {
       return new QualifiedType(
           USE_TYPED_REFERENCES ? getTypedReferenceName(element.getTypeList()) : "Reference",
-          fhirVersion.coreFhirPackage);
+          fhirVersion.coreProtoPackage);
     } else {
       if (element.getTypeCount() > 1) {
         throw new IllegalArgumentException(
@@ -1131,7 +1126,7 @@ public class ProtoGenerator {
         if (!packageInfo.getContainedResourcePackage().isEmpty()) {
           return new QualifiedType("ContainedResource", packageInfo.getContainedResourcePackage());
         }
-        return new QualifiedType("ContainedResource", fhirVersion.coreFhirPackage);
+        return new QualifiedType("ContainedResource", fhirVersion.coreProtoPackage);
       }
 
       if (normalizedFhirTypeName.equals("Code")) {
@@ -1141,7 +1136,7 @@ public class ProtoGenerator {
               valueSetType.get().getName(), valueSetType.get().getFile().getPackage());
         }
       }
-      return new QualifiedType(normalizedFhirTypeName, fhirVersion.coreFhirPackage);
+      return new QualifiedType(normalizedFhirTypeName, fhirVersion.coreProtoPackage);
     }
   }
 
@@ -1327,7 +1322,9 @@ public class ProtoGenerator {
   // TODO: Handle reslices. Could be as easy as adding it to the end of SliceName.
   private String getJsonNameForElement(ElementDefinition element) {
     IdToken lastToken = lastIdToken(element.getId().getValue());
-    if (lastToken.slicename == null) {
+    if (lastToken.slicename == null || element.getId().getValue().indexOf(".") == -1) {
+      // There is either no slicename, or the "slice" is on the root element, which is a meaningless
+      // thing that UsCore sometimes does.
       return toJsonCase(lastToken.pathpart);
     }
     String sliceName = element.getSliceName().getValue();
@@ -1472,7 +1469,7 @@ public class ProtoGenerator {
           buildFieldInternal(
                   fieldName,
                   fieldType,
-                  fhirVersion.coreFhirPackage,
+                  fhirVersion.coreProtoPackage,
                   nextTag++,
                   FieldDescriptorProto.Label.LABEL_OPTIONAL,
                   options.build())
@@ -1677,7 +1674,7 @@ public class ProtoGenerator {
               valueSetType.get().getName(), valueSetType.get().getFile().getPackage());
         }
       }
-      return new QualifiedType(toFieldTypeCase(rawType), fhirVersion.coreFhirPackage);
+      return new QualifiedType(toFieldTypeCase(rawType), fhirVersion.coreProtoPackage);
     }
     // This is a choice-type extension that will be inlined as a message.
     return new QualifiedType(getContainerType(element, elementList), packageInfo.getProtoPackage());

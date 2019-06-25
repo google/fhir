@@ -15,9 +15,9 @@
 """Rules for generating Protos from Profiles and StructureDefinitions"""
 
 STU3_STRUCTURE_DEFINITION_DEP = "//spec:fhir_stu3_package"
+R4_STRUCTURE_DEFINITION_DEP = "//spec:fhir_r4_package"
 PROTO_GENERATOR = "//java:ProtoGenerator"
 PROFILE_GENERATOR = "//java:ProfileGenerator"
-FHIR_PROTO_ROOT = "proto/stu3"
 
 def zip_file(name, filegroup):
     native.genrule(
@@ -62,11 +62,10 @@ def gen_fhir_protos(
                            and one for profiles.
     """
 
-    all_struct_def_pkgs = package_deps + [STU3_STRUCTURE_DEFINITION_DEP, package]
     struct_def_dep_flags = " ".join([
         "--struct_def_dep_pkg \"$(location %s)|$(location %s)\"" %
         (_get_zip_for_pkg(dep), _get_package_info_for_pkg(dep))
-        for dep in all_struct_def_pkgs
+        for dep in (package_deps + [package])
     ])
     if not additional_proto_imports:
         additional_proto_imports = []
@@ -87,13 +86,15 @@ def gen_fhir_protos(
             --emit_proto \
             --output_directory $(@D) \
             --package_info $(location %s) \
-            --fhir_proto_root %s \
+            --stu3_struct_def_zip $(location %s) \
+            --r4_struct_def_zip $(location %s) \
             --output_name _genfiles_%s \
             --input_zip $(location %s) \
             """ % (
         PROTO_GENERATOR,
         _get_package_info_for_pkg(package),
-        FHIR_PROTO_ROOT,
+        _get_zip_for_pkg(STU3_STRUCTURE_DEFINITION_DEP),
+        _get_zip_for_pkg(R4_STRUCTURE_DEFINITION_DEP),
         name,
         _get_zip_for_pkg(package),
     )
@@ -106,6 +107,11 @@ def gen_fhir_protos(
     else:
         outs = ["_genfiles_" + name + ".proto"]
 
+    all_struct_def_pkgs = package_deps + [
+        package,
+        STU3_STRUCTURE_DEFINITION_DEP,
+        R4_STRUCTURE_DEFINITION_DEP,
+    ]
     srcs = ([_get_zip_for_pkg(pkg) for pkg in all_struct_def_pkgs] +
             [_get_package_info_for_pkg(pkg) for pkg in all_struct_def_pkgs])
 
@@ -150,16 +156,19 @@ def gen_fhir_definitions_and_protos(
     extension_flags = " ".join([("--extensions $(location %s) " % extension) for extension in extensions])
     profile_flags = " ".join([("--profiles $(location %s) " % profile) for profile in profiles])
 
-    all_struct_def_deps = [STU3_STRUCTURE_DEFINITION_DEP] + package_deps
     struct_def_dep_zip_flags = " ".join([
         ("--struct_def_dep_zip $(location %s) " % _get_zip_for_pkg(dep))
-        for dep in all_struct_def_deps
+        for dep in package_deps
     ])
 
-    structure_definition_srcs = ([package_info] +
+    structure_definition_srcs = ([
+                                     package_info,
+                                     _get_zip_for_pkg(STU3_STRUCTURE_DEFINITION_DEP),
+                                     _get_zip_for_pkg(R4_STRUCTURE_DEFINITION_DEP),
+                                 ] +
                                  extensions +
                                  profiles +
-                                 [_get_zip_for_pkg(dep) for dep in all_struct_def_deps])
+                                 [_get_zip_for_pkg(dep) for dep in package_deps])
 
     native.genrule(
         name = name + "_structure_definitions",
@@ -173,10 +182,14 @@ def gen_fhir_definitions_and_protos(
                 --output_directory $(@D) \
                 --name _genfiles_%s \
                 --package_info $(location %s) \
+                --stu3_struct_def_zip $(location %s) \
+                --r4_struct_def_zip $(location %s) \
                 %s %s %s""" % (
             PROFILE_GENERATOR,
             name,
             package_info,
+            _get_zip_for_pkg(STU3_STRUCTURE_DEFINITION_DEP),
+            _get_zip_for_pkg(R4_STRUCTURE_DEFINITION_DEP),
             struct_def_dep_zip_flags,
             extension_flags,
             profile_flags,

@@ -250,7 +250,6 @@ public final class ProtoFilePrinterTest {
     protoGenerator =
         new ProtoGenerator(
             packageInfo,
-            "proto/stu3",
             getKnownStructDefs());
     protoPrinter = new ProtoFilePrinter(packageInfo);
   }
