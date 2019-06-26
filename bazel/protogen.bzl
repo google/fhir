@@ -18,6 +18,7 @@ STU3_STRUCTURE_DEFINITION_DEP = "//spec:fhir_stu3_package"
 R4_STRUCTURE_DEFINITION_DEP = "//spec:fhir_r4_package"
 PROTO_GENERATOR = "//java:ProtoGenerator"
 PROFILE_GENERATOR = "//java:ProfileGenerator"
+MANUAL_TAGS = ["manual"]
 
 def zip_file(name, filegroup):
     native.genrule(
@@ -25,17 +26,31 @@ def zip_file(name, filegroup):
         srcs = [filegroup],
         outs = [name],
         cmd = "zip --quiet -j $@ $(locations %s)" % filegroup,
+        tags = MANUAL_TAGS,
     )
 
 def structure_definition_package(package_name, structure_definitions_zip, package_info):
+    """Generates a Structure Definition package in a way that can be referenced by other packages
+
+    Given a zip of structure definitions, and a package info proto, this generates aliases
+    based on the package name, so that in the future, pointing to the package name allows other
+    rules to point directly to the zip and info.
+
+    Args:
+        package_name: The name for the package, which other targets will use to refer to this
+        structure_definitions_zip: the structure definitions to export with this package
+        package_info: the package_info to export with this package
+    """
     if _get_zip_for_pkg(package_name) != structure_definitions_zip:
         native.alias(
             name = _get_zip_for_pkg(package_name),
             actual = structure_definitions_zip,
+            tags = MANUAL_TAGS,
         )
     native.alias(
         name = _get_package_info_for_pkg(package_name),
         actual = package_info,
+        tags = MANUAL_TAGS,
     )
 
 def gen_fhir_protos(
@@ -121,6 +136,7 @@ def gen_fhir_protos(
         srcs = srcs,
         tools = [PROTO_GENERATOR],
         cmd = cmd,
+        tags = MANUAL_TAGS,
     )
 
 def gen_fhir_definitions_and_protos(
@@ -194,11 +210,13 @@ def gen_fhir_definitions_and_protos(
             extension_flags,
             profile_flags,
         )),
+        tags = MANUAL_TAGS,
     )
 
     native.filegroup(
         name = name + "_structure_definitions_filegroup",
         srcs = [name + "_extensions.json", name + ".json"],
+        tags = MANUAL_TAGS,
     )
 
     zip_file(
