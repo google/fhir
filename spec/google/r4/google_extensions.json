@@ -7,7 +7,7 @@
         "id": "PrimitiveHasNoValue",
         "url": "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
         "name": "PrimitiveHasNoValue",
-        "date": "2019-01-29",
+        "date": "2019-06-25",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -20,10 +20,14 @@
           }
         ],
         "description": "Whether or not the primitive is missing a value.",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "4.0.0",
         "kind": "complex-type",
         "abstract": false,
-        "contextType": "resource",
+        "context": [
+          {
+            "type": "element"
+          }
+        ],
         "type": "Extension",
         "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
         "derivation": "constraint",
@@ -31,6 +35,16 @@
           "element": [
             {
               "id": "Extension",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension",
               "short": "Whether or not the primitive is missing a value.",
               "definition": "Whether or not the primitive is missing a value.",
@@ -49,7 +63,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -62,6 +76,7 @@
                   "source": "Extension"
                 }
               ],
+              "isModifier": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -79,8 +94,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -93,6 +108,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -113,8 +130,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -132,6 +149,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -157,10 +176,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -172,7 +212,7 @@
               "id": "Extension.valueBoolean",
               "path": "Extension.valueBoolean",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "1",
               "base": {
@@ -185,6 +225,8 @@
                   "code": "boolean"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -242,7 +284,7 @@
         "id": "Base64BinarySeparatorStride",
         "url": "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
         "name": "Base64BinarySeparatorStride",
-        "date": "2019-01-29",
+        "date": "2019-06-25",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -255,10 +297,14 @@
           }
         ],
         "description": "Base64Binary rendering parameters.",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "4.0.0",
         "kind": "complex-type",
         "abstract": false,
-        "contextType": "resource",
+        "context": [
+          {
+            "type": "element"
+          }
+        ],
         "type": "Extension",
         "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
         "derivation": "constraint",
@@ -266,6 +312,16 @@
           "element": [
             {
               "id": "Extension",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension",
               "short": "Base64Binary rendering parameters.",
               "definition": "Base64Binary rendering parameters.",
@@ -284,7 +340,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -297,6 +353,7 @@
                   "source": "Extension"
                 }
               ],
+              "isModifier": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -314,8 +371,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -328,6 +385,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -348,8 +407,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -367,6 +426,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -392,10 +453,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -407,7 +489,7 @@
               "id": "Extension.value[x]",
               "path": "Extension.value[x]",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "0",
               "base": {
@@ -421,6 +503,9 @@
                 },
                 {
                   "code": "boolean"
+                },
+                {
+                  "code": "canonical"
                 },
                 {
                   "code": "code"
@@ -463,6 +548,12 @@
                 },
                 {
                   "code": "uri"
+                },
+                {
+                  "code": "url"
+                },
+                {
+                  "code": "uuid"
                 },
                 {
                   "code": "Address"
@@ -528,9 +619,35 @@
                   "code": "Timing"
                 },
                 {
-                  "code": "Meta"
+                  "code": "ContactDetail"
+                },
+                {
+                  "code": "Contributor"
+                },
+                {
+                  "code": "DataRequirement"
+                },
+                {
+                  "code": "Expression"
+                },
+                {
+                  "code": "ParameterDefinition"
+                },
+                {
+                  "code": "RelatedArtifact"
+                },
+                {
+                  "code": "TriggerDefinition"
+                },
+                {
+                  "code": "UsageContext"
+                },
+                {
+                  "code": "Dosage"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -540,6 +657,16 @@
             },
             {
               "id": "Extension.extension:separator",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "separator",
               "short": "The separator, usually a sequence of spaces.",
@@ -564,7 +691,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -576,7 +703,8 @@
                   "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
                   "source": "Extension"
                 }
-              ]
+              ],
+              "isModifier": false
             },
             {
               "id": "Extension.extension:separator.id",
@@ -584,8 +712,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -598,6 +726,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -618,8 +748,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -637,6 +767,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -662,10 +794,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "separator",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -677,7 +830,7 @@
               "id": "Extension.extension:separator.valueString",
               "path": "Extension.extension.valueString",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "1",
               "base": {
@@ -690,6 +843,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -699,6 +854,16 @@
             },
             {
               "id": "Extension.extension:stride",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "stride",
               "short": "The stride.",
@@ -723,7 +888,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -735,7 +900,8 @@
                   "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
                   "source": "Extension"
                 }
-              ]
+              ],
+              "isModifier": false
             },
             {
               "id": "Extension.extension:stride.id",
@@ -743,8 +909,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -757,6 +923,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -777,8 +945,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -796,6 +964,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -821,10 +991,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "stride",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -836,7 +1027,7 @@
               "id": "Extension.extension:stride.valuePositiveInt",
               "path": "Extension.extension.valuePositiveInt",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "1",
               "base": {
@@ -849,6 +1040,8 @@
                   "code": "positiveInt"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -894,6 +1087,16 @@
             },
             {
               "id": "Extension.extension:separator",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "separator",
               "short": "The separator, usually a sequence of spaces.",
@@ -909,7 +1112,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -948,6 +1151,16 @@
             },
             {
               "id": "Extension.extension:stride",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "stride",
               "short": "The stride.",
@@ -963,7 +1176,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -1010,7 +1223,7 @@
         "id": "EventLabel",
         "url": "https://g.co/fhir/StructureDefinition/eventLabel",
         "name": "EventLabel",
-        "date": "2019-01-29",
+        "date": "2019-06-25",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -1023,10 +1236,14 @@
           }
         ],
         "description": "EventLabels define labels used for TensorFlow model training and evaluation.",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "4.0.0",
         "kind": "complex-type",
         "abstract": false,
-        "contextType": "resource",
+        "context": [
+          {
+            "type": "element"
+          }
+        ],
         "type": "Extension",
         "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
         "derivation": "constraint",
@@ -1034,6 +1251,16 @@
           "element": [
             {
               "id": "Extension",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension",
               "short": "EventLabels define labels used for TensorFlow model training and evaluation.",
               "definition": "EventLabels define labels used for TensorFlow model training and evaluation.",
@@ -1052,7 +1279,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -1065,6 +1292,7 @@
                   "source": "Extension"
                 }
               ],
+              "isModifier": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1082,8 +1310,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -1096,6 +1324,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1116,8 +1346,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -1135,6 +1365,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1160,10 +1392,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "https://g.co/fhir/StructureDefinition/eventLabel",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1175,7 +1428,7 @@
               "id": "Extension.value[x]",
               "path": "Extension.value[x]",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "0",
               "base": {
@@ -1189,6 +1442,9 @@
                 },
                 {
                   "code": "boolean"
+                },
+                {
+                  "code": "canonical"
                 },
                 {
                   "code": "code"
@@ -1231,6 +1487,12 @@
                 },
                 {
                   "code": "uri"
+                },
+                {
+                  "code": "url"
+                },
+                {
+                  "code": "uuid"
                 },
                 {
                   "code": "Address"
@@ -1296,9 +1558,35 @@
                   "code": "Timing"
                 },
                 {
-                  "code": "Meta"
+                  "code": "ContactDetail"
+                },
+                {
+                  "code": "Contributor"
+                },
+                {
+                  "code": "DataRequirement"
+                },
+                {
+                  "code": "Expression"
+                },
+                {
+                  "code": "ParameterDefinition"
+                },
+                {
+                  "code": "RelatedArtifact"
+                },
+                {
+                  "code": "TriggerDefinition"
+                },
+                {
+                  "code": "UsageContext"
+                },
+                {
+                  "code": "Dosage"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1308,6 +1596,16 @@
             },
             {
               "id": "Extension.extension:patient",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "patient",
               "short": "The patient associated with this label",
@@ -1332,7 +1630,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -1344,7 +1642,8 @@
                   "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
                   "source": "Extension"
                 }
-              ]
+              ],
+              "isModifier": false
             },
             {
               "id": "Extension.extension:patient.id",
@@ -1352,8 +1651,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -1366,6 +1665,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1386,8 +1687,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -1405,6 +1706,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1430,10 +1733,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "patient",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1445,7 +1769,7 @@
               "id": "Extension.extension:patient.valueReference",
               "path": "Extension.extension.valueReference",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "1",
               "base": {
@@ -1458,6 +1782,8 @@
                   "code": "Reference"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1467,6 +1793,16 @@
             },
             {
               "id": "Extension.extension:type",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "type",
               "short": "The type of label, part of the prediction task definition",
@@ -1491,7 +1827,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -1503,7 +1839,8 @@
                   "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
                   "source": "Extension"
                 }
-              ]
+              ],
+              "isModifier": false
             },
             {
               "id": "Extension.extension:type.id",
@@ -1511,8 +1848,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -1525,6 +1862,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1545,8 +1884,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -1564,6 +1903,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1589,10 +1930,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "type",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1604,7 +1966,7 @@
               "id": "Extension.extension:type.valueCoding",
               "path": "Extension.extension.valueCoding",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "1",
               "base": {
@@ -1617,6 +1979,8 @@
                   "code": "Coding"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1626,6 +1990,16 @@
             },
             {
               "id": "Extension.extension:eventTime",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "eventTime",
               "short": "Time associated with the label event, if available",
@@ -1650,7 +2024,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -1662,7 +2036,8 @@
                   "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
                   "source": "Extension"
                 }
-              ]
+              ],
+              "isModifier": false
             },
             {
               "id": "Extension.extension:eventTime.id",
@@ -1670,8 +2045,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -1684,6 +2059,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1704,8 +2081,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -1723,6 +2100,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1748,10 +2127,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "eventTime",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1763,7 +2163,7 @@
               "id": "Extension.extension:eventTime.valueDateTime",
               "path": "Extension.extension.valueDateTime",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "1",
               "base": {
@@ -1776,6 +2176,8 @@
                   "code": "dateTime"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1785,6 +2187,16 @@
             },
             {
               "id": "Extension.extension:source",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "source",
               "short": "Resource that owns this label",
@@ -1809,7 +2221,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -1821,7 +2233,8 @@
                   "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
                   "source": "Extension"
                 }
-              ]
+              ],
+              "isModifier": false
             },
             {
               "id": "Extension.extension:source.id",
@@ -1829,8 +2242,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -1843,6 +2256,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1863,8 +2278,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -1882,6 +2297,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1907,10 +2324,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "source",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1922,7 +2360,7 @@
               "id": "Extension.extension:source.valueReference",
               "path": "Extension.extension.valueReference",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "1",
               "base": {
@@ -1935,6 +2373,8 @@
                   "code": "Reference"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -1944,6 +2384,16 @@
             },
             {
               "id": "Extension.extension:label",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "label",
               "short": "List of labels associated with this event",
@@ -1968,7 +2418,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -1980,7 +2430,8 @@
                   "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
                   "source": "Extension"
                 }
-              ]
+              ],
+              "isModifier": false
             },
             {
               "id": "Extension.extension:label.id",
@@ -1988,8 +2439,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -2002,6 +2453,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -2022,8 +2475,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -2041,6 +2494,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -2066,10 +2521,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "label",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -2081,7 +2557,7 @@
               "id": "Extension.extension:label.value[x]",
               "path": "Extension.extension.value[x]",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "0",
               "base": {
@@ -2095,6 +2571,9 @@
                 },
                 {
                   "code": "boolean"
+                },
+                {
+                  "code": "canonical"
                 },
                 {
                   "code": "code"
@@ -2137,6 +2616,12 @@
                 },
                 {
                   "code": "uri"
+                },
+                {
+                  "code": "url"
+                },
+                {
+                  "code": "uuid"
                 },
                 {
                   "code": "Address"
@@ -2202,9 +2687,35 @@
                   "code": "Timing"
                 },
                 {
-                  "code": "Meta"
+                  "code": "ContactDetail"
+                },
+                {
+                  "code": "Contributor"
+                },
+                {
+                  "code": "DataRequirement"
+                },
+                {
+                  "code": "Expression"
+                },
+                {
+                  "code": "ParameterDefinition"
+                },
+                {
+                  "code": "RelatedArtifact"
+                },
+                {
+                  "code": "TriggerDefinition"
+                },
+                {
+                  "code": "UsageContext"
+                },
+                {
+                  "code": "Dosage"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -2214,6 +2725,16 @@
             },
             {
               "id": "Extension.extension:label.extension:className",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension.extension",
               "sliceName": "className",
               "short": "Class name in multi-class prediction tasks, e.g. code \"780.60\" for icd9",
@@ -2238,7 +2759,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -2250,7 +2771,8 @@
                   "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
                   "source": "Extension"
                 }
-              ]
+              ],
+              "isModifier": false
             },
             {
               "id": "Extension.extension:label.extension:className.id",
@@ -2258,8 +2780,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -2272,6 +2794,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -2292,8 +2816,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -2311,6 +2835,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -2336,10 +2862,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "className",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -2351,7 +2898,7 @@
               "id": "Extension.extension:label.extension:className.valueCoding",
               "path": "Extension.extension.extension.valueCoding",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "1",
               "base": {
@@ -2364,6 +2911,8 @@
                   "code": "Coding"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -2373,6 +2922,16 @@
             },
             {
               "id": "Extension.extension:label.extension:classValue",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension.extension",
               "sliceName": "classValue",
               "short": "The value of the label",
@@ -2397,7 +2956,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -2409,7 +2968,8 @@
                   "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
                   "source": "Extension"
                 }
-              ]
+              ],
+              "isModifier": false
             },
             {
               "id": "Extension.extension:label.extension:classValue.id",
@@ -2417,8 +2977,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -2431,6 +2991,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -2451,8 +3013,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -2470,6 +3032,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -2495,10 +3059,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "classValue",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -2510,7 +3095,7 @@
               "id": "Extension.extension:label.extension:classValue.value[x]",
               "path": "Extension.extension.extension.value[x]",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "1",
               "base": {
@@ -2535,6 +3120,8 @@
                   "code": "dateTime"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -2575,6 +3162,16 @@
             },
             {
               "id": "Extension.extension:patient",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "patient",
               "short": "The patient associated with this label",
@@ -2590,7 +3187,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -2629,6 +3226,16 @@
             },
             {
               "id": "Extension.extension:type",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "type",
               "short": "The type of label, part of the prediction task definition",
@@ -2644,7 +3251,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -2683,6 +3290,16 @@
             },
             {
               "id": "Extension.extension:eventTime",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "eventTime",
               "short": "Time associated with the label event, if available",
@@ -2697,7 +3314,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -2736,6 +3353,16 @@
             },
             {
               "id": "Extension.extension:source",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "source",
               "short": "Resource that owns this label",
@@ -2750,7 +3377,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -2789,6 +3416,16 @@
             },
             {
               "id": "Extension.extension:label",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "label",
               "short": "List of labels associated with this event",
@@ -2802,7 +3439,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -2837,6 +3474,16 @@
             },
             {
               "id": "Extension.extension:label.extension:className",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension.extension",
               "sliceName": "className",
               "short": "Class name in multi-class prediction tasks, e.g. code \"780.60\" for icd9",
@@ -2852,7 +3499,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -2891,6 +3538,16 @@
             },
             {
               "id": "Extension.extension:label.extension:classValue",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension.extension",
               "sliceName": "classValue",
               "short": "The value of the label",
@@ -2906,7 +3563,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -2965,7 +3622,7 @@
         "id": "EventTrigger",
         "url": "https://g.co/fhir/StructureDefinition/eventTrigger",
         "name": "EventTrigger",
-        "date": "2019-01-29",
+        "date": "2019-06-25",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -2978,10 +3635,14 @@
           }
         ],
         "description": "EventTriggers specify cutoff times for generated TensorFlow examples.",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "4.0.0",
         "kind": "complex-type",
         "abstract": false,
-        "contextType": "resource",
+        "context": [
+          {
+            "type": "element"
+          }
+        ],
         "type": "Extension",
         "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
         "derivation": "constraint",
@@ -2989,6 +3650,16 @@
           "element": [
             {
               "id": "Extension",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension",
               "short": "EventTriggers specify cutoff times for generated TensorFlow examples.",
               "definition": "EventTriggers specify cutoff times for generated TensorFlow examples.",
@@ -3007,7 +3678,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -3020,6 +3691,7 @@
                   "source": "Extension"
                 }
               ],
+              "isModifier": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3037,8 +3709,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -3051,6 +3723,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3071,8 +3745,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -3090,6 +3764,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3115,10 +3791,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "https://g.co/fhir/StructureDefinition/eventTrigger",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3130,7 +3827,7 @@
               "id": "Extension.value[x]",
               "path": "Extension.value[x]",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "0",
               "base": {
@@ -3144,6 +3841,9 @@
                 },
                 {
                   "code": "boolean"
+                },
+                {
+                  "code": "canonical"
                 },
                 {
                   "code": "code"
@@ -3186,6 +3886,12 @@
                 },
                 {
                   "code": "uri"
+                },
+                {
+                  "code": "url"
+                },
+                {
+                  "code": "uuid"
                 },
                 {
                   "code": "Address"
@@ -3251,9 +3957,35 @@
                   "code": "Timing"
                 },
                 {
-                  "code": "Meta"
+                  "code": "ContactDetail"
+                },
+                {
+                  "code": "Contributor"
+                },
+                {
+                  "code": "DataRequirement"
+                },
+                {
+                  "code": "Expression"
+                },
+                {
+                  "code": "ParameterDefinition"
+                },
+                {
+                  "code": "RelatedArtifact"
+                },
+                {
+                  "code": "TriggerDefinition"
+                },
+                {
+                  "code": "UsageContext"
+                },
+                {
+                  "code": "Dosage"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3263,6 +3995,16 @@
             },
             {
               "id": "Extension.extension:type",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "type",
               "short": "The type of trigger, part of the prediction task definition.",
@@ -3287,7 +4029,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -3299,7 +4041,8 @@
                   "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
                   "source": "Extension"
                 }
-              ]
+              ],
+              "isModifier": false
             },
             {
               "id": "Extension.extension:type.id",
@@ -3307,8 +4050,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -3321,6 +4064,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3341,8 +4086,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -3360,6 +4105,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3385,10 +4132,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "type",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3400,7 +4168,7 @@
               "id": "Extension.extension:type.valueCoding",
               "path": "Extension.extension.valueCoding",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "1",
               "base": {
@@ -3413,6 +4181,8 @@
                   "code": "Coding"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3422,6 +4192,16 @@
             },
             {
               "id": "Extension.extension:eventTime",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "eventTime",
               "short": "Prediction event time, more recent data will be elided.",
@@ -3446,7 +4226,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -3458,7 +4238,8 @@
                   "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
                   "source": "Extension"
                 }
-              ]
+              ],
+              "isModifier": false
             },
             {
               "id": "Extension.extension:eventTime.id",
@@ -3466,8 +4247,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -3480,6 +4261,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3500,8 +4283,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -3519,6 +4302,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3544,10 +4329,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "eventTime",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3559,7 +4365,7 @@
               "id": "Extension.extension:eventTime.valueDateTime",
               "path": "Extension.extension.valueDateTime",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "1",
               "base": {
@@ -3572,6 +4378,8 @@
                   "code": "dateTime"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3581,6 +4389,16 @@
             },
             {
               "id": "Extension.extension:source",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "source",
               "short": "Resource that owns this trigger.",
@@ -3605,7 +4423,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -3617,7 +4435,8 @@
                   "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
                   "source": "Extension"
                 }
-              ]
+              ],
+              "isModifier": false
             },
             {
               "id": "Extension.extension:source.id",
@@ -3625,8 +4444,8 @@
               "representation": [
                 "xmlAttr"
               ],
-              "short": "xml:id (or equivalent in JSON)",
-              "definition": "unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+              "short": "Unique id for inter-element referencing",
+              "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
               "min": 0,
               "max": "1",
               "base": {
@@ -3639,6 +4458,8 @@
                   "code": "string"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3659,8 +4480,8 @@
                 "description": "Extensions are always sliced by (at least) url",
                 "rules": "open"
               },
-              "short": "Additional Content defined by implementations",
-              "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+              "short": "Additional content defined by implementations",
+              "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
               "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
               "alias": [
                 "extensions",
@@ -3678,6 +4499,8 @@
                   "code": "Extension"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3703,10 +4526,31 @@
               },
               "type": [
                 {
-                  "code": "uri"
+                  "_code": {
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type",
+                        "valueString": "string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type",
+                        "valueString": "xsd:string"
+                      },
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                        "valueString": "((http|https)://([A-Za-z0-9\\\\\\.\\:\\%\\$]*\\/)*)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)\\/[A-Za-z0-9\\-\\.]{1,64}(\\/_history\\/[A-Za-z0-9\\-\\.]{1,64})?"
+                      }
+                    ]
+                  }
                 }
               ],
               "fixedUri": "source",
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3718,7 +4562,7 @@
               "id": "Extension.extension:source.valueReference",
               "path": "Extension.extension.valueReference",
               "short": "Value of extension",
-              "definition": "Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).",
+              "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
               "max": "1",
               "base": {
@@ -3731,6 +4575,8 @@
                   "code": "Reference"
                 }
               ],
+              "isModifier": false,
+              "isSummary": false,
               "mapping": [
                 {
                   "identity": "rim",
@@ -3776,6 +4622,16 @@
             },
             {
               "id": "Extension.extension:type",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "type",
               "short": "The type of trigger, part of the prediction task definition.",
@@ -3791,7 +4647,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -3830,6 +4686,16 @@
             },
             {
               "id": "Extension.extension:eventTime",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "eventTime",
               "short": "Prediction event time, more recent data will be elided.",
@@ -3845,7 +4711,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },
@@ -3884,6 +4750,16 @@
             },
             {
               "id": "Extension.extension:source",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
               "path": "Extension.extension",
               "sliceName": "source",
               "short": "Resource that owns this trigger.",
@@ -3898,7 +4774,7 @@
                   "key": "ele-1",
                   "severity": "error",
                   "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() | (children().count() > id.count())",
+                  "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "Element"
                 },

@@ -1,0 +1,8 @@
+base_url: "https://g.co/fhir/StructureDefinition"
+proto_package: "google.fhir.r4.google"
+java_proto_package: "com.google.fhir.r4.google"
+publisher: "Google LLC"
+fhir_version: R4
+telcom_url: "https://www.google.com"
+license: APACHE
+license_date: "2019"
