@@ -380,7 +380,7 @@ nested_type {
     number: 5
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: "google.fhir.stu3.proto.CodingWithFixedCode"
+    type_name: ".google.fhir.stu3.proto.CodingWithFixedCode"
     options {
       [google.fhir.proto.fhir_inlined_coding_system]: "http://loinc.org"
       [google.fhir.proto.fhir_inlined_coding_code]: "85354-9"
@@ -697,7 +697,7 @@ nested_type {
       number: 5
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: "google.fhir.stu3.proto.CodingWithFixedCode"
+      type_name: ".google.fhir.stu3.proto.CodingWithFixedCode"
       options {
         [google.fhir.proto.fhir_inlined_coding_system]: "http://loinc.org"
         [google.fhir.proto.fhir_inlined_coding_code]: "8480-6"
@@ -855,7 +855,7 @@ nested_type {
       number: 5
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: "google.fhir.stu3.proto.CodingWithFixedCode"
+      type_name: ".google.fhir.stu3.proto.CodingWithFixedCode"
       options {
         [google.fhir.proto.fhir_inlined_coding_system]: "http://loinc.org"
         [google.fhir.proto.fhir_inlined_coding_code]: "8462-4"

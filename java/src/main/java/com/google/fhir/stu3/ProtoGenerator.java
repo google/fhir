@@ -33,7 +33,6 @@ import com.google.fhir.r4.proto.StructureDefinition;
 import com.google.fhir.r4.proto.StructureDefinitionKindCode;
 import com.google.fhir.r4.proto.TypeDerivationRuleCode;
 import com.google.fhir.r4.proto.Uri;
-import com.google.fhir.stu3.proto.CodingWithFixedCode;
 import com.google.fhir.stu3.proto.CodingWithFixedSystem;
 import com.google.fhir.stu3.proto.ElementDefinitionExplicitTypeName;
 import com.google.fhir.stu3.proto.Instant;
@@ -785,7 +784,7 @@ public class ProtoGenerator {
         FieldDescriptorProto.Builder codingField =
             FieldDescriptorProto.newBuilder()
                 .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-                .setTypeName(CodingWithFixedCode.getDescriptor().getFullName())
+                .setTypeName("." + fhirVersion.coreProtoPackage + ".CodingWithFixedCode")
                 .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
                 .setLabel(getFieldSize(codingSlice))
                 .setNumber(codeableConceptBuilder.getFieldCount() + 1);
