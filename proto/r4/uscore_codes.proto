@@ -1,0 +1,184 @@
+syntax = "proto3";
+
+package google.fhir.r4.uscore;
+
+import "proto/annotations.proto";
+import "proto/r4/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.uscore";
+
+// Codes for assigning sex at birth as specified by the [Office of the National
+// Coordinator for Health IT
+// (ONC)](https://www.healthit.gov/newsroom/about-onc). See
+// http://hl7.org/fhir/us/core/ValueSet/birthsex
+message BirthSexCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/us/core/ValueSet/birthsex";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    F = 1 [(.google.fhir.proto.fhir_original_code) = "F"];
+    M = 2 [(.google.fhir.proto.fhir_original_code) = "M"];
+    UNK = 3 [(.google.fhir.proto.fhir_original_code) = "UNK"];
+  }
+  Value value = 1;
+
+  proto.String id = 2;
+
+  repeated proto.Extension extension = 3;
+}
+
+// The 41 [CDC ethnicity
+// codes](http://www.cdc.gov/phin/resources/vocabulary/index.html) that are
+// grouped under one of the 2 OMB ethnicity category codes. See
+// http://hl7.org/fhir/us/core/ValueSet/detailed-ethnicity
+message DetailedEthnicityCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/us/core/ValueSet/detailed-ethnicity";
+
+  // Field 1 reserved to allow enumeration in the future.
+  reserved 1;
+
+  // This valueset is not enumerable, and so is represented as a string.
+  string value = 4;
+
+  proto.String id = 2;
+
+  repeated proto.Extension extension = 3;
+}
+
+// The 900+ [CDC Race
+// codes](http://www.cdc.gov/phin/resources/vocabulary/index.html) that are
+// grouped under one of the 5 OMB race category codes. See
+// http://hl7.org/fhir/us/core/ValueSet/detailed-race
+message DetailedRaceCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/us/core/ValueSet/detailed-race";
+
+  // Field 1 reserved to allow enumeration in the future.
+  reserved 1;
+
+  // This valueset is not enumerable, and so is represented as a string.
+  string value = 4;
+
+  proto.String id = 2;
+
+  repeated proto.Extension extension = 3;
+}
+
+// The US Core Narrative Status Value Set limits the text status for the
+// resource narrative. See
+// http://hl7.org/fhir/us/core/ValueSet/us-core-narrative-status
+message NarrativeStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/us/core/ValueSet/us-core-narrative-status";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ADDITIONAL = 1;
+    GENERATED = 2;
+  }
+  Value value = 1;
+
+  proto.String id = 2;
+
+  repeated proto.Extension extension = 3;
+}
+
+// The codes for the ethnicity categories - 'Hispanic or Latino' and 'Non
+// Hispanic or Latino' - as defined by the [OMB Standards for Maintaining,
+// Collecting, and Presenting Federal Data on Race and Ethnicity, Statistical
+// Policy Directive No. 15, as revised, October 30,
+// 1997](https://www.whitehouse.gov/omb/fedreg_1997standards). See
+// http://hl7.org/fhir/us/core/ValueSet/omb-ethnicity-category
+message OmbEthnicityCategoriesCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/us/core/ValueSet/omb-ethnicity-category";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    NUM_2135_2 = 1 [(.google.fhir.proto.fhir_original_code) = "2135-2"];
+    NUM_2186_5 = 2 [(.google.fhir.proto.fhir_original_code) = "2186-5"];
+  }
+  Value value = 1;
+
+  proto.String id = 2;
+
+  repeated proto.Extension extension = 3;
+}
+
+// The codes for the concepts 'Unknown' and  'Asked but no answer' and the the
+// codes for the five race categories - 'American Indian' or 'Alaska Native',
+// 'Asian', 'Black or African American', 'Native Hawaiian or Other Pacific
+// Islander', and 'White' - as defined by the [OMB Standards for Maintaining,
+// Collecting, and Presenting Federal Data on Race and Ethnicity, Statistical
+// Policy Directive No. 15, as revised, October 30,
+// 1997](https://www.whitehouse.gov/omb/fedreg_1997standards) . See
+// http://hl7.org/fhir/us/core/ValueSet/omb-race-category
+message OmbRaceCategoriesCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/us/core/ValueSet/omb-race-category";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    NUM_1002_5 = 1 [(.google.fhir.proto.fhir_original_code) = "1002-5"];
+    NUM_2028_9 = 2 [(.google.fhir.proto.fhir_original_code) = "2028-9"];
+    NUM_2054_5 = 3 [(.google.fhir.proto.fhir_original_code) = "2054-5"];
+    NUM_2076_8 = 4 [(.google.fhir.proto.fhir_original_code) = "2076-8"];
+    NUM_2106_3 = 5 [(.google.fhir.proto.fhir_original_code) = "2106-3"];
+    UNK = 6 [(.google.fhir.proto.fhir_original_code) = "UNK"];
+    ASKU = 7 [(.google.fhir.proto.fhir_original_code) = "ASKU"];
+  }
+  Value value = 1;
+
+  proto.String id = 2;
+
+  repeated proto.Extension extension = 3;
+}
+
+// The US Core DocumentReference Type Value Set includes all LOINC  values whose
+// SCALE is DOC in the LOINC database and the HL7 v3 Code System NullFlavor
+// concept 'unknown'. See
+// http://hl7.org/fhir/us/core/ValueSet/us-core-documentreference-type
+message USCoreDocumentReferenceTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/us/core/ValueSet/us-core-documentreference-type";
+
+  // Field 1 reserved to allow enumeration in the future.
+  reserved 1;
+
+  // This valueset is not enumerable, and so is represented as a string.
+  string value = 4;
+
+  proto.String id = 2;
+
+  repeated proto.Extension extension = 3;
+}
+
+// Codes providing the status of an observation for smoking status. Constrained
+// to `final`and `entered-in-error`. See
+// http://hl7.org/fhir/us/core/ValueSet/us-core-observation-smoking-status-status
+message USCoreObservationSmokingStatusStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/us/core/ValueSet/us-core-observation-smoking-status-status";
+
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    FINAL = 1;
+    ENTERED_IN_ERROR = 2;
+  }
+  Value value = 1;
+
+  proto.String id = 2;
+
+  repeated proto.Extension extension = 3;
+}

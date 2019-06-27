@@ -48,9 +48,11 @@ public enum FhirVersion {
       "proto/r4",
       ImmutableList.of(
           com.google.fhir.r4.proto.AccountStatusCode.getDescriptor().getFile(),
-          com.google.fhir.r4.proto.AddressTypeCode.getDescriptor().getFile()),
+          com.google.fhir.r4.proto.AddressTypeCode.getDescriptor().getFile(),
+          com.google.fhir.r4.uscore.BirthSexCode.getDescriptor().getFile()),
       ImmutableMap.of(
           "datatypes.proto", com.google.fhir.r4.proto.Decimal.getDescriptor().getFile(),
+          "resources.proto", com.google.fhir.r4.proto.Patient.getDescriptor().getFile(),
           "codes.proto", com.google.fhir.r4.proto.AccountStatusCode.getDescriptor().getFile()),
       FHIRVersionCode.Value.NUM_4_0_0);
 

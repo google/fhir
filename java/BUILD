@@ -158,6 +158,8 @@ java_library(
         "//proto:annotations_java_proto",
         "//proto/r4:codes_java_proto",
         "//proto/r4:datatypes_java_proto",
+        "//proto/r4:resources_java_proto",
+        "//proto/r4:uscore_codes_java_proto",
         "@com_google_protobuf//:protobuf_java",
     ],
 )
