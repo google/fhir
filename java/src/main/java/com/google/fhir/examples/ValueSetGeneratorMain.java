@@ -25,6 +25,7 @@ import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.r4.proto.Bundle;
 import com.google.fhir.r4.proto.CodeSystem;
 import com.google.fhir.r4.proto.ContainedResource;
+import com.google.fhir.r4.proto.StructureDefinition;
 import com.google.fhir.r4.proto.ValueSet;
 import com.google.fhir.stu3.FileUtils;
 import com.google.fhir.stu3.JsonFormat;
@@ -70,12 +71,6 @@ final class ValueSetGeneratorMain {
     private String packageInfo = null;
 
     @Parameter(
-        names = {"--fhir_proto_root"},
-        description = "Generated proto import root path",
-        required = true)
-    private String fhirProtoRoot = null;
-
-    @Parameter(
         names = {"--for_codes_in"},
         description = "Generate codes for types used in these bundles.")
     private Set<String> codeUsers = new HashSet<>();
@@ -106,8 +101,7 @@ final class ValueSetGeneratorMain {
     Set<Bundle> valueSetBundles = loadBundles(args.valueSetBundleFiles, fhirVersion);
     valueSetBundles.add(makeBundle(args.codeSystemFiles, args.valueSetFiles, fhirVersion));
 
-    ValueSetGenerator generator =
-        new ValueSetGenerator(packageInfo, args.fhirProtoRoot, valueSetBundles);
+    ValueSetGenerator generator = new ValueSetGenerator(packageInfo, valueSetBundles);
 
     ProtoFilePrinter printer = new ProtoFilePrinter();
 
@@ -164,8 +158,17 @@ final class ValueSetGeneratorMain {
     Set<Bundle> bundles = new HashSet<>();
     for (String filename : filenames) {
       Bundle.Builder builder = Bundle.newBuilder();
-      String json = Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read();
-      parser.merge(json, builder);
+      if (filename.endsWith(".json")) {
+        String json = Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read();
+        parser.merge(json, builder);
+      } else if (filename.endsWith(".zip")) {
+        for (StructureDefinition structDef : FileUtils.loadStructureDefinitionsInZip(filename)) {
+          builder.addEntryBuilder().getResourceBuilder().setStructureDefinition(structDef);
+        }
+      } else {
+        throw new IllegalArgumentException(
+            "Filename must be either a .json bundle or .zip archive");
+      }
       bundles.add(builder.build());
     }
     return bundles;

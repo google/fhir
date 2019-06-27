@@ -22,6 +22,8 @@ import com.google.protobuf.MessageOrBuilder;
 import java.util.function.BiConsumer;
 
 /** Utilities to make it easier to work with proto reflection. */
+// These utilities do a lot of unchecked casts based on generic types, use with caution!
+@SuppressWarnings("unchecked")
 public class ProtoUtils {
 
   private ProtoUtils() {}

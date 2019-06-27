@@ -19,6 +19,7 @@ import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
+import com.google.fhir.common.FhirVersion;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.r4.proto.BindingStrengthCode;
@@ -49,14 +50,14 @@ import java.util.stream.Collectors;
 /** */
 public class ValueSetGenerator {
   private final PackageInfo packageInfo;
-  private final String fhirProtoRootPath;
+  private final FhirVersion fhirVersion;
   private final Map<String, List<EnumValueDescriptorProto.Builder>> codesByUrl;
   private final Map<String, ValueSet> valueSetsByUrl;
 
-  public ValueSetGenerator(
-      PackageInfo packageInfo, String fhirProtoRootPath, Set<Bundle> valuesetBundles) {
+  public ValueSetGenerator(PackageInfo packageInfo, Set<Bundle> valuesetBundles) {
     this.packageInfo = packageInfo;
-    this.fhirProtoRootPath = fhirProtoRootPath;
+    this.fhirVersion = FhirVersion.fromAnnotation(packageInfo.getFhirVersion());
+
     List<Bundle.Entry> allEntries =
         valuesetBundles.stream()
             .flatMap(bundle -> bundle.getEntryList().stream())
@@ -88,7 +89,7 @@ public class ValueSetGenerator {
   private FileDescriptorProto generateValueSetFile(Collection<ValueSet> valueSetsToGenerate) {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
     builder.setPackage(packageInfo.getProtoPackage()).setSyntax("proto3");
-    builder.addDependency(new File(fhirProtoRootPath, "datatypes.proto").toString());
+    builder.addDependency(new File(fhirVersion.coreProtoImportRoot, "datatypes.proto").toString());
     builder.addDependency(new File(ProtoGenerator.ANNOTATION_PATH, "annotations.proto").toString());
     FileOptions.Builder options = FileOptions.newBuilder();
     if (!packageInfo.getJavaProtoPackage().isEmpty()) {
@@ -157,13 +158,13 @@ public class ValueSetGenerator {
             FieldDescriptorProto.newBuilder()
                 .setNumber(2)
                 .setName("id")
-                .setTypeName("String")
+                .setTypeName("." + fhirVersion.coreProtoPackage + ".String")
                 .setType(FieldDescriptorProto.Type.TYPE_MESSAGE))
         .addField(
             FieldDescriptorProto.newBuilder()
                 .setNumber(3)
                 .setName("extension")
-                .setTypeName("Extension")
+                .setTypeName("." + fhirVersion.coreProtoPackage + ".Extension")
                 .setLabel(FieldDescriptorProto.Label.LABEL_REPEATED)
                 .setType(FieldDescriptorProto.Type.TYPE_MESSAGE));
 
