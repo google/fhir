@@ -67,6 +67,8 @@ cc_test(
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:extensions_cc_proto",
         "//proto/stu3:resources_cc_proto",
+        "//proto/stu3:uscore_cc_proto",
+        "//proto/stu3:uscore_codes_cc_proto",
         "//proto/stu3:version_config_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:optional",

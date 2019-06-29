@@ -23,16 +23,22 @@
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
+#include "proto/stu3/uscore.pb.h"
+#include "proto/stu3/uscore_codes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 
+using ::google::fhir::stu3::proto::Code;
+using ::google::fhir::stu3::proto::Coding;
 using ::google::fhir::stu3::proto::Encounter;
 using ::google::fhir::stu3::proto::Observation;
+using ::google::fhir::stu3::proto::Uri;
 using ::google::fhir::stu3::proto::ValueSet;
+using ::google::fhir::stu3::uscore::UsCoreBirthSexCode;
+using ::google::fhir::stu3::uscore::UsCorePatient;
 
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::util::MessageDifferencer;
-
 using google::fhir::Status;
 using google::fhir::fhir_path::CompiledExpression;
 using google::fhir::fhir_path::EvaluationResult;
@@ -77,6 +83,15 @@ Observation ValidObservation() {
 ValueSet ValidValueSet() {
   return ParseFromString<ValueSet>(R"proto(
     url { value: "http://example.com/valueset" }
+  )proto");
+}
+
+UsCorePatient ValidUsCorePatient() {
+  return ParseFromString<UsCorePatient>(R"proto(
+    identifier {
+      system { value: "foo" },
+      value: { value: "http://example.com/patient" }
+    }
   )proto");
 }
 
@@ -461,4 +476,33 @@ TEST(FhirPathTest, NestedConstraintSatisfied) {
   MessageValidator validator;
 
   EXPECT_TRUE(validator.Validate(value_set).ok());
+}
+
+TEST(FhirPathTest, ProfiledEmptyExtension) {
+  UsCorePatient patient = ValidUsCorePatient();
+  MessageValidator validator;
+  EXPECT_TRUE(validator.Validate(patient).ok());
+}
+
+TEST(FhirPathTest, ProfiledWithExtensions) {
+  UsCorePatient patient = ValidUsCorePatient();
+  auto race = new google::fhir::stu3::uscore::PatientUSCoreRaceExtension();
+
+  Coding* coding = race->add_omb_category();
+
+  Uri* uri = new Uri();
+  uri->set_value("urn:oid:2.16.840.1.113883.6.238");
+  coding->set_allocated_system(uri);
+
+  Code* code = new Code();
+  code->set_value("1002-5");
+  coding->set_allocated_code(code);
+  patient.set_allocated_race(race);
+
+  UsCoreBirthSexCode* birth_sex = new UsCoreBirthSexCode();
+  birth_sex->set_value(UsCoreBirthSexCode::MALE);
+  patient.set_allocated_birthsex(birth_sex);
+
+  MessageValidator validator;
+  EXPECT_TRUE(validator.Validate(patient).ok());
 }
