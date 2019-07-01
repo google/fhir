@@ -19,10 +19,8 @@ import com.google.api.services.bigquery.model.TableSchema;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableSet;
 import com.google.fhir.proto.Annotations;
-import com.google.fhir.stu3.proto.ContainedResource;
 import com.google.fhir.stu3.proto.Decimal;
 import com.google.fhir.stu3.proto.Extension;
-import com.google.fhir.stu3.proto.Identifier;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import java.util.ArrayList;
@@ -55,20 +53,15 @@ public final class BigQuerySchema {
       return field.setType(schemaTypeForPrimitive(fieldType));
     }
 
-    // We don't include extensions or contained resources unless they exist in the data.
+    // We inline extensions and contained resources as simple strings describing the url or type,
+    // respectively, to keep a well-structured schema.
     if (fieldType.equals(Extension.getDescriptor())
-        || fieldType.equals(ContainedResource.getDescriptor())) {
+        || fieldType.getName().equals("ContainedResource")) {
       return field.setType("STRING");
     }
     // We don't include nested types.
     // TODO: consider allowing a certain level of nesting.
     if (fieldType.equals(fieldDescriptor.getContainingType())) {
-      return null;
-    }
-    // Identifier and Reference refer to each other. We stop the recursion by not including
-    // Identifier.assigner unless it exists in the data.
-    if (fieldDescriptor.getContainingType().equals(Identifier.getDescriptor())
-        && fieldName.equals("assigner")) {
       return null;
     }
     field.setType("RECORD");
@@ -109,8 +102,10 @@ public final class BigQuerySchema {
 
       // Accept the generic types (uri, fragment) as well as the specified ones.
       List<FieldDescriptor> fields = new ArrayList<>();
-      Set<String> staticNames =
-          ImmutableSet.of("uri", "fragment", "extension", "identifier", "display");
+      // TODO: We're dropping "identifier" to avoid an infinite recursion where
+      // identifiers have references and vice versa.  We should dig in to if there is a better
+      // solution.
+      Set<String> staticNames = ImmutableSet.of("uri", "fragment", "extension", "display");
       for (FieldDescriptor field : descriptor.getFields()) {
         String resourceFieldName =
             CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, field.getName());

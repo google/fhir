@@ -249,6 +249,38 @@
         "mode": "NULLABLE",
         "name": "period",
         "type": "RECORD"
+      },
+      {
+        "fields": [
+          {
+            "mode": "REPEATED",
+            "name": "extension",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "reference",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "fragment",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "organizationId",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "display",
+            "type": "STRING"
+          }
+        ],
+        "mode": "NULLABLE",
+        "name": "assigner",
+        "type": "RECORD"
       }
     ],
     "mode": "REPEATED",
@@ -553,109 +585,6 @@
         "type": "STRING"
       },
       {
-        "fields": [
-          {
-            "mode": "REPEATED",
-            "name": "extension",
-            "type": "STRING"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "use",
-            "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "system",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "version",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "code",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "display",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "userSelected",
-                    "type": "BOOLEAN"
-                  }
-                ],
-                "mode": "REPEATED",
-                "name": "coding",
-                "type": "RECORD"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "text",
-                "type": "STRING"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "type",
-            "type": "RECORD"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "system",
-            "type": "STRING"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "value",
-            "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "start",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "end",
-                "type": "STRING"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "period",
-            "type": "RECORD"
-          }
-        ],
-        "mode": "NULLABLE",
-        "name": "identifier",
-        "type": "RECORD"
-      },
-      {
         "mode": "NULLABLE",
         "name": "display",
         "type": "STRING"
@@ -688,109 +617,6 @@
         "type": "STRING"
       },
       {
-        "fields": [
-          {
-            "mode": "REPEATED",
-            "name": "extension",
-            "type": "STRING"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "use",
-            "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "system",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "version",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "code",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "display",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "userSelected",
-                    "type": "BOOLEAN"
-                  }
-                ],
-                "mode": "REPEATED",
-                "name": "coding",
-                "type": "RECORD"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "text",
-                "type": "STRING"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "type",
-            "type": "RECORD"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "system",
-            "type": "STRING"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "value",
-            "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "start",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "end",
-                "type": "STRING"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "period",
-            "type": "RECORD"
-          }
-        ],
-        "mode": "NULLABLE",
-        "name": "identifier",
-        "type": "RECORD"
-      },
-      {
         "mode": "NULLABLE",
         "name": "display",
         "type": "STRING"
@@ -821,109 +647,6 @@
         "mode": "NULLABLE",
         "name": "referralRequestId",
         "type": "STRING"
-      },
-      {
-        "fields": [
-          {
-            "mode": "REPEATED",
-            "name": "extension",
-            "type": "STRING"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "use",
-            "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "system",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "version",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "code",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "display",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "userSelected",
-                    "type": "BOOLEAN"
-                  }
-                ],
-                "mode": "REPEATED",
-                "name": "coding",
-                "type": "RECORD"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "text",
-                "type": "STRING"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "type",
-            "type": "RECORD"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "system",
-            "type": "STRING"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "value",
-            "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "start",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "end",
-                "type": "STRING"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "period",
-            "type": "RECORD"
-          }
-        ],
-        "mode": "NULLABLE",
-        "name": "identifier",
-        "type": "RECORD"
       },
       {
         "mode": "NULLABLE",
@@ -1051,109 +774,6 @@
             "type": "STRING"
           },
           {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "use",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "fields": [
-                      {
-                        "mode": "REPEATED",
-                        "name": "extension",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "system",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "version",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "code",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "display",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "userSelected",
-                        "type": "BOOLEAN"
-                      }
-                    ],
-                    "mode": "REPEATED",
-                    "name": "coding",
-                    "type": "RECORD"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "text",
-                    "type": "STRING"
-                  }
-                ],
-                "mode": "NULLABLE",
-                "name": "type",
-                "type": "RECORD"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "system",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "value",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "start",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "end",
-                    "type": "STRING"
-                  }
-                ],
-                "mode": "NULLABLE",
-                "name": "period",
-                "type": "RECORD"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "identifier",
-            "type": "RECORD"
-          },
-          {
             "mode": "NULLABLE",
             "name": "display",
             "type": "STRING"
@@ -1189,109 +809,6 @@
         "mode": "NULLABLE",
         "name": "appointmentId",
         "type": "STRING"
-      },
-      {
-        "fields": [
-          {
-            "mode": "REPEATED",
-            "name": "extension",
-            "type": "STRING"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "use",
-            "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "system",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "version",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "code",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "display",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "userSelected",
-                    "type": "BOOLEAN"
-                  }
-                ],
-                "mode": "REPEATED",
-                "name": "coding",
-                "type": "RECORD"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "text",
-                "type": "STRING"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "type",
-            "type": "RECORD"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "system",
-            "type": "STRING"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "value",
-            "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "start",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "end",
-                "type": "STRING"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "period",
-            "type": "RECORD"
-          }
-        ],
-        "mode": "NULLABLE",
-        "name": "identifier",
-        "type": "RECORD"
       },
       {
         "mode": "NULLABLE",
@@ -1456,109 +973,6 @@
             "type": "STRING"
           },
           {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "use",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "fields": [
-                      {
-                        "mode": "REPEATED",
-                        "name": "extension",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "system",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "version",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "code",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "display",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "userSelected",
-                        "type": "BOOLEAN"
-                      }
-                    ],
-                    "mode": "REPEATED",
-                    "name": "coding",
-                    "type": "RECORD"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "text",
-                    "type": "STRING"
-                  }
-                ],
-                "mode": "NULLABLE",
-                "name": "type",
-                "type": "RECORD"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "system",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "value",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "start",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "end",
-                    "type": "STRING"
-                  }
-                ],
-                "mode": "NULLABLE",
-                "name": "period",
-                "type": "RECORD"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "identifier",
-            "type": "RECORD"
-          },
-          {
             "mode": "NULLABLE",
             "name": "display",
             "type": "STRING"
@@ -1653,109 +1067,6 @@
         "mode": "NULLABLE",
         "name": "accountId",
         "type": "STRING"
-      },
-      {
-        "fields": [
-          {
-            "mode": "REPEATED",
-            "name": "extension",
-            "type": "STRING"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "use",
-            "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "system",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "version",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "code",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "display",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "userSelected",
-                    "type": "BOOLEAN"
-                  }
-                ],
-                "mode": "REPEATED",
-                "name": "coding",
-                "type": "RECORD"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "text",
-                "type": "STRING"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "type",
-            "type": "RECORD"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "system",
-            "type": "STRING"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "value",
-            "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "start",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "end",
-                "type": "STRING"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "period",
-            "type": "RECORD"
-          }
-        ],
-        "mode": "NULLABLE",
-        "name": "identifier",
-        "type": "RECORD"
       },
       {
         "mode": "NULLABLE",
@@ -1876,6 +1187,38 @@
             "mode": "NULLABLE",
             "name": "period",
             "type": "RECORD"
+          },
+          {
+            "fields": [
+              {
+                "mode": "REPEATED",
+                "name": "extension",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "reference",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "fragment",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "organizationId",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "display",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "assigner",
+            "type": "RECORD"
           }
         ],
         "mode": "NULLABLE",
@@ -1903,109 +1246,6 @@
             "mode": "NULLABLE",
             "name": "locationId",
             "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "use",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "fields": [
-                      {
-                        "mode": "REPEATED",
-                        "name": "extension",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "system",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "version",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "code",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "display",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "userSelected",
-                        "type": "BOOLEAN"
-                      }
-                    ],
-                    "mode": "REPEATED",
-                    "name": "coding",
-                    "type": "RECORD"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "text",
-                    "type": "STRING"
-                  }
-                ],
-                "mode": "NULLABLE",
-                "name": "type",
-                "type": "RECORD"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "system",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "value",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "start",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "end",
-                    "type": "STRING"
-                  }
-                ],
-                "mode": "NULLABLE",
-                "name": "period",
-                "type": "RECORD"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "identifier",
-            "type": "RECORD"
           },
           {
             "mode": "NULLABLE",
@@ -2310,109 +1550,6 @@
             "type": "STRING"
           },
           {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "use",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "fields": [
-                      {
-                        "mode": "REPEATED",
-                        "name": "extension",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "system",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "version",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "code",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "display",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "userSelected",
-                        "type": "BOOLEAN"
-                      }
-                    ],
-                    "mode": "REPEATED",
-                    "name": "coding",
-                    "type": "RECORD"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "text",
-                    "type": "STRING"
-                  }
-                ],
-                "mode": "NULLABLE",
-                "name": "type",
-                "type": "RECORD"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "system",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "value",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "start",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "end",
-                    "type": "STRING"
-                  }
-                ],
-                "mode": "NULLABLE",
-                "name": "period",
-                "type": "RECORD"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "identifier",
-            "type": "RECORD"
-          },
-          {
             "mode": "NULLABLE",
             "name": "display",
             "type": "STRING"
@@ -2516,109 +1653,6 @@
             "type": "STRING"
           },
           {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "use",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "fields": [
-                      {
-                        "mode": "REPEATED",
-                        "name": "extension",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "system",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "version",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "code",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "display",
-                        "type": "STRING"
-                      },
-                      {
-                        "mode": "NULLABLE",
-                        "name": "userSelected",
-                        "type": "BOOLEAN"
-                      }
-                    ],
-                    "mode": "REPEATED",
-                    "name": "coding",
-                    "type": "RECORD"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "text",
-                    "type": "STRING"
-                  }
-                ],
-                "mode": "NULLABLE",
-                "name": "type",
-                "type": "RECORD"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "system",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "value",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "start",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "end",
-                    "type": "STRING"
-                  }
-                ],
-                "mode": "NULLABLE",
-                "name": "period",
-                "type": "RECORD"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "identifier",
-            "type": "RECORD"
-          },
-          {
             "mode": "NULLABLE",
             "name": "display",
             "type": "STRING"
@@ -2683,109 +1717,6 @@
         "type": "STRING"
       },
       {
-        "fields": [
-          {
-            "mode": "REPEATED",
-            "name": "extension",
-            "type": "STRING"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "use",
-            "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "system",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "version",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "code",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "display",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "userSelected",
-                    "type": "BOOLEAN"
-                  }
-                ],
-                "mode": "REPEATED",
-                "name": "coding",
-                "type": "RECORD"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "text",
-                "type": "STRING"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "type",
-            "type": "RECORD"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "system",
-            "type": "STRING"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "value",
-            "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "start",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "end",
-                "type": "STRING"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "period",
-            "type": "RECORD"
-          }
-        ],
-        "mode": "NULLABLE",
-        "name": "identifier",
-        "type": "RECORD"
-      },
-      {
         "mode": "NULLABLE",
         "name": "display",
         "type": "STRING"
@@ -2816,109 +1747,6 @@
         "mode": "NULLABLE",
         "name": "encounterId",
         "type": "STRING"
-      },
-      {
-        "fields": [
-          {
-            "mode": "REPEATED",
-            "name": "extension",
-            "type": "STRING"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "use",
-            "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "fields": [
-                  {
-                    "mode": "REPEATED",
-                    "name": "extension",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "system",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "version",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "code",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "display",
-                    "type": "STRING"
-                  },
-                  {
-                    "mode": "NULLABLE",
-                    "name": "userSelected",
-                    "type": "BOOLEAN"
-                  }
-                ],
-                "mode": "REPEATED",
-                "name": "coding",
-                "type": "RECORD"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "text",
-                "type": "STRING"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "type",
-            "type": "RECORD"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "system",
-            "type": "STRING"
-          },
-          {
-            "mode": "NULLABLE",
-            "name": "value",
-            "type": "STRING"
-          },
-          {
-            "fields": [
-              {
-                "mode": "REPEATED",
-                "name": "extension",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "start",
-                "type": "STRING"
-              },
-              {
-                "mode": "NULLABLE",
-                "name": "end",
-                "type": "STRING"
-              }
-            ],
-            "mode": "NULLABLE",
-            "name": "period",
-            "type": "RECORD"
-          }
-        ],
-        "mode": "NULLABLE",
-        "name": "identifier",
-        "type": "RECORD"
       },
       {
         "mode": "NULLABLE",
