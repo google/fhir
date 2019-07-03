@@ -201,16 +201,13 @@ void SplitResource(const R& resource, const stu3::proto::VersionConfig& config,
   // is the _earliest_ available time.  To safeguard against leaks, it should be
   // the _latest_ available time.  In that case, the "default" time version will
   // just be the original proto.
-  for (const auto& override_map_entry : sorted_overrides) {
-    for (const string& field_path : override_map_entry.second) {
-      if (EndsInIndex(field_path)) {
-        // This points to a specific index in a repeated field.
-        // We can't just clear an index, but that's ok because the whole field
-        // will have overrides, so just clear it all.
+  for (const auto& timestamp_override : resource_config.timestamp_override()) {
+    for (const string& field_path : timestamp_override.resource_field()) {
+      if (field_path.find_last_of('[') == string::npos) {
+        CHECK(ClearFieldByPath(current_resource.get(), field_path).ok());
+      } else {
         CHECK(ClearFieldByPath(current_resource.get(), StripIndex(field_path))
                   .ok());
-      } else {
-        CHECK(ClearFieldByPath(current_resource.get(), field_path).ok());
       }
     }
   }
