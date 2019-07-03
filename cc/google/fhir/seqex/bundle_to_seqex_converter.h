@@ -20,12 +20,14 @@
 #include <algorithm>
 #include <iterator>
 #include <map>
+#include <memory>
 #include <set>
 #include <string>
 #include <utility>
 #include <vector>
 
 #include "gflags/gflags.h"
+#include "google/protobuf/arena.h"
 #include "google/protobuf/message.h"
 #include "absl/strings/str_split.h"
 #include "absl/time/time.h"
@@ -128,13 +130,16 @@ class BaseBundleToSeqexConverter {
   std::set<string> redacted_features_for_example_;
   ::tensorflow::Features feature_types_;
 
+  // Helper to manage memory allocation.
+  std::unique_ptr<::google::protobuf::Arena> arena_;
+
   // The current sequence example.
   struct ExampleKey key_;
-  // Internal seqex that contains all data.
-  ::tensorflow::SequenceExample seqex_;
+  // Internal seqex that contains all data. Owned by arena_.
+  ::tensorflow::SequenceExample* seqex_;
   // The seqex to be returned when GetExample() is called. It may be a trimmed
-  // version of "seqex_".
-  ::tensorflow::SequenceExample seqex_to_return_;
+  // version of "seqex_". Owned by arena_.
+  ::tensorflow::SequenceExample* seqex_to_return_;
   int cached_offset_;
 
   bool enable_attribution_;
@@ -175,7 +180,7 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
   // Get the current SequenceExample. Requires: !Done().
   const ::tensorflow::SequenceExample& GetExample() {
     CHECK(!Done());
-    return seqex_to_return_;
+    return *seqex_to_return_;
   }
 
   int ExampleSeqLen() {

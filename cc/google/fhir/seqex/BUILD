@@ -22,7 +22,6 @@ cc_library(
         "//proto/stu3:extensions_cc_proto",
         "//proto/stu3:resources_cc_proto",
         "//proto/stu3:version_config_cc_proto",
-        "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
         "@org_tensorflow//tensorflow/core:lib",
