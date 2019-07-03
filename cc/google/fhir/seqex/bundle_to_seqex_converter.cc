@@ -172,7 +172,6 @@ void GetSequenceFeatures(
 
     // Append to the output
     if (has_valid_feature) {
-
       for (const auto& empty_feature : feature_types.feature()) {
         const string& feature_name = empty_feature.first;
         auto* f =
@@ -206,7 +205,6 @@ void GetSequenceFeatures(
     }
     // Append to the output
     if (has_valid_feature) {
-
       for (const auto& empty_feature : feature_types.feature()) {
         const string& feature_name = empty_feature.first;
         auto* f = (*feature_list_map)[feature_name].add_feature();
@@ -403,8 +401,6 @@ BaseBundleToSeqexConverter::BaseBundleToSeqexConverter(
   arena_.reset(new google::protobuf::Arena(options));
   seqex_ =
       google::protobuf::Arena::CreateMessage<tensorflow::SequenceExample>(arena_.get());
-  seqex_to_return_ =
-      google::protobuf::Arena::CreateMessage<tensorflow::SequenceExample>(arena_.get());
 
   // Split the redacted feature list for easy access.
   redacted_features_ =
@@ -484,7 +480,6 @@ bool BaseBundleToSeqexConverter::Next() {
   key_.start = offset;
   key_.end = end - examples_.begin();
 
-  *seqex_to_return_ = *seqex_;
   return true;
 }
 

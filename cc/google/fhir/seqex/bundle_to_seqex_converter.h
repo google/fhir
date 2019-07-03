@@ -137,9 +137,6 @@ class BaseBundleToSeqexConverter {
   struct ExampleKey key_;
   // Internal seqex that contains all data. Owned by arena_.
   ::tensorflow::SequenceExample* seqex_;
-  // The seqex to be returned when GetExample() is called. It may be a trimmed
-  // version of "seqex_". Owned by arena_.
-  ::tensorflow::SequenceExample* seqex_to_return_;
   int cached_offset_;
 
   bool enable_attribution_;
@@ -180,7 +177,7 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
   // Get the current SequenceExample. Requires: !Done().
   const ::tensorflow::SequenceExample& GetExample() {
     CHECK(!Done());
-    return *seqex_to_return_;
+    return *seqex_;
   }
 
   int ExampleSeqLen() {
