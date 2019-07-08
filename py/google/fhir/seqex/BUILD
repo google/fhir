@@ -3,12 +3,12 @@ licenses(["notice"])
 package(default_visibility = ["//visibility:public"])
 
 load("//bazel:cython.bzl", "pyx_library")
-
 load(
- "@io_bazel_rules_python//python:python.bzl",
- "py_binary", "py_library", "py_test",
+    "@io_bazel_rules_python//python:python.bzl",
+    "py_binary",
+    "py_library",
+    "py_test",
 )
-
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 
 # @io_bazel_rules_python may not be able to pull in transitive dependency correctly

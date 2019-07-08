@@ -19,5 +19,6 @@ if [[ $# -eq 0 ]] ; then
 fi
 
 echo "converting FHIR files in $1"
+
 bazel run //java:ConvertNdJsonForBigQuery -- --output_directory $1 $1/*.ndjson
 gzip $1/*.prototxt

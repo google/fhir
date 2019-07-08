@@ -28,8 +28,10 @@ PRIMITIVES="base64Binary boolean code date dateTime decimal id instant integer m
 DATATYPES="Address Age Annotation Attachment CodeableConcept Coding ContactPoint Count Distance Duration Extension HumanName Identifier Meta Money Period Quantity Range Ratio SampledData Signature SimpleQuantity Timing"
 METADATATYPES="BackboneElement Element ElementDefinition Narrative"
 RESOURCES="Account AllergyIntolerance Appointment AppointmentResponse AuditEvent Basic Binary BodySite Bundle CarePlan Claim ClaimResponse ClinicalImpression Communication CommunicationRequest Composition ConceptMap Condition Conformance Contract Coverage DataElement DetectedIssue Device DeviceComponent DeviceMetric DeviceUseRequest DeviceUseStatement DiagnosticOrder DiagnosticReport DocumentManifest DocumentReference DomainResource EligibilityRequest EligibilityResponse Encounter EnrollmentRequest EnrollmentResponse EpisodeOfCare ExplanationOfBenefit FamilyMemberHistory Flag Goal Group HealthcareService ImagingObjectSelection ImagingStudy Immunization ImmunizationRecommendation ImplementationGuide List Location Media Medication MedicationAdministration MedicationDispense MedicationOrder MedicationStatement MessageHeader NamingSystem NutritionOrder Observation OperationDefinition OperationOutcome Order OrderResponse Organization Parameters Patient PaymentNotice PaymentReconciliation Person Practitioner Procedure ProcedureRequest ProcessRequest ProcessResponse Provenance Questionnaire QuestionnaireResponse ReferralRequest RelatedPerson Resource RiskAssessment Schedule SearchParameter Slot Specimen StructureDefinition Subscription Substance SupplyDelivery SupplyRequest TestScript ValueSet VisionPrescription"
+
 FHIR_PACKAGE_INFO=$ROOT_PATH/testdata/dstu2/fhir_package_info.prototxt
 OUTPUT_PATH=$ROOT_PATH/proto/dstu2
+
 INPUT_PATH=$ROOT_PATH/spec/hl7.fhir.core/1.0.2/package
 
 COMMON_FLAGS="\

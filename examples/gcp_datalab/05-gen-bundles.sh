@@ -17,7 +17,9 @@ if [[ $# -eq 0 ]] ; then
     echo 'Missing argument: scratch directory'
     exit 1
 fi
+
 bazel build -c opt //java:SyntheaToTFRecords
+
 SYNTHEA_TO_TF_RECORDS=$(pwd)/../../bazel-bin/java/SyntheaToTFRecords
 
 $SYNTHEA_TO_TF_RECORDS --input=${1}/synthea/output/fhir/* \

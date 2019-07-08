@@ -19,7 +19,9 @@ if [[ $# -eq 0 ]] ; then
 fi
 # Remove any trailing "/", which confuses beam's file matcher.
 DIR=$(echo $1 | sed "s/\/$//")
+
 bazel build -c opt //py/google/fhir/labels:all
+
 BUNDLE_TO_LABELS=$(pwd)/../../bazel-bin/py/google/fhir/labels/bundle_to_label
 
 # We generate labels for train, validation, and test separately, using an ad-hoc

@@ -38,6 +38,7 @@ function get_location() {
   fi
   echo "$INPUT_PATH/StructureDefinition-$1.json"
 }
+
 FHIR_STRUCT_DEF_ZIP="$ROOT_PATH/bazel-genfiles/spec/fhir_stu3_structure_definitions.zip"
 FHIR_PACKAGE_INFO="$ROOT_PATH//spec/fhir_stu3_package_info.prototxt"
 

@@ -19,7 +19,9 @@ if [[ $# -eq 0 ]] ; then
 fi
 # Remove any trailing "/", which confuses beam's file matcher.
 DIR=$(echo $1 | sed "s/\/$//")
+
 bazel build -c opt //py/google/fhir/seqex:all
+
 BUNDLE_TO_SEQEX=$(pwd)/../../bazel-bin/py/google/fhir/seqex/bundle_to_seqex_main
 VERSION_CONFIG=$(pwd)/../../proto/stu3/version_config.textproto
 
