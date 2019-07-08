@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef GOOGLE_FHIR_STU3_EXTENSIONS_H_
-#define GOOGLE_FHIR_STU3_EXTENSIONS_H_
+#ifndef GOOGLE_FHIR_EXTENSIONS_H_
+#define GOOGLE_FHIR_EXTENSIONS_H_
 
 #include <string>
 #include <vector>
@@ -40,8 +40,14 @@ using std::string;
 Status ExtensionToMessage(const stu3::proto::Extension& extension,
                           ::google::protobuf::Message* message);
 
+Status ExtensionToMessage(const r4::proto::Extension& extension,
+                          ::google::protobuf::Message* message);
+
 Status ConvertToExtension(const ::google::protobuf::Message& message,
                           stu3::proto::Extension* extension);
+
+Status ConvertToExtension(const ::google::protobuf::Message& message,
+                          r4::proto::Extension* extension);
 
 // Given a datatype message (E.g., String, Code, Boolean, etc.),
 // finds the appropriate field on the target extension and sets it.
@@ -49,6 +55,8 @@ Status ConvertToExtension(const ::google::protobuf::Message& message,
 // for the message.
 Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
                               stu3::proto::Extension* extension);
+Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
+                              r4::proto::Extension* extension);
 
 Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor);
 
@@ -110,4 +118,4 @@ string GetInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* field);
 }  // namespace fhir
 }  // namespace google
 
-#endif  // GOOGLE_FHIR_STU3_EXTENSIONS_H_
+#endif  // GOOGLE_FHIR_EXTENSIONS_H_

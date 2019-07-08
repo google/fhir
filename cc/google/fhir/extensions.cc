@@ -24,6 +24,7 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
+#include "proto/r4/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "tensorflow/core/platform/logging.h"
@@ -32,7 +33,6 @@ namespace google {
 namespace fhir {
 
 using std::string;
-using ::google::fhir::stu3::proto::Extension;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
@@ -45,14 +45,22 @@ const std::unordered_map<string, const FieldDescriptor*>*
 GetExtensionValueFieldsMap() {
   static const std::unordered_map<string, const FieldDescriptor*>*
       extension_value_fields_by_type = []() {
-        const google::protobuf::OneofDescriptor* value_oneof =
-            Extension::Value::descriptor()->FindOneofByName("value");
-        CHECK(value_oneof != nullptr);
-
         std::unordered_map<string, const FieldDescriptor*>* map =
             new std::unordered_map<string, const FieldDescriptor*>;
-        for (int i = 0; i < value_oneof->field_count(); i++) {
-          const FieldDescriptor* field = value_oneof->field(i);
+
+        const google::protobuf::OneofDescriptor* stu3_value_oneof =
+            stu3::proto::Extension::Value::descriptor()->FindOneofByName(
+                "value");
+        CHECK(stu3_value_oneof != nullptr);
+        for (int i = 0; i < stu3_value_oneof->field_count(); i++) {
+          const FieldDescriptor* field = stu3_value_oneof->field(i);
+          (*map)[field->message_type()->full_name()] = field;
+        }
+        const google::protobuf::OneofDescriptor* r4_value_oneof =
+            r4::proto::Extension::Value::descriptor()->FindOneofByName("value");
+        CHECK(r4_value_oneof != nullptr);
+        for (int i = 0; i < r4_value_oneof->field_count(); i++) {
+          const FieldDescriptor* field = r4_value_oneof->field(i);
           (*map)[field->message_type()->full_name()] = field;
         }
         return map;
@@ -60,7 +68,10 @@ GetExtensionValueFieldsMap() {
   return extension_value_fields_by_type;
 }
 
-Status AddFieldsToExtension(const Message& message, Extension* extension);
+Status AddFieldsToExtension(const Message& message,
+                            ::google::fhir::stu3::proto::Extension* extension);
+Status AddFieldsToExtension(const Message& message,
+                            ::google::fhir::r4::proto::Extension* extension);
 
 Status CheckIsMessage(const FieldDescriptor* field) {
   if (field->type() != FieldDescriptor::Type::TYPE_MESSAGE) {
@@ -70,8 +81,37 @@ Status CheckIsMessage(const FieldDescriptor* field) {
   return Status::OK();
 }
 
-Status AddValueToExtension(const Message& message, Extension* extension,
-                           bool is_choice_type) {
+// Given a datatype message (E.g., String, Code, Boolean, etc.),
+// finds the appropriate field on the target extension and sets it.
+// Returns InvalidArgument if there's no matching oneof type on the extension
+// for the message.
+template <class ExtensionLike>
+Status SetDatatypeOnExtensionInternal(const Message& message,
+                                      ExtensionLike* extension) {
+  const Descriptor* descriptor = message.GetDescriptor();
+  auto value_field_iter =
+      GetExtensionValueFieldsMap()->find(descriptor->full_name());
+  if (value_field_iter != GetExtensionValueFieldsMap()->end()) {
+    extension->value()
+        .GetReflection()
+        ->MutableMessage(extension->mutable_value(), value_field_iter->second)
+        ->CopyFrom(message);
+    return Status::OK();
+  }
+  if (HasValueset(message.GetDescriptor())) {
+    // The source message is a bound code type.
+    // Convert it to a generic code, and add it to the extension.
+    return ConvertToGenericCode(message,
+                                extension->mutable_value()->mutable_code());
+  }
+  return InvalidArgument(descriptor->full_name(),
+                         " is not a valid value type on Extension.");
+}
+
+template <class ExtensionLike>
+Status AddValueToExtensionInternal(const Message& message,
+                                   ExtensionLike* extension,
+                                   bool is_choice_type) {
   const Descriptor* descriptor = message.GetDescriptor();
 
   if (is_choice_type) {
@@ -88,19 +128,49 @@ Status AddValueToExtension(const Message& message, Extension* extension,
                              descriptor->full_name());
     }
     FHIR_RETURN_IF_ERROR(CheckIsMessage(value_field));
-    return AddValueToExtension(
+    return AddValueToExtensionInternal(
         message_reflection->GetMessage(message, value_field), extension, false);
   }
   // Try to set the message directly as a datatype value on the extension.
   // E.g., put message of type boolean into the value.boolean field
-  if (SetDatatypeOnExtension(message, extension).ok()) {
+  if (SetDatatypeOnExtensionInternal(message, extension).ok()) {
     return Status::OK();
   }
   // Fall back to adding individual fields as sub-extensions.
   return AddFieldsToExtension(message, extension);
 }
 
-Status AddFieldsToExtension(const Message& message, Extension* extension) {
+}  // namespace
+
+Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
+                              stu3::proto::Extension* extension) {
+  return SetDatatypeOnExtensionInternal(message, extension);
+}
+
+Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
+                              r4::proto::Extension* extension) {
+  return SetDatatypeOnExtensionInternal(message, extension);
+}
+
+Status AddValueToExtension(const Message& message,
+                           ::google::fhir::stu3::proto::Extension* extension,
+                           bool is_choice_type) {
+  return AddValueToExtensionInternal<::google::fhir::stu3::proto::Extension>(
+      message, extension, is_choice_type);
+}
+
+Status AddValueToExtension(const Message& message,
+                           ::google::fhir::r4::proto::Extension* extension,
+                           bool is_choice_type) {
+  return AddValueToExtensionInternal<::google::fhir::r4::proto::Extension>(
+      message, extension, is_choice_type);
+}
+
+namespace {
+
+template <class ExtensionLike>
+Status AddFieldsToExtensionInternal(const Message& message,
+                                    ExtensionLike* extension) {
   const Descriptor* descriptor = message.GetDescriptor();
   const Reflection* reflection = message.GetReflection();
   std::vector<const FieldDescriptor*> fields;
@@ -113,29 +183,39 @@ Status AddFieldsToExtension(const Message& message, Extension* extension) {
     // Add submessages to nested extensions.
     if (field->is_repeated()) {
       for (int j = 0; j < reflection->FieldSize(message, field); j++) {
-        Extension* child = extension->add_extension();
+        ExtensionLike* child = extension->add_extension();
         child->mutable_url()->set_value(GetInlinedExtensionUrl(field));
         FHIR_RETURN_IF_ERROR(CheckIsMessage(field));
-        FHIR_RETURN_IF_ERROR(AddValueToExtension(
+        FHIR_RETURN_IF_ERROR(AddValueToExtensionInternal(
             reflection->GetRepeatedMessage(message, field, j), child,
             IsChoiceType(field)));
       }
     } else {
-      Extension* child = extension->add_extension();
+      ExtensionLike* child = extension->add_extension();
       child->mutable_url()->set_value(GetInlinedExtensionUrl(field));
       FHIR_RETURN_IF_ERROR(CheckIsMessage(field));
-      FHIR_RETURN_IF_ERROR(AddValueToExtension(
+      FHIR_RETURN_IF_ERROR(AddValueToExtensionInternal(
           reflection->GetMessage(message, field), child, IsChoiceType(field)));
     }
   }
   return Status::OK();
 }
 
+Status AddFieldsToExtension(const Message& message,
+                            ::google::fhir::stu3::proto::Extension* extension) {
+  return AddFieldsToExtensionInternal(message, extension);
+}
+Status AddFieldsToExtension(const Message& message,
+                            ::google::fhir::r4::proto::Extension* extension) {
+  return AddFieldsToExtensionInternal(message, extension);
+}
+
+template <class ExtensionLike>
 StatusOr<const FieldDescriptor*> GetExtensionValueField(
-    const Extension& extension) {
+    const ExtensionLike& extension) {
   static const google::protobuf::OneofDescriptor* value_oneof =
-      Extension::Value::descriptor()->FindOneofByName("value");
-  const Extension::Value value = extension.value();
+      ExtensionLike::Value::descriptor()->FindOneofByName("value");
+  const auto& value = extension.value();
   const Reflection* value_reflection = value.GetReflection();
   const FieldDescriptor* field =
       value_reflection->GetOneofFieldDescriptor(value, value_oneof);
@@ -146,8 +226,9 @@ StatusOr<const FieldDescriptor*> GetExtensionValueField(
   return field;
 }
 
-Status ValueToMessage(const Extension& extension, Message* message,
-                      const FieldDescriptor* field) {
+template <class ExtensionLike>
+Status ValueToMessageInternal(const ExtensionLike& extension, Message* message,
+                              const FieldDescriptor* field) {
   const Descriptor* descriptor = message->GetDescriptor();
   if (field->cpp_type() != FieldDescriptor::CPPTYPE_MESSAGE) {
     return InvalidArgument(descriptor->full_name(),
@@ -171,7 +252,7 @@ Status ValueToMessage(const Extension& extension, Message* message,
       const FieldDescriptor* choice_field = choice_descriptor->field(i);
       if (value_field->message_type()->full_name() ==
           choice_field->message_type()->full_name()) {
-        return ValueToMessage(extension, choice_message, choice_field);
+        return ValueToMessageInternal(extension, choice_message, choice_field);
       }
     }
     return InvalidArgument("No field on Choice Type ",
@@ -194,11 +275,23 @@ Status ValueToMessage(const Extension& extension, Message* message,
                            field->message_type()->full_name(), " in extension ",
                            extension.DebugString());
   }
-  const Extension::Value value = extension.value();
+  const auto& value = extension.value();
   const Reflection* value_reflection = value.GetReflection();
   MutableOrAddMessage(message, field)
       ->CopyFrom(value_reflection->GetMessage(value, value_field));
   return Status::OK();
+}
+
+}  // namespace
+
+Status ValueToMessage(const ::google::fhir::stu3::proto::Extension& extension,
+                      Message* message, const FieldDescriptor* field) {
+  return ValueToMessageInternal(extension, message, field);
+}
+
+Status ValueToMessage(const ::google::fhir::r4::proto::Extension& extension,
+                      Message* message, const FieldDescriptor* field) {
+  return ValueToMessageInternal(extension, message, field);
 }
 
 const std::vector<const FieldDescriptor*> FindValueFields(
@@ -211,32 +304,6 @@ const std::vector<const FieldDescriptor*> FindValueFields(
     }
   }
   return value_fields;
-}
-
-}  // namespace
-// Given a datatype message (E.g., String, Code, Boolean, etc.),
-// finds the appropriate field on the target extension and sets it.
-// Returns InvalidArgument if there's no matching oneof type on the extension
-// for the message.
-Status SetDatatypeOnExtension(const Message& message, Extension* extension) {
-  const Descriptor* descriptor = message.GetDescriptor();
-  auto value_field_iter =
-      GetExtensionValueFieldsMap()->find(descriptor->full_name());
-  if (value_field_iter != GetExtensionValueFieldsMap()->end()) {
-    extension->value()
-        .GetReflection()
-        ->MutableMessage(extension->mutable_value(), value_field_iter->second)
-        ->CopyFrom(message);
-    return Status::OK();
-  }
-  if (HasValueset(message.GetDescriptor())) {
-    // The source message is a bound code type.
-    // Convert it to a generic code, and add it to the extension.
-    return ConvertToGenericCode(message,
-                                extension->mutable_value()->mutable_code());
-  }
-  return InvalidArgument(descriptor->full_name(),
-                         " is not a valid value type on Extension.");
 }
 
 Status ValidateExtension(const Descriptor* descriptor) {
@@ -253,7 +320,11 @@ Status ValidateExtension(const Descriptor* descriptor) {
   return Status::OK();
 }
 
-Status ConvertToExtension(const Message& message, Extension* extension) {
+namespace {
+
+template <class ExtensionLike>
+Status ConvertToExtensionInternal(const Message& message,
+                                  ExtensionLike* extension) {
   const Descriptor* descriptor = message.GetDescriptor();
   FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
 
@@ -292,7 +363,9 @@ Status ConvertToExtension(const Message& message, Extension* extension) {
   }
 }
 
-Status ExtensionToMessage(const Extension& extension, Message* message) {
+template <class ExtensionLike>
+Status ExtensionToMessageInternal(const ExtensionLike& extension,
+                                  Message* message) {
   const Descriptor* descriptor = message->GetDescriptor();
   const Reflection* reflection = message->GetReflection();
 
@@ -316,17 +389,18 @@ Status ExtensionToMessage(const Extension& extension, Message* message) {
         ->CopyFrom(extension.id());
   }
 
-  if (extension.value().value_case() != Extension::Value::VALUE_NOT_SET) {
+  if (extension.value().value_case() != ExtensionLike::Value::VALUE_NOT_SET) {
     // This is a simple extension, with only one value.
     if (fields_by_url.size() != 1 ||
         fields_by_url.begin()->second->is_repeated()) {
       return InvalidArgument(descriptor->full_name(),
                              " is not a FHIR extension type");
     }
-    return ValueToMessage(extension, message, fields_by_url.begin()->second);
+    return ValueToMessageInternal(extension, message,
+                                  fields_by_url.begin()->second);
   }
 
-  for (const Extension& inner : extension.extension()) {
+  for (const ExtensionLike& inner : extension.extension()) {
     const FieldDescriptor* field = fields_by_url[inner.url().value()];
 
     if (field == nullptr) {
@@ -334,8 +408,8 @@ Status ExtensionToMessage(const Extension& extension, Message* message) {
                              " has no field with name ", inner.url().value());
     }
 
-    if (inner.value().value_case() != Extension::Value::VALUE_NOT_SET) {
-      FHIR_RETURN_IF_ERROR(ValueToMessage(inner, message, field));
+    if (inner.value().value_case() != ExtensionLike::Value::VALUE_NOT_SET) {
+      FHIR_RETURN_IF_ERROR(ValueToMessageInternal(inner, message, field));
     } else {
       Message* child;
       if (field->is_repeated()) {
@@ -348,10 +422,32 @@ Status ExtensionToMessage(const Extension& extension, Message* message) {
       } else {
         child = reflection->MutableMessage(message, field);
       }
-      FHIR_RETURN_IF_ERROR(ExtensionToMessage(inner, child));
+      FHIR_RETURN_IF_ERROR(ExtensionToMessageInternal(inner, child));
     }
   }
   return Status::OK();
+}
+
+}  // namespace
+
+Status ConvertToExtension(const Message& message,
+                          ::google::fhir::stu3::proto::Extension* extension) {
+  return ConvertToExtensionInternal(message, extension);
+}
+
+Status ConvertToExtension(const Message& message,
+                          ::google::fhir::r4::proto::Extension* extension) {
+  return ConvertToExtensionInternal(message, extension);
+}
+
+Status ExtensionToMessage(
+    const ::google::fhir::stu3::proto::Extension& extension, Message* message) {
+  return ExtensionToMessageInternal(extension, message);
+}
+
+Status ExtensionToMessage(const ::google::fhir::r4::proto::Extension& extension,
+                          Message* message) {
+  return ExtensionToMessageInternal(extension, message);
 }
 
 Status ClearTypedExtensions(const Descriptor* descriptor, Message* message) {
@@ -363,14 +459,16 @@ Status ClearTypedExtensions(const Descriptor* descriptor, Message* message) {
       message->GetDescriptor()->FindFieldByName("extension");
   std::vector<Extension> other_extensions;
   for (int i = 0; i < reflection->FieldSize(*message, field); i++) {
-    Extension extension = dynamic_cast<const Extension&>(
-        reflection->GetRepeatedMessage(*message, field, i));
+    Extension extension =
+        dynamic_cast<const ::google::fhir::stu3::proto::Extension&>(
+            reflection->GetRepeatedMessage(*message, field, i));
     if (extension.url().value() != url) {
       other_extensions.push_back(extension);
     }
   }
   reflection->ClearField(message, field);
-  for (const Extension& extension : other_extensions) {
+  for (const ::google::fhir::stu3::proto::Extension& extension :
+       other_extensions) {
     message->GetReflection()->AddMessage(message, field)->CopyFrom(extension);
   }
   return Status::OK();

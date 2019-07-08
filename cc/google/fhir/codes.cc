@@ -47,17 +47,15 @@ string TitleCaseToUpperUnderscores(const string& src) {
   return dst;
 }
 
-}  // namespace
-
-::google::fhir::Status ConvertToTypedCode(
-    const google::fhir::stu3::proto::Code& generic_code,
-    google::protobuf::Message* target) {
+template <class CodeLike>
+::google::fhir::Status ConvertToTypedCodeInternal(const CodeLike& generic_code,
+                                                  google::protobuf::Message* target) {
   const Descriptor* target_descriptor = target->GetDescriptor();
   const Reflection* target_reflection = target->GetReflection();
 
   // If there is no valueset url, assume we're just copying a plain old Code
   if (!HasValueset(target_descriptor)) {
-    if (!IsMessageType<Code>(*target)) {
+    if (!IsMessageType<CodeLike>(*target)) {
       return InvalidArgument("Type ", target_descriptor->full_name(),
                              " is not a valid FHIR code type.");
     }
@@ -76,7 +74,7 @@ string TitleCaseToUpperUnderscores(const string& src) {
     return InvalidArgument("Type ", target_descriptor->full_name(),
                            " has no extension field");
   }
-  for (const Extension& extension : generic_code.extension()) {
+  for (const auto& extension : generic_code.extension()) {
     target_reflection->AddMessage(target, extension_field)->CopyFrom(extension);
   }
   if (generic_code.value().empty()) {
@@ -137,10 +135,10 @@ string TitleCaseToUpperUnderscores(const string& src) {
                          generic_code.value(), "\" is not a valid enum entry");
 }
 
-::google::fhir::Status ConvertToGenericCode(
-    const google::protobuf::Message& typed_code,
-    google::fhir::stu3::proto::Code* generic_code) {
-  if (IsMessageType<Code>(typed_code)) {
+template <class CodeLike>
+::google::fhir::Status ConvertToGenericCodeInternal(
+    const google::protobuf::Message& typed_code, CodeLike* generic_code) {
+  if (IsMessageType<CodeLike>(typed_code)) {
     generic_code->CopyFrom(typed_code);
     return Status::OK();
   }
@@ -202,6 +200,32 @@ string TitleCaseToUpperUnderscores(const string& src) {
   std::replace(code_string.begin(), code_string.end(), '_', '-');
   generic_code->set_value(code_string);
   return Status::OK();
+}
+
+}  // namespace
+
+::google::fhir::Status ConvertToTypedCode(
+    const ::google::fhir::stu3::proto::Code& generic_code,
+    google::protobuf::Message* target) {
+  return ConvertToTypedCodeInternal(generic_code, target);
+}
+
+::google::fhir::Status ConvertToTypedCode(
+    const ::google::fhir::r4::proto::Code& generic_code,
+    google::protobuf::Message* target) {
+  return ConvertToTypedCodeInternal(generic_code, target);
+}
+
+::google::fhir::Status ConvertToGenericCode(
+    const google::protobuf::Message& typed_code,
+    google::fhir::stu3::proto::Code* generic_code) {
+  return ConvertToGenericCodeInternal(typed_code, generic_code);
+}
+
+::google::fhir::Status ConvertToGenericCode(
+    const google::protobuf::Message& typed_code,
+    google::fhir::r4::proto::Code* generic_code) {
+  return ConvertToGenericCodeInternal(typed_code, generic_code);
 }
 
 ::google::fhir::StatusOr<ResourceTypeCode::Value> GetCodeForResourceType(

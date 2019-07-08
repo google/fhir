@@ -1,0 +1,3 @@
+id { value: "dummy" }
+url { value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue" }
+value { boolean: { value: true } }

@@ -19,6 +19,8 @@
 #include "absl/strings/str_cat.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
+#include "proto/r4/datatypes.pb.h"
+#include "proto/r4/google_extensions.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/extensions.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
@@ -38,23 +40,31 @@ using ::google::fhir::stu3::google::PrimitiveHasNoValue;
 using ::google::fhir::stu3::proto::
     CapabilityStatementSearchParameterCombination;
 using ::google::fhir::stu3::proto::Composition;
-using ::google::fhir::stu3::proto::Extension;
 using ::google::fhir::stu3::testing::DigitalMediaType;
 using ::google::fhir::testutil::EqualsProto;
 
 template <class T>
-void ReadTestData(const string& type, T* message, Extension* extension) {
+void ReadStu3TestData(const string& type, T* message,
+                      stu3::proto::Extension* extension) {
   *message =
       ReadStu3Proto<T>(absl::StrCat("google/", type, ".message.prototxt"));
-  *extension = ReadStu3Proto<Extension>(
+  *extension = ReadStu3Proto<stu3::proto::Extension>(
+      absl::StrCat("google/", type, ".extension.prototxt"));
+}
+
+template <class T>
+void ReadR4TestData(const string& type, T* message,
+                    r4::proto::Extension* extension) {
+  *message = ReadR4Proto<T>(absl::StrCat("google/", type, ".message.prototxt"));
+  *extension = ReadR4Proto<r4::proto::Extension>(
       absl::StrCat("google/", type, ".extension.prototxt"));
 }
 
 template <class T>
 void TestExtensionToMessage(const string& name) {
   T message;
-  Extension extension;
-  ReadTestData(name, &message, &extension);
+  stu3::proto::Extension extension;
+  ReadStu3TestData(name, &message, &extension);
 
   T output;
   TF_ASSERT_OK(ExtensionToMessage(extension, &output));
@@ -64,10 +74,32 @@ void TestExtensionToMessage(const string& name) {
 template <class T>
 void TestConvertToExtension(const string& name) {
   T message;
-  Extension extension;
-  ReadTestData(name, &message, &extension);
+  stu3::proto::Extension extension;
+  ReadStu3TestData(name, &message, &extension);
 
   Extension output;
+  TF_ASSERT_OK(ConvertToExtension(message, &output));
+  EXPECT_THAT(output, EqualsProto(extension));
+}
+
+template <class T>
+void TestExtensionToMessageR4(const string& name) {
+  T message;
+  r4::proto::Extension extension;
+  ReadR4TestData(name, &message, &extension);
+
+  T output;
+  TF_ASSERT_OK(ExtensionToMessage(extension, &output));
+  EXPECT_THAT(output, EqualsProto(message));
+}
+
+template <class T>
+void TestConvertToExtensionR4(const string& name) {
+  T message;
+  r4::proto::Extension extension;
+  ReadR4TestData(name, &message, &extension);
+
+  r4::proto::Extension output;
   TF_ASSERT_OK(ConvertToExtension(message, &output));
   EXPECT_THAT(output, EqualsProto(extension));
 }
@@ -94,6 +126,16 @@ TEST(ExtensionsTest, ParsePrimitiveHasNoValue) {
 
 TEST(ExtensionsTest, PrintPrimitiveHasNoValue) {
   TestConvertToExtension<PrimitiveHasNoValue>("primitive_has_no_value");
+}
+
+TEST(ExtensionsTestR4, ParsePrimitiveHasNoValue) {
+  TestExtensionToMessageR4<r4::google::PrimitiveHasNoValue>(
+      "primitive_has_no_value");
+}
+
+TEST(ExtensionsTestR4, PrintPrimitiveHasNoValue) {
+  TestConvertToExtensionR4<r4::google::PrimitiveHasNoValue>(
+      "primitive_has_no_value");
 }
 
 TEST(ExtensionsTest, ParsePrimitiveHasNoValue_Empty) {
@@ -175,10 +217,10 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionOneFound) {
 
   Base64BinarySeparatorStride expected;
   ASSERT_TRUE(::google::protobuf::TextFormat::ParseFromString(R"pb(
-                                                    separator { value: "!" }
-                                                    stride { value: 5 }
-                                                  )pb",
-                                                  &expected));
+                                                      separator { value: "!" }
+                                                      stride { value: 5 }
+                                                    )pb",
+                                                    &expected));
 
   TF_ASSERT_OK(extracted.status());
   EXPECT_THAT(extracted.ValueOrDie(), EqualsProto(expected));

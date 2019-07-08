@@ -110,6 +110,11 @@ T ReadStu3Proto(const string& filename) {
   return ReadProto<T>(absl::StrCat("testdata/stu3/", filename));
 }
 
+template <class T>
+T ReadR4Proto(const string& filename) {
+  return ReadProto<T>(absl::StrCat("testdata/r4/", filename));
+}
+
 string ReadFile(const string& filename) {
   string result;
   TF_CHECK_OK(::tensorflow::ReadFileToString(

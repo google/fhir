@@ -39,6 +39,7 @@ fhir_proto_library(
 fhir_proto_library(
     srcs = [
         "extensions.proto",
+        "google_extensions.proto",
     ],
     proto_deps = [
         ":codes_proto",

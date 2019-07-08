@@ -19,3 +19,14 @@ filegroup(
         "examples/*.prototxt",
     ]),
 )
+
+# These files contain google extensions.
+filegroup(
+    name = "google",
+    srcs = glob([
+        "google/*.json",
+        "google/*.descriptor.prototxt",
+        "google/*.extension.prototxt",
+        "google/*.message.prototxt",
+    ]),
+)

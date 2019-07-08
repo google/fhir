@@ -1,6 +1,6 @@
 licenses(["notice"])
 
-package(default_visibility = ["//visibility:public"],)
+package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "codes",
@@ -13,9 +13,10 @@ cc_library(
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto:annotations_cc_proto",
+        "//proto/r4:codes_cc_proto",
+        "//proto/r4:datatypes_cc_proto",
         "//proto/stu3:codes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
-        "@org_tensorflow//tensorflow/core:lib",
         "@protobuf_archive//:protobuf",
     ],
 )
@@ -46,6 +47,7 @@ cc_library(
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto:annotations_cc_proto",
+        "//proto/r4:datatypes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/strings",
         "@org_tensorflow//tensorflow/core:lib",
@@ -55,11 +57,16 @@ cc_library(
 cc_test(
     name = "extensions_test",
     srcs = ["extensions_test.cc"],
-    data = ["//testdata/stu3:google"],
+    data = [
+        "//testdata/r4:google",
+        "//testdata/stu3:google",
+    ],
     deps = [
         ":extensions",
         ":test_helper",
         "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/r4:datatypes_cc_proto",
+        "//proto/r4:extensions_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:extensions_cc_proto",
         "//testdata/stu3/profiles:test_cc_proto",
@@ -317,7 +324,6 @@ cc_library(
         "//proto:annotations_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:extensions_cc_proto",
-        "//proto/stu3:resources_cc_proto",
         "@com_google_absl//absl/memory",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
