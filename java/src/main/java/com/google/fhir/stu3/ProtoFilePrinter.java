@@ -18,6 +18,7 @@ import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.common.escape.CharEscaperBuilder;
 import com.google.common.escape.Escaper;
 import com.google.fhir.proto.Annotations;
@@ -31,6 +32,8 @@ import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileOptions;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
+import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Extension;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -60,8 +63,20 @@ public class ProtoFilePrinter {
 
   private final PackageInfo packageInfo;
 
-  private static final Escaper VALUE_REGEX_ESCAPER =
+  private static final Escaper EXTENSION_ESCAPER =
       new CharEscaperBuilder().addEscape('\\', "\\\\").toEscaper();
+  
+  private static final ImmutableList<Extension<MessageOptions, ? extends Object>>
+      MESSAGE_EXTENSIONS =
+          ImmutableList.of(
+              Annotations.structureDefinitionKind,
+              Annotations.fhirValuesetUrl,
+              Annotations.isAbstractType,
+              Annotations.valueRegex,
+              Annotations.fhirProfileBase,
+              Annotations.fhirStructureDefinitionUrl,
+              Annotations.isChoiceType,
+              Annotations.fhirFixedSystem);
 
   /** Creates a ProtoFilePrinter with default parameters. */
   public ProtoFilePrinter() {
@@ -173,75 +188,40 @@ public class ProtoFilePrinter {
     // For fhir options, fully type the package name if we are not writing to the same package
     // as the annotations
     String optionPackage = getOptionsPackage(packageName);
-    if (options.hasExtension(Annotations.structureDefinitionKind)) {
-      message
-          .append(fieldIndent)
-          .append("option (")
-          .append(optionPackage)
-          .append("structure_definition_kind) = ")
-          .append(options.getExtension(Annotations.structureDefinitionKind))
-          .append(";\n");
-      printedField = true;
-    }
-    if (options.hasExtension(Annotations.fhirValuesetUrl)) {
-      message
-          .append(fieldIndent)
-          .append("option (")
-          .append(optionPackage)
-          .append("fhir_valueset_url) = \"")
-          .append(options.getExtension(Annotations.fhirValuesetUrl))
-          .append("\";\n");
-      printedField = true;
-    }
-    if (options.hasExtension(Annotations.isAbstractType)) {
-      message
-          .append(fieldIndent)
-          .append("option (")
-          .append(optionPackage)
-          .append("is_abstract_type) = ")
-          .append(options.getExtension(Annotations.isAbstractType))
-          .append(";\n");
-      printedField = true;
-    }
-    if (options.hasExtension(Annotations.valueRegex)) {
-      message
-          .append(fieldIndent)
-          .append("option (")
-          .append(optionPackage)
-          .append("value_regex) = \"")
-          .append(VALUE_REGEX_ESCAPER.escape(options.getExtension(Annotations.valueRegex)))
-          .append("\";\n");
-      printedField = true;
-    }
-    for (int i = 0; i < options.getExtensionCount(Annotations.fhirProfileBase); i++) {
-      message
-          .append(fieldIndent)
-          .append("option (")
-          .append(optionPackage)
-          .append("fhir_profile_base) = \"")
-          .append(options.getExtension(Annotations.fhirProfileBase, i))
-          .append("\";\n");
-      printedField = true;
-    }
-    if (options.hasExtension(Annotations.fhirStructureDefinitionUrl)) {
-      message
-          .append(fieldIndent)
-          .append("option (")
-          .append(optionPackage)
-          .append("fhir_structure_definition_url) = \"")
-          .append(options.getExtension(Annotations.fhirStructureDefinitionUrl))
-          .append("\";\n");
-      printedField = true;
-    }
-    if (options.hasExtension(Annotations.isChoiceType)) {
-      message
-          .append(fieldIndent)
-          .append("option (")
-          .append(optionPackage)
-          .append("is_choice_type) = ")
-          .append(options.getExtension(Annotations.isChoiceType))
-          .append(";\n");
-      printedField = true;
+    for (Extension<MessageOptions, ? extends Object> extension : MESSAGE_EXTENSIONS) {
+      boolean isStringType = extension.getDescriptor().getType() == FieldDescriptor.Type.STRING;
+      if (extension.isRepeated()) {
+        @SuppressWarnings("unchecked") // Cast to list extension
+        Extension<MessageOptions, List<Object>> listExtension =
+            (Extension<MessageOptions, List<Object>>) extension;
+        for (int i = 0; i < options.getExtensionCount(listExtension); i++) {
+          message
+              .append(fieldIndent)
+              .append("option (")
+              .append(optionPackage)
+              .append(listExtension.getDescriptor().getName())
+              .append(") = ")
+              .append(isStringType ? "\"" : "")
+              .append(EXTENSION_ESCAPER.escape(options.getExtension(listExtension, i).toString()))
+              .append(isStringType ? "\"" : "")
+              .append(";\n");
+          printedField = true;
+        }
+      } else {
+        if (options.hasExtension(extension)) {
+          message
+              .append(fieldIndent)
+              .append("option (")
+              .append(optionPackage)
+              .append(extension.getDescriptor().getName())
+              .append(") = ")
+              .append(isStringType ? "\"" : "")
+              .append(EXTENSION_ESCAPER.escape(options.getExtension(extension).toString()))
+              .append(isStringType ? "\"" : "")
+              .append(";\n");
+          printedField = true;
+        }
+      }
     }
 
     // Loop over the elements.

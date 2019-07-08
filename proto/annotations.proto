@@ -79,6 +79,8 @@ extend google.protobuf.MessageOptions {
   // Is this message a wrapper around a choice type?
   bool is_choice_type = 228595764;
 
+  string fhir_fixed_system = 255621907;
+
   // DEPRECATED: use fhir_profile_base to identify extension, and
   // fhir_structure_definition_url to get the extension url.
   string fhir_extension_url = 177048773 [deprecated = true];
