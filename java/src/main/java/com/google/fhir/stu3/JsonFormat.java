@@ -467,7 +467,7 @@ public final class JsonFormat {
       }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void printPrimitiveField(String name, FieldDescriptor field, Object value)
         throws IOException {
       boolean printedElement = false;

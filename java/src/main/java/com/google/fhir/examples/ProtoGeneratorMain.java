@@ -225,7 +225,7 @@ class ProtoGeneratorMain {
       case STU3:
         if (args.stu3StructDefZip == null) {
           throw new IllegalArgumentException(
-              "Profile is for STU3, but --stu3_struct_def_zip is not specified.");
+              "Package is for STU3, but --stu3_struct_def_zip is not specified.");
         }
         dependencyPackagesMap.put(
             args.stu3StructDefZip, com.google.fhir.common.FhirVersion.STU3.coreProtoPackage);
@@ -233,7 +233,7 @@ class ProtoGeneratorMain {
       case R4:
         if (args.r4StructDefZip == null) {
           throw new IllegalArgumentException(
-              "Profile is for R4, but --r4_struct_def_zip is not specified.");
+              "Package is for R4, but --r4_struct_def_zip is not specified.");
         }
         dependencyPackagesMap.put(
             args.r4StructDefZip, com.google.fhir.common.FhirVersion.R4.coreProtoPackage);
