@@ -1,7 +1,6 @@
 simple_extension {
   element_data {
     name: "SimpleDecimalExt"
-    size_restriction: REPEATED
     description: "This is the A-Extension"
   }
   type: "decimal"
@@ -11,11 +10,9 @@ simple_extension {
 simple_extension {
   element_data {
     name: "SimpleCodeableConceptExtension"
-    size_restriction: OPTIONAL
     description: "SimpleCodeableConcept Extension"
   }
   code_type {
-    binding_name: "CarePlanActivityStatus"
     system: "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
   }
 }
@@ -23,7 +20,6 @@ simple_extension {
 complex_extension {
   element_data {
     name: "ComplexExt"
-    size_restriction: OPTIONAL
     description: "complex extension"
   }
 
@@ -61,7 +57,7 @@ complex_extension {
         size_restriction: REPEATED
         description: "simple sub sub field b"
       }
-      type: "UnsignedInt"
+      type: "unsignedInt"
     }
   }
 }
@@ -69,11 +65,9 @@ complex_extension {
 simple_extension {
   element_data {
     name: "DigitalMediaType"
-    size_restriction: OPTIONAL
     description: "Extension for Digital Media Type code."
   }
   code_type {
-    binding_name: "DigitalMediaType"
     system: "http://hl7.org/fhir/ValueSet/digital-media-type"
   }
 }

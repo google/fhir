@@ -7,7 +7,7 @@
         "id": "SimpleDecimalExt",
         "url": "http://test/url/base/SimpleDecimalExt",
         "name": "SimpleDecimalExt",
-        "date": "2019-04-22",
+        "date": "2019-07-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -23,7 +23,11 @@
         "fhirVersion": "3.0.1",
         "kind": "complex-type",
         "abstract": false,
-        "contextType": "resource",
+        "context": [
+          {
+            "type": "element"
+          }
+        ],
         "type": "Extension",
         "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
         "derivation": "constraint",
@@ -35,7 +39,7 @@
               "short": "This is the A-Extension",
               "definition": "This is the A-Extension",
               "min": 0,
-              "max": "*",
+              "max": "1",
               "base": {
                 "path": "Extension",
                 "min": 0,
@@ -201,6 +205,7 @@
               "path": "Extension",
               "short": "This is the A-Extension",
               "definition": "This is the A-Extension",
+              "max": "1",
               "constraint": [
                 {
                   "key": "ext-1",
@@ -236,7 +241,7 @@
         "id": "SimpleCodeableConceptExtension",
         "url": "http://test/url/base/SimpleCodeableConceptExtension",
         "name": "SimpleCodeableConceptExtension",
-        "date": "2019-04-22",
+        "date": "2019-07-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -252,7 +257,11 @@
         "fhirVersion": "3.0.1",
         "kind": "complex-type",
         "abstract": false,
-        "contextType": "resource",
+        "context": [
+          {
+            "type": "element"
+          }
+        ],
         "type": "Extension",
         "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
         "derivation": "constraint",
@@ -415,16 +424,8 @@
                 }
               ],
               "binding": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-                    "valueString": "CarePlanActivityStatus"
-                  }
-                ],
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
               },
               "mapping": [
                 {
@@ -473,16 +474,8 @@
                 }
               ],
               "binding": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-                    "valueString": "CarePlanActivityStatus"
-                  }
-                ],
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
               }
             }
           ]
@@ -495,7 +488,7 @@
         "id": "DigitalMediaType",
         "url": "http://test/url/base/DigitalMediaType",
         "name": "DigitalMediaType",
-        "date": "2019-04-22",
+        "date": "2019-07-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -511,7 +504,11 @@
         "fhirVersion": "3.0.1",
         "kind": "complex-type",
         "abstract": false,
-        "contextType": "resource",
+        "context": [
+          {
+            "type": "element"
+          }
+        ],
         "type": "Extension",
         "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
         "derivation": "constraint",
@@ -674,16 +671,8 @@
                 }
               ],
               "binding": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-                    "valueString": "DigitalMediaType"
-                  }
-                ],
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/digital-media-type"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/digital-media-type"
               },
               "mapping": [
                 {
@@ -732,16 +721,8 @@
                 }
               ],
               "binding": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-                    "valueString": "DigitalMediaType"
-                  }
-                ],
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/digital-media-type"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/digital-media-type"
               }
             }
           ]
@@ -754,7 +735,7 @@
         "id": "ComplexExt",
         "url": "http://test/url/base/ComplexExt",
         "name": "ComplexExt",
-        "date": "2019-04-22",
+        "date": "2019-07-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -770,7 +751,11 @@
         "fhirVersion": "3.0.1",
         "kind": "complex-type",
         "abstract": false,
-        "contextType": "resource",
+        "context": [
+          {
+            "type": "element"
+          }
+        ],
         "type": "Extension",
         "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
         "derivation": "constraint",
@@ -1793,7 +1778,7 @@
               },
               "type": [
                 {
-                  "code": "UnsignedInt"
+                  "code": "unsignedInt"
                 }
               ],
               "mapping": [
@@ -2048,7 +2033,7 @@
               "path": "Extension.extension.extension.valueUnsignedInt",
               "type": [
                 {
-                  "code": "UnsignedInt"
+                  "code": "unsignedInt"
                 }
               ]
             }

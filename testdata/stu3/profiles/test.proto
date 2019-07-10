@@ -502,12 +502,12 @@ message TestObservation {
     repeated google.fhir.stu3.proto.CodingWithFixedSystem sys_b = 6
         [(.google.fhir.proto.fhir_inlined_coding_system) = "http://sysb.org"];
 
-    google.fhir.stu3.proto.CodingWithFixedCode sys_c = 7 [
+    proto.CodingWithFixedCode sys_c = 7 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://sysc.org",
       (.google.fhir.proto.fhir_inlined_coding_code) = "8472"
     ];
 
-    google.fhir.stu3.proto.CodingWithFixedCode sys_d = 8 [
+    proto.CodingWithFixedCode sys_d = 8 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://sysd.org",
       (.google.fhir.proto.fhir_inlined_coding_code) = "8675329"
     ];
@@ -835,12 +835,12 @@ message TestObservationLvl2 {
     repeated google.fhir.stu3.proto.CodingWithFixedSystem sys_b = 6
         [(.google.fhir.proto.fhir_inlined_coding_system) = "http://sysb.org"];
 
-    google.fhir.stu3.proto.CodingWithFixedCode sys_c = 7 [
+    proto.CodingWithFixedCode sys_c = 7 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://sysc.org",
       (.google.fhir.proto.fhir_inlined_coding_code) = "8472"
     ];
 
-    google.fhir.stu3.proto.CodingWithFixedCode sys_d = 8 [
+    proto.CodingWithFixedCode sys_d = 8 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://sysd.org",
       (.google.fhir.proto.fhir_inlined_coding_code) = "8675329"
     ];

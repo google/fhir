@@ -7,7 +7,7 @@
         "id": "Bundle",
         "url": "http://test/url/base/Bundle",
         "name": "Bundle",
-        "date": "2019-04-22",
+        "date": "2019-07-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -23,7 +23,11 @@
         "fhirVersion": "3.0.1",
         "kind": "resource",
         "abstract": false,
-        "contextType": "resource",
+        "context": [
+          {
+            "type": "element"
+          }
+        ],
         "type": "Bundle",
         "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Bundle",
         "derivation": "constraint",
@@ -196,9 +200,7 @@
                 ],
                 "strength": "extensible",
                 "description": "A human language.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/languages"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/languages"
               }
             },
             {
@@ -245,9 +247,7 @@
                 ],
                 "strength": "required",
                 "description": "Indicates the purpose of a bundle - how it was intended to be used.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/bundle-type"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/bundle-type"
               },
               "mapping": [
                 {
@@ -717,9 +717,7 @@
                 ],
                 "strength": "required",
                 "description": "Why an entry is in the result set - whether it's included as a match or because of an _include requirement.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/search-entry-mode"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/search-entry-mode"
               }
             },
             {
@@ -874,9 +872,7 @@
                 ],
                 "strength": "required",
                 "description": "HTTP verbs (in the HTTP command line).",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/http-verb"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/http-verb"
               }
             },
             {
@@ -1164,7 +1160,7 @@
         "id": "TestPatient",
         "url": "http://test/url/base/TestPatient",
         "name": "TestPatient",
-        "date": "2019-04-22",
+        "date": "2019-07-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1180,7 +1176,11 @@
         "fhirVersion": "3.0.1",
         "kind": "resource",
         "abstract": false,
-        "contextType": "resource",
+        "context": [
+          {
+            "type": "element"
+          }
+        ],
         "type": "Patient",
         "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Patient",
         "derivation": "constraint",
@@ -1346,9 +1346,7 @@
                 ],
                 "strength": "extensible",
                 "description": "A human language.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/languages"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/languages"
               }
             },
             {
@@ -1627,9 +1625,7 @@
                 ],
                 "strength": "required",
                 "description": "The gender of a person used for administrative purposes.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/administrative-gender"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/administrative-gender"
               },
               "mapping": [
                 {
@@ -1770,9 +1766,7 @@
                 ],
                 "strength": "extensible",
                 "description": "The domestic partnership status of a person.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/marital-status"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/marital-status"
               },
               "mapping": [
                 {
@@ -2007,9 +2001,7 @@
                 ],
                 "strength": "extensible",
                 "description": "The nature of the relationship between a patient and a contact person for that patient.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/v2-0131"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/v2-0131"
               },
               "mapping": [
                 {
@@ -2137,9 +2129,7 @@
                 ],
                 "strength": "required",
                 "description": "The gender of a person used for administrative purposes.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/administrative-gender"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/administrative-gender"
               },
               "mapping": [
                 {
@@ -2167,7 +2157,9 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Organization"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Organization"
+                  ]
                 }
               ],
               "condition": [
@@ -2366,9 +2358,7 @@
                 ],
                 "strength": "example",
                 "description": "The species of an animal.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/animal-species"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/animal-species"
               },
               "mapping": [
                 {
@@ -2409,9 +2399,7 @@
                 ],
                 "strength": "example",
                 "description": "The breed of an animal.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/animal-breeds"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/animal-breeds"
               },
               "mapping": [
                 {
@@ -2451,9 +2439,7 @@
                 ],
                 "strength": "example",
                 "description": "The state of the animal's reproductive organs.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/animal-genderstatus"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/animal-genderstatus"
               },
               "mapping": [
                 {
@@ -2626,9 +2612,7 @@
                 ],
                 "strength": "extensible",
                 "description": "A human language.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/languages"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/languages"
               },
               "mapping": [
                 {
@@ -2688,11 +2672,15 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Organization"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Organization"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Practitioner"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Practitioner"
+                  ]
                 }
               ],
               "mapping": [
@@ -2722,7 +2710,9 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Organization"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Organization"
+                  ]
                 }
               ],
               "isSummary": true,
@@ -2873,11 +2863,15 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Patient"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Patient"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+                  ]
                 }
               ],
               "isSummary": true,
@@ -2918,9 +2912,7 @@
                 ],
                 "strength": "required",
                 "description": "The type of link between this patient resource and another patient resource.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/link-type"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/link-type"
               },
               "mapping": [
                 {
@@ -2949,7 +2941,9 @@
               "type": [
                 {
                   "code": "Extension",
-                  "profile": "http://test/url/base/SimpleDecimalExt"
+                  "profile": [
+                    "http://test/url/base/SimpleDecimalExt"
+                  ]
                 }
               ],
               "condition": [
@@ -2996,7 +2990,9 @@
               "type": [
                 {
                   "code": "Extension",
-                  "profile": "http://test/url/base/SimpleDecimalExt"
+                  "profile": [
+                    "http://test/url/base/SimpleDecimalExt"
+                  ]
                 }
               ],
               "condition": [
@@ -3031,7 +3027,7 @@
         "id": "TestObservation",
         "url": "http://test/url/base/TestObservation",
         "name": "TestObservation",
-        "date": "2019-04-22",
+        "date": "2019-07-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -3047,7 +3043,11 @@
         "fhirVersion": "3.0.1",
         "kind": "resource",
         "abstract": false,
-        "contextType": "resource",
+        "context": [
+          {
+            "type": "element"
+          }
+        ],
         "type": "Observation",
         "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Observation",
         "derivation": "constraint",
@@ -3239,9 +3239,7 @@
                 ],
                 "strength": "extensible",
                 "description": "A human language.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/languages"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/languages"
               }
             },
             {
@@ -3414,31 +3412,45 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/CarePlan"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/CarePlan"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/DeviceRequest"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/DeviceRequest"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/MedicationRequest"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/MedicationRequest"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/NutritionOrder"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/NutritionOrder"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+                  ]
                 }
               ],
               "isSummary": true,
@@ -3488,9 +3500,7 @@
                 ],
                 "strength": "required",
                 "description": "Codes providing the status of an observation.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-status"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-status"
               },
               "mapping": [
                 {
@@ -3538,9 +3548,7 @@
                 ],
                 "strength": "preferred",
                 "description": "Codes for high level observation categories.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-category"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-category"
               },
               "mapping": [
                 {
@@ -3579,9 +3587,7 @@
                 ],
                 "strength": "example",
                 "description": "Codes identifying names of simple observations.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-codes"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-codes"
               },
               "mapping": [
                 {
@@ -3622,19 +3628,27 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Patient"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Patient"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Group"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Group"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Device"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Device"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Location"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Location"
+                  ]
                 }
               ],
               "isSummary": true,
@@ -3672,11 +3686,15 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Encounter"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Encounter"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+                  ]
                 }
               ],
               "mapping": [
@@ -3778,19 +3796,27 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Practitioner"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Practitioner"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Organization"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Organization"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Patient"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Patient"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+                  ]
                 }
               ],
               "isSummary": true,
@@ -3910,9 +3936,7 @@
                 ],
                 "strength": "extensible",
                 "description": "Codes specifying why the result (Observation.value[x]) is missing.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-valueabsentreason"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-valueabsentreason"
               },
               "mapping": [
                 {
@@ -3954,9 +3978,7 @@
                 ],
                 "strength": "extensible",
                 "description": "Codes identifying interpretations of observations.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-interpretation"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-interpretation"
               },
               "mapping": [
                 {
@@ -4027,9 +4049,7 @@
                 ],
                 "strength": "example",
                 "description": "Codes describing anatomical locations. May include laterality.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/body-site"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/body-site"
               },
               "mapping": [
                 {
@@ -4073,9 +4093,7 @@
                 ],
                 "strength": "example",
                 "description": "Methods for simple observations.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-methods"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-methods"
               },
               "mapping": [
                 {
@@ -4099,7 +4117,9 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Specimen"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Specimen"
+                  ]
                 }
               ],
               "mapping": [
@@ -4132,11 +4152,15 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Device"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Device"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+                  ]
                 }
               ],
               "mapping": [
@@ -4298,7 +4322,9 @@
               "type": [
                 {
                   "code": "Quantity",
-                  "profile": "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
+                  "profile": [
+                    "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
+                  ]
                 }
               ],
               "condition": [
@@ -4325,7 +4351,9 @@
               "type": [
                 {
                   "code": "Quantity",
-                  "profile": "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
+                  "profile": [
+                    "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
+                  ]
                 }
               ],
               "condition": [
@@ -4365,9 +4393,7 @@
                 ],
                 "strength": "extensible",
                 "description": "Code for the meaning of a reference range.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/referencerange-meaning"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/referencerange-meaning"
               },
               "mapping": [
                 {
@@ -4407,9 +4433,7 @@
                 ],
                 "strength": "example",
                 "description": "Codes identifying the population the reference range applies to.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/referencerange-appliesto"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/referencerange-appliesto"
               },
               "mapping": [
                 {
@@ -4616,9 +4640,7 @@
                 ],
                 "strength": "required",
                 "description": "Codes specifying how two observations are related.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-relationshiptypes"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-relationshiptypes"
               },
               "mapping": [
                 {
@@ -4641,15 +4663,21 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Observation"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Observation"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Sequence"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Sequence"
+                  ]
                 }
               ],
               "mapping": [
@@ -4806,9 +4834,7 @@
                 ],
                 "strength": "example",
                 "description": "Codes identifying names of simple observations.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-codes"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-codes"
               },
               "mapping": [
                 {
@@ -4916,9 +4942,7 @@
                 ],
                 "strength": "extensible",
                 "description": "Codes specifying why the result (Observation.value[x]) is missing.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-valueabsentreason"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-valueabsentreason"
               },
               "mapping": [
                 {
@@ -4957,9 +4981,7 @@
                 ],
                 "strength": "extensible",
                 "description": "Codes identifying interpretations of observations.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-interpretation"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-interpretation"
               },
               "mapping": [
                 {
@@ -5017,7 +5039,9 @@
               "type": [
                 {
                   "code": "Extension",
-                  "profile": "http://test/url/base/ComplexExt"
+                  "profile": [
+                    "http://test/url/base/ComplexExt"
+                  ]
                 }
               ],
               "condition": [
@@ -5058,7 +5082,9 @@
               "type": [
                 {
                   "code": "Extension",
-                  "profile": "http://test/url/base/SimpleDecimalExt"
+                  "profile": [
+                    "http://test/url/base/SimpleDecimalExt"
+                  ]
                 }
               ],
               "condition": [
@@ -5331,9 +5357,7 @@
               "isSummary": true,
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysa.org"
-                }
+                "valueSet": "http://sysa.org"
               },
               "mapping": [
                 {
@@ -5628,9 +5652,7 @@
               "isSummary": true,
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysb.org"
-                }
+                "valueSet": "http://sysb.org"
               },
               "mapping": [
                 {
@@ -5926,9 +5948,7 @@
               "isSummary": true,
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysc.org"
-                }
+                "valueSet": "http://sysc.org"
               },
               "mapping": [
                 {
@@ -6224,9 +6244,7 @@
               "isSummary": true,
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysd.org"
-                }
+                "valueSet": "http://sysd.org"
               },
               "mapping": [
                 {
@@ -6566,9 +6584,7 @@
               "isSummary": true,
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://catA.org"
-                }
+                "valueSet": "http://catA.org"
               },
               "mapping": [
                 {
@@ -6908,9 +6924,7 @@
               "isSummary": true,
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://nestedconcept.org"
-                }
+                "valueSet": "http://nestedconcept.org"
               },
               "mapping": [
                 {
@@ -7017,7 +7031,9 @@
               "type": [
                 {
                   "code": "Extension",
-                  "profile": "http://test/url/base/ComplexExt"
+                  "profile": [
+                    "http://test/url/base/ComplexExt"
+                  ]
                 }
               ],
               "condition": [
@@ -7053,7 +7069,9 @@
               "type": [
                 {
                   "code": "Extension",
-                  "profile": "http://test/url/base/SimpleDecimalExt"
+                  "profile": [
+                    "http://test/url/base/SimpleDecimalExt"
+                  ]
                 }
               ],
               "condition": [
@@ -7122,9 +7140,7 @@
               "path": "Observation.code.coding.code",
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysa.org"
-                }
+                "valueSet": "http://sysa.org"
               }
             },
             {
@@ -7164,9 +7180,7 @@
               "path": "Observation.code.coding.code",
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysb.org"
-                }
+                "valueSet": "http://sysb.org"
               }
             },
             {
@@ -7208,9 +7222,7 @@
               "fixedCode": "8472",
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysc.org"
-                }
+                "valueSet": "http://sysc.org"
               }
             },
             {
@@ -7252,9 +7264,7 @@
               "fixedCode": "8675329",
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysd.org"
-                }
+                "valueSet": "http://sysd.org"
               }
             },
             {
@@ -7308,9 +7318,7 @@
               "path": "Observation.category.coding.code",
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://catA.org"
-                }
+                "valueSet": "http://catA.org"
               }
             },
             {
@@ -7365,9 +7373,7 @@
               "path": "Observation.component.interpretation.coding.code",
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://nestedconcept.org"
-                }
+                "valueSet": "http://nestedconcept.org"
               }
             },
             {
@@ -7388,7 +7394,7 @@
         "id": "TestObservationLvl2",
         "url": "http://test/url/base/TestObservationLvl2",
         "name": "TestObservationLvl2",
-        "date": "2019-04-22",
+        "date": "2019-07-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -7404,7 +7410,11 @@
         "fhirVersion": "3.0.1",
         "kind": "resource",
         "abstract": false,
-        "contextType": "resource",
+        "context": [
+          {
+            "type": "element"
+          }
+        ],
         "type": "Observation",
         "baseDefinition": "http://test/url/base/TestObservation",
         "derivation": "constraint",
@@ -7596,9 +7606,7 @@
                 ],
                 "strength": "extensible",
                 "description": "A human language.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/languages"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/languages"
               }
             },
             {
@@ -7771,31 +7779,45 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/CarePlan"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/CarePlan"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/DeviceRequest"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/DeviceRequest"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/MedicationRequest"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/MedicationRequest"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/NutritionOrder"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/NutritionOrder"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/ProcedureRequest"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/ReferralRequest"
+                  ]
                 }
               ],
               "isSummary": true,
@@ -7845,9 +7867,7 @@
                 ],
                 "strength": "required",
                 "description": "Codes providing the status of an observation.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-status"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-status"
               },
               "mapping": [
                 {
@@ -7895,9 +7915,7 @@
                 ],
                 "strength": "preferred",
                 "description": "Codes for high level observation categories.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-category"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-category"
               },
               "mapping": [
                 {
@@ -7936,9 +7954,7 @@
                 ],
                 "strength": "example",
                 "description": "Codes identifying names of simple observations.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-codes"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-codes"
               },
               "mapping": [
                 {
@@ -7979,19 +7995,27 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Patient"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Patient"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Group"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Group"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Device"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Device"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Location"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Location"
+                  ]
                 }
               ],
               "isSummary": true,
@@ -8029,11 +8053,15 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Encounter"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Encounter"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare"
+                  ]
                 }
               ],
               "mapping": [
@@ -8135,19 +8163,27 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Practitioner"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Practitioner"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Organization"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Organization"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Patient"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Patient"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+                  ]
                 }
               ],
               "isSummary": true,
@@ -8267,9 +8303,7 @@
                 ],
                 "strength": "extensible",
                 "description": "Codes specifying why the result (Observation.value[x]) is missing.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-valueabsentreason"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-valueabsentreason"
               },
               "mapping": [
                 {
@@ -8311,9 +8345,7 @@
                 ],
                 "strength": "extensible",
                 "description": "Codes identifying interpretations of observations.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-interpretation"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-interpretation"
               },
               "mapping": [
                 {
@@ -8384,9 +8416,7 @@
                 ],
                 "strength": "example",
                 "description": "Codes describing anatomical locations. May include laterality.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/body-site"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/body-site"
               },
               "mapping": [
                 {
@@ -8430,9 +8460,7 @@
                 ],
                 "strength": "example",
                 "description": "Methods for simple observations.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-methods"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-methods"
               },
               "mapping": [
                 {
@@ -8456,7 +8484,9 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Specimen"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Specimen"
+                  ]
                 }
               ],
               "mapping": [
@@ -8489,11 +8519,15 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Device"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Device"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/DeviceMetric"
+                  ]
                 }
               ],
               "mapping": [
@@ -8655,7 +8689,9 @@
               "type": [
                 {
                   "code": "Quantity",
-                  "profile": "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
+                  "profile": [
+                    "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
+                  ]
                 }
               ],
               "condition": [
@@ -8682,7 +8718,9 @@
               "type": [
                 {
                   "code": "Quantity",
-                  "profile": "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
+                  "profile": [
+                    "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
+                  ]
                 }
               ],
               "condition": [
@@ -8722,9 +8760,7 @@
                 ],
                 "strength": "extensible",
                 "description": "Code for the meaning of a reference range.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/referencerange-meaning"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/referencerange-meaning"
               },
               "mapping": [
                 {
@@ -8764,9 +8800,7 @@
                 ],
                 "strength": "example",
                 "description": "Codes identifying the population the reference range applies to.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/referencerange-appliesto"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/referencerange-appliesto"
               },
               "mapping": [
                 {
@@ -8973,9 +9007,7 @@
                 ],
                 "strength": "required",
                 "description": "Codes specifying how two observations are related.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-relationshiptypes"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-relationshiptypes"
               },
               "mapping": [
                 {
@@ -8998,15 +9030,21 @@
               "type": [
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Observation"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Observation"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse"
+                  ]
                 },
                 {
                   "code": "Reference",
-                  "targetProfile": "http://hl7.org/fhir/StructureDefinition/Sequence"
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Sequence"
+                  ]
                 }
               ],
               "mapping": [
@@ -9163,9 +9201,7 @@
                 ],
                 "strength": "example",
                 "description": "Codes identifying names of simple observations.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-codes"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-codes"
               },
               "mapping": [
                 {
@@ -9273,9 +9309,7 @@
                 ],
                 "strength": "extensible",
                 "description": "Codes specifying why the result (Observation.value[x]) is missing.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-valueabsentreason"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-valueabsentreason"
               },
               "mapping": [
                 {
@@ -9314,9 +9348,7 @@
                 ],
                 "strength": "extensible",
                 "description": "Codes identifying interpretations of observations.",
-                "valueSetReference": {
-                  "reference": "http://hl7.org/fhir/ValueSet/observation-interpretation"
-                }
+                "valueSet": "http://hl7.org/fhir/ValueSet/observation-interpretation"
               },
               "mapping": [
                 {
@@ -9374,7 +9406,9 @@
               "type": [
                 {
                   "code": "Extension",
-                  "profile": "http://test/url/base/ComplexExt"
+                  "profile": [
+                    "http://test/url/base/ComplexExt"
+                  ]
                 }
               ],
               "condition": [
@@ -9415,7 +9449,9 @@
               "type": [
                 {
                   "code": "Extension",
-                  "profile": "http://test/url/base/SimpleDecimalExt"
+                  "profile": [
+                    "http://test/url/base/SimpleDecimalExt"
+                  ]
                 }
               ],
               "condition": [
@@ -9688,9 +9724,7 @@
               "isSummary": true,
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysa.org"
-                }
+                "valueSet": "http://sysa.org"
               },
               "mapping": [
                 {
@@ -9985,9 +10019,7 @@
               "isSummary": true,
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysb.org"
-                }
+                "valueSet": "http://sysb.org"
               },
               "mapping": [
                 {
@@ -10283,9 +10315,7 @@
               "isSummary": true,
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysc.org"
-                }
+                "valueSet": "http://sysc.org"
               },
               "mapping": [
                 {
@@ -10581,9 +10611,7 @@
               "isSummary": true,
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysd.org"
-                }
+                "valueSet": "http://sysd.org"
               },
               "mapping": [
                 {
@@ -10923,9 +10951,7 @@
               "isSummary": true,
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://catA.org"
-                }
+                "valueSet": "http://catA.org"
               },
               "mapping": [
                 {
@@ -11265,9 +11291,7 @@
               "isSummary": true,
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://nestedconcept.org"
-                }
+                "valueSet": "http://nestedconcept.org"
               },
               "mapping": [
                 {
@@ -11375,7 +11399,9 @@
               "type": [
                 {
                   "code": "Extension",
-                  "profile": "http://test/url/base/SimpleDecimalExt"
+                  "profile": [
+                    "http://test/url/base/SimpleDecimalExt"
+                  ]
                 }
               ],
               "condition": [
@@ -11648,9 +11674,7 @@
               "isSummary": true,
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://newonprofiled.org"
-                }
+                "valueSet": "http://newonprofiled.org"
               },
               "mapping": [
                 {
@@ -11757,7 +11781,9 @@
               "type": [
                 {
                   "code": "Extension",
-                  "profile": "http://test/url/base/ComplexExt"
+                  "profile": [
+                    "http://test/url/base/ComplexExt"
+                  ]
                 }
               ],
               "condition": [
@@ -11793,7 +11819,9 @@
               "type": [
                 {
                   "code": "Extension",
-                  "profile": "http://test/url/base/SimpleDecimalExt"
+                  "profile": [
+                    "http://test/url/base/SimpleDecimalExt"
+                  ]
                 }
               ],
               "condition": [
@@ -11882,9 +11910,7 @@
               "path": "Observation.code.coding.code",
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysa.org"
-                }
+                "valueSet": "http://sysa.org"
               }
             },
             {
@@ -11958,9 +11984,7 @@
               "path": "Observation.code.coding.code",
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysb.org"
-                }
+                "valueSet": "http://sysb.org"
               }
             },
             {
@@ -12036,9 +12060,7 @@
               "fixedCode": "8472",
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysc.org"
-                }
+                "valueSet": "http://sysc.org"
               }
             },
             {
@@ -12114,9 +12136,7 @@
               "fixedCode": "8675329",
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://sysd.org"
-                }
+                "valueSet": "http://sysd.org"
               }
             },
             {
@@ -12190,9 +12210,7 @@
               "path": "Observation.category.coding.code",
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://catA.org"
-                }
+                "valueSet": "http://catA.org"
               }
             },
             {
@@ -12267,9 +12285,7 @@
               "path": "Observation.component.interpretation.coding.code",
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://nestedconcept.org"
-                }
+                "valueSet": "http://nestedconcept.org"
               }
             },
             {
@@ -12291,7 +12307,9 @@
               "type": [
                 {
                   "code": "Extension",
-                  "profile": "http://test/url/base/SimpleDecimalExt"
+                  "profile": [
+                    "http://test/url/base/SimpleDecimalExt"
+                  ]
                 }
               ],
               "condition": [
@@ -12380,9 +12398,7 @@
               "path": "Observation.code.coding.code",
               "binding": {
                 "strength": "required",
-                "valueSetReference": {
-                  "reference": "http://newonprofiled.org"
-                }
+                "valueSet": "http://newonprofiled.org"
               }
             },
             {

@@ -187,12 +187,6 @@
           }
         ],
         "binding": {
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-              "valueString": "CarePlanActivityStatus"
-            }
-          ],
           "strength": "required",
           "valueSet": "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
         },
@@ -245,12 +239,6 @@
           }
         ],
         "binding": {
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-              "valueString": "CarePlanActivityStatus"
-            }
-          ],
           "strength": "required",
           "valueSet": "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
         }

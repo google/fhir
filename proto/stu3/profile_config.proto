@@ -198,20 +198,12 @@ message CodeData {
   // Fixed Url of the value set to use
   string system = 1;
 
-  // Optional - if set, inlines this Code using a predefined type.
-  // Should be a Code type defined in a proto file (e.g., codes.proto)
-  // without the trailing "Code".
-  // If unset, will be inlined as a raw fhir String
-  // TODO: remove this advice once protogenerator uses url
-  // to pull down code type.  This will make binding name arbitrary.
-  string binding_name = 2;
-
   // "Strength" of value set binding - i.e., whether to allow codes that
   // are not in that value set.
   // Optional - defaults to required.
-  google.fhir.r4.proto.BindingStrengthCode.Value binding_strength = 3;
+  google.fhir.r4.proto.BindingStrengthCode.Value binding_strength = 2;
 
   // Optional - if set, this code will have a fixed value, and will not be
   // inlined as a field.
-  string fixed_value = 4;
+  string fixed_value = 3;
 }

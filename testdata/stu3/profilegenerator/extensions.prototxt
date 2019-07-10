@@ -19,7 +19,6 @@ simple_extension {
     url_override: "https://randomwebsite.com"
   }
   code_type {
-    binding_name: "CarePlanActivityStatus"
     system: "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
   }
 }

@@ -48,7 +48,6 @@ import com.google.fhir.r4.proto.DateTime;
 import com.google.fhir.r4.proto.DiscriminatorTypeCode;
 import com.google.fhir.r4.proto.ElementDefinition;
 import com.google.fhir.r4.proto.ElementDefinition.ElementDefinitionBinding;
-import com.google.fhir.r4.proto.ElementDefinitionBindingName;
 import com.google.fhir.r4.proto.ElementDefinitionOrBuilder;
 import com.google.fhir.r4.proto.Extension;
 import com.google.fhir.r4.proto.ExtensionContextTypeCode;
@@ -91,12 +90,6 @@ final class ProfileGenerator {
   private final Map<String, StructureDefinition> urlToStructDefMap;
   private final Map<String, StructureDefinition> idToBaseStructDefMap;
   private final DateTime creationDateTime;
-
-  private static final Uri ELEMENT_BINDING_DEFINITION_URL =
-      fhirUri(
-          ElementDefinitionBindingName.getDescriptor()
-              .getOptions()
-              .getExtension(Annotations.fhirStructureDefinitionUrl));
 
   ProfileGenerator(
       PackageInfo packageInfo,
@@ -841,14 +834,6 @@ final class ProfileGenerator {
                                 .equals(BindingStrengthCode.Value.INVALID_UNINITIALIZED)
                             ? BindingStrengthCode.Value.REQUIRED
                             : codeData.getBindingStrength()));
-    if (!codeData.getBindingName().isEmpty()) {
-      binding.addExtension(
-          Extension.newBuilder()
-              .setUrl(ELEMENT_BINDING_DEFINITION_URL)
-              .setValue(
-                  Extension.Value.newBuilder()
-                      .setStringValue(fhirString(codeData.getBindingName()))));
-    }
 
     return binding.build();
   }
