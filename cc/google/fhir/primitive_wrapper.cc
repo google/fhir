@@ -144,7 +144,7 @@ class SpecificWrapper : public PrimitiveWrapper {
           T::descriptor()->full_name(), " into ",
           target->GetDescriptor()->full_name());
     }
-    target->MergeFrom(wrapped_);
+    target->MergeFrom(*wrapped_);
     return Status::OK();
   }
 
@@ -155,16 +155,14 @@ class SpecificWrapper : public PrimitiveWrapper {
           message.GetDescriptor()->full_name(), " with wrapper for ",
           T::descriptor()->full_name());
     }
-    wrapped_.CopyFrom(message);
+    wrapped_ = dynamic_cast<const T*>(&message);
     return Status::OK();
   }
 
-  T& GetWrapped() { return wrapped_; }
-
-  const T& GetWrapped() const { return wrapped_; }
+  const T* GetWrapped() const { return wrapped_; }
 
   bool HasValue() const override {
-    for (const Extension& extension : GetWrapped().extension()) {
+    for (const Extension& extension : GetWrapped()->extension()) {
       if (extension.url().value() ==
               GetPrimitiveHasNoValueExtension()->url().value() &&
           extension.value().boolean().value()) {
@@ -175,17 +173,17 @@ class SpecificWrapper : public PrimitiveWrapper {
   }
 
   bool HasElement() const override {
-    if (GetWrapped().has_id()) return true;
+    if (GetWrapped()->has_id()) return true;
 
-    const Descriptor* descriptor = GetWrapped().GetDescriptor();
-    const Reflection* reflection = GetWrapped().GetReflection();
+    const Descriptor* descriptor = GetWrapped()->GetDescriptor();
+    const Reflection* reflection = GetWrapped()->GetReflection();
 
     const FieldDescriptor* extension_field =
         descriptor->FindFieldByName("extension");
-    for (int i = 0; i < reflection->FieldSize(GetWrapped(), extension_field);
+    for (int i = 0; i < reflection->FieldSize(*GetWrapped(), extension_field);
          i++) {
       const Extension& extension = dynamic_cast<const Extension&>(
-          reflection->GetRepeatedMessage(GetWrapped(), extension_field, i));
+          reflection->GetRepeatedMessage(*GetWrapped(), extension_field, i));
       bool is_conversion_only_extension = false;
       for (const Descriptor* internal_extension : *kConversionOnlyExtensions) {
         if (extension.url().value() ==
@@ -201,27 +199,27 @@ class SpecificWrapper : public PrimitiveWrapper {
   }
 
   StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement() const override {
-    const Descriptor* descriptor = GetWrapped().GetDescriptor();
-    const Reflection* reflection = GetWrapped().GetReflection();
+    const Descriptor* descriptor = GetWrapped()->GetDescriptor();
+    const Reflection* reflection = GetWrapped()->GetReflection();
     Message* copy = GetWrapped()
-                        .GetReflection()
+                        ->GetReflection()
                         ->GetMessageFactory()
                         ->GetPrototype(descriptor)
                         ->New();
     const Reflection* copy_reflection = copy->GetReflection();
     const FieldDescriptor* id_field = descriptor->FindFieldByName("id");
-    if (reflection->HasField(GetWrapped(), id_field)) {
+    if (reflection->HasField(*GetWrapped(), id_field)) {
       copy_reflection->MutableMessage(copy, id_field)
-          ->CopyFrom(reflection->GetMessage(GetWrapped(), id_field));
+          ->CopyFrom(reflection->GetMessage(*GetWrapped(), id_field));
     }
 
     const FieldDescriptor* extension_field =
         descriptor->FindFieldByName("extension");
-    for (int i = 0; i < reflection->FieldSize(GetWrapped(), extension_field);
+    for (int i = 0; i < reflection->FieldSize(*GetWrapped(), extension_field);
          i++) {
       copy_reflection->AddMessage(copy, extension_field)
-          ->CopyFrom(
-              reflection->GetRepeatedMessage(GetWrapped(), extension_field, i));
+          ->CopyFrom(reflection->GetRepeatedMessage(*GetWrapped(),
+                                                    extension_field, i));
     }
     for (const Descriptor* internal_extension : *kConversionOnlyExtensions) {
       FHIR_RETURN_IF_ERROR(ClearTypedExtensions(internal_extension, copy));
@@ -259,8 +257,20 @@ class SpecificWrapper : public PrimitiveWrapper {
   }
 
  protected:
-  T wrapped_;
-  static StatusOr<T> BuildNullValue();
+  const T* wrapped_;
+  std::unique_ptr<T> managed_memory_;
+
+  void WrapAndManage(std::unique_ptr<T>&& t) {
+    managed_memory_ = std::move(t);
+    wrapped_ = managed_memory_.get();
+  }
+
+  Status InitializeNull() {
+    managed_memory_ = absl::make_unique<T>();
+    *(managed_memory_->add_extension()) = *GetPrimitiveHasNoValueExtension();
+    wrapped_ = managed_memory_.get();
+    return Status::OK();
+  }
 
   virtual Status ValidateTypeSpecific(
       const T& message, const bool has_no_value_extension) const = 0;
@@ -285,18 +295,11 @@ bool SpecificWrapper<Xhtml>::HasValue() const {
 
 template <>
 bool SpecificWrapper<Xhtml>::HasElement() const {
-  return GetWrapped().has_id();
-}
-
-template <class T>
-StatusOr<T> SpecificWrapper<T>::BuildNullValue() {
-  T t;
-  *(t.add_extension()) = *GetPrimitiveHasNoValueExtension();
-  return t;
+  return GetWrapped()->has_id();
 }
 
 template <>
-StatusOr<Xhtml> SpecificWrapper<Xhtml>::BuildNullValue() {
+Status SpecificWrapper<Xhtml>::InitializeNull() {
   return InvalidArgument("Unexpected null xhtml");
 }
 
@@ -314,8 +317,7 @@ class StringInputWrapper : public SpecificWrapper<T> {
   Status Parse(const Json::Value& json,
                const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
-      FHIR_ASSIGN_OR_RETURN(this->wrapped_, this->BuildNullValue());
-      return Status::OK();
+      return this->InitializeNull();
     }
     if (!json.isString()) {
       return InvalidArgument("Cannot parse ", json.toStyledString(), " as ",
@@ -335,7 +337,7 @@ class StringTypeWrapper : public StringInputWrapper<T> {
  public:
   StatusOr<string> ToNonNullValueString() const override {
     return StatusOr<string>(
-        Json::valueToQuotedString(this->GetWrapped().value().c_str()));
+        Json::valueToQuotedString(this->GetWrapped()->value().c_str()));
   }
 
   Status ValidateTypeSpecific(
@@ -356,7 +358,9 @@ class StringTypeWrapper : public StringInputWrapper<T> {
  protected:
   Status ParseString(const string& json_string) override {
     FHIR_RETURN_IF_ERROR(this->ValidateString(json_string));
-    this->GetWrapped().set_value(json_string);
+    std::unique_ptr<T> wrapped = absl::make_unique<T>();
+    wrapped->set_value(json_string);
+    this->WrapAndManage(std::move(wrapped));
     return Status::OK();
   }
 };
@@ -383,7 +387,7 @@ template <typename T>
 class TimeTypeWrapper : public SpecificWrapper<T> {
  public:
   StatusOr<string> ToNonNullValueString() const override {
-    const T& timelike = this->GetWrapped();
+    const T& timelike = *this->GetWrapped();
     absl::Time absolute_time = absl::FromUnixMicros(timelike.value_us());
     FHIR_ASSIGN_OR_RETURN(absl::TimeZone time_zone,
                           BuildTimeZoneFromString(timelike.timezone()));
@@ -439,8 +443,7 @@ class TimeTypeWrapper : public SpecificWrapper<T> {
   Status Parse(const Json::Value& json,
                const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
-      FHIR_ASSIGN_OR_RETURN(this->wrapped_, this->BuildNullValue());
-      return Status::OK();
+      return this->InitializeNull();
     }
     if (!json.isString()) {
       return InvalidArgument("Cannot parse ", json.toStyledString(), " as ",
@@ -498,9 +501,9 @@ class TimeTypeWrapper : public SpecificWrapper<T> {
  private:
   Status SetValue(absl::Time time, const string& timezone_string,
                   const string& precision_string) {
-    T& wrapped = this->GetWrapped();
-    wrapped.set_value_us(ToUnixMicros(time));
-    wrapped.set_timezone(timezone_string);
+    std::unique_ptr<T> wrapped = absl::make_unique<T>();
+    wrapped->set_value_us(ToUnixMicros(time));
+    wrapped->set_timezone(timezone_string);
     const EnumDescriptor* precision_enum_descriptor =
         T::descriptor()->FindEnumTypeByName("Precision");
     if (!precision_enum_descriptor) {
@@ -519,7 +522,9 @@ class TimeTypeWrapper : public SpecificWrapper<T> {
       return InvalidArgument(T::descriptor()->full_name(),
                              " has no precision field.");
     }
-    wrapped.GetReflection()->SetEnum(&wrapped, precision_field, precision);
+    wrapped->GetReflection()->SetEnum(wrapped.get(), precision_field,
+                                      precision);
+    this->WrapAndManage(std::move(wrapped));
     return Status::OK();
   }
 
@@ -567,8 +572,7 @@ class IntegerTypeWrapper : public SpecificWrapper<T> {
   Status Parse(const Json::Value& json,
                const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
-      FHIR_ASSIGN_OR_RETURN(this->wrapped_, this->BuildNullValue());
-      return Status::OK();
+      return this->InitializeNull();
     }
     if (json.type() != Json::ValueType::intValue &&
         json.type() != Json::ValueType::uintValue) {
@@ -577,12 +581,14 @@ class IntegerTypeWrapper : public SpecificWrapper<T> {
                              json.isString() ? "  It is a quoted string." : "");
     }
     FHIR_RETURN_IF_ERROR(ValidateInteger(json.asInt()));
-    this->GetWrapped().set_value(json.asInt());
+    std::unique_ptr<T> wrapped = absl::make_unique<T>();
+    wrapped->set_value(json.asInt());
+    this->WrapAndManage(std::move(wrapped));
     return Status::OK();
   }
 
   StatusOr<string> ToNonNullValueString() const override {
-    return absl::StrCat(this->GetWrapped().value());
+    return absl::StrCat(this->GetWrapped()->value());
   }
 
  protected:
@@ -663,11 +669,14 @@ Status ValidateCodelike(const Message& message) {
 class CodeWrapper : public StringTypeWrapper<Code> {
  public:
   Status Wrap(const ::google::protobuf::Message& codelike) override {
-    return ConvertToGenericCode(codelike, &this->GetWrapped());
+    std::unique_ptr<Code> wrapped = absl::make_unique<Code>();
+    FHIR_RETURN_IF_ERROR(ConvertToGenericCode(codelike, wrapped.get()));
+    this->WrapAndManage(std::move(wrapped));
+    return Status::OK();
   }
 
   Status MergeInto(Message* target) const override {
-    return ConvertToTypedCode(this->GetWrapped(), target);
+    return ConvertToTypedCode(*this->GetWrapped(), target);
   }
 
   Status ValidateProto(const Message& message) const override {
@@ -683,9 +692,9 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64Binary> {
  public:
   StatusOr<string> ToNonNullValueString() const override {
     string escaped;
-    absl::Base64Escape(GetWrapped().value(), &escaped);
+    absl::Base64Escape(GetWrapped()->value(), &escaped);
     std::vector<Base64BinarySeparatorStride> separator_extensions;
-    FHIR_RETURN_IF_ERROR(GetRepeatedFromExtension(GetWrapped().extension(),
+    FHIR_RETURN_IF_ERROR(GetRepeatedFromExtension(GetWrapped()->extension(),
                                                   &separator_extensions));
     if (!separator_extensions.empty()) {
       int stride = separator_extensions[0].stride().value();
@@ -726,6 +735,7 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64Binary> {
 
  private:
   Status ParseString(const string& json_string) override {
+    std::unique_ptr<Base64Binary> wrapped = absl::make_unique<Base64Binary>();
     size_t stride = json_string.find(' ');
     if (stride != string::npos) {
       size_t end = stride;
@@ -738,14 +748,15 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64Binary> {
       separator_stride_extension_msg.mutable_stride()->set_value(stride);
 
       FHIR_RETURN_IF_ERROR(ConvertToExtension(separator_stride_extension_msg,
-                                              GetWrapped().add_extension()));
+                                              wrapped->add_extension()));
     }
 
     string unescaped;
     if (!absl::Base64Unescape(json_string, &unescaped)) {
       return InvalidArgument("Encountered invalid base64 string.");
     }
-    GetWrapped().set_value(unescaped);
+    wrapped->set_value(unescaped);
+    this->WrapAndManage(std::move(wrapped));
     return Status::OK();
   }
 };
@@ -766,20 +777,21 @@ class BooleanWrapper : public SpecificWrapper<Boolean> {
   Status Parse(const Json::Value& json,
                const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
-      FHIR_ASSIGN_OR_RETURN(wrapped_, BuildNullValue());
-      return Status::OK();
+      return this->InitializeNull();
     }
     if (!json.isBool()) {
       return InvalidArgument("Cannot parse ", json.toStyledString(),
                              " as Boolean.",
                              json.isString() ? "  It is a quoted string." : "");
     }
-    GetWrapped().set_value(json.asBool());
+    std::unique_ptr<Boolean> wrapped = absl::make_unique<Boolean>();
+    wrapped->set_value(json.asBool());
+    this->WrapAndManage(std::move(wrapped));
     return Status::OK();
   }
 
   StatusOr<string> ToNonNullValueString() const override {
-    return absl::StrCat(GetWrapped().value() ? "true" : "false");
+    return absl::StrCat(GetWrapped()->value() ? "true" : "false");
   }
 };
 
@@ -794,7 +806,7 @@ class BooleanWrapper : public SpecificWrapper<Boolean> {
 class DecimalWrapper : public StringInputWrapper<Decimal> {
  public:
   StatusOr<string> ToNonNullValueString() const override {
-    return absl::StrCat(GetWrapped().value());
+    return absl::StrCat(GetWrapped()->value());
   }
 
  protected:
@@ -817,14 +829,15 @@ class DecimalWrapper : public StringInputWrapper<Decimal> {
   Status Parse(const Json::Value& json,
                const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
-      FHIR_ASSIGN_OR_RETURN(this->wrapped_, this->BuildNullValue());
-      return Status::OK();
+      return this->InitializeNull();
     }
     if (json.isString()) {
       return ParseString(json.asString());
     }
     if (json.isIntegral()) {
-      this->GetWrapped().set_value(json.asString());
+      std::unique_ptr<Decimal> wrapped = absl::make_unique<Decimal>();
+      wrapped->set_value(json.asString());
+      this->WrapAndManage(std::move(wrapped));
       return Status::OK();
     }
     return InvalidArgument("Cannot parse ", json.toStyledString(),
@@ -836,7 +849,9 @@ class DecimalWrapper : public StringInputWrapper<Decimal> {
   Status ParseString(const string& json_string) override {
     FHIR_RETURN_IF_ERROR(ValidateString(json_string));
     // TODO: range check
-    this->GetWrapped().set_value(json_string);
+    std::unique_ptr<Decimal> wrapped = absl::make_unique<Decimal>();
+    wrapped->set_value(json_string);
+    this->WrapAndManage(std::move(wrapped));
     return Status::OK();
   }
 };
@@ -860,12 +875,13 @@ class TimeWrapper : public StringInputWrapper<Time> {
             {Time::Precision::Time_Precision_SECOND, "%H:%M:%S"},
             {Time::Precision::Time_Precision_MILLISECOND, "%H:%M:%E3S"},
             {Time::Precision::Time_Precision_MICROSECOND, "%H:%M:%E6S"}};
-    absl::Time absolute_t = absl::FromUnixMicros(this->GetWrapped().value_us());
+    absl::Time absolute_t =
+        absl::FromUnixMicros(this->GetWrapped()->value_us());
 
-    const auto format_iter = formatters->find(this->GetWrapped().precision());
+    const auto format_iter = formatters->find(this->GetWrapped()->precision());
     if (format_iter == formatters->end()) {
       return InvalidArgument("Invalid precision on Time: ",
-                             this->GetWrapped().DebugString());
+                             this->GetWrapped()->DebugString());
     }
     // Note that we use UTC time, regardless of default timezone, because
     // FHIR Time is timezone independent, and represented as micros since epoch.
@@ -915,20 +931,23 @@ class TimeWrapper : public StringInputWrapper<Time> {
     const int fractional_seconds_length = fractional_seconds.length();
     const uint64_t base_value_us =
         (((hours * 60L) + minutes) * 60L + seconds) * 1000L * 1000L;
+
+    std::unique_ptr<Time> wrapped = absl::make_unique<Time>();
     if (fractional_seconds_length > 3 && fractional_seconds_length <= 6) {
-      GetWrapped().set_precision(Time::Precision::Time_Precision_MICROSECOND);
+      wrapped->set_precision(Time::Precision::Time_Precision_MICROSECOND);
       const int microseconds = std::stoi(fractional_seconds.append(
           std::string(6 - fractional_seconds_length, '0')));
-      GetWrapped().set_value_us(base_value_us + microseconds);
+      wrapped->set_value_us(base_value_us + microseconds);
     } else if (fractional_seconds.length() > 0) {
-      GetWrapped().set_precision(Time::Precision::Time_Precision_MILLISECOND);
+      wrapped->set_precision(Time::Precision::Time_Precision_MILLISECOND);
       const int milliseconds = std::stoi(fractional_seconds.append(
           std::string(3 - fractional_seconds_length, '0')));
-      GetWrapped().set_value_us(base_value_us + 1000 * milliseconds);
+      wrapped->set_value_us(base_value_us + 1000 * milliseconds);
     } else {
-      GetWrapped().set_precision(Time::Precision::Time_Precision_SECOND);
-      GetWrapped().set_value_us(base_value_us);
+      wrapped->set_precision(Time::Precision::Time_Precision_SECOND);
+      wrapped->set_value_us(base_value_us);
     }
+    this->WrapAndManage(std::move(wrapped));
     return Status::OK();
   }
 };
