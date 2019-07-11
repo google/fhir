@@ -1,0 +1,161 @@
+profile {
+  element_data {
+    name: "Bundle",
+  }
+  base_url: "http://hl7.org/fhir/StructureDefinition/Bundle"
+}
+
+profile {
+  element_data {
+    name: "TestPatient"
+    description: "Patient with some fields changed for test."
+  }
+  base_url: "http://hl7.org/fhir/StructureDefinition/Patient"
+
+  restriction {
+    field_id: "Patient.name"
+    size_restriction: REQUIRED
+  }
+
+  extension_slice {
+    element_data {
+      name: "decExt"
+      description: "Decimal Extension"
+      size_restriction: REQUIRED
+    }
+    url: "http://test/url/base/SimpleDecimalExt"
+  }
+}
+
+profile {
+  element_data {
+    name: "TestObservation"
+    description: "Patient with some fields changed for test."
+  }
+  base_url: "http://hl7.org/fhir/StructureDefinition/Observation"
+
+  codeable_concept_slice {
+    coding_slice {
+      element_data {
+        name: "sysA"
+        description: "SysA Code"
+        size_restriction: OPTIONAL
+      }
+      code_data {
+        system: "http://sysa.org"
+      }
+    }
+    coding_slice {
+      element_data {
+        name: "sysB"
+        description: "SysB Code"
+        size_restriction: REPEATED
+      }
+      code_data {
+        system: "http://sysb.org"
+      }
+    }
+    coding_slice {
+      element_data {
+        name: "sysC"
+        description: "SysC Code"
+        size_restriction: OPTIONAL
+      }
+      code_data {
+        system: "http://sysc.org"
+        fixed_value: "8472"
+      }
+    }
+    coding_slice {
+      element_data {
+        name: "sysD"
+        description: "SysD Code"
+        size_restriction: OPTIONAL
+      }
+      code_data {
+        system: "http://sysd.org"
+        fixed_value: "8675329"
+      }
+    }
+    coding_slice {
+      element_data {
+        name: "color"
+        size_restriction: OPTIONAL
+      }
+      code_data {
+        system: "http://hl7.org/fhir/ValueSet/metric-color"
+      }
+    }
+    field_id: "Observation.code"
+  }
+
+  codeable_concept_slice {
+    coding_slice {
+      element_data {
+        name: "catA"
+        size_restriction: REPEATED
+      }
+      code_data {
+        system: "http://catA.org"
+      }
+    }
+    field_id: "Observation.category"
+  }
+
+  extension_slice {
+    element_data {
+      name: "myComplexExtension"
+      size_restriction: OPTIONAL
+    }
+    url: "http://test/url/base/ComplexExt"
+  }
+
+  extension_slice {
+    element_data {
+      name: "onNested"
+      size_restriction: OPTIONAL
+    }
+    url: "http://test/url/base/SimpleDecimalExt"
+    field_id: "Observation.component"
+  }
+
+  codeable_concept_slice {
+    coding_slice {
+      element_data {
+        name: "onNestedConcept"
+        size_restriction: OPTIONAL
+      }
+      code_data {
+        system: "http://nestedconcept.org"
+      }
+    }
+    field_id: "Observation.component.interpretation"
+  }
+}
+
+profile {
+  element_data {
+    name: "TestObservationLvl2"
+  }
+  base_url: "http://test/url/base/TestObservation"
+
+  extension_slice {
+    element_data {
+      name: "newExt"
+    }
+    url: "http://test/url/base/SimpleDecimalExt"
+  }
+
+  codeable_concept_slice {
+    coding_slice {
+      element_data {
+        name: "newCodeOnProfiled"
+        size_restriction: OPTIONAL
+      }
+      code_data {
+        system: "http://newonprofiled.org"
+      }
+    }
+    field_id: "Observation.code"
+  }
+}

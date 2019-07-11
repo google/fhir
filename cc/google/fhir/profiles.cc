@@ -28,8 +28,10 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/resource_validation.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
+#include "proto/r4/resources.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "tensorflow/core/lib/core/status.h"
@@ -38,15 +40,13 @@
 namespace google {
 namespace fhir {
 
+namespace {
+
 using std::string;
+using ::google::fhir::proto::fhir_fixed_system;
 using ::google::fhir::proto::fhir_inlined_coding_code;
 using ::google::fhir::proto::fhir_inlined_coding_system;
-using ::google::fhir::stu3::proto::Code;
-using ::google::fhir::stu3::proto::CodeableConcept;
-using ::google::fhir::stu3::proto::Coding;
-using ::google::fhir::stu3::proto::CodingWithFixedCode;
 using ::google::fhir::stu3::proto::CodingWithFixedSystem;
-using ::google::fhir::stu3::proto::Extension;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::FieldOptions;
@@ -55,7 +55,20 @@ using ::google::protobuf::Reflection;
 using ::google::protobuf::RepeatedPtrField;
 using ::tensorflow::errors::InvalidArgument;
 
-namespace {
+struct CodeableConceptSlicingInfo {
+  // For fixed system slices, map from System -> legacy CodingWithFixedSystem
+  // slice
+  // TODO: These annotations only exist for legacy STU3.  Once STU3
+  // is converted to inlined types, remove this.
+  std::unordered_map<string, const FieldDescriptor*>
+      legacy_coding_with_fixed_system;
+  // For fixed system slices, map from System -> r4 inlined Coding message
+  std::unordered_map<string, const FieldDescriptor*>
+      inlined_codings_with_fixed_system;
+  // For fixed code slices, map from System -> {code, CodingWithFixedCode slice}
+  std::unordered_map<string, std::tuple<string, const FieldDescriptor*>>
+      coding_with_fixed_code;
+};
 
 //////////////////////////////////////////////////////////////
 // Slicing functions begins here
@@ -63,6 +76,9 @@ namespace {
 // These functions help with going from Unprofiled -> Profiled
 
 // Finds any extensions that can be slotted into slices, and moves them.
+template <typename BundleLike,
+          typename ExtensionLike = EXTENSION_TYPE(BundleLike),
+          typename CodeLike = FHIR_DATATYPE(BundleLike, code)>
 Status PerformExtensionSlicing(Message* message) {
   const Descriptor* descriptor = message->GetDescriptor();
   const Reflection* reflection = message->GetReflection();
@@ -85,7 +101,7 @@ Status PerformExtensionSlicing(Message* message) {
   RepeatedPtrField<Message>* extensions =
       reflection->MutableRepeatedPtrField<Message>(message, extension_field);
   for (auto iter = extensions->begin(); iter != extensions->end();) {
-    Extension& raw_extension = dynamic_cast<Extension&>(*iter);
+    ExtensionLike& raw_extension = dynamic_cast<ExtensionLike&>(*iter);
     const string& url = raw_extension.url().value();
     const auto extension_entry_iter = extension_map.find(url);
     if (extension_entry_iter != extension_map.end()) {
@@ -97,7 +113,7 @@ Status PerformExtensionSlicing(Message* message) {
         // here, because there is no top-level extension message we're merging
         // into, it's just a single primitive inlined field.
         const Descriptor* destination_type = inlined_field->message_type();
-        const Extension::Value& value = raw_extension.value();
+        const auto& value = raw_extension.value();
         const FieldDescriptor* src_datatype_field =
             value.GetReflection()->GetOneofFieldDescriptor(
                 value, value.GetDescriptor()->FindOneofByName("value"));
@@ -113,9 +129,9 @@ Status PerformExtensionSlicing(Message* message) {
         if (destination_type == src_datatype_field->message_type()) {
           typed_extension->CopyFrom(src_value);
         } else if (src_datatype_field->message_type()->full_name() ==
-                   Code::descriptor()->full_name()) {
+                   CodeLike::descriptor()->full_name()) {
           TF_RETURN_IF_ERROR(ConvertToTypedCode(
-              dynamic_cast<const Code&>(src_value), typed_extension));
+              dynamic_cast<const CodeLike&>(src_value), typed_extension));
         } else {
           return InvalidArgument(
               "Profiled extension slice is incorrect type: ", url, "should be ",
@@ -137,77 +153,176 @@ Status PerformExtensionSlicing(Message* message) {
   return Status::OK();
 }
 
+template <typename CodingLike>
+StatusOr<bool> CheckCodingWithFixedCode(
+    const CodeableConceptSlicingInfo& slicing_info, CodingLike* coding,
+    Message* profiled_codeable_concept) {
+  const string& system = coding->system().value();
+  const string& coding_string = coding->code().value();
+  auto fixed_code_iter = slicing_info.coding_with_fixed_code.find(system);
+
+  if (fixed_code_iter != slicing_info.coding_with_fixed_code.end()) {
+    const std::tuple<const string, const FieldDescriptor*> code_field_tuple =
+        fixed_code_iter->second;
+    const string& fixed_code_string = std::get<0>(code_field_tuple);
+    if (coding_string == fixed_code_string) {
+      const FieldDescriptor* field = std::get<1>(code_field_tuple);
+      Message* coding_with_fixed_system =
+          MutableOrAddMessage(profiled_codeable_concept, field);
+      if (!coding_with_fixed_system->ParseFromString(
+              coding->SerializeAsString())) {
+        return InvalidArgument(
+            "Unable to parse Coding as CodingWithFixedCode.");
+      }
+      coding_with_fixed_system->DiscardUnknownFields();
+      return true;  // was copied into new field
+    }
+  }
+  return false;
+}
+
+template <typename CodingLike,
+          typename CodeLike = FHIR_DATATYPE(CodingLike, code)>
+StatusOr<bool> CheckCodingWithFixedSystem(
+    const CodeableConceptSlicingInfo& slicing_info, CodingLike* coding,
+    Message* profiled_codeable_concept) {
+  const string& system = coding->system().value();
+  auto inlined_codings_with_fixed_system_iter =
+      slicing_info.inlined_codings_with_fixed_system.find(system);
+  if (inlined_codings_with_fixed_system_iter !=
+      slicing_info.inlined_codings_with_fixed_system.end()) {
+    const FieldDescriptor* target_coding_field =
+        inlined_codings_with_fixed_system_iter->second;
+    Message* inlined_coding =
+        MutableOrAddMessage(profiled_codeable_concept, target_coding_field);
+    CodeLike code = coding->code();
+    coding->clear_system();
+    coding->clear_code();
+    if (!inlined_coding->ParseFromString(coding->SerializeAsString())) {
+      return InvalidArgument("Unable to parse Coding as ",
+                             inlined_coding->GetDescriptor()->full_name(), ": ",
+                             target_coding_field->full_name());
+    }
+    const FieldDescriptor* code_field =
+        inlined_coding->GetDescriptor()->FindFieldByName("code");
+    if (!code_field ||
+        code_field->type() != google::protobuf::FieldDescriptor::TYPE_MESSAGE) {
+      return InvalidArgument(
+          "Inlined Coding message does not have a valid 'code' field.");
+    }
+    Message* target_code = MutableOrAddMessage(inlined_coding, code_field);
+    FHIR_RETURN_IF_ERROR(ConvertToTypedCode(code, target_code));
+    return true;  // was copied into new field
+  }
+  return false;
+}
+
+// TODO: Delete this (and surrounding logic) once STU3 protos are
+// updated to use non-legacy fixed systems.
+template <typename CodingLike>
+StatusOr<bool> CheckLegacyCodingWithFixedSystem(
+    const CodeableConceptSlicingInfo& slicing_info, CodingLike* coding,
+    Message* profiled_codeable_concept) {
+  const string& system = coding->system().value();
+  auto legacy_coding_with_fixed_system_iter =
+      slicing_info.legacy_coding_with_fixed_system.find(system);
+  if (legacy_coding_with_fixed_system_iter !=
+      slicing_info.legacy_coding_with_fixed_system.end()) {
+    const FieldDescriptor* field = legacy_coding_with_fixed_system_iter->second;
+    CodingWithFixedSystem* sliced_coding = dynamic_cast<CodingWithFixedSystem*>(
+        MutableOrAddMessage(profiled_codeable_concept, field));
+    coding->clear_system();
+    if (!sliced_coding->ParseFromString(coding->SerializeAsString())) {
+      return InvalidArgument(
+          "Unable to parse Coding as CodingWithFixedSystem: ",
+          field->full_name());
+    }
+    return true;  // was copied into new field
+  }
+  return false;
+}
+
+// Examines a single Coding on a CodeableConcept, and attemts to copy it to
+// a profiled field if an appropriate one exists.
+// Returns true if the field was copied into a profiled field (and thus should
+// be removed from its original home), or false if it was not copied (and should
+// remain in original home).
+// Returns a status failure if it found a profiled field but could not copy into
+// it.
+template <typename CodingLike,
+          typename CodeLike = FHIR_DATATYPE(CodingLike, code)>
+StatusOr<bool> SliceOneCoding(const CodeableConceptSlicingInfo& slicing_info,
+                              CodingLike* coding,
+                              Message* codeable_concept_like) {
+  FHIR_ASSIGN_OR_RETURN(const bool sliced_into_fixed_code,
+                        CheckCodingWithFixedCode<CodingLike>(
+                            slicing_info, coding, codeable_concept_like));
+  if (sliced_into_fixed_code) return true;
+
+  FHIR_ASSIGN_OR_RETURN(const bool sliced_into_fixed_system,
+                        CheckCodingWithFixedSystem<CodingLike>(
+                            slicing_info, coding, codeable_concept_like));
+  if (sliced_into_fixed_system) return true;
+
+  FHIR_ASSIGN_OR_RETURN(const bool sliced_into_legacy_fixed_system,
+                        CheckLegacyCodingWithFixedSystem<CodingLike>(
+                            slicing_info, coding, codeable_concept_like));
+  if (sliced_into_legacy_fixed_system) return true;
+
+
+  return false;  // was not copied
+}
+
+// TODO: CodingWithFixedSystem is a legacy pattern that only exists
+// in obselete versions of STU3.  Eliminate once STU3 uses the inlined message
+// pattern.
+template <typename BundleLike,
+          typename CodingLike = FHIR_DATATYPE(BundleLike, coding),
+          typename CodeLike = FHIR_DATATYPE(BundleLike, code)>
 Status SliceCodingsInCodeableConcept(Message* codeable_concept_like) {
   const Descriptor* descriptor = codeable_concept_like->GetDescriptor();
   const Reflection* reflection = codeable_concept_like->GetReflection();
 
-  // For fixed system slices, map from System -> CodingWithFixedSystem slice
-  std::unordered_map<string, const FieldDescriptor*> fixed_systems;
-  // For fixed code slices, map from System -> {code, CodingWithFixedCode slice}
-  std::unordered_map<string, std::tuple<string, const FieldDescriptor*>>
-      fixed_codes;
+  CodeableConceptSlicingInfo slicing_info;
+
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
     const FieldOptions& field_options = field->options();
     if (field_options.HasExtension(fhir_inlined_coding_system)) {
-      const string& fixed_system =
+      const string& legacy_fixed_system =
           field_options.GetExtension(fhir_inlined_coding_system);
       if (field_options.HasExtension(fhir_inlined_coding_code)) {
-        fixed_codes[fixed_system] = std::make_tuple(
-            field_options.GetExtension(fhir_inlined_coding_code), field);
+        slicing_info.coding_with_fixed_code[legacy_fixed_system] =
+            std::make_tuple(
+                field_options.GetExtension(fhir_inlined_coding_code), field);
       } else {
-        fixed_systems[fixed_system] = field;
+        slicing_info.legacy_coding_with_fixed_system[legacy_fixed_system] =
+            field;
       }
+    } else if (field->message_type()->options().HasExtension(
+                   fhir_fixed_system)) {
+      slicing_info.inlined_codings_with_fixed_system
+          [field->message_type()->options().GetExtension(fhir_fixed_system)] =
+          field;
     }
   }
 
   const FieldDescriptor* coding_field = descriptor->FindFieldByName("coding");
   if (!coding_field || !coding_field->is_repeated() ||
-      !IsMessageType<Coding>(coding_field->message_type())) {
+      !IsMessageType<CodingLike>(coding_field->message_type())) {
     return InvalidArgument(
         "Cannot slice CodeableConcept-like: ", descriptor->full_name(),
         ".  No repeated coding field found.");
   }
 
-  RepeatedPtrField<Message>* codings =
-      reflection->MutableRepeatedPtrField<Message>(codeable_concept_like,
-                                                   coding_field);
+  RepeatedPtrField<CodingLike>* codings =
+      reflection->MutableRepeatedPtrField<CodingLike>(codeable_concept_like,
+                                                      coding_field);
   for (auto iter = codings->begin(); iter != codings->end();) {
-    Coding& coding = dynamic_cast<Coding&>(*iter);
-    const string& system = coding.system().value();
-    auto fixed_systems_iter = fixed_systems.find(system);
-    auto fixed_code_iter = fixed_codes.find(system);
-    if (fixed_systems_iter != fixed_systems.end()) {
-      const FieldDescriptor* field = fixed_systems_iter->second;
-      CodingWithFixedSystem* sliced_coding = dynamic_cast<CodingWithFixedSystem*>(
-          MutableOrAddMessage(codeable_concept_like, field));
-      coding.clear_system();
-      if (!sliced_coding->ParseFromString(coding.SerializeAsString())) {
-        return InvalidArgument(
-            "Unable to parse Coding as CodingWithFixedSystem: ",
-            field->full_name());
-      }
-      iter = codings->erase(iter);
-    } else if (fixed_code_iter != fixed_codes.end()) {
-      const std::tuple<const string, const FieldDescriptor*> code_field_tuple =
-          fixed_code_iter->second;
-      const string& code = std::get<0>(code_field_tuple);
-      const FieldDescriptor* field = std::get<1>(code_field_tuple);
-      if (coding.code().value() != code) {
-        return InvalidArgument("Invalid fixed code slice on ",
-                               field->full_name(), ": Expected code ", code,
-                               " for system ", system,
-                               ".  Found: ", coding.code().value());
-      }
-      CodingWithFixedCode* sliced_coding = dynamic_cast<CodingWithFixedCode*>(
-          MutableOrAddMessage(codeable_concept_like, field));
-      coding.clear_system();
-      coding.clear_code();
-      if (!sliced_coding->ParseFromString(coding.SerializeAsString())) {
-        return InvalidArgument(
-            "Unable to parse Coding as CodingWithFixedCode: ",
-            field->full_name());
-      }
+    FHIR_ASSIGN_OR_RETURN(const bool was_copied_into_profiled_field,
+                          SliceOneCoding<CodingLike>(slicing_info, &(*iter),
+                                                     codeable_concept_like));
+    if (was_copied_into_profiled_field) {
       iter = codings->erase(iter);
     } else {
       iter++;
@@ -216,6 +331,8 @@ Status SliceCodingsInCodeableConcept(Message* codeable_concept_like) {
   return Status::OK();
 }
 
+template <typename BundleLike, typename CodeableConceptLike =
+                                   FHIR_DATATYPE(BundleLike, codeable_concept)>
 Status PerformCodeableConceptSlicing(Message* message) {
   const Descriptor* descriptor = message->GetDescriptor();
   const Reflection* reflection = message->GetReflection();
@@ -227,16 +344,18 @@ Status PerformCodeableConceptSlicing(Message* message) {
       return InvalidArgument("Encountered unexpected primitive field: ",
                              field->full_name());
     }
-    if (IsProfileOf<CodeableConcept>(field_type)) {
+    if (IsProfileOf<CodeableConceptLike>(field_type)) {
       if (field->is_repeated()) {
         for (int i = 0; i < reflection->FieldSize(*message, field); i++) {
-          FHIR_RETURN_IF_ERROR(SliceCodingsInCodeableConcept(
-              reflection->MutableRepeatedMessage(message, field, i)));
+          const auto& result = SliceCodingsInCodeableConcept<BundleLike>(
+              reflection->MutableRepeatedMessage(message, field, i));
+          FHIR_RETURN_IF_ERROR(result);
         }
       } else {
         if (reflection->HasField(*message, field)) {
-          FHIR_RETURN_IF_ERROR(SliceCodingsInCodeableConcept(
-              reflection->MutableMessage(message, field)));
+          const auto& result = SliceCodingsInCodeableConcept<BundleLike>(
+              reflection->MutableMessage(message, field));
+          FHIR_RETURN_IF_ERROR(result);
         }
       }
     }
@@ -244,6 +363,9 @@ Status PerformCodeableConceptSlicing(Message* message) {
   return Status::OK();
 }
 
+template <
+    typename BundleLike, typename ExtensionLike = EXTENSION_TYPE(BundleLike),
+    typename CodeableConceptLike = FHIR_DATATYPE(BundleLike, codeable_concept)>
 bool CanHaveSlicing(const FieldDescriptor* field) {
   if (IsChoiceType(field)) {
     return false;
@@ -262,8 +384,8 @@ bool CanHaveSlicing(const FieldDescriptor* field) {
     return true;
   }
   if (IsProfile(field_type)) {
-    if (IsProfileOf<CodeableConcept>(field_type) ||
-        IsProfileOf<Extension>(field_type)) {
+    if (IsProfileOf<CodeableConceptLike>(field_type) ||
+        IsProfileOf<ExtensionLike>(field_type)) {
       // Profiles on Extensions and CodeableConcepts are the slices themselves,
       // rather than elements that *have* slices.
       return false;
@@ -276,9 +398,13 @@ bool CanHaveSlicing(const FieldDescriptor* field) {
                                        0) == 0;
 }
 
+template <typename BundleLike>
 Status PerformSlicing(Message* message) {
-  FHIR_RETURN_IF_ERROR(PerformExtensionSlicing(message));
-  FHIR_RETURN_IF_ERROR(PerformCodeableConceptSlicing(message));
+  FHIR_RETURN_IF_ERROR(PerformExtensionSlicing<BundleLike>(message));
+
+  const auto& cc_slicing_status =
+      PerformCodeableConceptSlicing<BundleLike>(message);
+  FHIR_RETURN_IF_ERROR(cc_slicing_status);
   // TODO: Perform generic slicing
 
   const Descriptor* descriptor = message->GetDescriptor();
@@ -289,10 +415,11 @@ Status PerformSlicing(Message* message) {
       return InvalidArgument("Encountered unexpected primitive type on field: ",
                              field->full_name());
     }
-    if (CanHaveSlicing(field)) {
+    if (CanHaveSlicing<BundleLike>(field)) {
       for (int j = 0; j < PotentiallyRepeatedFieldSize(*message, field); j++) {
-        FHIR_RETURN_IF_ERROR(PerformSlicing(
-            MutablePotentiallyRepeatedMessage(message, field, j)));
+        const auto& ps_status = PerformSlicing<BundleLike>(
+            MutablePotentiallyRepeatedMessage(message, field, j));
+        FHIR_RETURN_IF_ERROR(ps_status);
       }
     }
   }
@@ -304,6 +431,8 @@ Status PerformSlicing(Message* message) {
 //
 // These functions help with going from Profiled -> Unprofiled
 
+template <typename BundleLike,
+          typename ExtensionLike = EXTENSION_TYPE(BundleLike)>
 Status PerformExtensionUnslicing(const google::protobuf::Message& profiled_message,
                                  google::protobuf::Message* base_message) {
   const Descriptor* profiled_descriptor = profiled_message.GetDescriptor();
@@ -325,12 +454,12 @@ Status PerformExtensionUnslicing(const google::protobuf::Message& profiled_messa
     }
     // We've found a profiled extension field.
     // Convert it into a vanilla extension on the base message.
-    Extension* raw_extension =
-        dynamic_cast<Extension*>(base_reflection->AddMessage(
+    ExtensionLike* raw_extension =
+        dynamic_cast<ExtensionLike*>(base_reflection->AddMessage(
             base_message, base_descriptor->FindFieldByName("extension")));
     const Message& extension_as_message =
         profiled_reflection->GetMessage(profiled_message, field);
-    if (IsProfileOf<Extension>(extension_as_message)) {
+    if (IsProfileOf<ExtensionLike>(extension_as_message)) {
       // This a profile on extension, and therefore a complex extension
       FHIR_RETURN_IF_ERROR(
           ConvertToExtension(extension_as_message, raw_extension));
@@ -346,11 +475,15 @@ Status PerformExtensionUnslicing(const google::protobuf::Message& profiled_messa
   return Status::OK();
 }
 
-Coding* AddRawCoding(Message* concept) {
-  return dynamic_cast<Coding*>(concept->GetReflection()->AddMessage(
+template <typename CodingLike>
+CodingLike* AddRawCoding(Message* concept) {
+  return dynamic_cast<CodingLike*>(concept->GetReflection()->AddMessage(
       concept, concept->GetDescriptor()->FindFieldByName("coding")));
 }
 
+template <typename BundleLike,
+          typename CodingLike = FHIR_DATATYPE(BundleLike, coding),
+          typename CodeLike = FHIR_DATATYPE(BundleLike, code)>
 Status UnsliceCodingsWithinCodeableConcept(
     const google::protobuf::Message& profiled_concept, Message* target_concept) {
   const Descriptor* profiled_descriptor = profiled_concept.GetDescriptor();
@@ -359,7 +492,7 @@ Status UnsliceCodingsWithinCodeableConcept(
     // Check if this is a newly profiled coding we need to handle.
     // This is the case if the field is a Profile of Coding AND
     // there is no corresonding profiled field in the base proto.
-    if (IsProfileOf<Coding>(profiled_field->message_type()) &&
+    if (IsProfileOf<CodingLike>(profiled_field->message_type()) &&
         target_concept->GetDescriptor()->FindFieldByNumber(
             profiled_field->number()) == nullptr) {
       // This is a specialization of Coding.
@@ -369,27 +502,46 @@ Status UnsliceCodingsWithinCodeableConcept(
       for (int i = 0; i < field_size; i++) {
         const Message& profiled_coding =
             GetPotentiallyRepeatedMessage(profiled_concept, profiled_field, i);
-        Coding* new_coding = AddRawCoding(target_concept);
+        CodingLike* new_coding = AddRawCoding<CodingLike>(target_concept);
+
         // Copy over as many fields as we can.
         new_coding->ParseFromString(profiled_coding.SerializeAsString());
         new_coding->DiscardUnknownFields();
 
-        // If we see an inlined system or code, copy that over.
+        const FieldDescriptor* profiled_code_field =
+            profiled_coding.GetDescriptor()->FindFieldByName("code");
+        if (profiled_code_field &&
+            !IsMessageType<CodeLike>(profiled_code_field->message_type())) {
+          const Message& profiled_code =
+              profiled_coding.GetReflection()->GetMessage(profiled_coding,
+                                                          profiled_code_field);
+          TF_RETURN_IF_ERROR(
+              ConvertToGenericCode(profiled_code, new_coding->mutable_code()));
+        }
+
+        // If we see an inlined system or code on the field, copy that over.
         const string& inlined_system = GetInlinedCodingSystem(profiled_field);
         if (!inlined_system.empty()) {
           new_coding->mutable_system()->set_value(inlined_system);
         }
-
         const string& inlined_code = GetInlinedCodingCode(profiled_field);
         if (!inlined_code.empty()) {
           new_coding->mutable_code()->set_value(inlined_code);
+        }
+
+        // If there is a fixed system on the profiled coding message,
+        // copy that over too.
+        const string& fixed_system_from_message =
+            GetFixedCodingSystem(profiled_coding.GetDescriptor());
+        if (!fixed_system_from_message.empty()) {
+          new_coding->mutable_system()->set_value(fixed_system_from_message);
         }
       }
       if (field_size == 0 &&
           IsMessageType<CodingWithFixedCode>(profiled_field->message_type())) {
         // This is a Fixed-Code field with no additional information provided.
         // Just add the Code and System.
-        Coding* new_coding = AddRawCoding(target_concept);
+        CodingLike* new_coding = AddRawCoding<CodingLike>(target_concept);
         new_coding->mutable_system()->set_value(
             GetInlinedCodingSystem(profiled_field));
         new_coding->mutable_code()->set_value(
@@ -400,6 +552,8 @@ Status UnsliceCodingsWithinCodeableConcept(
   return Status::OK();
 }
 
+template <typename BundleLike, typename CodeableConceptLike =
+                                   FHIR_DATATYPE(BundleLike, codeable_concept)>
 Status PerformCodeableConceptUnslicing(const google::protobuf::Message& profiled_message,
                                        google::protobuf::Message* base_message) {
   const Descriptor* profiled_descriptor = profiled_message.GetDescriptor();
@@ -416,11 +570,11 @@ Status PerformCodeableConceptUnslicing(const google::protobuf::Message& profiled
     if (!profiled_field || !FieldHasValue(profiled_message, profiled_field)) {
       continue;
     }
-    if (IsProfileOf<CodeableConcept>(profiled_field->message_type())) {
+    if (IsProfileOf<CodeableConceptLike>(profiled_field->message_type())) {
       for (int j = 0;
            j < PotentiallyRepeatedFieldSize(profiled_message, profiled_field);
            j++) {
-        FHIR_RETURN_IF_ERROR(UnsliceCodingsWithinCodeableConcept(
+        FHIR_RETURN_IF_ERROR(UnsliceCodingsWithinCodeableConcept<BundleLike>(
             GetPotentiallyRepeatedMessage(profiled_message, profiled_field, j),
             MutablePotentiallyRepeatedMessage(base_message, base_field, j)));
       }
@@ -429,12 +583,13 @@ Status PerformCodeableConceptUnslicing(const google::protobuf::Message& profiled
   return Status::OK();
 }
 
+template <typename BundleLike>
 Status PerformUnslicing(const google::protobuf::Message& profiled_message,
                         google::protobuf::Message* base_message) {
   FHIR_RETURN_IF_ERROR(
-      PerformExtensionUnslicing(profiled_message, base_message));
-  FHIR_RETURN_IF_ERROR(
-      PerformCodeableConceptUnslicing(profiled_message, base_message));
+      PerformExtensionUnslicing<BundleLike>(profiled_message, base_message));
+  FHIR_RETURN_IF_ERROR(PerformCodeableConceptUnslicing<BundleLike>(
+      profiled_message, base_message));
 
   const Descriptor* profiled_descriptor = profiled_message.GetDescriptor();
   const Descriptor* base_descriptor = base_message->GetDescriptor();
@@ -447,11 +602,11 @@ Status PerformUnslicing(const google::protobuf::Message& profiled_message,
       return InvalidArgument("Encountered unexpected primitive type on field: ",
                              profiled_field->full_name());
     }
-    if (CanHaveSlicing(profiled_field)) {
+    if (CanHaveSlicing<BundleLike>(profiled_field)) {
       for (int j = 0;
            j < PotentiallyRepeatedFieldSize(profiled_message, profiled_field);
            j++) {
-        FHIR_RETURN_IF_ERROR(PerformUnslicing(
+        FHIR_RETURN_IF_ERROR(PerformUnslicing<BundleLike>(
             GetPotentiallyRepeatedMessage(profiled_message, profiled_field, j),
             MutablePotentiallyRepeatedMessage(base_message, base_field, j)));
       }
@@ -461,6 +616,7 @@ Status PerformUnslicing(const google::protobuf::Message& profiled_message,
 }
 
 // Converts from something less specialized to something more specialized
+template <typename BundleLike>
 Status DownConvert(const Message& base_message, Message* profiled_message) {
   const Descriptor* base_descriptor = base_message.GetDescriptor();
   const Descriptor* profiled_descriptor = profiled_message->GetDescriptor();
@@ -481,7 +637,7 @@ Status DownConvert(const Message& base_message, Message* profiled_message) {
                            " to ", profiled_descriptor->full_name(),
                            ".  They are not binary compatible.");
   }
-  Status slicing_status = PerformSlicing(profiled_message);
+  Status slicing_status = PerformSlicing<BundleLike>(profiled_message);
   if (!slicing_status.ok()) {
     return InvalidArgument("Unable to slice ", base_descriptor->full_name(),
                            " to ", profiled_descriptor->full_name(), ": ",
@@ -491,6 +647,7 @@ Status DownConvert(const Message& base_message, Message* profiled_message) {
 }
 
 // Converts from something more specialized to something less specialized
+template <typename BundleLike>
 Status UpConvert(const google::protobuf::Message& profiled_message,
                  google::protobuf::Message* base_message) {
   const Descriptor* profiled_descriptor = profiled_message.GetDescriptor();
@@ -513,21 +670,11 @@ Status UpConvert(const google::protobuf::Message& profiled_message,
   // message.  We toss them out here, and then handled these fields in the
   // profiled message by reading annotations.
   base_message->DiscardUnknownFields();
-  return PerformUnslicing(profiled_message, base_message);
+  return PerformUnslicing<BundleLike>(profiled_message, base_message);
 }
 
-}  // namespace
-
-Status ConvertToProfile(const Message& source, Message* target) {
-  FHIR_RETURN_IF_ERROR(ConvertToProfileLenient(source, target));
-  Status validation = ValidateResource(*target);
-  if (validation.ok()) {
-    return Status::OK();
-  }
-  return tensorflow::errors::FailedPrecondition(validation.error_message());
-}
-
-Status ConvertToProfileLenient(const Message& source, Message* target) {
+template <typename BundleLike>
+Status ConvertToProfileLenientInternal(const Message& source, Message* target) {
   const Descriptor* source_descriptor = source.GetDescriptor();
   const Descriptor* target_descriptor = target->GetDescriptor();
   if (source_descriptor->full_name() == target_descriptor->full_name() ||
@@ -536,16 +683,50 @@ Status ConvertToProfileLenient(const Message& source, Message* target) {
     // to more specialized.
     // If they are the same type, Down convert to make sure all profiled fields
     // get normalized.
-    return DownConvert(source, target);
+    return DownConvert<BundleLike>(source, target);
   }
   if (IsProfileOf(source_descriptor, target_descriptor)) {
     // Source is a profile of Target, we want to go from more specialized
     // to less specialized.
-    return UpConvert(source, target);
+    return UpConvert<BundleLike>(source, target);
   }
   // TODO: Side convert if possible, through a common ancestor.
   return InvalidArgument("Unable to convert ", source_descriptor->full_name(),
                          " to ", target_descriptor->full_name());
+}
+
+template <typename BundleLike>
+Status ConvertToProfileInternal(const Message& source, Message* target) {
+  const auto& status =
+      ConvertToProfileLenientInternal<BundleLike>(source, target);
+  FHIR_RETURN_IF_ERROR(status);
+  Status validation = ValidateResource(*target);
+  if (validation.ok()) {
+    return Status::OK();
+  }
+  return tensorflow::errors::FailedPrecondition(validation.error_message());
+}
+
+}  // namespace
+
+Status ConvertToProfileStu3(const ::google::protobuf::Message& source,
+                            ::google::protobuf::Message* target) {
+  return ConvertToProfileInternal<stu3::proto::Bundle>(source, target);
+}
+Status ConvertToProfileR4(const ::google::protobuf::Message& source,
+                          ::google::protobuf::Message* target) {
+  return ConvertToProfileInternal<r4::proto::Bundle>(source, target);
+}
+
+// Identical to ConvertToProfile, except does not run the validation step.
+Status ConvertToProfileLenientStu3(const ::google::protobuf::Message& source,
+                                   ::google::protobuf::Message* target) {
+  return ConvertToProfileLenientInternal<stu3::proto::Bundle>(source, target);
+}
+
+Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
+                                 ::google::protobuf::Message* target) {
+  return ConvertToProfileLenientInternal<r4::proto::Bundle>(source, target);
 }
 
 }  // namespace fhir

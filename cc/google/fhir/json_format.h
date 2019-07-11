@@ -47,7 +47,8 @@ template <typename R>
   R resource;
   FHIR_RETURN_IF_ERROR(
       MergeJsonFhirStringIntoProto(raw_json, &resource, default_timezone));
-  return IsProfile(R::descriptor()) ? Normalize(resource) : resource;
+  // TODO: The NormalizeStu3 call will fail with R4.
+  return IsProfile(R::descriptor()) ? NormalizeStu3(resource) : resource;
 }
 
 ::google::fhir::StatusOr<string> PrettyPrintFhirToJsonString(

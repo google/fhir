@@ -41,12 +41,16 @@ using std::string;
 // Any data that is in an inlined field in the profiled message,
 // that does not exists in the base message will be converted back to the
 // original format (e.g., extension).
-Status ConvertToProfile(const ::google::protobuf::Message& source,
-                        ::google::protobuf::Message* target);
+Status ConvertToProfileStu3(const ::google::protobuf::Message& source,
+                            ::google::protobuf::Message* target);
+Status ConvertToProfileR4(const ::google::protobuf::Message& source,
+                          ::google::protobuf::Message* target);
 
 // Identical to ConvertToProfile, except does not run the validation step.
-Status ConvertToProfileLenient(const ::google::protobuf::Message& source,
-                               ::google::protobuf::Message* target);
+Status ConvertToProfileLenientStu3(const ::google::protobuf::Message& source,
+                                   ::google::protobuf::Message* target);
+Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
+                                 ::google::protobuf::Message* target);
 
 // Given a Message, returns a copy with all data is stored in typed fields where
 // possible.
@@ -54,9 +58,16 @@ Status ConvertToProfileLenient(const ::google::protobuf::Message& source,
 // has a corresponding typed field, the return copy will have the data in the
 // typed field.
 template <typename T>
-StatusOr<T> Normalize(const T& message) {
+StatusOr<T> NormalizeStu3(const T& message) {
   T normalized;
-  FHIR_RETURN_IF_ERROR(ConvertToProfileLenient(message, &normalized));
+  FHIR_RETURN_IF_ERROR(ConvertToProfileLenientStu3(message, &normalized));
+  return normalized;
+}
+
+template <typename T>
+StatusOr<T> NormalizeR4(const T& message) {
+  T normalized;
+  FHIR_RETURN_IF_ERROR(ConvertToProfileLenientR4(message, &normalized));
   return normalized;
 }
 

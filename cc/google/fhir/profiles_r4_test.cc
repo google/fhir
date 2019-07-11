@@ -12,31 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "google/fhir/profiles.h"
-
 #include <string>
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/strings/ascii.h"
 #include "absl/strings/str_cat.h"
+#include "google/fhir/profiles.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/google_extensions.pb.h"
-#include "proto/stu3/profiles.pb.h"
-#include "proto/stu3/resources.pb.h"
-#include "testdata/stu3/profiles/test.pb.h"
+#include "proto/r4/datatypes.pb.h"
+#include "proto/r4/google_extensions.pb.h"
+#include "proto/r4/resources.pb.h"
+#include "testdata/r4/profiles/test.pb.h"
 
 namespace google {
 namespace fhir {
 
 namespace {
 
-using ::google::fhir::stu3::proto::Observation;
-using ::google::fhir::stu3::proto::Patient;
+using ::google::fhir::r4::proto::Observation;
+using ::google::fhir::r4::proto::Patient;
 using ::google::fhir::testutil::EqualsProto;
 using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
 
@@ -57,7 +55,7 @@ void TestDownConvert(const string& filename) {
   const B unprofiled = GetUnprofiled<B>(filename);
   P profiled;
 
-  auto status = ConvertToProfileLenient(unprofiled, &profiled);
+  auto status = ConvertToProfileLenientR4(unprofiled, &profiled);
   if (!status.ok()) {
     LOG(ERROR) << status.error_message();
     ASSERT_TRUE(status.ok());
@@ -70,7 +68,7 @@ void TestUpConvert(const string& filename) {
   const P profiled = GetProfiled<P>(filename);
   B unprofiled;
 
-  auto status = ConvertToProfileLenient(profiled, &unprofiled);
+  auto status = ConvertToProfileLenientR4(profiled, &unprofiled);
   if (!status.ok()) {
     LOG(ERROR) << status.error_message();
     ASSERT_TRUE(status.ok());
@@ -88,108 +86,92 @@ void TestPair(const string& filename) {
 TEST(ProfilesTest, InvalidInputs) {
   Patient patient;
   Observation observation;
-  ASSERT_FALSE(ConvertToProfileLenient(patient, &observation).ok());
-}
-
-TEST(ProfilesTest, SimpleExtensions) {
-  TestPair<Observation, stu3::proto::ObservationGenetics>(
-      "testdata/stu3/examples/Observation-example-genetics-1");
-}
-
-TEST(ProfilesTest, FixedCoding) {
-  TestPair<Observation, stu3::proto::Bodyheight>(
-      "testdata/stu3/examples/Observation-body-height");
-}
-
-TEST(ProfilesTest, VitalSigns) {
-  TestPair<Observation, stu3::proto::Vitalsigns>(
-      "testdata/stu3/examples/Observation-body-height");
+  ASSERT_FALSE(ConvertToProfileLenientR4(patient, &observation).ok());
 }
 
 TEST(ProfilesTest, FixedSystem) {
-  TestPair<Observation, ::google::fhir::stu3::testing::TestObservation>(
-      "testdata/stu3/profiles/observation_fixedsystem");
+  TestPair<Observation, ::google::fhir::r4::testing::TestObservation>(
+      "testdata/r4/profiles/observation_fixedsystem");
 }
 
 TEST(ProfilesTest, ComplexExtension) {
-  TestPair<Observation, ::google::fhir::stu3::testing::TestObservation>(
-      "testdata/stu3/profiles/observation_complexextension");
+  TestPair<Observation, ::google::fhir::r4::testing::TestObservation>(
+      "testdata/r4/profiles/observation_complexextension");
 }
 
 TEST(ProfilesTest, Normalize) {
-  const stu3::testing::TestObservation unnormalized =
-      ReadProto<stu3::testing::TestObservation>(absl::StrCat(
-          "testdata/stu3/profiles/observation_complexextension.prototxt"));
-  StatusOr<stu3::testing::TestObservation> normalized = Normalize(unnormalized);
+  const r4::testing::TestObservation unnormalized =
+      ReadProto<r4::testing::TestObservation>(absl::StrCat(
+          "testdata/r4/profiles/observation_complexextension.prototxt"));
+  StatusOr<r4::testing::TestObservation> normalized = NormalizeR4(unnormalized);
   if (!normalized.status().ok()) {
     LOG(ERROR) << normalized.status().error_message();
     ASSERT_TRUE(normalized.status().ok());
   }
   EXPECT_THAT(
       normalized.ValueOrDie(),
-      EqualsProto(ReadProto<stu3::testing::TestObservation>(absl::StrCat(
-          "testdata/stu3/profiles/"
+      EqualsProto(ReadProto<r4::testing::TestObservation>(absl::StrCat(
+          "testdata/r4/profiles/"
           "observation_complexextension-profiled-testobservation.prototxt"))));
 }
 
 TEST(ProfilesTest, NormalizeBundle) {
-  stu3::testing::Bundle unnormalized_bundle;
+  r4::testing::Bundle unnormalized_bundle;
 
   *unnormalized_bundle.add_entry()
        ->mutable_resource()
        ->mutable_test_observation() =
-      GetUnprofiled<stu3::testing::TestObservation>(
-          "testdata/stu3/profiles/observation_complexextension");
+      GetUnprofiled<r4::testing::TestObservation>(
+          "testdata/r4/profiles/observation_complexextension");
   *unnormalized_bundle.add_entry()
        ->mutable_resource()
        ->mutable_test_observation_lvl2() =
-      GetUnprofiled<stu3::testing::TestObservationLvl2>(
-          "testdata/stu3/profiles/testobservation_lvl2");
+      GetUnprofiled<r4::testing::TestObservationLvl2>(
+          "testdata/r4/profiles/testobservation_lvl2");
 
-  stu3::testing::Bundle expected_normalized;
+  r4::testing::Bundle expected_normalized;
   *expected_normalized.add_entry()
        ->mutable_resource()
-       ->mutable_test_observation() =
-      GetProfiled<stu3::testing::TestObservation>(
-          "testdata/stu3/profiles/observation_complexextension");
+       ->mutable_test_observation() = GetProfiled<r4::testing::TestObservation>(
+      "testdata/r4/profiles/observation_complexextension");
   *expected_normalized.add_entry()
        ->mutable_resource()
        ->mutable_test_observation_lvl2() =
-      GetProfiled<stu3::testing::TestObservationLvl2>(
-          "testdata/stu3/profiles/testobservation_lvl2");
+      GetProfiled<r4::testing::TestObservationLvl2>(
+          "testdata/r4/profiles/testobservation_lvl2");
 
-  StatusOr<stu3::testing::Bundle> normalized = Normalize(unnormalized_bundle);
+  StatusOr<r4::testing::Bundle> normalized = NormalizeR4(unnormalized_bundle);
   EXPECT_THAT(normalized.ValueOrDie(),
               EqualsProtoIgnoringReordering(expected_normalized));
 }
 
 TEST(ProfilesTest, ProfileOfProfile) {
-  TestPair<::google::fhir::stu3::testing::TestObservation,
-           ::google::fhir::stu3::testing::TestObservationLvl2>(
-      "testdata/stu3/profiles/testobservation_lvl2");
+  TestPair<::google::fhir::r4::testing::TestObservation,
+           ::google::fhir::r4::testing::TestObservationLvl2>(
+      "testdata/r4/profiles/testobservation_lvl2");
 }
 
 TEST(ProfilesTest, UnableToProfile) {
   const Observation unprofiled = ReadProto<Observation>(
-      "testdata/stu3/examples/Observation-example-genetics-1.prototxt");
+      "testdata/r4/examples/Observation-example-genetics-1.prototxt");
   Patient patient;
 
-  auto lenient_status = ConvertToProfileLenient(unprofiled, &patient);
+  auto lenient_status = ConvertToProfileLenientR4(unprofiled, &patient);
   ASSERT_EQ(tensorflow::error::INVALID_ARGUMENT, lenient_status.code());
 
-  auto strict_status = ConvertToProfile(unprofiled, &patient);
+  auto strict_status = ConvertToProfileR4(unprofiled, &patient);
   ASSERT_EQ(tensorflow::error::INVALID_ARGUMENT, strict_status.code());
 }
 
 TEST(ProfilesTest, MissingRequiredFields) {
   const Observation unprofiled = ReadProto<Observation>(
-      "testdata/stu3/profiles/observation_fixedsystem.prototxt");
-  ::google::fhir::stu3::testing::TestObservation profiled;
+      "testdata/r4/profiles/observation_fixedsystem.prototxt");
+  ::google::fhir::r4::testing::TestObservation profiled;
 
-  auto lenient_status = ConvertToProfileLenient(unprofiled, &profiled);
+  auto lenient_status = ConvertToProfileLenientR4(unprofiled, &profiled);
   ASSERT_EQ(tensorflow::error::OK, lenient_status.code());
 
-  auto strict_status = ConvertToProfile(unprofiled, &profiled);
+  auto strict_status = ConvertToProfileR4(unprofiled, &profiled);
   ASSERT_EQ(tensorflow::error::FAILED_PRECONDITION, strict_status.code());
 }
 

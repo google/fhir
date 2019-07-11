@@ -1,0 +1,79 @@
+simple_extension {
+  element_data {
+    name: "SimpleDecimalExt"
+    size_restriction: REPEATED
+    description: "This is the A-Extension"
+  }
+  type: "decimal"
+  can_have_extensions: true
+}
+
+simple_extension {
+  element_data {
+    name: "SimpleCodeableConceptExtension"
+    size_restriction: OPTIONAL
+    description: "SimpleCodeableConcept Extension"
+  }
+  code_type {
+    binding_name: "CarePlanActivityStatus"
+    system: "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
+  }
+}
+
+complex_extension {
+  element_data {
+    name: "ComplexExt"
+    size_restriction: OPTIONAL
+    description: "complex extension"
+  }
+
+  simple_field {
+    element_data {
+      name: "simpleSubfield"
+      size_restriction: OPTIONAL
+      description: "simple subfield"
+    }
+    type: "string"
+  }
+
+  complex_field {
+    element_data {
+      name: "complexSubfield"
+      size_restriction: REQUIRED
+      description: "complex subfield"
+    }
+
+    simple_field {
+      element_data {
+        name: "simpleSubSubFieldA"
+        size_restriction: OPTIONAL
+        description: "choice type"
+      }
+      type: "string"
+      type: "decimal"
+      type: "boolean"
+      can_have_extensions: true
+    }
+
+    simple_field {
+      element_data {
+        name: "simpleSubSubFieldB"
+        size_restriction: REPEATED
+        description: "simple sub sub field b"
+      }
+      type: "UnsignedInt"
+    }
+  }
+}
+
+simple_extension {
+  element_data {
+    name: "DigitalMediaType"
+    size_restriction: OPTIONAL
+    description: "Extension for Digital Media Type code."
+  }
+  code_type {
+    binding_name: "DigitalMediaType"
+    system: "http://hl7.org/fhir/ValueSet/digital-media-type"
+  }
+}

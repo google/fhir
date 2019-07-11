@@ -28,7 +28,7 @@
 using std::string;
 
 using ::company::fhir::stu3::demo::DemoPatient;
-using ::google::fhir::ConvertToProfileLenient;
+using ::google::fhir::ConvertToProfileLenientStu3;
 using ::google::fhir::JsonFhirStringToProto;
 using ::google::fhir::PrintFhirToJsonStringForAnalytics;
 using ::google::fhir::stu3::proto::Patient;
@@ -52,7 +52,7 @@ void ConvertToProfile(const absl::TimeZone& time_zone, std::string dir) {
     if (!line.length()) continue;
     R raw = JsonFhirStringToProto<Patient>(line, time_zone).ValueOrDie();
     P profiled;
-    CHECK(ConvertToProfileLenient(raw, &profiled).ok());
+    CHECK(ConvertToProfileLenientStu3(raw, &profiled).ok());
     write_stream << PrintFhirToJsonStringForAnalytics(profiled).ValueOrDie();
     write_stream << "\n";
   }

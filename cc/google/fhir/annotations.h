@@ -74,6 +74,8 @@ const string& GetInlinedCodingSystem(const ::google::protobuf::FieldDescriptor* 
 
 const string& GetInlinedCodingCode(const ::google::protobuf::FieldDescriptor* field);
 
+const string& GetFixedCodingSystem(const ::google::protobuf::Descriptor* descriptor);
+
 const string& GetValueRegex(const ::google::protobuf::Descriptor* descriptor);
 
 const bool HasInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* field);

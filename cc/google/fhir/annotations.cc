@@ -77,6 +77,10 @@ const string& GetInlinedCodingCode(const ::google::protobuf::FieldDescriptor* fi
   return field->options().GetExtension(proto::fhir_inlined_coding_code);
 }
 
+const string& GetFixedCodingSystem(const ::google::protobuf::Descriptor* descriptor) {
+  return descriptor->options().GetExtension(proto::fhir_fixed_system);
+}
+
 const string& GetValueRegex(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().GetExtension(proto::value_regex);
 }

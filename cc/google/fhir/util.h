@@ -52,6 +52,17 @@
   typename std::remove_const<typename std::remove_reference<decltype( \
       std::declval<b>().entry(0).resource().r())>::type>::type
 
+// Macro for specifying the extension type associated with a FHIR type.
+#define EXTENSION_TYPE(t)                                             \
+  typename std::remove_const<typename std::remove_reference<decltype( \
+      std::declval<t>().id().extension(0))>::type>::type
+
+// Given a FHIR type, returns the datatype with a given name assosiated with
+// the input type's version of fhir
+#define FHIR_DATATYPE(t, d)                                           \
+  typename std::remove_const<typename std::remove_reference<decltype( \
+      std::declval<t>().id().extension(0).value().d())>::type>::type
+
 namespace google {
 namespace fhir {
 
