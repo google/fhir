@@ -27,6 +27,7 @@ import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.r4.proto.Canonical;
 import com.google.fhir.r4.proto.CodeableConcept;
+import com.google.fhir.r4.proto.Coding;
 import com.google.fhir.r4.proto.ElementDefinition;
 import com.google.fhir.r4.proto.ExtensionContextTypeCode;
 import com.google.fhir.r4.proto.StructureDefinition;
@@ -765,7 +766,6 @@ public class ProtoGenerator {
         .clearExtension(Annotations.structureDefinitionKind)
         .clearExtension(Annotations.fhirStructureDefinitionUrl)
         .addExtension(Annotations.fhirProfileBase, codeableConceptStructDefUrl);
-
     for (ElementDefinition codingSlice : codingSlices) {
       String fixedSystem = null;
       ElementDefinition codeDefinition = null;
@@ -787,18 +787,18 @@ public class ProtoGenerator {
 
       if (codeDefinition.getFixed().hasCode()) {
         FieldDescriptorProto.Builder codingField =
-            FieldDescriptorProto.newBuilder()
+            codeableConceptBuilder
+                .addFieldBuilder()
                 .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
                 .setTypeName("." + fhirVersion.coreProtoPackage + ".CodingWithFixedCode")
                 .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
                 .setLabel(getFieldSize(codingSlice))
-                .setNumber(codeableConceptBuilder.getFieldCount() + 1);
+                .setNumber(codeableConceptBuilder.getFieldCount());
         codingField
             .getOptionsBuilder()
             .setExtension(Annotations.fhirInlinedCodingSystem, fixedSystem)
             .setExtension(
                 Annotations.fhirInlinedCodingCode, codeDefinition.getFixed().getCode().getValue());
-        codeableConceptBuilder.addField(codingField);
       } else {
         // For codings with fixed systems, we should inline a custom Coding type that incorporates
         // this information, e.g., inlining a strongly-typed Code enum.
@@ -809,20 +809,21 @@ public class ProtoGenerator {
               codeableConceptBuilder,
               qualifiedType.toQualifiedTypeString(),
               codingSlice,
+              elementList,
               fixedSystem);
         } else {
           // Legacy "CodingWithFixedSystem"
           FieldDescriptorProto.Builder codingField =
-              FieldDescriptorProto.newBuilder()
+              codeableConceptBuilder
+                  .addFieldBuilder()
                   .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
                   .setTypeName(CodingWithFixedSystem.getDescriptor().getFullName())
                   .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
                   .setLabel(getFieldSize(codingSlice))
-                  .setNumber(codeableConceptBuilder.getFieldCount() + 1);
+                  .setNumber(codeableConceptBuilder.getFieldCount());
           codingField
               .getOptionsBuilder()
               .setExtension(Annotations.fhirInlinedCodingSystem, fixedSystem);
-          codeableConceptBuilder.addField(codingField);
         }
       }
     }
@@ -834,28 +835,52 @@ public class ProtoGenerator {
       DescriptorProto.Builder codeableConceptBuilder,
       String codeableConceptTypeString,
       ElementDefinition codingSlice,
+      List<ElementDefinition> elementList,
       String fixedSystem) {
     String typeName = toFieldTypeCase(codingSlice.getSliceName().getValue());
     // Build and add a custom Coding message with a fixed system & inlined code
     DescriptorProto.Builder codingMessage = codeableConceptBuilder.addNestedTypeBuilder();
     codingMessage.setName(typeName);
-    codingMessage.getOptionsBuilder().setExtension(Annotations.fhirFixedSystem, fixedSystem);
-
-    // Add id and extension fields
-    codingMessage.addField(codeableConceptBuilder.getField(0));
-    codingMessage.addField(codeableConceptBuilder.getField(1));
-
-    Optional<QualifiedType> boundType = checkForCodeWithBoundValueSet(codingSlice);
-    String codingType =
-        boundType.isPresent()
-            ? boundType.get().toQualifiedTypeString()
-            : "." + fhirVersion.coreProtoPackage + ".Code";
     codingMessage
-        .addFieldBuilder()
-        .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-        .setTypeName(codingType)
-        .setName("code")
-        .setNumber(3);
+        .getOptionsBuilder()
+        .setExtension(Annotations.fhirFixedSystem, fixedSystem)
+        .addExtension(
+            Annotations.fhirProfileBase, baseStructDefsById.get("Coding").getUrl().getValue());
+
+    List<FieldDescriptorProto> codingFields = new ArrayList<>();
+    // Add in all coding fields that aren't code or system
+    for (FieldDescriptorProto field : Coding.getDescriptor().toProto().getFieldList()) {
+      if (!field.getName().equals("code") && !field.getName().equals("system")) {
+        codingFields.add(field);
+      }
+    }
+
+    QualifiedType codingType = new QualifiedType("Code", fhirVersion.coreProtoPackage);
+    Optional<ElementDefinition> systemField =
+        getOptionalElementDefinitionById(codingSlice.getId().getValue() + ".system", elementList);
+    if (systemField.isPresent()) {
+      String fixedUri = systemField.get().getFixed().getUri().getValue();
+      if (!fixedUri.isEmpty()) {
+        if (valueSetTypesByUrl.containsKey(fixedUri)) {
+          Descriptor descriptor = valueSetTypesByUrl.get(fixedUri);
+          codingType = new QualifiedType(descriptor.getName(), descriptor.getFile().getPackage());
+        } else {
+          // TODO: throw an error in strict mode
+        }
+      }
+    }
+
+    codingFields.add(
+        FieldDescriptorProto.newBuilder()
+            .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+            .setTypeName(codingType.toQualifiedTypeString())
+            .setName("code")
+            .setNumber(5)
+            .build());
+    codingMessage.addAllField(
+        codingFields.stream()
+            .sorted((a, b) -> a.getNumber() - b.getNumber())
+            .collect(Collectors.toList()));
 
     // Add a field with that type.
     codeableConceptBuilder
@@ -864,7 +889,7 @@ public class ProtoGenerator {
         .setTypeName(codeableConceptTypeString + "." + typeName)
         .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
         .setLabel(getFieldSize(codingSlice))
-        .setNumber(codeableConceptBuilder.getFieldCount() + 1);
+        .setNumber(codeableConceptBuilder.getFieldCount());
   }
 
   private static List<ElementDefinition> getDirectChildren(
@@ -1639,13 +1664,21 @@ public class ProtoGenerator {
   }
 
   // Returns the only element in the list matching a given id.
-  // Throws IllegalArgumentException if zero or more than one matching elements are found.
+  // Throws IllegalArgumentException if zero or more than one matching element is found.
   private static ElementDefinition getElementDefinitionById(
+      String id, List<ElementDefinition> elements) {
+    return getOptionalElementDefinitionById(id, elements)
+        .orElseThrow(() -> new IllegalArgumentException("No element with id: " + id));
+  }
+
+  // Returns the only element in the list matching a given id, or an empty optional if none are
+  // found.
+  // Throws IllegalArgumentException if more than one matching element is found.
+  private static Optional<ElementDefinition> getOptionalElementDefinitionById(
       String id, List<ElementDefinition> elements) {
     return elements.stream()
         .filter(element -> element.getId().getValue().equals(id))
-        .collect(MoreCollectors.toOptional())
-        .orElseThrow(() -> new IllegalArgumentException("No element with id: " + id));
+        .collect(MoreCollectors.toOptional());
   }
 
   private String getTypedReferenceName(List<ElementDefinition.TypeRef> typeList) {
