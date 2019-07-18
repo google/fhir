@@ -49,6 +49,20 @@ fhir_proto_library(
     proto_library_prefix = "extensions",
 )
 
+fhir_proto_library(
+    srcs = [
+        "profiles.proto",
+    ],
+    proto_deps = [
+        ":codes_proto",
+        ":datatypes_proto",
+        ":extensions_proto",
+        ":resources_proto",
+        "//proto:annotations_proto",
+    ],
+    proto_library_prefix = "profiles",
+)
+
 gen_fhir_protos(
     name = "uscore",
     additional_proto_imports = [

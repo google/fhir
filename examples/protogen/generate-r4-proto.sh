@@ -72,12 +72,11 @@ $PROTO_GENERATOR \
 # generate profiles.proto
 # exclude familymemberhistory-genetic due to
 # https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_id=677&tracker_item_id=19239
-# TODO: enable once profiles are vetted
-# $PROTO_GENERATOR \
-#   $COMMON_FLAGS \
-#   --output_name profiles \
-#   --input_bundle $INPUT_PATH/Bundle-profiles-others.json \
-#   --exclude familymemberhistory-genetic
+$PROTO_GENERATOR \
+  $COMMON_FLAGS \
+  --output_name profiles \
+  --input_bundle $INPUT_PATH/Bundle-profiles-others.json \
+  --exclude familymemberhistory-genetic
 
 
 # generate extensions

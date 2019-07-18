@@ -1,10 +1,10 @@
-name: "LipidProfile"
+name: "DiagnosticReportGenetics"
 field {
   name: "id"
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Id"
+  type_name: ".google.fhir.r4.proto.Id"
   options {
     [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Meta"
+  type_name: ".google.fhir.r4.proto.Meta"
   options {
     [google.fhir.proto.field_description]: "Metadata about the resource"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Uri"
+  type_name: ".google.fhir.r4.proto.Uri"
   options {
     [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.LanguageCode"
+  type_name: ".google.fhir.r4.proto.Code"
   options {
     [google.fhir.proto.field_description]: "Language of the resource content"
   }
@@ -44,7 +44,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Narrative"
+  type_name: ".google.fhir.r4.proto.Narrative"
   options {
     [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
@@ -54,7 +54,7 @@ field {
   number: 6
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.ContainedResource"
+  type_name: ".google.fhir.r4.proto.ContainedResource"
   options {
     [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
@@ -64,9 +64,9 @@ field {
   number: 7
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.r4.proto.Extension"
   options {
-    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    [google.fhir.proto.field_description]: "Extension"
   }
 }
 field {
@@ -74,7 +74,7 @@ field {
   number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Extension"
+  type_name: ".google.fhir.r4.proto.Extension"
   options {
     [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
@@ -84,7 +84,7 @@ field {
   number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Identifier"
+  type_name: ".google.fhir.r4.proto.Identifier"
   options {
     [google.fhir.proto.field_description]: "Business identifier for report"
   }
@@ -94,15 +94,14 @@ field {
   number: 10
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
+  type_name: ".google.fhir.r4.proto.Reference"
   options {
     [google.fhir.proto.field_description]: "What was requested"
     [google.fhir.proto.valid_reference_type]: "CarePlan"
     [google.fhir.proto.valid_reference_type]: "ImmunizationRecommendation"
     [google.fhir.proto.valid_reference_type]: "MedicationRequest"
     [google.fhir.proto.valid_reference_type]: "NutritionOrder"
-    [google.fhir.proto.valid_reference_type]: "ProcedureRequest"
-    [google.fhir.proto.valid_reference_type]: "ReferralRequest"
+    [google.fhir.proto.valid_reference_type]: "ServiceRequest"
   }
 }
 field {
@@ -110,7 +109,7 @@ field {
   number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.DiagnosticReportStatusCode"
+  type_name: ".google.fhir.r4.proto.DiagnosticReportStatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "registered | partial | preliminary | final +"
@@ -119,9 +118,9 @@ field {
 field {
   name: "category"
   number: 12
-  label: LABEL_OPTIONAL
+  label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Service category"
   }
@@ -131,10 +130,10 @@ field {
   number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.proto.CodeableConcept"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "LOINC Code for Lipid Panel with LDL"
+    [google.fhir.proto.field_description]: "Name/Code for this diagnostic report"
   }
 }
 field {
@@ -142,7 +141,7 @@ field {
   number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
+  type_name: ".google.fhir.r4.proto.Reference"
   options {
     [google.fhir.proto.field_description]: "The subject of the report - usually, but not always, the patient"
     [google.fhir.proto.valid_reference_type]: "Patient"
@@ -152,15 +151,14 @@ field {
   }
 }
 field {
-  name: "context"
+  name: "encounter"
   number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
+  type_name: ".google.fhir.r4.proto.Reference"
   options {
     [google.fhir.proto.field_description]: "Health care event when test ordered"
     [google.fhir.proto.valid_reference_type]: "Encounter"
-    [google.fhir.proto.valid_reference_type]: "EpisodeOfCare"
   }
 }
 field {
@@ -168,7 +166,7 @@ field {
   number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.LipidProfile.Effective"
+  type_name: ".google.fhir.r4.proto.DiagnosticReportGenetics.EffectiveX"
   options {
     [google.fhir.proto.field_description]: "Clinically relevant time/time-period for report"
   }
@@ -178,9 +176,9 @@ field {
   number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Instant"
+  type_name: ".google.fhir.r4.proto.Instant"
   options {
-    [google.fhir.proto.field_description]: "DateTime this version was released"
+    [google.fhir.proto.field_description]: "DateTime this version was made"
   }
 }
 field {
@@ -188,17 +186,35 @@ field {
   number: 18
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.LipidProfile.Performer"
+  type_name: ".google.fhir.r4.proto.Reference"
   options {
-    [google.fhir.proto.field_description]: "Participants in producing the report"
+    [google.fhir.proto.field_description]: "Responsible Diagnostic Service"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.valid_reference_type]: "PractitionerRole"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.valid_reference_type]: "CareTeam"
+  }
+}
+field {
+  name: "results_interpreter"
+  number: 19
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Primary result interpreter"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.valid_reference_type]: "PractitionerRole"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.valid_reference_type]: "CareTeam"
   }
 }
 field {
   name: "specimen"
-  number: 19
+  number: 20
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
+  type_name: ".google.fhir.r4.proto.Reference"
   options {
     [google.fhir.proto.field_description]: "Specimens this report is based on"
     [google.fhir.proto.valid_reference_type]: "Specimen"
@@ -206,118 +222,123 @@ field {
 }
 field {
   name: "result"
-  number: 20
-  label: LABEL_OPTIONAL
+  number: 21
+  label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
+  type_name: ".google.fhir.r4.proto.Reference"
   options {
-    [google.fhir.proto.field_description]: "Observations - simple, or complex nested groups"
+    [google.fhir.proto.field_description]: "Observations"
     [google.fhir.proto.valid_reference_type]: "Observation"
   }
 }
 field {
   name: "imaging_study"
-  number: 21
-  label: LABEL_REPEATED
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
-  options {
-    [google.fhir.proto.field_description]: "Reference to full details of imaging associated with the diagnostic report"
-    [google.fhir.proto.valid_reference_type]: "ImagingStudy"
-    [google.fhir.proto.valid_reference_type]: "ImagingManifest"
-  }
-}
-field {
-  name: "image"
   number: 22
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.LipidProfile.Image"
+  type_name: ".google.fhir.r4.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Reference to full details of imaging associated with the diagnostic report"
+    [google.fhir.proto.valid_reference_type]: "ImagingStudy"
+  }
+}
+field {
+  name: "media"
+  number: 23
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.DiagnosticReportGenetics.Media"
   options {
     [google.fhir.proto.field_description]: "Key images associated with this report"
+    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
   name: "conclusion"
-  number: 23
+  number: 24
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.String"
+  type_name: ".google.fhir.r4.proto.String"
   options {
-    [google.fhir.proto.field_description]: "Clinical Interpretation of Lipid Panel"
+    [google.fhir.proto.field_description]: "Clinical conclusion (interpretation) of test results"
   }
 }
 field {
-  number: 24
+  number: 25
   options {
-    [google.fhir.proto.reserved_reason]: "DiagnosticReport.codedDiagnosis not present on profile."
+    [google.fhir.proto.reserved_reason]: "DiagnosticReport.conclusionCode not present on profile."
   }
 }
 field {
   name: "presented_form"
-  number: 25
+  number: 26
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Attachment"
+  type_name: ".google.fhir.r4.proto.Attachment"
   options {
     [google.fhir.proto.field_description]: "Entire report as issued"
   }
 }
 field {
-  name: "cholesterol"
-  number: 26
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
-  options {
-    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "Cholesterol Result"
-    [google.fhir.proto.valid_reference_type]: "Observation"
-  }
-}
-field {
-  name: "triglyceride"
+  name: "assessed_condition"
   number: 27
-  label: LABEL_OPTIONAL
+  label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
+  type_name: ".google.fhir.r4.proto.Reference"
   options {
-    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "Triglyceride Result"
-    [google.fhir.proto.valid_reference_type]: "Observation"
+    [google.fhir.proto.field_description]: "AssessedCondition"
+    [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition"
+    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
-  name: "h_d_l_cholesterol"
+  name: "family_member_history"
   number: 28
-  label: LABEL_OPTIONAL
+  label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
+  type_name: ".google.fhir.r4.proto.Reference"
   options {
-    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "HDL Cholesterol Result"
-    [google.fhir.proto.valid_reference_type]: "Observation"
+    [google.fhir.proto.field_description]: "FamilyHistory"
+    [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory"
+    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
-  name: "l_d_l_cholesterol"
+  name: "analysis"
   number: 29
-  label: LABEL_OPTIONAL
+  label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Reference"
+  type_name: ".google.fhir.r4.proto.DiagnosticReportAnalysis"
   options {
-    [google.fhir.proto.field_description]: "LDL Cholesterol result, if reported"
-    [google.fhir.proto.valid_reference_type]: "Observation"
+    [google.fhir.proto.field_description]: "Analysis"
+    [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis"
+    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
+  }
+}
+field {
+  name: "references"
+  number: 30
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.proto.DiagnosticReportReferences"
+  options {
+    [google.fhir.proto.field_description]: "References"
+    [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsReferences"
+    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 nested_type {
-  name: "Effective"
+  name: "EffectiveX"
   field {
     name: "date_time"
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.DateTime"
+    type_name: ".google.fhir.r4.proto.DateTime"
     oneof_index: 0
   }
   field {
@@ -325,26 +346,26 @@ nested_type {
     number: 2
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Period"
+    type_name: ".google.fhir.r4.proto.Period"
     oneof_index: 0
   }
   options {
     [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
-    name: "effective"
+    name: "choice"
   }
 }
 nested_type {
-  name: "Performer"
+  name: "Media"
   field {
     name: "id"
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
+    type_name: ".google.fhir.r4.proto.String"
     options {
-      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
   }
   field {
@@ -352,9 +373,9 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Extension"
+    type_name: ".google.fhir.r4.proto.Extension"
     options {
-      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
   }
   field {
@@ -362,65 +383,9 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Extension"
+    type_name: ".google.fhir.r4.proto.Extension"
     options {
-      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
-    }
-  }
-  field {
-    name: "role"
-    number: 4
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.CodeableConcept"
-    options {
-      [google.fhir.proto.field_description]: "Type of performer"
-    }
-  }
-  field {
-    name: "actor"
-    number: 5
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Reference"
-    options {
-      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-      [google.fhir.proto.field_description]: "Practitioner or Organization  participant"
-      [google.fhir.proto.valid_reference_type]: "Practitioner"
-      [google.fhir.proto.valid_reference_type]: "Organization"
-    }
-  }
-}
-nested_type {
-  name: "Image"
-  field {
-    name: "id"
-    number: 1
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
-    options {
-      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
-    }
-  }
-  field {
-    name: "extension"
-    number: 2
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Extension"
-    options {
-      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
-    }
-  }
-  field {
-    name: "modifier_extension"
-    number: 3
-    label: LABEL_REPEATED
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Extension"
-    options {
-      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
   }
   field {
@@ -428,7 +393,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.String"
+    type_name: ".google.fhir.r4.proto.String"
     options {
       [google.fhir.proto.field_description]: "Comment about the image (e.g. explanation)"
     }
@@ -438,7 +403,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Reference"
+    type_name: ".google.fhir.r4.proto.Reference"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Reference to the image source"
@@ -448,7 +413,7 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Example Lipid Profile.\nLipid Lab Report.\nSee http://hl7.org/fhir/StructureDefinition/lipidprofile"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for DiagnosticReport-Genetics.\nA Diagnostic report - a combination of request information, atomic results, images, interpretation, as well as formatted reports.\nSee http://hl7.org/fhir/StructureDefinition/diagnosticreport-genetics"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"
-  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/lipidprofile"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/diagnosticreport-genetics"
 }

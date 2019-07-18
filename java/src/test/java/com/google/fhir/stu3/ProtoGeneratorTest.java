@@ -1501,7 +1501,7 @@ public class ProtoGeneratorTest {
     }
   }
 
-  private static final int EXPECTED_R4_COUNT = 604;
+  private static final int EXPECTED_R4_COUNT = 647;
 
   /** Test generating R4 proto files. */
   @Test

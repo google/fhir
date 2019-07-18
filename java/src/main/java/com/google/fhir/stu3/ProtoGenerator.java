@@ -307,6 +307,12 @@ public class ProtoGenerator {
               "UsCoreCondition")
           .put(
               "http://hl7.org/fhir/us/core/StructureDefinition/us-core-direct", "UsCoreDirectEmail")
+          // https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_item_id=22531
+          .put("http://hl7.org/fhir/StructureDefinition/hdlcholesterol", "HdlCholesterol")
+          .put("http://hl7.org/fhir/StructureDefinition/ldlcholesterol", "LdlCholesterol")
+          .put("http://hl7.org/fhir/StructureDefinition/lipidprofile", "LipidProfile")
+          .put("http://hl7.org/fhir/StructureDefinition/cholesterol", "Cholesterol")
+          .put("http://hl7.org/fhir/StructureDefinition/triglyceride", "Triglyceride")
           .build();
 
   // Given a structure definition, gets the name of the top-level message that will be generated.
@@ -1079,9 +1085,6 @@ public class ProtoGenerator {
   /** Extract the type of a container field, possibly by reference. */
   private String getContainerType(ElementDefinition element, List<ElementDefinition> elementList) {
     String id = element.getId().getValue();
-    if (containerTypeCache.containsKey(id)) {
-      return containerTypeCache.get(id);
-    }
 
     if (element.hasContentReference()) {
       // Find the named element which was referenced. We'll use the type of that element.
@@ -1093,7 +1096,15 @@ public class ProtoGenerator {
         throw new IllegalArgumentException(
             "ContentReference does not reference a container: " + element.getContentReference());
       }
-      return addToContainerTypeCache(id, getContainerType(referencedElement, elementList));
+      return getContainerType(referencedElement, elementList);
+    }
+
+    // Check the container type cache for this element id.
+    // Note that we if a container type comes from a content reference in the above block,
+    // we don't cache this as a profile can "override" an element with a given id with a different
+    // content reference.
+    if (containerTypeCache.containsKey(id)) {
+      return containerTypeCache.get(id);
     }
 
     // The container type is the full type of the message that will be generated (minus package).
@@ -1721,7 +1732,7 @@ public class ProtoGenerator {
             && element.getType(0).getProfileCount() == 0);
   }
 
-  // Returns the QualifiedType (type + package) of a simple extension as a string.
+  // Returns the QualifiedType (type + package) of a simple extension.
   private QualifiedType getSimpleExtensionDefinitionType(StructureDefinition def) {
     if (!isExtensionProfile(def)) {
       throw new IllegalArgumentException(
@@ -1733,7 +1744,8 @@ public class ProtoGenerator {
       return getSimpleInternalExtensionType(element, elementList);
     }
     if (isChoiceTypeExtension(element, elementList)) {
-      return new QualifiedType(getTypeName(def) + ".Value", packageInfo.getProtoPackage());
+      String choiceField = useLegacyTypeNaming() ? ".Value" : ".ValueX";
+      return new QualifiedType(getTypeName(def) + choiceField, packageInfo.getProtoPackage());
     }
     throw new IllegalArgumentException(
         "StructureDefinition is not a simple extension: " + def.getId().getValue());

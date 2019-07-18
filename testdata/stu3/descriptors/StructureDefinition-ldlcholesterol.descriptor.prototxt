@@ -1,4 +1,4 @@
-name: "Ldlcholesterol"
+name: "LdlCholesterol"
 field {
   name: "id"
   number: 1
@@ -169,7 +169,7 @@ field {
   number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Ldlcholesterol.Effective"
+  type_name: ".google.fhir.stu3.proto.LdlCholesterol.Effective"
   options {
     [google.fhir.proto.field_description]: "Clinically relevant time/time-period for observation"
   }
@@ -203,7 +203,7 @@ field {
   number: 19
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Ldlcholesterol.Value"
+  type_name: ".google.fhir.stu3.proto.LdlCholesterol.Value"
   options {
     [google.fhir.proto.field_description]: "LDL Cholesterol value"
   }
@@ -286,7 +286,7 @@ field {
   number: 27
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Ldlcholesterol.ReferenceRange"
+  type_name: ".google.fhir.stu3.proto.LdlCholesterol.ReferenceRange"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Provides guide for interpretation"
@@ -304,7 +304,7 @@ field {
   number: 29
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.stu3.proto.Ldlcholesterol.Component"
+  type_name: ".google.fhir.stu3.proto.LdlCholesterol.Component"
   options {
     [google.fhir.proto.field_description]: "Component results"
   }
@@ -479,7 +479,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Ldlcholesterol.Component.Value"
+    type_name: ".google.fhir.stu3.proto.LdlCholesterol.Component.Value"
     options {
       [google.fhir.proto.field_description]: "Actual component result"
     }
@@ -509,7 +509,7 @@ nested_type {
     number: 8
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.stu3.proto.Ldlcholesterol.ReferenceRange"
+    type_name: ".google.fhir.stu3.proto.LdlCholesterol.ReferenceRange"
     options {
       [google.fhir.proto.field_description]: "Provides guide for interpretation of component result"
     }

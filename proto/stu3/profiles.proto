@@ -3061,7 +3061,7 @@ message FamilymemberhistoryGenetic {
 // Auto-generated from StructureDefinition for Example Lipid Profile.
 // HDL Cholesterol Result.
 // See http://hl7.org/fhir/StructureDefinition/hdlcholesterol
-message Hdlcholesterol {
+message HdlCholesterol {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Observation";
@@ -3979,7 +3979,7 @@ message Hlaresult {
 // Auto-generated from StructureDefinition for Example Lipid Profile.
 // LDL Cholesterol Result.
 // See http://hl7.org/fhir/StructureDefinition/ldlcholesterol
-message Ldlcholesterol {
+message LdlCholesterol {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Observation";
@@ -4198,7 +4198,7 @@ message Ldlcholesterol {
 // Auto-generated from StructureDefinition for Example Lipid Profile.
 // Lipid Lab Report.
 // See http://hl7.org/fhir/StructureDefinition/lipidprofile
-message Lipidprofile {
+message LipidProfile {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/DiagnosticReport";
