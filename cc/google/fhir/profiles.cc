@@ -175,6 +175,24 @@ StatusOr<bool> CheckCodingWithFixedCode(
             "Unable to parse Coding as CodingWithFixedCode.");
       }
       coding_with_fixed_system->DiscardUnknownFields();
+
+      std::vector<const FieldDescriptor*> set_fields;
+      coding_with_fixed_system->GetReflection()->ListFields(
+          *coding_with_fixed_system, &set_fields);
+      if (set_fields.empty()) {
+        // If there's no information other than the fixed code and system,
+        // we don't need to add a message.
+        const Reflection* profiled_codeable_concept_ref =
+            profiled_codeable_concept->GetReflection();
+
+        if (field->is_repeated()) {
+          profiled_codeable_concept_ref->RemoveLast(profiled_codeable_concept,
+                                                    field);
+        } else {
+          profiled_codeable_concept_ref->ClearField(profiled_codeable_concept,
+                                                    field);
+        }
+      }
       return true;  // was copied into new field
     }
   }
@@ -537,8 +555,7 @@ Status UnsliceCodingsWithinCodeableConcept(
           new_coding->mutable_system()->set_value(fixed_system_from_message);
         }
       }
-      if (field_size == 0 &&
-          IsMessageType<CodingWithFixedCode>(profiled_field->message_type())) {
+      if (field_size == 0 && !GetInlinedCodingCode(profiled_field).empty()) {
         // This is a Fixed-Code field with no additional information provided.
         // Just add the Code and System.
         CodingLike* new_coding = AddRawCoding<CodingLike>(target_concept);

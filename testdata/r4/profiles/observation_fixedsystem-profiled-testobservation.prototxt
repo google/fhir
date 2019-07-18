@@ -71,7 +71,6 @@ code {
       value: "BDisplay"
     }
   },
-  sys_c {},
   sys_d {
     display {
       value: "display d"
