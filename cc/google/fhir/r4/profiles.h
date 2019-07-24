@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef GOOGLE_FHIR_STU3_PROFILES_H_
-#define GOOGLE_FHIR_STU3_PROFILES_H_
+#ifndef GOOGLE_FHIR_R4_PROFILES_H_
+#define GOOGLE_FHIR_R4_PROFILES_H_
 
 #include "google/protobuf/message.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "tensorflow/core/lib/core/errors.h"
-
-// TODO: move to an stu3 directory
 
 namespace google {
 namespace fhir {
@@ -45,10 +43,14 @@ using std::string;
 // original format (e.g., extension).
 Status ConvertToProfileStu3(const ::google::protobuf::Message& source,
                             ::google::protobuf::Message* target);
+Status ConvertToProfileR4(const ::google::protobuf::Message& source,
+                          ::google::protobuf::Message* target);
 
 // Identical to ConvertToProfile, except does not run the validation step.
 Status ConvertToProfileLenientStu3(const ::google::protobuf::Message& source,
                                    ::google::protobuf::Message* target);
+Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
+                                 ::google::protobuf::Message* target);
 
 // Given a Message, returns a copy with all data is stored in typed fields where
 // possible.
@@ -62,7 +64,14 @@ StatusOr<T> NormalizeStu3(const T& message) {
   return normalized;
 }
 
+template <typename T>
+StatusOr<T> NormalizeR4(const T& message) {
+  T normalized;
+  FHIR_RETURN_IF_ERROR(ConvertToProfileLenientR4(message, &normalized));
+  return normalized;
+}
+
 }  // namespace fhir
 }  // namespace google
 
-#endif  // GOOGLE_FHIR_STU3_PROFILES_H_
+#endif  // GOOGLE_FHIR_R4_PROFILES_H_
