@@ -17,6 +17,7 @@
 #include <unordered_map>
 
 #include "google/protobuf/descriptor.h"
+#include "google/protobuf/message.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/codes.h"
@@ -273,7 +274,7 @@ Status ValueToMessageInternal(const ExtensionLike& extension, Message* message,
       field->message_type()->full_name()) {
     return InvalidArgument("Missing expected value of type ",
                            field->message_type()->full_name(), " in extension ",
-                           extension.DebugString());
+                           extension.GetDescriptor()->full_name());
   }
   const auto& value = extension.value();
   const Reflection* value_reflection = value.GetReflection();
@@ -307,7 +308,7 @@ const std::vector<const FieldDescriptor*> FindValueFields(
 }
 
 Status ValidateExtension(const Descriptor* descriptor) {
-  if (!IsProfileOf<Extension>(descriptor)) {
+  if (!IsProfileOf<r4::proto::Extension>(descriptor)) {
     return InvalidArgument(descriptor->full_name(),
                            " is not a FHIR extension type");
   }
@@ -457,19 +458,19 @@ Status ClearTypedExtensions(const Descriptor* descriptor, Message* message) {
   const Reflection* reflection = message->GetReflection();
   const FieldDescriptor* field =
       message->GetDescriptor()->FindFieldByName("extension");
-  std::vector<Extension> other_extensions;
-  for (int i = 0; i < reflection->FieldSize(*message, field); i++) {
-    Extension extension =
-        dynamic_cast<const ::google::fhir::stu3::proto::Extension&>(
-            reflection->GetRepeatedMessage(*message, field, i));
-    if (extension.url().value() != url) {
-      other_extensions.push_back(extension);
+  google::protobuf::RepeatedPtrField<Message>* repeated_ptr_field =
+      reflection->MutableRepeatedPtrField<Message>(message, field);
+  for (auto iter = repeated_ptr_field->begin();
+       iter != repeated_ptr_field->end();) {
+    const Message& extension = *iter;
+    string scratch;
+    const string& url_value = GetExtensionUrl(extension, &scratch);
+
+    if (url_value == url) {
+      iter = repeated_ptr_field->erase(iter);
+    } else {
+      iter++;
     }
-  }
-  reflection->ClearField(message, field);
-  for (const ::google::fhir::stu3::proto::Extension& extension :
-       other_extensions) {
-    message->GetReflection()->AddMessage(message, field)->CopyFrom(extension);
   }
   return Status::OK();
 }
@@ -480,6 +481,24 @@ string GetInlinedExtensionUrl(const FieldDescriptor* field) {
              ? field->options().GetExtension(
                    ::google::fhir::proto::fhir_inlined_extension_url)
              : field->json_name();
+}
+
+const string& GetExtensionUrl(const google::protobuf::Message& extension,
+                              string* scratch) {
+  const Message& url_message = extension.GetReflection()->GetMessage(
+      extension, extension.GetDescriptor()->FindFieldByName("url"));
+  return url_message.GetReflection()->GetStringReference(
+      url_message, url_message.GetDescriptor()->FindFieldByName("value"),
+      scratch);
+}
+
+const string& GetExtensionSystem(const google::protobuf::Message& extension,
+                                 string* scratch) {
+  const Message& url_message = extension.GetReflection()->GetMessage(
+      extension, extension.GetDescriptor()->FindFieldByName("system"));
+  return url_message.GetReflection()->GetStringReference(
+      url_message, url_message.GetDescriptor()->FindFieldByName("value"),
+      scratch);
 }
 
 }  // namespace fhir

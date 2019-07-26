@@ -60,7 +60,7 @@ void TestParseWithFilepaths(const string& proto_path, const string& json_path) {
   ::google::protobuf::util::MessageDifferencer differencer;
   string differences;
   differencer.ReportDifferencesToString(&differences);
-  ASSERT_TRUE(differencer.Compare(from_json, from_disk)) << differences;
+  ASSERT_TRUE(differencer.Compare(from_disk, from_json)) << differences;
 }
 
 template <typename R>

@@ -63,13 +63,15 @@
   typename std::remove_const<typename std::remove_reference<decltype( \
       std::declval<t>().id().extension(0).value().d())>::type>::type
 
+// Given a FHIR Reference type, gets the corresponding ReferenceId type.
+#define REFERENCE_ID_TYPE(r)                                          \
+  typename std::remove_const<typename std::remove_reference<decltype( \
+      std::declval<r>().patient_id())>::type>::type
+
 namespace google {
 namespace fhir {
 
 using std::string;
-using ::google::fhir::stu3::proto::CodingWithFixedCode;
-using ::google::fhir::stu3::proto::CodingWithFixedSystem;
-using ::google::fhir::stu3::proto::Extension;
 using ::google::fhir::stu3::proto::Reference;
 
 // Extract first code value with a given system.
@@ -123,9 +125,24 @@ stu3::proto::Meta* MutableMetadataFromResource(R* resource) {
   return resource->mutable_meta();
 }
 
-StatusOr<Reference> ReferenceStringToProto(const string& input);
+// Splits relative references into their components, for example, "Patient/ABCD"
+// will result in the patientId field getting the value "ABCD".
+Status SplitIfRelativeReference(::google::protobuf::Message* reference);
+
+Status ReferenceStringToProto(const string& input,
+                              ::google::protobuf::Message* reference);
+
+// TODO: Split these into separate files.
+StatusOr<stu3::proto::Reference> ReferenceStringToProtoStu3(
+    const string& input);
+StatusOr<r4::proto::Reference> ReferenceStringToProtoR4(const string& input);
+
 // Return the full string representation of a reference.
-StatusOr<string> ReferenceProtoToString(const Reference& reference);
+StatusOr<string> ReferenceProtoToString(
+    const stu3::proto::Reference& reference);
+
+// Return the full string representation of a reference.
+StatusOr<string> ReferenceProtoToString(const r4::proto::Reference& reference);
 
 // Builds an absl::Time from a time-like fhir Element.
 // Must have a value_us field.
@@ -235,10 +252,19 @@ StatusOr<const PatientLike*> GetPatient(const BundleLike& bundle) {
 // Returns a reference, e.g. "Encounter/1234" for a FHIR resource.
 string GetReferenceToResource(const ::google::protobuf::Message& message);
 
+// Given a resource and a reference, populates the correct typed reference field
+// with a reference to that resource. If the message is not a FHIR
+// resource, an error will be returned.
+Status PopulatedTypedReferenceToResource(const ::google::protobuf::Message& resource,
+                                         stu3::proto::Reference* reference);
+
 // Returns a typed Reference for a FHIR resource.  If the message is not a FHIR
 // resource, an error will be returned.
-StatusOr<Reference> GetTypedReferenceToResource(
-    const ::google::protobuf::Message& message);
+// TODO: Split these into separate files.
+StatusOr<stu3::proto::Reference> GetTypedReferenceToResourceStu3(
+    const ::google::protobuf::Message& resource);
+StatusOr<r4::proto::Reference> GetTypedReferenceToResourceR4(
+    const ::google::protobuf::Message& resource);
 
 // Extract the value of a Decimal field as a double.
 Status GetDecimalValue(const stu3::proto::Decimal& decimal, double* value);
@@ -261,8 +287,9 @@ Status GetResourceFromBundleEntry(const EntryLike& entry,
 
 // Extracts and returns the FHIR extension list from the resource field in
 // a bundle entry.
-template <typename EntryLike>
-StatusOr<const ::google::protobuf::RepeatedFieldRef<Extension>>
+template <typename EntryLike,
+          typename ExtensionLike = EXTENSION_TYPE(EntryLike)>
+StatusOr<const ::google::protobuf::RepeatedFieldRef<ExtensionLike>>
 GetResourceExtensionsFromBundleEntry(const EntryLike& entry) {
   const ::google::protobuf::Message* resource;
   TF_RETURN_IF_ERROR(GetResourceFromBundleEntry(entry, &resource));
@@ -273,8 +300,13 @@ GetResourceExtensionsFromBundleEntry(const EntryLike& entry) {
   if (field == nullptr) {
     return ::tensorflow::errors::NotFound("No extension field.");
   }
-  return ref->GetRepeatedFieldRef<stu3::proto::Extension>(*resource, field);
+  return ref->GetRepeatedFieldRef<ExtensionLike>(*resource, field);
 }
+
+Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
+                               const string& value);
+StatusOr<string> GetPrimitiveStringValue(const ::google::protobuf::Message& primitive,
+                                         string* scratch);
 
 }  // namespace fhir
 }  // namespace google

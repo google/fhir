@@ -43,8 +43,8 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/google_extensions.pb.h"
+#include "proto/r4/datatypes.pb.h"
+#include "proto/r4/google_extensions.pb.h"
 #include "include/json/json.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
@@ -60,26 +60,26 @@ using ::google::fhir::GetRepeatedFromExtension;
 using ::google::fhir::HasValueset;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
-using ::google::fhir::stu3::google::Base64BinarySeparatorStride;
-using ::google::fhir::stu3::google::PrimitiveHasNoValue;
-using ::google::fhir::stu3::proto::Base64Binary;
-using ::google::fhir::stu3::proto::Boolean;
-using ::google::fhir::stu3::proto::Code;
-using ::google::fhir::stu3::proto::Date;
-using ::google::fhir::stu3::proto::DateTime;
-using ::google::fhir::stu3::proto::Decimal;
-using ::google::fhir::stu3::proto::Extension;
-using ::google::fhir::stu3::proto::Id;
-using ::google::fhir::stu3::proto::Instant;
-using ::google::fhir::stu3::proto::Integer;
-using ::google::fhir::stu3::proto::Markdown;
-using ::google::fhir::stu3::proto::Oid;
-using ::google::fhir::stu3::proto::PositiveInt;
-using ::google::fhir::stu3::proto::String;
-using ::google::fhir::stu3::proto::Time;
-using ::google::fhir::stu3::proto::UnsignedInt;
-using ::google::fhir::stu3::proto::Uri;
-using ::google::fhir::stu3::proto::Xhtml;
+using ::google::fhir::r4::google::Base64BinarySeparatorStride;
+using ::google::fhir::r4::google::PrimitiveHasNoValue;
+using ::google::fhir::r4::proto::Base64Binary;
+using ::google::fhir::r4::proto::Boolean;
+using ::google::fhir::r4::proto::Code;
+using ::google::fhir::r4::proto::Date;
+using ::google::fhir::r4::proto::DateTime;
+using ::google::fhir::r4::proto::Decimal;
+using ::google::fhir::r4::proto::Extension;
+using ::google::fhir::r4::proto::Id;
+using ::google::fhir::r4::proto::Instant;
+using ::google::fhir::r4::proto::Integer;
+using ::google::fhir::r4::proto::Markdown;
+using ::google::fhir::r4::proto::Oid;
+using ::google::fhir::r4::proto::PositiveInt;
+using ::google::fhir::r4::proto::String;
+using ::google::fhir::r4::proto::Time;
+using ::google::fhir::r4::proto::UnsignedInt;
+using ::google::fhir::r4::proto::Uri;
+using ::google::fhir::r4::proto::Xhtml;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::EnumDescriptor;
 using ::google::protobuf::EnumValueDescriptor;
@@ -95,6 +95,36 @@ StatusOr<const Extension*> BuildHasNoValueExtension() {
   Extension* extension = new Extension;
   FHIR_RETURN_IF_ERROR(ConvertToExtension(msg, extension));
   return extension;
+}
+
+StatusOr<bool> HasPrimitiveHasNoValue(const Message& message) {
+  const FieldDescriptor* field =
+      message.GetDescriptor()->FindFieldByName("extension");
+  std::vector<const Message*> no_value_extensions;
+  ForEachMessage<Message>(message, field, [&](const Message& extension) {
+    string scratch;
+    const string& url_value = GetExtensionUrl(extension, &scratch);
+    if (url_value ==
+        GetStructureDefinitionUrl(PrimitiveHasNoValue::descriptor())) {
+      no_value_extensions.push_back(&extension);
+    }
+  });
+  if (no_value_extensions.size() > 1) {
+    return InvalidArgument(
+        "Message has more than one PrimitiveHasNoValue extension: ",
+        message.GetDescriptor()->full_name());
+  }
+  if (no_value_extensions.empty()) {
+    return false;
+  }
+  const Message& no_value_extension = *no_value_extensions.front();
+  const Message& value_msg = no_value_extension.GetReflection()->GetMessage(
+      no_value_extension,
+      no_value_extension.GetDescriptor()->FindFieldByName("value"));
+  const Message& boolean_msg = value_msg.GetReflection()->GetMessage(
+      value_msg, value_msg.GetDescriptor()->FindFieldByName("boolean"));
+  return boolean_msg.GetReflection()->GetBool(
+      boolean_msg, boolean_msg.GetDescriptor()->FindFieldByName("value"));
 }
 
 static const std::vector<const Descriptor*>* const kConversionOnlyExtensions =
@@ -113,13 +143,7 @@ class PrimitiveWrapper {
   virtual bool HasElement() const = 0;
   virtual StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement() const = 0;
 
-  // This is used to validate arbitrary protos - not necessarily the one being
-  // wrapped. This allows validation logic to be shared with things besides
-  // JSON parsing/printing with minimal memory and code overhead.
-  // TODO: Refactor this class to not do a copy when wrapping a
-  // proto.  Then, we can make this operate on the wrapped proto without doing
-  // extra copies.
-  virtual Status ValidateProto(const Message& message) const = 0;
+  virtual Status ValidateProto() const = 0;
 
   StatusOr<string> ToValueString() const {
     static const char* kNullString = "null";
@@ -138,25 +162,35 @@ template <typename T>
 class SpecificWrapper : public PrimitiveWrapper {
  public:
   Status MergeInto(Message* target) const override {
-    if (T::descriptor()->full_name() != target->GetDescriptor()->full_name()) {
-      return InvalidArgument(
-          "Type mismatch in SpecificWrapper#MergeInto: ", "Attempted to merge ",
-          T::descriptor()->full_name(), " into ",
-          target->GetDescriptor()->full_name());
+    if (T::descriptor()->full_name() == target->GetDescriptor()->full_name()) {
+      target->MergeFrom(*wrapped_);
+      return Status::OK();
     }
-    target->MergeFrom(*wrapped_);
-    return Status::OK();
+    if (IsFhirType<T>(*target)) {
+      // Same FHIR type, different version.
+      return PerformFieldWiseCopy(*wrapped_, target);
+    }
+    return InvalidArgument("Type mismatch in SpecificWrapper#MergeInto: ",
+                           "Attempted to merge ", T::descriptor()->full_name(),
+                           " into ", target->GetDescriptor()->full_name());
   }
 
   Status Wrap(const ::google::protobuf::Message& message) override {
-    if (T::descriptor()->full_name() != message.GetDescriptor()->full_name()) {
-      return InvalidArgument(
-          "Type mismatch in SpecificWrapper#Wrap: ", "Attempted to wrap ",
-          message.GetDescriptor()->full_name(), " with wrapper for ",
-          T::descriptor()->full_name());
+    if (IsMessageType<T>(message)) {
+      wrapped_ = dynamic_cast<const T*>(&message);
+      return Status::OK();
     }
-    wrapped_ = dynamic_cast<const T*>(&message);
-    return Status::OK();
+    if (IsFhirType<T>(message)) {
+      // Same FHIR type, different version.
+      std::unique_ptr<T> wrapped = absl::make_unique<T>();
+      FHIR_RETURN_IF_ERROR(PerformFieldWiseCopy(message, wrapped.get()));
+      this->WrapAndManage(std::move(wrapped));
+      return Status::OK();
+    }
+    return InvalidArgument(
+        "Type mismatch in SpecificWrapper#Wrap: Attempted to wrap ",
+        message.GetDescriptor()->full_name(), " with wrapper for ",
+        T::descriptor()->full_name());
   }
 
   const T* GetWrapped() const { return wrapped_; }
@@ -228,32 +262,15 @@ class SpecificWrapper : public PrimitiveWrapper {
     return absl::WrapUnique(copy);
   }
 
-  Status ValidateProto(const Message& message) const override {
-    if (message.GetDescriptor()->full_name() != T::descriptor()->full_name()) {
-      return InvalidArgument("Error: Mismatch validating message of type ",
-                             message.GetDescriptor()->full_name(), " against ",
-                             T::descriptor()->full_name(),
-                             ".  This indicates an error in validation, rather "
-                             "than a problem with data.");
-    }
-    const T& typed = dynamic_cast<const T&>(message);
-
-    std::vector<PrimitiveHasNoValue> no_value_extensions;
-    FHIR_RETURN_IF_ERROR(
-        GetRepeatedFromExtension(typed.extension(), &no_value_extensions));
-    if (no_value_extensions.size() > 1) {
-      return FailedPrecondition(
-          T::descriptor()->full_name(),
-          " has multiple PrimitiveHasNoValue extensions.");
-    }
-    const bool has_no_value_extension =
-        no_value_extensions.size() == 1 &&
-        no_value_extensions.at(0).value_boolean().value();
+  Status ValidateProto() const {
+    FHIR_ASSIGN_OR_RETURN(const bool has_no_value_extension,
+                          HasPrimitiveHasNoValue(*GetWrapped()));
+    const T& typed = dynamic_cast<const T&>(*GetWrapped());
     if (typed.extension_size() == 1 && has_no_value_extension) {
       return FailedPrecondition(T::descriptor()->full_name(),
                                 " must have either extensions or value.");
     }
-    return ValidateTypeSpecific(typed, has_no_value_extension);
+    return ValidateTypeSpecific(has_no_value_extension);
   }
 
  protected:
@@ -273,7 +290,7 @@ class SpecificWrapper : public PrimitiveWrapper {
   }
 
   virtual Status ValidateTypeSpecific(
-      const T& message, const bool has_no_value_extension) const = 0;
+      const bool has_no_value_extension) const = 0;
 
   static Status ValidateString(const string& input) {
     static const RE2* regex_pattern = [] {
@@ -305,7 +322,7 @@ Status SpecificWrapper<Xhtml>::InitializeNull() {
 
 // Xhtml can't have extensions, it's always valid.
 template <>
-Status SpecificWrapper<Xhtml>::ValidateProto(const Message& message) const {
+Status SpecificWrapper<Xhtml>::ValidateProto() const {
   return Status::OK();
 }
 
@@ -341,15 +358,16 @@ class StringTypeWrapper : public StringInputWrapper<T> {
   }
 
   Status ValidateTypeSpecific(
-      const T& message, const bool has_no_value_extension) const override {
+      const bool has_no_value_extension) const override {
     if (has_no_value_extension) {
-      return message.value().empty()
+      return this->GetWrapped()->value().empty()
                  ? Status::OK()
                  : FailedPrecondition(T::descriptor()->full_name(),
                                       " has both a value, and a "
                                       "PrimitiveHasNoValueExtension.");
     }
-    Status string_validation = this->ValidateString(message.value());
+    Status string_validation =
+        this->ValidateString(this->GetWrapped()->value());
     return string_validation.ok()
                ? Status::OK()
                : FailedPrecondition(string_validation.error_message());
@@ -412,27 +430,28 @@ class TimeTypeWrapper : public SpecificWrapper<T> {
   }
 
   Status ValidateTypeSpecific(
-      const T& message, const bool has_no_value_extension) const override {
+      const bool has_no_value_extension) const override {
+    const T* wrapped = this->GetWrapped();
     if (has_no_value_extension) {
-      if (message.value_us() != 0) {
+      if (wrapped->value_us() != 0) {
         return FailedPrecondition(
             T::descriptor()->full_name(),
             " has PrimitiveNoValueExtension but has a value.");
       }
-      if (message.precision() != T::PRECISION_UNSPECIFIED) {
+      if (wrapped->precision() != T::PRECISION_UNSPECIFIED) {
         return FailedPrecondition(
             T::descriptor()->full_name(),
             " has PrimitiveNoValueExtension but has a specified precision.");
       }
-      if (!message.timezone().empty()) {
+      if (!wrapped->timezone().empty()) {
         return FailedPrecondition(
             T::descriptor()->full_name(),
             " has PrimitiveNoValueExtension but has a specified timezone.");
       }
-    } else if (message.precision() == T::PRECISION_UNSPECIFIED) {
+    } else if (wrapped->precision() == T::PRECISION_UNSPECIFIED) {
       return FailedPrecondition(T::descriptor()->full_name(),
                                 " is missing precision.");
-    } else if (message.timezone().empty()) {
+    } else if (wrapped->timezone().empty()) {
       return FailedPrecondition(T::descriptor()->full_name(),
                                 " is missing TimeZone.");
     }
@@ -597,78 +616,37 @@ class IntegerTypeWrapper : public SpecificWrapper<T> {
   }
 
   Status ValidateTypeSpecific(
-      const T& message, const bool has_no_value_extension) const override {
+      const bool has_no_value_extension) const override {
     if (has_no_value_extension) {
-      if (message.value() != 0) {
+      if (this->GetWrapped()->value() != 0) {
         return FailedPrecondition(
             T::descriptor()->full_name(),
             " has both a value, and a PrimitiveHasNoValueExtension.");
       }
       return Status::OK();
     }
-    Status int_validation = this->ValidateInteger(message.value());
+    Status int_validation = this->ValidateInteger(this->GetWrapped()->value());
     return int_validation.ok()
                ? Status::OK()
                : FailedPrecondition(int_validation.error_message());
   }
 };
 
-Status ValidateCodelike(const Message& message) {
-  const Descriptor* descriptor = message.GetDescriptor();
-  const Reflection* reflection = message.GetReflection();
-  const FieldDescriptor* value_field = descriptor->FindFieldByName("value");
-  const FieldDescriptor* extension_field =
-      descriptor->FindFieldByName("extension");
-
-  std::vector<PrimitiveHasNoValue> no_value_extensions;
-  const auto& extensions =
-      reflection->GetRepeatedFieldRef<Extension>(message, extension_field);
-  FHIR_RETURN_IF_ERROR(
-      GetRepeatedFromExtension(extensions, &no_value_extensions));
-  if (no_value_extensions.size() > 1) {
-    return FailedPrecondition(descriptor->full_name(),
-                              " has multiple PrimitiveHasNoValue extensions.");
-  }
-  const bool has_no_value_extension =
-      no_value_extensions.size() == 1 &&
-      no_value_extensions.at(0).value_boolean().value();
-  if (extensions.size() == 1 && has_no_value_extension) {
-    return FailedPrecondition(descriptor->full_name(),
-                              " must have either extensions or value.");
-  }
-  bool has_value = false;
-  switch (value_field->cpp_type()) {
-    case google::protobuf::FieldDescriptor::CPPTYPE_ENUM:
-      has_value = reflection->GetEnumValue(message, value_field) != 0;
-      break;
-    case google::protobuf::FieldDescriptor::CPPTYPE_STRING: {
-      string str;
-      has_value =
-          !reflection->GetStringReference(message, value_field, &str).empty();
-      break;
-    }
-    default:
-      return FailedPrecondition(
-          descriptor->full_name(),
-          " should have a value field of type ENUM or STRING.");
-  }
-
-  if (has_no_value_extension && has_value) {
-    return FailedPrecondition(
-        descriptor->full_name(),
-        " has both PrimitiveHasNoValue extension and a value.");
-  }
-  if (!has_no_value_extension && !has_value) {
-    return FailedPrecondition(
-        descriptor->full_name(),
-        " has no value, and no PrimitiveHasNoValue extension.");
-  }
-  return Status::OK();
-}
-
 class CodeWrapper : public StringTypeWrapper<Code> {
  public:
   Status Wrap(const ::google::protobuf::Message& codelike) override {
+    if (IsMessageType<Code>(codelike)) {
+      wrapped_ = dynamic_cast<const Code*>(&codelike);
+      return Status::OK();
+    }
+    if (IsFhirType<Code>(codelike)) {
+      // Same FHIR type, different version
+      std::unique_ptr<Code> wrapped = absl::make_unique<Code>();
+      FHIR_RETURN_IF_ERROR(PerformFieldWiseCopy(codelike, wrapped.get()));
+      this->WrapAndManage(std::move(wrapped));
+      return Status::OK();
+    }
+    // We're wrapping a typed code.  Convert to a generic code.
     std::unique_ptr<Code> wrapped = absl::make_unique<Code>();
     FHIR_RETURN_IF_ERROR(ConvertToGenericCode(codelike, wrapped.get()));
     this->WrapAndManage(std::move(wrapped));
@@ -676,15 +654,72 @@ class CodeWrapper : public StringTypeWrapper<Code> {
   }
 
   Status MergeInto(Message* target) const override {
+    if (!IsMessageType<Code>(*target) && IsFhirType<Code>(*target)) {
+      // Wrapped and target both FHIR Codes, but different versions.
+      // Just do serialize->deserialize
+      if (target->ParseFromString(this->GetWrapped()->SerializeAsString())) {
+        return Status::OK();
+      }
+      return InvalidArgument("Failed Merging CodeWrapper: from ",
+                             Code::descriptor()->full_name(), " into ",
+                             target->GetDescriptor()->full_name());
+    }
     return ConvertToTypedCode(*this->GetWrapped(), target);
   }
 
-  Status ValidateProto(const Message& message) const override {
-    if (IsMessageType<Code>(message)) {
-      return SpecificWrapper::ValidateProto(message);
+  Status ValidateProto() const override {
+    if (IsMessageType<Code>(*this->GetWrapped())) {
+      return SpecificWrapper::ValidateProto();
     } else {
-      return ValidateCodelike(message);
+      return ValidateCodelike();
     }
+  }
+
+ private:
+  Status ValidateCodelike() const {
+    const Descriptor* descriptor = GetWrapped()->GetDescriptor();
+    const Reflection* reflection = GetWrapped()->GetReflection();
+    const FieldDescriptor* value_field = descriptor->FindFieldByName("value");
+
+    FHIR_ASSIGN_OR_RETURN(const bool has_no_value_extension,
+                          HasPrimitiveHasNoValue(*GetWrapped()));
+    bool has_value = false;
+    switch (value_field->cpp_type()) {
+      case google::protobuf::FieldDescriptor::CPPTYPE_ENUM:
+        has_value = reflection->GetEnumValue(*GetWrapped(), value_field) != 0;
+        break;
+      case google::protobuf::FieldDescriptor::CPPTYPE_STRING: {
+        string str;
+        has_value =
+            !reflection->GetStringReference(*GetWrapped(), value_field, &str)
+                 .empty();
+        break;
+      }
+      default:
+        return FailedPrecondition(
+            descriptor->full_name(),
+            " should have a value field of type ENUM or STRING.");
+    }
+
+    if (has_no_value_extension && has_value) {
+      return FailedPrecondition(
+          descriptor->full_name(),
+          " has both PrimitiveHasNoValue extension and a value.");
+    }
+    if (!has_no_value_extension && !has_value) {
+      return FailedPrecondition(
+          descriptor->full_name(),
+          " has no value, and no PrimitiveHasNoValue extension.");
+    }
+    if (has_no_value_extension &&
+        reflection->FieldSize(*GetWrapped(),
+                              descriptor->FindFieldByName("extension")) == 1) {
+      // The only extension is the "no value" extension.
+      return FailedPrecondition(
+          descriptor->full_name(), " must have either extensions or value",
+          " (not counting the PrimitiveHasNoValue", " extension).");
+    }
+    return Status::OK();
   }
 };
 
@@ -719,15 +754,17 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64Binary> {
 
  protected:
   Status ValidateTypeSpecific(
-      const Base64Binary& message,
       const bool has_no_value_extension) const override {
     if (has_no_value_extension) {
-      return message.value().empty() ? Status::OK()
-                                     : FailedPrecondition(
-                                           "Base64Binary has both a value, and "
-                                           "a PrimitiveHasNoValueExtension.");
+      return this->GetWrapped()->value().empty()
+                 ? Status::OK()
+                 : FailedPrecondition(
+                       "Base64Binary has both a value, and "
+                       "a PrimitiveHasNoValueExtension.");
     }
-    Status string_validation = this->ValidateString(message.value());
+    FHIR_ASSIGN_OR_RETURN(const string& as_string, ToValueString());
+    Status string_validation =
+        this->ValidateString(as_string.substr(1, as_string.length() - 2));
     return string_validation.ok()
                ? Status::OK()
                : FailedPrecondition(string_validation.error_message());
@@ -764,9 +801,8 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64Binary> {
 class BooleanWrapper : public SpecificWrapper<Boolean> {
  protected:
   Status ValidateTypeSpecific(
-      const Boolean& message,
       const bool has_no_value_extension) const override {
-    if (has_no_value_extension && message.value()) {
+    if (has_no_value_extension && this->GetWrapped()->value()) {
       return FailedPrecondition(
           "Boolean has both a value, and a PrimitiveHasNoValueExtension.");
     }
@@ -811,15 +847,16 @@ class DecimalWrapper : public StringInputWrapper<Decimal> {
 
  protected:
   Status ValidateTypeSpecific(
-      const Decimal& message,
       const bool has_no_value_extension) const override {
     if (has_no_value_extension) {
-      return message.value().empty() ? Status::OK()
-                                     : FailedPrecondition(
-                                           "Decimal has both a value, and a "
-                                           "PrimitiveHasNoValueExtension.");
+      return this->GetWrapped()->value().empty()
+                 ? Status::OK()
+                 : FailedPrecondition(
+                       "Decimal has both a value, and a "
+                       "PrimitiveHasNoValueExtension.");
     }
-    Status string_validation = this->ValidateString(message.value());
+    Status string_validation =
+        this->ValidateString(this->GetWrapped()->value());
     return string_validation.ok()
                ? Status::OK()
                : FailedPrecondition(string_validation.error_message());
@@ -893,22 +930,23 @@ class TimeWrapper : public StringInputWrapper<Time> {
 
  protected:
   Status ValidateTypeSpecific(
-      const Time& message, const bool has_no_value_extension) const override {
+      const bool has_no_value_extension) const override {
+    const Time* wrapped = this->GetWrapped();
     if (has_no_value_extension) {
-      if (message.value_us() != 0) {
+      if (wrapped->value_us() != 0) {
         return FailedPrecondition(
             "Time has PrimitiveNoValueExtension but has a value.");
       }
-      if (message.precision() != Time::PRECISION_UNSPECIFIED) {
+      if (wrapped->precision() != Time::PRECISION_UNSPECIFIED) {
         return FailedPrecondition(
             "Time has PrimitiveNoValueExtension but has a specified "
             "precision.");
       }
       return Status::OK();
-    } else if (message.precision() == Time::PRECISION_UNSPECIFIED) {
+    } else if (wrapped->precision() == Time::PRECISION_UNSPECIFIED) {
       return FailedPrecondition("Time is missing precision.");
     }
-    if (message.value_us() >= DAY_IN_US) {
+    if (wrapped->value_us() >= DAY_IN_US) {
       return FailedPrecondition(
           "Time has value out of range: must be less than a day in "
           "microseconds.");
@@ -1009,8 +1047,8 @@ StatusOr<std::unique_ptr<PrimitiveWrapper>> GetWrapper(
 
 }  // namespace
 
-const Extension* const GetPrimitiveHasNoValueExtension() {
-  static const Extension* const extension =
+const r4::proto::Extension* const GetPrimitiveHasNoValueExtension() {
+  static const r4::proto::Extension* const extension =
       BuildHasNoValueExtension().ValueOrDie();
   return extension;
 }
@@ -1053,7 +1091,8 @@ Status ValidatePrimitive(const ::google::protobuf::Message& primitive) {
   // wrap directly here.
   FHIR_ASSIGN_OR_RETURN(std::unique_ptr<PrimitiveWrapper> wrapper,
                         GetWrapper(descriptor));
-  return wrapper->ValidateProto(primitive);
+  FHIR_RETURN_IF_ERROR(wrapper->Wrap(primitive));
+  return wrapper->ValidateProto();
 }
 
 }  // namespace fhir

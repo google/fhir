@@ -26,6 +26,7 @@
 #include "google/protobuf/message.h"
 #include "absl/strings/str_cat.h"
 #include "absl/time/time.h"
+#include "google/fhir/extensions.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
@@ -129,11 +130,10 @@ class Printer {
       return Status::OK();
     }
 
-    if (for_analytics_ &&
-        descriptor->full_name() == Extension::descriptor()->full_name()) {
+    if (for_analytics_ && IsFhirType<r4::proto::Extension>(proto)) {
       // Only print extension url when in analytic mode.
-      absl::StrAppend(&output_, "\"",
-                      dynamic_cast<const Extension&>(proto).url().value(), "\"");
+      string scratch;
+      absl::StrAppend(&output_, "\"", GetExtensionUrl(proto, &scratch), "\"");
       return Status::OK();
     }
 

@@ -28,13 +28,12 @@
 #include "google/fhir/extensions.h"
 #include "google/fhir/json_format.h"
 #include "google/fhir/primitive_wrapper.h"
+#include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/google_extensions.pb.h"
-#include "proto/stu3/resources.pb.h"
+#include "proto/r4/google_extensions.pb.h"
 #include "include/json/json.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
@@ -53,7 +52,6 @@ using ::google::fhir::ReferenceProtoToString;
 using ::google::fhir::ReferenceStringToProto;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
-using ::google::fhir::stu3::proto::Extension;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
@@ -283,10 +281,36 @@ class Parser {
     return Status::OK();
   }
 
+  Status AddPrimitiveHasNoValueExtension(Message* message) {
+    Message* extension = message->GetReflection()->AddMessage(
+        message, message->GetDescriptor()->FindFieldByName("extension"));
+    const Message* r4_version = GetPrimitiveHasNoValueExtension();
+    if (AreSameMessageType(*extension, *r4_version)) {
+      extension->CopyFrom(*r4_version);
+      return Status::OK();
+    }
+    const proto::FhirVersion version = GetFhirVersion(*message);
+    static std::unordered_map<proto::FhirVersion, std::unique_ptr<Message>>
+        other_versions;
+    if (version != proto::FhirVersion::FHIR_VERSION_UNKNOWN) {
+      auto iter = other_versions.find(version);
+      if (iter == other_versions.end()) {
+        Message* version_extension = extension->New();
+        FHIR_RETURN_IF_ERROR(
+            PerformFieldWiseCopy(*r4_version, version_extension));
+        other_versions[version] = std::unique_ptr<Message>(version_extension);
+        iter = other_versions.find(version);
+      }
+      extension->CopyFrom(*iter->second);
+      return Status::OK();
+    }
+    return InvalidArgument("Unable to add PrimitiveHasNoValueExtension to ",
+                           extension->GetDescriptor()->full_name());
+  }
+
   Status ClearPrimitiveHasNoValue(Message* message) {
     return ClearTypedExtensions(
-        ::google::fhir::stu3::google::PrimitiveHasNoValue::descriptor(),
-        message);
+        ::google::fhir::r4::google::PrimitiveHasNoValue::descriptor(), message);
   }
 
   StatusOr<std::unique_ptr<Message>> ParseFieldValue(
@@ -311,46 +335,13 @@ class Parser {
         // Merge the extension fields into into the empty target proto,
         // and tag it as having no value.
         FHIR_RETURN_IF_ERROR(MergeMessage(json, target));
-        target->GetReflection()
-            ->AddMessage(target,
-                         target->GetDescriptor()->FindFieldByName("extension"))
-            ->CopyFrom(*GetPrimitiveHasNoValueExtension());
-        return Status::OK();
+        return AddPrimitiveHasNoValueExtension(target);
       } else {
-        FHIR_RETURN_IF_ERROR(ParseInto(json, default_timezone_, target));
-        return Status::OK();
+        return ParseInto(json, default_timezone_, target);
       }
     } else if (IsReference(target->GetDescriptor())) {
-      ::google::fhir::stu3::proto::Reference reference;
-      FHIR_RETURN_IF_ERROR(MergeMessage(json, &reference));
-
-      // Proto references support more structure than json references.
-      // Serialize and deserialize to get the most structured version
-      // possible.
-      StatusOr<string> reference_string = ReferenceProtoToString(reference);
-      if (!reference_string.ok()) {
-        // This code path is taken for References which don't have "reference"
-        // set, such as references with only a "display" field.
-        target->MergeFrom(reference);
-        return Status::OK();
-      } else {
-        string reference_value = reference_string.ValueOrDie();
-        FHIR_ASSIGN_OR_RETURN(
-            ::google::fhir::stu3::proto::Reference parsed_reference,
-            ReferenceStringToProto(reference_value));
-        if (reference.has_display()) {
-          parsed_reference.mutable_display()->set_value(
-              reference.display().value());
-        }
-        if (reference.has_id()) {
-          parsed_reference.mutable_id()->set_value(reference.id().value());
-        }
-        for (const Extension& extension : reference.extension()) {
-          *(parsed_reference.add_extension()) = extension;
-        }
-        target->MergeFrom(parsed_reference);
-        return Status::OK();
-      }
+      FHIR_RETURN_IF_ERROR(MergeMessage(json, target));
+      return SplitIfRelativeReference(target);
     }
     // Must be another FHIR element.
     if (!json.isObject()) {
@@ -404,9 +395,7 @@ Status MergeJsonFhirStringIntoProto(const string& raw_json, Message* target,
   Json::Value value;
 
   // TODO: Decide if we want to support value-only JSON
-  if (target->GetDescriptor()->full_name() ==
-          stu3::proto::Decimal::descriptor()->full_name() &&
-      raw_json != "null") {
+  if (IsFhirType<r4::proto::Decimal>(*target) && raw_json != "null") {
     // Similar to above, if this is a standalone decimal, parse it as a string
     // to avoid changing reprentation due to precision.
     FHIR_ASSIGN_OR_RETURN(

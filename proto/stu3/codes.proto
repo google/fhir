@@ -21,6 +21,7 @@ import "proto/stu3/datatypes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.proto";
+option (.google.fhir.proto.fhir_version) = STU3;
 
 // A type defined by FHIR that is an abstract type
 // See http://hl7.org/fhir/ValueSet/abstract-types
