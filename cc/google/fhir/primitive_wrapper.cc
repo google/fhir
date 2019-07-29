@@ -64,6 +64,7 @@ using ::google::fhir::r4::google::Base64BinarySeparatorStride;
 using ::google::fhir::r4::google::PrimitiveHasNoValue;
 using ::google::fhir::r4::proto::Base64Binary;
 using ::google::fhir::r4::proto::Boolean;
+using ::google::fhir::r4::proto::Canonical;
 using ::google::fhir::r4::proto::Code;
 using ::google::fhir::r4::proto::Date;
 using ::google::fhir::r4::proto::DateTime;
@@ -79,6 +80,7 @@ using ::google::fhir::r4::proto::String;
 using ::google::fhir::r4::proto::Time;
 using ::google::fhir::r4::proto::UnsignedInt;
 using ::google::fhir::r4::proto::Uri;
+using ::google::fhir::r4::proto::Url;
 using ::google::fhir::r4::proto::Xhtml;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::EnumDescriptor;
@@ -1009,6 +1011,9 @@ StatusOr<std::unique_ptr<PrimitiveWrapper>> GetWrapper(
     return std::unique_ptr<PrimitiveWrapper>(new Base64BinaryWrapper());
   } else if (target_name == "Boolean") {
     return std::unique_ptr<PrimitiveWrapper>(new BooleanWrapper());
+  } else if (target_name == "Canonical") {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<Canonical>());
   } else if (target_name == "Date") {
     return std::unique_ptr<PrimitiveWrapper>(new TimeTypeWrapper<Date>());
   } else if (target_name == "DateTime") {
@@ -1037,6 +1042,8 @@ StatusOr<std::unique_ptr<PrimitiveWrapper>> GetWrapper(
         new IntegerTypeWrapper<UnsignedInt>());
   } else if (target_name == "Uri") {
     return std::unique_ptr<PrimitiveWrapper>(new StringTypeWrapper<Uri>());
+  } else if (target_name == "Url") {
+    return std::unique_ptr<PrimitiveWrapper>(new StringTypeWrapper<Url>());
   } else if (target_name == "Xhtml") {
     return std::unique_ptr<PrimitiveWrapper>(new StringTypeWrapper<Xhtml>());
   } else {
