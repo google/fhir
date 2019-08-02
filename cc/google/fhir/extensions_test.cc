@@ -77,7 +77,7 @@ void TestConvertToExtension(const string& name) {
   stu3::proto::Extension extension;
   ReadStu3TestData(name, &message, &extension);
 
-  stu3::proto::Extension output;
+  Extension output;
   TF_ASSERT_OK(ConvertToExtension(message, &output));
   EXPECT_THAT(output, EqualsProto(extension));
 }

@@ -22,7 +22,6 @@
 #include "absl/strings/str_split.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
 
 namespace google {
@@ -34,7 +33,6 @@ using ::google::fhir::StatusOr;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
-using ::google::protobuf::Reflection;
 using ::tensorflow::Status;
 using ::tensorflow::errors::InvalidArgument;
 
@@ -267,99 +265,6 @@ Status CopyCommonField(const Message& source, Message* target,
   ForEachMessage<Message>(source, source_field, [&](const Message& message) {
     MutableOrAddMessage(target, target_field)->CopyFrom(message);
   });
-  return Status::OK();
-}
-
-// Macro to spare a ton of field-copying boilerplate in PerformFieldWiseCopy,
-// since c++ proto reflection doesn't allow for getting/setting with field types
-// that are unknown at compile time.
-#define PERFORM_FIELD_WISE_COPY_FOR_FIELD_TYPE(t)                    \
-  if (source_field->is_repeated()) {                                 \
-    target_reflection->Add##t(                                       \
-        target, target_field,                                        \
-        source_reflection->GetRepeated##t(source, source_field, i)); \
-  } else {                                                           \
-    target_reflection->Set##t(                                       \
-        target, target_field,                                        \
-        source_reflection->Get##t(source, source_field));            \
-  }
-
-Status PerformFieldWiseCopy(const Message& source, Message* target) {
-  const Descriptor* target_descriptor = target->GetDescriptor();
-  const Descriptor* source_descriptor = source.GetDescriptor();
-  const Reflection* target_reflection = target->GetReflection();
-  const Reflection* source_reflection = source.GetReflection();
-
-  if (source_descriptor->full_name() == target_descriptor->full_name()) {
-    target->CopyFrom(source);
-    return Status::OK();
-  }
-
-  std::vector<const FieldDescriptor*> set_fields;
-  source_reflection->ListFields(source, &set_fields);
-  for (const FieldDescriptor* source_field : set_fields) {
-    const FieldDescriptor* target_field =
-        target_descriptor->FindFieldByName(source_field->name());
-    if (!target_field || target_field->type() != source_field->type() ||
-        target_field->is_repeated() != source_field->is_repeated()) {
-      return InvalidArgument("Failed on PerformFieldWiseCopy from ",
-                             source_descriptor->full_name(), " to ",
-                             target_descriptor->full_name(),
-                             " on field: ", source_field->name());
-    }
-
-    for (int i = 0; i < PotentiallyRepeatedFieldSize(source, source_field);
-         i++) {
-      switch (target_field->type()) {
-        case FieldDescriptor::TYPE_MESSAGE:
-          FHIR_RETURN_IF_ERROR(PerformFieldWiseCopy(
-              GetPotentiallyRepeatedMessage(source, source_field, i),
-              MutableOrAddMessage(target, target_field)));
-          break;
-        case FieldDescriptor::TYPE_STRING:
-        case FieldDescriptor::TYPE_BYTES:
-          PERFORM_FIELD_WISE_COPY_FOR_FIELD_TYPE(String);
-          break;
-        case FieldDescriptor::TYPE_BOOL:
-          PERFORM_FIELD_WISE_COPY_FOR_FIELD_TYPE(Bool);
-          break;
-        case FieldDescriptor::TYPE_INT64:
-          PERFORM_FIELD_WISE_COPY_FOR_FIELD_TYPE(Int64)
-          break;
-        case FieldDescriptor::TYPE_SINT32:
-          PERFORM_FIELD_WISE_COPY_FOR_FIELD_TYPE(Int32)
-          break;
-        case FieldDescriptor::TYPE_UINT32:
-          PERFORM_FIELD_WISE_COPY_FOR_FIELD_TYPE(UInt32)
-          break;
-        case FieldDescriptor::TYPE_ENUM:
-          if (source_field->is_repeated()) {
-            const string& source_enum_name =
-                source_reflection->GetRepeatedEnum(source, source_field, i)
-                    ->name();
-            const ::google::protobuf::EnumDescriptor* target_enum_type =
-                target_field->default_value_enum()->type();
-            const ::google::protobuf::EnumValueDescriptor* target_enum_value =
-                target_enum_type->FindValueByName(source_enum_name);
-            target_reflection->AddEnum(target, target_field, target_enum_value);
-          } else {
-            const string& source_enum_name =
-                source_reflection->GetEnum(source, source_field)->name();
-            const ::google::protobuf::EnumDescriptor* target_enum_type =
-                target_field->default_value_enum()->type();
-            const ::google::protobuf::EnumValueDescriptor* target_enum_value =
-                target_enum_type->FindValueByName(source_enum_name);
-            target_reflection->SetEnum(target, target_field, target_enum_value);
-          }
-          break;
-        default:
-          return InvalidArgument(
-              "Unexpected field type in PerformFieldWiseCopy: ",
-              target_field->type());
-      }
-    }
-  }
-
   return Status::OK();
 }
 

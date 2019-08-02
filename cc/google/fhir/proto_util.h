@@ -225,15 +225,6 @@ bool AreSameMessageType(const ::google::protobuf::Message& a, const ::google::pr
 Status CopyCommonField(const ::google::protobuf::Message& source,
                        ::google::protobuf::Message* target, const string& field_name);
 
-// Attempts a field-wise copy of a FHIR proto.
-// For each set field on `source`, will attempt to copy the contents to an
-// equivalent field in target, recursively performing the copy on message
-// fields.  Will return a status error if any field or sub-field on `source`
-// does not have a corresponding field on `target`, or any field is encountered
-// on `source` that is not a Message, string, int, boolean, or enum.
-Status PerformFieldWiseCopy(const ::google::protobuf::Message& source,
-                            ::google::protobuf::Message* target);
-
 }  // namespace fhir
 }  // namespace google
 

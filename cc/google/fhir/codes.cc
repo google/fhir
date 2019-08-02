@@ -55,7 +55,7 @@ template <class CodeLike>
 
   // If there is no valueset url, assume we're just copying a plain old Code
   if (!HasValueset(target_descriptor)) {
-    if (!AreSameMessageType(generic_code, *target)) {
+    if (!IsMessageType<CodeLike>(*target)) {
       return InvalidArgument("Type ", target_descriptor->full_name(),
                              " is not a valid FHIR code type.");
     }
@@ -147,15 +147,14 @@ template <class CodeLike>
   const Reflection* reflection = typed_code.GetReflection();
   if (!HasValueset(descriptor)) {
     return InvalidArgument("Type ", descriptor->full_name(),
-                           " is not a FHIR code type");
+                           " is not a FHIR code type.");
   }
 
   // Copy the Element parts
   const FieldDescriptor* id_field = descriptor->FindFieldByName("id");
   if (reflection->HasField(typed_code, id_field)) {
-    FHIR_RETURN_IF_ERROR(
-        PerformFieldWiseCopy(reflection->GetMessage(typed_code, id_field),
-                             generic_code->mutable_id()));
+    generic_code->mutable_id()->CopyFrom(
+        reflection->GetMessage(typed_code, id_field));
   }
   const FieldDescriptor* extension_field =
       descriptor->FindFieldByName("extension");
@@ -164,9 +163,8 @@ template <class CodeLike>
                            " has no extension field");
   }
   for (int i = 0; i < reflection->FieldSize(typed_code, extension_field); i++) {
-    FHIR_RETURN_IF_ERROR(PerformFieldWiseCopy(
-        reflection->GetRepeatedMessage(typed_code, extension_field, i),
-        generic_code->add_extension()));
+    generic_code->add_extension()->CopyFrom(
+        reflection->GetRepeatedMessage(typed_code, extension_field, i));
   }
 
   const FieldDescriptor* value_field = descriptor->FindFieldByName("value");

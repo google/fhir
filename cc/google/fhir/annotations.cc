@@ -89,14 +89,5 @@ const bool HasInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* fie
   return field->options().HasExtension(proto::fhir_inlined_extension_url);
 }
 
-const proto::FhirVersion GetFhirVersion(
-    const ::google::protobuf::Descriptor* descriptor) {
-  return descriptor->file()->options().GetExtension(proto::fhir_version);
-}
-
-const proto::FhirVersion GetFhirVersion(const ::google::protobuf::Message& message) {
-  return GetFhirVersion(message.GetDescriptor());
-}
-
 }  // namespace fhir
 }  // namespace google
