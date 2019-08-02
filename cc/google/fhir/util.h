@@ -144,13 +144,6 @@ StatusOr<string> ReferenceProtoToString(
 // Return the full string representation of a reference.
 StatusOr<string> ReferenceProtoToString(const r4::proto::Reference& reference);
 
-// When a message is not of a known type at compile time, this overload can
-// be used to cast to a reference and then call ReferenceProtoToString.
-// This is provided as a separate API rather than relying on the caller to cast
-// so that version-agnostic libraries don't need to link in multiple versions
-// of FHIR.
-StatusOr<string> ReferenceMessageToString(const ::google::protobuf::Message& reference);
-
 // Builds an absl::Time from a time-like fhir Element.
 // Must have a value_us field.
 template <class T>

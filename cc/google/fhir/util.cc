@@ -29,7 +29,6 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/systems/systems.h"
-#include "proto/annotations.pb.h"
 #include "proto/r4/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
@@ -171,23 +170,6 @@ StatusOr<string> ReferenceProtoToString(
 }
 StatusOr<string> ReferenceProtoToString(const r4::proto::Reference& reference) {
   return ReferenceProtoToStringInternal(reference);
-}
-
-// TODO: Split these into separate files, each that accepts only
-// one type.
-StatusOr<string> ReferenceMessageToString(const ::google::protobuf::Message& reference) {
-  switch (GetFhirVersion(reference)) {
-    case proto::FhirVersion::STU3:
-      return ReferenceProtoToString(
-          dynamic_cast<const stu3::proto::Reference&>(reference));
-    case proto::FhirVersion::R4:
-      return ReferenceProtoToString(
-          dynamic_cast<const r4::proto::Reference&>(reference));
-    default:
-      return InvalidArgument(
-          "FHIR version not supported by ReferenceMessageToString: ",
-          proto::FhirVersion_Name(GetFhirVersion(reference)));
-  }
 }
 
 absl::Duration GetDurationFromTimelikeElement(const DateTime& datetime) {

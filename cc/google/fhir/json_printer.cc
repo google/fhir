@@ -24,12 +24,10 @@
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
-#include "absl/memory/memory.h"
 #include "absl/strings/str_cat.h"
 #include "absl/time/time.h"
 #include "google/fhir/extensions.h"
 #include "google/fhir/primitive_wrapper.h"
-#include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
@@ -48,6 +46,8 @@ using ::google::fhir::IsReference;
 using ::google::fhir::ReferenceProtoToString;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
+using ::google::fhir::stu3::proto::Reference;
+using ::google::fhir::stu3::proto::ReferenceId;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
@@ -61,7 +61,7 @@ class Printer {
         add_newlines_(add_newlines),
         for_analytics_(for_analytics) {}
 
-  StatusOr<string> WriteMessage(const Message& message) {
+  StatusOr<string> WriteMessage(const google::protobuf::Message& message) {
     output_.clear();
     current_indent_ = 0;
     FHIR_RETURN_IF_ERROR(PrintNonPrimitive(message));
@@ -95,21 +95,19 @@ class Printer {
     absl::StrAppend(&output_, "\"", name, "\": ");
   }
 
-  Status PrintNonPrimitive(const Message& proto) {
+  Status PrintNonPrimitive(const google::protobuf::Message& proto) {
     if (IsReference(proto.GetDescriptor()) && !for_analytics_) {
-      // For printing reference, we don't want typed reference fields,
-      // just standard FHIR reference fields.
-      // If we have a typed field instead, convert to a "Standard" reference.
-      FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> standard_reference,
-                            StandardizeReference(proto));
-      if (standard_reference) {
-        return PrintStandardNonPrimitive(*standard_reference);
-      }
+      FHIR_ASSIGN_OR_RETURN(
+          const Reference& reference,
+          StandardizeReference(dynamic_cast<const Reference&>(proto)));
+      FHIR_RETURN_IF_ERROR(PrintStandardNonPrimitive(reference));
+    } else {
+      FHIR_RETURN_IF_ERROR(PrintStandardNonPrimitive(proto));
     }
-    return PrintStandardNonPrimitive(proto);
+    return Status::OK();
   }
 
-  Status PrintStandardNonPrimitive(const Message& proto) {
+  Status PrintStandardNonPrimitive(const google::protobuf::Message& proto) {
     const Descriptor* descriptor = proto.GetDescriptor();
     const Reflection* reflection = proto.GetReflection();
 
@@ -167,7 +165,7 @@ class Printer {
     return Status::OK();
   }
 
-  Status PrintField(const Message& containing_proto,
+  Status PrintField(const google::protobuf::Message& containing_proto,
                     const FieldDescriptor* field) {
     if (field->containing_type() != containing_proto.GetDescriptor()) {
       return InvalidArgument("Field ", field->full_name(), " not found on ",
@@ -213,16 +211,15 @@ class Printer {
     return Status::OK();
   }
 
-  Status PrintPrimitiveField(const Message& proto, const string& field_name) {
-    // TODO: check for ReferenceId using an annotation.
-    if (for_analytics_ && proto.GetDescriptor()->name() == "ReferenceId") {
+  Status PrintPrimitiveField(const google::protobuf::Message& proto,
+                             const string& field_name) {
+    if (for_analytics_ && proto.GetDescriptor()->full_name() ==
+                              ReferenceId::descriptor()->full_name()) {
       // In analytic mode, print the raw reference id rather than slicing into
       // type subfields, to make it easier to query.
       PrintFieldPreamble(field_name);
-      string scratch;
-      FHIR_ASSIGN_OR_RETURN(const string& reference_value,
-                            GetPrimitiveStringValue(proto, &scratch));
-      absl::StrAppend(&output_, "\"", reference_value, "\"");
+      absl::StrAppend(&output_, "\"",
+                      dynamic_cast<const ReferenceId&>(proto).value(), "\"");
       return Status::OK();
     }
     FHIR_ASSIGN_OR_RETURN(const JsonPrimitive json_primitive,
@@ -243,7 +240,7 @@ class Printer {
     return Status::OK();
   }
 
-  Status PrintChoiceTypeField(const Message& choice_container,
+  Status PrintChoiceTypeField(const google::protobuf::Message& choice_container,
                               const string& json_name) {
     const google::protobuf::Reflection* choice_reflection =
         choice_container.GetReflection();
@@ -276,7 +273,7 @@ class Printer {
     return Status::OK();
   }
 
-  Status PrintRepeatedPrimitiveField(const Message& containing_proto,
+  Status PrintRepeatedPrimitiveField(const google::protobuf::Message& containing_proto,
                                      const FieldDescriptor* field) {
     if (field->containing_type() != containing_proto.GetDescriptor()) {
       return InvalidArgument("Field ", field->full_name(), " not found on ",
@@ -341,39 +338,29 @@ class Printer {
     return Status::OK();
   }
 
-  // If reference is typed Returns a unique pointer to a new standardized
-  // reference
-  // Returns nullptr if reference is alrady standard.
-  StatusOr<std::unique_ptr<Message>> StandardizeReference(
-      const Message& reference) {
-    const Descriptor* descriptor = reference.GetDescriptor();
-    const Reflection* reflection = reference.GetReflection();
-    const ::google::protobuf::OneofDescriptor* oneof =
-        descriptor->FindOneofByName("reference");
+  StatusOr<const Reference> StandardizeReference(const google::protobuf::Message& proto) {
+    const Descriptor* descriptor = proto.GetDescriptor();
+    if (Reference::descriptor()->full_name() != descriptor->full_name()) {
+      return InvalidArgument(descriptor->full_name(), " is not a reference.");
+    }
 
-    if (!reflection->HasOneof(reference, oneof)) {
-      // Nothing we need to do.  Return a null unique ptr to indicate this.
-      return std::unique_ptr<Message>();
+    const Reference& reference = dynamic_cast<const Reference&>(proto);
+    if (reference.has_uri()) {
+      return reference;
     }
-    const FieldDescriptor* set_oneof =
-        reflection->GetOneofFieldDescriptor(reference, oneof);
-    if (set_oneof->name() == "uri") {
-      // It's already standard
-      return std::unique_ptr<Message>();
+    StatusOr<string> reference_string_status =
+        ReferenceProtoToString(reference);
+    if (tensorflow::errors::IsNotFound(reference_string_status.status())) {
+      // Indicates a Reference with no reference string - e.g., contains a
+      // display text only.
+      return reference;
     }
-    // If we're this far, we have a type reference that needs to be standardized
-    auto mutable_reference = absl::WrapUnique(reference.New());
-    mutable_reference->CopyFrom(reference);
-    const FieldDescriptor* uri_field =
-        mutable_reference->GetDescriptor()->FindFieldByName("uri");
-    Message* uri = mutable_reference->GetReflection()->MutableMessage(
-        mutable_reference.get(), uri_field);
-    // Note that setting the uri clears the typed references, since they share
-    // a oneof
     FHIR_ASSIGN_OR_RETURN(const string& reference_string,
-                          ReferenceMessageToString(reference));
-    FHIR_RETURN_IF_ERROR(SetPrimitiveStringValue(uri, reference_string));
-    return mutable_reference;
+                          reference_string_status);
+    Reference new_reference;
+    new_reference = reference;
+    new_reference.mutable_uri()->set_value(reference_string);
+    return new_reference;
   }
 
   const int indent_size_;
@@ -386,23 +373,25 @@ class Printer {
 
 }  // namespace
 
-StatusOr<string> PrettyPrintFhirToJsonString(const Message& fhir_proto) {
+StatusOr<string> PrettyPrintFhirToJsonString(
+    const google::protobuf::Message& fhir_proto) {
   Printer printer{2, true, false};
   return printer.WriteMessage(fhir_proto);
 }
 
-StatusOr<string> PrintFhirToJsonString(const Message& fhir_proto) {
+StatusOr<string> PrintFhirToJsonString(const google::protobuf::Message& fhir_proto) {
   Printer printer{0, false, false};
   return printer.WriteMessage(fhir_proto);
 }
 
-StatusOr<string> PrintFhirToJsonStringForAnalytics(const Message& fhir_proto) {
+StatusOr<string> PrintFhirToJsonStringForAnalytics(
+    const google::protobuf::Message& fhir_proto) {
   Printer printer{0, false, true};
   return printer.WriteMessage(fhir_proto);
 }
 
 StatusOr<string> PrettyPrintFhirToJsonStringForAnalytics(
-    const Message& fhir_proto) {
+    const google::protobuf::Message& fhir_proto) {
   Printer printer{2, true, true};
   return printer.WriteMessage(fhir_proto);
 }
