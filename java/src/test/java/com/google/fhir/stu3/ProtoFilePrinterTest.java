@@ -28,11 +28,9 @@ import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.r4.proto.StructureDefinition;
 import com.google.fhir.stu3.proto.ContactDetail;
-import com.google.fhir.stu3.proto.ContainedResource;
 import com.google.fhir.stu3.proto.Extension;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
-import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.FileDescriptor;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -279,21 +277,21 @@ public final class ProtoFilePrinterTest {
   }
 
   /** Test generating resources.proto. */
-  @Test
-  public void generateResources() throws Exception {
-    List<StructureDefinition> resourceDefinitions = new ArrayList<>();
-    for (FieldDescriptor resource : ContainedResource.getDescriptor().getFields()) {
-      resourceDefinitions.add(readStructureDefinition(resource.getMessageType().getName()));
-    }
-    // Resource and DomainResource are not contained resources.
-    resourceDefinitions.add(readStructureDefinition("Resource"));
-    resourceDefinitions.add(readStructureDefinition("DomainResource"));
-    FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(resourceDefinitions);
-    descriptor = protoGenerator.addContainedResource(descriptor);
-    String generated = protoPrinter.print(descriptor);
-    String golden = readGolden("resources");
-    assertEqualsIgnoreClangFormat(golden, generated);
-  }
+  // @Test
+  // public void generateResources() throws Exception {
+  //   List<StructureDefinition> resourceDefinitions = new ArrayList<>();
+  //   for (FieldDescriptor resource : ContainedResource.getDescriptor().getFields()) {
+  //     resourceDefinitions.add(readStructureDefinition(resource.getMessageType().getName()));
+  //   }
+  //   // Resource and DomainResource are not contained resources.
+  //   resourceDefinitions.add(readStructureDefinition("Resource"));
+  //   resourceDefinitions.add(readStructureDefinition("DomainResource"));
+  //   FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(resourceDefinitions);
+  //   descriptor = protoGenerator.addContainedResource(descriptor);
+  //   String generated = protoPrinter.print(descriptor);
+  //   String golden = readGolden("resources");
+  //   assertEqualsIgnoreClangFormat(golden, generated);
+  // }
 
   /** Test generating extensions.proto. */
   @Test

@@ -23,6 +23,7 @@ import com.google.common.escape.CharEscaperBuilder;
 import com.google.common.escape.Escaper;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
+import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
@@ -65,7 +66,7 @@ public class ProtoFilePrinter {
 
   private static final Escaper EXTENSION_ESCAPER =
       new CharEscaperBuilder().addEscape('\\', "\\\\").toEscaper();
-  
+
   private static final ImmutableList<Extension<MessageOptions, ? extends Object>>
       MESSAGE_EXTENSIONS =
           ImmutableList.of(
@@ -166,14 +167,14 @@ public class ProtoFilePrinter {
         Strings.repeat("  ", matcher.countIn(typePrefix) - matcher.countIn(packageName));
     StringBuilder message = new StringBuilder();
 
-    if (options.hasExtension(Annotations.messageDescription)) {
+    if (options.hasExtension(ProtoGeneratorAnnotations.messageDescription)) {
       // Add the main documentation.
       message
           .append(indent)
           .append("// ")
           .append(
               options
-                  .getExtension(Annotations.messageDescription)
+                  .getExtension(ProtoGeneratorAnnotations.messageDescription)
                   .replaceAll("[\\n\\r]", "\n" + indent + "// "))
           .append("\n");
     }
@@ -233,11 +234,11 @@ public class ProtoFilePrinter {
           message.append("\n");
         }
 
-        if (field.getOptions().hasExtension(Annotations.reservedReason)) {
+        if (field.getOptions().hasExtension(ProtoGeneratorAnnotations.reservedReason)) {
           message
               .append(fieldIndent)
               .append("// ")
-              .append(field.getOptions().getExtension(Annotations.reservedReason))
+              .append(field.getOptions().getExtension(ProtoGeneratorAnnotations.reservedReason))
               .append("\n")
               .append(fieldIndent)
               .append("reserved ")
@@ -246,9 +247,10 @@ public class ProtoFilePrinter {
           continue;
         }
 
-        if (field.getOptions().hasExtension(Annotations.fieldDescription)) {
+        if (field.getOptions().hasExtension(ProtoGeneratorAnnotations.fieldDescription)) {
           // Add a comment describing the field.
-          String description = field.getOptions().getExtension(Annotations.fieldDescription);
+          String description =
+              field.getOptions().getExtension(ProtoGeneratorAnnotations.fieldDescription);
           message
               .append(fieldIndent)
               .append("// ")

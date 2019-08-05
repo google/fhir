@@ -24,6 +24,7 @@ import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
+import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.r4.proto.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
@@ -208,8 +209,6 @@ public class ProtoGeneratorTest {
     registry.add(Annotations.isChoiceType);
     registry.add(Annotations.isAbstractType);
     registry.add(Annotations.fhirOneofIsOptional);
-    registry.add(Annotations.fieldDescription);
-    registry.add(Annotations.messageDescription);
     registry.add(Annotations.fhirReferenceType);
     registry.add(Annotations.fhirStructureDefinitionUrl);
     registry.add(Annotations.valueRegex);
@@ -221,8 +220,10 @@ public class ProtoGeneratorTest {
     registry.add(Annotations.validReferenceType);
     registry.add(Annotations.referencedFhirType);
     registry.add(Annotations.fhirPathConstraint);
-    registry.add(Annotations.reservedReason);
     registry.add(Annotations.fhirVersion);
+    registry.add(ProtoGeneratorAnnotations.fieldDescription);
+    registry.add(ProtoGeneratorAnnotations.messageDescription);
+    registry.add(ProtoGeneratorAnnotations.reservedReason);
   }
 
   // Test the primitive FHIR data types individually. */

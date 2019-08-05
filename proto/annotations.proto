@@ -13,7 +13,7 @@
 //    limitations under the License.
 
 // This file defines extensions to FieldOptions and MessageOptions to enable
-// annotation proto fields and messages with their corresponding FHIR types.
+// adding FHIR-specific metadata to the proto implementation of the FHIR spec.
 
 syntax = "proto3";
 
@@ -57,9 +57,6 @@ extend google.protobuf.MessageOptions {
 
   // What type of fhir structure does this message represent?
   StructureDefinitionKindValue structure_definition_kind = 182131192;
-
-  // A brief description of the intended use of this message.
-  string message_description = 190563156;
 
   // For primitive types, values must match this regex if present.
   string value_regex = 204543906;
@@ -140,14 +137,6 @@ extend google.protobuf.FieldOptions {
 
   // Indicates the base FHIR resource type a ReferenceId field points to.
   string referenced_fhir_type = 239446062;
-
-  // A brief description of the intended use of this field.
-  // For use by proto generator only.
-  string field_description = 190357977;
-
-  // Directive to reserve the field with this comment.
-  // For use by proto generator only.
-  string reserved_reason = 248408866;
 }
 
 extend google.protobuf.OneofOptions {

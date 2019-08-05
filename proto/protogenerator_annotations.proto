@@ -1,0 +1,42 @@
+//    Copyright 2018 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.proto;
+
+import "google/protobuf/descriptor.proto";
+
+option java_outer_classname = "ProtoGeneratorAnnotations";
+option java_package = "com.google.fhir.proto";
+
+// This file defines extensions to FieldOptions and MessageOptions for use by
+// the ProtoFilePrinter to give directives to as to how things should be
+// printed.
+// Annotations in this file should NOT appear in any output .proto files.
+
+extend google.protobuf.MessageOptions {
+  // A brief description of the intended use of this message.
+  string message_description = 190563156;
+}
+
+extend google.protobuf.FieldOptions {
+  // A brief description of the intended use of this field.
+  // For use by proto generator only.
+  string field_description = 190357977;
+
+  // Directive to reserve the field with this comment.
+  // For use by proto generator only.
+  string reserved_reason = 248408866;
+}

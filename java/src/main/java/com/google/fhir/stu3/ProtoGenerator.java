@@ -25,6 +25,7 @@ import com.google.fhir.common.FhirVersion;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
+import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.r4.proto.Canonical;
 import com.google.fhir.r4.proto.CodeableConcept;
 import com.google.fhir.r4.proto.Coding;
@@ -397,7 +398,7 @@ public class ProtoGenerator {
                 Annotations.structureDefinitionKind,
                 Annotations.StructureDefinitionKindValue.valueOf(
                     "KIND_" + def.getKind().getValue()))
-            .setExtension(Annotations.messageDescription, comment.toString())
+            .setExtension(ProtoGeneratorAnnotations.messageDescription, comment.toString())
             .setExtension(Annotations.fhirStructureDefinitionUrl, def.getUrl().getValue());
     if (def.getAbstract().getValue()) {
       optionsBuilder.setExtension(Annotations.isAbstractType, def.getAbstract().getValue());
@@ -671,7 +672,7 @@ public class ProtoGenerator {
           .setNumber(tag)
           .getOptionsBuilder()
           .setExtension(
-              Annotations.reservedReason,
+              ProtoGeneratorAnnotations.reservedReason,
               element.getPath().getValue() + " not present on profile.");
     }
   }
@@ -1250,7 +1251,8 @@ public class ProtoGenerator {
 
     // Add a short description of the field.
     if (element.hasShort()) {
-      options.setExtension(Annotations.fieldDescription, element.getShort().getValue());
+      options.setExtension(
+          ProtoGeneratorAnnotations.fieldDescription, element.getShort().getValue());
     }
 
     addFhirPathConstraints(element, options);

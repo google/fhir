@@ -22,6 +22,7 @@ import com.google.common.collect.Iterables;
 import com.google.fhir.common.FhirVersion;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
+import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.r4.proto.BindingStrengthCode;
 import com.google.fhir.r4.proto.Bundle;
 import com.google.fhir.r4.proto.Code;
@@ -139,7 +140,7 @@ public class ValueSetGenerator {
                   .setOptions(
                       FieldOptions.newBuilder()
                           .setExtension(
-                              Annotations.reservedReason,
+                              ProtoGeneratorAnnotations.reservedReason,
                               "Field 1 reserved to allow enumeration in the future.")))
           .addField(
               FieldDescriptorProto.newBuilder()
@@ -149,7 +150,7 @@ public class ValueSetGenerator {
                   .setOptions(
                       FieldOptions.newBuilder()
                           .setExtension(
-                              Annotations.fieldDescription,
+                              ProtoGeneratorAnnotations.fieldDescription,
                               "This valueset is not enumerable, and so is represented as a"
                                   + " string.")));
     }
@@ -180,7 +181,7 @@ public class ValueSetGenerator {
 
     descriptor
         .getOptionsBuilder()
-        .setExtension(Annotations.messageDescription, comment.toString())
+        .setExtension(ProtoGeneratorAnnotations.messageDescription, comment.toString())
         .setExtension(
             Annotations.structureDefinitionKind,
             Annotations.StructureDefinitionKindValue.KIND_PRIMITIVE_TYPE)
