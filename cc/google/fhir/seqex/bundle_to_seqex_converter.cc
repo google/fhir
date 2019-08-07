@@ -363,8 +363,8 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
           floats;
     }
     if (datetime_secs.int64_list().value_size() > 0) {
-      (*result.mutable_feature())[absl::StrCat(
-          label_prefix, ".value_datetime_secs")] = datetime_secs;
+      (*result.mutable_feature())[
+          absl::StrCat(label_prefix, ".value_datetime_secs")] = datetime_secs;
     }
   }
   return result;
@@ -392,16 +392,6 @@ BaseBundleToSeqexConverter::BaseBundleToSeqexConverter(
     : version_config_(fhir_version_config),
       enable_attribution_(enable_attribution),
       generate_sequence_label_(generate_sequence_label) {
-  // Using arenas can speed up SequenceExample generation by a significant
-  // amount, especially for large inputs. We allow quite a significant block
-  // size, to support large examples.
-  google::protobuf::ArenaOptions options;
-  options.start_block_size = std::max(options.start_block_size, 128UL << 10);
-  options.max_block_size = std::max(options.max_block_size, 1024UL << 10);
-  arena_.reset(new google::protobuf::Arena(options));
-  seqex_ =
-      google::protobuf::Arena::CreateMessage<tensorflow::SequenceExample>(arena_.get());
-
   // Split the redacted feature list for easy access.
   redacted_features_ =
       absl::StrSplit(FLAGS_trigger_time_redacted_features, ',');
@@ -458,20 +448,20 @@ bool BaseBundleToSeqexConverter::Next() {
   // Convert to feature-major. If the requested sequence start is not what
   // we expected, we have to start from scratch.
   if (offset != cached_offset_) {
-    seqex_->Clear();
+    seqex_.Clear();
     cached_offset_ = offset;
   }
 
   GetContextFeatures(
       *current_label_, context_, sequence_length, encounter_start_times_,
-      seqex_->mutable_context()->mutable_feature(), generate_sequence_label_);
+      seqex_.mutable_context()->mutable_feature(), generate_sequence_label_);
   GetSequenceFeatures(current_label_->first.trigger_timestamp,
                       examples_.begin() + offset, end, feature_types_,
                       redacted_features_for_example_,
-                      seqex_->mutable_feature_lists()->mutable_feature_list());
-  QCHECK(!seqex_->feature_lists().feature_list().empty())
+                      seqex_.mutable_feature_lists()->mutable_feature_list());
+  QCHECK(!seqex_.feature_lists().feature_list().empty())
       << "Empty SequenceExample, Patient ID: "
-      << seqex_->context()
+      << seqex_.context()
              .feature()
              .at(kPatientIdFeatureKey)
              .bytes_list()
@@ -479,7 +469,6 @@ bool BaseBundleToSeqexConverter::Next() {
 
   key_.start = offset;
   key_.end = end - examples_.begin();
-
   return true;
 }
 
@@ -494,7 +483,7 @@ void BaseBundleToSeqexConverter::Reset() {
   label_map_.clear();
   redacted_features_for_example_.clear();
   feature_types_.Clear();
-  seqex_->Clear();
+  seqex_.Clear();
   cached_offset_ = 0;
   init_done_ = false;
   patient_id_ = "";
