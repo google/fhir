@@ -260,6 +260,8 @@ cc_library(
     hdrs = ["test_helper.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":annotations",
+        ":profiles",
         ":resource_validation",
         "//cc/google/fhir/status",
         "@com_google_absl//absl/strings",

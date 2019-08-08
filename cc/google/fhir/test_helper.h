@@ -26,6 +26,8 @@
 #include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
+#include "google/fhir/annotations.h"
+#include "google/fhir/profiles.h"
 #include "google/fhir/resource_validation.h"
 #include "google/fhir/status/status.h"
 #include "tensorflow/core/platform/env.h"
@@ -74,6 +76,11 @@ class FhirProtoParseHelper {
       return T();
     }
     Status status = ValidateResource(tmp);
+    if (IsProfile(T::descriptor())) {
+      auto status_or_normalized = NormalizeStu3(tmp);
+      EXPECT_TRUE(status_or_normalized.ok());
+      tmp = status_or_normalized.ValueOrDie();
+    }
     if (validity_ == VALID) {
       EXPECT_TRUE(status.ok())
           << "Invalid FHIR resource of type " << T::descriptor()->full_name()

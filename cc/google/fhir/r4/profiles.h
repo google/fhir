@@ -41,28 +41,11 @@ using std::string;
 // Any data that is in an inlined field in the profiled message,
 // that does not exists in the base message will be converted back to the
 // original format (e.g., extension).
-Status ConvertToProfileStu3(const ::google::protobuf::Message& source,
-                            ::google::protobuf::Message* target);
 Status ConvertToProfileR4(const ::google::protobuf::Message& source,
                           ::google::protobuf::Message* target);
 
-// Identical to ConvertToProfile, except does not run the validation step.
-Status ConvertToProfileLenientStu3(const ::google::protobuf::Message& source,
-                                   ::google::protobuf::Message* target);
 Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
                                  ::google::protobuf::Message* target);
-
-// Given a Message, returns a copy with all data is stored in typed fields where
-// possible.
-// E.g., if the message contains an extension in the raw extension field that
-// has a corresponding typed field, the return copy will have the data in the
-// typed field.
-template <typename T>
-StatusOr<T> NormalizeStu3(const T& message) {
-  T normalized;
-  FHIR_RETURN_IF_ERROR(ConvertToProfileLenientStu3(message, &normalized));
-  return normalized;
-}
 
 template <typename T>
 StatusOr<T> NormalizeR4(const T& message) {
