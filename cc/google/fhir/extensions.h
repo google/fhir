@@ -113,7 +113,15 @@ StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
 Status ClearTypedExtensions(const ::google::protobuf::Descriptor* descriptor,
                             ::google::protobuf::Message* message);
 
+Status ClearExtensionsWithUrl(const string& url, ::google::protobuf::Message* message);
+
 string GetInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* field);
+
+const string& GetExtensionUrl(const google::protobuf::Message& extension,
+                              string* scratch);
+
+const string& GetExtensionSystem(const google::protobuf::Message& extension,
+                                 string* scratch);
 
 }  // namespace fhir
 }  // namespace google

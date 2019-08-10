@@ -41,14 +41,23 @@ const bool IsProfileOf(const ::google::protobuf::Message& message) {
   return IsProfileOf<B>(message.GetDescriptor());
 }
 
+template <typename B>
+const bool IsFhirType(const ::google::protobuf::Descriptor* descriptor) {
+  return GetStructureDefinitionUrl(B::descriptor()) ==
+         GetStructureDefinitionUrl(descriptor);
+}
+
+template <typename B>
+const bool IsFhirType(const ::google::protobuf::Message& message) {
+  return IsFhirType<B>(message.GetDescriptor());
+}
+
 // Returns true if the passed-in descriptor is either of the template FHIR type,
 // or a profile of that type.
 template <typename B>
 const bool IsTypeOrProfileOf(const ::google::protobuf::Descriptor* descriptor) {
-  const string& actual_type = GetStructureDefinitionUrl(descriptor);
-  return (!actual_type.empty() &&
-          actual_type == GetStructureDefinitionUrl(B::descriptor())) ||
-         IsProfileOf<B>(descriptor);
+  return !GetStructureDefinitionUrl(B::descriptor()).empty() &&
+         (IsFhirType<B>(descriptor) || IsProfileOf<B>(descriptor));
 }
 
 // Returns true if the passed-in message is either of the template FHIR type,
@@ -79,6 +88,10 @@ const string& GetFixedCodingSystem(const ::google::protobuf::Descriptor* descrip
 const string& GetValueRegex(const ::google::protobuf::Descriptor* descriptor);
 
 const bool HasInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* field);
+
+const proto::FhirVersion GetFhirVersion(const ::google::protobuf::Descriptor* descriptor);
+
+const proto::FhirVersion GetFhirVersion(const ::google::protobuf::Message& message);
 
 }  // namespace fhir
 }  // namespace google

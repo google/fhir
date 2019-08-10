@@ -25,7 +25,6 @@
 #include "absl/time/time.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "proto/stu3/datatypes.pb.h"
 #include "include/json/json.h"
 
 namespace google {
@@ -33,8 +32,7 @@ namespace fhir {
 
 using std::string;
 
-const google::fhir::stu3::proto::Extension* const
-    GetPrimitiveHasNoValueExtension();
+Status BuildHasNoValueExtension(::google::protobuf::Message* extension);
 
 struct JsonPrimitive {
   string value;
