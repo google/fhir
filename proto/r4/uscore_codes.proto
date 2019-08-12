@@ -7,6 +7,7 @@ import "proto/r4/datatypes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.uscore";
+option (.google.fhir.proto.fhir_version) = R4;
 
 // Codes for assigning sex at birth as specified by the [Office of the National
 // Coordinator for Health IT
