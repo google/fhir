@@ -42,6 +42,22 @@ namespace fhir {
     const google::protobuf::Message& typed_code,
     ::google::fhir::r4::proto::Code* generic_code);
 
+::google::fhir::Status ConvertToTypedCoding(
+    const google::fhir::stu3::proto::Coding& generic_coding,
+    google::protobuf::Message* typed_coding);
+
+::google::fhir::Status ConvertToGenericCoding(
+    const google::protobuf::Message& typed_coding,
+    google::fhir::stu3::proto::Coding* generic_coding);
+
+::google::fhir::Status ConvertToTypedCoding(
+    const google::fhir::r4::proto::Coding& generic_coding,
+    google::protobuf::Message* typed_coding);
+
+::google::fhir::Status ConvertToGenericCoding(
+    const google::protobuf::Message& typed_coding,
+    google::fhir::r4::proto::Coding* generic_coding);
+
 ::google::fhir::StatusOr<::google::fhir::stu3::proto::ResourceTypeCode::Value>
 GetCodeForResourceType(const google::protobuf::Message& resource);
 

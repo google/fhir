@@ -27,6 +27,7 @@
 #include "proto/r4/datatypes.pb.h"
 #include "proto/r4/google_extensions.pb.h"
 #include "proto/r4/resources.pb.h"
+#include "proto/r4/uscore.pb.h"
 #include "testdata/r4/profiles/test.pb.h"
 
 namespace google {
@@ -98,6 +99,11 @@ TEST(ProfilesTest, FixedSystem) {
 TEST(ProfilesTest, ComplexExtension) {
   TestPair<Observation, ::google::fhir::r4::testing::TestObservation>(
       "testdata/r4/profiles/observation_complexextension");
+}
+
+TEST(ProfilesTest, UsCore) {
+  TestPair<Patient, ::google::fhir::r4::uscore::USCorePatientProfile>(
+      "testdata/r4/profiles/uscore_patient");
 }
 
 TEST(ProfilesTest, Normalize) {

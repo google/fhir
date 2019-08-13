@@ -16,6 +16,7 @@
 
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
+#include "google/fhir/annotations.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
@@ -49,23 +50,23 @@ string TitleCaseToUpperUnderscores(const string& src) {
 
 template <class CodeLike>
 ::google::fhir::Status ConvertToTypedCodeInternal(const CodeLike& generic_code,
-                                                  google::protobuf::Message* target) {
-  const Descriptor* target_descriptor = target->GetDescriptor();
-  const Reflection* target_reflection = target->GetReflection();
+                                                  google::protobuf::Message* typed_code) {
+  const Descriptor* target_descriptor = typed_code->GetDescriptor();
+  const Reflection* target_reflection = typed_code->GetReflection();
 
   // If there is no valueset url, assume we're just copying a plain old Code
   if (!HasValueset(target_descriptor)) {
-    if (!IsMessageType<CodeLike>(*target)) {
+    if (!AreSameMessageType(generic_code, *typed_code)) {
       return InvalidArgument("Type ", target_descriptor->full_name(),
                              " is not a valid FHIR code type.");
     }
-    target->CopyFrom(generic_code);
+    typed_code->CopyFrom(generic_code);
   }
 
   // Handle specialized codes.
   if (generic_code.has_id()) {
     target_reflection
-        ->MutableMessage(target, target_descriptor->FindFieldByName("id"))
+        ->MutableMessage(typed_code, target_descriptor->FindFieldByName("id"))
         ->CopyFrom(generic_code.id());
   }
   const FieldDescriptor* extension_field =
@@ -75,7 +76,8 @@ template <class CodeLike>
                            " has no extension field");
   }
   for (const auto& extension : generic_code.extension()) {
-    target_reflection->AddMessage(target, extension_field)->CopyFrom(extension);
+    target_reflection->AddMessage(typed_code, extension_field)
+        ->CopyFrom(extension);
   }
   if (generic_code.value().empty()) {
     // We're done if there is no value to parse.
@@ -90,7 +92,7 @@ template <class CodeLike>
   }
   // If target it a string, just set it from the wrapped value.
   if (target_value_field->type() == FieldDescriptor::Type::TYPE_STRING) {
-    target_reflection->SetString(target, target_value_field,
+    target_reflection->SetString(typed_code, target_value_field,
                                  generic_code.value());
     return Status::OK();
   }
@@ -109,7 +111,8 @@ template <class CodeLike>
   const EnumValueDescriptor* target_enum_value =
       target_value_field->enum_type()->FindValueByName(target_enum_name);
   if (target_enum_value != nullptr) {
-    target_reflection->SetEnum(target, target_value_field, target_enum_value);
+    target_reflection->SetEnum(typed_code, target_value_field,
+                               target_enum_value);
     return Status::OK();
   }
 
@@ -125,7 +128,7 @@ template <class CodeLike>
         target_value->options().GetExtension(
             ::google::fhir::proto::fhir_original_code) ==
             generic_code.value()) {
-      target_reflection->SetEnum(target, target_value_field, target_value);
+      target_reflection->SetEnum(typed_code, target_value_field, target_value);
       return Status::OK();
     }
   }
@@ -151,21 +154,8 @@ template <class CodeLike>
   }
 
   // Copy the Element parts
-  const FieldDescriptor* id_field = descriptor->FindFieldByName("id");
-  if (reflection->HasField(typed_code, id_field)) {
-    generic_code->mutable_id()->CopyFrom(
-        reflection->GetMessage(typed_code, id_field));
-  }
-  const FieldDescriptor* extension_field =
-      descriptor->FindFieldByName("extension");
-  if (!extension_field) {
-    return InvalidArgument("Type ", descriptor->full_name(),
-                           " has no extension field");
-  }
-  for (int i = 0; i < reflection->FieldSize(typed_code, extension_field); i++) {
-    generic_code->add_extension()->CopyFrom(
-        reflection->GetRepeatedMessage(typed_code, extension_field, i));
-  }
+  FHIR_RETURN_IF_ERROR(CopyCommonField(typed_code, generic_code, "id"));
+  FHIR_RETURN_IF_ERROR(CopyCommonField(typed_code, generic_code, "extension"));
 
   const FieldDescriptor* value_field = descriptor->FindFieldByName("value");
   if (!value_field) {
@@ -201,6 +191,86 @@ template <class CodeLike>
   generic_code->set_value(code_string);
   return Status::OK();
 }
+template <typename CodingLike,
+          typename CodeLike = FHIR_DATATYPE(CodingLike, code)>
+Status ConvertToTypedCodingInternal(const CodingLike& generic_coding,
+                                    google::protobuf::Message* typed_coding) {
+  if (IsMessageType<CodingLike>(*typed_coding)) {
+    typed_coding->CopyFrom(generic_coding);
+    return Status::OK();
+  }
+
+  // Copy the Element parts
+  FHIR_RETURN_IF_ERROR(CopyCommonField(generic_coding, typed_coding, "id"));
+  FHIR_RETURN_IF_ERROR(
+      CopyCommonField(generic_coding, typed_coding, "extension"));
+  FHIR_RETURN_IF_ERROR(
+      CopyCommonField(generic_coding, typed_coding, "version"));
+  FHIR_RETURN_IF_ERROR(
+      CopyCommonField(generic_coding, typed_coding, "display"));
+  FHIR_RETURN_IF_ERROR(
+      CopyCommonField(generic_coding, typed_coding, "user_selected"));
+
+  const Descriptor* descriptor = typed_coding->GetDescriptor();
+  const Reflection* reflection = typed_coding->GetReflection();
+  const FieldDescriptor* code_field = descriptor->FindFieldByName("code");
+
+  if (!code_field) {
+    return InvalidArgument("Cannot convert ",
+                           CodingLike::descriptor()->full_name(), " to typed ",
+                           descriptor->full_name(), ": Must have code field.");
+  }
+  if (HasValueset(code_field->message_type()) &&
+      GetValueset(code_field->message_type()) !=
+          generic_coding.system().value()) {
+    return InvalidArgument(
+        "Cannot convert generic coding to typed code ", descriptor->full_name(),
+        ": Target has valueset ", GetValueset(descriptor),
+        " but generic coding has system ", generic_coding.system().value());
+  }
+  return ConvertToTypedCodeInternal(
+      generic_coding.code(),
+      reflection->MutableMessage(typed_coding, code_field));
+}
+
+template <typename CodingLike,
+          typename CodeLike = FHIR_DATATYPE(CodingLike, code)>
+Status ConvertToGenericCodingInternal(const google::protobuf::Message& typed_coding,
+                                      CodingLike* generic_coding) {
+  if (IsMessageType<CodingLike>(typed_coding)) {
+    generic_coding->CopyFrom(typed_coding);
+    return Status::OK();
+  }
+
+  // Copy the Element parts
+  FHIR_RETURN_IF_ERROR(CopyCommonField(typed_coding, generic_coding, "id"));
+  FHIR_RETURN_IF_ERROR(
+      CopyCommonField(typed_coding, generic_coding, "extension"));
+  FHIR_RETURN_IF_ERROR(
+      CopyCommonField(typed_coding, generic_coding, "version"));
+  FHIR_RETURN_IF_ERROR(
+      CopyCommonField(typed_coding, generic_coding, "display"));
+  FHIR_RETURN_IF_ERROR(
+      CopyCommonField(typed_coding, generic_coding, "user_selected"));
+
+  const Descriptor* descriptor = typed_coding.GetDescriptor();
+  const Reflection* reflection = typed_coding.GetReflection();
+  const FieldDescriptor* code_field = descriptor->FindFieldByName("code");
+
+  if (!code_field || !HasValueset(code_field->message_type())) {
+    return InvalidArgument(
+        "Cannot convert ", descriptor->full_name(), " to generic ",
+        CodingLike::descriptor()->full_name(),
+        ": Must have code field with a fhir_valueset_url annotation");
+  }
+
+  generic_coding->mutable_system()->set_value(
+      GetFixedCodingSystem(typed_coding.GetDescriptor()));
+
+  return ConvertToGenericCodeInternal(
+      reflection->GetMessage(typed_coding, code_field),
+      generic_coding->mutable_code());
+}
 
 }  // namespace
 
@@ -226,6 +296,30 @@ template <class CodeLike>
     const google::protobuf::Message& typed_code,
     google::fhir::r4::proto::Code* generic_code) {
   return ConvertToGenericCodeInternal(typed_code, generic_code);
+}
+
+::google::fhir::Status ConvertToTypedCoding(
+    const ::google::fhir::stu3::proto::Coding& generic_coding,
+    google::protobuf::Message* typed_coding) {
+  return ConvertToTypedCodingInternal(generic_coding, typed_coding);
+}
+
+::google::fhir::Status ConvertToGenericCoding(
+    const google::protobuf::Message& typed_coding,
+    google::fhir::stu3::proto::Coding* generic_coding) {
+  return ConvertToGenericCodingInternal(typed_coding, generic_coding);
+}
+
+::google::fhir::Status ConvertToTypedCoding(
+    const ::google::fhir::r4::proto::Coding& generic_coding,
+    google::protobuf::Message* typed_coding) {
+  return ConvertToTypedCodingInternal(generic_coding, typed_coding);
+}
+
+::google::fhir::Status ConvertToGenericCoding(
+    const google::protobuf::Message& typed_coding,
+    google::fhir::r4::proto::Coding* generic_coding) {
+  return ConvertToGenericCodingInternal(typed_coding, generic_coding);
 }
 
 ::google::fhir::StatusOr<ResourceTypeCode::Value> GetCodeForResourceType(

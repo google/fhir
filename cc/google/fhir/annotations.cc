@@ -65,8 +65,12 @@ const bool IsReference(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().ExtensionSize(proto::fhir_reference_type) > 0;
 }
 
+const string& GetValueset(const ::google::protobuf::Descriptor* descriptor) {
+  return descriptor->options().GetExtension(proto::fhir_valueset_url);
+}
+
 const bool HasValueset(const ::google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().HasExtension(proto::fhir_valueset_url);
+  return !GetValueset(descriptor).empty();
 }
 
 const string& GetInlinedCodingSystem(const ::google::protobuf::FieldDescriptor* field) {
@@ -79,6 +83,10 @@ const string& GetInlinedCodingCode(const ::google::protobuf::FieldDescriptor* fi
 
 const string& GetFixedCodingSystem(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().GetExtension(proto::fhir_fixed_system);
+}
+
+const bool HasFixedCodingSystem(const ::google::protobuf::Descriptor* descriptor) {
+  return !GetFixedCodingSystem(descriptor).empty();
 }
 
 const string& GetValueRegex(const ::google::protobuf::Descriptor* descriptor) {

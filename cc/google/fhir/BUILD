@@ -8,6 +8,7 @@ cc_library(
     hdrs = ["codes.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":annotations",
         ":proto_util",
         ":util",
         "//cc/google/fhir/status",
@@ -24,9 +25,15 @@ cc_library(
 cc_test(
     name = "codes_test",
     srcs = ["codes_test.cc"],
-    data = ["//testdata/stu3:google"],
+    data = [
+        "//testdata/r4/codes:testdata",
+        "//testdata/stu3:google",
+    ],
     deps = [
         ":codes",
+        ":test_helper",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/r4:uscore_cc_proto",
         "//proto/stu3:codes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",

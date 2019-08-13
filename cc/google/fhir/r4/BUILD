@@ -45,6 +45,7 @@ cc_test(
         "//proto/r4:datatypes_cc_proto",
         "//proto/r4:extensions_cc_proto",
         "//proto/r4:resources_cc_proto",
+        "//proto/r4:uscore_cc_proto",
         "//testdata/r4/profiles:test_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",

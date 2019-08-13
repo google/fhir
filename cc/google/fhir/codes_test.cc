@@ -16,6 +16,9 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "google/fhir/test_helper.h"
+#include "google/fhir/testutil/proto_matchers.h"
+#include "proto/r4/uscore.pb.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
@@ -25,6 +28,7 @@ namespace fhir {
 
 namespace {
 
+using ::google::fhir::testutil::EqualsProto;
 using stu3::proto::ContainedResource;
 using stu3::proto::Encounter;
 using stu3::proto::FamilyMemberHistory;
@@ -60,6 +64,24 @@ TEST(CodesTest, GetCodeForResourceType_AllContainedTypesValid) {
     EXPECT_TRUE(GetCodeForResourceType(*factory->GetPrototype(type)).ok())
         << "Failed to find code for type: " << type->full_name();
   }
+}
+
+TEST(CodesTest, TypedCodingConversion) {
+  auto typed_golden =
+      ReadProto<r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding>(
+          "testdata/r4/codes/uscore_omb_typed.prototxt");
+  auto generic_golden =
+      ReadProto<r4::proto::Coding>("testdata/r4/codes/uscore_omb_raw.prototxt");
+
+  r4::proto::Coding generic_test;
+  auto status_generic = ConvertToGenericCoding(typed_golden, &generic_test);
+  ASSERT_TRUE(status_generic.ok()) << status_generic.error_message();
+  EXPECT_THAT(generic_test, EqualsProto(generic_golden));
+
+  r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding typed_test;
+  auto status_typed = ConvertToTypedCoding(generic_golden, &typed_test);
+  ASSERT_TRUE(status_typed.ok()) << status_typed.error_message();
+  EXPECT_THAT(typed_test, EqualsProto(typed_golden));
 }
 
 }  // namespace

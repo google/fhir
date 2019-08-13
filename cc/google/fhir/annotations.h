@@ -77,11 +77,15 @@ const bool IsResource(const ::google::protobuf::Descriptor* descriptor);
 
 const bool IsReference(const ::google::protobuf::Descriptor* descriptor);
 
+const string& GetValueset(const ::google::protobuf::Descriptor* descriptor);
+
 const bool HasValueset(const ::google::protobuf::Descriptor* descriptor);
 
 const string& GetInlinedCodingSystem(const ::google::protobuf::FieldDescriptor* field);
 
 const string& GetInlinedCodingCode(const ::google::protobuf::FieldDescriptor* field);
+
+const bool HasFixedCodingSystem(const ::google::protobuf::Descriptor* descriptor);
 
 const string& GetFixedCodingSystem(const ::google::protobuf::Descriptor* descriptor);
 
