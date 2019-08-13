@@ -26,6 +26,7 @@ import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
+import com.google.fhir.r4.proto.BindingStrengthCode;
 import com.google.fhir.r4.proto.Canonical;
 import com.google.fhir.r4.proto.CodeableConcept;
 import com.google.fhir.r4.proto.Coding;
@@ -683,6 +684,14 @@ public class ProtoGenerator {
     if (choiceType.isPresent()) {
       return Optional.of(choiceType.get());
     }
+    if (element.getTypeCount() != 1) {
+      return Optional.empty();
+    }
+    Optional<DescriptorProto> codingMessageWithFixedSystem =
+        makeStandaloneCodingMessageWithFixedSystemIfRequired(element, elementList);
+    if (codingMessageWithFixedSystem.isPresent()) {
+      return codingMessageWithFixedSystem;
+    }
 
     // If this is a container type, or a complex internal extension, define the inner message.
     // If this is a CodeableConcept, check for fixed coding slices.  Normally we don't add a
@@ -816,7 +825,6 @@ public class ProtoGenerator {
               codeableConceptBuilder,
               qualifiedType.toQualifiedTypeString(),
               codingSlice,
-              elementList,
               fixedSystem);
         } else {
           // Legacy "CodingWithFixedSystem"
@@ -839,14 +847,37 @@ public class ProtoGenerator {
   }
 
   private void addCodingFieldWithFixedSystem(
-      DescriptorProto.Builder codeableConceptBuilder,
-      String codeableConceptTypeString,
+      DescriptorProto.Builder parentBuilder,
+      String parentTypeString,
       ElementDefinition codingSlice,
-      List<ElementDefinition> elementList,
       String fixedSystem) {
     String typeName = toFieldTypeCase(codingSlice.getSliceName().getValue());
+
+    QualifiedType inlinedCodeType;
+    if (valueSetTypesByUrl.containsKey(fixedSystem)) {
+      Descriptor descriptor = valueSetTypesByUrl.get(fixedSystem);
+      inlinedCodeType = new QualifiedType(descriptor.getName(), descriptor.getFile().getPackage());
+    } else {
+      // TODO: throw an error in strict mode
+      inlinedCodeType = new QualifiedType("Code", fhirVersion.coreProtoPackage);
+    }
     // Build and add a custom Coding message with a fixed system & inlined code
-    DescriptorProto.Builder codingMessage = codeableConceptBuilder.addNestedTypeBuilder();
+    parentBuilder.addNestedType(
+        makeCodingMessageWithFixedSystem(typeName, fixedSystem, inlinedCodeType));
+
+    // Add a field with that type.
+    parentBuilder
+        .addFieldBuilder()
+        .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+        .setTypeName(parentTypeString + "." + typeName)
+        .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
+        .setLabel(getFieldSize(codingSlice))
+        .setNumber(parentBuilder.getFieldCount());
+  }
+
+  private DescriptorProto makeCodingMessageWithFixedSystem(
+      String typeName, String fixedSystem, QualifiedType codeType) {
+    DescriptorProto.Builder codingMessage = DescriptorProto.newBuilder();
     codingMessage.setName(typeName);
     codingMessage
         .getOptionsBuilder()
@@ -862,25 +893,10 @@ public class ProtoGenerator {
       }
     }
 
-    QualifiedType codingType = new QualifiedType("Code", fhirVersion.coreProtoPackage);
-    Optional<ElementDefinition> systemField =
-        getOptionalElementDefinitionById(codingSlice.getId().getValue() + ".system", elementList);
-    if (systemField.isPresent()) {
-      String fixedUri = systemField.get().getFixed().getUri().getValue();
-      if (!fixedUri.isEmpty()) {
-        if (valueSetTypesByUrl.containsKey(fixedUri)) {
-          Descriptor descriptor = valueSetTypesByUrl.get(fixedUri);
-          codingType = new QualifiedType(descriptor.getName(), descriptor.getFile().getPackage());
-        } else {
-          // TODO: throw an error in strict mode
-        }
-      }
-    }
-
     codingFields.add(
         FieldDescriptorProto.newBuilder()
             .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-            .setTypeName(codingType.toQualifiedTypeString())
+            .setTypeName(codeType.toQualifiedTypeString())
             .setName("code")
             .setNumber(5)
             .build());
@@ -889,14 +905,7 @@ public class ProtoGenerator {
             .sorted((a, b) -> a.getNumber() - b.getNumber())
             .collect(Collectors.toList()));
 
-    // Add a field with that type.
-    codeableConceptBuilder
-        .addFieldBuilder()
-        .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-        .setTypeName(codeableConceptTypeString + "." + typeName)
-        .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
-        .setLabel(getFieldSize(codingSlice))
-        .setNumber(codeableConceptBuilder.getFieldCount());
+    return codingMessage.build();
   }
 
   private static List<ElementDefinition> getDirectChildren(
@@ -1220,13 +1229,21 @@ public class ProtoGenerator {
         return new QualifiedType("ContainedResource", fhirVersion.coreProtoPackage);
       }
 
-      Optional<QualifiedType> valueSetType = checkForCodeWithBoundValueSet(element);
+      Optional<QualifiedType> valueSetType = checkForTypeWithBoundValueSet(element, elementList);
       return valueSetType.orElse(
           new QualifiedType(normalizedFhirTypeName, fhirVersion.coreProtoPackage));
     }
   }
 
-  private Optional<Descriptor> getBindingValueSetType(ElementDefinition element) {
+  private Optional<Descriptor> getBindingValueSetType(
+      ElementDefinition element, List<ElementDefinition> elementList) {
+    if (isSimpleInternalExtension(element, elementList)) {
+      return getBindingValueSetType(getExtensionValueElement(element, elementList), elementList);
+    }
+    if (!useLegacyTypeNaming()
+        && element.getBinding().getStrength().getValue() != BindingStrengthCode.Value.REQUIRED) {
+      return Optional.empty();
+    }
     String url = CanonicalWrapper.getUri(element.getBinding().getValueSet());
     if (url.isEmpty()) {
       return Optional.empty();
@@ -1627,14 +1644,68 @@ public class ProtoGenerator {
         "Unable to deduce typename for profile: " + profileUrl + " on " + type);
   }
 
-  private Optional<QualifiedType> checkForCodeWithBoundValueSet(ElementDefinition element) {
-    if (getDistinctTypeCount(element) == 1
-        && element.getType(0).getCode().getValue().equals("code")) {
-      Optional<Descriptor> valueSetType = getBindingValueSetType(element);
+  private Optional<QualifiedType> checkForTypeWithBoundValueSet(
+      ElementDefinition element, List<ElementDefinition> elementList) {
+    // Note that for Simple extensions that are inlined as a single type, we need to actually check
+    // the internal value element on the extension, even though the element we're replacing and
+    // naming the field after is the extension itself.  Thus, here we differentiate between
+    // "value element" and "naming element".
+    // E.g., for element mySubExtension, which has a valueCoding element on it, the datatype will be
+    // generated from the valueElement, valueCoding in this case, but the name should be based on
+    // the original, mySubExtension element.
+    //
+    // For all cases other than simple sub extensions, the value element is equal to the naming
+    // element.
+    ElementDefinition namingElement = element;
+    ElementDefinition valueElement =
+        isSimpleInternalExtension(element, elementList)
+            ? getExtensionValueElement(element, elementList)
+            : element;
+    if (getDistinctTypeCount(valueElement) == 1) {
+      String typeName = valueElement.getType(0).getCode().getValue();
+      Optional<Descriptor> valueSetType = getBindingValueSetType(valueElement, elementList);
       if (valueSetType.isPresent()) {
+        if (typeName.equals("code")) {
+          return Optional.of(
+              new QualifiedType(
+                  valueSetType.get().getName(), valueSetType.get().getFile().getPackage()));
+        }
+        if (!useLegacyTypeNaming() && typeName.equals("Coding")) {
+          return Optional.of(
+              new QualifiedType(
+                  getContainerType(namingElement, elementList) + "Coding",
+                  packageInfo.getProtoPackage()));
+        }
+      }
+      // TODO: Handle bound systems on CodeableConcepts
+      // TODO: return an error for unhandled types with required bindings in strict mode
+    }
+    return Optional.empty();
+  }
+
+  private Optional<DescriptorProto> makeStandaloneCodingMessageWithFixedSystemIfRequired(
+      ElementDefinition element, List<ElementDefinition> elementList) {
+    // Note that in the case of sub extensions, the element will be an extension, but the field
+    // we're using to generate the type will be the "value" field on that extension.
+    // In all other cases, the value element is the same as the element passed in.
+    ElementDefinition valueElement = element;
+    if (isSimpleInternalExtension(element, elementList)) {
+      valueElement = getExtensionValueElement(element, elementList);
+    }
+    String type = valueElement.getType(0).getCode().getValue();
+    if (type.equals("Coding") && !useLegacyTypeNaming()) {
+      Optional<Descriptor> boundCodeOptional = getBindingValueSetType(valueElement, elementList);
+      if (boundCodeOptional.isPresent()) {
+        Descriptor boundCode = boundCodeOptional.get();
+        String fieldType = checkForTypeWithBoundValueSet(valueElement, elementList).get().type;
+        // Protos are nested by adding the nested proto directly to the parent proto.
+        // So, we don't want the parent proto tokens in the type name.
+        fieldType = fieldType.substring(fieldType.lastIndexOf(".") + 1);
         return Optional.of(
-            new QualifiedType(
-                valueSetType.get().getName(), valueSetType.get().getFile().getPackage()));
+            makeCodingMessageWithFixedSystem(
+                fieldType,
+                AnnotationUtils.getFhirValuesetUrl(boundCode),
+                new QualifiedType(boundCode.getName(), boundCode.getFile().getPackage())));
       }
     }
     return Optional.empty();
@@ -1776,7 +1847,7 @@ public class ProtoGenerator {
       // This is a primitive extension with a single type
       String rawType = valueElement.getType(0).getCode().getValue();
 
-      Optional<QualifiedType> valueSetType = checkForCodeWithBoundValueSet(valueElement);
+      Optional<QualifiedType> valueSetType = checkForTypeWithBoundValueSet(element, elementList);
       return valueSetType.orElse(
           new QualifiedType(toFieldTypeCase(rawType), fhirVersion.coreProtoPackage));
     }

@@ -2373,10 +2373,46 @@ message PatientUSCoreEthnicityExtension {
   repeated proto.Extension extension = 2;
 
   // Hispanic or Latino|Not Hispanic or Latino
-  proto.Coding omb_category = 4;
+  message OmbCategoryCoding {
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/Coding";
+    option (.google.fhir.proto.fhir_fixed_system) =
+        "http://hl7.org/fhir/us/core/ValueSet/omb-ethnicity-category";
+
+    proto.String id = 1;
+
+    repeated proto.Extension extension = 2;
+
+    proto.String version = 4;
+
+    OmbEthnicityCategoriesCode code = 5;
+
+    proto.String display = 6;
+
+    proto.Boolean user_selected = 7;
+  }
+  OmbCategoryCoding omb_category = 4;
 
   // Extended ethnicity codes
-  repeated proto.Coding detailed = 5;
+  message DetailedCoding {
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/Coding";
+    option (.google.fhir.proto.fhir_fixed_system) =
+        "http://hl7.org/fhir/us/core/ValueSet/detailed-ethnicity";
+
+    proto.String id = 1;
+
+    repeated proto.Extension extension = 2;
+
+    proto.String version = 4;
+
+    DetailedEthnicityCode code = 5;
+
+    proto.String display = 6;
+
+    proto.Boolean user_selected = 7;
+  }
+  repeated DetailedCoding detailed = 5;
 
   // ethnicity Text
   proto.String text = 6
@@ -4501,10 +4537,46 @@ message PatientUSCoreRaceExtension {
 
   // American Indian or Alaska Native|Asian|Black or African American|Native
   // Hawaiian or Other Pacific Islander|White
-  repeated proto.Coding omb_category = 4;
+  message OmbCategoryCoding {
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/Coding";
+    option (.google.fhir.proto.fhir_fixed_system) =
+        "http://hl7.org/fhir/us/core/ValueSet/omb-race-category";
+
+    proto.String id = 1;
+
+    repeated proto.Extension extension = 2;
+
+    proto.String version = 4;
+
+    OmbRaceCategoriesCode code = 5;
+
+    proto.String display = 6;
+
+    proto.Boolean user_selected = 7;
+  }
+  repeated OmbCategoryCoding omb_category = 4;
 
   // Extended race codes
-  repeated proto.Coding detailed = 5;
+  message DetailedCoding {
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/Coding";
+    option (.google.fhir.proto.fhir_fixed_system) =
+        "http://hl7.org/fhir/us/core/ValueSet/detailed-race";
+
+    proto.String id = 1;
+
+    repeated proto.Extension extension = 2;
+
+    proto.String version = 4;
+
+    DetailedRaceCode code = 5;
+
+    proto.String display = 6;
+
+    proto.Boolean user_selected = 7;
+  }
+  repeated DetailedCoding detailed = 5;
 
   // Race Text
   proto.String text = 6

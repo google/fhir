@@ -94,6 +94,10 @@ public final class AnnotationUtils {
     return descriptor.getOptions().getExtension(Annotations.fhirStructureDefinitionUrl);
   }
 
+  public static String getFhirValuesetUrl(Descriptor descriptor) {
+    return descriptor.getOptions().getExtension(Annotations.fhirValuesetUrl);
+  }
+
   public static boolean isProfileOf(Descriptor base, Descriptor test) {
     for (int i = 0; i < test.getOptions().getExtensionCount(Annotations.fhirProfileBase); i++) {
       if (test.getOptions()

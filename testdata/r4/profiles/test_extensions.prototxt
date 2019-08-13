@@ -15,7 +15,6 @@ simple_extension {
     description: "SimpleCodeableConcept Extension"
   }
   code_type {
-    binding_name: "CarePlanActivityStatus"
     system: "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
   }
 }
@@ -73,7 +72,6 @@ simple_extension {
     description: "Extension for Digital Media Type code."
   }
   code_type {
-    binding_name: "DigitalMediaType"
     system: "http://hl7.org/fhir/ValueSet/digital-media-type"
   }
 }
