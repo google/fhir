@@ -311,6 +311,7 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
     Feature class_names;
     Feature integers;
     Feature floats;
+    Feature booleans;
     Feature datetime_secs;
     for (const auto& label : event_label.label()) {
       int label_value_types = 0;
@@ -331,13 +332,18 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
           CHECK(GetDecimalValue(label.class_value().decimal(), &value).ok());
           floats.mutable_float_list()->add_value(value);
         }
+        if (label.class_value().has_boolean()) {
+          booleans.mutable_int64_list()->add_value(
+              label.class_value().boolean().value());
+        }
         if (label.class_value().has_date_time()) {
           ::absl::Time date_time =
               GetTimeFromTimelikeElement(label.class_value().date_time());
           datetime_secs.mutable_int64_list()->add_value(
               absl::ToUnixSeconds(date_time));
         }
-        CHECK(!label.class_value().has_boolean());  // TODO: implement
+        // Currently unused.
+        CHECK(!label.class_value().has_string_value());
         label_value_types++;
       }
       CHECK_LE(label_value_types, 1);
@@ -361,6 +367,11 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
     if (floats.float_list().value_size() > 0) {
       (*result.mutable_feature())[absl::StrCat(label_prefix, ".value_float")] =
           floats;
+    }
+    if (booleans.int64_list().value_size() > 0) {
+      (*result
+            .mutable_feature())[absl::StrCat(label_prefix, ".value_boolean")] =
+          booleans;
     }
     if (datetime_secs.int64_list().value_size() > 0) {
       (*result.mutable_feature())[
