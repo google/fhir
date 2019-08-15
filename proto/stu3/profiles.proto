@@ -1517,123 +1517,13 @@ message Bp {
       [(.google.fhir.proto.fhir_path_constraint) =
            "value.exists() or dataAbsentReason.exists()"];
 
-  // Used when reporting systolic and diastolic blood pressure.
-  message SystolicBP {
-    // xml:id (or equivalent in JSON)
-    String id = 1;
+  // field 30 reserved for Observation.component:systolicbp which uses an
+  // unsupported slicing on BackboneElement
+  reserved 30;
 
-    // Additional Content defined by implementations
-    repeated Extension extension = 2;
-
-    // Extensions that cannot be ignored
-    repeated Extension modifier_extension = 3;
-
-    // Type of component observation (code / type)
-    message CodeableConceptForCode {
-      option (.google.fhir.proto.fhir_profile_base) =
-          "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
-
-      // xml:id (or equivalent in JSON)
-      String id = 1;
-
-      // Additional Content defined by implementations
-      repeated Extension extension = 2;
-
-      // Code defined by a terminology system
-      repeated Coding coding = 3;
-
-      // Plain text representation of the concept
-      String text = 4;
-
-      repeated CodingWithFixedCode s_b_p_code = 5 [
-        (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-        (.google.fhir.proto.fhir_inlined_coding_code) = "8480-6"
-      ];
-    }
-    CodeableConceptForCode code = 4
-        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-    // Vital Sign Value recorded with UCUM
-    message Value {
-      option (.google.fhir.proto.is_choice_type) = true;
-
-      oneof value {
-        Quantity quantity = 1;
-      }
-    }
-    Value value = 5;
-
-    // Why the component result is missing
-    CodeableConcept data_absent_reason = 6;
-
-    // High, low, normal, etc.
-    CodeableConcept interpretation = 7;
-
-    // Provides guide for interpretation of component result
-    repeated ReferenceRange reference_range = 8;
-  }
-  repeated SystolicBP systolic_b_p = 30
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "value.exists() or dataAbsentReason.exists()"];
-
-  // Used when reporting systolic and diastolic blood pressure.
-  message DiastolicBP {
-    // xml:id (or equivalent in JSON)
-    String id = 1;
-
-    // Additional Content defined by implementations
-    repeated Extension extension = 2;
-
-    // Extensions that cannot be ignored
-    repeated Extension modifier_extension = 3;
-
-    // Type of component observation (code / type)
-    message CodeableConceptForCode {
-      option (.google.fhir.proto.fhir_profile_base) =
-          "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
-
-      // xml:id (or equivalent in JSON)
-      String id = 1;
-
-      // Additional Content defined by implementations
-      repeated Extension extension = 2;
-
-      // Code defined by a terminology system
-      repeated Coding coding = 3;
-
-      // Plain text representation of the concept
-      String text = 4;
-
-      repeated CodingWithFixedCode d_b_p_code = 5 [
-        (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-        (.google.fhir.proto.fhir_inlined_coding_code) = "8462-4"
-      ];
-    }
-    CodeableConceptForCode code = 4
-        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-    // Vital Sign Value recorded with UCUM
-    message Value {
-      option (.google.fhir.proto.is_choice_type) = true;
-
-      oneof value {
-        Quantity quantity = 1;
-      }
-    }
-    Value value = 5;
-
-    // Why the component result is missing
-    CodeableConcept data_absent_reason = 6;
-
-    // High, low, normal, etc.
-    CodeableConcept interpretation = 7;
-
-    // Provides guide for interpretation of component result
-    repeated ReferenceRange reference_range = 8;
-  }
-  repeated DiastolicBP diastolic_b_p = 31
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "value.exists() or dataAbsentReason.exists()"];
+  // field 31 reserved for Observation.component:diastolicbp which uses an
+  // unsupported slicing on BackboneElement
+  reserved 31;
 }
 
 // Auto-generated from StructureDefinition for Example Lipid Profile.
@@ -4349,27 +4239,21 @@ message LipidProfile {
   // Entire report as issued
   repeated Attachment presented_form = 25;
 
-  // Cholesterol Result
-  Reference cholesterol = 26 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.valid_reference_type) = "Observation"
-  ];
+  // field 26 reserved for DiagnosticReport.result:cholesterol which uses an
+  // unsupported slicing on Reference
+  reserved 26;
 
-  // Triglyceride Result
-  Reference triglyceride = 27 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.valid_reference_type) = "Observation"
-  ];
+  // field 27 reserved for DiagnosticReport.result:triglyceride which uses an
+  // unsupported slicing on Reference
+  reserved 27;
 
-  // HDL Cholesterol Result
-  Reference h_d_l_cholesterol = 28 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.valid_reference_type) = "Observation"
-  ];
+  // field 28 reserved for DiagnosticReport.result:hdlcholesterol which uses an
+  // unsupported slicing on Reference
+  reserved 28;
 
-  // LDL Cholesterol result, if reported
-  Reference l_d_l_cholesterol = 29
-      [(.google.fhir.proto.valid_reference_type) = "Observation"];
+  // field 29 reserved for DiagnosticReport.result:ldlcholesterol which uses an
+  // unsupported slicing on Reference
+  reserved 29;
 }
 
 // Auto-generated from StructureDefinition for MetadataResource, last updated

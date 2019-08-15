@@ -302,9 +302,9 @@ message USCorePediatricBMIforAgeObservationProfile {
         "value.exists() or dataAbsentReason.exists()"
   ];
 
-  // Classification of  type of observation
-  proto.CodeableConcept v_s_cat = 33
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 33 reserved for Observation.category:VSCat which uses an unsupported
+  // slicing on CodeableConcept
+  reserved 33;
 }
 
 // Auto-generated from StructureDefinition for
@@ -584,9 +584,9 @@ message USCorePediatricWeightForHeightObservationProfile {
         "value.exists() or dataAbsentReason.exists()"
   ];
 
-  // Classification of  type of observation
-  proto.CodeableConcept v_s_cat = 33
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 33 reserved for Observation.category:VSCat which uses an unsupported
+  // slicing on CodeableConcept
+  reserved 33;
 }
 
 // Auto-generated from StructureDefinition for USCoreAllergyIntolerance.
@@ -1030,9 +1030,9 @@ message USCoreCarePlanProfile {
   // Comments about the plan
   repeated proto.Annotation note = 31;
 
-  // Type of plan
-  proto.CodeableConcept assessplan = 32
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 32 reserved for CarePlan.category:assessplan which uses an
+  // unsupported slicing on CodeableConcept
+  reserved 32;
 }
 
 // Auto-generated from StructureDefinition for USCoreCareTeam.
@@ -1715,9 +1715,9 @@ message USCoreDiagnosticReportProfileLaboratoryReporting {
       [(.google.fhir.proto.fhir_path_constraint) =
            "result.exists() or presentedForm.exists()"];
 
-  // Service category
-  proto.CodeableConcept lab = 27
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 27 reserved for DiagnosticReport.category:lab which uses an
+  // unsupported slicing on CodeableConcept
+  reserved 27;
 }
 
 // Auto-generated from StructureDefinition for
@@ -3755,9 +3755,9 @@ message USCoreLaboratoryResultObservationProfile {
       [(.google.fhir.proto.fhir_path_constraint) =
            "hasValue() or (children().count() > id.count())"];
 
-  // Classification of  type of observation
-  proto.CodeableConcept laboratory = 33
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 33 reserved for Observation.category:laboratory which uses an
+  // unsupported slicing on CodeableConcept
+  reserved 33;
 }
 
 // Auto-generated from StructureDefinition for USCoreOrganizationProfile.
@@ -4163,8 +4163,9 @@ message USCorePractitionerProfile {
   // A language the practitioner can use in patient communication
   repeated proto.CodeableConcept communication = 18;
 
-  // An identifier for the person as this agent
-  proto.Identifier npislice = 19;
+  // field 19 reserved for Practitioner.identifier:npislice which uses an
+  // unsupported slicing on Identifier
+  reserved 19;
 }
 
 // Auto-generated from StructureDefinition for USCorePractitionerRoleProfile.

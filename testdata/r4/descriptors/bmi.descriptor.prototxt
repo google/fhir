@@ -364,14 +364,9 @@ field {
   }
 }
 field {
-  name: "v_s_cat"
   number: 33
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
   options {
-    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "Classification of  type of observation"
+    [google.fhir.proto.reserved_reason]: "field 33 reserved for Observation.category:VSCat which uses an unsupported slicing on CodeableConcept"
   }
 }
 nested_type {

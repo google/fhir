@@ -249,14 +249,9 @@ field {
   }
 }
 field {
-  name: "issue_date"
   number: 24
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DateTime"
   options {
-    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "When the Catalog was created"
+    [google.fhir.proto.reserved_reason]: "field 24 reserved for Composition.date:IssueDate which uses an unsupported slicing on dateTime"
   }
 }
 nested_type {

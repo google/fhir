@@ -633,7 +633,24 @@ public class ProtoGenerator {
     }
 
     for (ElementDefinition deferredElement : deferredElements) {
-      buildAndAddField(deferredElement, elementList, nextTag++, builder);
+      // Currently we only support slicing for Extensions and Codings
+      if (isElementSupportedForSlicing(deferredElement)) {
+        buildAndAddField(deferredElement, elementList, nextTag++, builder);
+      } else {
+        builder
+            .addFieldBuilder()
+            .setNumber(nextTag)
+            .getOptionsBuilder()
+            .setExtension(
+                ProtoGeneratorAnnotations.reservedReason,
+                "field "
+                    + nextTag
+                    + " reserved for "
+                    + deferredElement.getId().getValue()
+                    + " which uses an unsupported slicing on "
+                    + deferredElement.getType(0).getCode().getValue());
+        nextTag++;
+      }
     }
     return builder.build();
   }
@@ -1105,6 +1122,18 @@ public class ProtoGenerator {
       if (!isContainer(referencedElement)) {
         throw new IllegalArgumentException(
             "ContentReference does not reference a container: " + element.getContentReference());
+      }
+      if (lastIdToken(referencedElementId).slicename != null
+          && !isElementSupportedForSlicing(referencedElement)) {
+        // This is a reference to a slice of a field, but the slice isn't a supported slice type.
+        // Just use a reference to the base field.
+
+        // TODO:  This logic assumes only a single level of slicing is present - the
+        // base element could theoretically also be unsupported for slicing.
+        referencedElement =
+            getElementDefinitionById(
+                referencedElementId.substring(0, referencedElementId.lastIndexOf(":")),
+                elementList);
       }
       return getContainerType(referencedElement, elementList);
     }
@@ -1697,7 +1726,7 @@ public class ProtoGenerator {
       Optional<Descriptor> boundCodeOptional = getBindingValueSetType(valueElement, elementList);
       if (boundCodeOptional.isPresent()) {
         Descriptor boundCode = boundCodeOptional.get();
-        String fieldType = checkForTypeWithBoundValueSet(valueElement, elementList).get().type;
+        String fieldType = checkForTypeWithBoundValueSet(element, elementList).get().type;
         // Protos are nested by adding the nested proto directly to the parent proto.
         // So, we don't want the parent proto tokens in the type name.
         fieldType = fieldType.substring(fieldType.lastIndexOf(".") + 1);
@@ -1925,6 +1954,13 @@ public class ProtoGenerator {
       }
     }
     return toFieldTypeCase(name);
+  }
+
+  // TODO: consider supporting more types of slicing.
+  private static boolean isElementSupportedForSlicing(ElementDefinition element) {
+    return element.getTypeCount() == 1
+        && (element.getType(0).getCode().getValue().equals("Extension")
+            || element.getType(0).getCode().getValue().equals("Coding"));
   }
 
   private static final boolean PRINT_SNAPSHOT_DISCREPANCIES = false;

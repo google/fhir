@@ -1387,7 +1387,7 @@ message ProvenanceRelevantHistory {
     ];
 
     // Entity is attributed to this agent
-    repeated Author agent = 6;
+    repeated Agent agent = 6;
   }
   repeated Entity entity = 17
       [(.google.fhir.proto.fhir_path_constraint) =
@@ -1396,47 +1396,9 @@ message ProvenanceRelevantHistory {
   // Signature on target
   repeated Signature signature = 18;
 
-  // Author
-  message Author {
-    // Unique id for inter-element referencing
-    String id = 1;
-
-    // Additional content defined by implementations
-    repeated Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated Extension modifier_extension = 3;
-
-    // How the agent participated
-    CodeableConcept type = 4
-        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-    // What the agents role was
-    repeated CodeableConcept role = 5;
-
-    // Author Reference
-    Reference who = 6 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.valid_reference_type) = "Practitioner",
-      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
-      (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
-      (.google.fhir.proto.valid_reference_type) = "Patient",
-      (.google.fhir.proto.valid_reference_type) = "Device",
-      (.google.fhir.proto.valid_reference_type) = "Organization"
-    ];
-
-    // Who the agent is representing
-    Reference on_behalf_of = 7 [
-      (.google.fhir.proto.valid_reference_type) = "Practitioner",
-      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
-      (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
-      (.google.fhir.proto.valid_reference_type) = "Patient",
-      (.google.fhir.proto.valid_reference_type) = "Device",
-      (.google.fhir.proto.valid_reference_type) = "Organization"
-    ];
-  }
-  Author author = 19 [(.google.fhir.proto.fhir_path_constraint) =
-                          "hasValue() or (children().count() > id.count())"];
+  // field 19 reserved for Provenance.agent:Author which uses an unsupported
+  // slicing on BackboneElement
+  reserved 19;
 }
 
 // Auto-generated from StructureDefinition for CQF-Questionnaire.
@@ -3501,9 +3463,9 @@ message ObservationVitalsigns {
         "value.exists() or dataAbsentReason.exists()"
   ];
 
-  // Classification of  type of observation
-  CodeableConcept v_s_cat = 33
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 33 reserved for Observation.category:VSCat which uses an unsupported
+  // slicing on CodeableConcept
+  reserved 33;
 }
 
 // Auto-generated from StructureDefinition for observation-bodyweight.
@@ -3781,9 +3743,9 @@ message ObservationBodyweight {
         "value.exists() or dataAbsentReason.exists()"
   ];
 
-  // Classification of  type of observation
-  CodeableConcept v_s_cat = 33
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 33 reserved for Observation.category:VSCat which uses an unsupported
+  // slicing on CodeableConcept
+  reserved 33;
 }
 
 // Auto-generated from StructureDefinition for observation-vitalspanel.
@@ -4053,9 +4015,9 @@ message ObservationVitalspanel {
         "value.exists() or dataAbsentReason.exists()"
   ];
 
-  // Classification of  type of observation
-  CodeableConcept v_s_cat = 33
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 33 reserved for Observation.category:VSCat which uses an unsupported
+  // slicing on CodeableConcept
+  reserved 33;
 }
 
 // Auto-generated from StructureDefinition for observation-bodyheight.
@@ -4333,9 +4295,9 @@ message ObservationBodyheight {
         "value.exists() or dataAbsentReason.exists()"
   ];
 
-  // Classification of  type of observation
-  CodeableConcept v_s_cat = 33
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 33 reserved for Observation.category:VSCat which uses an unsupported
+  // slicing on CodeableConcept
+  reserved 33;
 }
 
 // Auto-generated from StructureDefinition for observation-resprate.
@@ -4613,9 +4575,9 @@ message ObservationResprate {
         "value.exists() or dataAbsentReason.exists()"
   ];
 
-  // Classification of  type of observation
-  CodeableConcept v_s_cat = 33
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 33 reserved for Observation.category:VSCat which uses an unsupported
+  // slicing on CodeableConcept
+  reserved 33;
 }
 
 // Auto-generated from StructureDefinition for observation-heartrate.
@@ -4893,9 +4855,9 @@ message ObservationHeartrate {
         "value.exists() or dataAbsentReason.exists()"
   ];
 
-  // Classification of  type of observation
-  CodeableConcept v_s_cat = 33
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 33 reserved for Observation.category:VSCat which uses an unsupported
+  // slicing on CodeableConcept
+  reserved 33;
 }
 
 // Auto-generated from StructureDefinition for observation-bodytemp.
@@ -5173,9 +5135,9 @@ message ObservationBodytemp {
         "value.exists() or dataAbsentReason.exists()"
   ];
 
-  // Classification of  type of observation
-  CodeableConcept v_s_cat = 33
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 33 reserved for Observation.category:VSCat which uses an unsupported
+  // slicing on CodeableConcept
+  reserved 33;
 }
 
 // Auto-generated from StructureDefinition for observation-headcircum.
@@ -5453,9 +5415,9 @@ message ObservationHeadcircum {
         "value.exists() or dataAbsentReason.exists()"
   ];
 
-  // Classification of  type of observation
-  CodeableConcept v_s_cat = 33
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 33 reserved for Observation.category:VSCat which uses an unsupported
+  // slicing on CodeableConcept
+  reserved 33;
 }
 
 // Auto-generated from StructureDefinition for observation-oxygensat.
@@ -5733,9 +5695,9 @@ message ObservationOxygensat {
         "value.exists() or dataAbsentReason.exists()"
   ];
 
-  // Classification of  type of observation
-  CodeableConcept v_s_cat = 33
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 33 reserved for Observation.category:VSCat which uses an unsupported
+  // slicing on CodeableConcept
+  reserved 33;
 }
 
 // Auto-generated from StructureDefinition for observation-bmi.
@@ -6014,9 +5976,9 @@ message ObservationBmi {
         "value.exists() or dataAbsentReason.exists()"
   ];
 
-  // Classification of  type of observation
-  CodeableConcept v_s_cat = 33
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 33 reserved for Observation.category:VSCat which uses an unsupported
+  // slicing on CodeableConcept
+  reserved 33;
 }
 
 // Auto-generated from StructureDefinition for observation-bp.
@@ -6285,135 +6247,17 @@ message ObservationBp {
         "value.exists() or dataAbsentReason.exists()"
   ];
 
-  // Classification of  type of observation
-  CodeableConcept v_s_cat = 33
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 33 reserved for Observation.category:VSCat which uses an unsupported
+  // slicing on CodeableConcept
+  reserved 33;
 
-  // Used when reporting systolic and diastolic blood pressure.
-  message SystolicBP {
-    // Unique id for inter-element referencing
-    String id = 1;
+  // field 34 reserved for Observation.component:SystolicBP which uses an
+  // unsupported slicing on BackboneElement
+  reserved 34;
 
-    // Additional content defined by implementations
-    repeated Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated Extension modifier_extension = 3;
-
-    // Type of component observation (code / type)
-    message CodeableConceptForCode {
-      option (.google.fhir.proto.fhir_profile_base) =
-          "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
-
-      // Unique id for inter-element referencing
-      String id = 1;
-
-      // Additional content defined by implementations
-      repeated Extension extension = 2;
-
-      // Code defined by a terminology system
-      repeated Coding coding = 3;
-
-      // Plain text representation of the concept
-      String text = 4;
-
-      CodingWithFixedCode s_b_p_code = 5 [
-        (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-        (.google.fhir.proto.fhir_inlined_coding_code) = "8480-6"
-      ];
-    }
-    CodeableConceptForCode code = 4
-        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-    // Vital Sign Value recorded with UCUM
-    message ValueX {
-      option (.google.fhir.proto.is_choice_type) = true;
-
-      oneof choice {
-        Quantity quantity = 1;
-      }
-    }
-    ValueX value = 5;
-
-    // Why the component result is missing
-    CodeableConcept data_absent_reason = 6;
-
-    // High, low, normal, etc.
-    repeated CodeableConcept interpretation = 7;
-
-    // Provides guide for interpretation of component result
-    repeated ReferenceRange reference_range = 8;
-  }
-  SystolicBP systolic_b_p = 34 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "value.exists() or dataAbsentReason.exists()"
-  ];
-
-  // Used when reporting systolic and diastolic blood pressure.
-  message DiastolicBP {
-    // Unique id for inter-element referencing
-    String id = 1;
-
-    // Additional content defined by implementations
-    repeated Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated Extension modifier_extension = 3;
-
-    // Type of component observation (code / type)
-    message CodeableConceptForCode {
-      option (.google.fhir.proto.fhir_profile_base) =
-          "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
-
-      // Unique id for inter-element referencing
-      String id = 1;
-
-      // Additional content defined by implementations
-      repeated Extension extension = 2;
-
-      // Code defined by a terminology system
-      repeated Coding coding = 3;
-
-      // Plain text representation of the concept
-      String text = 4;
-
-      CodingWithFixedCode d_b_p_code = 5 [
-        (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-        (.google.fhir.proto.fhir_inlined_coding_code) = "8462-4"
-      ];
-    }
-    CodeableConceptForCode code = 4
-        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-    // Vital Sign Value recorded with UCUM
-    message ValueX {
-      option (.google.fhir.proto.is_choice_type) = true;
-
-      oneof choice {
-        Quantity quantity = 1;
-      }
-    }
-    ValueX value = 5;
-
-    // Why the component result is missing
-    CodeableConcept data_absent_reason = 6;
-
-    // High, low, normal, etc.
-    repeated CodeableConcept interpretation = 7;
-
-    // Provides guide for interpretation of component result
-    repeated ReferenceRange reference_range = 8;
-  }
-  DiastolicBP diastolic_b_p = 35 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "value.exists() or dataAbsentReason.exists()"
-  ];
+  // field 35 reserved for Observation.component:DiastolicBP which uses an
+  // unsupported slicing on BackboneElement
+  reserved 35;
 }
 
 // Auto-generated from StructureDefinition for Shareable Library.
@@ -6845,27 +6689,21 @@ message LipidProfile {
   // Entire report as issued
   repeated Attachment presented_form = 26;
 
-  // Cholesterol Result
-  Reference cholesterol = 27 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.valid_reference_type) = "Observation"
-  ];
+  // field 27 reserved for DiagnosticReport.result:Cholesterol which uses an
+  // unsupported slicing on Reference
+  reserved 27;
 
-  // Triglyceride Result
-  Reference triglyceride = 28 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.valid_reference_type) = "Observation"
-  ];
+  // field 28 reserved for DiagnosticReport.result:Triglyceride which uses an
+  // unsupported slicing on Reference
+  reserved 28;
 
-  // HDL Cholesterol Result
-  Reference h_d_l_cholesterol = 29 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.valid_reference_type) = "Observation"
-  ];
+  // field 29 reserved for DiagnosticReport.result:HDLCholesterol which uses an
+  // unsupported slicing on Reference
+  reserved 29;
 
-  // LDL Cholesterol result, if reported
-  Reference l_d_l_cholesterol = 30
-      [(.google.fhir.proto.valid_reference_type) = "Observation"];
+  // field 30 reserved for DiagnosticReport.result:LDLCholesterol which uses an
+  // unsupported slicing on Reference
+  reserved 30;
 }
 
 // Auto-generated from StructureDefinition for Example Lipid Profile.
@@ -8828,9 +8666,9 @@ message ProfileForCatalog {
         "extension.exists() != value.exists()"
   ];
 
-  // When the Catalog was created
-  DateTime issue_date = 24
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  // field 24 reserved for Composition.date:IssueDate which uses an unsupported
+  // slicing on dateTime
+  reserved 24;
 }
 
 // Auto-generated from StructureDefinition for Shareable PlanDefinition.

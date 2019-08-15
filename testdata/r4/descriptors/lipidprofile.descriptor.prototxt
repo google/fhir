@@ -280,50 +280,27 @@ field {
   }
 }
 field {
-  name: "cholesterol"
   number: 27
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
   options {
-    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "Cholesterol Result"
-    [google.fhir.proto.valid_reference_type]: "Observation"
+    [google.fhir.proto.reserved_reason]: "field 27 reserved for DiagnosticReport.result:Cholesterol which uses an unsupported slicing on Reference"
   }
 }
 field {
-  name: "triglyceride"
   number: 28
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
   options {
-    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "Triglyceride Result"
-    [google.fhir.proto.valid_reference_type]: "Observation"
+    [google.fhir.proto.reserved_reason]: "field 28 reserved for DiagnosticReport.result:Triglyceride which uses an unsupported slicing on Reference"
   }
 }
 field {
-  name: "h_d_l_cholesterol"
   number: 29
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
   options {
-    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "HDL Cholesterol Result"
-    [google.fhir.proto.valid_reference_type]: "Observation"
+    [google.fhir.proto.reserved_reason]: "field 29 reserved for DiagnosticReport.result:HDLCholesterol which uses an unsupported slicing on Reference"
   }
 }
 field {
-  name: "l_d_l_cholesterol"
   number: 30
-  label: LABEL_OPTIONAL
-  type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
   options {
-    [google.fhir.proto.field_description]: "LDL Cholesterol result, if reported"
-    [google.fhir.proto.valid_reference_type]: "Observation"
+    [google.fhir.proto.reserved_reason]: "field 30 reserved for DiagnosticReport.result:LDLCholesterol which uses an unsupported slicing on Reference"
   }
 }
 nested_type {
