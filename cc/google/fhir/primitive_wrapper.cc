@@ -16,13 +16,11 @@
 
 #include "google/fhir/primitive_wrapper.h"
 
-#include <ctype.h>
+#include <stddef.h>
+#include <stdint.h>
 
-#include <algorithm>
-#include <array>
-#include <functional>
 #include <memory>
-#include <type_traits>
+#include <string>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -30,20 +28,22 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
-#include "absl/strings/ascii.h"
 #include "absl/strings/escaping.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
-#include "absl/strings/strip.h"
 #include "absl/time/time.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/codes.h"
 #include "google/fhir/extensions.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
+#include "proto/r4/datatypes.pb.h"
+#include "proto/r4/google_extensions.pb.h"
+#include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "include/json/json.h"
 #include "tensorflow/core/lib/core/errors.h"
@@ -1017,8 +1017,75 @@ StatusOr<std::unique_ptr<PrimitiveWrapper>> GetStu3Wrapper(
     return std::unique_ptr<PrimitiveWrapper>(
         new XhtmlWrapper<stu3::proto::Xhtml>());
   } else {
-    return InvalidArgument("Unexpected primitive FHIR type: ",
-                           target_descriptor->name());
+    return InvalidArgument("Unexpected STU3 primitive FHIR type: ",
+                           target_descriptor->full_name());
+  }
+}
+
+StatusOr<std::unique_ptr<PrimitiveWrapper>> GetR4Wrapper(
+    const Descriptor* target_descriptor) {
+  if (IsMessageType<r4::proto::Code>(target_descriptor) ||
+      HasValueset(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        (new CodeWrapper<r4::proto::Code>()));
+  } else if (IsMessageType<r4::proto::Base64Binary>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new Base64BinaryWrapper<r4::proto::Base64Binary,
+                                r4::google::Base64BinarySeparatorStride>());
+  } else if (IsMessageType<r4::proto::Boolean>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new BooleanWrapper<r4::proto::Boolean>());
+  } else if (IsMessageType<r4::proto::Canonical>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<r4::proto::Canonical>());
+  } else if (IsMessageType<r4::proto::Date>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new TimeTypeWrapper<r4::proto::Date>());
+  } else if (IsMessageType<r4::proto::DateTime>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new TimeTypeWrapper<r4::proto::DateTime>());
+  } else if (IsMessageType<r4::proto::Decimal>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new DecimalWrapper<r4::proto::Decimal>());
+  } else if (IsMessageType<r4::proto::Id>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<r4::proto::Id>());
+  } else if (IsMessageType<r4::proto::Instant>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new TimeTypeWrapper<r4::proto::Instant>());
+  } else if (IsMessageType<r4::proto::Integer>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new IntegerTypeWrapper<r4::proto::Integer>());
+  } else if (IsMessageType<r4::proto::Markdown>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<r4::proto::Markdown>());
+  } else if (IsMessageType<r4::proto::Oid>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<r4::proto::Oid>());
+  } else if (IsMessageType<r4::proto::PositiveInt>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new PositiveIntWrapper<r4::proto::PositiveInt>());
+  } else if (IsMessageType<r4::proto::String>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<r4::proto::String>());
+  } else if (IsMessageType<r4::proto::Time>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new TimeWrapper<r4::proto::Time>());
+  } else if (IsMessageType<r4::proto::UnsignedInt>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new UnsignedIntWrapper<r4::proto::UnsignedInt>());
+  } else if (IsMessageType<r4::proto::Uri>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<r4::proto::Uri>());
+  } else if (IsMessageType<r4::proto::Url>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<r4::proto::Url>());
+  } else if (IsMessageType<r4::proto::Xhtml>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new XhtmlWrapper<r4::proto::Xhtml>());
+  } else {
+    return InvalidArgument("Unexpected R4 primitive FHIR type: ",
+                           target_descriptor->full_name());
   }
 }
 
@@ -1051,23 +1118,52 @@ Status BuildHasNoValueExtension(Message* extension) {
   return Status::OK();
 }
 
-Status ParseInto(const Json::Value& json, absl::TimeZone tz,
-                 ::google::protobuf::Message* target) {
+::google::fhir::Status ParseInto(const Json::Value& json,
+                                 const proto::FhirVersion fhir_version,
+                                 const absl::TimeZone tz,
+                                 ::google::protobuf::Message* target) {
   if (json.type() == Json::ValueType::arrayValue ||
       json.type() == Json::ValueType::objectValue) {
     return InvalidArgument("Invalid JSON type for ",
                            absl::StrCat(json.toStyledString()));
   }
-  FHIR_ASSIGN_OR_RETURN(std::unique_ptr<PrimitiveWrapper> wrapper,
-                        GetStu3Wrapper(target->GetDescriptor()));
-  FHIR_RETURN_IF_ERROR(wrapper->Parse(json, tz));
-  return wrapper->MergeInto(target);
+  switch (fhir_version) {
+    case proto::STU3: {
+      FHIR_ASSIGN_OR_RETURN(std::unique_ptr<PrimitiveWrapper> wrapper,
+                            GetStu3Wrapper(target->GetDescriptor()));
+      FHIR_RETURN_IF_ERROR(wrapper->Parse(json, tz));
+      return wrapper->MergeInto(target);
+    }
+    case proto::R4: {
+      FHIR_ASSIGN_OR_RETURN(std::unique_ptr<PrimitiveWrapper> wrapper,
+                            GetR4Wrapper(target->GetDescriptor()));
+      FHIR_RETURN_IF_ERROR(wrapper->Parse(json, tz));
+      return wrapper->MergeInto(target);
+    }
+    default:
+      return InvalidArgument("Unsupported Fhir Version: ",
+                             proto::FhirVersion_Name(fhir_version));
+  }
 }
 
 StatusOr<JsonPrimitive> WrapPrimitiveProto(const ::google::protobuf::Message& proto) {
   const ::google::protobuf::Descriptor* descriptor = proto.GetDescriptor();
-  FHIR_ASSIGN_OR_RETURN(std::unique_ptr<PrimitiveWrapper> wrapper,
-                        GetStu3Wrapper(descriptor));
+  std::unique_ptr<PrimitiveWrapper> wrapper;
+  switch (GetFhirVersion(proto)) {
+    case proto::STU3: {
+      FHIR_ASSIGN_OR_RETURN(wrapper, GetStu3Wrapper(descriptor));
+      break;
+    }
+    case proto::R4: {
+      FHIR_ASSIGN_OR_RETURN(wrapper, GetR4Wrapper(descriptor));
+      break;
+    }
+    default:
+      return InvalidArgument(
+          "Unsupported Fhir Version: ",
+          proto::FhirVersion_Name(GetFhirVersion(proto)),
+          " for proto: ", proto.GetDescriptor()->full_name());
+  }
   FHIR_RETURN_IF_ERROR(wrapper->Wrap(proto));
   FHIR_ASSIGN_OR_RETURN(const string value, wrapper->ToValueString());
   if (wrapper->HasElement()) {

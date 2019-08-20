@@ -355,6 +355,8 @@ cc_library(
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto:annotations_cc_proto",
+        "//proto/r4:datatypes_cc_proto",
+        "//proto/r4:extensions_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:extensions_cc_proto",
         "@com_google_absl//absl/memory",
@@ -368,8 +370,8 @@ cc_library(
 )
 
 cc_test(
-    name = "json_format_test",
-    srcs = ["json_format_test.cc"],
+    name = "json_format_stu3_test",
+    srcs = ["json_format_stu3_test.cc"],
     data = [
         "//spec:stu3",
         "//testdata/stu3:bigquery",
@@ -383,6 +385,29 @@ cc_test(
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/stu3:resources_cc_proto",
         "//testdata/stu3/profiles:test_cc_proto",
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest_main",
+        "@jsoncpp_git//:jsoncpp",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "json_format_r4_test",
+    size = "large",
+    srcs = ["json_format_r4_test.cc"],
+    data = [
+        "//spec:r4",
+        "//testdata/r4:examples",
+    ],
+    shard_count = 10,
+    deps = [
+        ":json_format",
+        ":test_helper",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/r4:datatypes_cc_proto",
+        "//proto/r4:resources_cc_proto",
+        "//testdata/r4/profiles:test_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@jsoncpp_git//:jsoncpp",

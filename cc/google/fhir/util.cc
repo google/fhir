@@ -178,6 +178,25 @@ StatusOr<string> ReferenceProtoToString(
   return ReferenceProtoToStringInternal(reference);
 }
 
+StatusOr<string> ReferenceProtoToString(const r4::proto::Reference& reference) {
+  return ReferenceProtoToStringInternal(reference);
+}
+
+// TODO: Split these into separate files, each that accepts only
+// one type.
+StatusOr<string> ReferenceMessageToString(const ::google::protobuf::Message& reference) {
+  if (IsMessageType<stu3::proto::Reference>(reference)) {
+    return ReferenceProtoToString(
+        dynamic_cast<const stu3::proto::Reference&>(reference));
+  } else if (IsMessageType<r4::proto::Reference>(reference)) {
+    return ReferenceProtoToString(
+        dynamic_cast<const r4::proto::Reference&>(reference));
+  }
+  return InvalidArgument(
+      "Invalid Reference type for ReferenceMessageToString: ",
+      reference.GetDescriptor()->full_name());
+}
+
 absl::Duration GetDurationFromTimelikeElement(const DateTime& datetime) {
   // TODO: handle YEAR and MONTH properly, instead of approximating.
   switch (datetime.precision()) {
@@ -368,6 +387,12 @@ Status SplitIfRelativeReference(Message* reference) {
 StatusOr<stu3::proto::Reference> ReferenceStringToProtoStu3(
     const string& input) {
   stu3::proto::Reference reference;
+  FHIR_RETURN_IF_ERROR(ReferenceStringToProto(input, &reference));
+  return reference;
+}
+
+StatusOr<r4::proto::Reference> ReferenceStringToProtoR4(const string& input) {
+  r4::proto::Reference reference;
   FHIR_RETURN_IF_ERROR(ReferenceStringToProto(input, &reference));
   return reference;
 }

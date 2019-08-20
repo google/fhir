@@ -25,7 +25,9 @@
 #include "absl/time/time.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "proto/annotations.pb.h"
 #include "include/json/json.h"
+#include "tensorflow/core/lib/core/status.h"
 
 namespace google {
 namespace fhir {
@@ -41,7 +43,9 @@ struct JsonPrimitive {
   const bool is_non_null() const { return value != "null"; }
 };
 
-::google::fhir::Status ParseInto(const Json::Value& json, absl::TimeZone tz,
+::google::fhir::Status ParseInto(const Json::Value& json,
+                                 const proto::FhirVersion fhir_version,
+                                 const absl::TimeZone tz,
                                  ::google::protobuf::Message* target);
 
 ::google::fhir::StatusOr<JsonPrimitive> WrapPrimitiveProto(

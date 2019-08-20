@@ -17,6 +17,11 @@
 #ifndef GOOGLE_FHIR_UTIL_H_
 #define GOOGLE_FHIR_UTIL_H_
 
+#include <stddef.h>
+
+#include <type_traits>
+#include <utility>
+
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
@@ -86,9 +91,21 @@ Status SplitIfRelativeReference(::google::protobuf::Message* reference);
 StatusOr<stu3::proto::Reference> ReferenceStringToProtoStu3(
     const string& input);
 
+StatusOr<r4::proto::Reference> ReferenceStringToProtoR4(const string& input);
+
 // Return the full string representation of a reference.
 StatusOr<string> ReferenceProtoToString(
     const stu3::proto::Reference& reference);
+
+// Return the full string representation of a reference.
+StatusOr<string> ReferenceProtoToString(const r4::proto::Reference& reference);
+
+// When a message is not of a known type at compile time, this overload can
+// be used to cast to a reference and then call ReferenceProtoToString.
+// This is provided as a separate API rather than relying on the caller to cast
+// so that version-agnostic libraries don't need to link in multiple versions
+// of FHIR.
+StatusOr<string> ReferenceMessageToString(const ::google::protobuf::Message& reference);
 
 // Builds an absl::Time from a time-like fhir Element.
 // Must have a value_us field.

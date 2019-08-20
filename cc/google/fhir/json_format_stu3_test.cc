@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-#include "google/fhir/json_format.h"
-
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
+#include "google/fhir/json_format.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/resources.pb.h"
@@ -112,16 +111,16 @@ void TestPrintForAnalytics(const string& name) {
 /* Edge Case Testing */
 
 /** Test parsing of FHIR edge cases. */
-TEST(JsonFormatTest, EdgeCasesParse) { TestParse<Patient>("Patient-null"); }
+TEST(JsonFormatStu3Test, EdgeCasesParse) { TestParse<Patient>("Patient-null"); }
 
 /** Test parsing of FHIR edge casers from ndjson. */
-TEST(JsonFormatTest, EdgeCasesNdjsonParse) {
+TEST(JsonFormatStu3Test, EdgeCasesNdjsonParse) {
   TestParseWithFilepaths<Patient>("examples/Patient-null.prototxt",
                                   "testdata/stu3/ndjson/Patient-null.ndjson");
 }
 
 /** Test parsing to a profile */
-TEST(JsonFormatTest, ParseSingleArrayElementIntoSingularField) {
+TEST(JsonFormatStu3Test, ParseSingleArrayElementIntoSingularField) {
   TestParseWithFilepaths<stu3::testing::TestPatient>(
       "profiles/test_patient-profiled-testpatient.prototxt",
       "testdata/stu3/profiles/test_patient.json");
@@ -138,9 +137,9 @@ TEST(JsonFormatTest, ParseSingleArrayElementIntoSingularField) {
 }
 
 /** Test printing of FHIR edge cases. */
-TEST(JsonFormatTest, EdgeCasesPrint) { TestPrint<Patient>("Patient-null"); }
+TEST(JsonFormatStu3Test, EdgeCasesPrint) { TestPrint<Patient>("Patient-null"); }
 
-TEST(JsonFormatTest, PrintForAnalytics) {
+TEST(JsonFormatStu3Test, PrintForAnalytics) {
   TestPrintForAnalytics<Composition>("Composition-example");
   TestPrintForAnalytics<Encounter>("Encounter-home");
   TestPrintForAnalytics<Observation>("Observation-example-genetics-1");
@@ -150,13 +149,13 @@ TEST(JsonFormatTest, PrintForAnalytics) {
 /* Resource tests start here. */
 
 /** Test parsing of the Account FHIR resource. */
-TEST(JsonFormatTest, AccountParse) {
+TEST(JsonFormatStu3Test, AccountParse) {
   TestParse<Account>("Account-example");
   TestParse<Account>("Account-ewg");
 }
 
 /** Test parsing of the ActivityDefinition FHIR resource. */
-TEST(JsonFormatTest, ActivityDefinitionParse) {
+TEST(JsonFormatStu3Test, ActivityDefinitionParse) {
   TestParse<ActivityDefinition>(
       "ActivityDefinition-referralPrimaryCareMentalHealth");
   TestParse<ActivityDefinition>("ActivityDefinition-citalopramPrescription");
@@ -167,30 +166,30 @@ TEST(JsonFormatTest, ActivityDefinitionParse) {
 }
 
 /** Test parsing of the AdverseEvent FHIR resource. */
-TEST(JsonFormatTest, AdverseEventParse) {
+TEST(JsonFormatStu3Test, AdverseEventParse) {
   TestParse<AdverseEvent>("AdverseEvent-example");
 }
 
 /** Test parsing of the AllergyIntolerance FHIR resource. */
-TEST(JsonFormatTest, AllergyIntoleranceParse) {
+TEST(JsonFormatStu3Test, AllergyIntoleranceParse) {
   TestParse<AllergyIntolerance>("AllergyIntolerance-example");
 }
 
 /** Test parsing of the Appointment FHIR resource. */
-TEST(JsonFormatTest, AppointmentParse) {
+TEST(JsonFormatStu3Test, AppointmentParse) {
   TestParse<Appointment>("Appointment-example");
   TestParse<Appointment>("Appointment-2docs");
   TestParse<Appointment>("Appointment-examplereq");
 }
 
 /** Test parsing of the AppointmentResponse FHIR resource. */
-TEST(JsonFormatTest, AppointmentResponseParse) {
+TEST(JsonFormatStu3Test, AppointmentResponseParse) {
   TestParse<AppointmentResponse>("AppointmentResponse-example");
   TestParse<AppointmentResponse>("AppointmentResponse-exampleresp");
 }
 
 /** Test parsing of the AuditEvent FHIR resource. */
-TEST(JsonFormatTest, AuditEventParse) {
+TEST(JsonFormatStu3Test, AuditEventParse) {
   TestParse<AuditEvent>("AuditEvent-example");
   TestParse<AuditEvent>("AuditEvent-example-disclosure");
   TestParse<AuditEvent>("AuditEvent-example-login");
@@ -202,24 +201,24 @@ TEST(JsonFormatTest, AuditEventParse) {
 }
 
 /** Test parsing of the Basic FHIR resource. */
-TEST(JsonFormatTest, BasicParse) {
+TEST(JsonFormatStu3Test, BasicParse) {
   TestParse<Basic>("Basic-referral");
   TestParse<Basic>("Basic-classModel");
   TestParse<Basic>("Basic-basic-example-narrative");
 }
 
 /** Test parsing of the Binary FHIR resource. */
-TEST(JsonFormatTest, BinaryParse) { TestParse<Binary>("Binary-example"); }
+TEST(JsonFormatStu3Test, BinaryParse) { TestParse<Binary>("Binary-example"); }
 
 /** Test parsing of the BodySite FHIR resource. */
-TEST(JsonFormatTest, BodySiteParse) {
+TEST(JsonFormatStu3Test, BodySiteParse) {
   TestParse<BodySite>("BodySite-fetus");
   TestParse<BodySite>("BodySite-skin-patch");
   TestParse<BodySite>("BodySite-tumor");
 }
 
 /** Test parsing of the Bundle FHIR resource. */
-TEST(JsonFormatTest, BundleParse) {
+TEST(JsonFormatStu3Test, BundleParse) {
   TestParse<Bundle>("Bundle-bundle-example");
   TestParse<Bundle>("Bundle-72ac8493-52ac-41bd-8d5d-7258c289b5ea");
   TestParse<Bundle>("Bundle-hla-1");
@@ -235,13 +234,13 @@ TEST(JsonFormatTest, BundleParse) {
 }
 
 /** Test parsing of the CapabilityStatement FHIR resource. */
-TEST(JsonFormatTest, CapabilityStatementParse) {
+TEST(JsonFormatStu3Test, CapabilityStatementParse) {
   TestParse<CapabilityStatement>("CapabilityStatement-example");
   TestParse<CapabilityStatement>("CapabilityStatement-phr");
 }
 
 /** Test parsing of the CarePlan FHIR resource. */
-TEST(JsonFormatTest, CarePlanParse) {
+TEST(JsonFormatStu3Test, CarePlanParse) {
   TestParse<CarePlan>("CarePlan-example");
   TestParse<CarePlan>("CarePlan-f001");
   TestParse<CarePlan>("CarePlan-f002");
@@ -256,15 +255,17 @@ TEST(JsonFormatTest, CarePlanParse) {
 }
 
 /** Test parsing of the CareTeam FHIR resource. */
-TEST(JsonFormatTest, CareTeamParse) { TestParse<CareTeam>("CareTeam-example"); }
+TEST(JsonFormatStu3Test, CareTeamParse) {
+  TestParse<CareTeam>("CareTeam-example");
+}
 
 /** Test parsing of the ChargeItem FHIR resource. */
-TEST(JsonFormatTest, ChargeItemParse) {
+TEST(JsonFormatStu3Test, ChargeItemParse) {
   TestParse<ChargeItem>("ChargeItem-example");
 }
 
 /** Test parsing of the Claim FHIR resource. */
-TEST(JsonFormatTest, ClaimParse) {
+TEST(JsonFormatStu3Test, ClaimParse) {
   TestParse<Claim>("Claim-100150");
   TestParse<Claim>("Claim-960150");
   TestParse<Claim>("Claim-960151");
@@ -284,54 +285,54 @@ TEST(JsonFormatTest, ClaimParse) {
 }
 
 /** Test parsing of the ClaimResponse FHIR resource. */
-TEST(JsonFormatTest, ClaimResponseParse) {
+TEST(JsonFormatStu3Test, ClaimResponseParse) {
   TestParse<ClaimResponse>("ClaimResponse-R3500");
 }
 
 /** Test parsing of the ClinicalImpression FHIR resource. */
-TEST(JsonFormatTest, ClinicalImpressionParse) {
+TEST(JsonFormatStu3Test, ClinicalImpressionParse) {
   TestParse<ClinicalImpression>("ClinicalImpression-example");
 }
 
 /** Test parsing of the CodeSystem FHIR resource. */
-TEST(JsonFormatTest, CodeSystemParse) {
+TEST(JsonFormatStu3Test, CodeSystemParse) {
   TestParse<CodeSystem>("codesystem-example");
   TestParse<CodeSystem>("codesystem-example-summary");
   TestParse<CodeSystem>("codesystem-list-example-codes");
 }
 
 /** Test parsing of the Communication FHIR resource. */
-TEST(JsonFormatTest, CommunicationParse) {
+TEST(JsonFormatStu3Test, CommunicationParse) {
   TestParse<Communication>("Communication-example");
   TestParse<Communication>("Communication-fm-attachment");
   TestParse<Communication>("Communication-fm-solicited");
 }
 
 /** Test parsing of the CommunicationRequest FHIR resource. */
-TEST(JsonFormatTest, CommunicationRequestParse) {
+TEST(JsonFormatStu3Test, CommunicationRequestParse) {
   TestParse<CommunicationRequest>("CommunicationRequest-example");
   TestParse<CommunicationRequest>("CommunicationRequest-fm-solicit");
 }
 
 /** Test parsing of the CompartmentDefinition FHIR resource. */
-TEST(JsonFormatTest, CompartmentDefinitionParse) {
+TEST(JsonFormatStu3Test, CompartmentDefinitionParse) {
   TestParse<CompartmentDefinition>("CompartmentDefinition-example");
 }
 
 /** Test parsing of the Composition FHIR resource. */
-TEST(JsonFormatTest, CompositionParse) {
+TEST(JsonFormatStu3Test, CompositionParse) {
   TestParse<Composition>("Composition-example");
 }
 
 /** Test parsing of the ConceptMap FHIR resource. */
-TEST(JsonFormatTest, ConceptMapParse) {
+TEST(JsonFormatStu3Test, ConceptMapParse) {
   TestParse<ConceptMap>("conceptmap-example");
   TestParse<ConceptMap>("conceptmap-example-2");
   TestParse<ConceptMap>("conceptmap-example-specimen-type");
 }
 
 /** Test parsing of the Condition FHIR resource. */
-TEST(JsonFormatTest, ConditionParse) {
+TEST(JsonFormatStu3Test, ConditionParse) {
   TestParse<Condition>("Condition-example");
   TestParse<Condition>("Condition-example2");
   TestParse<Condition>("Condition-f001");
@@ -347,7 +348,7 @@ TEST(JsonFormatTest, ConditionParse) {
 }
 
 /** Test parsing of the Consent FHIR resource. */
-TEST(JsonFormatTest, ConsentParse) {
+TEST(JsonFormatStu3Test, ConsentParse) {
   TestParse<Consent>("Consent-consent-example-basic");
   TestParse<Consent>("Consent-consent-example-Emergency");
   TestParse<Consent>("Consent-consent-example-grantor");
@@ -363,7 +364,7 @@ TEST(JsonFormatTest, ConsentParse) {
 }
 
 /** Test parsing of the Contract FHIR resource. */
-TEST(JsonFormatTest, ContractParse) {
+TEST(JsonFormatStu3Test, ContractParse) {
   TestParse<Contract>("Contract-C-123");
   TestParse<Contract>("Contract-C-2121");
   TestParse<Contract>("Contract-pcd-example-notAuthor");
@@ -374,7 +375,7 @@ TEST(JsonFormatTest, ContractParse) {
 }
 
 /** Test parsing of the Coverage FHIR resource. */
-TEST(JsonFormatTest, CoverageParse) {
+TEST(JsonFormatStu3Test, CoverageParse) {
   TestParse<Coverage>("Coverage-9876B1");
   TestParse<Coverage>("Coverage-7546D");
   TestParse<Coverage>("Coverage-7547E");
@@ -382,13 +383,13 @@ TEST(JsonFormatTest, CoverageParse) {
 }
 
 /** Test parsing of the DataElement FHIR resource. */
-TEST(JsonFormatTest, DataElementParse) {
+TEST(JsonFormatStu3Test, DataElementParse) {
   TestParse<DataElement>("DataElement-gender");
   TestParse<DataElement>("DataElement-prothrombin");
 }
 
 /** Test parsing of the DetectedIssue FHIR resource. */
-TEST(JsonFormatTest, DetectedIssueParse) {
+TEST(JsonFormatStu3Test, DetectedIssueParse) {
   TestParse<DetectedIssue>("DetectedIssue-ddi");
   TestParse<DetectedIssue>("DetectedIssue-allergy");
   TestParse<DetectedIssue>("DetectedIssue-duplicate");
@@ -396,7 +397,7 @@ TEST(JsonFormatTest, DetectedIssueParse) {
 }
 
 /** Test parsing of the Device FHIR resource. */
-TEST(JsonFormatTest, DeviceParse) {
+TEST(JsonFormatStu3Test, DeviceParse) {
   TestParse<Device>("Device-example");
   TestParse<Device>("Device-f001");
   TestParse<Device>("Device-ihe-pcd");
@@ -409,29 +410,29 @@ TEST(JsonFormatTest, DeviceParse) {
 }
 
 /** Test parsing of the DeviceComponent FHIR resource. */
-TEST(JsonFormatTest, DeviceComponentParse) {
+TEST(JsonFormatStu3Test, DeviceComponentParse) {
   TestParse<DeviceComponent>("DeviceComponent-example");
   TestParse<DeviceComponent>("DeviceComponent-example-prodspec");
 }
 
 /** Test parsing of the DeviceMetric FHIR resource. */
-TEST(JsonFormatTest, DeviceMetricParse) {
+TEST(JsonFormatStu3Test, DeviceMetricParse) {
   TestParse<DeviceMetric>("DeviceMetric-example");
 }
 
 /** Test parsing of the DeviceRequest FHIR resource. */
-TEST(JsonFormatTest, DeviceRequestParse) {
+TEST(JsonFormatStu3Test, DeviceRequestParse) {
   TestParse<DeviceRequest>("DeviceRequest-example");
   TestParse<DeviceRequest>("DeviceRequest-insulinpump");
 }
 
 /** Test parsing of the DeviceUseStatement FHIR resource. */
-TEST(JsonFormatTest, DeviceUseStatementParse) {
+TEST(JsonFormatStu3Test, DeviceUseStatementParse) {
   TestParse<DeviceUseStatement>("DeviceUseStatement-example");
 }
 
 /** Test parsing of the DiagnosticReport FHIR resource. */
-TEST(JsonFormatTest, DiagnosticReportParse) {
+TEST(JsonFormatStu3Test, DiagnosticReportParse) {
   TestParse<DiagnosticReport>("DiagnosticReport-101");
   TestParse<DiagnosticReport>("DiagnosticReport-102");
   TestParse<DiagnosticReport>("DiagnosticReport-f001");
@@ -447,23 +448,23 @@ TEST(JsonFormatTest, DiagnosticReportParse) {
 }
 
 /** Test parsing of the DocumentManifest FHIR resource. */
-TEST(JsonFormatTest, DocumentManifestParse) {
+TEST(JsonFormatStu3Test, DocumentManifestParse) {
   TestParse<DocumentManifest>("DocumentManifest-example");
 }
 
 /** Test parsing of the DocumentReference FHIR resource. */
-TEST(JsonFormatTest, DocumentReferenceParse) {
+TEST(JsonFormatStu3Test, DocumentReferenceParse) {
   TestParse<DocumentReference>("DocumentReference-example");
 }
 
 /** Test parsing of the EligibilityRequest FHIR resource. */
-TEST(JsonFormatTest, EligibilityRequestParse) {
+TEST(JsonFormatStu3Test, EligibilityRequestParse) {
   TestParse<EligibilityRequest>("EligibilityRequest-52345");
   TestParse<EligibilityRequest>("EligibilityRequest-52346");
 }
 
 /** Test parsing of the EligibilityResponse FHIR resource. */
-TEST(JsonFormatTest, EligibilityResponseParse) {
+TEST(JsonFormatStu3Test, EligibilityResponseParse) {
   TestParse<EligibilityResponse>("EligibilityResponse-E2500");
   TestParse<EligibilityResponse>("EligibilityResponse-E2501");
   TestParse<EligibilityResponse>("EligibilityResponse-E2502");
@@ -471,7 +472,7 @@ TEST(JsonFormatTest, EligibilityResponseParse) {
 }
 
 /** Test parsing of the Encounter FHIR resource. */
-TEST(JsonFormatTest, EncounterParse) {
+TEST(JsonFormatStu3Test, EncounterParse) {
   TestParse<Encounter>("Encounter-example");
   TestParse<Encounter>("Encounter-emerg");
   TestParse<Encounter>("Encounter-f001");
@@ -485,108 +486,108 @@ TEST(JsonFormatTest, EncounterParse) {
 }
 
 /** Test parsing of the Endpoint FHIR resource. */
-TEST(JsonFormatTest, EndpointParse) {
+TEST(JsonFormatStu3Test, EndpointParse) {
   TestParse<Endpoint>("Endpoint-example");
   TestParse<Endpoint>("Endpoint-example-iid");
   TestParse<Endpoint>("Endpoint-example-wadors");
 }
 
 /** Test parsing of the EnrollmentRequest FHIR resource. */
-TEST(JsonFormatTest, EnrollmentRequestParse) {
+TEST(JsonFormatStu3Test, EnrollmentRequestParse) {
   TestParse<EnrollmentRequest>("EnrollmentRequest-22345");
 }
 
 /** Test parsing of the EnrollmentResponse FHIR resource. */
-TEST(JsonFormatTest, EnrollmentResponseParse) {
+TEST(JsonFormatStu3Test, EnrollmentResponseParse) {
   TestParse<EnrollmentResponse>("EnrollmentResponse-ER2500");
 }
 
 /** Test parsing of the EpisodeOfCare FHIR resource. */
-TEST(JsonFormatTest, EpisodeOfCareParse) {
+TEST(JsonFormatStu3Test, EpisodeOfCareParse) {
   TestParse<EpisodeOfCare>("EpisodeOfCare-example");
 }
 
 /** Test parsing of the ExpansionProfile FHIR resource. */
-TEST(JsonFormatTest, ExpansionProfileParse) {
+TEST(JsonFormatStu3Test, ExpansionProfileParse) {
   TestParse<ExpansionProfile>("ExpansionProfile-example");
 }
 
 /** Test parsing of the ExplanationOfBenefit FHIR resource. */
-TEST(JsonFormatTest, ExplanationOfBenefitParse) {
+TEST(JsonFormatStu3Test, ExplanationOfBenefitParse) {
   TestParse<ExplanationOfBenefit>("ExplanationOfBenefit-EB3500");
 }
 
 /** Test parsing of the FamilyMemberHistory FHIR resource. */
-TEST(JsonFormatTest, FamilyMemberHistoryParse) {
+TEST(JsonFormatStu3Test, FamilyMemberHistoryParse) {
   TestParse<FamilyMemberHistory>("FamilyMemberHistory-father");
   TestParse<FamilyMemberHistory>("FamilyMemberHistory-mother");
 }
 
 /** Test parsing of the Flag FHIR resource. */
-TEST(JsonFormatTest, FlagParse) {
+TEST(JsonFormatStu3Test, FlagParse) {
   TestParse<Flag>("Flag-example");
   TestParse<Flag>("Flag-example-encounter");
 }
 
 /** Test parsing of the Goal FHIR resource. */
-TEST(JsonFormatTest, GoalParse) {
+TEST(JsonFormatStu3Test, GoalParse) {
   TestParse<Goal>("Goal-example");
   TestParse<Goal>("Goal-stop-smoking");
 }
 
 /** Test parsing of the GraphDefinition FHIR resource. */
-TEST(JsonFormatTest, GraphDefinitionParse) {
+TEST(JsonFormatStu3Test, GraphDefinitionParse) {
   TestParse<GraphDefinition>("GraphDefinition-example");
 }
 
 /** Test parsing of the Group FHIR resource. */
-TEST(JsonFormatTest, GroupParse) {
+TEST(JsonFormatStu3Test, GroupParse) {
   TestParse<Group>("Group-101");
   TestParse<Group>("Group-102");
 }
 
 /** Test parsing of the GuidanceResponse FHIR resource. */
-TEST(JsonFormatTest, GuidanceResponseParse) {
+TEST(JsonFormatStu3Test, GuidanceResponseParse) {
   TestParse<GuidanceResponse>("GuidanceResponse-example");
 }
 
 /** Test parsing of the HealthcareService FHIR resource. */
-TEST(JsonFormatTest, HealthcareServiceParse) {
+TEST(JsonFormatStu3Test, HealthcareServiceParse) {
   TestParse<HealthcareService>("HealthcareService-example");
 }
 
 /** Test parsing of the ImagingManifest FHIR resource. */
-TEST(JsonFormatTest, ImagingManifestParse) {
+TEST(JsonFormatStu3Test, ImagingManifestParse) {
   TestParse<ImagingManifest>("ImagingManifest-example");
 }
 
 /** Test parsing of the ImagingStudy FHIR resource. */
-TEST(JsonFormatTest, ImagingStudyParse) {
+TEST(JsonFormatStu3Test, ImagingStudyParse) {
   TestParse<ImagingStudy>("ImagingStudy-example");
   TestParse<ImagingStudy>("ImagingStudy-example-xr");
 }
 
 /** Test parsing of the Immunization FHIR resource. */
-TEST(JsonFormatTest, ImmunizationParse) {
+TEST(JsonFormatStu3Test, ImmunizationParse) {
   TestParse<Immunization>("Immunization-example");
   TestParse<Immunization>("Immunization-historical");
   TestParse<Immunization>("Immunization-notGiven");
 }
 
 /** Test parsing of the ImmunizationRecommendation FHIR resource. */
-TEST(JsonFormatTest, ImmunizationRecommendationParse) {
+TEST(JsonFormatStu3Test, ImmunizationRecommendationParse) {
   TestParse<ImmunizationRecommendation>("ImmunizationRecommendation-example");
   TestParse<ImmunizationRecommendation>(
       "immunizationrecommendation-target-disease-example");
 }
 
 /** Test parsing of the ImplementationGuide FHIR resource. */
-TEST(JsonFormatTest, ImplementationGuideParse) {
+TEST(JsonFormatStu3Test, ImplementationGuideParse) {
   TestParse<ImplementationGuide>("ImplementationGuide-example");
 }
 
 /** Test parsing of the Library FHIR resource. */
-TEST(JsonFormatTest, LibraryParse) {
+TEST(JsonFormatStu3Test, LibraryParse) {
   TestParse<Library>("Library-library-cms146-example");
   TestParse<Library>("Library-composition-example");
   TestParse<Library>("Library-example");
@@ -594,10 +595,12 @@ TEST(JsonFormatTest, LibraryParse) {
 }
 
 /** Test parsing of the Linkage FHIR resource. */
-TEST(JsonFormatTest, LinkageParse) { TestParse<Linkage>("Linkage-example"); }
+TEST(JsonFormatStu3Test, LinkageParse) {
+  TestParse<Linkage>("Linkage-example");
+}
 
 /** Test parsing of the List FHIR resource. */
-TEST(JsonFormatTest, ListParse) {
+TEST(JsonFormatStu3Test, ListParse) {
   TestParse<List>("List-example");
   TestParse<List>("List-current-allergies");
   TestParse<List>("List-example-double-cousin-relationship");
@@ -610,7 +613,7 @@ TEST(JsonFormatTest, ListParse) {
 }
 
 /** Test parsing of the Location FHIR resource. */
-TEST(JsonFormatTest, LocationParse) {
+TEST(JsonFormatStu3Test, LocationParse) {
   TestParse<Location>("Location-1");
   TestParse<Location>("Location-amb");
   TestParse<Location>("Location-hl7");
@@ -620,7 +623,7 @@ TEST(JsonFormatTest, LocationParse) {
 }
 
 /** Test parsing of the Measure FHIR resource. */
-TEST(JsonFormatTest, MeasureParse) {
+TEST(JsonFormatStu3Test, MeasureParse) {
   TestParse<Measure>("Measure-measure-cms146-example");
   TestParse<Measure>("Measure-component-a-example");
   TestParse<Measure>("Measure-component-b-example");
@@ -629,14 +632,14 @@ TEST(JsonFormatTest, MeasureParse) {
 }
 
 /** Test parsing of the MeasureReport FHIR resource. */
-TEST(JsonFormatTest, MeasureReportParse) {
+TEST(JsonFormatStu3Test, MeasureReportParse) {
   TestParse<MeasureReport>("MeasureReport-measurereport-cms146-cat1-example");
   TestParse<MeasureReport>("MeasureReport-measurereport-cms146-cat2-example");
   TestParse<MeasureReport>("MeasureReport-measurereport-cms146-cat3-example");
 }
 
 /** Test parsing of the Media FHIR resource. */
-TEST(JsonFormatTest, MediaParse) {
+TEST(JsonFormatStu3Test, MediaParse) {
   TestParse<Media>("Media-example");
   TestParse<Media>(
       "Media-1.2.840.11361907579238403408700.3.0.14.19970327150033");
@@ -645,7 +648,7 @@ TEST(JsonFormatTest, MediaParse) {
 }
 
 /** Test parsing of the Medication FHIR resource. */
-TEST(JsonFormatTest, MedicationParse) {
+TEST(JsonFormatStu3Test, MedicationParse) {
   TestParse<Medication>("Medication-med0301");
   TestParse<Medication>("Medication-med0302");
   TestParse<Medication>("Medication-med0303");
@@ -672,24 +675,24 @@ TEST(JsonFormatTest, MedicationParse) {
 }
 
 /** Test parsing of the MedicationAdministration FHIR resource. */
-TEST(JsonFormatTest, MedicationAdministrationParse) {
+TEST(JsonFormatStu3Test, MedicationAdministrationParse) {
   TestParse<MedicationAdministration>(
       "MedicationAdministration-medadminexample03");
 }
 
 /** Test parsing of the MedicationDispense FHIR resource. */
-TEST(JsonFormatTest, MedicationDispenseParse) {
+TEST(JsonFormatStu3Test, MedicationDispenseParse) {
   TestParse<MedicationDispense>("MedicationDispense-meddisp008");
 }
 
 /** Test parsing of the MedicationRequest FHIR resource. */
-TEST(JsonFormatTest, MedicationRequestParse) {
+TEST(JsonFormatStu3Test, MedicationRequestParse) {
   TestParse<MedicationRequest>("MedicationRequest-medrx0311");
   TestParse<MedicationRequest>("MedicationRequest-medrx002");
 }
 
 /** Test parsing of the MedicationStatement FHIR resource. */
-TEST(JsonFormatTest, MedicationStatementParse) {
+TEST(JsonFormatStu3Test, MedicationStatementParse) {
   TestParse<MedicationStatement>("MedicationStatement-example001");
   TestParse<MedicationStatement>("MedicationStatement-example002");
   TestParse<MedicationStatement>("MedicationStatement-example003");
@@ -700,25 +703,25 @@ TEST(JsonFormatTest, MedicationStatementParse) {
 }
 
 /** Test parsing of the MessageDefinition FHIR resource. */
-TEST(JsonFormatTest, MessageDefinitionParse) {
+TEST(JsonFormatStu3Test, MessageDefinitionParse) {
   TestParse<MessageDefinition>("MessageDefinition-example");
 }
 
 /** Test parsing of the MessageHeader FHIR resource. */
-TEST(JsonFormatTest, MessageHeaderParse) {
+TEST(JsonFormatStu3Test, MessageHeaderParse) {
   TestParse<MessageHeader>(
       "MessageHeader-1cbdfb97-5859-48a4-8301-d54eab818d68");
 }
 
 /** Test parsing of the NamingSystem FHIR resource. */
-TEST(JsonFormatTest, NamingSystemParse) {
+TEST(JsonFormatStu3Test, NamingSystemParse) {
   TestParse<NamingSystem>("NamingSystem-example");
   TestParse<NamingSystem>("NamingSystem-example-id");
   TestParse<NamingSystem>("NamingSystem-example-replaced");
 }
 
 /** Test parsing of the NutritionOrder FHIR resource. */
-TEST(JsonFormatTest, NutritionOrderParse) {
+TEST(JsonFormatStu3Test, NutritionOrderParse) {
   TestParse<NutritionOrder>("NutritionOrder-cardiacdiet");
   TestParse<NutritionOrder>("NutritionOrder-diabeticdiet");
   TestParse<NutritionOrder>("NutritionOrder-diabeticsupplement");
@@ -735,7 +738,7 @@ TEST(JsonFormatTest, NutritionOrderParse) {
 }
 
 /** Test parsing of the Observation FHIR resource. */
-TEST(JsonFormatTest, ObservationParse) {
+TEST(JsonFormatStu3Test, ObservationParse) {
   TestParse<Observation>("Observation-example");
   TestParse<Observation>("Observation-10minute-apgar-score");
   TestParse<Observation>("Observation-1minute-apgar-score");
@@ -787,12 +790,12 @@ TEST(JsonFormatTest, ObservationParse) {
 }
 
 /** Test parsing of the OperationDefinition FHIR resource. */
-TEST(JsonFormatTest, OperationDefinitionParse) {
+TEST(JsonFormatStu3Test, OperationDefinitionParse) {
   TestParse<OperationDefinition>("OperationDefinition-example");
 }
 
 /** Test parsing of the OperationOutcome FHIR resource. */
-TEST(JsonFormatTest, OperationOutcomeParse) {
+TEST(JsonFormatStu3Test, OperationOutcomeParse) {
   TestParse<OperationOutcome>("OperationOutcome-101");
   TestParse<OperationOutcome>("OperationOutcome-allok");
   TestParse<OperationOutcome>("OperationOutcome-break-the-glass");
@@ -802,7 +805,7 @@ TEST(JsonFormatTest, OperationOutcomeParse) {
 }
 
 /** Test parsing of the Organization FHIR resource. */
-TEST(JsonFormatTest, OrganizationParse) {
+TEST(JsonFormatStu3Test, OrganizationParse) {
   TestParse<Organization>("Organization-hl7");
   TestParse<Organization>("Organization-f001");
   TestParse<Organization>("Organization-f002");
@@ -817,12 +820,12 @@ TEST(JsonFormatTest, OrganizationParse) {
 }
 
 /** Test parsing of the Parameters FHIR resource. */
-TEST(JsonFormatTest, ParametersParse) {
+TEST(JsonFormatStu3Test, ParametersParse) {
   TestParse<Parameters>("Parameters-example");
 }
 
 /** Test parsing of the Patient FHIR resource. */
-TEST(JsonFormatTest, PatientParse) {
+TEST(JsonFormatStu3Test, PatientParse) {
   TestParse<Patient>("patient-example");
   TestParse<Patient>("patient-example-a");
   TestParse<Patient>("patient-example-animal");
@@ -842,23 +845,23 @@ TEST(JsonFormatTest, PatientParse) {
 }
 
 /** Test parsing of the PaymentNotice FHIR resource. */
-TEST(JsonFormatTest, PaymentNoticeParse) {
+TEST(JsonFormatStu3Test, PaymentNoticeParse) {
   TestParse<PaymentNotice>("PaymentNotice-77654");
 }
 
 /** Test parsing of the PaymentReconciliation FHIR resource. */
-TEST(JsonFormatTest, PaymentReconciliationParse) {
+TEST(JsonFormatStu3Test, PaymentReconciliationParse) {
   TestParse<PaymentReconciliation>("PaymentReconciliation-ER2500");
 }
 
 /** Test parsing of the Person FHIR resource. */
-TEST(JsonFormatTest, PersonParse) {
+TEST(JsonFormatStu3Test, PersonParse) {
   TestParse<Person>("Person-example");
   TestParse<Person>("Person-f002");
 }
 
 /** Test parsing of the PlanDefinition FHIR resource. */
-TEST(JsonFormatTest, PlanDefinitionParse) {
+TEST(JsonFormatStu3Test, PlanDefinitionParse) {
   TestParse<PlanDefinition>("PlanDefinition-low-suicide-risk-order-set");
   TestParse<PlanDefinition>("PlanDefinition-KDN5");
   TestParse<PlanDefinition>("PlanDefinition-options-example");
@@ -867,7 +870,7 @@ TEST(JsonFormatTest, PlanDefinitionParse) {
 }
 
 /** Test parsing of the Practitioner FHIR resource. */
-TEST(JsonFormatTest, PractitionerParse) {
+TEST(JsonFormatStu3Test, PractitionerParse) {
   TestParse<Practitioner>("Practitioner-example");
   TestParse<Practitioner>("Practitioner-f001");
   TestParse<Practitioner>("Practitioner-f002");
@@ -885,12 +888,12 @@ TEST(JsonFormatTest, PractitionerParse) {
 }
 
 /** Test parsing of the PractitionerRole FHIR resource. */
-TEST(JsonFormatTest, PractitionerRoleParse) {
+TEST(JsonFormatStu3Test, PractitionerRoleParse) {
   TestParse<PractitionerRole>("PractitionerRole-example");
 }
 
 /** Test parsing of the Procedure FHIR resource. */
-TEST(JsonFormatTest, ProcedureParse) {
+TEST(JsonFormatStu3Test, ProcedureParse) {
   TestParse<Procedure>("Procedure-example");
   TestParse<Procedure>("Procedure-ambulation");
   TestParse<Procedure>("Procedure-appendectomy-narrative");
@@ -909,7 +912,7 @@ TEST(JsonFormatTest, ProcedureParse) {
 }
 
 /** Test parsing of the ProcedureRequest FHIR resource. */
-TEST(JsonFormatTest, ProcedureRequestParse) {
+TEST(JsonFormatStu3Test, ProcedureRequestParse) {
   TestParse<ProcedureRequest>("ProcedureRequest-example");
   TestParse<ProcedureRequest>("ProcedureRequest-physiotherapy");
   TestParse<ProcedureRequest>("ProcedureRequest-do-not-turn");
@@ -931,7 +934,7 @@ TEST(JsonFormatTest, ProcedureRequestParse) {
 }
 
 /** Test parsing of the ProcessRequest FHIR resource. */
-TEST(JsonFormatTest, ProcessRequestParse) {
+TEST(JsonFormatStu3Test, ProcessRequestParse) {
   TestParse<ProcessRequest>("ProcessRequest-1110");
   TestParse<ProcessRequest>("ProcessRequest-1115");
   TestParse<ProcessRequest>("ProcessRequest-1113");
@@ -944,14 +947,14 @@ TEST(JsonFormatTest, ProcessRequestParse) {
 }
 
 /** Test parsing of the ProcessResponse FHIR resource. */
-TEST(JsonFormatTest, ProcessResponseParse) {
+TEST(JsonFormatStu3Test, ProcessResponseParse) {
   TestParse<ProcessResponse>("ProcessResponse-SR2500");
   TestParse<ProcessResponse>("ProcessResponse-SR2349");
   TestParse<ProcessResponse>("ProcessResponse-SR2499");
 }
 
 /** Test parsing of the Provenance FHIR resource. */
-TEST(JsonFormatTest, ProvenanceParse) {
+TEST(JsonFormatStu3Test, ProvenanceParse) {
   TestParse<Provenance>("Provenance-example");
   TestParse<Provenance>("Provenance-example-biocompute-object");
   TestParse<Provenance>("Provenance-example-cwl");
@@ -959,7 +962,7 @@ TEST(JsonFormatTest, ProvenanceParse) {
 }
 
 /** Test parsing of the Questionnaire FHIR resource. */
-TEST(JsonFormatTest, QuestionnaireParse) {
+TEST(JsonFormatStu3Test, QuestionnaireParse) {
   TestParse<Questionnaire>("Questionnaire-3141");
   TestParse<Questionnaire>("Questionnaire-bb");
   TestParse<Questionnaire>("Questionnaire-f201");
@@ -967,7 +970,7 @@ TEST(JsonFormatTest, QuestionnaireParse) {
 }
 
 /** Test parsing of the QuestionnaireResponse FHIR resource. */
-TEST(JsonFormatTest, QuestionnaireResponseParse) {
+TEST(JsonFormatStu3Test, QuestionnaireResponseParse) {
   TestParse<QuestionnaireResponse>("QuestionnaireResponse-3141");
   TestParse<QuestionnaireResponse>("QuestionnaireResponse-bb");
   TestParse<QuestionnaireResponse>("QuestionnaireResponse-f201");
@@ -976,12 +979,12 @@ TEST(JsonFormatTest, QuestionnaireResponseParse) {
 }
 
 /** Test parsing of the ReferralRequest FHIR resource. */
-TEST(JsonFormatTest, ReferralRequestParse) {
+TEST(JsonFormatStu3Test, ReferralRequestParse) {
   TestParse<ReferralRequest>("ReferralRequest-example");
 }
 
 /** Test parsing of the RelatedPerson FHIR resource. */
-TEST(JsonFormatTest, RelatedPersonParse) {
+TEST(JsonFormatStu3Test, RelatedPersonParse) {
   TestParse<RelatedPerson>("RelatedPerson-benedicte");
   TestParse<RelatedPerson>("RelatedPerson-f001");
   TestParse<RelatedPerson>("RelatedPerson-f002");
@@ -989,23 +992,23 @@ TEST(JsonFormatTest, RelatedPersonParse) {
 }
 
 /** Test parsing of the RequestGroup FHIR resource. */
-TEST(JsonFormatTest, RequestGroupParse) {
+TEST(JsonFormatStu3Test, RequestGroupParse) {
   TestParse<RequestGroup>("RequestGroup-example");
   TestParse<RequestGroup>("RequestGroup-kdn5-example");
 }
 
 /** Test parsing of the ResearchStudy FHIR resource. */
-TEST(JsonFormatTest, ResearchStudyParse) {
+TEST(JsonFormatStu3Test, ResearchStudyParse) {
   TestParse<ResearchStudy>("ResearchStudy-example");
 }
 
 /** Test parsing of the ResearchSubject FHIR resource. */
-TEST(JsonFormatTest, ResearchSubjectParse) {
+TEST(JsonFormatStu3Test, ResearchSubjectParse) {
   TestParse<ResearchSubject>("ResearchSubject-example");
 }
 
 /** Test parsing of the RiskAssessment FHIR resource. */
-TEST(JsonFormatTest, RiskAssessmentParse) {
+TEST(JsonFormatStu3Test, RiskAssessmentParse) {
   TestParse<RiskAssessment>("RiskAssessment-genetic");
   TestParse<RiskAssessment>("RiskAssessment-cardiac");
   TestParse<RiskAssessment>("RiskAssessment-population");
@@ -1013,21 +1016,21 @@ TEST(JsonFormatTest, RiskAssessmentParse) {
 }
 
 /** Test parsing of the Schedule FHIR resource. */
-TEST(JsonFormatTest, ScheduleParse) {
+TEST(JsonFormatStu3Test, ScheduleParse) {
   TestParse<Schedule>("Schedule-example");
   TestParse<Schedule>("Schedule-exampleloc1");
   TestParse<Schedule>("Schedule-exampleloc2");
 }
 
 /** Test parsing of the SearchParameter FHIR resource. */
-TEST(JsonFormatTest, SearchParameterParse) {
+TEST(JsonFormatStu3Test, SearchParameterParse) {
   TestParse<SearchParameter>("SearchParameter-example");
   TestParse<SearchParameter>("SearchParameter-example-extension");
   TestParse<SearchParameter>("SearchParameter-example-reference");
 }
 
 /** Test parsing of the Sequence FHIR resource. */
-TEST(JsonFormatTest, SequenceParse) {
+TEST(JsonFormatStu3Test, SequenceParse) {
   TestParse<Sequence>("Sequence-coord-0-base");
   TestParse<Sequence>("Sequence-coord-1-base");
   TestParse<Sequence>("Sequence-example");
@@ -1046,12 +1049,12 @@ TEST(JsonFormatTest, SequenceParse) {
 }
 
 /** Test parsing of the ServiceDefinition FHIR resource. */
-TEST(JsonFormatTest, ServiceDefinitionParse) {
+TEST(JsonFormatStu3Test, ServiceDefinitionParse) {
   TestParse<ServiceDefinition>("ServiceDefinition-example");
 }
 
 /** Test parsing of the Slot FHIR resource. */
-TEST(JsonFormatTest, SlotParse) {
+TEST(JsonFormatStu3Test, SlotParse) {
   TestParse<Slot>("Slot-example");
   TestParse<Slot>("Slot-1");
   TestParse<Slot>("Slot-2");
@@ -1059,7 +1062,7 @@ TEST(JsonFormatTest, SlotParse) {
 }
 
 /** Test parsing of the Specimen FHIR resource. */
-TEST(JsonFormatTest, SpecimenParse) {
+TEST(JsonFormatStu3Test, SpecimenParse) {
   TestParse<Specimen>("Specimen-101");
   TestParse<Specimen>("Specimen-isolate");
   TestParse<Specimen>("Specimen-sst");
@@ -1067,23 +1070,23 @@ TEST(JsonFormatTest, SpecimenParse) {
 }
 
 /** Test parsing of the StructureDefinition FHIR resource. */
-TEST(JsonFormatTest, StructureDefinitionParse) {
+TEST(JsonFormatStu3Test, StructureDefinitionParse) {
   TestParse<StructureDefinition>("StructureDefinition-example");
 }
 
 /** Test parsing of the StructureMap FHIR resource. */
-TEST(JsonFormatTest, StructureMapParse) {
+TEST(JsonFormatStu3Test, StructureMapParse) {
   TestParse<StructureMap>("StructureMap-example");
 }
 
 /** Test parsing of the Subscription FHIR resource. */
-TEST(JsonFormatTest, SubscriptionParse) {
+TEST(JsonFormatStu3Test, SubscriptionParse) {
   TestParse<Subscription>("Subscription-example");
   TestParse<Subscription>("Subscription-example-error");
 }
 
 /** Test parsing of the Substance FHIR resource. */
-TEST(JsonFormatTest, SubstanceParse) {
+TEST(JsonFormatStu3Test, SubstanceParse) {
   TestParse<Substance>("Substance-example");
   TestParse<Substance>("Substance-f205");
   TestParse<Substance>("Substance-f201");
@@ -1093,18 +1096,18 @@ TEST(JsonFormatTest, SubstanceParse) {
 }
 
 /** Test parsing of the SupplyDelivery FHIR resource. */
-TEST(JsonFormatTest, SupplyDeliveryParse) {
+TEST(JsonFormatStu3Test, SupplyDeliveryParse) {
   TestParse<SupplyDelivery>("SupplyDelivery-simpledelivery");
   TestParse<SupplyDelivery>("SupplyDelivery-pumpdelivery");
 }
 
 /** Test parsing of the SupplyRequest FHIR resource. */
-TEST(JsonFormatTest, SupplyRequestParse) {
+TEST(JsonFormatStu3Test, SupplyRequestParse) {
   TestParse<SupplyRequest>("SupplyRequest-simpleorder");
 }
 
 /** Test parsing of the Task FHIR resource. */
-TEST(JsonFormatTest, TaskParse) {
+TEST(JsonFormatStu3Test, TaskParse) {
   TestParse<Task>("Task-example1");
   TestParse<Task>("Task-example2");
   TestParse<Task>("Task-example3");
@@ -1114,12 +1117,12 @@ TEST(JsonFormatTest, TaskParse) {
 }
 
 /** Test parsing of the TestReport FHIR resource. */
-TEST(JsonFormatTest, TestReportParse) {
+TEST(JsonFormatStu3Test, TestReportParse) {
   TestParse<TestReport>("TestReport-testreport-example");
 }
 
 /** Test parsing of the TestScript FHIR resource. */
-TEST(JsonFormatTest, TestScriptParse) {
+TEST(JsonFormatStu3Test, TestScriptParse) {
   TestParse<TestScript>("TestScript-testscript-example");
   TestParse<TestScript>("TestScript-testscript-example-history");
   TestParse<TestScript>("TestScript-testscript-example-multisystem");
@@ -1130,7 +1133,7 @@ TEST(JsonFormatTest, TestScriptParse) {
 }
 
 /** Test parsing of the ValueSet FHIR resource. */
-TEST(JsonFormatTest, ValueSetParse) {
+TEST(JsonFormatStu3Test, ValueSetParse) {
   TestParse<ValueSet>("valueset-example");
   TestParse<ValueSet>("valueset-example-expansion");
   TestParse<ValueSet>("valueset-example-inactive");
@@ -1140,7 +1143,7 @@ TEST(JsonFormatTest, ValueSetParse) {
 }
 
 /** Test parsing of the VisionPrescription FHIR resource. */
-TEST(JsonFormatTest, VisionPrescriptionParse) {
+TEST(JsonFormatStu3Test, VisionPrescriptionParse) {
   TestParse<VisionPrescription>("VisionPrescription-33123");
   TestParse<VisionPrescription>("VisionPrescription-33124");
 }
@@ -1150,13 +1153,13 @@ TEST(JsonFormatTest, VisionPrescriptionParse) {
 /* Resource tests start here. */
 
 /** Test printing of the Account FHIR resource. */
-TEST(JsonFormatTest, AccountPrint) {
+TEST(JsonFormatStu3Test, AccountPrint) {
   TestPrint<Account>("Account-example");
   TestPrint<Account>("Account-ewg");
 }
 
 /** Test printing of the ActivityDefinition FHIR resource. */
-TEST(JsonFormatTest, ActivityDefinitionPrint) {
+TEST(JsonFormatStu3Test, ActivityDefinitionPrint) {
   TestPrint<ActivityDefinition>(
       "ActivityDefinition-referralPrimaryCareMentalHealth");
   TestPrint<ActivityDefinition>("ActivityDefinition-citalopramPrescription");
@@ -1167,30 +1170,30 @@ TEST(JsonFormatTest, ActivityDefinitionPrint) {
 }
 
 /** Test printing of the AdverseEvent FHIR resource. */
-TEST(JsonFormatTest, AdverseEventPrint) {
+TEST(JsonFormatStu3Test, AdverseEventPrint) {
   TestPrint<AdverseEvent>("AdverseEvent-example");
 }
 
 /** Test printing of the AllergyIntolerance FHIR resource. */
-TEST(JsonFormatTest, AllergyIntolerancePrint) {
+TEST(JsonFormatStu3Test, AllergyIntolerancePrint) {
   TestPrint<AllergyIntolerance>("AllergyIntolerance-example");
 }
 
 /** Test printing of the Appointment FHIR resource. */
-TEST(JsonFormatTest, AppointmentPrint) {
+TEST(JsonFormatStu3Test, AppointmentPrint) {
   TestPrint<Appointment>("Appointment-example");
   TestPrint<Appointment>("Appointment-2docs");
   TestPrint<Appointment>("Appointment-examplereq");
 }
 
 /** Test printing of the AppointmentResponse FHIR resource. */
-TEST(JsonFormatTest, AppointmentResponsePrint) {
+TEST(JsonFormatStu3Test, AppointmentResponsePrint) {
   TestPrint<AppointmentResponse>("AppointmentResponse-example");
   TestPrint<AppointmentResponse>("AppointmentResponse-exampleresp");
 }
 
 /** Test printing of the AuditEvent FHIR resource. */
-TEST(JsonFormatTest, AuditEventPrint) {
+TEST(JsonFormatStu3Test, AuditEventPrint) {
   TestPrint<AuditEvent>("AuditEvent-example");
   TestPrint<AuditEvent>("AuditEvent-example-disclosure");
   TestPrint<AuditEvent>("AuditEvent-example-login");
@@ -1202,24 +1205,24 @@ TEST(JsonFormatTest, AuditEventPrint) {
 }
 
 /** Test printing of the Basic FHIR resource. */
-TEST(JsonFormatTest, BasicPrint) {
+TEST(JsonFormatStu3Test, BasicPrint) {
   TestPrint<Basic>("Basic-referral");
   TestPrint<Basic>("Basic-classModel");
   TestPrint<Basic>("Basic-basic-example-narrative");
 }
 
 /** Test printing of the Binary FHIR resource. */
-TEST(JsonFormatTest, BinaryPrint) { TestPrint<Binary>("Binary-example"); }
+TEST(JsonFormatStu3Test, BinaryPrint) { TestPrint<Binary>("Binary-example"); }
 
 /** Test printing of the BodySite FHIR resource. */
-TEST(JsonFormatTest, BodySitePrint) {
+TEST(JsonFormatStu3Test, BodySitePrint) {
   TestPrint<BodySite>("BodySite-fetus");
   TestPrint<BodySite>("BodySite-skin-patch");
   TestPrint<BodySite>("BodySite-tumor");
 }
 
 /** Test printing of the Bundle FHIR resource. */
-TEST(JsonFormatTest, BundlePrint) {
+TEST(JsonFormatStu3Test, BundlePrint) {
   TestPrint<Bundle>("Bundle-bundle-example");
   TestPrint<Bundle>("Bundle-72ac8493-52ac-41bd-8d5d-7258c289b5ea");
   TestPrint<Bundle>("Bundle-hla-1");
@@ -1235,13 +1238,13 @@ TEST(JsonFormatTest, BundlePrint) {
 }
 
 /** Test printing of the CapabilityStatement FHIR resource. */
-TEST(JsonFormatTest, CapabilityStatementPrint) {
+TEST(JsonFormatStu3Test, CapabilityStatementPrint) {
   TestPrint<CapabilityStatement>("CapabilityStatement-example");
   TestPrint<CapabilityStatement>("CapabilityStatement-phr");
 }
 
 /** Test printing of the CarePlan FHIR resource. */
-TEST(JsonFormatTest, CarePlanPrint) {
+TEST(JsonFormatStu3Test, CarePlanPrint) {
   TestPrint<CarePlan>("CarePlan-example");
   TestPrint<CarePlan>("CarePlan-f001");
   TestPrint<CarePlan>("CarePlan-f002");
@@ -1256,15 +1259,17 @@ TEST(JsonFormatTest, CarePlanPrint) {
 }
 
 /** Test printing of the CareTeam FHIR resource. */
-TEST(JsonFormatTest, CareTeamPrint) { TestPrint<CareTeam>("CareTeam-example"); }
+TEST(JsonFormatStu3Test, CareTeamPrint) {
+  TestPrint<CareTeam>("CareTeam-example");
+}
 
 /** Test printing of the ChargeItem FHIR resource. */
-TEST(JsonFormatTest, ChargeItemPrint) {
+TEST(JsonFormatStu3Test, ChargeItemPrint) {
   TestPrint<ChargeItem>("ChargeItem-example");
 }
 
 /** Test printing of the Claim FHIR resource. */
-TEST(JsonFormatTest, ClaimPrint) {
+TEST(JsonFormatStu3Test, ClaimPrint) {
   TestPrint<Claim>("Claim-100150");
   TestPrint<Claim>("Claim-960150");
   TestPrint<Claim>("Claim-960151");
@@ -1284,54 +1289,54 @@ TEST(JsonFormatTest, ClaimPrint) {
 }
 
 /** Test printing of the ClaimResponse FHIR resource. */
-TEST(JsonFormatTest, ClaimResponsePrint) {
+TEST(JsonFormatStu3Test, ClaimResponsePrint) {
   TestPrint<ClaimResponse>("ClaimResponse-R3500");
 }
 
 /** Test printing of the ClinicalImpression FHIR resource. */
-TEST(JsonFormatTest, ClinicalImpressionPrint) {
+TEST(JsonFormatStu3Test, ClinicalImpressionPrint) {
   TestPrint<ClinicalImpression>("ClinicalImpression-example");
 }
 
 /** Test printing of the CodeSystem FHIR resource. */
-TEST(JsonFormatTest, CodeSystemPrint) {
+TEST(JsonFormatStu3Test, CodeSystemPrint) {
   TestPrint<CodeSystem>("codesystem-example");
   TestPrint<CodeSystem>("codesystem-example-summary");
   TestPrint<CodeSystem>("codesystem-list-example-codes");
 }
 
 /** Test printing of the Communication FHIR resource. */
-TEST(JsonFormatTest, CommunicationPrint) {
+TEST(JsonFormatStu3Test, CommunicationPrint) {
   TestPrint<Communication>("Communication-example");
   TestPrint<Communication>("Communication-fm-attachment");
   TestPrint<Communication>("Communication-fm-solicited");
 }
 
 /** Test printing of the CommunicationRequest FHIR resource. */
-TEST(JsonFormatTest, CommunicationRequestPrint) {
+TEST(JsonFormatStu3Test, CommunicationRequestPrint) {
   TestPrint<CommunicationRequest>("CommunicationRequest-example");
   TestPrint<CommunicationRequest>("CommunicationRequest-fm-solicit");
 }
 
 /** Test printing of the CompartmentDefinition FHIR resource. */
-TEST(JsonFormatTest, CompartmentDefinitionPrint) {
+TEST(JsonFormatStu3Test, CompartmentDefinitionPrint) {
   TestPrint<CompartmentDefinition>("CompartmentDefinition-example");
 }
 
 /** Test printing of the Composition FHIR resource. */
-TEST(JsonFormatTest, CompositionPrint) {
+TEST(JsonFormatStu3Test, CompositionPrint) {
   TestPrint<Composition>("Composition-example");
 }
 
 /** Test printing of the ConceptMap FHIR resource. */
-TEST(JsonFormatTest, ConceptMapPrint) {
+TEST(JsonFormatStu3Test, ConceptMapPrint) {
   TestPrint<ConceptMap>("conceptmap-example");
   TestPrint<ConceptMap>("conceptmap-example-2");
   TestPrint<ConceptMap>("conceptmap-example-specimen-type");
 }
 
 /** Test printing of the Condition FHIR resource. */
-TEST(JsonFormatTest, ConditionPrint) {
+TEST(JsonFormatStu3Test, ConditionPrint) {
   TestPrint<Condition>("Condition-example");
   TestPrint<Condition>("Condition-example2");
   TestPrint<Condition>("Condition-f001");
@@ -1347,7 +1352,7 @@ TEST(JsonFormatTest, ConditionPrint) {
 }
 
 /** Test printing of the Consent FHIR resource. */
-TEST(JsonFormatTest, ConsentPrint) {
+TEST(JsonFormatStu3Test, ConsentPrint) {
   TestPrint<Consent>("Consent-consent-example-basic");
   TestPrint<Consent>("Consent-consent-example-Emergency");
   TestPrint<Consent>("Consent-consent-example-grantor");
@@ -1363,7 +1368,7 @@ TEST(JsonFormatTest, ConsentPrint) {
 }
 
 /** Test printing of the Contract FHIR resource. */
-TEST(JsonFormatTest, ContractPrint) {
+TEST(JsonFormatStu3Test, ContractPrint) {
   TestPrint<Contract>("Contract-C-123");
   TestPrint<Contract>("Contract-C-2121");
   TestPrint<Contract>("Contract-pcd-example-notAuthor");
@@ -1374,7 +1379,7 @@ TEST(JsonFormatTest, ContractPrint) {
 }
 
 /** Test printing of the Coverage FHIR resource. */
-TEST(JsonFormatTest, CoveragePrint) {
+TEST(JsonFormatStu3Test, CoveragePrint) {
   TestPrint<Coverage>("Coverage-9876B1");
   TestPrint<Coverage>("Coverage-7546D");
   TestPrint<Coverage>("Coverage-7547E");
@@ -1382,13 +1387,13 @@ TEST(JsonFormatTest, CoveragePrint) {
 }
 
 /** Test printing of the DataElement FHIR resource. */
-TEST(JsonFormatTest, DataElementPrint) {
+TEST(JsonFormatStu3Test, DataElementPrint) {
   TestPrint<DataElement>("DataElement-gender");
   TestPrint<DataElement>("DataElement-prothrombin");
 }
 
 /** Test printing of the DetectedIssue FHIR resource. */
-TEST(JsonFormatTest, DetectedIssuePrint) {
+TEST(JsonFormatStu3Test, DetectedIssuePrint) {
   TestPrint<DetectedIssue>("DetectedIssue-ddi");
   TestPrint<DetectedIssue>("DetectedIssue-allergy");
   TestPrint<DetectedIssue>("DetectedIssue-duplicate");
@@ -1396,7 +1401,7 @@ TEST(JsonFormatTest, DetectedIssuePrint) {
 }
 
 /** Test printing of the Device FHIR resource. */
-TEST(JsonFormatTest, DevicePrint) {
+TEST(JsonFormatStu3Test, DevicePrint) {
   TestPrint<Device>("Device-example");
   TestPrint<Device>("Device-f001");
   TestPrint<Device>("Device-ihe-pcd");
@@ -1409,29 +1414,29 @@ TEST(JsonFormatTest, DevicePrint) {
 }
 
 /** Test printing of the DeviceComponent FHIR resource. */
-TEST(JsonFormatTest, DeviceComponentPrint) {
+TEST(JsonFormatStu3Test, DeviceComponentPrint) {
   TestPrint<DeviceComponent>("DeviceComponent-example");
   TestPrint<DeviceComponent>("DeviceComponent-example-prodspec");
 }
 
 /** Test printing of the DeviceMetric FHIR resource. */
-TEST(JsonFormatTest, DeviceMetricPrint) {
+TEST(JsonFormatStu3Test, DeviceMetricPrint) {
   TestPrint<DeviceMetric>("DeviceMetric-example");
 }
 
 /** Test printing of the DeviceRequest FHIR resource. */
-TEST(JsonFormatTest, DeviceRequestPrint) {
+TEST(JsonFormatStu3Test, DeviceRequestPrint) {
   TestPrint<DeviceRequest>("DeviceRequest-example");
   TestPrint<DeviceRequest>("DeviceRequest-insulinpump");
 }
 
 /** Test printing of the DeviceUseStatement FHIR resource. */
-TEST(JsonFormatTest, DeviceUseStatementPrint) {
+TEST(JsonFormatStu3Test, DeviceUseStatementPrint) {
   TestPrint<DeviceUseStatement>("DeviceUseStatement-example");
 }
 
 /** Test printing of the DiagnosticReport FHIR resource. */
-TEST(JsonFormatTest, DiagnosticReportPrint) {
+TEST(JsonFormatStu3Test, DiagnosticReportPrint) {
   TestPrint<DiagnosticReport>("DiagnosticReport-101");
   TestPrint<DiagnosticReport>("DiagnosticReport-102");
   TestPrint<DiagnosticReport>("DiagnosticReport-f001");
@@ -1447,23 +1452,23 @@ TEST(JsonFormatTest, DiagnosticReportPrint) {
 }
 
 /** Test printing of the DocumentManifest FHIR resource. */
-TEST(JsonFormatTest, DocumentManifestPrint) {
+TEST(JsonFormatStu3Test, DocumentManifestPrint) {
   TestPrint<DocumentManifest>("DocumentManifest-example");
 }
 
 /** Test printing of the DocumentReference FHIR resource. */
-TEST(JsonFormatTest, DocumentReferencePrint) {
+TEST(JsonFormatStu3Test, DocumentReferencePrint) {
   TestPrint<DocumentReference>("DocumentReference-example");
 }
 
 /** Test printing of the EligibilityRequest FHIR resource. */
-TEST(JsonFormatTest, EligibilityRequestPrint) {
+TEST(JsonFormatStu3Test, EligibilityRequestPrint) {
   TestPrint<EligibilityRequest>("EligibilityRequest-52345");
   TestPrint<EligibilityRequest>("EligibilityRequest-52346");
 }
 
 /** Test printing of the EligibilityResponse FHIR resource. */
-TEST(JsonFormatTest, EligibilityResponsePrint) {
+TEST(JsonFormatStu3Test, EligibilityResponsePrint) {
   TestPrint<EligibilityResponse>("EligibilityResponse-E2500");
   TestPrint<EligibilityResponse>("EligibilityResponse-E2501");
   TestPrint<EligibilityResponse>("EligibilityResponse-E2502");
@@ -1471,7 +1476,7 @@ TEST(JsonFormatTest, EligibilityResponsePrint) {
 }
 
 /** Test printing of the Encounter FHIR resource. */
-TEST(JsonFormatTest, EncounterPrint) {
+TEST(JsonFormatStu3Test, EncounterPrint) {
   TestPrint<Encounter>("Encounter-example");
   TestPrint<Encounter>("Encounter-emerg");
   TestPrint<Encounter>("Encounter-f001");
@@ -1485,107 +1490,107 @@ TEST(JsonFormatTest, EncounterPrint) {
 }
 
 /** Test printing of the Endpoint FHIR resource. */
-TEST(JsonFormatTest, EndpointPrint) {
+TEST(JsonFormatStu3Test, EndpointPrint) {
   TestPrint<Endpoint>("Endpoint-example");
   TestPrint<Endpoint>("Endpoint-example-iid");
   TestPrint<Endpoint>("Endpoint-example-wadors");
 }
 
 /** Test printing of the EnrollmentRequest FHIR resource. */
-TEST(JsonFormatTest, EnrollmentRequestPrint) {
+TEST(JsonFormatStu3Test, EnrollmentRequestPrint) {
   TestPrint<EnrollmentRequest>("EnrollmentRequest-22345");
 }
 
 /** Test printing of the EnrollmentResponse FHIR resource. */
-TEST(JsonFormatTest, EnrollmentResponsePrint) {
+TEST(JsonFormatStu3Test, EnrollmentResponsePrint) {
   TestPrint<EnrollmentResponse>("EnrollmentResponse-ER2500");
 }
 
 /** Test printing of the EpisodeOfCare FHIR resource. */
-TEST(JsonFormatTest, EpisodeOfCarePrint) {
+TEST(JsonFormatStu3Test, EpisodeOfCarePrint) {
   TestPrint<EpisodeOfCare>("EpisodeOfCare-example");
 }
 
 /** Test printing of the ExpansionProfile FHIR resource. */
-TEST(JsonFormatTest, ExpansionProfilePrint) {
+TEST(JsonFormatStu3Test, ExpansionProfilePrint) {
   TestPrint<ExpansionProfile>("ExpansionProfile-example");
 }
 
 /** Test printing of the ExplanationOfBenefit FHIR resource. */
-TEST(JsonFormatTest, ExplanationOfBenefitPrint) {
+TEST(JsonFormatStu3Test, ExplanationOfBenefitPrint) {
   TestPrint<ExplanationOfBenefit>("ExplanationOfBenefit-EB3500");
 }
 
 /** Test printing of the FamilyMemberHistory FHIR resource. */
-TEST(JsonFormatTest, FamilyMemberHistoryPrint) {
+TEST(JsonFormatStu3Test, FamilyMemberHistoryPrint) {
   TestPrint<FamilyMemberHistory>("FamilyMemberHistory-father");
   TestPrint<FamilyMemberHistory>("FamilyMemberHistory-mother");
 }
 
 /** Test printing of the Flag FHIR resource. */
-TEST(JsonFormatTest, FlagPrint) {
+TEST(JsonFormatStu3Test, FlagPrint) {
   TestPrint<Flag>("Flag-example");
   TestPrint<Flag>("Flag-example-encounter");
 }
 
 /** Test printing of the Goal FHIR resource. */
-TEST(JsonFormatTest, GoalPrint) {
+TEST(JsonFormatStu3Test, GoalPrint) {
   TestPrint<Goal>("Goal-example");
   TestPrint<Goal>("Goal-stop-smoking");
 }
 
 /** Test printing of the GraphDefinition FHIR resource. */
-TEST(JsonFormatTest, GraphDefinitionPrint) {
+TEST(JsonFormatStu3Test, GraphDefinitionPrint) {
   TestPrint<GraphDefinition>("GraphDefinition-example");
 }
 
 /** Test printing of the Group FHIR resource. */
-TEST(JsonFormatTest, GroupPrint) {
+TEST(JsonFormatStu3Test, GroupPrint) {
   TestPrint<Group>("Group-101");
   TestPrint<Group>("Group-102");
 }
 
 /** Test printing of the GuidanceResponse FHIR resource. */
-TEST(JsonFormatTest, GuidanceResponsePrint) {
+TEST(JsonFormatStu3Test, GuidanceResponsePrint) {
   TestPrint<GuidanceResponse>("GuidanceResponse-example");
 }
 
 /** Test printing of the HealthcareService FHIR resource. */
-TEST(JsonFormatTest, HealthcareServicePrint) {
+TEST(JsonFormatStu3Test, HealthcareServicePrint) {
   TestPrint<HealthcareService>("HealthcareService-example");
 }
 
 /** Test printing of the ImagingManifest FHIR resource. */
-TEST(JsonFormatTest, ImagingManifestPrint) {
+TEST(JsonFormatStu3Test, ImagingManifestPrint) {
   TestPrint<ImagingManifest>("ImagingManifest-example");
 }
 
 /** Test printing of the ImagingStudy FHIR resource. */
-TEST(JsonFormatTest, ImagingStudyPrint) {
+TEST(JsonFormatStu3Test, ImagingStudyPrint) {
   TestPrint<ImagingStudy>("ImagingStudy-example");
   TestPrint<ImagingStudy>("ImagingStudy-example-xr");
 }
 
 /** Test printing of the Immunization FHIR resource. */
-TEST(JsonFormatTest, ImmunizationPrint) {
+TEST(JsonFormatStu3Test, ImmunizationPrint) {
   TestPrint<Immunization>("Immunization-example");
   TestPrint<Immunization>("Immunization-historical");
   TestPrint<Immunization>("Immunization-notGiven");
 }
 
 /** Test printing of the ImmunizationRecommendation FHIR resource. */
-TEST(JsonFormatTest, ImmunizationRecommendationPrint) {
+TEST(JsonFormatStu3Test, ImmunizationRecommendationPrint) {
   TestPrint<ImmunizationRecommendation>("ImmunizationRecommendation-example");
   TestPrint<ImmunizationRecommendation>("ImmunizationRecommendation-example");
 }
 
 /** Test printing of the ImplementationGuide FHIR resource. */
-TEST(JsonFormatTest, ImplementationGuidePrint) {
+TEST(JsonFormatStu3Test, ImplementationGuidePrint) {
   TestPrint<ImplementationGuide>("ImplementationGuide-example");
 }
 
 /** Test printing of the Library FHIR resource. */
-TEST(JsonFormatTest, LibraryPrint) {
+TEST(JsonFormatStu3Test, LibraryPrint) {
   TestPrint<Library>("Library-library-cms146-example");
   TestPrint<Library>("Library-composition-example");
   TestPrint<Library>("Library-example");
@@ -1593,10 +1598,12 @@ TEST(JsonFormatTest, LibraryPrint) {
 }
 
 /** Test printing of the Linkage FHIR resource. */
-TEST(JsonFormatTest, LinkagePrint) { TestPrint<Linkage>("Linkage-example"); }
+TEST(JsonFormatStu3Test, LinkagePrint) {
+  TestPrint<Linkage>("Linkage-example");
+}
 
 /** Test printing of the List FHIR resource. */
-TEST(JsonFormatTest, ListPrint) {
+TEST(JsonFormatStu3Test, ListPrint) {
   TestPrint<List>("List-example");
   TestPrint<List>("List-current-allergies");
   TestPrint<List>("List-example-double-cousin-relationship");
@@ -1609,7 +1616,7 @@ TEST(JsonFormatTest, ListPrint) {
 }
 
 /** Test printing of the Location FHIR resource. */
-TEST(JsonFormatTest, LocationPrint) {
+TEST(JsonFormatStu3Test, LocationPrint) {
   TestPrint<Location>("Location-1");
   TestPrint<Location>("Location-amb");
   TestPrint<Location>("Location-hl7");
@@ -1619,7 +1626,7 @@ TEST(JsonFormatTest, LocationPrint) {
 }
 
 /** Test printing of the Measure FHIR resource. */
-TEST(JsonFormatTest, MeasurePrint) {
+TEST(JsonFormatStu3Test, MeasurePrint) {
   TestPrint<Measure>("Measure-measure-cms146-example");
   TestPrint<Measure>("Measure-component-a-example");
   TestPrint<Measure>("Measure-component-b-example");
@@ -1628,14 +1635,14 @@ TEST(JsonFormatTest, MeasurePrint) {
 }
 
 /** Test printing of the MeasureReport FHIR resource. */
-TEST(JsonFormatTest, MeasureReportPrint) {
+TEST(JsonFormatStu3Test, MeasureReportPrint) {
   TestPrint<MeasureReport>("MeasureReport-measurereport-cms146-cat1-example");
   TestPrint<MeasureReport>("MeasureReport-measurereport-cms146-cat2-example");
   TestPrint<MeasureReport>("MeasureReport-measurereport-cms146-cat3-example");
 }
 
 /** Test printing of the Media FHIR resource. */
-TEST(JsonFormatTest, MediaPrint) {
+TEST(JsonFormatStu3Test, MediaPrint) {
   TestPrint<Media>("Media-example");
   TestPrint<Media>(
       "Media-1.2.840.11361907579238403408700.3.0.14.19970327150033");
@@ -1644,7 +1651,7 @@ TEST(JsonFormatTest, MediaPrint) {
 }
 
 /** Test printing of the Medication FHIR resource. */
-TEST(JsonFormatTest, MedicationPrint) {
+TEST(JsonFormatStu3Test, MedicationPrint) {
   TestPrint<Medication>("Medication-med0301");
   TestPrint<Medication>("Medication-med0302");
   TestPrint<Medication>("Medication-med0303");
@@ -1671,18 +1678,18 @@ TEST(JsonFormatTest, MedicationPrint) {
 }
 
 /** Test printing of the MedicationAdministration FHIR resource. */
-TEST(JsonFormatTest, MedicationAdministrationPrint) {
+TEST(JsonFormatStu3Test, MedicationAdministrationPrint) {
   TestPrint<MedicationAdministration>(
       "MedicationAdministration-medadminexample03");
 }
 
 /** Test printing of the MedicationDispense FHIR resource. */
-TEST(JsonFormatTest, MedicationDispensePrint) {
+TEST(JsonFormatStu3Test, MedicationDispensePrint) {
   TestPrint<MedicationDispense>("MedicationDispense-meddisp008");
 }
 
 /** Test printing of the MedicationRequest FHIR resource. */
-TEST(JsonFormatTest, MedicationRequestPrint) {
+TEST(JsonFormatStu3Test, MedicationRequestPrint) {
   TestPrint<MedicationRequest>("MedicationRequest-medrx0311");
   TestPrint<MedicationRequest>("MedicationRequest-medrx002");
 }

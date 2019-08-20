@@ -20,7 +20,9 @@
 #include <vector>
 
 #include "google/protobuf/descriptor.pb.h"
+#include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
+#include "absl/strings/string_view.h"
 #include "absl/types/optional.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/proto_util.h"

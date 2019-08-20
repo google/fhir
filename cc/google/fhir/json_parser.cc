@@ -48,9 +48,9 @@ using ::google::fhir::IsChoiceType;
 using ::google::fhir::IsPrimitive;
 using ::google::fhir::IsReference;
 using ::google::fhir::IsResource;
-using ::google::fhir::ReferenceProtoToString;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
+using ::google::fhir::proto::FhirVersion;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
@@ -73,9 +73,19 @@ std::unordered_map<string, const FieldDescriptor*> GetFieldMap(
       std::unordered_map<string, const FieldDescriptor*> inner_map =
           GetFieldMap(field->message_type());
       for (auto iter = inner_map.begin(); iter != inner_map.end(); iter++) {
-        string inner_field_name = iter->first;
-        inner_field_name[0] = std::toupper(inner_field_name[0]);
-        field_map[absl::StrCat(field->json_name(), inner_field_name)] = field;
+        string child_field_name = iter->first;
+        if (child_field_name[0] == '_') {
+          // Convert primitive extension field name to field on choice type,
+          // e.g., value + _boolean -> _valueBoolean for Extension.value.
+          child_field_name[1] = std::toupper(child_field_name[1]);
+          field_map[absl::StrCat("_", field->json_name(),
+                                 child_field_name.substr(1))] = field;
+        } else {
+          // For non-primitive, just append them together as camelcase, e.g.,
+          // value + boolean = valueBoolean
+          child_field_name[0] = std::toupper(child_field_name[0]);
+          field_map[absl::StrCat(field->json_name(), child_field_name)] = field;
+        }
       }
     } else {
       field_map[field->json_name()] = field;
@@ -127,8 +137,8 @@ StatusOr<const FieldDescriptor*> GetContainedResourceField(
 
 class Parser {
  public:
-  explicit Parser(absl::TimeZone default_timezone)
-      : default_timezone_(default_timezone) {}
+  explicit Parser(FhirVersion fhir_version, absl::TimeZone default_timezone)
+      : fhir_version_(fhir_version), default_timezone_(default_timezone) {}
 
   Status MergeMessage(const Json::Value& value, Message* target) {
     const Descriptor* target_descriptor = target->GetDescriptor();
@@ -186,12 +196,23 @@ class Parser {
                           const FieldDescriptor* choice_field,
                           const string& field_name, Message* parent) {
     const Descriptor* choice_type_descriptor = choice_field->message_type();
-    string value_suffix = field_name.substr(choice_field->json_name().length());
-    value_suffix[0] = std::tolower(value_suffix[0]);
     const auto choice_type_field_map = GetFieldMap(choice_type_descriptor);
-    auto value_field_iter = choice_type_field_map.find(value_suffix);
+    string choice_field_name = field_name;
+    if (field_name[0] == '_') {
+      // E.g., _valueBoolean -> boolean
+      choice_field_name =
+          absl::StrCat("_" + choice_field_name.substr(
+                                 1 + choice_field->json_name().length()));
+      choice_field_name[1] = std::tolower(choice_field_name[1]);
+    } else {
+      // E.g., valueBoolean -> boolean
+      choice_field_name =
+          choice_field_name.substr(choice_field->json_name().length());
+      choice_field_name[0] = std::tolower(choice_field_name[0]);
+    }
+    auto value_field_iter = choice_type_field_map.find(choice_field_name);
     if (value_field_iter == choice_type_field_map.end()) {
-      return InvalidArgument("Can't find ", value_suffix, " on ",
+      return InvalidArgument("Can't find ", choice_field_name, " on ",
                              choice_field->full_name());
     }
     Message* choice_msg =
@@ -211,22 +232,29 @@ class Parser {
     // represents extensions to primitives as separate, subsequent JSON
     // elements, with the field prepended by an underscore.  In #GetFieldMap
     // above, these were mapped to the same fields.
-    if (!IsPrimitive(field->message_type()) &&
-        !(field->is_repeated() &&
-          parent_reflection->FieldSize(*parent, field) == 0) &&
-        !(!field->is_repeated() &&
-          !parent_reflection->HasField(*parent, field))) {
-      return InvalidArgument("Target field already set: ", field->full_name(),
-                             "\n", parent->DebugString(), "\n",
-                             field->full_name(), "\n",
-                             absl::StrCat(json.toStyledString()), "\n done");
+    if (!IsPrimitive(field->message_type())) {
+      if (!(field->is_repeated() &&
+            parent_reflection->FieldSize(*parent, field) == 0) &&
+          !(!field->is_repeated() &&
+            !parent_reflection->HasField(*parent, field))) {
+        return InvalidArgument("Target field already set: ", field->full_name(),
+                               "\n", parent->DebugString(), "\n",
+                               field->full_name(), "\n",
+                               absl::StrCat(json.toStyledString()), "\n done");
+      }
     }
 
     if (field->containing_oneof()) {
       const ::google::protobuf::FieldDescriptor* oneof_field =
           parent_reflection->GetOneofFieldDescriptor(*parent,
                                                      field->containing_oneof());
-      if (oneof_field) {
+      // Consider it an error to try to set a field in a oneof if one is already
+      // set.
+      // Exception: When a primitive in a choice type has a value and an
+      // extension, it will get set twice, once by the value (e.g.,
+      // valueString), and once by an extension (e.g., _valueString).
+      if (oneof_field && !(IsPrimitive(field->message_type()) &&
+                           oneof_field->full_name() == field->full_name())) {
         return InvalidArgument(
             "Cannot set field ", field->full_name(), " because another field ",
             oneof_field->full_name(), " of the same oneof is already set.");
@@ -314,9 +342,10 @@ class Parser {
         // Merge the extension fields into into the empty target proto,
         // and tag it as having no value.
         FHIR_RETURN_IF_ERROR(MergeMessage(json, target));
-        return AddPrimitiveHasNoValueExtension(target);
+        return BuildHasNoValueExtension(target->GetReflection()->AddMessage(
+            target, target->GetDescriptor()->FindFieldByName("extension")));
       } else {
-        return ParseInto(json, default_timezone_, target);
+        return ParseInto(json, fhir_version_, default_timezone_, target);
       }
     } else if (IsReference(target->GetDescriptor())) {
       FHIR_RETURN_IF_ERROR(MergeMessage(json, target));
@@ -338,7 +367,8 @@ class Parser {
   }
 
  private:
-  absl::TimeZone default_timezone_;
+  const FhirVersion fhir_version_;
+  const absl::TimeZone default_timezone_;
 };
 
 StatusOr<Json::Value> ParseJsonValue(const string& raw_json) {
@@ -366,10 +396,19 @@ Status MergeJsonFhirStringIntoProto(const string& raw_json, Message* target,
   //    to ensure this is a field value (and not inside a string).
   // 2: a decimal
   // 3: any field-ending token.
+  // TODO: Try to do this in a single pass, with a uglier regex.
+  //                   Alternatively, see if we can find a better json parser
+  //                   that doesn't use c++ decimals to back decimal fields.
   static const LazyRE2 kDecimalKeyValuePattern{
-      "(?m)([^\\\\]\":\\s*)(-?\\d*\\.\\d*?)([\\s,\\}\\]$])"};
+      "(?m)([^\\\\]\"\\s*:\\s*)(-?\\d*\\.\\d*?)([\\s,\\}\\]$])"};
   RE2::GlobalReplace(&mutable_raw_json, *kDecimalKeyValuePattern,
                      "\\1\"\\2\"\\3");
+
+  static const LazyRE2 kScientificNotationPattern{
+      "(?m)([^\\\\]\"\\s*:\\s*)(-?\\d*(\\.\\d*)?[eE][+-]?[0-9]+)([\\s,\\}\\]$]"
+      ")"};
+  RE2::GlobalReplace(&mutable_raw_json, *kScientificNotationPattern,
+                     "\\1\"\\2\"\\4");
 
   Json::Value value;
 
@@ -383,7 +422,7 @@ Status MergeJsonFhirStringIntoProto(const string& raw_json, Message* target,
     FHIR_ASSIGN_OR_RETURN(value, ParseJsonValue(mutable_raw_json));
   }
 
-  Parser parser{default_timezone};
+  Parser parser{GetFhirVersion(*target), default_timezone};
   return parser.MergeValue(value, target);
 }
 
