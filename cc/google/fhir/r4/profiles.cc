@@ -14,43 +14,25 @@
 
 #include "google/fhir/profiles.h"
 
-#include <sstream>
-#include <string>
-#include <unordered_map>
-#include <utility>
-
-#include "google/protobuf/descriptor.pb.h"
-#include "google/protobuf/descriptor.h"
-#include "absl/strings/str_cat.h"
-#include "google/fhir/annotations.h"
-#include "google/fhir/codes.h"
-#include "google/fhir/extensions.h"
+#include "google/protobuf/message.h"
 #include "google/fhir/profiles_lib.h"
-#include "google/fhir/proto_util.h"
-#include "google/fhir/resource_validation.h"
 #include "google/fhir/status/status.h"
-#include "google/fhir/status/statusor.h"
-#include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
-#include "proto/r4/resources.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
-#include "tensorflow/core/lib/core/status.h"
-#include "tensorflow/core/platform/logging.h"
 
 namespace google {
 namespace fhir {
 
 Status ConvertToProfileR4(const ::google::protobuf::Message& source,
                           ::google::protobuf::Message* target) {
-  return profiles_internal::ConvertToProfileInternal<r4::proto::Bundle>(source,
-                                                                        target);
+  return profiles_internal::ConvertToProfileInternal<r4::proto::Extension>(
+      source, target);
 }
 
 // Identical to ConvertToProfile, except does not run the validation step.
 Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
                                  ::google::protobuf::Message* target) {
-  return profiles_internal::ConvertToProfileLenientInternal<r4::proto::Bundle>(
-      source, target);
+  return profiles_internal::ConvertToProfileLenientInternal<
+      r4::proto::Extension>(source, target);
 }
 
 }  // namespace fhir

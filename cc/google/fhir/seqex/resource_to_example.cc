@@ -28,10 +28,10 @@
 #include "absl/strings/str_replace.h"
 #include "absl/strings/str_split.h"
 #include "absl/time/time.h"
-#include "google/fhir/codeable_concepts.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/seqex/text_tokenizer.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/stu3/codeable_concepts.h"
 #include "google/fhir/systems/systems.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
@@ -148,7 +148,7 @@ void AddValueAndOrTokensToExample(
 Status ExtractCodeBySystem(const Message& codeable_concept,
                            absl::string_view system_value, string* result) {
   auto status_or_result =
-      google::fhir::ExtractCodeBySystem(codeable_concept, system_value);
+      google::fhir::stu3::ExtractCodeBySystem(codeable_concept, system_value);
   if (status_or_result.ok()) {
     *result = status_or_result.ValueOrDie();
     return Status::OK();
@@ -158,17 +158,36 @@ Status ExtractCodeBySystem(const Message& codeable_concept,
 
 Status ExtractIcdCode(const Message& codeable_concept,
                       const std::vector<string>& schemes, string* result) {
-  auto status_or_result =
-      google::fhir::ExtractIcdCode(codeable_concept, schemes);
-  if (status_or_result.ok()) {
-    *result = status_or_result.ValueOrDie();
-    return Status::OK();
+  bool found_response = false;
+  string intermediate_result;
+  for (size_t i = 0; i < schemes.size(); i++) {
+    StatusOr<string> s =
+        google::fhir::stu3::ExtractCodeBySystem(codeable_concept, schemes[i]);
+
+    if (s.status().code() == ::tensorflow::errors::Code::ALREADY_EXISTS) {
+      // Multiple codes, so we can return an error already.
+      return s.status();
+    } else if (s.ok()) {
+      if (found_response) {
+        // We found _another_ code. That shouldn't have happened.
+        return ::tensorflow::errors::AlreadyExists("Found more than one code");
+      } else {
+        intermediate_result = s.ValueOrDie();
+        found_response = true;
+      }
+    }
   }
-  return status_or_result.status();
+  if (found_response) {
+    *result = intermediate_result;
+    return Status::OK();
+  } else {
+    return ::tensorflow::errors::NotFound(
+        "No ICD code with the provided schemes in concept.");
+  }
 }
 
 absl::optional<string> GetCodeFromConceptText(const Message& concept) {
-  if (CodingSize(concept) > 0) {
+  if (stu3::CodingSize(concept) > 0) {
     return absl::nullopt;
   }
   const google::protobuf::FieldDescriptor* text_field =
@@ -289,7 +308,7 @@ void AddCodeableConceptToExample(
         *tokenize_feature_set, add_tokenize_feature_set, full_name,
         statusor_text.ValueOrDie().value(), example, enable_attribution);
   }
-  ForEachCoding(concept, [&](const Coding& coding) {
+  stu3::ForEachCoding(concept, [&](const Coding& coding) {
     CHECK(coding.has_system() && coding.has_code());
     const string system = systems::ToShortSystemName(coding.system().value());
     (*example->mutable_features()
@@ -461,7 +480,7 @@ void MessageToExample(const google::protobuf::Message& message, const string& pr
           (*example->mutable_features()->mutable_feature())[name]
               .mutable_float_list()
               ->add_value(value_as_double);
-        } else if (IsCodeableConceptLike(field->message_type())) {
+        } else if (stu3::IsCodeableConceptLike(field->message_type())) {
           // Codeable concepts are emitted using the preferred coding systems.
           AddCodeableConceptToExample(
               child, name, example, &tokenize_feature_set,

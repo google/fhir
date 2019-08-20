@@ -257,11 +257,10 @@ Status ConvertToGenericCodingInternal(const google::protobuf::Message& typed_cod
   const Reflection* reflection = typed_coding.GetReflection();
   const FieldDescriptor* code_field = descriptor->FindFieldByName("code");
 
-  if (!code_field || !HasValueset(code_field->message_type())) {
+  if (!code_field) {
     return InvalidArgument(
         "Cannot convert ", descriptor->full_name(), " to generic ",
-        CodingLike::descriptor()->full_name(),
-        ": Must have code field with a fhir_valueset_url annotation");
+        CodingLike::descriptor()->full_name(), ": Must have code.");
   }
 
   generic_coding->mutable_system()->set_value(

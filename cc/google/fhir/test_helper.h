@@ -28,8 +28,10 @@
 #include "absl/strings/string_view.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/profiles.h"
+#include "google/fhir/r4/profiles.h"
 #include "google/fhir/resource_validation.h"
 #include "google/fhir/status/status.h"
+#include "proto/annotations.pb.h"
 #include "tensorflow/core/platform/env.h"
 
 // When comparing converted FHIR resources to their expected value, you should
@@ -42,6 +44,8 @@
 // having to fix all tests with missing fields.  Long term, tests where
 // validation is important should be fixed, and tests where validation is not
 // important should be switched to PARSE_STU3_PROTO.
+// TODO: This is not stu3 specific - these can be eliminated
+// in favor of PARSE_*_FHIR_PROTO versions.
 #define PARSE_VALID_STU3_PROTO(asciipb) \
   ::google::fhir::FhirProtoParseHelper( \
       asciipb, ::google::fhir::NO_EXPECTATION, __FILE__, __LINE__)
@@ -49,6 +53,16 @@
   ::google::fhir::FhirProtoParseHelper(asciipb, ::google::fhir::INVALID, \
                                        __FILE__, __LINE__)
 #define PARSE_STU3_PROTO(asciipb)       \
+  ::google::fhir::FhirProtoParseHelper( \
+      asciipb, ::google::fhir::NO_EXPECTATION, __FILE__, __LINE__)
+
+#define PARSE_VALID_FHIR_PROTO(asciipb)                                \
+  ::google::fhir::FhirProtoParseHelper(asciipb, ::google::fhir::VALID, \
+                                       __FILE__, __LINE__)
+#define PARSE_INVALID_FHIR_PROTO(asciipb)                                \
+  ::google::fhir::FhirProtoParseHelper(asciipb, ::google::fhir::INVALID, \
+                                       __FILE__, __LINE__)
+#define PARSE_FHIR_PROTO(asciipb)       \
   ::google::fhir::FhirProtoParseHelper( \
       asciipb, ::google::fhir::NO_EXPECTATION, __FILE__, __LINE__)
 
@@ -77,9 +91,20 @@ class FhirProtoParseHelper {
     }
     Status status = ValidateResource(tmp);
     if (IsProfile(T::descriptor())) {
-      auto status_or_normalized = NormalizeStu3(tmp);
-      EXPECT_TRUE(status_or_normalized.ok());
-      tmp = status_or_normalized.ValueOrDie();
+      switch (GetFhirVersion(tmp)) {
+        case proto::STU3: {
+          auto status_or_normalized = NormalizeStu3(tmp);
+          EXPECT_TRUE(status_or_normalized.ok());
+          tmp = status_or_normalized.ValueOrDie();
+          break;
+        }
+        case proto::R4: {
+          auto status_or_normalized = NormalizeR4(tmp);
+          EXPECT_TRUE(status_or_normalized.ok());
+          tmp = status_or_normalized.ValueOrDie();
+          break;
+        }
+      }
     }
     if (validity_ == VALID) {
       EXPECT_TRUE(status.ok())

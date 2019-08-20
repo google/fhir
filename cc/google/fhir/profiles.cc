@@ -17,7 +17,7 @@
 #include "google/protobuf/message.h"
 #include "google/fhir/profiles_lib.h"
 #include "google/fhir/status/status.h"
-#include "proto/stu3/resources.pb.h"
+#include "proto/stu3/datatypes.pb.h"
 
 namespace google {
 namespace fhir {
@@ -27,7 +27,7 @@ using ::google::protobuf::Message;
 
 Status ConvertToProfileStu3(const ::google::protobuf::Message& source,
                             ::google::protobuf::Message* target) {
-  return profiles_internal::ConvertToProfileInternal<stu3::proto::Bundle>(
+  return profiles_internal::ConvertToProfileInternal<stu3::proto::Extension>(
       source, target);
 }
 
@@ -35,7 +35,7 @@ Status ConvertToProfileStu3(const ::google::protobuf::Message& source,
 Status ConvertToProfileLenientStu3(const ::google::protobuf::Message& source,
                                    ::google::protobuf::Message* target) {
   return profiles_internal::ConvertToProfileLenientInternal<
-      stu3::proto::Bundle>(source, target);
+      stu3::proto::Extension>(source, target);
 }
 
 }  // namespace fhir

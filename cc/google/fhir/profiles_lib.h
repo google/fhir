@@ -76,9 +76,8 @@ struct CodeableConceptSlicingInfo {
 // These functions help with going from Unprofiled -> Profiled
 
 // Finds any extensions that can be slotted into slices, and moves them.
-template <typename BundleLike,
-          typename ExtensionLike = EXTENSION_TYPE(BundleLike),
-          typename CodeLike = FHIR_DATATYPE(BundleLike, code)>
+template <typename ExtensionLike,
+          typename CodeLike = FHIR_DATATYPE(ExtensionLike, code)>
 Status PerformExtensionSlicing(Message* message) {
   const Descriptor* descriptor = message->GetDescriptor();
   const Reflection* reflection = message->GetReflection();
@@ -294,9 +293,9 @@ StatusOr<bool> SliceOneCoding(const CodeableConceptSlicingInfo& slicing_info,
 // TODO: CodingWithFixedSystem is a legacy pattern that only exists
 // in obselete versions of STU3.  Eliminate once STU3 uses the inlined message
 // pattern.
-template <typename BundleLike,
-          typename CodingLike = FHIR_DATATYPE(BundleLike, coding),
-          typename CodeLike = FHIR_DATATYPE(BundleLike, code)>
+template <typename ExtensionLike,
+          typename CodingLike = FHIR_DATATYPE(ExtensionLike, coding),
+          typename CodeLike = FHIR_DATATYPE(ExtensionLike, code)>
 Status SliceCodingsInCodeableConcept(Message* codeable_concept_like) {
   const Descriptor* descriptor = codeable_concept_like->GetDescriptor();
   const Reflection* reflection = codeable_concept_like->GetReflection();
@@ -349,8 +348,8 @@ Status SliceCodingsInCodeableConcept(Message* codeable_concept_like) {
   return Status::OK();
 }
 
-template <typename BundleLike, typename CodeableConceptLike =
-                                   FHIR_DATATYPE(BundleLike, codeable_concept)>
+template <typename ExtensionLike, typename CodeableConceptLike = FHIR_DATATYPE(
+                                      ExtensionLike, codeable_concept)>
 Status PerformCodeableConceptSlicing(Message* message) {
   const Descriptor* descriptor = message->GetDescriptor();
   const Reflection* reflection = message->GetReflection();
@@ -365,13 +364,13 @@ Status PerformCodeableConceptSlicing(Message* message) {
     if (IsProfileOf<CodeableConceptLike>(field_type)) {
       if (field->is_repeated()) {
         for (int i = 0; i < reflection->FieldSize(*message, field); i++) {
-          const auto& result = SliceCodingsInCodeableConcept<BundleLike>(
+          const auto& result = SliceCodingsInCodeableConcept<ExtensionLike>(
               reflection->MutableRepeatedMessage(message, field, i));
           FHIR_RETURN_IF_ERROR(result);
         }
       } else {
         if (reflection->HasField(*message, field)) {
-          const auto& result = SliceCodingsInCodeableConcept<BundleLike>(
+          const auto& result = SliceCodingsInCodeableConcept<ExtensionLike>(
               reflection->MutableMessage(message, field));
           FHIR_RETURN_IF_ERROR(result);
         }
@@ -381,9 +380,8 @@ Status PerformCodeableConceptSlicing(Message* message) {
   return Status::OK();
 }
 
-template <
-    typename BundleLike, typename ExtensionLike = EXTENSION_TYPE(BundleLike),
-    typename CodeableConceptLike = FHIR_DATATYPE(BundleLike, codeable_concept)>
+template <typename ExtensionLike, typename CodeableConceptLike = FHIR_DATATYPE(
+                                      ExtensionLike, codeable_concept)>
 bool CanHaveSlicing(const FieldDescriptor* field) {
   if (IsChoiceType(field)) {
     return false;
@@ -417,12 +415,12 @@ bool CanHaveSlicing(const FieldDescriptor* field) {
                                        0) == 0;
 }
 
-template <typename BundleLike>
+template <typename ExtensionLike>
 Status PerformSlicing(Message* message) {
-  FHIR_RETURN_IF_ERROR(PerformExtensionSlicing<BundleLike>(message));
+  FHIR_RETURN_IF_ERROR(PerformExtensionSlicing<ExtensionLike>(message));
 
   const auto& cc_slicing_status =
-      PerformCodeableConceptSlicing<BundleLike>(message);
+      PerformCodeableConceptSlicing<ExtensionLike>(message);
   FHIR_RETURN_IF_ERROR(cc_slicing_status);
   // TODO: Perform generic slicing
 
@@ -434,9 +432,9 @@ Status PerformSlicing(Message* message) {
       return InvalidArgument("Encountered unexpected primitive type on field: ",
                              field->full_name());
     }
-    if (CanHaveSlicing<BundleLike>(field)) {
+    if (CanHaveSlicing<ExtensionLike>(field)) {
       for (int j = 0; j < PotentiallyRepeatedFieldSize(*message, field); j++) {
-        const auto& ps_status = PerformSlicing<BundleLike>(
+        const auto& ps_status = PerformSlicing<ExtensionLike>(
             MutablePotentiallyRepeatedMessage(message, field, j));
         FHIR_RETURN_IF_ERROR(ps_status);
       }
@@ -450,8 +448,7 @@ Status PerformSlicing(Message* message) {
 //
 // These functions help with going from Profiled -> Unprofiled
 
-template <typename BundleLike,
-          typename ExtensionLike = EXTENSION_TYPE(BundleLike)>
+template <typename ExtensionLike>
 Status PerformExtensionUnslicing(const google::protobuf::Message& profiled_message,
                                  google::protobuf::Message* base_message) {
   const Descriptor* profiled_descriptor = profiled_message.GetDescriptor();
@@ -500,9 +497,9 @@ CodingLike* AddRawCoding(Message* concept) {
       concept, concept->GetDescriptor()->FindFieldByName("coding")));
 }
 
-template <typename BundleLike,
-          typename CodingLike = FHIR_DATATYPE(BundleLike, coding),
-          typename CodeLike = FHIR_DATATYPE(BundleLike, code)>
+template <typename ExtensionLike,
+          typename CodingLike = FHIR_DATATYPE(ExtensionLike, coding),
+          typename CodeLike = FHIR_DATATYPE(ExtensionLike, code)>
 Status UnsliceCodingsWithinCodeableConcept(
     const google::protobuf::Message& profiled_concept, Message* target_concept) {
   const Descriptor* profiled_descriptor = profiled_concept.GetDescriptor();
@@ -570,8 +567,8 @@ Status UnsliceCodingsWithinCodeableConcept(
   return Status::OK();
 }
 
-template <typename BundleLike, typename CodeableConceptLike =
-                                   FHIR_DATATYPE(BundleLike, codeable_concept)>
+template <typename ExtensionLike, typename CodeableConceptLike = FHIR_DATATYPE(
+                                      ExtensionLike, codeable_concept)>
 Status PerformCodeableConceptUnslicing(const google::protobuf::Message& profiled_message,
                                        google::protobuf::Message* base_message) {
   const Descriptor* profiled_descriptor = profiled_message.GetDescriptor();
@@ -592,7 +589,7 @@ Status PerformCodeableConceptUnslicing(const google::protobuf::Message& profiled
       for (int j = 0;
            j < PotentiallyRepeatedFieldSize(profiled_message, profiled_field);
            j++) {
-        FHIR_RETURN_IF_ERROR(UnsliceCodingsWithinCodeableConcept<BundleLike>(
+        FHIR_RETURN_IF_ERROR(UnsliceCodingsWithinCodeableConcept<ExtensionLike>(
             GetPotentiallyRepeatedMessage(profiled_message, profiled_field, j),
             MutablePotentiallyRepeatedMessage(base_message, base_field, j)));
       }
@@ -601,12 +598,12 @@ Status PerformCodeableConceptUnslicing(const google::protobuf::Message& profiled
   return Status::OK();
 }
 
-template <typename BundleLike>
+template <typename ExtensionLike>
 Status PerformUnslicing(const google::protobuf::Message& profiled_message,
                         google::protobuf::Message* base_message) {
   FHIR_RETURN_IF_ERROR(
-      PerformExtensionUnslicing<BundleLike>(profiled_message, base_message));
-  FHIR_RETURN_IF_ERROR(PerformCodeableConceptUnslicing<BundleLike>(
+      PerformExtensionUnslicing<ExtensionLike>(profiled_message, base_message));
+  FHIR_RETURN_IF_ERROR(PerformCodeableConceptUnslicing<ExtensionLike>(
       profiled_message, base_message));
 
   const Descriptor* profiled_descriptor = profiled_message.GetDescriptor();
@@ -620,11 +617,11 @@ Status PerformUnslicing(const google::protobuf::Message& profiled_message,
       return InvalidArgument("Encountered unexpected primitive type on field: ",
                              profiled_field->full_name());
     }
-    if (CanHaveSlicing<BundleLike>(profiled_field)) {
+    if (CanHaveSlicing<ExtensionLike>(profiled_field)) {
       for (int j = 0;
            j < PotentiallyRepeatedFieldSize(profiled_message, profiled_field);
            j++) {
-        FHIR_RETURN_IF_ERROR(PerformUnslicing<BundleLike>(
+        FHIR_RETURN_IF_ERROR(PerformUnslicing<ExtensionLike>(
             GetPotentiallyRepeatedMessage(profiled_message, profiled_field, j),
             MutablePotentiallyRepeatedMessage(base_message, base_field, j)));
       }
@@ -634,7 +631,7 @@ Status PerformUnslicing(const google::protobuf::Message& profiled_message,
 }
 
 // Converts from something less specialized to something more specialized
-template <typename BundleLike>
+template <typename ExtensionLike>
 Status DownConvert(const Message& base_message, Message* profiled_message) {
   const Descriptor* base_descriptor = base_message.GetDescriptor();
   const Descriptor* profiled_descriptor = profiled_message->GetDescriptor();
@@ -655,7 +652,7 @@ Status DownConvert(const Message& base_message, Message* profiled_message) {
                            " to ", profiled_descriptor->full_name(),
                            ".  They are not binary compatible.");
   }
-  Status slicing_status = PerformSlicing<BundleLike>(profiled_message);
+  Status slicing_status = PerformSlicing<ExtensionLike>(profiled_message);
   if (!slicing_status.ok()) {
     return InvalidArgument("Unable to slice ", base_descriptor->full_name(),
                            " to ", profiled_descriptor->full_name(), ": ",
@@ -665,7 +662,7 @@ Status DownConvert(const Message& base_message, Message* profiled_message) {
 }
 
 // Converts from something more specialized to something less specialized
-template <typename BundleLike>
+template <typename ExtensionLike>
 Status UpConvert(const google::protobuf::Message& profiled_message,
                  google::protobuf::Message* base_message) {
   const Descriptor* profiled_descriptor = profiled_message.GetDescriptor();
@@ -688,10 +685,10 @@ Status UpConvert(const google::protobuf::Message& profiled_message,
   // message.  We toss them out here, and then handled these fields in the
   // profiled message by reading annotations.
   base_message->DiscardUnknownFields();
-  return PerformUnslicing<BundleLike>(profiled_message, base_message);
+  return PerformUnslicing<ExtensionLike>(profiled_message, base_message);
 }
 
-template <typename BundleLike>
+template <typename ExtensionLike>
 Status ConvertToProfileLenientInternal(const Message& source, Message* target) {
   const Descriptor* source_descriptor = source.GetDescriptor();
   const Descriptor* target_descriptor = target->GetDescriptor();
@@ -701,22 +698,22 @@ Status ConvertToProfileLenientInternal(const Message& source, Message* target) {
     // to more specialized.
     // If they are the same type, Down convert to make sure all profiled fields
     // get normalized.
-    return DownConvert<BundleLike>(source, target);
+    return DownConvert<ExtensionLike>(source, target);
   }
   if (IsProfileOf(source_descriptor, target_descriptor)) {
     // Source is a profile of Target, we want to go from more specialized
     // to less specialized.
-    return UpConvert<BundleLike>(source, target);
+    return UpConvert<ExtensionLike>(source, target);
   }
   // TODO: Side convert if possible, through a common ancestor.
   return InvalidArgument("Unable to convert ", source_descriptor->full_name(),
                          " to ", target_descriptor->full_name());
 }
 
-template <typename BundleLike>
+template <typename ExtensionLike>
 Status ConvertToProfileInternal(const Message& source, Message* target) {
   const auto& status =
-      ConvertToProfileLenientInternal<BundleLike>(source, target);
+      ConvertToProfileLenientInternal<ExtensionLike>(source, target);
   FHIR_RETURN_IF_ERROR(status);
   Status validation = ValidateResource(*target);
   if (validation.ok()) {

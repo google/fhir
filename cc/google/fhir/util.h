@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef GOOGLE_FHIR_STU3_UTIL_H_
-#define GOOGLE_FHIR_STU3_UTIL_H_
+#ifndef GOOGLE_FHIR_UTIL_H_
+#define GOOGLE_FHIR_UTIL_H_
 
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
@@ -27,12 +27,12 @@
 #include "absl/strings/strip.h"
 #include "absl/time/time.h"
 #include "google/fhir/annotations.h"
-#include "google/fhir/codeable_concepts.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/systems/systems.h"
 #include "proto/annotations.pb.h"
+#include "proto/r4/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
@@ -73,52 +73,6 @@ namespace fhir {
 
 using std::string;
 using ::google::fhir::stu3::proto::Reference;
-
-// Extract first code value with a given system.
-// Returns NOT_FOUND if none exists.
-// TODO: use GetOnlyCodeWithSystem, making this return
-// ALREADY_EXISTS if more than one code exists in that system.
-template <typename CodeableConceptLike>
-StatusOr<string> ExtractCodeBySystem(
-    const CodeableConceptLike& codeable_concept,
-    absl::string_view system_value) {
-  const std::vector<string>& codes =
-      GetCodesWithSystem(codeable_concept, system_value);
-  if (codes.size() == 0) {
-    return tensorflow::errors::NotFound("No code from system: ", system_value);
-  }
-  return codes.front();
-}
-
-// Extract the icd code for the given schemes.
-template <typename CodeableConceptLike>
-StatusOr<string> ExtractIcdCode(const CodeableConceptLike& codeable_concept,
-                                const std::vector<string>& schemes) {
-  bool found_response = false;
-  StatusOr<string> result;
-  for (size_t i = 0; i < schemes.size(); i++) {
-    StatusOr<string> s = ExtractCodeBySystem(codeable_concept, schemes[i]);
-
-    if (s.status().code() == ::tensorflow::errors::Code::ALREADY_EXISTS) {
-      // Multiple codes, so we can return an error already.
-      return s;
-    } else if (s.ok()) {
-      if (found_response) {
-        // We found _another_ code. That shouldn't have happened.
-        return ::tensorflow::errors::AlreadyExists("Found more than one code");
-      } else {
-        result = s;
-        found_response = true;
-      }
-    }
-  }
-  if (found_response) {
-    return result;
-  } else {
-    return ::tensorflow::errors::NotFound(
-        "No ICD code with the provided schemes in concept.");
-  }
-}
 
 template <typename R>
 stu3::proto::Meta* MutableMetadataFromResource(R* resource) {
@@ -301,4 +255,4 @@ StatusOr<string> GetPrimitiveStringValue(const ::google::protobuf::Message& prim
 }  // namespace fhir
 }  // namespace google
 
-#endif  // GOOGLE_FHIR_STU3_UTIL_H_
+#endif  // GOOGLE_FHIR_UTIL_H_

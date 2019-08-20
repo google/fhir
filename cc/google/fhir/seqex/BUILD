@@ -126,6 +126,7 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
         "//cc/google/fhir/status",
+        "//cc/google/fhir/stu3:codeable_concepts",
         "//cc/google/fhir:codeable_concepts",
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir:util",

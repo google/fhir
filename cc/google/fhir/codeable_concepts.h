@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GOOGLE_FHIR_STU3_CODEABLE_CONCEPTS_H_
-#define GOOGLE_FHIR_STU3_CODEABLE_CONCEPTS_H_
+#ifndef GOOGLE_FHIR_CODEABLE_CONCEPTS_H_
+#define GOOGLE_FHIR_CODEABLE_CONCEPTS_H_
 
 #include <functional>
 #include <memory>
@@ -23,9 +23,10 @@
 #include "google/protobuf/message.h"
 #include "absl/types/optional.h"
 #include "google/fhir/annotations.h"
-#include "google/fhir/codeable_concepts.h"
 #include "google/fhir/proto_util.h"
+#include "google/fhir/r4/codeable_concepts.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/stu3/codeable_concepts.h"
 #include "proto/annotations.pb.h"
 #include "proto/r4/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
@@ -37,19 +38,6 @@ namespace fhir {
 typedef std::function<void(const string& system, const string& code)> CodeFunc;
 typedef std::function<bool(const string& system, const string& code)>
     CodeBoolFunc;
-typedef std::function<void(const stu3::proto::Coding&)> CodingFunc;
-typedef std::function<Status(const stu3::proto::Coding&)> CodingStatusFunc;
-typedef std::function<bool(const stu3::proto::Coding&)> CodingBoolFunc;
-
-namespace internal {
-
-// Gets a profiled field for a given system, or nullptr if none is found.
-// This is internal, since outside callers shouldn't care about profiled vs
-// unprofiled.
-const ::google::protobuf::FieldDescriptor* ProfiledFieldForSystem(
-    const ::google::protobuf::Message& concept, const string& system);
-
-}  // namespace internal
 
 // Performs a function on all System/Code pairs, where all codes are treated
 // like strings, until the function returns true.
@@ -57,8 +45,7 @@ const ::google::protobuf::FieldDescriptor* ProfiledFieldForSystem(
 // true.  If the function returned false for all Codings, returns false.
 const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
                                     const CodeBoolFunc& func,
-                                    const string** found_system,
-                                    const string** found_code);
+                                    string* found_system, string* found_code);
 
 // Variant of FindSystemCodeStringPair that does not explicitly set return
 // pointers.
@@ -72,35 +59,6 @@ const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
 void ForEachSystemCodeStringPair(const ::google::protobuf::Message& concept,
                                  const CodeFunc& func);
 
-// Performs a function on all Codings, until the function returns true.
-// If the function returns true on a Coding, ceases visiting Codings and returns
-// a shared_ptr to that coding.  If the function returned false for all Codings,
-// returns a null shared_ptr.
-// For profiled fields that have no native Coding representation, constructs
-// a synthetic Coding to operate on.
-// The shared_ptr semantics are used to correctly manage the lifecycle of both
-// cases:
-//   * For raw codings, the shared_ptr has a no-op deleter, so lifecycle is
-//     managed by the CodeableConcept.
-//   * For synthetic codings, the returned shared_ptr has the default deleter,
-//     so lifecycle is managed by the call site.
-// Since the call site has no way of knowing which case it is, the shared_ptr
-// semantics accurately convey to the caller that they should never count on
-// the Coding living longer than the shared_ptr.
-std::shared_ptr<const stu3::proto::Coding> FindCoding(
-    const ::google::protobuf::Message& concept, const CodingBoolFunc& func);
-
-// Performs a function on all Codings.
-// For profiled fields that have no native Coding representation, constructs
-// a synthetic Coding.
-void ForEachCoding(const ::google::protobuf::Message& concept, const CodingFunc& func);
-
-// Similar to ForEachCoding, but takes a function that returns a status.
-// If the function ever returns anything other than OK,
-// this will halt and return that status.
-Status ForEachCodingWithStatus(const ::google::protobuf::Message& concept,
-                               const CodingStatusFunc& func);
-
 // Gets a vector of all codes with a given system, where codes are represented
 // as strings.
 const std::vector<string> GetCodesWithSystem(
@@ -113,14 +71,27 @@ const std::vector<string> GetCodesWithSystem(
 StatusOr<const string> GetOnlyCodeWithSystem(const ::google::protobuf::Message& concept,
                                              const absl::string_view system);
 
-// Adds a Coding to a CodeableConcept.
-// TODO: This will have undefined behavior if there is a
-// CodingWithFixedCode and CodingWithFixedSystem field with the same system.
-// Think about this a bit more.  It might just be illegal since a code might
-// fit into two different slices, but might be useful, e.g., if you want
-// to specify a required ICD9 code, but make it easy to add other ICD9 codes.
-Status AddCoding(::google::protobuf::Message* concept, const stu3::proto::Coding& coding);
-Status AddCoding(::google::protobuf::Message* concept, const r4::proto::Coding& coding);
+// Extract first code value with a given system.
+// Returns NOT_FOUND if none exists.
+// This is different from GetOnlyCodeWithSystem in that it doesn't fail if
+// there is more than one code with the given system.
+template <typename CodeableConceptLike>
+StatusOr<string> ExtractCodeBySystem(
+    const CodeableConceptLike& codeable_concept,
+    absl::string_view system_value) {
+  switch (google::fhir::GetFhirVersion(codeable_concept)) {
+    case google::fhir::proto::STU3:
+      return stu3::ExtractCodeBySystem(codeable_concept, system_value);
+    case google::fhir::proto::R4: {
+      return r4::ExtractCodeBySystem(codeable_concept, system_value);
+    }
+    default:
+      return ::tensorflow::errors::InvalidArgument(
+          absl::StrCat("FHIR version not supported by codeable_concepts.h: ",
+                       google::fhir::proto::FhirVersion_Name(
+                           google::fhir::GetFhirVersion(codeable_concept))));
+  }
+}
 
 Status AddCoding(::google::protobuf::Message* concept, const string& system,
                  const string& code);
@@ -128,31 +99,18 @@ Status AddCoding(::google::protobuf::Message* concept, const string& system,
 template <typename CodeableConceptLike>
 Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
                                  const string& system) {
-  if (IsProfileOf<stu3::proto::CodeableConcept>(*concept)) {
-    const ::google::protobuf::FieldDescriptor* profiled_field =
-        internal::ProfiledFieldForSystem(*concept, system);
-    if (profiled_field != nullptr) {
-      if (IsMessageType<stu3::proto::CodingWithFixedSystem>(
-              profiled_field->message_type())) {
-        concept->GetReflection()->ClearField(concept, profiled_field);
-      } else if (IsMessageType<stu3::proto::CodingWithFixedCode>(
-                     profiled_field->message_type())) {
-        return ::tensorflow::errors::InvalidArgument(
-            "Cannot clear coding system: ", system, " from ",
-            concept->GetDescriptor()->full_name(),
-            ". It is a fixed code on that profile");
-      }
+  switch (google::fhir::GetFhirVersion(*concept)) {
+    case google::fhir::proto::STU3:
+      return stu3::ClearAllCodingsWithSystem(concept, system);
+    case google::fhir::proto::R4: {
+      return r4::ClearAllCodingsWithSystem(concept, system);
     }
+    default:
+      return ::tensorflow::errors::InvalidArgument(
+          absl::StrCat("FHIR version not supported by codeable_concepts.h: ",
+                       google::fhir::proto::FhirVersion_Name(
+                           google::fhir::GetFhirVersion(*concept))));
   }
-  for (auto iter = concept->mutable_coding()->begin();
-       iter != concept->mutable_coding()->end();) {
-    if (iter->has_system() && iter->system().value() == system) {
-      iter = concept->mutable_coding()->erase(iter);
-    } else {
-      iter++;
-    }
-  }
-  return Status::OK();
 }
 
 Status CopyCodeableConcept(const ::google::protobuf::Message& source,
@@ -167,4 +125,4 @@ int CodingSize(const ::google::protobuf::Message& concept);
 }  // namespace fhir
 }  // namespace google
 
-#endif  // GOOGLE_FHIR_STU3_CODEABLE_CONCEPTS_H_
+#endif  // GOOGLE_FHIR_CODEABLE_CONCEPTS_H_
