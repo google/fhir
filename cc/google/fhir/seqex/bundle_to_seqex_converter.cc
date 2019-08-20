@@ -314,12 +314,10 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
     Feature booleans;
     Feature datetime_secs;
     for (const auto& label : event_label.label()) {
-      int label_value_types = 0;
       if (label.class_name().has_code()) {
         auto bytes_list = class_names.mutable_bytes_list();
         if (!label.class_name().code().value().empty()) {
           bytes_list->add_value(label.class_name().code().value());
-          label_value_types++;
         }
       }
       if (label.has_class_value()) {
@@ -344,9 +342,7 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
         }
         // Currently unused.
         CHECK(!label.class_value().has_string_value());
-        label_value_types++;
       }
-      CHECK_LE(label_value_types, 1);
     }
     // Even for current label, it's nice to have a .class suffix, as there are
     // companion features e.g. label event time for metrics.
