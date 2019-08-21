@@ -19,9 +19,11 @@
 #include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/json_format.h"
+#include "google/fhir/r4/profiles.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/r4/datatypes.pb.h"
+#include "proto/r4/profiles.pb.h"
 #include "proto/r4/resources.pb.h"
 #include "testdata/r4/profiles/test.pb.h"
 #include "include/json/json.h"
@@ -104,23 +106,45 @@ void TestPair(const std::vector<string>& file_names) {
   }
 }
 
-// TODO: Analytics, Profiles tests.
+// TODO: Profiles tests.
 
 template <typename R>
-void TestPrintForAnalytics(const string& name) {
-  const R proto = ReadR4Proto<R>(absl::StrCat("examples/", name, ".prototxt"));
+void TestPrintForAnalytics(const string& proto_name, const string& json_name) {
+  R proto = ReadR4Proto<R>(absl::StrCat("examples/", proto_name, ".prototxt"));
+  if (IsProfile(R::descriptor())) {
+    proto = NormalizeR4(proto).ValueOrDie();
+  }
   auto result = PrettyPrintFhirToJsonStringForAnalytics(proto);
-  ASSERT_TRUE(result.ok()) << "Failed PrintForAnalytics on: " << name << "\n"
+  ASSERT_TRUE(result.ok()) << "Failed PrintForAnalytics on: " << proto_name
+                           << "\n"
                            << result.status();
   string from_proto = result.ValueOrDie();
   string from_json =
-      ReadFile(absl::StrCat("testdata/r4/bigquery/", name + ".json"));
+      ReadFile(absl::StrCat("testdata/r4/bigquery/", json_name + ".json"));
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
     // This assert will fail, but we get terrible diff messages comparing
     // JsonCPP, so fall back to string diffs.
     ASSERT_EQ(from_json, from_proto);
   }
+}
+
+template <typename R>
+void TestPrintForAnalytics(const string& name) {
+  TestPrintForAnalytics<R>(name, name);
+}
+
+TEST(JsonFormatStu3Test, PrintForAnalytics) {
+  TestPrintForAnalytics<Composition>("Composition-example");
+  TestPrintForAnalytics<Encounter>("Encounter-home");
+  TestPrintForAnalytics<Observation>("Observation-example-genetics-1");
+  TestPrintForAnalytics<Patient>("Patient-example");
+}
+
+TEST(JsonFormatStu3Test, PrintForAnalyticsProfiled) {
+  TestPrintForAnalytics<ObservationGenetics>(
+      "Observation-example-genetics-1",
+      "Observation-example-genetics-1-profiled");
 }
 
 TEST(JsonFormatR4Test, TestAccount) {

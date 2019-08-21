@@ -398,14 +398,17 @@ cc_test(
     srcs = ["json_format_r4_test.cc"],
     data = [
         "//spec:r4",
+        "//testdata/r4:bigquery",
         "//testdata/r4:examples",
     ],
     shard_count = 10,
     deps = [
         ":json_format",
         ":test_helper",
+        "//cc/google/fhir/r4:profiles",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/r4:datatypes_cc_proto",
+        "//proto/r4:profiles_cc_proto",
         "//proto/r4:resources_cc_proto",
         "//testdata/r4/profiles:test_cc_proto",
         "@com_google_absl//absl/strings",

@@ -20,6 +20,14 @@ filegroup(
     ]),
 )
 
+# These files are used to help test bigquery integration.
+filegroup(
+    name = "bigquery",
+    srcs = glob([
+        "bigquery/*.json",
+    ]),
+)
+
 # These files contain google extensions.
 filegroup(
     name = "google",
