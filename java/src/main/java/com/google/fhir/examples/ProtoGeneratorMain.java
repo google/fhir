@@ -102,6 +102,11 @@ class ProtoGeneratorMain {
     private String packageInfo = null;
 
     @Parameter(
+        names = {"--dstu2_struct_def_zip"},
+        description = "Zip file containing core DSTU2 Structure Definitions.")
+    private String dstu2StructDefZip = null;
+
+    @Parameter(
         names = {"--stu3_struct_def_zip"},
         description = "Zip file containing core STU3 Structure Definitions.")
     private String stu3StructDefZip = null;
@@ -222,6 +227,14 @@ class ProtoGeneratorMain {
 
     // Add in core FHIR types (e.g., datatypes and unprofiled resources)
     switch (packageInfo.getFhirVersion()) {
+      case DSTU2:
+        if (args.dstu2StructDefZip == null) {
+          throw new IllegalArgumentException(
+              "Package is for DSTU2, but --dstu2_struct_def_zip is not specified.");
+        }
+        dependencyPackagesMap.put(
+            args.dstu2StructDefZip, com.google.fhir.common.FhirVersion.R4.coreProtoPackage);
+        break;
       case STU3:
         if (args.stu3StructDefZip == null) {
           throw new IllegalArgumentException(

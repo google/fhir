@@ -37,10 +37,10 @@ INPUT_PATH=$ROOT_PATH/spec/hl7.fhir.core/1.0.2/package
 COMMON_FLAGS="\
   --emit_proto \
   --emit_descriptors \
+  --dstu2_struct_def_zip $FHIR_STRUCT_DEF_ZIP \
+  --package_info $FHIR_PACKAGE_INFO \
   --output_directory $OUTPUT_PATH \
-  --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH \
-  --struct_def_dep_pkg $FHIR_STRUCT_DEF_ZIP|$FHIR_PACKAGE_INFO \
-  --package_info $FHIR_PACKAGE_INFO"
+  --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH"
 
 # Generate datatypes.proto.
 $PROTO_GENERATOR \
