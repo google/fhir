@@ -14,6 +14,7 @@
 
 package com.google.fhir.stu3;
 
+import com.google.common.base.Ascii;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
@@ -488,7 +489,7 @@ public class ProtoGenerator {
   }
 
   // Returns true if the file proto uses a type from a set of types.
-  private boolean usesTypeFromSet(DescriptorProto proto, Set<String> types) {
+  private static boolean usesTypeFromSet(DescriptorProto proto, Set<String> types) {
     for (FieldDescriptorProto field : proto.getFieldList()) {
       // Drop leading dot before checking field type.
       if (!field.getTypeName().isEmpty() && types.contains(field.getTypeName().substring(1))) {
@@ -508,7 +509,7 @@ public class ProtoGenerator {
   // throughout, but we wish to use the Profiled resource name.
   // So, for instance, for a profile MyProfiledResource on MyResource, this would be used to turn
   // some.package.MyResource.Submessage into some.package.MyProfiledResource.Submessage
-  private void replaceType(DescriptorProto.Builder protoBuilder, String from, String to) {
+  private static void replaceType(DescriptorProto.Builder protoBuilder, String from, String to) {
     String fromWithDots = "." + from + ".";
     String toWithDots = "." + to + ".";
     for (FieldDescriptorProto.Builder field : protoBuilder.getFieldBuilderList()) {
@@ -827,6 +828,10 @@ public class ProtoGenerator {
                 .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
                 .setLabel(getFieldSize(codingSlice))
                 .setNumber(codeableConceptBuilder.getFieldCount());
+        if (!snakeCaseToJsonCase(codingField.getName())
+            .equals(codingSlice.getSliceName().getValue())) {
+          codingField.setJsonName(codingSlice.getSliceName().getValue());
+        }
         codingField
             .getOptionsBuilder()
             .setExtension(Annotations.fhirInlinedCodingSystem, fixedSystem)
@@ -853,6 +858,10 @@ public class ProtoGenerator {
                   .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
                   .setLabel(getFieldSize(codingSlice))
                   .setNumber(codeableConceptBuilder.getFieldCount());
+          if (!snakeCaseToJsonCase(codingField.getName())
+              .equals(codingSlice.getSliceName().getValue())) {
+            codingField.setJsonName(codingSlice.getSliceName().getValue());
+          }
           codingField
               .getOptionsBuilder()
               .setExtension(Annotations.fhirInlinedCodingSystem, fixedSystem);
@@ -883,13 +892,19 @@ public class ProtoGenerator {
         makeCodingMessageWithFixedSystem(typeName, fixedSystem, inlinedCodeType));
 
     // Add a field with that type.
-    parentBuilder
-        .addFieldBuilder()
-        .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-        .setTypeName(parentTypeString + "." + typeName)
-        .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
-        .setLabel(getFieldSize(codingSlice))
-        .setNumber(parentBuilder.getFieldCount());
+    FieldDescriptorProto.Builder fieldBuilder =
+        parentBuilder
+            .addFieldBuilder()
+            .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+            .setTypeName(parentTypeString + "." + typeName)
+            .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
+            .setLabel(getFieldSize(codingSlice))
+            .setNumber(parentBuilder.getFieldCount());
+
+    if (!snakeCaseToJsonCase(fieldBuilder.getName())
+        .equals(codingSlice.getSliceName().getValue())) {
+      fieldBuilder.setJsonName(codingSlice.getSliceName().getValue());
+    }
   }
 
   private DescriptorProto makeCodingMessageWithFixedSystem(
@@ -1161,7 +1176,7 @@ public class ProtoGenerator {
     String typeName =
         toFieldTypeCase(
             explicitTypeNames.isEmpty()
-                ? getJsonNameForElement(element)
+                ? getNameForElement(element, elementList)
                 : explicitTypeNames.get(0).getValueString().getValue());
 
     int lastDotIndex = id.lastIndexOf('.');
@@ -1188,7 +1203,7 @@ public class ProtoGenerator {
     return addToContainerTypeCache(id, packageString + typeName);
   }
 
-  private String legacyRenaming(String typeName, String packageString) {
+  private static String legacyRenaming(String typeName, String packageString) {
     return packageString.contains(".")
             && (packageString.startsWith(typeName + ".")
                 || packageString.contains("." + typeName + ".")
@@ -1310,7 +1325,6 @@ public class ProtoGenerator {
     } else if (element.getMin().getValue() != 0) {
       System.out.println("Unexpected minimum field count: " + element.getMin().getValue());
     }
-    String jsonFieldNameString = getJsonNameForElement(element);
 
     addFhirPathConstraints(element, options);
 
@@ -1324,12 +1338,11 @@ public class ProtoGenerator {
         // TODO: add a lenient mode that just ignores this extension.
         throw new IllegalArgumentException("Encountered unknown extension url: " + profileUrl);
       }
-      jsonFieldNameString = resolveSliceNameConflicts(jsonFieldNameString, element, elementList);
       options.setExtension(Annotations.fhirInlinedExtensionUrl, profileUrl);
 
       return Optional.of(
           buildFieldInternal(
-                  jsonFieldNameString,
+                  getNameForElement(element, elementList),
                   profileData.inlineType,
                   profileData.protoPackage,
                   nextTag,
@@ -1341,7 +1354,7 @@ public class ProtoGenerator {
     Optional<ElementDefinition> choiceTypeBase = getChoiceTypeBase(element);
     if (choiceTypeBase.isPresent()) {
       ElementDefinition choiceTypeBaseElement = choiceTypeBase.get();
-      String baseJsonName = getJsonNameForElement(choiceTypeBaseElement);
+      String baseName = getNameForElement(choiceTypeBaseElement, elementList);
       String baseContainerType = getContainerType(choiceTypeBaseElement, elementList);
       String containerType = getContainerType(element, elementList);
       containerType =
@@ -1350,7 +1363,7 @@ public class ProtoGenerator {
 
       return Optional.of(
           buildFieldInternal(
-                  baseJsonName,
+                  baseName,
                   containerType,
                   packageInfo.getProtoPackage(),
                   nextTag,
@@ -1358,31 +1371,6 @@ public class ProtoGenerator {
                   options.build())
               .build());
     }
-
-    if (isExtensionBackboneElement(element)) {
-      // This is a internally-defined extension slice that will be inlined as a nested type for
-      // complex extensions, or as a primitive type simple extensions.
-      // Since extensions are sliced on url, the url for the extension matches the slicename.
-      // Since the field name is the slice name wherever possible, annotating the field with the
-      // inlined extension url is usually redundant.
-      // We will only add it if we have to rename the field name.  This can happen if the slice
-      // name is reserved (e.g., string or optional), or if the slice name conflicts with a field
-      // on the base element (e.g., id or url), or if the slicename/url are in an unexpected casing.
-      // If, for any reason, the urlField is not the camelCase version of the lower_underscore
-      // field_name, add an annotation with the explicit name.
-      jsonFieldNameString = resolveSliceNameConflicts(jsonFieldNameString, element, elementList);
-      String url =
-          getElementDefinitionById(element.getId().getValue() + ".url", elementList)
-              .getFixed()
-              .getUri()
-              .getValue();
-      if (!jsonFieldNameString.equals(url)) {
-        options.setExtension(Annotations.fhirInlinedExtensionUrl, url);
-      }
-    }
-
-
-    QualifiedType fieldType = getQualifiedFieldType(element, elementList);
 
     boolean isChoiceType = isChoiceType(element) || isChoiceTypeExtension(element, elementList);
     // Add typed reference options
@@ -1400,15 +1388,31 @@ public class ProtoGenerator {
       }
     }
 
-    return Optional.of(
+    QualifiedType fieldType = getQualifiedFieldType(element, elementList);
+    FieldDescriptorProto.Builder fieldBuilder =
         buildFieldInternal(
-                jsonFieldNameString,
-                fieldType.type,
-                fieldType.packageName,
-                nextTag,
-                fieldSize,
-                options.build())
-            .build());
+            getNameForElement(element, elementList),
+            fieldType.type,
+            fieldType.packageName,
+            nextTag,
+            fieldSize,
+            options.build());
+    if (isExtensionBackboneElement(element)) {
+      // For internal extension, the default is to assume the url is equal to the jsonName of the
+      // field. The json name of the field is the snake-to-json fieldName, unless a jsonName was
+      // explicitly set.
+      String url =
+          getElementDefinitionById(element.getId().getValue() + ".url", elementList)
+              .getFixed()
+              .getUri()
+              .getValue();
+      if ((fieldBuilder.hasJsonName() && !fieldBuilder.getJsonName().equals(url))
+          || (!fieldBuilder.hasJsonName()
+              && !snakeCaseToJsonCase(fieldBuilder.getName()).equals(url))) {
+        fieldBuilder.getOptionsBuilder().setExtension(Annotations.fhirInlinedExtensionUrl, url);
+      }
+    }
+    return Optional.of(fieldBuilder.build());
   }
 
   // Adds any FHIRPath constraints from the definition.
@@ -1436,7 +1440,7 @@ public class ProtoGenerator {
         : FieldDescriptorProto.Label.LABEL_REPEATED;
   }
 
-  private boolean isLocalContentReference(ElementDefinition element) {
+  private static boolean isLocalContentReference(ElementDefinition element) {
     // TODO: more sophisticated logic.  This wouldn't handle references to fields in
     // other elements in a non-core package
     if (!element.hasContentReference()) {
@@ -1447,18 +1451,19 @@ public class ProtoGenerator {
   }
 
   /**
-   * Returns the field name that should be used for an element, in jsonCase. If element is a slice,
-   * uses that slice name. Since the id token slice name is all-lowercase, uses the SliceName field.
+   * Returns the field name that should be used for an element. If element is a slice, uses that
+   * slice name. Since the id token slice name is all-lowercase, uses the SliceName field.
    * Otherwise, uses the last token's pathpart. Logs a warning if the slice name in the id token
    * does not match the SliceName field.
    */
   // TODO: Handle reslices. Could be as easy as adding it to the end of SliceName.
-  private String getJsonNameForElement(ElementDefinition element) {
+  private static String getNameForElement(
+      ElementDefinition element, List<ElementDefinition> elementList) {
     IdToken lastToken = lastIdToken(element.getId().getValue());
     if (lastToken.slicename == null || element.getId().getValue().indexOf(".") == -1) {
       // There is either no slicename, or the "slice" is on the root element, which is a meaningless
       // thing that UsCore sometimes does.
-      return toJsonCase(lastToken.pathpart);
+      return hyphenToCamel(lastToken.pathpart);
     }
     String sliceName = element.getSliceName().getValue();
     if (!lastToken.slicename.equals(sliceName.toLowerCase())) {
@@ -1469,7 +1474,19 @@ public class ProtoGenerator {
               + " and slicename "
               + element.getSliceName());
     }
-    return toJsonCase(sliceName);
+    sliceName = hyphenToCamel(sliceName);
+    return resolveSliceNameConflicts(sliceName, element, elementList);
+  }
+
+  private static String hyphenToCamel(String fieldName) {
+    int i;
+    while ((i = fieldName.indexOf("-")) != -1) {
+      fieldName =
+          fieldName.substring(0, i)
+              + Ascii.toUpperCase(fieldName.substring(i + 1, i + 2))
+              + fieldName.substring(i + 2);
+    }
+    return fieldName;
   }
 
   private static boolean descendantsHaveSlices(
@@ -1483,15 +1500,15 @@ public class ProtoGenerator {
   // TODO: This only checks against non-slice names.  Theoretically, you could have
   // two identically-named slices of different base fields.
   private static String resolveSliceNameConflicts(
-      String jsonFieldName, ElementDefinition element, List<ElementDefinition> elementList) {
-    if (RESERVED_FIELD_NAMES.contains(jsonFieldName)) {
-      return jsonFieldName + "Slice";
+      String fieldName, ElementDefinition element, List<ElementDefinition> elementList) {
+    if (RESERVED_FIELD_NAMES.contains(fieldName)) {
+      return fieldName + "Slice";
     }
     String elementId = element.getId().getValue();
     int lastDotIndex = elementId.lastIndexOf('.');
     if (lastDotIndex == -1) {
       // This is a profile on a top-level Element. There can't be any conflicts.
-      return jsonFieldName;
+      return fieldName;
     }
     String parentElementId = elementId.substring(0, lastDotIndex);
     List<ElementDefinition> elementsWithIdsConflictingWithSliceName =
@@ -1500,13 +1517,11 @@ public class ProtoGenerator {
             .filter(
                 candidateElement ->
                     toFieldNameCase(lastIdToken(candidateElement.getId().getValue()).pathpart)
-                            .equals(jsonFieldName)
+                            .equals(toFieldNameCase(fieldName))
                         && !candidateElement.getBase().getPath().getValue().equals("Extension.url"))
             .collect(Collectors.toList());
 
-    return elementsWithIdsConflictingWithSliceName.isEmpty()
-        ? jsonFieldName
-        : jsonFieldName + "Slice";
+    return elementsWithIdsConflictingWithSliceName.isEmpty() ? fieldName : fieldName + "Slice";
   }
 
   // TODO: memoize
@@ -1588,12 +1603,14 @@ public class ProtoGenerator {
 
     for (ElementDefinition.TypeRef t : types) {
       String fieldType = normalizeType(t);
-      String fieldName = t.getCode().getValue();
+      String fieldName =
+          Ascii.toLowerCase(t.getCode().getValue().substring(0, 1))
+              + t.getCode().getValue().substring(1);
       // TODO:  This assumes all types in a oneof are core FHIR types.  In order to
       // support custom types, we'll need to load the structure definition for the type and check
       // against knownStructureDefinitionPackages
       FieldOptions.Builder options = FieldOptions.newBuilder();
-      if (fieldName.equals("Reference")) {
+      if (fieldName.equals("reference")) {
         for (String referenceType : referenceTypes) {
           addReferenceType(options, referenceType);
         }
@@ -1634,8 +1651,8 @@ public class ProtoGenerator {
     return defData;
   }
 
-  private FieldDescriptorProto.Builder buildFieldInternal(
-      String fieldJsonName,
+  private static FieldDescriptorProto.Builder buildFieldInternal(
+      String fhirName,
       String fieldType,
       String fieldPackage,
       int tag,
@@ -1648,10 +1665,17 @@ public class ProtoGenerator {
     builder.setLabel(size);
     builder.setTypeName("." + fieldPackage + "." + fieldType);
 
-    if (RESERVED_FIELD_NAMES.contains(fieldJsonName)) {
-      builder.setName(toFieldNameCase(fieldJsonName + "Value")).setJsonName(fieldJsonName);
-    } else {
-      builder.setName(toFieldNameCase(fieldJsonName));
+    String fieldName =
+        RESERVED_FIELD_NAMES.contains(fhirName)
+            ? toFieldNameCase(fhirName) + "_value"
+            : toFieldNameCase(fhirName);
+
+    builder.setName(fieldName);
+    if (!fhirName.equals(snakeCaseToJsonCase(fieldName))) {
+      // We can't recover the original FHIR field name with a to-json transform, so add an
+      // annotation
+      // for the original field name.
+      builder.setJsonName(fhirName);
     }
 
     // Add annotations.
@@ -1671,6 +1695,10 @@ public class ProtoGenerator {
     }
     throw new IllegalArgumentException(
         "Unable to deduce typename for profile: " + profileUrl + " on " + type);
+  }
+
+  private static String snakeCaseToJsonCase(String snakeString) {
+    return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, snakeString);
   }
 
   private Optional<QualifiedType> checkForTypeWithBoundValueSet(
@@ -1761,19 +1789,26 @@ public class ProtoGenerator {
 
   private static String toFieldNameCase(String fieldName) {
     // Make sure the field name is snake case, as required by the proto style guide.
-    String normalizedFieldName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName);
+    String normalizedFieldName =
+        CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, resolveAcronyms(fieldName));
     // TODO: add more normalization here if necessary.  I think this is enough for now.
     return normalizedFieldName;
   }
 
-  private static String toJsonCase(String fieldName) {
-    if (fieldName.contains("-")) {
-      return CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, fieldName);
+  // TODO: consolidate with similar code in ValueSetGenerator, perhaps into a
+  // "Casing" util.
+  private static final Pattern ACRONYM_PATTERN = Pattern.compile("([A-Z])([A-Z]+)(?![a-z])");
+
+  public static String resolveAcronyms(String input) {
+    // Turn acronyms into single words, e.g., FHIRIsGreat -> FhirIsGreat, so that it ultimately
+    // becomes FhirIsGreat instead of f_h_i_r_is_great
+    Matcher matcher = ACRONYM_PATTERN.matcher(input);
+    StringBuffer sb = new StringBuffer();
+    while (matcher.find()) {
+      matcher.appendReplacement(sb, matcher.group(1) + Ascii.toLowerCase(matcher.group(2)));
     }
-    if (fieldName.contains("_")) {
-      return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, fieldName);
-    }
-    return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, fieldName);
+    matcher.appendTail(sb);
+    return sb.toString();
   }
 
   // Returns the only element in the list matching a given id.
@@ -1908,12 +1943,12 @@ public class ProtoGenerator {
         && !getExtensionValueElement(element, elementList).getMax().getValue().equals("0");
   }
 
-  private boolean isComplexInternalExtension(
+  private static boolean isComplexInternalExtension(
       ElementDefinition element, List<ElementDefinition> elementList) {
     return isExtensionBackboneElement(element) && !isSimpleInternalExtension(element, elementList);
   }
 
-  private boolean isSingleTypedExtensionDefinition(StructureDefinition def) {
+  private static boolean isSingleTypedExtensionDefinition(StructureDefinition def) {
     ElementDefinition element = def.getSnapshot().getElement(0);
     List<ElementDefinition> elementList = def.getSnapshot().getElementList();
     return isSimpleInternalExtension(element, elementList)

@@ -313,7 +313,7 @@ field {
   }
 }
 field {
-  name: "d_n_a_sequence_variant_name"
+  name: "dna_sequence_variant_name"
   number: 30
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
@@ -323,9 +323,10 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "DNASequenceVariantName"
 }
 field {
-  name: "d_n_a_variant_id"
+  name: "dna_variant_id"
   number: 31
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
@@ -335,9 +336,10 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNAVariantId"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "DNAVariantId"
 }
 field {
-  name: "d_n_a_sequence_variant_type"
+  name: "dna_sequence_variant_type"
   number: 32
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
@@ -347,6 +349,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantType"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "DNASequenceVariantType"
 }
 field {
   name: "amino_acid_change_name"
@@ -359,6 +362,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "AminoAcidChangeName"
 }
 field {
   name: "amino_acid_change_type"
@@ -371,6 +375,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeType"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "AminoAcidChangeType"
 }
 field {
   name: "gene_symbol"
@@ -383,9 +388,10 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "GeneSymbol"
 }
 field {
-  name: "d_n_a_region_name"
+  name: "dna_region_name"
   number: 36
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
@@ -395,6 +401,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNARegionName"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "DNARegionName"
 }
 field {
   name: "allele_name"
@@ -407,6 +414,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "AlleleName"
 }
 field {
   name: "allelic_state"
@@ -419,6 +427,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicState"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "AllelicState"
 }
 field {
   name: "allelic_frequency"
@@ -431,6 +440,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicFrequency"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "AllelicFrequency"
 }
 field {
   name: "copy_number_event"
@@ -443,6 +453,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsCopyNumberEvent"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "CopyNumberEvent"
 }
 field {
   name: "genomic_source_class"
@@ -455,6 +466,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "GenomicSourceClass"
 }
 field {
   name: "phase_set"
@@ -467,6 +479,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "PhaseSet"
 }
 field {
   name: "sequence"
@@ -479,6 +492,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsSequence"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "Sequence"
 }
 field {
   name: "interpretation_slice"
@@ -491,6 +505,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsInterpretation"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "InterpretationSlice"
 }
 nested_type {
   name: "Effective"

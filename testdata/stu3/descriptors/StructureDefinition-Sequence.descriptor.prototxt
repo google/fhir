@@ -542,7 +542,7 @@ nested_type {
     }
   }
   field {
-    name: "truth_t_p"
+    name: "truth_tp"
     number: 10
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
@@ -550,9 +550,10 @@ nested_type {
     options {
       [google.fhir.proto.field_description]: "True positives from the perspective of the truth data"
     }
+    json_name: "truthTP"
   }
   field {
-    name: "query_t_p"
+    name: "query_tp"
     number: 11
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
@@ -560,9 +561,10 @@ nested_type {
     options {
       [google.fhir.proto.field_description]: "True positives from the perspective of the query data"
     }
+    json_name: "queryTP"
   }
   field {
-    name: "truth_f_n"
+    name: "truth_fn"
     number: 12
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
@@ -570,9 +572,10 @@ nested_type {
     options {
       [google.fhir.proto.field_description]: "False negatives"
     }
+    json_name: "truthFN"
   }
   field {
-    name: "query_f_p"
+    name: "query_fp"
     number: 13
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
@@ -580,9 +583,10 @@ nested_type {
     options {
       [google.fhir.proto.field_description]: "False positives"
     }
+    json_name: "queryFP"
   }
   field {
-    name: "gt_f_p"
+    name: "gt_fp"
     number: 14
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
@@ -590,6 +594,7 @@ nested_type {
     options {
       [google.fhir.proto.field_description]: "False positives where the non-REF alleles in the Truth and Query Call Sets match"
     }
+    json_name: "gtFP"
   }
   field {
     name: "precision"

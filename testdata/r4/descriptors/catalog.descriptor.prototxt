@@ -247,6 +247,7 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "ValidityPeriod"
 }
 field {
   number: 24

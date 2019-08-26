@@ -318,7 +318,7 @@ nested_type {
     }
   }
   field {
-    name: "carrier_h_r_f"
+    name: "carrier_hrf"
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
@@ -328,7 +328,7 @@ nested_type {
     }
   }
   field {
-    name: "carrier_a_i_d_c"
+    name: "carrier_aidc"
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE

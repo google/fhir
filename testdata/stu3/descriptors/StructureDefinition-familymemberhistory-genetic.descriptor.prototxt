@@ -280,6 +280,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-parent"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "Parent"
 }
 field {
   name: "sibling"
@@ -292,6 +293,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-sibling"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "Sibling"
 }
 field {
   name: "observation"
@@ -304,6 +306,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "Observation"
 }
 nested_type {
   name: "Born"

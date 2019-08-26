@@ -367,6 +367,7 @@ nested_type {
       [google.fhir.proto.fhir_inlined_coding_system]: "http://loinc.org"
       [google.fhir.proto.fhir_inlined_coding_code]: "8302-2"
     }
+    json_name: "BodyHeightCode"
   }
   options {
     [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/CodeableConcept"

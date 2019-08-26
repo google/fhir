@@ -5847,10 +5847,10 @@ message Device {
     Uri jurisdiction = 6;
 
     // UDI Human Readable Barcode String
-    String carrier_h_r_f = 7;
+    String carrier_hrf = 7 [json_name = "carrierHRF"];
 
     // UDI Machine Readable Barcode String
-    Base64Binary carrier_a_i_d_c = 8;
+    Base64Binary carrier_aidc = 8 [json_name = "carrierAIDC"];
 
     // UDI Issuing Organization
     Uri issuer = 9;
@@ -7872,7 +7872,7 @@ message ExpansionProfile {
 
   // Include or exclude codes which cannot be rendered in user interfaces in the
   // value set expansion
-  Boolean exclude_not_for_u_i = 28;
+  Boolean exclude_not_for_ui = 28 [json_name = "excludeNotForUI"];
 
   // Include or exclude codes which are post coordinated expressions in the
   // value set expansion
@@ -17034,20 +17034,20 @@ message Sequence {
     CodeableConcept method = 9;
 
     // True positives from the perspective of the truth data
-    Decimal truth_t_p = 10;
+    Decimal truth_tp = 10 [json_name = "truthTP"];
 
     // True positives from the perspective of the query data
-    Decimal query_t_p = 11;
+    Decimal query_tp = 11 [json_name = "queryTP"];
 
     // False negatives
-    Decimal truth_f_n = 12;
+    Decimal truth_fn = 12 [json_name = "truthFN"];
 
     // False positives
-    Decimal query_f_p = 13;
+    Decimal query_fp = 13 [json_name = "queryFP"];
 
     // False positives where the non-REF alleles in the Truth and Query Call
     // Sets match
-    Decimal gt_f_p = 14;
+    Decimal gt_fp = 14 [json_name = "gtFP"];
 
     // Precision of comparison
     Decimal precision = 15;
@@ -19549,7 +19549,7 @@ message TestScript {
         TestScriptRequestMethodCodeCode request_method = 17;
 
         // Request URL comparison value
-        String request_u_r_l = 18;
+        String request_url = 18 [json_name = "requestURL"];
 
         // Resource type
         FHIRDefinedTypeCode resource = 19;

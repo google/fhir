@@ -291,6 +291,7 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "AssessedCondition"
 }
 field {
   name: "family_member_history"
@@ -304,6 +305,7 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "FamilyMemberHistory"
 }
 field {
   name: "analysis"
@@ -317,6 +319,7 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "Analysis"
 }
 field {
   name: "references"
@@ -330,6 +333,7 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "References"
 }
 nested_type {
   name: "EffectiveX"

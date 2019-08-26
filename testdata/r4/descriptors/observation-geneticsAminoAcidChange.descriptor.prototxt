@@ -27,8 +27,8 @@ field {
   type_name: ".google.fhir.r4.proto.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "HGVS nomenclature for observed Amino Acid Change"
-    [google.fhir.proto.fhir_inlined_extension_url]: "Name"
   }
+  json_name: "Name"
 }
 field {
   name: "type"
@@ -38,8 +38,8 @@ field {
   type_name: ".google.fhir.r4.proto.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Amino Acid Change Type"
-    [google.fhir.proto.fhir_inlined_extension_url]: "Type"
   }
+  json_name: "Type"
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE

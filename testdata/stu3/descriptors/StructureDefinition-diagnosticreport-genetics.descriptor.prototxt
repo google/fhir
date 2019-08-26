@@ -274,6 +274,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "AssessedCondition"
 }
 field {
   name: "family_member_history"
@@ -286,6 +287,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "FamilyMemberHistory"
 }
 field {
   name: "analysis"
@@ -298,6 +300,7 @@ field {
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "Analysis"
 }
 nested_type {
   name: "Effective"

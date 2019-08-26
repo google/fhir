@@ -372,9 +372,10 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "Gene"
 }
 field {
-  name: "d_n_a_region_name"
+  name: "dna_region_name"
   number: 34
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
@@ -385,6 +386,7 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "DNARegionName"
 }
 field {
   name: "copy_number_event"
@@ -398,6 +400,7 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "CopyNumberEvent"
 }
 field {
   name: "genomic_source_class"
@@ -411,6 +414,7 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "GenomicSourceClass"
 }
 field {
   name: "interpretation_slice"
@@ -424,6 +428,7 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "InterpretationSlice"
 }
 field {
   name: "variant"
@@ -437,6 +442,7 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "Variant"
 }
 field {
   name: "amino_acid_change"
@@ -450,6 +456,7 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "AminoAcidChange"
 }
 field {
   name: "allele"
@@ -463,6 +470,7 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "Allele"
 }
 field {
   name: "ancestry"
@@ -476,6 +484,7 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "Ancestry"
 }
 field {
   name: "phase_set"
@@ -489,6 +498,7 @@ field {
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
+  json_name: "PhaseSet"
 }
 nested_type {
   name: "EffectiveX"

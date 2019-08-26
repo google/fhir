@@ -2383,18 +2383,15 @@ message ObservationAllele {
   repeated Extension extension = 2;
 
   // Name of allele
-  CodeableConcept name = 4
-      [(.google.fhir.proto.fhir_inlined_extension_url) = "Name"];
+  CodeableConcept name = 4 [json_name = "Name"];
 
   // The level of occurrence of a single DNA sequence variant within a set of
   // chromosomes: Heteroplasmic / Homoplasmic / Homozygous / Heterozygous /
   // Hemizygous
-  CodeableConcept state = 5
-      [(.google.fhir.proto.fhir_inlined_extension_url) = "State"];
+  CodeableConcept state = 5 [json_name = "State"];
 
   // Allele frequency
-  Decimal frequency = 6
-      [(.google.fhir.proto.fhir_inlined_extension_url) = "Frequency"];
+  Decimal frequency = 6 [json_name = "Frequency"];
 }
 
 // Auto-generated from StructureDefinition for mothers-family.
@@ -2499,16 +2496,16 @@ message ObservationVariant {
   repeated Extension extension = 2;
 
   // HGVS nomenclature for observed DNA sequence variant
-  CodeableConcept name = 4
-      [(.google.fhir.proto.fhir_inlined_extension_url) = "Name"];
+  CodeableConcept name = 4 [json_name = "Name"];
 
   // DNA sequence variant ID
-  CodeableConcept id_slice = 5
-      [(.google.fhir.proto.fhir_inlined_extension_url) = "Id"];
+  CodeableConcept id_slice = 5 [
+    (.google.fhir.proto.fhir_inlined_extension_url) = "Id",
+    json_name = "IdSlice"
+  ];
 
   // DNA sequence variant type
-  CodeableConcept type = 6
-      [(.google.fhir.proto.fhir_inlined_extension_url) = "Type"];
+  CodeableConcept type = 6 [json_name = "Type"];
 }
 
 // Auto-generated from StructureDefinition for Analysis.
@@ -5399,12 +5396,10 @@ message ObservationAminoAcidChange {
   repeated Extension extension = 2;
 
   // HGVS nomenclature for observed Amino Acid Change
-  CodeableConcept name = 4
-      [(.google.fhir.proto.fhir_inlined_extension_url) = "Name"];
+  CodeableConcept name = 4 [json_name = "Name"];
 
   // Amino Acid Change Type
-  CodeableConcept type = 5
-      [(.google.fhir.proto.fhir_inlined_extension_url) = "Type"];
+  CodeableConcept type = 5 [json_name = "Type"];
 }
 
 // Auto-generated from StructureDefinition for optionPrefix.
@@ -6506,16 +6501,14 @@ message ObservationAncestry {
   // Ancestry name
   CodeableConcept name = 4 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_inlined_extension_url) = "Name"
+    json_name = "Name"
   ];
 
   // Ancestry percentage
-  Decimal percentage = 5
-      [(.google.fhir.proto.fhir_inlined_extension_url) = "Percentage"];
+  Decimal percentage = 5 [json_name = "Percentage"];
 
   // Source of ancestry report
-  CodeableConcept source = 6
-      [(.google.fhir.proto.fhir_inlined_extension_url) = "Source"];
+  CodeableConcept source = 6 [json_name = "Source"];
 }
 
 // Auto-generated from StructureDefinition for ADXP-houseNumberNumeric.
@@ -7350,12 +7343,15 @@ message ObservationPhaseSet {
   repeated Extension extension = 2;
 
   // Phase set ID
-  Uri id_slice = 4 [(.google.fhir.proto.fhir_inlined_extension_url) = "Id"];
+  Uri id_slice = 4 [
+    (.google.fhir.proto.fhir_inlined_extension_url) = "Id",
+    json_name = "IdSlice"
+  ];
 
   // Phase set sequence
   repeated Reference molecular_sequence = 5 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_inlined_extension_url) = "MolecularSequence"
+    json_name = "MolecularSequence"
   ];
 }
 

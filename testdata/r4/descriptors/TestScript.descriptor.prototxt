@@ -1376,7 +1376,7 @@ nested_type {
         }
       }
       field {
-        name: "request_u_r_l"
+        name: "request_url"
         number: 18
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
@@ -1384,6 +1384,7 @@ nested_type {
         options {
           [google.fhir.proto.field_description]: "Request URL comparison value"
         }
+        json_name: "requestURL"
       }
       field {
         name: "resource"

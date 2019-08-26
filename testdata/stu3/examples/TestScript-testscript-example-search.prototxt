@@ -205,7 +205,7 @@ setup {
       operator {
         value: CONTAINS
       }
-      request_u_r_l {
+      request_url {
         value: "family"
       }
     }

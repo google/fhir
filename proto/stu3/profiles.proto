@@ -105,9 +105,10 @@ message Bmi {
     // Plain text representation of the concept
     String text = 4;
 
-    repeated CodingWithFixedCode b_m_i_code = 5 [
+    repeated CodingWithFixedCode bmi_code = 5 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-      (.google.fhir.proto.fhir_inlined_coding_code) = "39156-5"
+      (.google.fhir.proto.fhir_inlined_coding_code) = "39156-5",
+      json_name = "BMICode"
     ];
   }
   CodeableConceptForCode code = 13
@@ -362,7 +363,8 @@ message Bodyheight {
 
     repeated CodingWithFixedCode body_height_code = 5 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-      (.google.fhir.proto.fhir_inlined_coding_code) = "8302-2"
+      (.google.fhir.proto.fhir_inlined_coding_code) = "8302-2",
+      json_name = "BodyHeightCode"
     ];
   }
   CodeableConceptForCode code = 13
@@ -617,7 +619,8 @@ message Bodylength {
 
     repeated CodingWithFixedCode body_length_code = 5 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-      (.google.fhir.proto.fhir_inlined_coding_code) = "8306-3"
+      (.google.fhir.proto.fhir_inlined_coding_code) = "8306-3",
+      json_name = "BodyLengthCode"
     ];
   }
   CodeableConceptForCode code = 13
@@ -872,7 +875,8 @@ message Bodytemp {
 
     repeated CodingWithFixedCode body_temp_code = 5 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-      (.google.fhir.proto.fhir_inlined_coding_code) = "8310-5"
+      (.google.fhir.proto.fhir_inlined_coding_code) = "8310-5",
+      json_name = "BodyTempCode"
     ];
   }
   CodeableConceptForCode code = 13
@@ -1127,7 +1131,8 @@ message Bodyweight {
 
     repeated CodingWithFixedCode body_weight_code = 5 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-      (.google.fhir.proto.fhir_inlined_coding_code) = "29463-7"
+      (.google.fhir.proto.fhir_inlined_coding_code) = "29463-7",
+      json_name = "BodyWeightCode"
     ];
   }
   CodeableConceptForCode code = 13
@@ -1380,9 +1385,10 @@ message Bp {
     // Plain text representation of the concept
     String text = 4;
 
-    repeated CodingWithFixedCode b_p_code = 5 [
+    repeated CodingWithFixedCode bp_code = 5 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-      (.google.fhir.proto.fhir_inlined_coding_code) = "85354-9"
+      (.google.fhir.proto.fhir_inlined_coding_code) = "85354-9",
+      json_name = "BPCode"
     ];
   }
   CodeableConceptForCode code = 13
@@ -2351,6 +2357,7 @@ message DiagnosticreportGenetics {
   repeated Reference assessed_condition = 26 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition",
+    json_name = "AssessedCondition",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -2359,6 +2366,7 @@ message DiagnosticreportGenetics {
   repeated Reference family_member_history = 27 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory",
+    json_name = "FamilyMemberHistory",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -2367,6 +2375,7 @@ message DiagnosticreportGenetics {
   repeated DiagnosticReportAnalysis analysis = 28 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis",
+    json_name = "Analysis",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -2749,13 +2758,15 @@ message ElementdefinitionDe {
   // Extension
   repeated String question = 35 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/elementdefinition-question"
+        "http://hl7.org/fhir/StructureDefinition/elementdefinition-question",
+    json_name = "Question"
   ];
 
   // Extension
   ElementDefinitionAllowedUnits.Value allowed_units = 36 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits"
+        "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits",
+    json_name = "AllowedUnits"
   ];
 }
 
@@ -2927,6 +2938,7 @@ message FamilymemberhistoryGenetic {
   repeated FamilyMemberHistoryParent parent = 27 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-parent",
+    json_name = "Parent",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -2935,6 +2947,7 @@ message FamilymemberhistoryGenetic {
   repeated FamilyMemberHistorySibling sibling = 28 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-sibling",
+    json_name = "Sibling",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -2943,6 +2956,7 @@ message FamilymemberhistoryGenetic {
   repeated Reference observation = 29 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation",
+    json_name = "Observation",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -3247,7 +3261,8 @@ message Headcircum {
 
     repeated CodingWithFixedCode head_circum_code = 5 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-      (.google.fhir.proto.fhir_inlined_coding_code) = "8287-5"
+      (.google.fhir.proto.fhir_inlined_coding_code) = "8287-5",
+      json_name = "HeadCircumCode"
     ];
   }
   CodeableConceptForCode code = 13
@@ -3502,7 +3517,8 @@ message Heartrate {
 
     repeated CodingWithFixedCode heart_rate_code = 5 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-      (.google.fhir.proto.fhir_inlined_coding_code) = "8867-4"
+      (.google.fhir.proto.fhir_inlined_coding_code) = "8867-4",
+      json_name = "HeartRateCode"
     ];
   }
   CodeableConceptForCode code = 13
@@ -4570,25 +4586,28 @@ message ObservationGenetics {
   repeated Component component = 29;
 
   // DNA sequence variant
-  CodeableConcept d_n_a_sequence_variant_name = 30 [
+  CodeableConcept dna_sequence_variant_name = 30 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantName",
+    json_name = "DNASequenceVariantName",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
   // DNA sequence variant ID
-  CodeableConcept d_n_a_variant_id = 31 [
+  CodeableConcept dna_variant_id = 31 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNAVariantId",
+    json_name = "DNAVariantId",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
   // DNA sequence variant type
-  CodeableConcept d_n_a_sequence_variant_type = 32 [
+  CodeableConcept dna_sequence_variant_type = 32 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNASequenceVariantType",
+    json_name = "DNASequenceVariantType",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -4597,6 +4616,7 @@ message ObservationGenetics {
   CodeableConcept amino_acid_change_name = 33 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName",
+    json_name = "AminoAcidChangeName",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -4605,6 +4625,7 @@ message ObservationGenetics {
   CodeableConcept amino_acid_change_type = 34 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeType",
+    json_name = "AminoAcidChangeType",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -4613,14 +4634,16 @@ message ObservationGenetics {
   CodeableConcept gene_symbol = 35 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene",
+    json_name = "GeneSymbol",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
   // DNA region name
-  String d_n_a_region_name = 36 [
+  String dna_region_name = 36 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNARegionName",
+    json_name = "DNARegionName",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -4629,6 +4652,7 @@ message ObservationGenetics {
   CodeableConcept allele_name = 37 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsAlleleName",
+    json_name = "AlleleName",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -4639,6 +4663,7 @@ message ObservationGenetics {
   CodeableConcept allelic_state = 38 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicState",
+    json_name = "AllelicState",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -4647,6 +4672,7 @@ message ObservationGenetics {
   Decimal allelic_frequency = 39 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllelicFrequency",
+    json_name = "AllelicFrequency",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -4655,6 +4681,7 @@ message ObservationGenetics {
   CodeableConcept copy_number_event = 40 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsCopyNumberEvent",
+    json_name = "CopyNumberEvent",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -4663,6 +4690,7 @@ message ObservationGenetics {
   CodeableConcept genomic_source_class = 41 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass",
+    json_name = "GenomicSourceClass",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -4671,6 +4699,7 @@ message ObservationGenetics {
   Uri phase_set = 42 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet",
+    json_name = "PhaseSet",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -4679,6 +4708,7 @@ message ObservationGenetics {
   repeated Reference sequence = 43 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsSequence",
+    json_name = "Sequence",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -4687,6 +4717,7 @@ message ObservationGenetics {
   Reference interpretation_slice = 44 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsInterpretation",
+    json_name = "InterpretationSlice",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -4772,7 +4803,8 @@ message Oxygensat {
 
     repeated CodingWithFixedCode oxygen_sat_code = 5 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-      (.google.fhir.proto.fhir_inlined_coding_code) = "59408-5"
+      (.google.fhir.proto.fhir_inlined_coding_code) = "59408-5",
+      json_name = "OxygenSatCode"
     ];
   }
   CodeableConceptForCode code = 13
@@ -5132,6 +5164,7 @@ message ProcedurerequestGenetics {
   repeated DiagnosticReportItem item = 35 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/procedurerequest-geneticsItem",
+    json_name = "Item",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -5217,7 +5250,8 @@ message Resprate {
 
     repeated CodingWithFixedCode resp_rate_code = 5 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-      (.google.fhir.proto.fhir_inlined_coding_code) = "9279-1"
+      (.google.fhir.proto.fhir_inlined_coding_code) = "9279-1",
+      json_name = "RespRateCode"
     ];
   }
   CodeableConceptForCode code = 13
@@ -6484,7 +6518,8 @@ message Vitalspanel {
 
     repeated CodingWithFixedCode body_weight_code = 5 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-      (.google.fhir.proto.fhir_inlined_coding_code) = "85353-1"
+      (.google.fhir.proto.fhir_inlined_coding_code) = "85353-1",
+      json_name = "BodyWeightCode"
     ];
   }
   CodeableConceptForCode code = 13

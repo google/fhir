@@ -359,6 +359,7 @@ field {
     [google.fhir.proto.field_description]: "Prompt for element phrased as question"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/elementdefinition-question"
   }
+  json_name: "Question"
 }
 field {
   name: "allowed_units"
@@ -370,6 +371,7 @@ field {
     [google.fhir.proto.field_description]: "Units to use for measured value"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits"
   }
+  json_name: "AllowedUnits"
 }
 nested_type {
   name: "Base"

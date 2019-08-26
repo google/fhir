@@ -27,8 +27,8 @@ field {
   type_name: ".google.fhir.r4.proto.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Name of allele"
-    [google.fhir.proto.fhir_inlined_extension_url]: "Name"
   }
+  json_name: "Name"
 }
 field {
   name: "state"
@@ -38,8 +38,8 @@ field {
   type_name: ".google.fhir.r4.proto.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "The level of occurrence of a single DNA sequence variant within a set of chromosomes: Heteroplasmic / Homoplasmic / Homozygous / Heterozygous / Hemizygous"
-    [google.fhir.proto.fhir_inlined_extension_url]: "State"
   }
+  json_name: "State"
 }
 field {
   name: "frequency"
@@ -49,8 +49,8 @@ field {
   type_name: ".google.fhir.r4.proto.Decimal"
   options {
     [google.fhir.proto.field_description]: "Allele frequency"
-    [google.fhir.proto.fhir_inlined_extension_url]: "Frequency"
   }
+  json_name: "Frequency"
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE

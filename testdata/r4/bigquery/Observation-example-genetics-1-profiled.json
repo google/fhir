@@ -40,7 +40,7 @@
     "specimenId": "genetics-example1-somatic",
     "display": "Molecular Specimen ID: MLD45-Z4-1234"
   },
-  "gene": {
+  "Gene": {
     "coding": [
       {
         "system": "http://www.genenames.org",
@@ -49,8 +49,8 @@
       }
     ]
   },
-  "dNARegionName": "Exon 21",
-  "genomicSourceClass": {
+  "DNARegionName": "Exon 21",
+  "GenomicSourceClass": {
     "coding": [
       {
         "system": "http://loinc.org",

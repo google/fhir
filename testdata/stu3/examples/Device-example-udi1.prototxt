@@ -42,10 +42,10 @@ udi {
   jurisdiction {
     value: "http://hl7.org/fhir/NamingSystem/fda-udi"
   }
-  carrier_h_r_f {
+  carrier_hrf {
     value: "{01}00844588003288{17}141120{10}7654321D{21}10987654d321"
   }
-  carrier_a_i_d_c {
+  carrier_aidc {
     value: "]d201108576740020171714112010NYFUL01\342\206\22421192837\342\206\224713A1B2C3D4E5F6G"
   }
   issuer {

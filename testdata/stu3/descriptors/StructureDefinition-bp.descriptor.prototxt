@@ -366,7 +366,7 @@ nested_type {
     }
   }
   field {
-    name: "b_p_code"
+    name: "bp_code"
     number: 5
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
@@ -375,6 +375,7 @@ nested_type {
       [google.fhir.proto.fhir_inlined_coding_system]: "http://loinc.org"
       [google.fhir.proto.fhir_inlined_coding_code]: "85354-9"
     }
+    json_name: "BPCode"
   }
   options {
     [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/CodeableConcept"

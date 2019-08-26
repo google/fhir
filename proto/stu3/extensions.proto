@@ -4798,9 +4798,9 @@ message PatientClinicalTrial {
   repeated Extension extension = 2;
 
   // National Clinical Trial number
-  String n_c_t = 4 [
+  String nct = 4 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_inlined_extension_url) = "NCT"
+    json_name = "NCT"
   ];
 
   // The period of participation in the clinical trial

@@ -771,10 +771,10 @@ message UsCoreDevice {
     proto.Uri jurisdiction = 6;
 
     // UDI Human Readable Barcode String
-    proto.String carrier_h_r_f = 7;
+    proto.String carrier_hrf = 7 [json_name = "carrierHRF"];
 
     // UDI Machine Readable Barcode String
-    proto.Base64Binary carrier_a_i_d_c = 8;
+    proto.Base64Binary carrier_aidc = 8 [json_name = "carrierAIDC"];
 
     // UDI Issuing Organization
     proto.Uri issuer = 9;

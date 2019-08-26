@@ -85,16 +85,16 @@ quality {
       value: "Vcfeval + Hap.py Comparison"
     }
   }
-  truth_t_p {
+  truth_tp {
     value: "7749"
   }
-  truth_f_n {
+  truth_fn {
     value: "2554"
   }
-  query_f_p {
+  query_fp {
     value: "10670"
   }
-  gt_f_p {
+  gt_fp {
     value: "2186"
   }
   precision {
@@ -137,16 +137,16 @@ quality {
       value: "Vcfeval + Hap.py Comparison"
     }
   }
-  truth_t_p {
+  truth_tp {
     value: "92106"
   }
-  truth_f_n {
+  truth_fn {
     value: "1247"
   }
-  query_f_p {
+  query_fp {
     value: "21744"
   }
-  gt_f_p {
+  gt_fp {
     value: "493"
   }
   precision {

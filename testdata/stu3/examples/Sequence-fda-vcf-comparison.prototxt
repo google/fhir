@@ -90,16 +90,16 @@ quality {
       value: "VCF Comparison"
     }
   }
-  truth_t_p {
+  truth_tp {
     value: "129481"
   }
-  truth_f_n {
+  truth_fn {
     value: "3168"
   }
-  query_f_p {
+  query_fp {
     value: "1507"
   }
-  gt_f_p {
+  gt_fp {
     value: "2186"
   }
   precision {

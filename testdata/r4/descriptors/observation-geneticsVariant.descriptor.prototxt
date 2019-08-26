@@ -27,8 +27,8 @@ field {
   type_name: ".google.fhir.r4.proto.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "HGVS nomenclature for observed DNA sequence variant"
-    [google.fhir.proto.fhir_inlined_extension_url]: "Name"
   }
+  json_name: "Name"
 }
 field {
   name: "id_slice"
@@ -40,6 +40,7 @@ field {
     [google.fhir.proto.field_description]: "DNA sequence variant ID"
     [google.fhir.proto.fhir_inlined_extension_url]: "Id"
   }
+  json_name: "IdSlice"
 }
 field {
   name: "type"
@@ -49,8 +50,8 @@ field {
   type_name: ".google.fhir.r4.proto.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "DNA sequence variant type"
-    [google.fhir.proto.fhir_inlined_extension_url]: "Type"
   }
+  json_name: "Type"
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE

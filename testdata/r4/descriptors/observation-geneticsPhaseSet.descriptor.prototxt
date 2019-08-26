@@ -29,6 +29,7 @@ field {
     [google.fhir.proto.field_description]: "Phase set ID"
     [google.fhir.proto.fhir_inlined_extension_url]: "Id"
   }
+  json_name: "IdSlice"
 }
 field {
   name: "molecular_sequence"
@@ -39,8 +40,8 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Phase set sequence"
-    [google.fhir.proto.fhir_inlined_extension_url]: "MolecularSequence"
   }
+  json_name: "MolecularSequence"
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE

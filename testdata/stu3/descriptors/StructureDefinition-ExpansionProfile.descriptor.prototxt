@@ -271,7 +271,7 @@ field {
   }
 }
 field {
-  name: "exclude_not_for_u_i"
+  name: "exclude_not_for_ui"
   number: 28
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
@@ -279,6 +279,7 @@ field {
   options {
     [google.fhir.proto.field_description]: "Include or exclude codes which cannot be rendered in user interfaces in the value set expansion"
   }
+  json_name: "excludeNotForUI"
 }
 field {
   name: "exclude_post_coordinated"

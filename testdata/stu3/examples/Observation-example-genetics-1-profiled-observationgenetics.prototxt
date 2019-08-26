@@ -69,7 +69,7 @@ specimen {
     value: "Molecular Specimen ID: MLD45-Z4-1234"
   }
 }
-d_n_a_sequence_variant_name {
+dna_sequence_variant_name {
   text {
     value: "NG_007726.3:g.146252T>G"
   }
@@ -87,7 +87,7 @@ gene_symbol {
     }
   }
 }
-d_n_a_region_name {
+dna_region_name {
   value: "Exon 21"
 }
 genomic_source_class {

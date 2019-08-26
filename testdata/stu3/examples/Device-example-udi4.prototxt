@@ -13,7 +13,7 @@ udi {
   jurisdiction {
     value: "http://hl7.org/fhir/NamingSystem/fda-udi"
   }
-  carrier_h_r_f {
+  carrier_hrf {
     value: "=)1TE123456A&)RZ12345678"
   }
   issuer {

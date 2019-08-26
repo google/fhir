@@ -110,9 +110,10 @@ message USCorePediatricBMIforAgeObservationProfile {
     // Plain text representation of the concept
     proto.String text = 4;
 
-    proto.CodingWithFixedCode b_m_i_percentile = 5 [
+    proto.CodingWithFixedCode bmi_percentile = 5 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-      (.google.fhir.proto.fhir_inlined_coding_code) = "59576-9"
+      (.google.fhir.proto.fhir_inlined_coding_code) = "59576-9",
+      json_name = "BMIPercentile"
     ];
   }
   CodeableConceptForCode code = 14
@@ -394,7 +395,8 @@ message USCorePediatricWeightForHeightObservationProfile {
 
     proto.CodingWithFixedCode wt_percentile = 5 [
       (.google.fhir.proto.fhir_inlined_coding_system) = "http://loinc.org",
-      (.google.fhir.proto.fhir_inlined_coding_code) = "77606-2"
+      (.google.fhir.proto.fhir_inlined_coding_code) = "77606-2",
+      json_name = "WtPercentile"
     ];
   }
   CodeableConceptForCode code = 14
@@ -1389,10 +1391,10 @@ message USCoreDeviceProfile {
     proto.Uri jurisdiction = 6;
 
     // UDI Machine Readable Barcode String
-    proto.Base64Binary carrier_a_i_d_c = 7;
+    proto.Base64Binary carrier_aidc = 7 [json_name = "carrierAIDC"];
 
     // UDI Human Readable Barcode String
-    proto.String carrier_h_r_f = 8;
+    proto.String carrier_hrf = 8 [json_name = "carrierHRF"];
 
     // barcode | rfid | manual +
     proto.UDIEntryTypeCode entry_type = 9;

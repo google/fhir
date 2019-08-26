@@ -28,8 +28,8 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Ancestry name"
-    [google.fhir.proto.fhir_inlined_extension_url]: "Name"
   }
+  json_name: "Name"
 }
 field {
   name: "percentage"
@@ -39,8 +39,8 @@ field {
   type_name: ".google.fhir.r4.proto.Decimal"
   options {
     [google.fhir.proto.field_description]: "Ancestry percentage"
-    [google.fhir.proto.fhir_inlined_extension_url]: "Percentage"
   }
+  json_name: "Percentage"
 }
 field {
   name: "source"
@@ -50,8 +50,8 @@ field {
   type_name: ".google.fhir.r4.proto.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Source of ancestry report"
-    [google.fhir.proto.fhir_inlined_extension_url]: "Source"
   }
+  json_name: "Source"
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
