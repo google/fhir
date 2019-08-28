@@ -1,0 +1,380 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.core;
+
+import "google/protobuf/any.proto";
+import "proto/annotations.proto";
+import "proto/r4/core/codes.proto";
+import "proto/r4/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.core";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for MolecularSequence, last updated
+// 2018-12-27T22:37:54.724+11:00. Information about a biological sequence. See
+// http://hl7.org/fhir/StructureDefinition/MolecularSequence
+message MolecularSequence {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MolecularSequence";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // MolecularSequence.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Unique ID for this particular sequence. This is a FHIR-defined id
+  repeated Identifier identifier = 10;
+
+  // aa | dna | rna
+  SequenceTypeCode type = 11;
+
+  // Base number of coordinate system (0 for 0-based numbering or coordinates,
+  // inclusive start, exclusive end, 1 for 1-based numbering, inclusive start,
+  // inclusive end)
+  Integer coordinate_system = 12
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what this is about
+  Reference patient = 13
+      [(.google.fhir.proto.valid_reference_type) = "Patient"];
+
+  // Specimen used for sequencing
+  Reference specimen = 14
+      [(.google.fhir.proto.valid_reference_type) = "Specimen"];
+
+  // The method for sequencing
+  Reference device = 15 [(.google.fhir.proto.valid_reference_type) = "Device"];
+
+  // Who should be responsible for test result
+  Reference performer = 16
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // The number of copies of the sequence of interest.  (RNASeq)
+  Quantity quantity = 17;
+
+  // A sequence used as reference
+  message ReferenceSeq {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Chromosome containing genetic finding
+    CodeableConcept chromosome = 4;
+
+    // The Genome Build used for reference, following GRCh build versions e.g.
+    // 'GRCh 37'
+    String genome_build = 5;
+
+    // sense | antisense
+    OrientationTypeCode orientation = 6;
+
+    // Reference identifier
+    CodeableConcept reference_seq_id = 7;
+
+    // A pointer to another MolecularSequence entity as reference sequence
+    Reference reference_seq_pointer = 8
+        [(.google.fhir.proto.valid_reference_type) = "MolecularSequence"];
+
+    // A string to represent reference sequence
+    String reference_seq_string = 9;
+
+    // watson | crick
+    StrandTypeCode strand = 10;
+
+    // Start position of the window on the  reference sequence
+    Integer window_start = 11;
+
+    // End position of the window on the reference sequence
+    Integer window_end = 12;
+  }
+  ReferenceSeq reference_seq = 18 [
+    (.google.fhir.proto.fhir_path_constraint) =
+        "hasValue() or (children().count() > id.count())",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "(genomeBuild.count()+referenceSeqId.count()+ referenceSeqPointer.count()+ referenceSeqString.count()) = 1",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "(chromosome.empty() and genomeBuild.empty()) or (chromosome.exists() and genomeBuild.exists())"
+  ];
+
+  // Variant in sequence
+  message Variant {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Start position of the variant on the  reference sequence
+    Integer start = 4;
+
+    // End position of the variant on the reference sequence
+    Integer end = 5;
+
+    // Allele that was observed
+    String observed_allele = 6;
+
+    // Allele in the reference sequence
+    String reference_allele = 7;
+
+    // Extended CIGAR string for aligning the sequence with reference bases
+    String cigar = 8;
+
+    // Pointer to observed variant information
+    Reference variant_pointer = 9
+        [(.google.fhir.proto.valid_reference_type) = "Observation"];
+  }
+  repeated Variant variant = 19
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+
+  // Sequence that was observed
+  String observed_seq = 20;
+
+  // An set of value as quality of sequence
+  message Quality {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // indel | snp | unknown
+    QualityTypeCode type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Standard sequence for comparison
+    CodeableConcept standard_sequence = 5;
+
+    // Start position of the sequence
+    Integer start = 6;
+
+    // End position of the sequence
+    Integer end = 7;
+
+    // Quality score for the comparison
+    Quantity score = 8;
+
+    // Method to get quality
+    CodeableConcept method = 9;
+
+    // True positives from the perspective of the truth data
+    Decimal truth_tp = 10 [json_name = "truthTP"];
+
+    // True positives from the perspective of the query data
+    Decimal query_tp = 11 [json_name = "queryTP"];
+
+    // False negatives
+    Decimal truth_fn = 12 [json_name = "truthFN"];
+
+    // False positives
+    Decimal query_fp = 13 [json_name = "queryFP"];
+
+    // False positives where the non-REF alleles in the Truth and Query Call
+    // Sets match
+    Decimal gt_fp = 14 [json_name = "gtFP"];
+
+    // Precision of comparison
+    Decimal precision = 15;
+
+    // Recall of comparison
+    Decimal recall = 16;
+
+    // F-score
+    Decimal f_score = 17;
+
+    // Receiver Operator Characteristic (ROC) Curve
+    message Roc {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Genotype quality score
+      repeated Integer score = 4;
+
+      // Roc score true positive numbers
+      repeated Integer num_tp = 5 [json_name = "numTP"];
+
+      // Roc score false positive numbers
+      repeated Integer num_fp = 6 [json_name = "numFP"];
+
+      // Roc score false negative numbers
+      repeated Integer num_fn = 7 [json_name = "numFN"];
+
+      // Precision of the GQ score
+      repeated Decimal precision = 8;
+
+      // Sensitivity of the GQ score
+      repeated Decimal sensitivity = 9;
+
+      // FScore of the GQ score
+      repeated Decimal f_measure = 10;
+    }
+    Roc roc = 18 [(.google.fhir.proto.fhir_path_constraint) =
+                      "hasValue() or (children().count() > id.count())"];
+  }
+  repeated Quality quality = 21
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+
+  // Average number of reads representing a given nucleotide in the
+  // reconstructed sequence
+  Integer read_coverage = 22;
+
+  // External repository which contains detailed report related with observedSeq
+  // in this resource
+  message Repository {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // directlink | openapi | login | oauth | other
+    RepositoryTypeCode type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // URI of the repository
+    Uri url = 5;
+
+    // Repository's name
+    String name = 6;
+
+    // Id of the dataset that used to call for dataset in repository
+    String dataset_id = 7;
+
+    // Id of the variantset that used to call for variantset in repository
+    String variantset_id = 8;
+
+    // Id of the read
+    String readset_id = 9;
+  }
+  repeated Repository repository = 23
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+
+  // Pointer to next atomic sequence
+  repeated Reference pointer = 24
+      [(.google.fhir.proto.valid_reference_type) = "MolecularSequence"];
+
+  // Structural variant
+  message StructureVariant {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Structural variant change type
+    CodeableConcept variant_type = 4;
+
+    // Does the structural variant have base pair resolution breakpoints?
+    Boolean exact = 5;
+
+    // Structural variant length
+    Integer length = 6;
+
+    // Structural variant outer
+    message Outer {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Structural variant outer start
+      Integer start = 4;
+
+      // Structural variant outer end
+      Integer end = 5;
+    }
+    Outer outer = 7 [(.google.fhir.proto.fhir_path_constraint) =
+                         "hasValue() or (children().count() > id.count())"];
+
+    // Structural variant inner
+    message Inner {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Structural variant inner start
+      Integer start = 4;
+
+      // Structural variant inner end
+      Integer end = 5;
+    }
+    Inner inner = 8 [(.google.fhir.proto.fhir_path_constraint) =
+                         "hasValue() or (children().count() > id.count())"];
+  }
+  repeated StructureVariant structure_variant = 25
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+}

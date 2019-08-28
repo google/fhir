@@ -1,0 +1,499 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.core;
+
+import "proto/annotations.proto";
+import "proto/r4/core/codes.proto";
+import "proto/r4/core/datatypes.proto";
+import "proto/r4/core/resources/account.proto";
+import "proto/r4/core/resources/activity_definition.proto";
+import "proto/r4/core/resources/adverse_event.proto";
+import "proto/r4/core/resources/allergy_intolerance.proto";
+import "proto/r4/core/resources/appointment.proto";
+import "proto/r4/core/resources/appointment_response.proto";
+import "proto/r4/core/resources/audit_event.proto";
+import "proto/r4/core/resources/basic.proto";
+import "proto/r4/core/resources/binary.proto";
+import "proto/r4/core/resources/biologically_derived_product.proto";
+import "proto/r4/core/resources/body_structure.proto";
+import "proto/r4/core/resources/capability_statement.proto";
+import "proto/r4/core/resources/care_plan.proto";
+import "proto/r4/core/resources/care_team.proto";
+import "proto/r4/core/resources/catalog_entry.proto";
+import "proto/r4/core/resources/charge_item.proto";
+import "proto/r4/core/resources/charge_item_definition.proto";
+import "proto/r4/core/resources/claim.proto";
+import "proto/r4/core/resources/claim_response.proto";
+import "proto/r4/core/resources/clinical_impression.proto";
+import "proto/r4/core/resources/code_system.proto";
+import "proto/r4/core/resources/communication.proto";
+import "proto/r4/core/resources/communication_request.proto";
+import "proto/r4/core/resources/compartment_definition.proto";
+import "proto/r4/core/resources/composition.proto";
+import "proto/r4/core/resources/concept_map.proto";
+import "proto/r4/core/resources/condition.proto";
+import "proto/r4/core/resources/consent.proto";
+import "proto/r4/core/resources/contract.proto";
+import "proto/r4/core/resources/coverage.proto";
+import "proto/r4/core/resources/coverage_eligibility_request.proto";
+import "proto/r4/core/resources/coverage_eligibility_response.proto";
+import "proto/r4/core/resources/detected_issue.proto";
+import "proto/r4/core/resources/device.proto";
+import "proto/r4/core/resources/device_definition.proto";
+import "proto/r4/core/resources/device_metric.proto";
+import "proto/r4/core/resources/device_request.proto";
+import "proto/r4/core/resources/device_use_statement.proto";
+import "proto/r4/core/resources/diagnostic_report.proto";
+import "proto/r4/core/resources/document_manifest.proto";
+import "proto/r4/core/resources/document_reference.proto";
+import "proto/r4/core/resources/effect_evidence_synthesis.proto";
+import "proto/r4/core/resources/encounter.proto";
+import "proto/r4/core/resources/endpoint.proto";
+import "proto/r4/core/resources/enrollment_request.proto";
+import "proto/r4/core/resources/enrollment_response.proto";
+import "proto/r4/core/resources/episode_of_care.proto";
+import "proto/r4/core/resources/event_definition.proto";
+import "proto/r4/core/resources/evidence.proto";
+import "proto/r4/core/resources/evidence_variable.proto";
+import "proto/r4/core/resources/example_scenario.proto";
+import "proto/r4/core/resources/explanation_of_benefit.proto";
+import "proto/r4/core/resources/family_member_history.proto";
+import "proto/r4/core/resources/flag.proto";
+import "proto/r4/core/resources/goal.proto";
+import "proto/r4/core/resources/graph_definition.proto";
+import "proto/r4/core/resources/group.proto";
+import "proto/r4/core/resources/guidance_response.proto";
+import "proto/r4/core/resources/healthcare_service.proto";
+import "proto/r4/core/resources/imaging_study.proto";
+import "proto/r4/core/resources/immunization.proto";
+import "proto/r4/core/resources/immunization_evaluation.proto";
+import "proto/r4/core/resources/immunization_recommendation.proto";
+import "proto/r4/core/resources/implementation_guide.proto";
+import "proto/r4/core/resources/insurance_plan.proto";
+import "proto/r4/core/resources/invoice.proto";
+import "proto/r4/core/resources/library.proto";
+import "proto/r4/core/resources/linkage.proto";
+import "proto/r4/core/resources/list.proto";
+import "proto/r4/core/resources/location.proto";
+import "proto/r4/core/resources/measure.proto";
+import "proto/r4/core/resources/measure_report.proto";
+import "proto/r4/core/resources/media.proto";
+import "proto/r4/core/resources/medication.proto";
+import "proto/r4/core/resources/medication_administration.proto";
+import "proto/r4/core/resources/medication_dispense.proto";
+import "proto/r4/core/resources/medication_knowledge.proto";
+import "proto/r4/core/resources/medication_request.proto";
+import "proto/r4/core/resources/medication_statement.proto";
+import "proto/r4/core/resources/medicinal_product.proto";
+import "proto/r4/core/resources/medicinal_product_authorization.proto";
+import "proto/r4/core/resources/medicinal_product_contraindication.proto";
+import "proto/r4/core/resources/medicinal_product_indication.proto";
+import "proto/r4/core/resources/medicinal_product_ingredient.proto";
+import "proto/r4/core/resources/medicinal_product_interaction.proto";
+import "proto/r4/core/resources/medicinal_product_manufactured.proto";
+import "proto/r4/core/resources/medicinal_product_packaged.proto";
+import "proto/r4/core/resources/medicinal_product_pharmaceutical.proto";
+import "proto/r4/core/resources/medicinal_product_undesirable_effect.proto";
+import "proto/r4/core/resources/message_definition.proto";
+import "proto/r4/core/resources/message_header.proto";
+import "proto/r4/core/resources/metadata_resource.proto";
+import "proto/r4/core/resources/molecular_sequence.proto";
+import "proto/r4/core/resources/naming_system.proto";
+import "proto/r4/core/resources/nutrition_order.proto";
+import "proto/r4/core/resources/observation.proto";
+import "proto/r4/core/resources/observation_definition.proto";
+import "proto/r4/core/resources/operation_definition.proto";
+import "proto/r4/core/resources/operation_outcome.proto";
+import "proto/r4/core/resources/organization.proto";
+import "proto/r4/core/resources/organization_affiliation.proto";
+import "proto/r4/core/resources/parameters.proto";
+import "proto/r4/core/resources/patient.proto";
+import "proto/r4/core/resources/payment_notice.proto";
+import "proto/r4/core/resources/payment_reconciliation.proto";
+import "proto/r4/core/resources/person.proto";
+import "proto/r4/core/resources/plan_definition.proto";
+import "proto/r4/core/resources/practitioner.proto";
+import "proto/r4/core/resources/practitioner_role.proto";
+import "proto/r4/core/resources/procedure.proto";
+import "proto/r4/core/resources/provenance.proto";
+import "proto/r4/core/resources/questionnaire.proto";
+import "proto/r4/core/resources/questionnaire_response.proto";
+import "proto/r4/core/resources/related_person.proto";
+import "proto/r4/core/resources/request_group.proto";
+import "proto/r4/core/resources/research_definition.proto";
+import "proto/r4/core/resources/research_element_definition.proto";
+import "proto/r4/core/resources/research_study.proto";
+import "proto/r4/core/resources/research_subject.proto";
+import "proto/r4/core/resources/risk_assessment.proto";
+import "proto/r4/core/resources/risk_evidence_synthesis.proto";
+import "proto/r4/core/resources/schedule.proto";
+import "proto/r4/core/resources/search_parameter.proto";
+import "proto/r4/core/resources/service_request.proto";
+import "proto/r4/core/resources/slot.proto";
+import "proto/r4/core/resources/specimen.proto";
+import "proto/r4/core/resources/specimen_definition.proto";
+import "proto/r4/core/resources/structure_definition.proto";
+import "proto/r4/core/resources/structure_map.proto";
+import "proto/r4/core/resources/subscription.proto";
+import "proto/r4/core/resources/substance.proto";
+import "proto/r4/core/resources/substance_nucleic_acid.proto";
+import "proto/r4/core/resources/substance_polymer.proto";
+import "proto/r4/core/resources/substance_protein.proto";
+import "proto/r4/core/resources/substance_reference_information.proto";
+import "proto/r4/core/resources/substance_source_material.proto";
+import "proto/r4/core/resources/substance_specification.proto";
+import "proto/r4/core/resources/supply_delivery.proto";
+import "proto/r4/core/resources/supply_request.proto";
+import "proto/r4/core/resources/task.proto";
+import "proto/r4/core/resources/terminology_capabilities.proto";
+import "proto/r4/core/resources/test_report.proto";
+import "proto/r4/core/resources/test_script.proto";
+import "proto/r4/core/resources/value_set.proto";
+import "proto/r4/core/resources/verification_result.proto";
+import "proto/r4/core/resources/vision_prescription.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.proto";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for Bundle, last updated
+// 2018-12-27T22:37:54.724+11:00. Contains a collection of resources. See
+// http://hl7.org/fhir/StructureDefinition/Bundle
+message Bundle {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Bundle";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Persistent identifier for the bundle
+  Identifier identifier = 5;
+
+  // document | message | transaction | transaction-response | batch |
+  // batch-response | history | searchset | collection
+  BundleTypeCode type = 6
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // When the bundle was assembled
+  Instant timestamp = 7;
+
+  // If search, the total number of matches
+  UnsignedInt total = 8;
+
+  // Links related to this Bundle
+  message Link {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // See
+    // http://www.iana.org/assignments/link-relations/link-relations.xhtml#link-relations-1
+    String relation = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Reference details for the link
+    Uri url = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Link link = 9
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+
+  // Entry in the bundle - will have a resource or information
+  message Entry {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Links related to this entry
+    repeated Link link = 4;
+
+    // URI for resource (Absolute URL server address or URI for UUID/OID)
+    Uri full_url = 5;
+
+    // A resource in the bundle
+    ContainedResource resource = 6;
+
+    // Search related information
+    message Search {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // match | include | outcome - why this is in the result set
+      SearchEntryModeCode mode = 4;
+
+      // Search ranking (between 0 and 1)
+      Decimal score = 5;
+    }
+    Search search = 7 [(.google.fhir.proto.fhir_path_constraint) =
+                           "hasValue() or (children().count() > id.count())"];
+
+    // Additional execution information (transaction/batch/history)
+    message Request {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // GET | HEAD | POST | PUT | DELETE | PATCH
+      HTTPVerbCode method = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // URL for HTTP equivalent of this entry
+      Uri url = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // For managing cache currency
+      String if_none_match = 6;
+
+      // For managing cache currency
+      Instant if_modified_since = 7;
+
+      // For managing update contention
+      String if_match = 8;
+
+      // For conditional creates
+      String if_none_exist = 9;
+    }
+    Request request = 8 [(.google.fhir.proto.fhir_path_constraint) =
+                             "hasValue() or (children().count() > id.count())"];
+
+    // Results of execution (transaction/batch/history)
+    message Response {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Status response code (text optional)
+      String status = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // The location (if the operation returns a location)
+      Uri location = 5;
+
+      // The Etag for the resource (if relevant)
+      String etag = 6;
+
+      // Server's date time modified
+      Instant last_modified = 7;
+
+      // OperationOutcome with hints and warnings (for batch/transaction)
+      ContainedResource outcome = 8;
+    }
+    Response response = 9
+        [(.google.fhir.proto.fhir_path_constraint) =
+             "hasValue() or (children().count() > id.count())"];
+  }
+  repeated Entry entry = 10 [
+    (.google.fhir.proto.fhir_path_constraint) =
+        "hasValue() or (children().count() > id.count())",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "fullUrl.contains('/_history/').not()",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "resource.exists() or request.exists() or response.exists()"
+  ];
+
+  // Digital Signature
+  Signature signature = 11;
+}
+
+message ContainedResource {
+  oneof oneof_resource {
+    Account account = 1;
+    ActivityDefinition activity_definition = 2;
+    AdverseEvent adverse_event = 3;
+    AllergyIntolerance allergy_intolerance = 4;
+    Appointment appointment = 5;
+    AppointmentResponse appointment_response = 6;
+    AuditEvent audit_event = 7;
+    Basic basic = 8;
+    Binary binary = 9;
+    BiologicallyDerivedProduct biologically_derived_product = 10;
+    BodyStructure body_structure = 11;
+    Bundle bundle = 12;
+    CapabilityStatement capability_statement = 13;
+    CarePlan care_plan = 14;
+    CareTeam care_team = 15;
+    CatalogEntry catalog_entry = 16;
+    ChargeItem charge_item = 17;
+    ChargeItemDefinition charge_item_definition = 18;
+    Claim claim = 19;
+    ClaimResponse claim_response = 20;
+    ClinicalImpression clinical_impression = 21;
+    CodeSystem code_system = 22;
+    Communication communication = 23;
+    CommunicationRequest communication_request = 24;
+    CompartmentDefinition compartment_definition = 25;
+    Composition composition = 26;
+    ConceptMap concept_map = 27;
+    Condition condition = 28;
+    Consent consent = 29;
+    Contract contract = 30;
+    Coverage coverage = 31;
+    CoverageEligibilityRequest coverage_eligibility_request = 32;
+    CoverageEligibilityResponse coverage_eligibility_response = 33;
+    DetectedIssue detected_issue = 34;
+    Device device = 35;
+    DeviceDefinition device_definition = 36;
+    DeviceMetric device_metric = 37;
+    DeviceRequest device_request = 38;
+    DeviceUseStatement device_use_statement = 39;
+    DiagnosticReport diagnostic_report = 40;
+    DocumentManifest document_manifest = 41;
+    DocumentReference document_reference = 42;
+    EffectEvidenceSynthesis effect_evidence_synthesis = 43;
+    Encounter encounter = 44;
+    Endpoint endpoint = 45;
+    EnrollmentRequest enrollment_request = 46;
+    EnrollmentResponse enrollment_response = 47;
+    EpisodeOfCare episode_of_care = 48;
+    EventDefinition event_definition = 49;
+    Evidence evidence = 50;
+    EvidenceVariable evidence_variable = 51;
+    ExampleScenario example_scenario = 52;
+    ExplanationOfBenefit explanation_of_benefit = 53;
+    FamilyMemberHistory family_member_history = 54;
+    Flag flag = 55;
+    Goal goal = 56;
+    GraphDefinition graph_definition = 57;
+    Group group = 58;
+    GuidanceResponse guidance_response = 59;
+    HealthcareService healthcare_service = 60;
+    ImagingStudy imaging_study = 61;
+    Immunization immunization = 62;
+    ImmunizationEvaluation immunization_evaluation = 63;
+    ImmunizationRecommendation immunization_recommendation = 64;
+    ImplementationGuide implementation_guide = 65;
+    InsurancePlan insurance_plan = 66;
+    Invoice invoice = 67;
+    Library library = 68;
+    Linkage linkage = 69;
+    List list = 70;
+    Location location = 71;
+    Measure measure = 72;
+    MeasureReport measure_report = 73;
+    Media media = 74;
+    Medication medication = 75;
+    MedicationAdministration medication_administration = 76;
+    MedicationDispense medication_dispense = 77;
+    MedicationKnowledge medication_knowledge = 78;
+    MedicationRequest medication_request = 79;
+    MedicationStatement medication_statement = 80;
+    MedicinalProduct medicinal_product = 81;
+    MedicinalProductAuthorization medicinal_product_authorization = 82;
+    MedicinalProductContraindication medicinal_product_contraindication = 83;
+    MedicinalProductIndication medicinal_product_indication = 84;
+    MedicinalProductIngredient medicinal_product_ingredient = 85;
+    MedicinalProductInteraction medicinal_product_interaction = 86;
+    MedicinalProductManufactured medicinal_product_manufactured = 87;
+    MedicinalProductPackaged medicinal_product_packaged = 88;
+    MedicinalProductPharmaceutical medicinal_product_pharmaceutical = 89;
+    MedicinalProductUndesirableEffect medicinal_product_undesirable_effect = 90;
+    MessageDefinition message_definition = 91;
+    MessageHeader message_header = 92;
+    MolecularSequence molecular_sequence = 93;
+    NamingSystem naming_system = 94;
+    NutritionOrder nutrition_order = 95;
+    Observation observation = 96;
+    ObservationDefinition observation_definition = 97;
+    OperationDefinition operation_definition = 98;
+    OperationOutcome operation_outcome = 99;
+    Organization organization = 100;
+    OrganizationAffiliation organization_affiliation = 101;
+    Parameters parameters = 102;
+    Patient patient = 103;
+    PaymentNotice payment_notice = 104;
+    PaymentReconciliation payment_reconciliation = 105;
+    Person person = 106;
+    PlanDefinition plan_definition = 107;
+    Practitioner practitioner = 108;
+    PractitionerRole practitioner_role = 109;
+    Procedure procedure = 110;
+    Provenance provenance = 111;
+    Questionnaire questionnaire = 112;
+    QuestionnaireResponse questionnaire_response = 113;
+    RelatedPerson related_person = 114;
+    RequestGroup request_group = 115;
+    ResearchDefinition research_definition = 116;
+    ResearchElementDefinition research_element_definition = 117;
+    ResearchStudy research_study = 118;
+    ResearchSubject research_subject = 119;
+    RiskAssessment risk_assessment = 120;
+    RiskEvidenceSynthesis risk_evidence_synthesis = 121;
+    Schedule schedule = 122;
+    SearchParameter search_parameter = 123;
+    ServiceRequest service_request = 124;
+    Slot slot = 125;
+    Specimen specimen = 126;
+    SpecimenDefinition specimen_definition = 127;
+    StructureDefinition structure_definition = 128;
+    StructureMap structure_map = 129;
+    Subscription subscription = 130;
+    Substance substance = 131;
+    SubstanceNucleicAcid substance_nucleic_acid = 132;
+    SubstancePolymer substance_polymer = 133;
+    SubstanceProtein substance_protein = 134;
+    SubstanceReferenceInformation substance_reference_information = 135;
+    SubstanceSourceMaterial substance_source_material = 136;
+    SubstanceSpecification substance_specification = 137;
+    SupplyDelivery supply_delivery = 138;
+    SupplyRequest supply_request = 139;
+    Task task = 140;
+    TerminologyCapabilities terminology_capabilities = 141;
+    TestReport test_report = 142;
+    TestScript test_script = 143;
+    ValueSet value_set = 144;
+    VerificationResult verification_result = 145;
+    VisionPrescription vision_prescription = 146;
+    MetadataResource metadata_resource = 147;
+  }
+}

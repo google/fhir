@@ -1,0 +1,425 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.core;
+
+import "google/protobuf/any.proto";
+import "proto/annotations.proto";
+import "proto/r4/core/codes.proto";
+import "proto/r4/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.core";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for ImplementationGuide, last updated
+// 2018-12-27T22:37:54.724+11:00. A set of rules about how FHIR is used. See
+// http://hl7.org/fhir/StructureDefinition/ImplementationGuide
+message ImplementationGuide {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ImplementationGuide";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ImplementationGuide.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this implementation guide, represented as a URI
+  // (globally unique)
+  Uri url = 10 [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Business version of the implementation guide
+  String version = 11;
+
+  // Name for this implementation guide (computer friendly)
+  String name = 12
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Name for this implementation guide (human friendly)
+  String title = 13;
+
+  // draft | active | retired | unknown
+  PublicationStatusCode status = 14
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 15;
+
+  // Date last changed
+  DateTime date = 16;
+
+  // Name of the publisher (organization or individual)
+  String publisher = 17;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 18;
+
+  // Natural language description of the implementation guide
+  Markdown description = 19;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 20;
+
+  // Intended jurisdiction for implementation guide (if applicable)
+  repeated CodeableConcept jurisdiction = 21;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 22;
+
+  // NPM Package name for IG
+  Id package_id = 23
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // SPDX license code for this IG (or not-open-source)
+  SPDXLicenseCode license = 24;
+
+  // FHIR Version(s) this Implementation Guide targets
+  repeated FHIRVersionCode fhir_version = 25
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Another Implementation guide this depends on
+  message DependsOn {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Identity of the IG that this depends on
+    Canonical uri = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // NPM Package name for IG this depends on
+    Id package_id = 5;
+
+    // Version of the IG
+    String version = 6;
+  }
+  repeated DependsOn depends_on = 26
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+
+  // Profiles that apply globally
+  message Global {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type this profile applies to
+    ResourceTypeCode type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Profile that all resources must conform to
+    Canonical profile = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Global global = 27
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+
+  // Information needed to build the IG
+  message Definition {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Grouping used to present related resources in the IG
+    message Grouping {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Descriptive name for the package
+      String name = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Human readable text describing the package
+      String description = 5;
+    }
+    repeated Grouping grouping = 4
+        [(.google.fhir.proto.fhir_path_constraint) =
+             "hasValue() or (children().count() > id.count())"];
+
+    // Resource in the implementation guide
+    message Resource {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Location of the resource
+      Reference reference = 4 [
+        (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+        (.google.fhir.proto.valid_reference_type) = "Resource"
+      ];
+
+      // Versions this applies to (if different to IG)
+      repeated FHIRVersionCode fhir_version = 5;
+
+      // Human Name for the resource
+      String name = 6;
+
+      // Reason why included in guide
+      String description = 7;
+
+      // Is an example/What is this an example of?
+      message ExampleX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Boolean boolean = 1;
+          Canonical canonical = 2;
+        }
+      }
+      ExampleX example = 8;
+
+      // Grouping this is part of
+      Id grouping_id = 9;
+    }
+    repeated Resource resource = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.fhir_path_constraint) =
+          "hasValue() or (children().count() > id.count())"
+    ];
+
+    // Page/Section in the Guide
+    message Page {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Where to find that page
+      message NameX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Url url = 1;
+          Reference reference = 2
+              [(.google.fhir.proto.valid_reference_type) = "Binary"];
+        }
+      }
+      NameX name = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Short title shown for navigational assistance
+      String title = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // html | markdown | xml | generated
+      GuidePageGenerationCode generation = 6
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Nested Pages / Sections
+      repeated Page page = 7;
+    }
+    Page page = 6 [(.google.fhir.proto.fhir_path_constraint) =
+                       "hasValue() or (children().count() > id.count())"];
+
+    // Defines how IG is built by tools
+    message Parameter {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // apply | path-resource | path-pages | path-tx-cache |
+      // expansion-parameter | rule-broken-links | generate-xml | generate-json
+      // | generate-turtle | html-template
+      GuideParameterCodeCode code = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Value for named type
+      String value = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated Parameter parameter = 7
+        [(.google.fhir.proto.fhir_path_constraint) =
+             "hasValue() or (children().count() > id.count())"];
+
+    // A template for building resources
+    message Template {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Type of template specified
+      Code code = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // The source location for the template
+      String source = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // The scope in which the template applies
+      String scope = 6;
+    }
+    repeated Template template = 8
+        [(.google.fhir.proto.fhir_path_constraint) =
+             "hasValue() or (children().count() > id.count())"];
+  }
+  Definition definition = 28 [
+    (.google.fhir.proto.fhir_path_constraint) =
+        "hasValue() or (children().count() > id.count())",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "resource.groupingId.all(%context.grouping.id contains $this)"
+  ];
+
+  // Information about an assembled IG
+  message Manifest {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Location of rendered implementation guide
+    Url rendering = 4;
+
+    // Resource in the implementation guide
+    message ManifestResource {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Location of the resource
+      Reference reference = 4 [
+        (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+        (.google.fhir.proto.valid_reference_type) = "Resource"
+      ];
+
+      // Is an example/What is this an example of?
+      message ExampleX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Boolean boolean = 1;
+          Canonical canonical = 2;
+        }
+      }
+      ExampleX example = 5;
+
+      // Relative path for page in IG
+      Url relative_path = 6;
+    }
+    repeated ManifestResource resource = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.fhir_path_constraint) =
+          "hasValue() or (children().count() > id.count())"
+    ];
+
+    // HTML page within the parent IG
+    message ManifestPage {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // HTML page name
+      String name = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Title of the page, for references
+      String title = 5;
+
+      // Anchor available on the page
+      repeated String anchor = 6;
+    }
+    repeated ManifestPage page = 6
+        [(.google.fhir.proto.fhir_path_constraint) =
+             "hasValue() or (children().count() > id.count())"];
+
+    // Image within the IG
+    repeated String image = 7;
+
+    // Additional linkable file in IG
+    repeated String other = 8;
+  }
+  Manifest manifest = 29
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+}

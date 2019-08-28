@@ -1,8 +1,9 @@
 """Proto related build rules for fhir.
 """
 
-load("@protobuf_archive//:protobuf.bzl", "cc_proto_library")
-load("@protobuf_archive//:protobuf.bzl", "py_proto_library")
+load("@protobuf_archive//:protobuf.bzl", "cc_proto_library", "py_proto_library")
+
+WELL_KNOWN_PROTOS = ["descriptor_proto", "any_proto"]
 
 def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = []):
     """Generates proto_library target, as well as {py,cc,java}_proto_library targets.
@@ -14,10 +15,14 @@ def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = []):
     """
     py_deps = []
     cc_deps = []
+    has_well_known_dep = False
     for x in proto_deps:
-        if x.endswith(":descriptor_proto"):
-            py_deps.append(x[:-17] + ":protobuf_python")
-            cc_deps.append(x[:-17] + ":cc_wkt_protos")
+        tokens = x.split(":")
+        if len(tokens) == 2 and tokens[1] in WELL_KNOWN_PROTOS:
+            if not has_well_known_dep:
+                py_deps.append(tokens[0] + ":protobuf_python")
+                cc_deps.append(tokens[0] + ":cc_wkt_protos")
+                has_well_known_dep = True
         elif x.endswith("_proto"):
             py_deps.append(x[:-6] + "_py_pb2")
             cc_deps.append(x[:-6] + "_cc_proto")

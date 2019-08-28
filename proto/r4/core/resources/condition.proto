@@ -1,0 +1,201 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.core;
+
+import "google/protobuf/any.proto";
+import "proto/annotations.proto";
+import "proto/r4/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.core";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for Condition, last updated
+// 2018-12-27T22:37:54.724+11:00. Detailed information about conditions,
+// problems or diagnoses. See http://hl7.org/fhir/StructureDefinition/Condition
+message Condition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Condition";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Condition.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // External Ids for this condition
+  repeated Identifier identifier = 10;
+
+  // active | recurrence | relapse | inactive | remission | resolved
+  CodeableConcept clinical_status = 11;
+
+  // unconfirmed | provisional | differential | confirmed | refuted |
+  // entered-in-error
+  CodeableConcept verification_status = 12;
+
+  // problem-list-item | encounter-diagnosis
+  repeated CodeableConcept category = 13;
+
+  // Subjective severity of condition
+  CodeableConcept severity = 14;
+
+  // Identification of the condition, problem or diagnosis
+  CodeableConcept code = 15;
+
+  // Anatomical location, if relevant
+  repeated CodeableConcept body_site = 16;
+
+  // Who has the condition?
+  Reference subject = 17 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // Encounter created as part of
+  Reference encounter = 18
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Estimated or actual date,  date-time, or age
+  message OnsetX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      DateTime date_time = 1;
+      Age age = 2;
+      Period period = 3;
+      Range range = 4;
+      String string_value = 5 [json_name = "string"];
+    }
+  }
+  OnsetX onset = 19;
+
+  // When in resolution/remission
+  message AbatementX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      DateTime date_time = 1;
+      Age age = 2;
+      Period period = 3;
+      Range range = 4;
+      String string_value = 5 [json_name = "string"];
+    }
+  }
+  AbatementX abatement = 20;
+
+  // Date record was first recorded
+  DateTime recorded_date = 21;
+
+  // Who recorded the condition
+  Reference recorder = 22 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+  ];
+
+  // Person who asserts this condition
+  Reference asserter = 23 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+  ];
+
+  // Stage/grade, usually assessed formally
+  message Stage {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Simple summary (disease specific)
+    CodeableConcept summary = 4;
+
+    // Formal record of assessment
+    repeated Reference assessment = 5 [
+      (.google.fhir.proto.valid_reference_type) = "ClinicalImpression",
+      (.google.fhir.proto.valid_reference_type) = "DiagnosticReport",
+      (.google.fhir.proto.valid_reference_type) = "Observation"
+    ];
+
+    // Kind of staging
+    CodeableConcept type = 6;
+  }
+  repeated Stage stage = 24 [
+    (.google.fhir.proto.fhir_path_constraint) =
+        "hasValue() or (children().count() > id.count())",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "summary.exists() or assessment.exists()"
+  ];
+
+  // Supporting evidence
+  message Evidence {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Manifestation/symptom
+    repeated CodeableConcept code = 4;
+
+    // Supporting information found elsewhere
+    repeated Reference detail = 5
+        [(.google.fhir.proto.valid_reference_type) = "Resource"];
+  }
+  repeated Evidence evidence = 25 [
+    (.google.fhir.proto.fhir_path_constraint) =
+        "hasValue() or (children().count() > id.count())",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "code.exists() or detail.exists()"
+  ];
+
+  // Additional information about the Condition
+  repeated Annotation note = 26;
+}

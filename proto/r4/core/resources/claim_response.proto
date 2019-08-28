@@ -1,0 +1,563 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.core;
+
+import "google/protobuf/any.proto";
+import "proto/annotations.proto";
+import "proto/r4/core/codes.proto";
+import "proto/r4/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.core";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for ClaimResponse, last updated
+// 2018-12-27T22:37:54.724+11:00. Response to a claim predetermination or
+// preauthorization. See http://hl7.org/fhir/StructureDefinition/ClaimResponse
+message ClaimResponse {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ClaimResponse";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ClaimResponse.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business Identifier for a claim response
+  repeated Identifier identifier = 10;
+
+  // active | cancelled | draft | entered-in-error
+  FinancialResourceStatusCodesCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // More granular claim type
+  CodeableConcept type = 12
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // More granular claim type
+  CodeableConcept sub_type = 13;
+
+  // claim | preauthorization | predetermination
+  UseCode use = 14
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The recipient of the products and services
+  Reference patient = 15 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient"
+  ];
+
+  // Response creation date
+  DateTime created = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Party responsible for reimbursement
+  Reference insurer = 17 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Organization"
+  ];
+
+  // Party responsible for the claim
+  Reference requestor = 18 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization"
+  ];
+
+  // Id of resource triggering adjudication
+  Reference request = 19 [(.google.fhir.proto.valid_reference_type) = "Claim"];
+
+  // queued | complete | error | partial
+  ClaimProcessingCodesCode outcome = 20
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Disposition Message
+  String disposition = 21;
+
+  // Preauthorization reference
+  String pre_auth_ref = 22;
+
+  // Preauthorization reference effective period
+  Period pre_auth_period = 23;
+
+  // Party to be paid any benefits payable
+  CodeableConcept payee_type = 24;
+
+  // Adjudication for claim line items
+  message Item {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Claim item instance identifier
+    PositiveInt item_sequence = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Applicable note numbers
+    repeated PositiveInt note_number = 5;
+
+    // Adjudication details
+    message Adjudication {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Type of adjudication information
+      CodeableConcept category = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Explanation of adjudication outcome
+      CodeableConcept reason = 5;
+
+      // Monetary amount
+      Money amount = 6;
+
+      // Non-monetary value
+      Decimal value = 7;
+    }
+    repeated Adjudication adjudication = 6 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.fhir_path_constraint) =
+          "hasValue() or (children().count() > id.count())"
+    ];
+
+    // Adjudication for claim details
+    message ItemDetail {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Claim detail instance identifier
+      PositiveInt detail_sequence = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Applicable note numbers
+      repeated PositiveInt note_number = 5;
+
+      // Detail level adjudication details
+      repeated Adjudication adjudication = 6
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Adjudication for claim sub-details
+      message SubDetail {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Claim sub-detail instance identifier
+        PositiveInt sub_detail_sequence = 4
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // Applicable note numbers
+        repeated PositiveInt note_number = 5;
+
+        // Subdetail level adjudication details
+        repeated Adjudication adjudication = 6;
+      }
+      repeated SubDetail sub_detail = 7
+          [(.google.fhir.proto.fhir_path_constraint) =
+               "hasValue() or (children().count() > id.count())"];
+    }
+    repeated ItemDetail detail = 7
+        [(.google.fhir.proto.fhir_path_constraint) =
+             "hasValue() or (children().count() > id.count())"];
+  }
+  repeated Item item = 25
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+
+  // Insurer added line items
+  message AddedItem {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Item sequence number
+    repeated PositiveInt item_sequence = 4;
+
+    // Detail sequence number
+    repeated PositiveInt detail_sequence = 5;
+
+    // Subdetail sequence number
+    repeated PositiveInt subdetail_sequence = 6;
+
+    // Authorized providers
+    repeated Reference provider = 7 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // Billing, service, product, or drug code
+    CodeableConcept product_or_service = 8
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Service/Product billing modifiers
+    repeated CodeableConcept modifier = 9;
+
+    // Program the product or service is provided under
+    repeated CodeableConcept program_code = 10;
+
+    // Date or dates of service or product delivery
+    message ServicedX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Date date = 1;
+        Period period = 2;
+      }
+    }
+    ServicedX serviced = 11;
+
+    // Place of service or where product was supplied
+    message LocationX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        CodeableConcept codeable_concept = 1;
+        Address address = 2;
+        Reference reference = 3
+            [(.google.fhir.proto.valid_reference_type) = "Location"];
+      }
+    }
+    LocationX location = 12;
+
+    // Count of products or services
+    SimpleQuantity quantity = 13;
+
+    // Fee, charge or cost per item
+    Money unit_price = 14;
+
+    // Price scaling factor
+    Decimal factor = 15;
+
+    // Total item cost
+    Money net = 16;
+
+    // Anatomical location
+    CodeableConcept body_site = 17;
+
+    // Anatomical sub-location
+    repeated CodeableConcept sub_site = 18;
+
+    // Applicable note numbers
+    repeated PositiveInt note_number = 19;
+
+    // Added items adjudication
+    repeated Item.Adjudication adjudication = 20
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Insurer added line details
+    message AddedItemDetail {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Billing, service, product, or drug code
+      CodeableConcept product_or_service = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Service/Product billing modifiers
+      repeated CodeableConcept modifier = 5;
+
+      // Count of products or services
+      SimpleQuantity quantity = 6;
+
+      // Fee, charge or cost per item
+      Money unit_price = 7;
+
+      // Price scaling factor
+      Decimal factor = 8;
+
+      // Total item cost
+      Money net = 9;
+
+      // Applicable note numbers
+      repeated PositiveInt note_number = 10;
+
+      // Added items detail adjudication
+      repeated Item.Adjudication adjudication = 11
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Insurer added line items
+      message AddedItemSubDetail {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Billing, service, product, or drug code
+        CodeableConcept product_or_service = 4
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // Service/Product billing modifiers
+        repeated CodeableConcept modifier = 5;
+
+        // Count of products or services
+        SimpleQuantity quantity = 6;
+
+        // Fee, charge or cost per item
+        Money unit_price = 7;
+
+        // Price scaling factor
+        Decimal factor = 8;
+
+        // Total item cost
+        Money net = 9;
+
+        // Applicable note numbers
+        repeated PositiveInt note_number = 10;
+
+        // Added items detail adjudication
+        repeated Item.Adjudication adjudication = 11
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+      }
+      repeated AddedItemSubDetail sub_detail = 12
+          [(.google.fhir.proto.fhir_path_constraint) =
+               "hasValue() or (children().count() > id.count())"];
+    }
+    repeated AddedItemDetail detail = 21
+        [(.google.fhir.proto.fhir_path_constraint) =
+             "hasValue() or (children().count() > id.count())"];
+  }
+  repeated AddedItem add_item = 26
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+
+  // Header-level adjudication
+  repeated Item.Adjudication adjudication = 27;
+
+  // Adjudication totals
+  message Total {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type of adjudication information
+    CodeableConcept category = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Financial total for the category
+    Money amount = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Total total = 28
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+
+  // Payment Details
+  message Payment {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Partial or complete payment
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Payment adjustment for non-claim issues
+    Money adjustment = 5;
+
+    // Explanation for the adjustment
+    CodeableConcept adjustment_reason = 6;
+
+    // Expected date of payment
+    Date date = 7;
+
+    // Payable amount after adjustment
+    Money amount = 8
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Business identifier for the payment
+    Identifier identifier = 9;
+  }
+  Payment payment = 29 [(.google.fhir.proto.fhir_path_constraint) =
+                            "hasValue() or (children().count() > id.count())"];
+
+  // Funds reserved status
+  CodeableConcept funds_reserve = 30;
+
+  // Printed form identifier
+  CodeableConcept form_code = 31;
+
+  // Printed reference or actual form
+  Attachment form = 32;
+
+  // Note concerning adjudication
+  message Note {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Note instance identifier
+    PositiveInt number = 4;
+
+    // display | print | printoper
+    NoteTypeCode type = 5;
+
+    // Note explanatory text
+    String text = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Language of the text
+    CodeableConcept language = 7;
+  }
+  repeated Note process_note = 33
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+
+  // Request for additional information
+  repeated Reference communication_request = 34
+      [(.google.fhir.proto.valid_reference_type) = "CommunicationRequest"];
+
+  // Patient insurance information
+  message Insurance {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Insurance instance identifier
+    PositiveInt sequence = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Coverage to be used for adjudication
+    Boolean focal = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Insurance information
+    Reference coverage = 6 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Coverage"
+    ];
+
+    // Additional provider contract number
+    String business_arrangement = 7;
+
+    // Adjudication results
+    Reference claim_response = 8
+        [(.google.fhir.proto.valid_reference_type) = "ClaimResponse"];
+  }
+  repeated Insurance insurance = 35
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+
+  // Processing errors
+  message Error {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Item sequence number
+    PositiveInt item_sequence = 4;
+
+    // Detail sequence number
+    PositiveInt detail_sequence = 5;
+
+    // Subdetail sequence number
+    PositiveInt sub_detail_sequence = 6;
+
+    // Error code detailing processing issues
+    CodeableConcept code = 7
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Error error = 36
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+}

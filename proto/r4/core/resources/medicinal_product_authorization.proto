@@ -1,0 +1,183 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.core;
+
+import "google/protobuf/any.proto";
+import "proto/annotations.proto";
+import "proto/r4/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.core";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for MedicinalProductAuthorization,
+// last updated 2018-12-27T22:37:54.724+11:00. The regulatory authorization of a
+// medicinal product. See
+// http://hl7.org/fhir/StructureDefinition/MedicinalProductAuthorization
+message MedicinalProductAuthorization {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MedicinalProductAuthorization";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // MedicinalProductAuthorization.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business identifier for the marketing authorization, as assigned by a
+  // regulator
+  repeated Identifier identifier = 10;
+
+  // The medicinal product that is being authorized
+  Reference subject = 11 [
+    (.google.fhir.proto.valid_reference_type) = "MedicinalProduct",
+    (.google.fhir.proto.valid_reference_type) = "MedicinalProductPackaged"
+  ];
+
+  // The country in which the marketing authorization has been granted
+  repeated CodeableConcept country = 12;
+
+  // Jurisdiction within a country
+  repeated CodeableConcept jurisdiction = 13;
+
+  // The status of the marketing authorization
+  CodeableConcept status = 14;
+
+  // The date at which the given status has become applicable
+  DateTime status_date = 15;
+
+  // The date when a suspended the marketing or the marketing authorization of
+  // the product is anticipated to be restored
+  DateTime restore_date = 16;
+
+  // The beginning of the time period in which the marketing authorization is in
+  // the specific status shall be specified A complete date consisting of day,
+  // month and year shall be specified using the ISO 8601 date format
+  Period validity_period = 17;
+
+  // A period of time after authorization before generic product applicatiosn
+  // can be submitted
+  Period data_exclusivity_period = 18;
+
+  // The date when the first authorization was granted by a Medicines Regulatory
+  // Agency
+  DateTime date_of_first_authorization = 19;
+
+  // Date of first marketing authorization for a company's new medicinal product
+  // in any country in the World
+  DateTime international_birth_date = 20;
+
+  // The legal framework against which this authorization is granted
+  CodeableConcept legal_basis = 21;
+
+  // Authorization in areas within a country
+  message JurisdictionalAuthorization {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The assigned number for the marketing authorization
+    repeated Identifier identifier = 4;
+
+    // Country of authorization
+    CodeableConcept country = 5;
+
+    // Jurisdiction within a country
+    repeated CodeableConcept jurisdiction = 6;
+
+    // The legal status of supply in a jurisdiction or region
+    CodeableConcept legal_status_of_supply = 7;
+
+    // The start and expected end date of the authorization
+    Period validity_period = 8;
+  }
+  repeated JurisdictionalAuthorization jurisdictional_authorization = 22
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+
+  // Marketing Authorization Holder
+  Reference holder = 23
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Medicines Regulatory Agency
+  Reference regulator = 24
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // The regulatory procedure for granting or amending a marketing authorization
+  message Procedure {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Identifier for this procedure
+    Identifier identifier = 4;
+
+    // Type of procedure
+    CodeableConcept type = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Date of procedure
+    message DateX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Period period = 1;
+        DateTime date_time = 2;
+      }
+    }
+    DateX date = 6;
+
+    // Applcations submitted to obtain a marketing authorization
+    repeated Procedure application = 7;
+  }
+  Procedure procedure = 25
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+}

@@ -1,0 +1,323 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.core;
+
+import "google/protobuf/any.proto";
+import "proto/annotations.proto";
+import "proto/r4/core/codes.proto";
+import "proto/r4/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.core";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for Shareable Measure.
+// A quality measure definition.
+// See http://hl7.org/fhir/StructureDefinition/shareablemeasure
+message ShareableMeasure {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Measure";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/shareablemeasure";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Measure.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this measure, represented as a URI (globally
+  // unique)
+  Uri url = 10 [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Additional identifier for the measure
+  repeated Identifier identifier = 11;
+
+  // Business version of the measure
+  String version = 12
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Name for this measure (computer friendly)
+  String name = 13
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Name for this measure (human friendly)
+  String title = 14;
+
+  // Subordinate title of the measure
+  String subtitle = 15;
+
+  // draft | active | retired | unknown
+  PublicationStatusCode status = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // E.g. Patient, Practitioner, RelatedPerson, Organization, Location, Device
+  message SubjectX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2
+          [(.google.fhir.proto.valid_reference_type) = "Group"];
+    }
+  }
+  SubjectX subject = 18;
+
+  // Date last changed
+  DateTime date = 19;
+
+  // Name of the publisher (organization or individual)
+  String publisher = 20
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 21;
+
+  // Natural language description of the measure
+  Markdown description = 22
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 23;
+
+  // Intended jurisdiction for measure (if applicable)
+  repeated CodeableConcept jurisdiction = 24;
+
+  // Why this measure is defined
+  Markdown purpose = 25;
+
+  // Describes the clinical usage of the measure
+  String usage = 26;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 27;
+
+  // When the measure was approved by publisher
+  Date approval_date = 28;
+
+  // When the measure was last reviewed
+  Date last_review_date = 29;
+
+  // When the measure is expected to be used
+  Period effective_period = 30;
+
+  // The category of the measure, such as Education, Treatment, Assessment, etc.
+  repeated CodeableConcept topic = 31;
+
+  // Who authored the content
+  repeated ContactDetail author = 32;
+
+  // Who edited the content
+  repeated ContactDetail editor = 33;
+
+  // Who reviewed the content
+  repeated ContactDetail reviewer = 34;
+
+  // Who endorsed the content
+  repeated ContactDetail endorser = 35;
+
+  // Additional documentation, citations, etc.
+  repeated RelatedArtifact related_artifact = 36;
+
+  // Logic used by the measure
+  repeated Canonical library = 37;
+
+  // Disclaimer for use of the measure or its referenced content
+  Markdown disclaimer = 38;
+
+  // proportion | ratio | continuous-variable | cohort
+  CodeableConcept scoring = 39;
+
+  // opportunity | all-or-nothing | linear | weighted
+  CodeableConcept composite_scoring = 40;
+
+  // process | outcome | structure | patient-reported-outcome | composite
+  repeated CodeableConcept type = 41;
+
+  // How risk adjustment is applied for this measure
+  String risk_adjustment = 42;
+
+  // How is rate aggregation performed for this measure
+  String rate_aggregation = 43;
+
+  // Detailed description of why the measure exists
+  Markdown rationale = 44;
+
+  // Summary of clinical guidelines
+  Markdown clinical_recommendation_statement = 45;
+
+  // increase | decrease
+  CodeableConcept improvement_notation = 46;
+
+  // Defined terms used in the measure documentation
+  repeated Markdown definition = 47;
+
+  // Additional guidance for implementers
+  Markdown guidance = 48;
+
+  // Population criteria group
+  message Group {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Meaning of the group
+    CodeableConcept code = 4;
+
+    // Summary description
+    String description = 5;
+
+    // Population criteria
+    message Population {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // initial-population | numerator | numerator-exclusion | denominator |
+      // denominator-exclusion | denominator-exception | measure-population |
+      // measure-population-exclusion | measure-observation
+      CodeableConcept code = 4;
+
+      // The human readable description of this population criteria
+      String description = 5;
+
+      // The criteria that defines this population
+      Expression criteria = 6
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated Population population = 6
+        [(.google.fhir.proto.fhir_path_constraint) =
+             "hasValue() or (children().count() > id.count())"];
+
+    // Stratifier criteria for the measure
+    message Stratifier {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Meaning of the stratifier
+      CodeableConcept code = 4;
+
+      // The human readable description of this stratifier
+      String description = 5;
+
+      // How the measure should be stratified
+      Expression criteria = 6;
+
+      // Stratifier criteria component for the measure
+      message Component {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Meaning of the stratifier component
+        CodeableConcept code = 4;
+
+        // The human readable description of this stratifier component
+        String description = 5;
+
+        // Component of how the measure should be stratified
+        Expression criteria = 6
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+      }
+      repeated Component component = 7
+          [(.google.fhir.proto.fhir_path_constraint) =
+               "hasValue() or (children().count() > id.count())"];
+    }
+    repeated Stratifier stratifier = 7
+        [(.google.fhir.proto.fhir_path_constraint) =
+             "hasValue() or (children().count() > id.count())"];
+  }
+  repeated Group group = 49
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+
+  // What other data should be reported with the measure
+  message SupplementalData {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Meaning of the supplemental data
+    CodeableConcept code = 4;
+
+    // supplemental-data | risk-adjustment-factor
+    repeated CodeableConcept usage = 5;
+
+    // The human readable description of this supplemental data
+    String description = 6;
+
+    // Expression describing additional data to be reported
+    Expression criteria = 7
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated SupplementalData supplemental_data = 50
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+}

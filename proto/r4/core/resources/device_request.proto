@@ -1,0 +1,217 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.core;
+
+import "google/protobuf/any.proto";
+import "proto/annotations.proto";
+import "proto/r4/core/codes.proto";
+import "proto/r4/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.core";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for DeviceRequest, last updated
+// 2018-12-27T22:37:54.724+11:00. Medical device request. See
+// http://hl7.org/fhir/StructureDefinition/DeviceRequest
+message DeviceRequest {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/DeviceRequest";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // DeviceRequest.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // External Request identifier
+  repeated Identifier identifier = 10;
+
+  // Instantiates FHIR protocol or definition
+  repeated Canonical instantiates_canonical = 11;
+
+  // Instantiates external protocol or definition
+  repeated Uri instantiates_uri = 12;
+
+  // What request fulfills
+  repeated Reference based_on = 13
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // What request replaces
+  repeated Reference prior_request = 14
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Identifier of composite request
+  Identifier group_identifier = 15;
+
+  // draft | active | suspended | completed | entered-in-error | cancelled
+  RequestStatusCode status = 16;
+
+  // proposal | plan | original-order | encoded | reflex-order
+  RequestIntentCode intent = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Indicates how quickly the {{title}} should be addressed with respect to
+  // other requests
+  RequestPriorityCode priority = 18;
+
+  // Device requested
+  message CodeX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Reference reference = 1
+          [(.google.fhir.proto.valid_reference_type) = "Device"];
+      CodeableConcept codeable_concept = 2;
+    }
+  }
+  CodeX code = 19
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Device details
+  message Parameter {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Device detail
+    CodeableConcept code = 4;
+
+    // Value of detail
+    message ValueX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        CodeableConcept codeable_concept = 1;
+        Quantity quantity = 2;
+        Range range = 3;
+        Boolean boolean = 4;
+      }
+    }
+    ValueX value = 5;
+  }
+  repeated Parameter parameter = 20
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
+
+  // Focus of request
+  Reference subject = 21 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "Location",
+    (.google.fhir.proto.valid_reference_type) = "Device"
+  ];
+
+  // Encounter motivating request
+  Reference encounter = 22
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Desired time or schedule for use
+  message OccurrenceX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      DateTime date_time = 1;
+      Period period = 2;
+      Timing timing = 3;
+    }
+  }
+  OccurrenceX occurrence = 23;
+
+  // When recorded
+  DateTime authored_on = 24;
+
+  // Who/what is requesting diagnostics
+  Reference requester = 25 [
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization"
+  ];
+
+  // Filler role
+  CodeableConcept performer_type = 26;
+
+  // Requested Filler
+  Reference performer = 27 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "CareTeam",
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+  ];
+
+  // Coded Reason for request
+  repeated CodeableConcept reason_code = 28;
+
+  // Linked Reason for request
+  repeated Reference reason_reference = 29 [
+    (.google.fhir.proto.valid_reference_type) = "Condition",
+    (.google.fhir.proto.valid_reference_type) = "Observation",
+    (.google.fhir.proto.valid_reference_type) = "DiagnosticReport",
+    (.google.fhir.proto.valid_reference_type) = "DocumentReference"
+  ];
+
+  // Associated insurance coverage
+  repeated Reference insurance = 30 [
+    (.google.fhir.proto.valid_reference_type) = "Coverage",
+    (.google.fhir.proto.valid_reference_type) = "ClaimResponse"
+  ];
+
+  // Additional clinical information
+  repeated Reference supporting_info = 31
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Notes or comments
+  repeated Annotation note = 32;
+
+  // Request provenance
+  repeated Reference relevant_history = 33
+      [(.google.fhir.proto.valid_reference_type) = "Provenance"];
+}

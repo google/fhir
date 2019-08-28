@@ -1,0 +1,282 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.core;
+
+import "google/protobuf/any.proto";
+import "proto/annotations.proto";
+import "proto/r4/core/codes.proto";
+import "proto/r4/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.core";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for CDS Hooks RequestGroup.
+// A group of related requests.
+// See http://hl7.org/fhir/StructureDefinition/cdshooksrequestgroup
+message CDSHooksRequestGroup {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/RequestGroup";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/cdshooksrequestgroup";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // RequestGroup.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business identifier
+  Identifier identifier = 10
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Instantiates FHIR protocol or definition
+  repeated Canonical instantiates_canonical = 11;
+
+  // Instantiates external protocol or definition
+  Uri instantiates_uri = 12
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Fulfills plan, proposal, or order
+  repeated Reference based_on = 13
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Request(s) replaced by this request
+  repeated Reference replaces = 14
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Composite request this is part of
+  Identifier group_identifier = 15;
+
+  // draft | active | suspended | cancelled | completed | entered-in-error |
+  // unknown
+  RequestStatusCode status = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // proposal | plan | order
+  RequestIntentCode intent = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // routine | urgent | asap | stat
+  RequestPriorityCode priority = 18;
+
+  // What's being requested/ordered
+  CodeableConcept code = 19;
+
+  // Who the request group is about
+  Reference subject = 20 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // Created as part of
+  Reference encounter = 21
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // When the request group was authored
+  DateTime authored_on = 22;
+
+  // Device or practitioner that authored the request group
+  Reference author = 23 [
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Why the request group is needed
+  repeated CodeableConcept reason_code = 24;
+
+  // Why the request group is needed
+  repeated Reference reason_reference = 25 [
+    (.google.fhir.proto.valid_reference_type) = "Condition",
+    (.google.fhir.proto.valid_reference_type) = "Observation",
+    (.google.fhir.proto.valid_reference_type) = "DiagnosticReport",
+    (.google.fhir.proto.valid_reference_type) = "DocumentReference"
+  ];
+
+  // Additional notes about the response
+  repeated Annotation note = 26;
+
+  // Proposed actions, if any
+  message Action {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // User-visible prefix for the action (e.g. 1. or A.)
+    String prefix = 4;
+
+    // User-visible title
+    String title = 5;
+
+    // Short description of the action
+    String description = 6;
+
+    // Static text equivalent of the action, used if the dynamic aspects cannot
+    // be interpreted by the receiving system
+    String text_equivalent = 7;
+
+    // routine | urgent | asap | stat
+    RequestPriorityCode priority = 8;
+
+    // Code representing the meaning of the action or sub-actions
+    repeated CodeableConcept code = 9;
+
+    // Supporting documentation for the intended performer of the action
+    repeated RelatedArtifact documentation = 10;
+
+    // Whether or not the action is applicable
+    message Condition {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // applicability | start | stop
+      ActionConditionKindCode kind = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Boolean-valued expression
+      Expression expression = 5;
+    }
+    repeated Condition condition = 11
+        [(.google.fhir.proto.fhir_path_constraint) =
+             "hasValue() or (children().count() > id.count())"];
+
+    // Relationship to another action
+    message RelatedAction {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // What action this is related to
+      Id action_id = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // before-start | before | before-end | concurrent-with-start | concurrent
+      // | concurrent-with-end | after-start | after | after-end
+      ActionRelationshipTypeCode relationship = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Time offset for the relationship
+      message OffsetX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Duration duration = 1;
+          Range range = 2;
+        }
+      }
+      OffsetX offset = 6;
+    }
+    repeated RelatedAction related_action = 12
+        [(.google.fhir.proto.fhir_path_constraint) =
+             "hasValue() or (children().count() > id.count())"];
+
+    // When the action should take place
+    message TimingX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        DateTime date_time = 1;
+        Age age = 2;
+        Period period = 3;
+        Duration duration = 4;
+        Range range = 5;
+        Timing timing = 6;
+      }
+    }
+    TimingX timing = 13;
+
+    // Who should perform the action
+    repeated Reference participant = 14 [
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+      (.google.fhir.proto.valid_reference_type) = "Device"
+    ];
+
+    // create | update | remove | fire-event
+    CodeableConcept type = 15;
+
+    // visual-group | logical-group | sentence-group
+    ActionGroupingBehaviorCode grouping_behavior = 16;
+
+    // any | all | all-or-none | exactly-one | at-most-one | one-or-more
+    ActionSelectionBehaviorCode selection_behavior = 17;
+
+    // must | could | must-unless-documented
+    ActionRequiredBehaviorCode required_behavior = 18;
+
+    // yes | no
+    ActionPrecheckBehaviorCode precheck_behavior = 19;
+
+    // single | multiple
+    ActionCardinalityBehaviorCode cardinality_behavior = 20;
+
+    // The target of the action
+    Reference resource = 21
+        [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+    // Sub action
+    repeated Action action = 22;
+  }
+  repeated Action action = 27 [
+    (.google.fhir.proto.fhir_path_constraint) =
+        "hasValue() or (children().count() > id.count())",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "resource.exists() != action.exists()"
+  ];
+}
