@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0304"
-    }
-    code {
-      coding {
-        system {
-          value: "http://hl7.org/fhir/sid/ndc"
-        }
-        code {
-          value: "76388-713-25"
-        }
-        display {
-          value: "Myleran 2mg tablet, film coated"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004a\n\t\n\amed0304ZT\032R\032\035\n\033http://hl7.org/fhir/sid/ndc*\016\n\f76388-713-252!\n\037Myleran 2mg tablet, film coated"
 }
 status {
   value: COMPLETED

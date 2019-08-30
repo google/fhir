@@ -365,28 +365,12 @@ java_test(
     ],
 )
 
-java_test(
-    name = "JsonFormatR4Test",
-    size = "large",
-    srcs = ["src/test/java/com/google/fhir/r4/JsonFormatTest.java"],
-    data = [
-        "//spec:r4",
-        "//testdata/r4:examples",
-    ],
-    shard_count = 10,
-    test_class = "com.google.fhir.r4.JsonFormatTest",
-    deps = [
-        ":json_format_test_base",
-        ":stu3",
-        "//external:gson",
-        "//external:guava",
-        "//proto/r4:resources_java_proto",
-        "@bazel_tools//tools/java/runfiles",
-        "@com_google_protobuf//:protobuf_java",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
-    ],
-)
+# Disabled until Java libraries and utils are updated to use core R4 protos
+# TODO: reenable
+# java_test(
+#     name = "JsonFormatR4Test",
+#     size = "large",
+# )
 
 java_test(
     name = "ProtoFilePrinterTest",

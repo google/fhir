@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0304"
-    }
-    code {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-        }
-        code {
-          value: "308047"
-        }
-        display {
-          value: "Alprazolam 0.25mg Oral Tablet"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004i\n\t\n\amed0304Z\\\032Z\032-\n+http://www.nlm.nih.gov/research/umls/rxnorm*\b\n\0063080472\037\n\035Alprazolam 0.25mg Oral Tablet"
 }
 status {
   value: COMPLETED

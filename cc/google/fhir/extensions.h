@@ -40,14 +40,14 @@ using std::string;
 Status ExtensionToMessage(const stu3::proto::Extension& extension,
                           ::google::protobuf::Message* message);
 
-Status ExtensionToMessage(const r4::proto::Extension& extension,
+Status ExtensionToMessage(const r4::core::Extension& extension,
                           ::google::protobuf::Message* message);
 
 Status ConvertToExtension(const ::google::protobuf::Message& message,
                           stu3::proto::Extension* extension);
 
 Status ConvertToExtension(const ::google::protobuf::Message& message,
-                          r4::proto::Extension* extension);
+                          r4::core::Extension* extension);
 
 // Given a datatype message (E.g., String, Code, Boolean, etc.),
 // finds the appropriate field on the target extension and sets it.
@@ -56,7 +56,7 @@ Status ConvertToExtension(const ::google::protobuf::Message& message,
 Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
                               stu3::proto::Extension* extension);
 Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
-                              r4::proto::Extension* extension);
+                              r4::core::Extension* extension);
 
 Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor);
 

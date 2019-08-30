@@ -10,44 +10,12 @@ text {
   }
 }
 contained {
-  activity_definition {
-    id {
-      value: "activitydefinition-medicationrequest-1"
-    }
-    status {
-      value: DRAFT
-    }
-    kind {
-      value: MEDICATION_REQUEST
-    }
-    product {
-      codeable_concept {
-        text {
-          value: "Medication 1"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\022I\n(\n&activitydefinition-medicationrequest-1\202\001\002\b\001\262\002\002\b\n\372\002\022\022\020\"\016\n\fMedication 1"
 }
 contained {
-  activity_definition {
-    id {
-      value: "activitydefinition-medicationrequest-2"
-    }
-    status {
-      value: DRAFT
-    }
-    kind {
-      value: MEDICATION_REQUEST
-    }
-    product {
-      codeable_concept {
-        text {
-          value: "Medication 2"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\022I\n(\n&activitydefinition-medicationrequest-2\202\001\002\b\001\262\002\002\b\n\372\002\022\022\020\"\016\n\fMedication 2"
 }
 title {
   value: "This example illustrates relationships between actions."

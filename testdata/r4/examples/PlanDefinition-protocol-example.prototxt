@@ -10,51 +10,8 @@ text {
   }
 }
 contained {
-  activity_definition {
-    id {
-      value: "procedure"
-    }
-    status {
-      value: DRAFT
-    }
-    description {
-      value: "Extra information on activity "
-    }
-    kind {
-      value: SERVICE_REQUEST
-    }
-    code {
-      coding {
-        system {
-          value: "http://loinc.org"
-        }
-        code {
-          value: "39156-5"
-        }
-        display {
-          value: "Body mass index (BMI) [Ratio]"
-        }
-      }
-    }
-    participant {
-      type {
-        value: PRACTITIONER
-      }
-      role {
-        coding {
-          system {
-            value: "http://terminology.hl7.org/CodeSystem/practitioner-role"
-          }
-          code {
-            value: "doctor"
-          }
-          display {
-            value: "Doctor"
-          }
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\022\331\001\n\v\n\tprocedure\202\001\002\b\001\262\001 \n\036Extra information on activity \262\002\002\b\f\302\002B\032@\032\022\n\020http://loinc.org*\t\n\a39156-52\037\n\035Body mass index (BMI) [Ratio]\362\002W\"\002\b\002*Q\032O\0329\n7http://terminology.hl7.org/CodeSystem/practitioner-role*\b\n\006doctor2\b\n\006Doctor"
 }
 identifier {
   system {

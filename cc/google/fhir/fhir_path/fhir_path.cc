@@ -29,7 +29,7 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "proto/r4/datatypes.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
@@ -44,10 +44,10 @@ using ::google::protobuf::util::MessageDifferencer;
 
 // Used to wrap primitives in protobuf messages, and
 // can be used against multiple versions of FHIR, not just R4.
-using ::google::fhir::r4::proto::Boolean;
-using ::google::fhir::r4::proto::Decimal;
-using ::google::fhir::r4::proto::Integer;
-using ::google::fhir::r4::proto::String;
+using ::google::fhir::r4::core::Boolean;
+using ::google::fhir::r4::core::Decimal;
+using ::google::fhir::r4::core::Integer;
+using ::google::fhir::r4::core::String;
 
 using antlr4::ANTLRInputStream;
 using antlr4::CommonTokenStream;

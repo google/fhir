@@ -10,78 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0313"
-    }
-    code {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-        }
-        code {
-          value: "206819"
-        }
-        display {
-          value: "Lorazepam 2mg/ml Injectable Solution (Ativan)"
-        }
-      }
-    }
-    form {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "385219001"
-        }
-        display {
-          value: "Injection solution (qualifier value)"
-        }
-      }
-    }
-    ingredient {
-      item {
-        codeable_concept {
-          coding {
-            system {
-              value: "http://snomed.info/sct"
-            }
-            code {
-              value: "387106007"
-            }
-            display {
-              value: "Lorazepam (substance)"
-            }
-          }
-        }
-      }
-      strength {
-        numerator {
-          value {
-            value: "2"
-          }
-          system {
-            value: "http://unitsofmeasure.org"
-          }
-          code {
-            value: "mg"
-          }
-        }
-        denominator {
-          value {
-            value: "1"
-          }
-          system {
-            value: "http://unitsofmeasure.org"
-          }
-          code {
-            value: "mL"
-          }
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004\354\002\n\t\n\amed0313Zl\032j\032-\n+http://www.nlm.nih.gov/research/umls/rxnorm*\b\n\0062068192/\n-Lorazepam 2mg/ml Injectable Solution (Ativan)rQ\032O\032\030\n\026http://snomed.info/sct*\v\n\t3852190012&\n$Injection solution (qualifier value)\202\001\234\001\"D\nB\032@\032\030\n\026http://snomed.info/sct*\v\n\t3871060072\027\n\025Lorazepam (substance)2T\032(\032\003\n\00122\033\n\031http://unitsofmeasure.org:\004\n\002mg\"(\032\003\n\00112\033\n\031http://unitsofmeasure.org:\004\n\002mL"
 }
 status {
   value: COMPLETED

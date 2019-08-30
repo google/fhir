@@ -27,98 +27,12 @@ entry {
         }
       }
       contained {
-        value_set {
-          id {
-            value: "length"
-          }
-          meta {
-            profile {
-              value: "http://hl7.org/fhir/us/sdc/StructureDefinition/sdc-valueset"
-            }
-          }
-          name {
-            value: "Length Units"
-          }
-          status {
-            value: ACTIVE
-          }
-          description {
-            value: "Length units"
-          }
-          immutable {
-            value: true
-          }
-          compose {
-            include {
-              system {
-                value: "http://unitsofmeasure.org"
-              }
-              concept {
-                code {
-                  value: "[in_i]"
-                }
-                display {
-                  value: "inches"
-                }
-              }
-              concept {
-                code {
-                  value: "cm"
-                }
-                display {
-                  value: "centimeters"
-                }
-              }
-            }
-          }
-        }
+        type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+        value: "\202\t\304\001\n\b\n\006length\022?2=\n;http://hl7.org/fhir/us/sdc/StructureDefinition/sdc-valuesetj\016\n\fLength Unitsz\002\b\002\242\001\016\n\fLength units\272\001\002\b\001\322\001L2J\"\033\n\031http://unitsofmeasure.org2\024\"\b\n\006[in_i]*\b\n\006inches2\025\"\004\n\002cm*\r\n\vcentimeters"
       }
       contained {
-        value_set {
-          id {
-            value: "weight"
-          }
-          meta {
-            profile {
-              value: "http://hl7.org/fhir/us/sdc/StructureDefinition/sdc-valueset"
-            }
-          }
-          name {
-            value: "Weight Units"
-          }
-          status {
-            value: ACTIVE
-          }
-          description {
-            value: "Weight units"
-          }
-          immutable {
-            value: true
-          }
-          compose {
-            include {
-              system {
-                value: "http://unitsofmeasure.org"
-              }
-              concept {
-                code {
-                  value: "[lb_i]"
-                }
-                display {
-                  value: "pounds"
-                }
-              }
-              concept {
-                code {
-                  value: "km"
-                }
-                display {
-                  value: "kilograms"
-                }
-              }
-            }
-          }
-        }
+        type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+        value: "\202\t\302\001\n\b\n\006weight\022?2=\n;http://hl7.org/fhir/us/sdc/StructureDefinition/sdc-valuesetj\016\n\fWeight Unitsz\002\b\002\242\001\016\n\fWeight units\272\001\002\b\001\322\001J2H\"\033\n\031http://unitsofmeasure.org2\024\"\b\n\006[lb_i]*\b\n\006pounds2\023\"\004\n\002km*\v\n\tkilograms"
       }
       url {
         value: "http://hl7.org/fhir/us/sdc/Questionnaire/54127-6"

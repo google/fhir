@@ -10,63 +10,8 @@ text {
   }
 }
 contained {
-  parameters {
-    id {
-      value: "outputParameters1"
-    }
-    parameter {
-      name {
-        value: "score"
-      }
-      value {
-        decimal {
-          value: "7"
-        }
-      }
-    }
-    parameter {
-      name {
-        value: "item-assessed"
-      }
-      value {
-        codeable_concept {
-          coding {
-            system {
-              value: "http://www.ama-assn.org/go/cpt"
-            }
-            code {
-              value: "70450"
-            }
-            display {
-              value: "CT, head, wo iv contrast"
-            }
-          }
-        }
-      }
-    }
-    parameter {
-      name {
-        value: "device"
-      }
-      value {
-        reference {
-          device_id {
-            value: "software"
-          }
-        }
-      }
-    }
-    parameter {
-      name {
-        value: "guideline-followed"
-      }
-      value {
-        uri {
-          value: "http://someguidelineprovider.org/radiology-appropriateness-guidelines.html"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\262\006\217\002\n\023\n\021outputParameters1*\020\"\a\n\005score*\005:\003\n\0017*_\"\017\n\ritem-assessed*L\302\001I\032G\032 \n\036http://www.ama-assn.org/go/cpt*\a\n\005704502\032\n\030CT, head, wo iv contrast*\034\"\b\n\006device*\020\252\002\r\312\002\n\n\bsoftware*g\"\024\n\022guideline-followed*O\212\001L\nJhttp://someguidelineprovider.org/radiology-appropriateness-guidelines.html"
 }
 request_identifier {
   system {

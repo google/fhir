@@ -10,47 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0306"
-    }
-    code {
-      coding {
-        system {
-          value: "http://hl7.org/fhir/sid/ndc"
-        }
-        code {
-          value: "51144-050-01"
-        }
-        display {
-          value: "Adcetris"
-        }
-      }
-    }
-    form {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "421637006"
-        }
-        display {
-          value: "Lyophilized powder for injectable solution (qualifier value) "
-        }
-      }
-    }
-    batch {
-      lot_number {
-        value: "12345"
-      }
-      expiration_date {
-        value_us: 1572440400000000
-        timezone: "Australia/Sydney"
-        precision: DAY
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004\341\001\n\t\n\amed0306Z=\032;\032\035\n\033http://hl7.org/fhir/sid/ndc*\016\n\f51144-050-012\n\n\bAdcetrisrj\032h\032\030\n\026http://snomed.info/sct*\v\n\t4216370062?\n=Lyophilized powder for injectable solution (qualifier value) \212\001(\"\a\n\00512345*\035\b\200\350\343\373\204\304\345\002\022\020Australia/Sydney\030\003"
 }
 identifier {
   use {

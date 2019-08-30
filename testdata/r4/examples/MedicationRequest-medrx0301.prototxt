@@ -10,96 +10,12 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0310"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "430127000"
-        }
-        display {
-          value: "Oral Form Oxycodone (product)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004W\n\t\n\amed0310ZJ\032H\032\030\n\026http://snomed.info/sct*\v\n\t4301270002\037\n\035Oral Form Oxycodone (product)"
 }
 contained {
-  provenance {
-    id {
-      value: "signature"
-    }
-    target {
-      service_request_id {
-        value: "physiotherapy"
-      }
-    }
-    recorded {
-      value_us: 1485969787000000
-      timezone: "Z"
-      precision: SECOND
-    }
-    agent {
-      role {
-        coding {
-          system {
-            value: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
-          }
-          code {
-            value: "AUT"
-          }
-        }
-      }
-      who {
-        practitioner_id {
-          value: "example"
-        }
-        display {
-          value: "Dr Adam Careful"
-        }
-      }
-    }
-    signature {
-      type {
-        system {
-          value: "urn:iso-astm:E1762-95:2013"
-        }
-        code {
-          value: "1.2.840.10065.1.12.1.1"
-        }
-        display {
-          value: "Author\'s Signature"
-        }
-      }
-      when {
-        value_us: 1485969787000000
-        timezone: "Z"
-        precision: SECOND
-      }
-      who {
-        practitioner_id {
-          value: "example"
-        }
-        display {
-          value: "Dr Adam Careful"
-        }
-      }
-      target_format {
-        value: "application/fhir+xml"
-      }
-      sig_format {
-        value: "application/signature+xml"
-      }
-      data {
-        value: "this blob is snipped"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\372\006\362\002\n\v\n\tsignatureR\022\232\b\017\n\rphysiotherapyb\016\b\300\251\264\352\264\357\321\002\022\001Z\030\001\212\001k*G\032E\032<\n:http://terminology.hl7.org/CodeSystem/v3-ParticipationType*\005\n\003AUT2 \232\a\t\n\aexample\342\t\021\n\017Dr Adam Careful\232\001\317\001\032N\032\034\n\032urn:iso-astm:E1762-95:2013*\030\n\0261.2.840.10065.1.12.1.12\024\n\022Author\'s Signature\"\016\b\300\251\264\352\264\357\321\002\022\001Z\030\001* \232\a\t\n\aexample\342\t\021\n\017Dr Adam Careful:\026\"\024application/fhir+xmlB\033\"\031application/signature+xmlJ\026\n\024this blob is snipped"
 }
 identifier {
   use {

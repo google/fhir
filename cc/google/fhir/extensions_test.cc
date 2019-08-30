@@ -19,8 +19,8 @@
 #include "absl/strings/str_cat.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/r4/datatypes.pb.h"
-#include "proto/r4/google_extensions.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
+#include "proto/r4/google_extensions_core.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/extensions.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
@@ -54,9 +54,9 @@ void ReadStu3TestData(const string& type, T* message,
 
 template <class T>
 void ReadR4TestData(const string& type, T* message,
-                    r4::proto::Extension* extension) {
+                    r4::core::Extension* extension) {
   *message = ReadR4Proto<T>(absl::StrCat("google/", type, ".message.prototxt"));
-  *extension = ReadR4Proto<r4::proto::Extension>(
+  *extension = ReadR4Proto<r4::core::Extension>(
       absl::StrCat("google/", type, ".extension.prototxt"));
 }
 
@@ -85,7 +85,7 @@ void TestConvertToExtension(const string& name) {
 template <class T>
 void TestExtensionToMessageR4(const string& name) {
   T message;
-  r4::proto::Extension extension;
+  r4::core::Extension extension;
   ReadR4TestData(name, &message, &extension);
 
   T output;
@@ -96,10 +96,10 @@ void TestExtensionToMessageR4(const string& name) {
 template <class T>
 void TestConvertToExtensionR4(const string& name) {
   T message;
-  r4::proto::Extension extension;
+  r4::core::Extension extension;
   ReadR4TestData(name, &message, &extension);
 
-  r4::proto::Extension output;
+  r4::core::Extension output;
   TF_ASSERT_OK(ConvertToExtension(message, &output));
   EXPECT_THAT(output, EqualsProto(extension));
 }
@@ -129,12 +129,12 @@ TEST(ExtensionsTest, PrintPrimitiveHasNoValue) {
 }
 
 TEST(ExtensionsTestR4, ParsePrimitiveHasNoValue) {
-  TestExtensionToMessageR4<r4::google::PrimitiveHasNoValue>(
+  TestExtensionToMessageR4<r4::googlecore::PrimitiveHasNoValue>(
       "primitive_has_no_value");
 }
 
 TEST(ExtensionsTestR4, PrintPrimitiveHasNoValue) {
-  TestConvertToExtensionR4<r4::google::PrimitiveHasNoValue>(
+  TestConvertToExtensionR4<r4::googlecore::PrimitiveHasNoValue>(
       "primitive_has_no_value");
 }
 

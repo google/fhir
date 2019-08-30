@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0308"
-    }
-    code {
-      coding {
-        system {
-          value: "http://hl7.org/fhir/sid/ndc"
-        }
-        code {
-          value: "16590-619-30"
-        }
-        display {
-          value: "Percocet tablet"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004Q\n\t\n\amed0308ZD\032B\032\035\n\033http://hl7.org/fhir/sid/ndc*\016\n\f16590-619-302\021\n\017Percocet tablet"
 }
 status {
   value: IN_PROGRESS

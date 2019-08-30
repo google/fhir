@@ -10,57 +10,16 @@ text {
   }
 }
 contained {
-  organization {
-    id {
-      value: "provider"
-    }
-    identifier {
-      system {
-        value: "http://www.jurisdiction.com/provideroffices"
-      }
-      value {
-        value: "3456"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\242\006E\n\n\n\bproviderR7*-\n+http://www.jurisdiction.com/provideroffices2\006\n\0043456"
 }
 contained {
-  organization {
-    id {
-      value: "payor"
-    }
-    identifier {
-      system {
-        value: "http://www.jurisdiction.com/insurer"
-      }
-      value {
-        value: "123456"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\242\006<\n\a\n\005payorR1*%\n#http://www.jurisdiction.com/insurer2\b\n\006123456"
 }
 contained {
-  communication_request {
-    id {
-      value: "request"
-    }
-    identifier {
-      system {
-        value: "http://www.jurisdiction.com/insurer/123456"
-      }
-      value {
-        value: "ABC123"
-      }
-    }
-    status {
-      value: COMPLETED
-    }
-    subject {
-      patient_id {
-        value: "1"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\302\001R\n\t\n\arequestR8*,\n*http://www.jurisdiction.com/insurer/1234562\b\n\006ABC123r\002\b\005\242\001\006\362\006\003\n\0011"
 }
 identifier {
   system {

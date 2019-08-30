@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0314"
-    }
-    code {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-        }
-        code {
-          value: "562721"
-        }
-        display {
-          value: "Alprazolam 0.25mg (Xanax)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004e\n\t\n\amed0314ZX\032V\032-\n+http://www.nlm.nih.gov/research/umls/rxnorm*\b\n\0065627212\033\n\031Alprazolam 0.25mg (Xanax)"
 }
 status {
   value: IN_PROGRESS

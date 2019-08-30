@@ -10,29 +10,12 @@ text {
   }
 }
 contained {
-  device {
-    id {
-      value: "device-bridge"
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\232\002\021\n\017\n\rdevice-bridge"
 }
 contained {
-  service_request {
-    id {
-      value: "referral"
-    }
-    status {
-      value: ACTIVE
-    }
-    intent {
-      value: ORDER
-    }
-    subject {
-      patient_id {
-        value: "1"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\a\037\n\n\n\breferral\202\001\002\b\002\212\001\002\b\004\302\001\006\362\006\003\n\0011"
 }
 identifier {
   system {

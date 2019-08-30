@@ -10,54 +10,12 @@ text {
   }
 }
 contained {
-  medication_request {
-    id {
-      value: "medicationrequest-1"
-    }
-    status {
-      value: UNKNOWN
-    }
-    intent {
-      value: PROPOSAL
-    }
-    medication {
-      codeable_concept {
-        text {
-          value: "Medication 1"
-        }
-      }
-    }
-    subject {
-      patient_id {
-        value: "example"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\372\004C\n\025\n\023medicationrequest-1Z\002\b\bj\002\b\001\222\001\022\n\020\"\016\n\fMedication 1\232\001\f\362\006\t\n\aexample"
 }
 contained {
-  medication_request {
-    id {
-      value: "medicationrequest-2"
-    }
-    status {
-      value: UNKNOWN
-    }
-    intent {
-      value: PROPOSAL
-    }
-    medication {
-      codeable_concept {
-        text {
-          value: "Medication 2"
-        }
-      }
-    }
-    subject {
-      patient_id {
-        value: "example"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\372\004C\n\025\n\023medicationrequest-2Z\002\b\bj\002\b\001\222\001\022\n\020\"\016\n\fMedication 2\232\001\f\362\006\t\n\aexample"
 }
 identifier {
   value {

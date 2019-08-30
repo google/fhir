@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0311"
-    }
-    code {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-        }
-        code {
-          value: "763179"
-        }
-        display {
-          value: "Prednisone 5mg Oral Tablet 48 Count Pack"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004t\n\t\n\amed0311Zg\032e\032-\n+http://www.nlm.nih.gov/research/umls/rxnorm*\b\n\0067631792*\n(Prednisone 5mg Oral Tablet 48 Count Pack"
 }
 status {
   value: ENTERED_IN_ERROR

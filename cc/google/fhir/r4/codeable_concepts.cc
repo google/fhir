@@ -21,7 +21,7 @@
 #include "google/fhir/codes.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/statusor.h"
-#include "proto/r4/datatypes.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
@@ -30,8 +30,8 @@ namespace r4 {
 
 namespace {
 
-using ::google::fhir::r4::proto::Coding;
-using ::google::fhir::r4::proto::CodingWithFixedCode;
+using ::google::fhir::r4::core::Coding;
+using ::google::fhir::r4::core::CodingWithFixedCode;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::tensorflow::errors::AlreadyExists;
@@ -91,7 +91,7 @@ const bool ForEachInternalCodingHalting(
   }
 
   // If there are no profiled fields to check, return.
-  if (IsMessageType<r4::proto::CodeableConcept>(concept)) return false;
+  if (IsMessageType<r4::core::CodeableConcept>(concept)) return false;
 
   // Check for profiled fields.
   const ::google::protobuf::Descriptor* descriptor = concept.GetDescriptor();
@@ -144,7 +144,7 @@ namespace internal {
 // unprofiled.
 const FieldDescriptor* ProfiledFieldForSystem(const Message& concept,
                                               const string& system) {
-  if (IsMessageType<r4::proto::CodeableConcept>(concept)) return nullptr;
+  if (IsMessageType<r4::core::CodeableConcept>(concept)) return nullptr;
 
   const ::google::protobuf::Descriptor* descriptor = concept.GetDescriptor();
   for (int i = 0; i < descriptor->field_count(); i++) {
@@ -247,13 +247,13 @@ StatusOr<const string> GetOnlyCodeWithSystem(const Message& concept,
 }
 
 Status AddCoding(Message* concept, const Coding& coding) {
-  if (!IsTypeOrProfileOf<r4::proto::CodeableConcept>(*concept)) {
+  if (!IsTypeOrProfileOf<r4::core::CodeableConcept>(*concept)) {
     return InvalidArgument(
         "Error adding coding: ", concept->GetDescriptor()->full_name(),
         " is not CodeableConcept-like.");
   }
   const string& system = coding.system().value();
-  if (IsProfileOf<r4::proto::CodeableConcept>(*concept)) {
+  if (IsProfileOf<r4::core::CodeableConcept>(*concept)) {
     const FieldDescriptor* profiled_field =
         internal::ProfiledFieldForSystem(*concept, system);
     if (profiled_field != nullptr) {
@@ -405,7 +405,7 @@ Status CopyCodeableConcept(const Message& source, Message* target) {
 }
 
 bool IsCodeableConceptLike(const ::google::protobuf::Descriptor* descriptor) {
-  return IsTypeOrProfileOf<r4::proto::CodeableConcept>(descriptor);
+  return IsTypeOrProfileOf<r4::core::CodeableConcept>(descriptor);
 }
 
 bool IsCodeableConceptLike(const Message& message) {

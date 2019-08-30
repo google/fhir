@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  substance {
-    id {
-      value: "sub03"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "387531004"
-        }
-        display {
-          value: "Azithromycin (substance)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\232\bP\n\a\n\005sub03jE\032C\032\030\n\026http://snomed.info/sct*\v\n\t3875310042\032\n\030Azithromycin (substance)"
 }
 code {
   coding {

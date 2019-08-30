@@ -10,78 +10,16 @@ text {
   }
 }
 contained {
-  organization {
-    id {
-      value: "org-1"
-    }
-    identifier {
-      system {
-        value: "http://nationalidentifiers.org/insurers"
-      }
-      value {
-        value: "52345"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\242\006?\n\a\n\005org-1R4*)\n\'http://nationalidentifiers.org/insurers2\a\n\00552345"
 }
 contained {
-  document_reference {
-    id {
-      value: "a1"
-    }
-    status {
-      value: CURRENT
-    }
-    content {
-      attachment {
-        content_type {
-          value: "application/pdf"
-        }
-        data {
-          value: "Hello"
-        }
-        title {
-          value: "accident notes 20100201.pdf"
-        }
-        creation {
-          value_us: 1265043023000000
-          timezone: "-05:00"
-          precision: SECOND
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\322\002_\n\004\n\002a1b\002\b\001\302\001R\"P\032\021\"\017application/pdf*\a\n\005HelloJ\035\n\033accident notes 20100201.pdfR\023\b\300\343\213\300\314\321\237\002\022\006-05:00\030\004"
 }
 contained {
-  document_reference {
-    id {
-      value: "a2"
-    }
-    status {
-      value: CURRENT
-    }
-    content {
-      attachment {
-        content_type {
-          value: "application/pdf"
-        }
-        url {
-          value: "http://happyvalley.com/docs/AB12345"
-        }
-        size {
-          value: 104274
-        }
-        hash {
-          value: "Hello there"
-        }
-        creation {
-          value_us: 1265018254000000
-          timezone: "+01:00"
-          precision: SECOND
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\322\002s\n\004\n\002a2b\002\b\001\302\001f\"d\032\021\"\017application/pdf2%\n#http://happyvalley.com/docs/AB12345:\004\b\322\256\006B\r\n\vHello thereR\023\b\200\377\247\235\360\320\237\002\022\006+01:00\030\004"
 }
 identifier {
   system {

@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0312"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "324689003"
-        }
-        display {
-          value: "Nystatin 100,000 units/ml oral suspension (product)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004m\n\t\n\amed0312Z`\032^\032\030\n\026http://snomed.info/sct*\v\n\t32468900325\n3Nystatin 100,000 units/ml oral suspension (product)"
 }
 identifier {
   use {

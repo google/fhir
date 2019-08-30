@@ -10,19 +10,8 @@ text {
   }
 }
 contained {
-  practitioner {
-    id {
-      value: "a2"
-    }
-    name {
-      family {
-        value: "Smitty"
-      }
-      given {
-        value: "Gerald"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\006\034\n\004\n\002a2b\024*\b\n\006Smitty2\b\n\006Gerald"
 }
 master_identifier {
   system {

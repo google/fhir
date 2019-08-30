@@ -10,37 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0316"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "317935006"
-        }
-        display {
-          value: "Chlorthalidone 50mg tablet (product)"
-        }
-      }
-    }
-    form {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "385055001"
-        }
-        display {
-          value: "Tablet dose form (qualifier value)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004\257\001\n\t\n\amed0316ZQ\032O\032\030\n\026http://snomed.info/sct*\v\n\t3179350062&\n$Chlorthalidone 50mg tablet (product)rO\032M\032\030\n\026http://snomed.info/sct*\v\n\t3850550012$\n\"Tablet dose form (qualifier value)"
 }
 identifier {
   use {

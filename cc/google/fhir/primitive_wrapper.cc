@@ -41,8 +41,8 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
-#include "proto/r4/datatypes.pb.h"
-#include "proto/r4/google_extensions.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
+#include "proto/r4/google_extensions_core.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "include/json/json.h"
@@ -1024,65 +1024,64 @@ StatusOr<std::unique_ptr<PrimitiveWrapper>> GetStu3Wrapper(
 
 StatusOr<std::unique_ptr<PrimitiveWrapper>> GetR4Wrapper(
     const Descriptor* target_descriptor) {
-  if (IsMessageType<r4::proto::Code>(target_descriptor) ||
+  if (IsMessageType<r4::core::Code>(target_descriptor) ||
       HasValueset(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        (new CodeWrapper<r4::proto::Code>()));
-  } else if (IsMessageType<r4::proto::Base64Binary>(target_descriptor)) {
+        (new CodeWrapper<r4::core::Code>()));
+  } else if (IsMessageType<r4::core::Base64Binary>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new Base64BinaryWrapper<r4::proto::Base64Binary,
-                                r4::google::Base64BinarySeparatorStride>());
-  } else if (IsMessageType<r4::proto::Boolean>(target_descriptor)) {
+        new Base64BinaryWrapper<r4::core::Base64Binary,
+                                r4::googlecore::Base64BinarySeparatorStride>());
+  } else if (IsMessageType<r4::core::Boolean>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new BooleanWrapper<r4::proto::Boolean>());
-  } else if (IsMessageType<r4::proto::Canonical>(target_descriptor)) {
+        new BooleanWrapper<r4::core::Boolean>());
+  } else if (IsMessageType<r4::core::Canonical>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new StringTypeWrapper<r4::proto::Canonical>());
-  } else if (IsMessageType<r4::proto::Date>(target_descriptor)) {
+        new StringTypeWrapper<r4::core::Canonical>());
+  } else if (IsMessageType<r4::core::Date>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new TimeTypeWrapper<r4::proto::Date>());
-  } else if (IsMessageType<r4::proto::DateTime>(target_descriptor)) {
+        new TimeTypeWrapper<r4::core::Date>());
+  } else if (IsMessageType<r4::core::DateTime>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new TimeTypeWrapper<r4::proto::DateTime>());
-  } else if (IsMessageType<r4::proto::Decimal>(target_descriptor)) {
+        new TimeTypeWrapper<r4::core::DateTime>());
+  } else if (IsMessageType<r4::core::Decimal>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new DecimalWrapper<r4::proto::Decimal>());
-  } else if (IsMessageType<r4::proto::Id>(target_descriptor)) {
+        new DecimalWrapper<r4::core::Decimal>());
+  } else if (IsMessageType<r4::core::Id>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new StringTypeWrapper<r4::proto::Id>());
-  } else if (IsMessageType<r4::proto::Instant>(target_descriptor)) {
+        new StringTypeWrapper<r4::core::Id>());
+  } else if (IsMessageType<r4::core::Instant>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new TimeTypeWrapper<r4::proto::Instant>());
-  } else if (IsMessageType<r4::proto::Integer>(target_descriptor)) {
+        new TimeTypeWrapper<r4::core::Instant>());
+  } else if (IsMessageType<r4::core::Integer>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new IntegerTypeWrapper<r4::proto::Integer>());
-  } else if (IsMessageType<r4::proto::Markdown>(target_descriptor)) {
+        new IntegerTypeWrapper<r4::core::Integer>());
+  } else if (IsMessageType<r4::core::Markdown>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new StringTypeWrapper<r4::proto::Markdown>());
-  } else if (IsMessageType<r4::proto::Oid>(target_descriptor)) {
+        new StringTypeWrapper<r4::core::Markdown>());
+  } else if (IsMessageType<r4::core::Oid>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new StringTypeWrapper<r4::proto::Oid>());
-  } else if (IsMessageType<r4::proto::PositiveInt>(target_descriptor)) {
+        new StringTypeWrapper<r4::core::Oid>());
+  } else if (IsMessageType<r4::core::PositiveInt>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new PositiveIntWrapper<r4::proto::PositiveInt>());
-  } else if (IsMessageType<r4::proto::String>(target_descriptor)) {
+        new PositiveIntWrapper<r4::core::PositiveInt>());
+  } else if (IsMessageType<r4::core::String>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new StringTypeWrapper<r4::proto::String>());
-  } else if (IsMessageType<r4::proto::Time>(target_descriptor)) {
+        new StringTypeWrapper<r4::core::String>());
+  } else if (IsMessageType<r4::core::Time>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(new TimeWrapper<r4::core::Time>());
+  } else if (IsMessageType<r4::core::UnsignedInt>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new TimeWrapper<r4::proto::Time>());
-  } else if (IsMessageType<r4::proto::UnsignedInt>(target_descriptor)) {
+        new UnsignedIntWrapper<r4::core::UnsignedInt>());
+  } else if (IsMessageType<r4::core::Uri>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new UnsignedIntWrapper<r4::proto::UnsignedInt>());
-  } else if (IsMessageType<r4::proto::Uri>(target_descriptor)) {
+        new StringTypeWrapper<r4::core::Uri>());
+  } else if (IsMessageType<r4::core::Url>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new StringTypeWrapper<r4::proto::Uri>());
-  } else if (IsMessageType<r4::proto::Url>(target_descriptor)) {
+        new StringTypeWrapper<r4::core::Url>());
+  } else if (IsMessageType<r4::core::Xhtml>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
-        new StringTypeWrapper<r4::proto::Url>());
-  } else if (IsMessageType<r4::proto::Xhtml>(target_descriptor)) {
-    return std::unique_ptr<PrimitiveWrapper>(
-        new XhtmlWrapper<r4::proto::Xhtml>());
+        new XhtmlWrapper<r4::core::Xhtml>());
   } else {
     return InvalidArgument("Unexpected R4 primitive FHIR type: ",
                            target_descriptor->full_name());

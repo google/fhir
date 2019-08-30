@@ -10,18 +10,12 @@ text {
   }
 }
 contained {
-  device {
-    id {
-      value: "device-frame"
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\232\002\020\n\016\n\fdevice-frame"
 }
 contained {
-  device {
-    id {
-      value: "device-lens"
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\232\002\017\n\r\n\vdevice-lens"
 }
 identifier {
   system {

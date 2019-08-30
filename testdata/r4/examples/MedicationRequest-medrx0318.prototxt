@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0301"
-    }
-    code {
-      coding {
-        system {
-          value: "http://hl7.org/fhir/sid/ndc"
-        }
-        code {
-          value: "0069-2587-10"
-        }
-        display {
-          value: "Vancomycin Hydrochloride (VANCOMYCIN HYDROCHLORIDE)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004u\n\t\n\amed0301Zh\032f\032\035\n\033http://hl7.org/fhir/sid/ndc*\016\n\f0069-2587-1025\n3Vancomycin Hydrochloride (VANCOMYCIN HYDROCHLORIDE)"
 }
 identifier {
   use {

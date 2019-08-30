@@ -10,37 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0315"
-    }
-    code {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-        }
-        code {
-          value: "358793"
-        }
-        display {
-          value: "Mometasone Furoate 0.05mg/Actuat"
-        }
-      }
-    }
-    form {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "385157007"
-        }
-        display {
-          value: "Nasal Spray"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004\246\001\n\t\n\amed0315Z_\032]\032-\n+http://www.nlm.nih.gov/research/umls/rxnorm*\b\n\0063587932\"\n Mometasone Furoate 0.05mg/Actuatr8\0326\032\030\n\026http://snomed.info/sct*\v\n\t3851570072\r\n\vNasal Spray"
 }
 status {
   value: ACTIVE

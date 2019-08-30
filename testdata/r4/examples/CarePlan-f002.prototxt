@@ -10,65 +10,12 @@ text {
   }
 }
 contained {
-  care_team {
-    id {
-      value: "careteam"
-    }
-    participant {
-      member {
-        practitioner_id {
-          value: "f003"
-        }
-        display {
-          value: "M.I.M. Versteegh"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "z/\n\n\n\bcareteam\212\001 *\036\232\a\006\n\004f003\342\t\022\n\020M.I.M. Versteegh"
 }
 contained {
-  goal {
-    id {
-      value: "goal"
-    }
-    lifecycle_status {
-      value: COMPLETED
-    }
-    achievement_status {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/goal-achievement"
-        }
-        code {
-          value: "achieved"
-        }
-        display {
-          value: "Achieved"
-        }
-      }
-      text {
-        value: "Achieved"
-      }
-    }
-    description {
-      text {
-        value: "succesful surgery on lung of patient"
-      }
-    }
-    subject {
-      patient_id {
-        value: "f001"
-      }
-      display {
-        value: "P. van de Heuvel"
-      }
-    }
-    note {
-      text {
-        value: "goal accomplished with minor complications"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\302\003\352\001\n\006\n\004goalZ\002\b\006b`\032R\0328\n6http://terminology.hl7.org/CodeSystem/goal-achievement*\n\n\bachieved2\n\n\bAchieved\"\n\n\bAchievedz(\"&\n$succesful surgery on lung of patient\202\001\036\362\006\006\n\004f001\342\t\022\n\020P. van de Heuvel\272\001.*,\n*goal accomplished with minor complications"
 }
 identifier {
   use {

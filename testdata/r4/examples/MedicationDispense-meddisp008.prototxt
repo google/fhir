@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "medexample015"
-    }
-    code {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-        }
-        code {
-          value: "213293"
-        }
-        display {
-          value: "Capecitabine 500mg oral tablet (Xeloda)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004y\n\017\n\rmedexample015Zf\032d\032-\n+http://www.nlm.nih.gov/research/umls/rxnorm*\b\n\0062132932)\n\'Capecitabine 500mg oral tablet (Xeloda)"
 }
 status {
   value: COMPLETED

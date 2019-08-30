@@ -10,14 +10,8 @@ text {
   }
 }
 contained {
-  organization {
-    id {
-      value: "reporter"
-    }
-    name {
-      value: "Good Health Hospital"
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\242\006$\n\n\n\breporterj\026\n\024Good Health Hospital"
 }
 identifier {
   value {

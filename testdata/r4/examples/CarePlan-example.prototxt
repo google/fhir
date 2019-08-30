@@ -10,44 +10,8 @@ text {
   }
 }
 contained {
-  condition {
-    id {
-      value: "p1"
-    }
-    clinical_status {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
-        }
-        code {
-          value: "active"
-        }
-      }
-    }
-    verification_status {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
-        }
-        code {
-          value: "confirmed"
-        }
-      }
-    }
-    code {
-      text {
-        value: "Obesity"
-      }
-    }
-    subject {
-      patient_id {
-        value: "example"
-      }
-      display {
-        value: "Peter James Chalmers"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\001\324\001\n\004\n\002p1ZH\032F\032:\n8http://terminology.hl7.org/CodeSystem/condition-clinical*\b\n\006activebM\032K\032<\n:http://terminology.hl7.org/CodeSystem/condition-ver-status*\v\n\tconfirmedz\v\"\t\n\aObesity\212\001%\362\006\t\n\aexample\342\t\026\n\024Peter James Chalmers"
 }
 identifier {
   value {

@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  substance {
-    id {
-      value: "sub02"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "387048002"
-        }
-        display {
-          value: "Nystatin (substance)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\232\bL\n\a\n\005sub02jA\032?\032\030\n\026http://snomed.info/sct*\v\n\t3870480022\026\n\024Nystatin (substance)"
 }
 code {
   coding {

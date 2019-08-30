@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0320"
-    }
-    code {
-      coding {
-        system {
-          value: "http://hl7.org/fhir/sid/ndc"
-        }
-        code {
-          value: "33261-403-02"
-        }
-        display {
-          value: "Azithromycin 250mg tablet, film coated (Aidarex Pharmaceuticals LLC)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004\206\001\n\t\n\amed0320Zy\032w\032\035\n\033http://hl7.org/fhir/sid/ndc*\016\n\f33261-403-022F\nDAzithromycin 250mg tablet, film coated (Aidarex Pharmaceuticals LLC)"
 }
 status {
   value: COMPLETED

@@ -10,27 +10,8 @@ text {
   }
 }
 contained {
-  practitioner {
-    id {
-      value: "a1"
-    }
-    name {
-      family {
-        value: "Dopplemeyer"
-      }
-      given {
-        value: "Sherry"
-      }
-    }
-    telecom {
-      system {
-        value: EMAIL
-      }
-      value {
-        value: "john.doe@healthcare.example.org"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\006J\n\004\n\002a1b\031*\r\n\vDopplemeyer2\b\n\006Sherryj\'\032\002\b\003\"!\n\037john.doe@healthcare.example.org"
 }
 master_identifier {
   system {

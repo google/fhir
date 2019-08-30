@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  substance {
-    id {
-      value: "sub04"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "387324004"
-        }
-        display {
-          value: "Chlorthalidone (substance)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\232\bR\n\a\n\005sub04jG\032E\032\030\n\026http://snomed.info/sct*\v\n\t3873240042\034\n\032Chlorthalidone (substance)"
 }
 code {
   coding {

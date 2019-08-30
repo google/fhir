@@ -24,19 +24,23 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/r4/datatypes.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
+#include "proto/r4/core/resources/observation.pb.h"
+#include "proto/r4/core/resources/patient.pb.h"
 #include "proto/r4/google_extensions.pb.h"
 #include "proto/r4/resources.pb.h"
 #include "proto/r4/uscore.pb.h"
-#include "testdata/r4/profiles/test.pb.h"
+#include "testdata/r4/profiles/test_core.pb.h"
 
 namespace google {
 namespace fhir {
 
 namespace {
 
-using ::google::fhir::r4::proto::Observation;
-using ::google::fhir::r4::proto::Patient;
+using ::google::fhir::r4::core::Observation;
+using ::google::fhir::r4::core::Patient;
+using ::google::fhir::r4::testingcore::TestObservation;
+using ::google::fhir::r4::testingcore::TestObservationLvl2;
 using ::google::fhir::testutil::EqualsProto;
 using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
 
@@ -92,12 +96,12 @@ TEST(ProfilesTest, InvalidInputs) {
 }
 
 TEST(ProfilesTest, FixedSystem) {
-  TestPair<Observation, ::google::fhir::r4::testing::TestObservation>(
+  TestPair<Observation, TestObservation>(
       "testdata/r4/profiles/observation_fixedsystem");
 }
 
 TEST(ProfilesTest, ComplexExtension) {
-  TestPair<Observation, ::google::fhir::r4::testing::TestObservation>(
+  TestPair<Observation, TestObservation>(
       "testdata/r4/profiles/observation_complexextension");
 }
 
@@ -108,54 +112,50 @@ TEST(ProfilesTest, ComplexExtension) {
 // }
 
 TEST(ProfilesTest, Normalize) {
-  const r4::testing::TestObservation unnormalized =
-      ReadProto<r4::testing::TestObservation>(absl::StrCat(
-          "testdata/r4/profiles/observation_complexextension.prototxt"));
-  StatusOr<r4::testing::TestObservation> normalized = NormalizeR4(unnormalized);
+  const TestObservation unnormalized = ReadProto<TestObservation>(absl::StrCat(
+      "testdata/r4/profiles/observation_complexextension.prototxt"));
+  StatusOr<TestObservation> normalized = NormalizeR4(unnormalized);
   if (!normalized.status().ok()) {
     LOG(ERROR) << normalized.status().error_message();
     ASSERT_TRUE(normalized.status().ok());
   }
   EXPECT_THAT(
       normalized.ValueOrDie(),
-      EqualsProto(ReadProto<r4::testing::TestObservation>(absl::StrCat(
+      EqualsProto(ReadProto<TestObservation>(absl::StrCat(
           "testdata/r4/profiles/"
           "observation_complexextension-profiled-testobservation.prototxt"))));
 }
 
 TEST(ProfilesTest, NormalizeBundle) {
-  r4::testing::Bundle unnormalized_bundle;
+  r4::testingcore::Bundle unnormalized_bundle;
 
   *unnormalized_bundle.add_entry()
        ->mutable_resource()
-       ->mutable_test_observation() =
-      GetUnprofiled<r4::testing::TestObservation>(
-          "testdata/r4/profiles/observation_complexextension");
+       ->mutable_test_observation() = GetUnprofiled<TestObservation>(
+      "testdata/r4/profiles/observation_complexextension");
   *unnormalized_bundle.add_entry()
        ->mutable_resource()
-       ->mutable_test_observation_lvl2() =
-      GetUnprofiled<r4::testing::TestObservationLvl2>(
-          "testdata/r4/profiles/testobservation_lvl2");
+       ->mutable_test_observation_lvl2() = GetUnprofiled<TestObservationLvl2>(
+      "testdata/r4/profiles/testobservation_lvl2");
 
-  r4::testing::Bundle expected_normalized;
+  r4::testingcore::Bundle expected_normalized;
   *expected_normalized.add_entry()
        ->mutable_resource()
-       ->mutable_test_observation() = GetProfiled<r4::testing::TestObservation>(
+       ->mutable_test_observation() = GetProfiled<TestObservation>(
       "testdata/r4/profiles/observation_complexextension");
   *expected_normalized.add_entry()
        ->mutable_resource()
-       ->mutable_test_observation_lvl2() =
-      GetProfiled<r4::testing::TestObservationLvl2>(
-          "testdata/r4/profiles/testobservation_lvl2");
+       ->mutable_test_observation_lvl2() = GetProfiled<TestObservationLvl2>(
+      "testdata/r4/profiles/testobservation_lvl2");
 
-  StatusOr<r4::testing::Bundle> normalized = NormalizeR4(unnormalized_bundle);
+  StatusOr<r4::testingcore::Bundle> normalized =
+      NormalizeR4(unnormalized_bundle);
   EXPECT_THAT(normalized.ValueOrDie(),
               EqualsProtoIgnoringReordering(expected_normalized));
 }
 
 TEST(ProfilesTest, ProfileOfProfile) {
-  TestPair<::google::fhir::r4::testing::TestObservation,
-           ::google::fhir::r4::testing::TestObservationLvl2>(
+  TestPair<TestObservation, TestObservationLvl2>(
       "testdata/r4/profiles/testobservation_lvl2");
 }
 
@@ -174,7 +174,7 @@ TEST(ProfilesTest, UnableToProfile) {
 TEST(ProfilesTest, MissingRequiredFields) {
   const Observation unprofiled = ReadProto<Observation>(
       "testdata/r4/profiles/observation_fixedsystem.prototxt");
-  ::google::fhir::r4::testing::TestObservation profiled;
+  TestObservation profiled;
 
   auto lenient_status = ConvertToProfileLenientR4(unprofiled, &profiled);
   ASSERT_EQ(tensorflow::error::OK, lenient_status.code());

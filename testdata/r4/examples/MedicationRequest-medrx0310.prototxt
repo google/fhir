@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0309"
-    }
-    code {
-      coding {
-        system {
-          value: "http://hl7.org/fhir/sid/ndc"
-        }
-        code {
-          value: "50580-506-02"
-        }
-        display {
-          value: "Tylenol PM"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004L\n\t\n\amed0309Z?\032=\032\035\n\033http://hl7.org/fhir/sid/ndc*\016\n\f50580-506-022\f\n\nTylenol PM"
 }
 identifier {
   use {

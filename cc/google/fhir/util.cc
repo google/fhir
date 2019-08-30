@@ -29,7 +29,7 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/systems/systems.h"
-#include "proto/r4/datatypes.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
@@ -178,7 +178,7 @@ StatusOr<string> ReferenceProtoToString(
   return ReferenceProtoToStringInternal(reference);
 }
 
-StatusOr<string> ReferenceProtoToString(const r4::proto::Reference& reference) {
+StatusOr<string> ReferenceProtoToString(const r4::core::Reference& reference) {
   return ReferenceProtoToStringInternal(reference);
 }
 
@@ -188,9 +188,9 @@ StatusOr<string> ReferenceMessageToString(const ::google::protobuf::Message& ref
   if (IsMessageType<stu3::proto::Reference>(reference)) {
     return ReferenceProtoToString(
         dynamic_cast<const stu3::proto::Reference&>(reference));
-  } else if (IsMessageType<r4::proto::Reference>(reference)) {
+  } else if (IsMessageType<r4::core::Reference>(reference)) {
     return ReferenceProtoToString(
-        dynamic_cast<const r4::proto::Reference&>(reference));
+        dynamic_cast<const r4::core::Reference&>(reference));
   }
   return InvalidArgument(
       "Invalid Reference type for ReferenceMessageToString: ",
@@ -271,8 +271,8 @@ StatusOr<string> GetResourceId(const Message& message) {
         dynamic_cast<const Id*>(&ref->GetMessage(message, field));
     return id_message->value();
   } else if (field->message_type()->full_name() ==
-             google::fhir::r4::proto::Id::descriptor()->full_name()) {
-    const auto* id_message = dynamic_cast<const google::fhir::r4::proto::Id*>(
+             google::fhir::r4::core::Id::descriptor()->full_name()) {
+    const auto* id_message = dynamic_cast<const google::fhir::r4::core::Id*>(
         &ref->GetMessage(message, field));
     return id_message->value();
   } else {
@@ -391,8 +391,8 @@ StatusOr<stu3::proto::Reference> ReferenceStringToProtoStu3(
   return reference;
 }
 
-StatusOr<r4::proto::Reference> ReferenceStringToProtoR4(const string& input) {
-  r4::proto::Reference reference;
+StatusOr<r4::core::Reference> ReferenceStringToProtoR4(const string& input) {
+  r4::core::Reference reference;
   FHIR_RETURN_IF_ERROR(ReferenceStringToProto(input, &reference));
   return reference;
 }

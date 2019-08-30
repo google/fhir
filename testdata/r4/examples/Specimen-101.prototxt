@@ -10,21 +10,8 @@ text {
   }
 }
 contained {
-  substance {
-    id {
-      value: "hep"
-    }
-    code {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/v3-EntityCode"
-        }
-        code {
-          value: "HEPL"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\232\bJ\n\005\n\003hepjA\032?\0325\n3http://terminology.hl7.org/CodeSystem/v3-EntityCode*\006\n\004HEPL"
 }
 identifier {
   system {

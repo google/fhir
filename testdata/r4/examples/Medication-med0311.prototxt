@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  substance {
-    id {
-      value: "sub03"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "116602009"
-        }
-        display {
-          value: "Prednisone (substance)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\232\bN\n\a\n\005sub03jC\032A\032\030\n\026http://snomed.info/sct*\v\n\t1166020092\030\n\026Prednisone (substance)"
 }
 code {
   coding {

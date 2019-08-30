@@ -10,78 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0313"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "400621001"
-        }
-        display {
-          value: "Lorazepam 2mg/ml injection solution 1ml vial (product)"
-        }
-      }
-    }
-    form {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "385219001"
-        }
-        display {
-          value: "Injection solution (qualifier value)"
-        }
-      }
-    }
-    ingredient {
-      item {
-        codeable_concept {
-          coding {
-            system {
-              value: "http://snomed.info/sct"
-            }
-            code {
-              value: "387106007"
-            }
-            display {
-              value: "Lorazepam (substance)"
-            }
-          }
-        }
-      }
-      strength {
-        numerator {
-          value {
-            value: "2"
-          }
-          system {
-            value: "http://unitsofmeasure.org"
-          }
-          code {
-            value: "mg"
-          }
-        }
-        denominator {
-          value {
-            value: "1"
-          }
-          system {
-            value: "http://unitsofmeasure.org"
-          }
-          code {
-            value: "mL"
-          }
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004\343\002\n\t\n\amed0313Zc\032a\032\030\n\026http://snomed.info/sct*\v\n\t40062100128\n6Lorazepam 2mg/ml injection solution 1ml vial (product)rQ\032O\032\030\n\026http://snomed.info/sct*\v\n\t3852190012&\n$Injection solution (qualifier value)\202\001\234\001\"D\nB\032@\032\030\n\026http://snomed.info/sct*\v\n\t3871060072\027\n\025Lorazepam (substance)2T\032(\032\003\n\00122\033\n\031http://unitsofmeasure.org:\004\n\002mg\"(\032\003\n\00112\033\n\031http://unitsofmeasure.org:\004\n\002mL"
 }
 identifier {
   use {

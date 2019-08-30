@@ -10,14 +10,8 @@ text {
   }
 }
 contained {
-  organization {
-    id {
-      value: "org3"
-    }
-    name {
-      value: "Novo Nordisk"
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\242\006\030\n\006\n\004org3j\016\n\fNovo Nordisk"
 }
 code {
   coding {

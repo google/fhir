@@ -18,8 +18,8 @@
 #include "gtest/gtest.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/r4/datatypes.pb.h"
-#include "testdata/r4/profiles/test.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
+#include "testdata/r4/profiles/test_core.pb.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
 
 namespace google {
@@ -28,9 +28,9 @@ namespace r4 {
 
 namespace {
 
-using ::google::fhir::r4::proto::CodeableConcept;
-using ::google::fhir::r4::proto::Coding;
-using ::google::fhir::r4::testing::TestObservation;
+using ::google::fhir::r4::core::CodeableConcept;
+using ::google::fhir::r4::core::Coding;
+using ::google::fhir::r4::testingcore::TestObservation;
 using ::testing::ElementsAre;
 
 const TestObservation::CodeableConceptForCode GetConcept() {
@@ -93,7 +93,7 @@ TEST(CodeableConceptsTest, FindSystemCodeStringPairNotFound) {
 
 TEST(CodeableConceptsTest, FindCodingUnprofiled) {
   const auto concept = GetConcept();
-  std::shared_ptr<const r4::proto::Coding> coding =
+  std::shared_ptr<const r4::core::Coding> coding =
       FindCoding(concept, [](const Coding& test_coding) {
         return test_coding.display().value() == "FDisplay";
       });
@@ -102,7 +102,7 @@ TEST(CodeableConceptsTest, FindCodingUnprofiled) {
 
 TEST(CodeableConceptsTest, FindCodingFixedSystem) {
   const auto concept = GetConcept();
-  std::shared_ptr<const r4::proto::Coding> coding =
+  std::shared_ptr<const r4::core::Coding> coding =
       FindCoding(concept, [](const Coding& test_coding) {
         return test_coding.code().value() == "acode";
       });
@@ -111,7 +111,7 @@ TEST(CodeableConceptsTest, FindCodingFixedSystem) {
 
 TEST(CodeableConceptsTest, FindCodingFixedCode) {
   const auto concept = GetConcept();
-  std::shared_ptr<const r4::proto::Coding> coding =
+  std::shared_ptr<const r4::core::Coding> coding =
       FindCoding(concept, [](const Coding& test_coding) {
         return test_coding.code().value() == "8675329";
       });
@@ -120,7 +120,7 @@ TEST(CodeableConceptsTest, FindCodingFixedCode) {
 
 TEST(CodeableConceptsTest, FindCodingNotFound) {
   const auto concept = GetConcept();
-  std::shared_ptr<const r4::proto::Coding> coding =
+  std::shared_ptr<const r4::core::Coding> coding =
       FindCoding(concept, [](const Coding& test_coding) { return false; });
   EXPECT_FALSE(coding);
 }
@@ -449,7 +449,7 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
 }
 
 TEST(CodeableConceptsTest, AddCodingFromStrings) {
-  r4::proto::CodeableConcept concept;
+  r4::core::CodeableConcept concept;
 
   TF_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode1"));
   TF_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode2"));

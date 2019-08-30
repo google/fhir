@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0322"
-    }
-    code {
-      coding {
-        system {
-          value: "http://hl7.org/fhir/sid/ndc"
-        }
-        code {
-          value: "0067-2091-03"
-        }
-        display {
-          value: "Vagistat-3"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004L\n\t\n\amed0322Z?\032=\032\035\n\033http://hl7.org/fhir/sid/ndc*\016\n\f0067-2091-032\f\n\nVagistat-3"
 }
 identifier {
   use {

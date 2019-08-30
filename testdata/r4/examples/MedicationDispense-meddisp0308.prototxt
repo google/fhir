@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0305"
-    }
-    code {
-      coding {
-        system {
-          value: "http://hl7.org/fhir/sid/ndc"
-        }
-        code {
-          value: "2501-813-16"
-        }
-        display {
-          value: "Timoptic 5mg/ml solution"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004Y\n\t\n\amed0305ZL\032J\032\035\n\033http://hl7.org/fhir/sid/ndc*\r\n\v2501-813-162\032\n\030Timoptic 5mg/ml solution"
 }
 status {
   value: COMPLETED

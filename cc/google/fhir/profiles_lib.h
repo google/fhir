@@ -397,6 +397,8 @@ bool CanHaveSlicing(const FieldDescriptor* field) {
       (field->message_type()->full_name() !=
            "google.fhir.stu3.proto.ContainedResource" ||
        field->message_type()->full_name() !=
+           "google.fhir.r4.core.ContainedResource" ||
+       field->message_type()->full_name() !=
            "google.fhir.r4.proto.ContainedResource")) {
     return true;
   }

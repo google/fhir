@@ -10,44 +10,12 @@ text {
   }
 }
 contained {
-  substance {
-    id {
-      value: "ingr1"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "372687004"
-        }
-        display {
-          value: "Amoxicillin (substance)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\232\bO\n\a\n\005ingr1jD\032B\032\030\n\026http://snomed.info/sct*\v\n\t3726870042\031\n\027Amoxicillin (substance)"
 }
 contained {
-  substance {
-    id {
-      value: "ingr2"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "395938000"
-        }
-        display {
-          value: "Clavulanate potassium (substance)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\232\bY\n\a\n\005ingr2jN\032L\032\030\n\026http://snomed.info/sct*\v\n\t3959380002#\n!Clavulanate potassium (substance)"
 }
 category {
   coding {

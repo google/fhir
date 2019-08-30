@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0320"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "324252006"
-        }
-        display {
-          value: "Azithromycin 250mg capsule (product)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004^\n\t\n\amed0320ZQ\032O\032\030\n\026http://snomed.info/sct*\v\n\t3242520062&\n$Azithromycin 250mg capsule (product)"
 }
 identifier {
   use {

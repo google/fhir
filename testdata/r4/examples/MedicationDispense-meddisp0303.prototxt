@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0310"
-    }
-    code {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-        }
-        code {
-          value: "1049623"
-        }
-        display {
-          value: "Oxycodone Hydrochloride 5mg oral tablet (Roxicodone"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004\200\001\n\t\n\amed0310Zs\032q\032-\n+http://www.nlm.nih.gov/research/umls/rxnorm*\t\n\a104962325\n3Oxycodone Hydrochloride 5mg oral tablet (Roxicodone"
 }
 part_of {
   procedure_id {

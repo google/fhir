@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0321"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "108761006"
-        }
-        display {
-          value: "Capecitabine (product)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004P\n\t\n\amed0321ZC\032A\032\030\n\026http://snomed.info/sct*\v\n\t1087610062\030\n\026Capecitabine (product)"
 }
 identifier {
   use {

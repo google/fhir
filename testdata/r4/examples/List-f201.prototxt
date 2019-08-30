@@ -10,118 +10,12 @@ text {
   }
 }
 contained {
-  family_member_history {
-    id {
-      value: "fmh-1"
-    }
-    status {
-      value: COMPLETED
-    }
-    patient {
-      patient_id {
-        value: "f201"
-      }
-      display {
-        value: "Roel"
-      }
-    }
-    relationship {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "72705000"
-        }
-        display {
-          value: "Mother"
-        }
-      }
-    }
-    deceased {
-      boolean {
-      }
-    }
-    condition {
-      code {
-        coding {
-          system {
-            value: "http://snomed.info/sct"
-          }
-          code {
-            value: "39839004"
-          }
-          display {
-            value: "Diaphragmatic hernia"
-          }
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\262\003\240\001\n\a\n\005fmh-1j\002\b\002z\022\362\006\006\n\004f201\342\t\006\n\004Roel\222\0012\0320\032\030\n\026http://snomed.info/sct*\n\n\b727050002\b\n\006Mother\272\001\002\n\000\332\001B\"@\032>\032\030\n\026http://snomed.info/sct*\n\n\b398390042\026\n\024Diaphragmatic hernia"
 }
 contained {
-  family_member_history {
-    id {
-      value: "fmh-2"
-    }
-    status {
-      value: COMPLETED
-    }
-    patient {
-      patient_id {
-        value: "f201"
-      }
-      display {
-        value: "Roel"
-      }
-    }
-    relationship {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "38048003"
-        }
-        display {
-          value: "Uncle"
-        }
-      }
-    }
-    deceased {
-      boolean {
-        value: true
-      }
-    }
-    condition {
-      code {
-        coding {
-          system {
-            value: "http://snomed.info/sct"
-          }
-          code {
-            value: "115665000"
-          }
-          display {
-            value: "Atopy"
-          }
-        }
-      }
-      outcome {
-        coding {
-          system {
-            value: "http://snomed.info/sct"
-          }
-          code {
-            value: "419099009"
-          }
-          display {
-            value: "Died"
-          }
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\262\003\306\001\n\a\n\005fmh-2j\002\b\002z\022\362\006\006\n\004f201\342\t\006\n\004Roel\222\0011\032/\032\030\n\026http://snomed.info/sct*\n\n\b380480032\a\n\005Uncle\272\001\004\n\002\b\001\332\001g\"2\0320\032\030\n\026http://snomed.info/sct*\v\n\t1156650002\a\n\005Atopy*1\032/\032\030\n\026http://snomed.info/sct*\v\n\t4190990092\006\n\004Died"
 }
 status {
   value: CURRENT

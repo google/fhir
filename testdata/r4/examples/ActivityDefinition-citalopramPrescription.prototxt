@@ -10,87 +10,12 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "citalopramMedication"
-    }
-    code {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-        }
-        code {
-          value: "200371"
-        }
-      }
-      text {
-        value: "citalopram"
-      }
-    }
-    form {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "385055001"
-        }
-        display {
-          value: "Tablet dose form"
-        }
-      }
-      text {
-        value: "Tablet dose form"
-      }
-    }
-    ingredient {
-      item {
-        reference {
-          fragment {
-            value: "citalopramSubstance"
-          }
-        }
-      }
-      strength {
-        numerator {
-          value {
-            value: "20"
-          }
-          unit {
-            value: "mg"
-          }
-        }
-        denominator {
-          value {
-            value: "1"
-          }
-          unit {
-            value: "{tbl}"
-          }
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004\364\001\n\026\n\024citalopramMedicationZI\0329\032-\n+http://www.nlm.nih.gov/research/umls/rxnorm*\b\n\006200371\"\f\n\ncitalopramrQ\032;\032\030\n\026http://snomed.info/sct*\v\n\t3850550012\022\n\020Tablet dose form\"\022\n\020Tablet dose form\202\001;\"\031\022\027*\025\n\023citalopramSubstance2\036\032\f\032\004\n\00220*\004\n\002mg\"\016\032\003\n\0011*\a\n\005{tbl}"
 }
 contained {
-  substance {
-    id {
-      value: "citalopramSubstance"
-    }
-    code {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-        }
-        code {
-          value: "2556"
-        }
-      }
-      text {
-        value: "citalopram"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\232\b`\n\025\n\023citalopramSubstancejG\0327\032-\n+http://www.nlm.nih.gov/research/umls/rxnorm*\006\n\0042556\"\f\n\ncitalopram"
 }
 url {
   value: "http://motivemi.com/artifacts/ActivityDefinition/citalopramPrescription"

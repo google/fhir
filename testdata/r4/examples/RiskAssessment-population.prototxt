@@ -10,16 +10,8 @@ text {
   }
 }
 contained {
-  group {
-    id {
-      value: "group1"
-    }
-    type {
-      value: PERSON
-    }
-    actual {
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\322\003\020\n\b\n\006group1b\002\b\001j\000"
 }
 status {
   value: FINAL

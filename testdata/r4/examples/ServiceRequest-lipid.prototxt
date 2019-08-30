@@ -10,89 +10,12 @@ text {
   }
 }
 contained {
-  observation {
-    id {
-      value: "fasting"
-    }
-    status {
-      value: FINAL
-    }
-    code {
-      coding {
-        system {
-          value: "http://loinc.org"
-        }
-        code {
-          value: "49541-6"
-        }
-        display {
-          value: "Fasting status - Reported"
-        }
-      }
-    }
-    subject {
-      patient_id {
-        value: "example"
-      }
-    }
-    value {
-      codeable_concept {
-        coding {
-          system {
-            value: "http://terminology.hl7.org/CodeSystem/v2-0136"
-          }
-          code {
-            value: "Y"
-          }
-          display {
-            value: "Yes"
-          }
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\202\006\242\001\n\t\n\afastingj\002\b\003z>\032<\032\022\n\020http://loinc.org*\t\n\a49541-62\033\n\031Fasting status - Reported\202\001\f\362\006\t\n\aexample\262\001A\022?\032=\032/\n-http://terminology.hl7.org/CodeSystem/v2-0136*\003\n\001Y2\005\n\003Yes"
 }
 contained {
-  specimen {
-    id {
-      value: "serum"
-    }
-    identifier {
-      system {
-        value: "http://acme.org/specimens"
-      }
-      value {
-        value: "20150107-0012"
-      }
-    }
-    type {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "119364003"
-        }
-        display {
-          value: "Serum sample"
-        }
-      }
-    }
-    subject {
-      patient_id {
-        value: "example"
-      }
-    }
-    collection {
-      collected {
-        date_time {
-          value_us: 1439707217000000
-          timezone: "Z"
-          precision: SECOND
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\362\a\227\001\n\a\n\005serumR.*\033\n\031http://acme.org/specimens2\017\n\r20150107-0012j9\0327\032\030\n\026http://snomed.info/sct*\v\n\t1193640032\016\n\fSerum sampler\f\362\006\t\n\aexample\222\001\022*\020\n\016\b\300\354\377\251\377\254\307\002\022\001Z\030\004"
 }
 identifier {
   type {

@@ -10,201 +10,24 @@ text {
   }
 }
 contained {
-  organization {
-    id {
-      value: "org-insurer"
-    }
-    identifier {
-      system {
-        value: "http://www.bindb.com/bin"
-      }
-      value {
-        value: "123456"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\242\0067\n\r\n\vorg-insurerR&*\032\n\030http://www.bindb.com/bin2\b\n\006123456"
 }
 contained {
-  organization {
-    id {
-      value: "org-org"
-    }
-    identifier {
-      system {
-        value: "http://www.jurisdiction.com/oralhealthoffices"
-      }
-      value {
-        value: "3456"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\242\006F\n\t\n\aorg-orgR9*/\n-http://www.jurisdiction.com/oralhealthoffices2\006\n\0043456"
 }
 contained {
-  practitioner {
-    id {
-      value: "provider-1"
-    }
-    identifier {
-      system {
-        value: "http://www.jurisdiction.com/oralhealthproviders"
-      }
-      value {
-        value: "123456789"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\006P\n\f\n\nprovider-1R@*1\n/http://www.jurisdiction.com/oralhealthproviders2\v\n\t123456789"
 }
 contained {
-  patient {
-    id {
-      value: "patient-1"
-    }
-    name {
-      use {
-        value: OFFICIAL
-      }
-      family {
-        value: "Donald"
-      }
-      given {
-        value: "Duck"
-      }
-    }
-    gender {
-      value: MALE
-    }
-    birth_date {
-      value_us: 516636000000000
-      timezone: "Australia/Sydney"
-      precision: DAY
-    }
-    address {
-      use {
-        value: HOME
-      }
-      line {
-        value: "1234 Main Street"
-      }
-      city {
-        value: "Vancouver"
-      }
-      postal_code {
-        value: "V2H1Y3"
-      }
-      country {
-        value: "CAD"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\272\006\200\001\n\v\n\tpatient-1b\026\032\002\b\002*\b\n\006Donald2\006\n\004Duckr\002\b\001z\034\b\200\260\210\212\213\274u\022\020Australia/Sydney\030\003\212\0016\032\002\b\0012\022\n\0201234 Main Street:\v\n\tVancouverR\b\n\006V2H1Y3Z\005\n\003CAD"
 }
 contained {
-  coverage {
-    id {
-      value: "coverage-1"
-    }
-    identifier {
-      system {
-        value: "http://benefitsinc.com/certificate"
-      }
-      value {
-        value: "12345"
-      }
-    }
-    status {
-      value: ACTIVE
-    }
-    type {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
-        }
-        code {
-          value: "EHCPOL"
-        }
-      }
-    }
-    subscriber {
-      fragment {
-        value: "patient-1"
-      }
-    }
-    beneficiary {
-      fragment {
-        value: "patient-1"
-      }
-    }
-    dependent {
-      value: "1"
-    }
-    relationship {
-      coding {
-        code {
-          value: "self"
-        }
-      }
-    }
-    payor {
-      identifier {
-        system {
-          value: "http://www.bindb.com/bin"
-        }
-        value {
-          value: "123456"
-        }
-      }
-    }
-    class_value {
-      type {
-        coding {
-          system {
-            value: "http://terminology.hl7.org/CodeSystem/coverage-class"
-          }
-          code {
-            value: "plan"
-          }
-        }
-      }
-      value {
-        value: "CBI35"
-      }
-      name {
-        value: "Corporate Baker\'s Inc. Plan#35"
-      }
-    }
-    class_value {
-      type {
-        coding {
-          system {
-            value: "http://terminology.hl7.org/CodeSystem/coverage-class"
-          }
-          code {
-            value: "subplan"
-          }
-        }
-      }
-      value {
-        value: "123"
-      }
-      name {
-        value: "Trainee Part-time Benefits"
-      }
-    }
-    class_value {
-      type {
-        coding {
-          system {
-            value: "http://terminology.hl7.org/CodeSystem/coverage-class"
-          }
-          code {
-            value: "sequence"
-          }
-        }
-      }
-      value {
-        value: "1"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\372\001\224\004\n\f\n\ncoverage-1R/*$\n\"http://benefitsinc.com/certificate2\a\n\00512345Z\002\b\001b@\032>\0322\n0http://terminology.hl7.org/CodeSystem/v3-ActCode*\b\n\006EHCPOLr\r*\v\n\tpatient-1\202\001\r*\v\n\tpatient-1\212\001\003\n\0011\222\001\n\032\b*\006\n\004self\242\001)\332\t&*\032\n\030http://www.bindb.com/bin2\b\n\006123456\252\001o\"B\032@\0326\n4http://terminology.hl7.org/CodeSystem/coverage-class*\006\n\004plan*\a\n\005CBI352 \n\036Corporate Baker\'s Inc. Plan#35\252\001l\"E\032C\0326\n4http://terminology.hl7.org/CodeSystem/coverage-class*\t\n\asubplan*\005\n\0031232\034\n\032Trainee Part-time Benefits\252\001M\"F\032D\0326\n4http://terminology.hl7.org/CodeSystem/coverage-class*\n\n\bsequence*\003\n\0011"
 }
 identifier {
   system {

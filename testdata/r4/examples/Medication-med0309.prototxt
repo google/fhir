@@ -10,14 +10,8 @@ text {
   }
 }
 contained {
-  organization {
-    id {
-      value: "org2"
-    }
-    name {
-      value: "Johnson and Johnson Consume Inc, McNeil Consumer Healthcare Division"
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\242\006P\n\006\n\004org2jF\nDJohnson and Johnson Consume Inc, McNeil Consumer Healthcare Division"
 }
 code {
   coding {

@@ -18,8 +18,8 @@
 #include "google/protobuf/message.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "proto/r4/codes.pb.h"
-#include "proto/r4/datatypes.pb.h"
+#include "proto/r4/core/codes.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 
@@ -31,7 +31,7 @@ namespace fhir {
     google::protobuf::Message* target);
 
 ::google::fhir::Status ConvertToTypedCode(
-    const ::google::fhir::r4::proto::Code& generic_code,
+    const ::google::fhir::r4::core::Code& generic_code,
     google::protobuf::Message* target);
 
 ::google::fhir::Status ConvertToGenericCode(
@@ -40,7 +40,7 @@ namespace fhir {
 
 ::google::fhir::Status ConvertToGenericCode(
     const google::protobuf::Message& typed_code,
-    ::google::fhir::r4::proto::Code* generic_code);
+    ::google::fhir::r4::core::Code* generic_code);
 
 ::google::fhir::Status ConvertToTypedCoding(
     const google::fhir::stu3::proto::Coding& generic_coding,
@@ -51,12 +51,12 @@ namespace fhir {
     google::fhir::stu3::proto::Coding* generic_coding);
 
 ::google::fhir::Status ConvertToTypedCoding(
-    const google::fhir::r4::proto::Coding& generic_coding,
+    const google::fhir::r4::core::Coding& generic_coding,
     google::protobuf::Message* typed_coding);
 
 ::google::fhir::Status ConvertToGenericCoding(
     const google::protobuf::Message& typed_coding,
-    google::fhir::r4::proto::Coding* generic_coding);
+    google::fhir::r4::core::Coding* generic_coding);
 
 ::google::fhir::StatusOr<::google::fhir::stu3::proto::ResourceTypeCode::Value>
 GetCodeForResourceType(const google::protobuf::Message& resource);

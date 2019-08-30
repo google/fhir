@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0311"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "373994007"
-        }
-        display {
-          value: "Prednisone 5mg tablet (Product)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004Y\n\t\n\amed0311ZL\032J\032\030\n\026http://snomed.info/sct*\v\n\t3739940072!\n\037Prednisone 5mg tablet (Product)"
 }
 identifier {
   use {

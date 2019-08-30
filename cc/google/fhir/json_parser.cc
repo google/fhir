@@ -21,6 +21,7 @@
 #include <unordered_map>
 #include <utility>
 
+#include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
@@ -33,6 +34,7 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
+#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "include/json/json.h"
 #include "tensorflow/core/lib/core/errors.h"
@@ -51,6 +53,7 @@ using ::google::fhir::IsResource;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
 using ::google::fhir::proto::FhirVersion;
+using ::google::protobuf::Any;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
@@ -144,19 +147,7 @@ class Parser {
     const Descriptor* target_descriptor = target->GetDescriptor();
     // TODO: handle this with an annotation
     if (target_descriptor->name() == "ContainedResource") {
-      // We handle contained resources in a special way, because despite
-      // internally being a Oneof, it is not acually a choice-type in FHIR. The
-      // JSON field name is just "resource", which doesn't give us any clues
-      // about which field in the Oneof to set.  Instead, we need to inspect
-      // the JSON input to determine its type.  Then, merge into that specific
-      // field in the resource Oneof.
-      string resource_type =
-          value.get("resourceType", Json::Value::null).asString();
-      FHIR_ASSIGN_OR_RETURN(
-          const FieldDescriptor* contained_field,
-          GetContainedResourceField(target_descriptor, resource_type));
-      return MergeMessage(value, target->GetReflection()->MutableMessage(
-                                     target, contained_field));
+      return MergeContainedResource(value, target);
     }
 
     const std::unordered_map<string, const FieldDescriptor*> field_map =
@@ -190,6 +181,22 @@ class Parser {
       }
     }
     return Status::OK();
+  }
+
+  Status MergeContainedResource(const Json::Value& value, Message* target) {
+    // We handle contained resources in a special way, because despite
+    // internally being a Oneof, it is not acually a choice-type in FHIR. The
+    // JSON field name is just "resource", which doesn't give us any clues
+    // about which field in the Oneof to set.  Instead, we need to inspect
+    // the JSON input to determine its type.  Then, merge into that specific
+    // field in the resource Oneof.
+    string resource_type =
+        value.get("resourceType", Json::Value::null).asString();
+    FHIR_ASSIGN_OR_RETURN(
+        const FieldDescriptor* contained_field,
+        GetContainedResourceField(target->GetDescriptor(), resource_type));
+    return MergeMessage(value, target->GetReflection()->MutableMessage(
+                                   target, contained_field));
   }
 
   Status MergeChoiceField(const Json::Value& json,
@@ -326,13 +333,22 @@ class Parser {
       return InvalidArgument("Error in FHIR proto definition: Field ",
                              field->full_name(), " is not a message.");
     }
-    std::unique_ptr<Message> target =
-        absl::WrapUnique(parent->GetReflection()
-                             ->GetMessageFactory()
-                             ->GetPrototype(field->message_type())
-                             ->New());
-    FHIR_RETURN_IF_ERROR(MergeValue(json, target.get()));
-    return std::move(target);
+    if (field->message_type()->full_name() == Any::descriptor()->full_name()) {
+      // TODO: Handle STU3 Any
+      r4::core::ContainedResource contained;
+      FHIR_RETURN_IF_ERROR(MergeContainedResource(json, &contained));
+      Any* any = new Any;
+      any->PackFrom(contained);
+      return absl::WrapUnique<Message>(any);
+    } else {
+      std::unique_ptr<Message> target =
+          absl::WrapUnique(parent->GetReflection()
+                               ->GetMessageFactory()
+                               ->GetPrototype(field->message_type())
+                               ->New());
+      FHIR_RETURN_IF_ERROR(MergeValue(json, target.get()));
+      return std::move(target);
+    }
   }
 
   Status MergeValue(const Json::Value& json, Message* target) {

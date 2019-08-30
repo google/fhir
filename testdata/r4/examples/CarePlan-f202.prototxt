@@ -10,156 +10,28 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "doce"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "108806006"
-        }
-        display {
-          value: "Docetaxel"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004@\n\006\n\004doceZ6\0324\032\030\n\026http://snomed.info/sct*\v\n\t1088060062\v\n\tDocetaxel"
 }
 contained {
-  medication {
-    id {
-      value: "cisp"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "57066004"
-        }
-        display {
-          value: "Cisplatin"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004?\n\006\n\004cispZ5\0323\032\030\n\026http://snomed.info/sct*\n\n\b570660042\v\n\tCisplatin"
 }
 contained {
-  medication {
-    id {
-      value: "fluo"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "3127006"
-        }
-        display {
-          value: "Fluorouracil"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004A\n\006\n\004fluoZ7\0325\032\030\n\026http://snomed.info/sct*\t\n\a31270062\016\n\fFluorouracil"
 }
 contained {
-  medication {
-    id {
-      value: "tpf"
-    }
-    code {
-      text {
-        value: "TPF"
-      }
-    }
-    ingredient {
-      item {
-        reference {
-          fragment {
-            value: "doce"
-          }
-        }
-      }
-    }
-    ingredient {
-      item {
-        reference {
-          fragment {
-            value: "cisp"
-          }
-        }
-      }
-    }
-    ingredient {
-      item {
-        reference {
-          fragment {
-            value: "fluo"
-          }
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004=\n\005\n\003tpfZ\a\"\005\n\003TPF\202\001\f\"\n\022\b*\006\n\004doce\202\001\f\"\n\022\b*\006\n\004cisp\202\001\f\"\n\022\b*\006\n\004fluo"
 }
 contained {
-  care_team {
-    id {
-      value: "careteam"
-    }
-    participant {
-      role {
-        coding {
-          system {
-            value: "http://snomed.info/sct"
-          }
-          code {
-            value: "28995006"
-          }
-          display {
-            value: "Treated with"
-          }
-        }
-      }
-      member {
-        practitioner_id {
-          value: "f201"
-        }
-        display {
-          value: "Dokter Bronsig"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "zg\n\n\n\bcareteam\212\001X\"8\0326\032\030\n\026http://snomed.info/sct*\n\n\b289950062\016\n\fTreated with*\034\232\a\006\n\004f201\342\t\020\n\016Dokter Bronsig"
 }
 contained {
-  goal {
-    id {
-      value: "goal"
-    }
-    lifecycle_status {
-      value: ACTIVE
-    }
-    description {
-      text {
-        value: "Elimination of the spenoid bone tumor"
-      }
-    }
-    subject {
-      patient_id {
-        value: "f201"
-      }
-      display {
-        value: "Roel"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\302\003L\n\006\n\004goalZ\002\b\004z)\"\'\n%Elimination of the spenoid bone tumor\202\001\022\362\006\006\n\004f201\342\t\006\n\004Roel"
 }
 status {
   value: ACTIVE

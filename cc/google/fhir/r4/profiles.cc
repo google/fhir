@@ -24,7 +24,7 @@ namespace fhir {
 
 Status ConvertToProfileR4(const ::google::protobuf::Message& source,
                           ::google::protobuf::Message* target) {
-  return profiles_internal::ConvertToProfileInternal<r4::proto::Extension>(
+  return profiles_internal::ConvertToProfileInternal<r4::core::Extension>(
       source, target);
 }
 
@@ -32,7 +32,7 @@ Status ConvertToProfileR4(const ::google::protobuf::Message& source,
 Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
                                  ::google::protobuf::Message* target) {
   return profiles_internal::ConvertToProfileLenientInternal<
-      r4::proto::Extension>(source, target);
+      r4::core::Extension>(source, target);
 }
 
 }  // namespace fhir

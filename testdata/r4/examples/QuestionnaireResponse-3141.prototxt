@@ -10,83 +10,16 @@ text {
   }
 }
 contained {
-  patient {
-    id {
-      value: "patsub"
-    }
-    identifier {
-      system {
-        value: "http://cancer.questionnaire.org/systems/id/patientnr"
-      }
-      value {
-        value: "A34442332"
-      }
-    }
-    identifier {
-      type {
-        text {
-          value: "Dutch BSN"
-        }
-      }
-      system {
-        value: "urn:oid:2.16.840.1.113883.2.4.6.3"
-      }
-      value {
-        value: "188912345"
-      }
-    }
-    gender {
-      value: MALE
-    }
-    birth_date {
-      value_us: 91890000000000
-      timezone: "Australia/Sydney"
-      precision: DAY
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\272\006\266\001\n\b\n\006patsubRE*6\n4http://cancer.questionnaire.org/systems/id/patientnr2\v\n\tA34442332RA\"\r\"\v\n\tDutch BSN*#\n!urn:oid:2.16.840.1.113883.2.4.6.32\v\n\t188912345r\002\b\001z\034\b\200\350\273\366\254\362\024\022\020Australia/Sydney\030\003"
 }
 contained {
-  service_request {
-    id {
-      value: "order"
-    }
-    status {
-      value: UNKNOWN
-    }
-    intent {
-      value: ORDER
-    }
-    subject {
-      fragment {
-        value: "patsub"
-      }
-    }
-    requester {
-      practitioner_id {
-        value: "example"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\a/\n\a\n\005order\202\001\002\b\a\212\001\002\b\004\302\001\n*\b\n\006patsub\352\001\f\232\a\t\n\aexample"
 }
 contained {
-  practitioner {
-    id {
-      value: "questauth"
-    }
-    identifier {
-      type {
-        text {
-          value: "AUMC, Den Helder"
-        }
-      }
-      system {
-        value: "http://cancer.questionnaire.org/systems/id/org"
-      }
-      value {
-        value: "AUMC"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\006_\n\v\n\tquestauthRP\"\024\"\022\n\020AUMC, Den Helder*0\n.http://cancer.questionnaire.org/systems/id/org2\006\n\004AUMC"
 }
 identifier {
   system {

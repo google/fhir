@@ -10,47 +10,8 @@ text {
   }
 }
 contained {
-  patient {
-    id {
-      value: "patient-1"
-    }
-    name {
-      use {
-        value: OFFICIAL
-      }
-      family {
-        value: "Donald"
-      }
-      given {
-        value: "Duck"
-      }
-    }
-    gender {
-      value: MALE
-    }
-    birth_date {
-      value_us: 516636000000000
-      timezone: "Australia/Sydney"
-      precision: DAY
-    }
-    address {
-      use {
-        value: HOME
-      }
-      line {
-        value: "1234 Main Street"
-      }
-      city {
-        value: "Vancouver"
-      }
-      postal_code {
-        value: "V2H1Y3"
-      }
-      country {
-        value: "CAD"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\272\006\200\001\n\v\n\tpatient-1b\026\032\002\b\002*\b\n\006Donald2\006\n\004Duckr\002\b\001z\034\b\200\260\210\212\213\274u\022\020Australia/Sydney\030\003\212\0016\032\002\b\0012\022\n\0201234 Main Street:\v\n\tVancouverR\b\n\006V2H1Y3Z\005\n\003CAD"
 }
 identifier {
   system {

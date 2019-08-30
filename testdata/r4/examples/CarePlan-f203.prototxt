@@ -10,80 +10,12 @@ text {
   }
 }
 contained {
-  care_team {
-    id {
-      value: "careteam"
-    }
-    participant {
-      role {
-        coding {
-          system {
-            value: "http://snomed.info/sct"
-          }
-          code {
-            value: "425268008"
-          }
-          display {
-            value: "Review of care plan"
-          }
-        }
-      }
-      member {
-        practitioner_id {
-          value: "f201"
-        }
-        display {
-          value: "Dokter Bronsig"
-        }
-      }
-    }
-    participant {
-      role {
-        coding {
-          system {
-            value: "http://snomed.info/sct"
-          }
-          code {
-            value: "278110001"
-          }
-          display {
-            value: "Radiographic imaging"
-          }
-        }
-      }
-      member {
-        practitioner_id {
-          value: "f202"
-        }
-        display {
-          value: "Luigi Maas"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "z\317\001\n\n\n\bcareteam\212\001`\"@\032>\032\030\n\026http://snomed.info/sct*\v\n\t4252680082\025\n\023Review of care plan*\034\232\a\006\n\004f201\342\t\020\n\016Dokter Bronsig\212\001]\"A\032?\032\030\n\026http://snomed.info/sct*\v\n\t2781100012\026\n\024Radiographic imaging*\030\232\a\006\n\004f202\342\t\f\n\nLuigi Maas"
 }
 contained {
-  goal {
-    id {
-      value: "goal"
-    }
-    lifecycle_status {
-      value: CANCELLED
-    }
-    description {
-      text {
-        value: "Check whether further treatment of sepsis/pulmonary abcess is required"
-      }
-    }
-    subject {
-      patient_id {
-        value: "f201"
-      }
-      display {
-        value: "Roel"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\302\003m\n\006\n\004goalZ\002\b\azJ\"H\nFCheck whether further treatment of sepsis/pulmonary abcess is required\202\001\022\362\006\006\n\004f201\342\t\006\n\004Roel"
 }
 status {
   value: COMPLETED

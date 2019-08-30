@@ -10,14 +10,8 @@ text {
   }
 }
 contained {
-  organization {
-    id {
-      value: "org1"
-    }
-    name {
-      value: "Stat Rx USA LLC"
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\242\006\033\n\006\n\004org1j\021\n\017Stat Rx USA LLC"
 }
 code {
   coding {

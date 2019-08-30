@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  operation_outcome {
-    id {
-      value: "o1"
-    }
-    issue {
-      severity {
-        value: ERROR
-      }
-      code {
-        value: INVALID
-      }
-      details {
-        text {
-          value: "Invalid pointer operation"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\232\006/\n\004\n\002o1R\'\"\002\b\002*\002\b\0012\035\"\033\n\031Invalid pointer operation"
 }
 type {
   system {

@@ -10,14 +10,8 @@ text {
   }
 }
 contained {
-  organization {
-    id {
-      value: "org5"
-    }
-    name {
-      value: "Aton Pharma Inc"
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\242\006\033\n\006\n\004org5j\021\n\017Aton Pharma Inc"
 }
 code {
   coding {

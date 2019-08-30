@@ -10,19 +10,8 @@ text {
   }
 }
 contained {
-  practitioner {
-    id {
-      value: "pr1"
-    }
-    name {
-      family {
-        value: "Dietician"
-      }
-      given {
-        value: "Dorothy"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\006!\n\005\n\003pr1b\030*\v\n\tDietician2\t\n\aDorothy"
 }
 identifier {
   value {

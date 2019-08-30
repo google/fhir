@@ -10,150 +10,24 @@ text {
   }
 }
 contained {
-  condition {
-    id {
-      value: "p1"
-    }
-    clinical_status {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
-        }
-        code {
-          value: "active"
-        }
-      }
-    }
-    verification_status {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
-        }
-        code {
-          value: "confirmed"
-        }
-      }
-    }
-    code {
-      text {
-        value: "pregnancy"
-      }
-    }
-    subject {
-      patient_id {
-        value: "1"
-      }
-      display {
-        value: "Eve Everywoman"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\001\312\001\n\004\n\002p1ZH\032F\032:\n8http://terminology.hl7.org/CodeSystem/condition-clinical*\b\n\006activebM\032K\032<\n:http://terminology.hl7.org/CodeSystem/condition-ver-status*\v\n\tconfirmedz\r\"\v\n\tpregnancy\212\001\031\362\006\003\n\0011\342\t\020\n\016Eve Everywoman"
 }
 contained {
-  practitioner {
-    id {
-      value: "pr1"
-    }
-    name {
-      family {
-        value: "Midwife"
-      }
-      given {
-        value: "Mavis"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\006\035\n\005\n\003pr1b\024*\t\n\aMidwife2\a\n\005Mavis"
 }
 contained {
-  practitioner {
-    id {
-      value: "pr2"
-    }
-    name {
-      family {
-        value: "Obstetrician"
-      }
-      given {
-        value: "Oscar"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\006\"\n\005\n\003pr2b\031*\016\n\fObstetrician2\a\n\005Oscar"
 }
 contained {
-  care_team {
-    id {
-      value: "careteam"
-    }
-    participant {
-      role {
-        coding {
-          system {
-            value: "http://example.org/mysys"
-          }
-          code {
-            value: "lmc"
-          }
-        }
-        text {
-          value: "Midwife"
-        }
-      }
-      member {
-        fragment {
-          value: "pr1"
-        }
-        display {
-          value: "Mavis Midwife"
-        }
-      }
-    }
-    participant {
-      role {
-        coding {
-          system {
-            value: "http://example.org/mysys"
-          }
-          code {
-            value: "obs"
-          }
-        }
-        text {
-          value: "Obstretitian"
-        }
-      }
-      member {
-        fragment {
-          value: "pr2"
-        }
-        display {
-          value: "Oscar Obstetrician"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "z\266\001\n\n\n\bcareteam\212\001M\"0\032#\032\032\n\030http://example.org/mysys*\005\n\003lmc\"\t\n\aMidwife*\031*\005\n\003pr1\342\t\017\n\rMavis Midwife\212\001W\"5\032#\032\032\n\030http://example.org/mysys*\005\n\003obs\"\016\n\fObstretitian*\036*\005\n\003pr2\342\t\024\n\022Oscar Obstetrician"
 }
 contained {
-  goal {
-    id {
-      value: "goal"
-    }
-    lifecycle_status {
-      value: ACTIVE
-    }
-    description {
-      text {
-        value: "Maintain patient\'s health throughout pregnancy and ensure a healthy child"
-      }
-    }
-    subject {
-      patient_id {
-        value: "1"
-      }
-      display {
-        value: "Eve Everywoman"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\302\003w\n\006\n\004goalZ\002\b\004zM\"K\nIMaintain patient\'s health throughout pregnancy and ensure a healthy child\202\001\031\362\006\003\n\0011\342\t\020\n\016Eve Everywoman"
 }
 extension {
   url {

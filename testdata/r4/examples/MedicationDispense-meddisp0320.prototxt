@@ -10,75 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0318"
-    }
-    form {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "385221006"
-        }
-        display {
-          value: "Injection emulsion"
-        }
-      }
-    }
-    ingredient {
-      item {
-        codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/sid/ndc"
-            }
-            code {
-              value: "0338-1134-03"
-            }
-            display {
-              value: "Clinimix 4.25/10 sulfite-free (4.25% Amino Acid in 10% Dextrose) Injection, 1000ml"
-            }
-          }
-        }
-      }
-    }
-    ingredient {
-      item {
-        codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/sid/ndc"
-            }
-            code {
-              value: "0409-5779-01"
-            }
-            display {
-              value: "TPN Electrolytes SODIUM CHLORIDE, CALCIUM CHLORIDE, POTASSIUM CHLORIDE, MAGNESIUM CHLORIDE, and SODIUM ACETATE ANHYDROUS | INJECTION, SOLUTION, CONCENTRATE | 321 mg/20mL, 331 mg/20mL, 1491 mg/20mL, 508 mg/20mL, 2420 mg/20mL"
-            }
-          }
-        }
-      }
-    }
-    ingredient {
-      item {
-        codeable_concept {
-          coding {
-            system {
-              value: "http://hl7.org/fhir/sid/ndc"
-            }
-            code {
-              value: "0338-0519-02"
-            }
-            display {
-              value: "Intralipid 20% IV Fat Emulsion"
-            }
-          }
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004\331\004\n\t\n\amed0318r?\032=\032\030\n\026http://snomed.info/sct*\v\n\t3852210062\024\n\022Injection emulsion\202\001\216\001\"\213\001\n\210\001\032\205\001\032\035\n\033http://hl7.org/fhir/sid/ndc*\016\n\f0338-1134-032T\nRClinimix 4.25/10 sulfite-free (4.25% Amino Acid in 10% Dextrose) Injection, 1000ml\202\001\235\002\"\232\002\n\227\002\032\224\002\032\035\n\033http://hl7.org/fhir/sid/ndc*\016\n\f0409-5779-012\342\001\n\337\001TPN Electrolytes SODIUM CHLORIDE, CALCIUM CHLORIDE, POTASSIUM CHLORIDE, MAGNESIUM CHLORIDE, and SODIUM ACETATE ANHYDROUS | INJECTION, SOLUTION, CONCENTRATE | 321 mg/20mL, 331 mg/20mL, 1491 mg/20mL, 508 mg/20mL, 2420 mg/20mL\202\001W\"U\nS\032Q\032\035\n\033http://hl7.org/fhir/sid/ndc*\016\n\f0338-0519-022 \n\036Intralipid 20% IV Fat Emulsion"
 }
 status {
   value: COMPLETED

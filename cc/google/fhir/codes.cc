@@ -280,7 +280,7 @@ Status ConvertToGenericCodingInternal(const google::protobuf::Message& typed_cod
 }
 
 ::google::fhir::Status ConvertToTypedCode(
-    const ::google::fhir::r4::proto::Code& generic_code,
+    const ::google::fhir::r4::core::Code& generic_code,
     google::protobuf::Message* target) {
   return ConvertToTypedCodeInternal(generic_code, target);
 }
@@ -293,7 +293,7 @@ Status ConvertToGenericCodingInternal(const google::protobuf::Message& typed_cod
 
 ::google::fhir::Status ConvertToGenericCode(
     const google::protobuf::Message& typed_code,
-    google::fhir::r4::proto::Code* generic_code) {
+    google::fhir::r4::core::Code* generic_code) {
   return ConvertToGenericCodeInternal(typed_code, generic_code);
 }
 
@@ -310,14 +310,14 @@ Status ConvertToGenericCodingInternal(const google::protobuf::Message& typed_cod
 }
 
 ::google::fhir::Status ConvertToTypedCoding(
-    const ::google::fhir::r4::proto::Coding& generic_coding,
+    const ::google::fhir::r4::core::Coding& generic_coding,
     google::protobuf::Message* typed_coding) {
   return ConvertToTypedCodingInternal(generic_coding, typed_coding);
 }
 
 ::google::fhir::Status ConvertToGenericCoding(
     const google::protobuf::Message& typed_coding,
-    google::fhir::r4::proto::Coding* generic_coding) {
+    google::fhir::r4::core::Coding* generic_coding) {
   return ConvertToGenericCodingInternal(typed_coding, generic_coding);
 }
 

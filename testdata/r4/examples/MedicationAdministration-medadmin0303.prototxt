@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0303"
-    }
-    code {
-      coding {
-        system {
-          value: "http://hl7.org/fhir/sid/ndc"
-        }
-        code {
-          value: "0206-8862-02"
-        }
-        display {
-          value: "Zosyn (piperacillin/tazobactam) 4.5gm injection"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004q\n\t\n\amed0303Zd\032b\032\035\n\033http://hl7.org/fhir/sid/ndc*\016\n\f0206-8862-0221\n/Zosyn (piperacillin/tazobactam) 4.5gm injection"
 }
 status {
   value: ENTERED_IN_ERROR

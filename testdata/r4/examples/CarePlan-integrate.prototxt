@@ -10,239 +10,36 @@ text {
   }
 }
 contained {
-  condition {
-    id {
-      value: "p1"
-    }
-    clinical_status {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
-        }
-        code {
-          value: "active"
-        }
-      }
-    }
-    verification_status {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
-        }
-        code {
-          value: "confirmed"
-        }
-      }
-    }
-    code {
-      text {
-        value: "GERDS"
-      }
-    }
-    subject {
-      patient_id {
-        value: "1"
-      }
-      display {
-        value: "Eve Everywoman"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\001\306\001\n\004\n\002p1ZH\032F\032:\n8http://terminology.hl7.org/CodeSystem/condition-clinical*\b\n\006activebM\032K\032<\n:http://terminology.hl7.org/CodeSystem/condition-ver-status*\v\n\tconfirmedz\t\"\a\n\005GERDS\212\001\031\362\006\003\n\0011\342\t\020\n\016Eve Everywoman"
 }
 contained {
-  condition {
-    id {
-      value: "p2"
-    }
-    clinical_status {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
-        }
-        code {
-          value: "active"
-        }
-      }
-    }
-    verification_status {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
-        }
-        code {
-          value: "confirmed"
-        }
-      }
-    }
-    code {
-      text {
-        value: "Obesity"
-      }
-    }
-    subject {
-      patient_id {
-        value: "1"
-      }
-      display {
-        value: "Eve Everywoman"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\001\310\001\n\004\n\002p2ZH\032F\032:\n8http://terminology.hl7.org/CodeSystem/condition-clinical*\b\n\006activebM\032K\032<\n:http://terminology.hl7.org/CodeSystem/condition-ver-status*\v\n\tconfirmedz\v\"\t\n\aObesity\212\001\031\362\006\003\n\0011\342\t\020\n\016Eve Everywoman"
 }
 contained {
-  condition {
-    id {
-      value: "p3"
-    }
-    clinical_status {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
-        }
-        code {
-          value: "active"
-        }
-      }
-    }
-    verification_status {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
-        }
-        code {
-          value: "confirmed"
-        }
-      }
-    }
-    code {
-      text {
-        value: "Psoriasis"
-      }
-    }
-    subject {
-      patient_id {
-        value: "1"
-      }
-      display {
-        value: "Eve Everywoman"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\001\312\001\n\004\n\002p3ZH\032F\032:\n8http://terminology.hl7.org/CodeSystem/condition-clinical*\b\n\006activebM\032K\032<\n:http://terminology.hl7.org/CodeSystem/condition-ver-status*\v\n\tconfirmedz\r\"\v\n\tPsoriasis\212\001\031\362\006\003\n\0011\342\t\020\n\016Eve Everywoman"
 }
 contained {
-  goal {
-    id {
-      value: "g1"
-    }
-    lifecycle_status {
-      value: ACTIVE
-    }
-    description {
-      text {
-        value: "Eve will lose weight and reduce her GERDS symptoms by improving her diet"
-      }
-    }
-    subject {
-      patient_id {
-        value: "1"
-      }
-      display {
-        value: "Eve Everywoman"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\302\003t\n\004\n\002g1Z\002\b\004zL\"J\nHEve will lose weight and reduce her GERDS symptoms by improving her diet\202\001\031\362\006\003\n\0011\342\t\020\n\016Eve Everywoman"
 }
 contained {
-  goal {
-    id {
-      value: "g2"
-    }
-    lifecycle_status {
-      value: ACTIVE
-    }
-    description {
-      text {
-        value: "Eve will improve her GERDS symptoms"
-      }
-    }
-    subject {
-      patient_id {
-        value: "1"
-      }
-      display {
-        value: "Eve Everywoman"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\302\003O\n\004\n\002g2Z\002\b\004z\'\"%\n#Eve will improve her GERDS symptoms\202\001\031\362\006\003\n\0011\342\t\020\n\016Eve Everywoman"
 }
 contained {
-  goal {
-    id {
-      value: "g3"
-    }
-    lifecycle_status {
-      value: ACTIVE
-    }
-    description {
-      text {
-        value: "Eve will increase her energy by being more active"
-      }
-    }
-    subject {
-      patient_id {
-        value: "1"
-      }
-      display {
-        value: "Eve Everywoman"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\302\003]\n\004\n\002g3Z\002\b\004z5\"3\n1Eve will increase her energy by being more active\202\001\031\362\006\003\n\0011\342\t\020\n\016Eve Everywoman"
 }
 contained {
-  goal {
-    id {
-      value: "g4"
-    }
-    lifecycle_status {
-      value: ACTIVE
-    }
-    description {
-      text {
-        value: "Eve will set up her medications and take as prescribed"
-      }
-    }
-    subject {
-      patient_id {
-        value: "1"
-      }
-      display {
-        value: "Eve Everywoman"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\302\003b\n\004\n\002g4Z\002\b\004z:\"8\n6Eve will set up her medications and take as prescribed\202\001\031\362\006\003\n\0011\342\t\020\n\016Eve Everywoman"
 }
 contained {
-  goal {
-    id {
-      value: "g5"
-    }
-    lifecycle_status {
-      value: ACTIVE
-    }
-    description {
-      text {
-        value: "Eve will restart her light treatments"
-      }
-    }
-    subject {
-      patient_id {
-        value: "1"
-      }
-      display {
-        value: "Eve Everywoman"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\302\003Q\n\004\n\002g5Z\002\b\004z)\"\'\n%Eve will restart her light treatments\202\001\031\362\006\003\n\0011\342\t\020\n\016Eve Everywoman"
 }
 status {
   value: ACTIVE

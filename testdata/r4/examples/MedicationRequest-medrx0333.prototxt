@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0310"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "430127000"
-        }
-        display {
-          value: "Oral Form Oxycodone (product)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004W\n\t\n\amed0310ZJ\032H\032\030\n\026http://snomed.info/sct*\v\n\t4301270002\037\n\035Oral Form Oxycodone (product)"
 }
 identifier {
   use {

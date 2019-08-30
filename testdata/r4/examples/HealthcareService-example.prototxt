@@ -10,27 +10,8 @@ text {
   }
 }
 contained {
-  location {
-    id {
-      value: "DenBurg"
-    }
-    description {
-      value: "Greater Denburg area"
-    }
-    mode {
-      value: INSTANCE
-    }
-    physical_type {
-      coding {
-        code {
-          value: "area"
-        }
-        display {
-          value: "Area"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\272\004=\n\t\n\aDenBurgz\026\n\024Greater Denburg area\202\001\002\b\001\242\001\022\032\020*\006\n\004area2\006\n\004Area"
 }
 identifier {
   system {

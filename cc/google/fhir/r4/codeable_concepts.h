@@ -26,7 +26,7 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/annotations.pb.h"
-#include "proto/r4/datatypes.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
@@ -36,9 +36,9 @@ namespace r4 {
 typedef std::function<void(const string& system, const string& code)> CodeFunc;
 typedef std::function<bool(const string& system, const string& code)>
     CodeBoolFunc;
-typedef std::function<void(const r4::proto::Coding&)> CodingFunc;
-typedef std::function<Status(const r4::proto::Coding&)> CodingStatusFunc;
-typedef std::function<bool(const r4::proto::Coding&)> CodingBoolFunc;
+typedef std::function<void(const r4::core::Coding&)> CodingFunc;
+typedef std::function<Status(const r4::core::Coding&)> CodingStatusFunc;
+typedef std::function<bool(const r4::core::Coding&)> CodingBoolFunc;
 
 namespace internal {
 
@@ -85,7 +85,7 @@ void ForEachSystemCodeStringPair(const ::google::protobuf::Message& concept,
 // Since the call site has no way of knowing which case it is, the shared_ptr
 // semantics accurately convey to the caller that they should never count on
 // the Coding living longer than the shared_ptr.
-std::shared_ptr<const r4::proto::Coding> FindCoding(
+std::shared_ptr<const r4::core::Coding> FindCoding(
     const ::google::protobuf::Message& concept, const CodingBoolFunc& func);
 
 // Performs a function on all Codings.
@@ -132,7 +132,7 @@ StatusOr<string> ExtractCodeBySystem(
 // Think about this a bit more.  It might just be illegal since a code might
 // fit into two different slices, but might be useful, e.g., if you want
 // to specify a required ICD9 code, but make it easy to add other ICD9 codes.
-Status AddCoding(::google::protobuf::Message* concept, const r4::proto::Coding& coding);
+Status AddCoding(::google::protobuf::Message* concept, const r4::core::Coding& coding);
 
 Status AddCoding(::google::protobuf::Message* concept, const string& system,
                  const string& code);
@@ -140,13 +140,13 @@ Status AddCoding(::google::protobuf::Message* concept, const string& system,
 template <typename CodeableConceptLike>
 Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
                                  const string& system) {
-  if (IsProfileOf<r4::proto::CodeableConcept>(*concept)) {
+  if (IsProfileOf<r4::core::CodeableConcept>(*concept)) {
     const ::google::protobuf::FieldDescriptor* profiled_field =
         internal::ProfiledFieldForSystem(*concept, system);
     if (profiled_field != nullptr) {
       if (HasFixedCodingSystem(profiled_field->message_type())) {
         concept->GetReflection()->ClearField(concept, profiled_field);
-      } else if (IsMessageType<r4::proto::CodingWithFixedCode>(
+      } else if (IsMessageType<r4::core::CodingWithFixedCode>(
                      profiled_field->message_type())) {
         return ::tensorflow::errors::InvalidArgument(
             "Cannot clear coding system: ", system, " from ",

@@ -10,69 +10,8 @@ text {
   }
 }
 contained {
-  specimen {
-    id {
-      value: "stool"
-    }
-    accession_identifier {
-      system {
-        value: "http://lab.acme.org/specimens/2015"
-      }
-      value {
-        value: "X352356"
-      }
-    }
-    status {
-      value: UNAVAILABLE
-    }
-    type {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "119339001"
-        }
-        display {
-          value: "Stool specimen"
-        }
-      }
-    }
-    subject {
-      patient_id {
-        value: "example"
-      }
-    }
-    received_time {
-      value_us: 1439708580000000
-      timezone: "Z"
-      precision: SECOND
-    }
-    collection {
-      collector {
-        display {
-          value: "Patient"
-        }
-      }
-      collected {
-        date_time {
-          value_us: 1313475300000000
-          timezone: "Z"
-          precision: SECOND
-        }
-      }
-      method {
-        coding {
-          system {
-            value: "http://terminology.hl7.org/CodeSystem/v2-0488"
-          }
-          code {
-            value: "LNV"
-          }
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\362\a\372\001\n\a\n\005stoolZ1*$\n\"http://lab.acme.org/specimens/20152\t\n\aX352356b\002\b\002j;\0329\032\030\n\026http://snomed.info/sct*\v\n\t1193390012\020\n\016Stool specimenr\f\362\006\t\n\aexamplez\016\b\200\342\366\263\204\255\307\002\022\001Z\030\004\222\001\\\"\f\342\t\t\n\aPatient*\020\n\016\b\200\202\266\345\224\323\252\002\022\001Z\030\004B:\0328\032/\n-http://terminology.hl7.org/CodeSystem/v2-0488*\005\n\003LNV"
 }
 accession_identifier {
   system {

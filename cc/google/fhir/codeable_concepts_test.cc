@@ -18,9 +18,9 @@
 #include "gtest/gtest.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/r4/datatypes.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
-#include "testdata/r4/profiles/test.pb.h"
+#include "testdata/r4/profiles/test_core.pb.h"
 #include "testdata/stu3/profiles/test.pb.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
 
@@ -30,7 +30,7 @@ namespace fhir {
 namespace {
 
 using Stu3TestObservation = stu3::testing::TestObservation;
-using R4TestObservation = r4::testing::TestObservation;
+using R4TestObservation = r4::testingcore::TestObservation;
 using ::testing::ElementsAre;
 
 const Stu3TestObservation::CodeableConceptForCode GetConceptStu3() {
@@ -235,7 +235,7 @@ TEST(CodeableConceptsTest, AddCodingFromStringsSTU3) {
 }
 
 TEST(CodeableConceptsTest, AddCodingFromStringsR4) {
-  r4::proto::CodeableConcept concept;
+  r4::core::CodeableConcept concept;
 
   TF_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode1"));
   TF_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode2"));
@@ -412,7 +412,7 @@ TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedCodeR4) {
 }
 
 TEST(CodeableConceptsTest, CopyCodeableConceptR4) {
-  r4::proto::CodeableConcept concept = PARSE_STU3_PROTO(R"proto(
+  r4::core::CodeableConcept concept = PARSE_STU3_PROTO(R"proto(
     coding {
       system { value: "foo" },
       code { value: "bar" }
@@ -498,7 +498,7 @@ TEST(CodeableConceptsTest, CopyCodeableConceptR4) {
         }
       )proto");
 
-  r4::proto::CodeableConcept profiled_to_unprofiled;
+  r4::core::CodeableConcept profiled_to_unprofiled;
   TF_ASSERT_OK(CopyCodeableConcept(concept_for_code, &profiled_to_unprofiled));
   ASSERT_THAT(concept,
               testutil::EqualsProtoIgnoringReordering(profiled_to_unprofiled));

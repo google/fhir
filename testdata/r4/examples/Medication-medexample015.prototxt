@@ -10,34 +10,12 @@ text {
   }
 }
 contained {
-  organization {
-    id {
-      value: "org2"
-    }
-    name {
-      value: "Gene Inc"
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\242\006\024\n\006\n\004org2j\n\n\bGene Inc"
 }
 contained {
-  substance {
-    id {
-      value: "sub04"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "386906001"
-        }
-        display {
-          value: "Capecitabine (substance)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\232\bP\n\a\n\005sub04jE\032C\032\030\n\026http://snomed.info/sct*\v\n\t3869060012\032\n\030Capecitabine (substance)"
 }
 code {
   coding {

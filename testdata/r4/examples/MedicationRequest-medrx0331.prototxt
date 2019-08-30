@@ -10,37 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0350"
-    }
-    code {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-        }
-        code {
-          value: "114194"
-        }
-        display {
-          value: "Warfarin Sodium"
-        }
-      }
-    }
-    form {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "421026006"
-        }
-        display {
-          value: "Oral Tablet"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004\225\001\n\t\n\amed0350ZN\032L\032-\n+http://www.nlm.nih.gov/research/umls/rxnorm*\b\n\0061141942\021\n\017Warfarin Sodiumr8\0326\032\030\n\026http://snomed.info/sct*\v\n\t4210260062\r\n\vOral Tablet"
 }
 identifier {
   use {

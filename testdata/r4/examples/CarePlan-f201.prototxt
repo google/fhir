@@ -10,96 +10,12 @@ text {
   }
 }
 contained {
-  care_team {
-    id {
-      value: "careteam"
-    }
-    participant {
-      role {
-        coding {
-          system {
-            value: "http://snomed.info/sct"
-          }
-          code {
-            value: "425268008"
-          }
-          display {
-            value: "Review of care plan"
-          }
-        }
-      }
-      member {
-        practitioner_id {
-          value: "f201"
-        }
-        display {
-          value: "Dokter Bronsig"
-        }
-      }
-    }
-    participant {
-      role {
-        coding {
-          system {
-            value: "http://snomed.info/sct"
-          }
-          code {
-            value: "229774002"
-          }
-          display {
-            value: "Carer"
-          }
-        }
-      }
-      member {
-        practitioner_id {
-          value: "f204"
-        }
-        display {
-          value: "Nurse Carla Espinosa"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "z\312\001\n\n\n\bcareteam\212\001`\"@\032>\032\030\n\026http://snomed.info/sct*\v\n\t4252680082\025\n\023Review of care plan*\034\232\a\006\n\004f201\342\t\020\n\016Dokter Bronsig\212\001X\"2\0320\032\030\n\026http://snomed.info/sct*\v\n\t2297740022\a\n\005Carer*\"\232\a\006\n\004f204\342\t\026\n\024Nurse Carla Espinosa"
 }
 contained {
-  goal {
-    id {
-      value: "goal"
-    }
-    lifecycle_status {
-      value: COMPLETED
-    }
-    achievement_status {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/goal-achievement"
-        }
-        code {
-          value: "achieved"
-        }
-        display {
-          value: "Achieved"
-        }
-      }
-      text {
-        value: "Achieved"
-      }
-    }
-    description {
-      text {
-        value: "Re-established renal function with at least healthy nutrients."
-      }
-    }
-    subject {
-      patient_id {
-        value: "f201"
-      }
-      display {
-        value: "Roel"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\302\003\307\001\n\006\n\004goalZ\002\b\006b`\032R\0328\n6http://terminology.hl7.org/CodeSystem/goal-achievement*\n\n\bachieved2\n\n\bAchieved\"\n\n\bAchievedzB\"@\n>Re-established renal function with at least healthy nutrients.\202\001\022\362\006\006\n\004f201\342\t\006\n\004Roel"
 }
 status {
   value: DRAFT

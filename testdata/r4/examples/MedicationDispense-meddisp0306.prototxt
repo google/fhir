@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0303"
-    }
-    code {
-      coding {
-        system {
-          value: "http://www.nlm.nih.gov/research/umls/rxnorm"
-        }
-        code {
-          value: "1594660"
-        }
-        display {
-          value: "Alemtuzumab 10mg/ml (Lemtrada)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004k\n\t\n\amed0303Z^\032\\\032-\n+http://www.nlm.nih.gov/research/umls/rxnorm*\t\n\a15946602 \n\036Alemtuzumab 10mg/ml (Lemtrada)"
 }
 status {
   value: IN_PROGRESS

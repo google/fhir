@@ -10,126 +10,16 @@ text {
   }
 }
 contained {
-  condition {
-    id {
-      value: "p1"
-    }
-    clinical_status {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/condition-clinical"
-        }
-        code {
-          value: "active"
-        }
-      }
-    }
-    verification_status {
-      coding {
-        system {
-          value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
-        }
-        code {
-          value: "confirmed"
-        }
-      }
-    }
-    code {
-      text {
-        value: "Overseas encounter"
-      }
-    }
-    subject {
-      patient_id {
-        value: "100"
-      }
-      display {
-        value: "Peter James Chalmers"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\342\001\333\001\n\004\n\002p1ZH\032F\032:\n8http://terminology.hl7.org/CodeSystem/condition-clinical*\b\n\006activebM\032K\032<\n:http://terminology.hl7.org/CodeSystem/condition-ver-status*\v\n\tconfirmedz\026\"\024\n\022Overseas encounter\212\001!\362\006\005\n\003100\342\t\026\n\024Peter James Chalmers"
 }
 contained {
-  care_team {
-    id {
-      value: "careteam"
-    }
-    participant {
-      id {
-        value: "part1"
-      }
-      role {
-        coding {
-          system {
-            value: "http://example.org/local"
-          }
-          code {
-            value: "nur"
-          }
-        }
-        text {
-          value: "nurse"
-        }
-      }
-      member {
-        practitioner_id {
-          value: "13"
-        }
-        display {
-          value: "Nurse Nancy"
-        }
-      }
-    }
-    participant {
-      id {
-        value: "part2"
-      }
-      role {
-        coding {
-          system {
-            value: "http://example.org/local"
-          }
-          code {
-            value: "doc"
-          }
-        }
-        text {
-          value: "doctor"
-        }
-      }
-      member {
-        practitioner_id {
-          value: "14"
-        }
-        display {
-          value: "Doctor Dave"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "z\267\001\n\n\n\bcareteam\212\001R\n\a\n\005part1\".\032#\032\032\n\030http://example.org/local*\005\n\003nur\"\a\n\005nurse*\027\232\a\004\n\00213\342\t\r\n\vNurse Nancy\212\001S\n\a\n\005part2\"/\032#\032\032\n\030http://example.org/local*\005\n\003doc\"\b\n\006doctor*\027\232\a\004\n\00214\342\t\r\n\vDoctor Dave"
 }
 contained {
-  goal {
-    id {
-      value: "goal"
-    }
-    lifecycle_status {
-      value: PLANNED
-    }
-    description {
-      text {
-        value: "Complete consultation"
-      }
-    }
-    subject {
-      patient_id {
-        value: "100"
-      }
-      display {
-        value: "Peter James Chalmers"
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\302\003K\n\006\n\004goalZ\002\b\002z\031\"\027\n\025Complete consultation\202\001!\362\006\005\n\003100\342\t\026\n\024Peter James Chalmers"
 }
 status {
   value: ACTIVE

@@ -10,53 +10,8 @@ text {
   }
 }
 contained {
-  patient {
-    id {
-      value: "newborn"
-    }
-    identifier {
-      system {
-        value: "http://acmehealthcare/org/mrns"
-      }
-      value {
-        value: "12345"
-      }
-    }
-    active {
-      value: true
-    }
-    name {
-      family {
-        value: "Chalmers"
-      }
-      given {
-        value: "Peter"
-      }
-      given {
-        value: "James"
-      }
-    }
-    gender {
-      value: MALE
-    }
-    birth_date {
-      value_us: 1463493600000000
-      timezone: "Australia/Sydney"
-      precision: DAY
-      extension {
-        url {
-          value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime"
-        }
-        value {
-          date_time {
-            value_us: 1463567325000000
-            timezone: "Z"
-            precision: SECOND
-          }
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\272\006\320\001\n\t\n\anewbornR+* \n\036http://acmehealthcare/org/mrns2\a\n\00512345Z\002\b\001b\036*\n\n\bChalmers2\a\n\005Peter2\a\n\005Jamesr\002\b\001zn\b\200\360\242\301\242\341\314\002\022\020Australia/Sydney\030\003*O\022;\n9http://hl7.org/fhir/StructureDefinition/patient-birthTime\"\0202\016\b\300\342\213\224\265\343\314\002\022\001Z\030\004"
 }
 status {
   value: FINAL

@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med0352"
-    }
-    code {
-      coding {
-        system {
-          value: "http://hl7.org/fhir/sid/ndc"
-        }
-        code {
-          value: "0056-0170-70"
-        }
-        display {
-          value: "Coumadin 2mg tablet"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004U\n\t\n\amed0352ZH\032F\032\035\n\033http://hl7.org/fhir/sid/ndc*\016\n\f0056-0170-702\025\n\023Coumadin 2mg tablet"
 }
 status {
   value: IN_PROGRESS

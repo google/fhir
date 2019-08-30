@@ -21,6 +21,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
@@ -35,6 +36,7 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
+#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "include/json/json.h"
 
@@ -50,6 +52,7 @@ using ::google::fhir::ReferenceProtoToString;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
 using ::google::protobuf::Descriptor;
+using ::google::protobuf::Any;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
@@ -114,23 +117,18 @@ class Printer {
     const Descriptor* descriptor = proto.GetDescriptor();
     const Reflection* reflection = proto.GetReflection();
 
-    std::vector<const FieldDescriptor*> set_fields;
-    reflection->ListFields(proto, &set_fields);
 
     // TODO: Use an annotation here.
     if (descriptor->name() == "ContainedResource") {
-      for (const FieldDescriptor* field : set_fields) {
-        const Message& field_value = reflection->GetMessage(proto, field);
-        if (for_analytics_) {
-          // Only print resource url if in analytic mode.
-          absl::StrAppend(
-              &output_, "\"",
-              GetStructureDefinitionUrl(field_value.GetDescriptor()), "\"");
-        } else {
-          FHIR_RETURN_IF_ERROR(PrintNonPrimitive(field_value));
-        }
+      return PrintContainedResource(proto);
+    }
+    if (descriptor->full_name() == Any::descriptor()->full_name()) {
+      // TODO: Handle STU3 Any
+      r4::core::ContainedResource contained;
+      if (!dynamic_cast<const Any&>(proto).UnpackTo(&contained)) {
+        return InvalidArgument("Unable to unpack Any to ContainedResource");
       }
-      return Status::OK();
+      return PrintContainedResource(contained);
     }
 
     if (for_analytics_ && IsFhirType<stu3::proto::Extension>(proto)) {
@@ -146,6 +144,8 @@ class Printer {
                       "\",");
       AddNewline();
     }
+    std::vector<const FieldDescriptor*> set_fields;
+    reflection->ListFields(proto, &set_fields);
     for (size_t i = 0; i < set_fields.size(); i++) {
       const FieldDescriptor* field = set_fields[i];
       // Choice types in proto form have a containing message that is not part
@@ -165,6 +165,25 @@ class Printer {
       }
     }
     CloseJsonObject();
+    return Status::OK();
+  }
+
+  Status PrintContainedResource(const Message& proto) {
+    std::vector<const FieldDescriptor*> set_fields;
+    proto.GetReflection()->ListFields(proto, &set_fields);
+
+    for (const FieldDescriptor* field : set_fields) {
+      const Message& field_value =
+          proto.GetReflection()->GetMessage(proto, field);
+      if (for_analytics_) {
+        // Only print resource url if in analytic mode.
+        absl::StrAppend(&output_, "\"",
+                        GetStructureDefinitionUrl(field_value.GetDescriptor()),
+                        "\"");
+      } else {
+        FHIR_RETURN_IF_ERROR(PrintNonPrimitive(field_value));
+      }
+    }
     return Status::OK();
   }
 

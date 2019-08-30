@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  substance {
-    id {
-      value: "sub03"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "55452001"
-        }
-        display {
-          value: "Oxycodone (substance)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\232\bL\n\a\n\005sub03jA\032?\032\030\n\026http://snomed.info/sct*\n\n\b554520012\027\n\025Oxycodone (substance)"
 }
 code {
   coding {

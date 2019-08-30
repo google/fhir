@@ -37,7 +37,7 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/systems/systems.h"
 #include "proto/annotations.pb.h"
-#include "proto/r4/datatypes.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
@@ -91,14 +91,14 @@ Status SplitIfRelativeReference(::google::protobuf::Message* reference);
 StatusOr<stu3::proto::Reference> ReferenceStringToProtoStu3(
     const string& input);
 
-StatusOr<r4::proto::Reference> ReferenceStringToProtoR4(const string& input);
+StatusOr<r4::core::Reference> ReferenceStringToProtoR4(const string& input);
 
 // Return the full string representation of a reference.
 StatusOr<string> ReferenceProtoToString(
     const stu3::proto::Reference& reference);
 
 // Return the full string representation of a reference.
-StatusOr<string> ReferenceProtoToString(const r4::proto::Reference& reference);
+StatusOr<string> ReferenceProtoToString(const r4::core::Reference& reference);
 
 // When a message is not of a known type at compile time, this overload can
 // be used to cast to a reference and then call ReferenceProtoToString.

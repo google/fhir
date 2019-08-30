@@ -25,7 +25,7 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
-#include "proto/r4/datatypes.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "tensorflow/core/platform/logging.h"
@@ -58,7 +58,7 @@ GetExtensionValueFieldsMap() {
           (*map)[field->message_type()->full_name()] = field;
         }
         const google::protobuf::OneofDescriptor* r4_value_oneof =
-            r4::proto::Extension::Value::descriptor()->FindOneofByName("value");
+            r4::core::Extension::Value::descriptor()->FindOneofByName("value");
         CHECK(r4_value_oneof != nullptr);
         for (int i = 0; i < r4_value_oneof->field_count(); i++) {
           const FieldDescriptor* field = r4_value_oneof->field(i);
@@ -72,7 +72,7 @@ GetExtensionValueFieldsMap() {
 Status AddFieldsToExtension(const Message& message,
                             ::google::fhir::stu3::proto::Extension* extension);
 Status AddFieldsToExtension(const Message& message,
-                            ::google::fhir::r4::proto::Extension* extension);
+                            ::google::fhir::r4::core::Extension* extension);
 
 Status CheckIsMessage(const FieldDescriptor* field) {
   if (field->type() != FieldDescriptor::Type::TYPE_MESSAGE) {
@@ -155,7 +155,7 @@ Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
 }
 
 Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
-                              r4::proto::Extension* extension) {
+                              r4::core::Extension* extension) {
   return SetDatatypeOnExtensionInternal(message, extension);
 }
 
@@ -167,9 +167,9 @@ Status AddValueToExtension(const Message& message,
 }
 
 Status AddValueToExtension(const Message& message,
-                           ::google::fhir::r4::proto::Extension* extension,
+                           ::google::fhir::r4::core::Extension* extension,
                            bool is_choice_type) {
-  return AddValueToExtensionInternal<::google::fhir::r4::proto::Extension>(
+  return AddValueToExtensionInternal<::google::fhir::r4::core::Extension>(
       message, extension, is_choice_type);
 }
 
@@ -213,7 +213,7 @@ Status AddFieldsToExtension(const Message& message,
   return AddFieldsToExtensionInternal(message, extension);
 }
 Status AddFieldsToExtension(const Message& message,
-                            ::google::fhir::r4::proto::Extension* extension) {
+                            ::google::fhir::r4::core::Extension* extension) {
   return AddFieldsToExtensionInternal(message, extension);
 }
 
@@ -302,7 +302,7 @@ Status ValueToMessage(const ::google::fhir::stu3::proto::Extension& extension,
   return ValueToMessageInternal(extension, message, field);
 }
 
-Status ValueToMessage(const ::google::fhir::r4::proto::Extension& extension,
+Status ValueToMessage(const ::google::fhir::r4::core::Extension& extension,
                       Message* message, const FieldDescriptor* field) {
   return ValueToMessageInternal(extension, message, field);
 }
@@ -449,7 +449,7 @@ Status ConvertToExtension(const Message& message,
 }
 
 Status ConvertToExtension(const Message& message,
-                          ::google::fhir::r4::proto::Extension* extension) {
+                          ::google::fhir::r4::core::Extension* extension) {
   return ConvertToExtensionInternal(message, extension);
 }
 
@@ -458,7 +458,7 @@ Status ExtensionToMessage(
   return ExtensionToMessageInternal(extension, message);
 }
 
-Status ExtensionToMessage(const ::google::fhir::r4::proto::Extension& extension,
+Status ExtensionToMessage(const ::google::fhir::r4::core::Extension& extension,
                           Message* message) {
   return ExtensionToMessageInternal(extension, message);
 }

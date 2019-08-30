@@ -10,24 +10,8 @@ text {
   }
 }
 contained {
-  medication {
-    id {
-      value: "med03499"
-    }
-    code {
-      coding {
-        system {
-          value: "http://snomed.info/sct"
-        }
-        code {
-          value: "375860009"
-        }
-        display {
-          value: "Ceftriaxone sodium 500mg powder for injection solution vial (product)"
-        }
-      }
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\332\004\200\001\n\n\n\bmed03499Zr\032p\032\030\n\026http://snomed.info/sct*\v\n\t3758600092G\nECeftriaxone sodium 500mg powder for injection solution vial (product)"
 }
 identifier {
   use {

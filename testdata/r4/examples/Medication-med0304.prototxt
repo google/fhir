@@ -10,14 +10,8 @@ text {
   }
 }
 contained {
-  organization {
-    id {
-      value: "org6"
-    }
-    name {
-      value: "Aspen Global Inc"
-    }
-  }
+  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+  value: "\242\006\034\n\006\n\004org6j\022\n\020Aspen Global Inc"
 }
 code {
   coding {
