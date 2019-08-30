@@ -3,7 +3,7 @@ syntax = "proto3";
 package google.fhir.r4.uscore;
 
 import "proto/annotations.proto";
-import "proto/r4/datatypes.proto";
+import "proto/r4/core/datatypes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.uscore";
@@ -26,9 +26,9 @@ message BirthSexCode {
   }
   Value value = 1;
 
-  proto.String id = 2;
+  core.String id = 2;
 
-  repeated proto.Extension extension = 3;
+  repeated core.Extension extension = 3;
 }
 
 // The 41 [CDC ethnicity
@@ -46,9 +46,9 @@ message DetailedEthnicityCode {
   // This valueset is not enumerable, and so is represented as a string.
   string value = 4;
 
-  proto.String id = 2;
+  core.String id = 2;
 
-  repeated proto.Extension extension = 3;
+  repeated core.Extension extension = 3;
 }
 
 // The 900+ [CDC Race
@@ -66,9 +66,9 @@ message DetailedRaceCode {
   // This valueset is not enumerable, and so is represented as a string.
   string value = 4;
 
-  proto.String id = 2;
+  core.String id = 2;
 
-  repeated proto.Extension extension = 3;
+  repeated core.Extension extension = 3;
 }
 
 // The US Core Narrative Status Value Set limits the text status for the
@@ -86,9 +86,9 @@ message NarrativeStatusCode {
   }
   Value value = 1;
 
-  proto.String id = 2;
+  core.String id = 2;
 
-  repeated proto.Extension extension = 3;
+  repeated core.Extension extension = 3;
 }
 
 // The codes for the ethnicity categories - 'Hispanic or Latino' and 'Non
@@ -109,9 +109,9 @@ message OmbEthnicityCategoriesCode {
   }
   Value value = 1;
 
-  proto.String id = 2;
+  core.String id = 2;
 
-  repeated proto.Extension extension = 3;
+  repeated core.Extension extension = 3;
 }
 
 // The codes for the concepts 'Unknown' and  'Asked but no answer' and the the
@@ -139,9 +139,9 @@ message OmbRaceCategoriesCode {
   }
   Value value = 1;
 
-  proto.String id = 2;
+  core.String id = 2;
 
-  repeated proto.Extension extension = 3;
+  repeated core.Extension extension = 3;
 }
 
 // The US Core DocumentReference Type Value Set includes all LOINC  values whose
@@ -159,9 +159,9 @@ message USCoreDocumentReferenceTypeCode {
   // This valueset is not enumerable, and so is represented as a string.
   string value = 4;
 
-  proto.String id = 2;
+  core.String id = 2;
 
-  repeated proto.Extension extension = 3;
+  repeated core.Extension extension = 3;
 }
 
 // Codes providing the status of an observation for smoking status. Constrained
@@ -179,7 +179,7 @@ message USCoreObservationSmokingStatusStatusCode {
   }
   Value value = 1;
 
-  proto.String id = 2;
+  core.String id = 2;
 
-  repeated proto.Extension extension = 3;
+  repeated core.Extension extension = 3;
 }

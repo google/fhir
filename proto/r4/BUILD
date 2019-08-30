@@ -76,11 +76,11 @@ fhir_proto_library(
         "uscore.proto",
     ],
     proto_deps = [
-        ":codes_proto",
-        ":datatypes_proto",
-        ":resources_proto",
         ":uscore_codes_proto",
+        "@protobuf_archive//:any_proto",
         "//proto:annotations_proto",
+        "//proto/r4/core:codes_proto",
+        "//proto/r4/core:datatypes_proto",
     ],
     proto_library_prefix = "uscore",
 )
@@ -90,8 +90,8 @@ fhir_proto_library(
         "uscore_codes.proto",
     ],
     proto_deps = [
-        ":datatypes_proto",
         "//proto:annotations_proto",
+        "//proto/r4/core:datatypes_proto",
     ],
     proto_library_prefix = "uscore_codes",
 )

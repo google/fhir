@@ -22,6 +22,22 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
+// Auto-generated from StructureDefinition for Element, last updated
+// 2018-12-27T22:37:54.724+11:00. Base for all elements. See
+// http://hl7.org/fhir/StructureDefinition/Element
+message Element {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.is_abstract_type) = true;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Element";
+
+  // Unique id for inter-element referencing
+  String id = 1;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 2;
+}
+
 // Auto-generated from StructureDefinition for BackboneElement, last updated
 // 2018-12-27T22:37:54.724+11:00. Base for elements defined inside a resource.
 // See http://hl7.org/fhir/StructureDefinition/BackboneElement

@@ -1,0 +1,145 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.testingcore;
+
+import "proto/annotations.proto";
+import "proto/r4/core/codes.proto";
+import "proto/r4/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.testingcore";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for SimpleDecimalExt.
+// This is the A-Extension.
+// See http://test/url/base/SimpleDecimalExt
+message SimpleDecimalExt {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://test/url/base/SimpleDecimalExt";
+
+  // Unique id for inter-element referencing
+  core.String id = 1;
+
+  // Additional content defined by implementations
+  repeated core.Extension extension = 2;
+
+  // Value of extension
+  core.Decimal value_decimal = 3;
+}
+
+// Auto-generated from StructureDefinition for SimpleCodeableConceptExtension.
+// SimpleCodeableConcept Extension.
+// See http://test/url/base/SimpleCodeableConceptExtension
+message SimpleCodeableConceptExtension {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://test/url/base/SimpleCodeableConceptExtension";
+
+  // Unique id for inter-element referencing
+  core.String id = 1;
+
+  // Value of extension
+  core.CarePlanActivityStatusCode value_code = 3;
+}
+
+// Auto-generated from StructureDefinition for DigitalMediaType.
+// Extension for Digital Media Type code.
+// See http://test/url/base/DigitalMediaType
+message DigitalMediaType {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://test/url/base/DigitalMediaType";
+
+  // Unique id for inter-element referencing
+  core.String id = 1;
+
+  // Value of extension
+  core.Code value_code = 3;
+}
+
+// Auto-generated from StructureDefinition for ComplexExt.
+// complex extension.
+// See http://test/url/base/ComplexExt
+message ComplexExt {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://test/url/base/ComplexExt";
+
+  // Unique id for inter-element referencing
+  core.String id = 1;
+
+  // simple subfield
+  core.String simple_subfield = 4 [
+    (.google.fhir.proto.fhir_path_constraint) =
+        "hasValue() or (children().count() > id.count())",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
+
+  // complex subfield
+  message ComplexSubfield {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Extension.extension.extension not present on profile.
+    reserved 2;
+
+    // Extension.extension.value[x] not present on profile.
+    reserved 3;
+
+    // choice type
+    message SimpleSubSubFieldA {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        core.String string_value = 1 [json_name = "string"];
+        core.Decimal decimal = 2;
+        core.Boolean boolean = 3;
+      }
+    }
+    SimpleSubSubFieldA simple_sub_sub_field_a = 4 [
+      (.google.fhir.proto.fhir_path_constraint) =
+          "hasValue() or (children().count() > id.count())",
+      (.google.fhir.proto.fhir_path_constraint) =
+          "extension.exists() != value.exists()"
+    ];
+
+    // simple sub sub field b
+    repeated core.UnsignedInt simple_sub_sub_field_b = 5 [
+      (.google.fhir.proto.fhir_path_constraint) =
+          "hasValue() or (children().count() > id.count())",
+      (.google.fhir.proto.fhir_path_constraint) =
+          "extension.exists() != value.exists()"
+    ];
+  }
+  ComplexSubfield complex_subfield = 5 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "hasValue() or (children().count() > id.count())",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
+}
