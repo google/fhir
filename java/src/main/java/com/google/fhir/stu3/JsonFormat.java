@@ -21,20 +21,20 @@ import com.google.common.collect.Table;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
-import com.google.fhir.r4.proto.Canonical;
-import com.google.fhir.r4.proto.CapabilityStatement;
-import com.google.fhir.r4.proto.CodeSystem;
-import com.google.fhir.r4.proto.CompartmentDefinition;
-import com.google.fhir.r4.proto.ConceptMap;
-import com.google.fhir.r4.proto.Element;
-import com.google.fhir.r4.proto.ElementDefinition;
-import com.google.fhir.r4.proto.ElementDefinition.ElementDefinitionBinding;
-import com.google.fhir.r4.proto.ExtensionContextTypeCode;
-import com.google.fhir.r4.proto.Identifier;
-import com.google.fhir.r4.proto.OperationDefinition;
-import com.google.fhir.r4.proto.ResourceTypeCode;
-import com.google.fhir.r4.proto.StructureDefinition;
-import com.google.fhir.r4.proto.ValueSet;
+import com.google.fhir.r4.core.Canonical;
+import com.google.fhir.r4.core.CapabilityStatement;
+import com.google.fhir.r4.core.CodeSystem;
+import com.google.fhir.r4.core.CompartmentDefinition;
+import com.google.fhir.r4.core.ConceptMap;
+import com.google.fhir.r4.core.Element;
+import com.google.fhir.r4.core.ElementDefinition;
+import com.google.fhir.r4.core.ElementDefinition.ElementDefinitionBinding;
+import com.google.fhir.r4.core.ExtensionContextTypeCode;
+import com.google.fhir.r4.core.Identifier;
+import com.google.fhir.r4.core.OperationDefinition;
+import com.google.fhir.r4.core.ResourceTypeCode;
+import com.google.fhir.r4.core.StructureDefinition;
+import com.google.fhir.r4.core.ValueSet;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;
 import com.google.fhir.stu3.proto.ReferenceId;
 import com.google.gson.JsonArray;
@@ -43,6 +43,7 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import com.google.protobuf.Any;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProtoOrBuilder;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -305,7 +306,7 @@ public final class JsonFormat {
           com.google.fhir.stu3.proto.ContainedResource.getDescriptor().getFullName(),
           containedResourcesPrinter);
       printers.put(
-          com.google.fhir.r4.proto.ContainedResource.getDescriptor().getFullName(),
+          com.google.fhir.r4.core.ContainedResource.getDescriptor().getFullName(),
           containedResourcesPrinter);
       // Special-case extensions for analytics use.
       // TODO: Add extensionPrinter for R4 (or else make generic)
@@ -318,6 +319,17 @@ public final class JsonFormat {
           };
       printers.put(
           com.google.fhir.stu3.proto.Extension.getDescriptor().getFullName(), extensionPrinter);
+
+      WellKnownTypePrinter anyPrinter =
+          new WellKnownTypePrinter() {
+            @Override
+            public void print(PrinterImpl printer, MessageOrBuilder message) throws IOException {
+              // TODO: handle STU3 Any.
+              printer.printContainedResource(
+                  ((Any) message).unpack(com.google.fhir.r4.core.ContainedResource.class));
+            }
+          };
+      printers.put(Any.getDescriptor().getFullName(), anyPrinter);
 
       return printers;
     }
@@ -428,15 +440,15 @@ public final class JsonFormat {
                 + "\"");
       }
 
-      for (Map.Entry<FieldDescriptor, Object> field : message.getAllFields().entrySet()) {
+      for (Map.Entry<FieldDescriptor, Object> entry : message.getAllFields().entrySet()) {
         printedField = maybeStartMessage(printedField);
-        String name = field.getKey().getJsonName();
-        if (AnnotationUtils.isChoiceType(field.getKey()) && !forAnalytics) {
-          printChoiceField(field.getKey(), field.getValue());
-        } else if (isPrimitiveType(field.getKey())) {
-          printPrimitiveField(name, field.getKey(), field.getValue());
+        String name = entry.getKey().getJsonName();
+        if (AnnotationUtils.isChoiceType(entry.getKey()) && !forAnalytics) {
+          printChoiceField(entry.getKey(), entry.getValue());
+        } else if (isPrimitiveType(entry.getKey())) {
+          printPrimitiveField(name, entry.getKey(), entry.getValue());
         } else {
-          printMessageField(name, field.getKey(), field.getValue());
+          printMessageField(name, entry.getKey(), entry.getValue());
         }
       }
 
@@ -687,7 +699,14 @@ public final class JsonFormat {
         }
         if (nameToDescriptorMap.containsKey(fieldName)) {
           FieldDescriptor field = nameToDescriptorMap.get(fieldName);
-          if (AnnotationUtils.isChoiceType(field)) {
+          if (field.getMessageType().getFullName().equals(Any.getDescriptor().getFullName())) {
+            JsonArray array = entry.getValue().getAsJsonArray();
+            for (int i = 0; i < array.size(); i++) {
+              Message.Builder containedBuilder = getContainedResourceForMessage(builder);
+              parseContainedResource(array.get(i).getAsJsonObject(), containedBuilder);
+              builder.addRepeatedField(field, Any.pack(containedBuilder.build()));
+            }
+          } else if (AnnotationUtils.isChoiceType(field)) {
             mergeChoiceField(field, fieldName, entry.getValue(), builder);
           } else {
             mergeField(field, entry.getValue(), builder);
@@ -848,7 +867,7 @@ public final class JsonFormat {
         table.put(FhirVersion.STU3, field.getMessageType().getName(), field);
       }
       for (FieldDescriptor field :
-          com.google.fhir.r4.proto.ContainedResource.getDescriptor().getFields()) {
+          com.google.fhir.r4.core.ContainedResource.getDescriptor().getFields()) {
         table.put(FhirVersion.R4, field.getMessageType().getName(), field);
       }
       return ImmutableTable.copyOf(table);
@@ -1222,6 +1241,17 @@ public final class JsonFormat {
     if (!(json.isJsonNull() || json.isJsonObject())
         && !(json.isJsonPrimitive() && json.getAsJsonPrimitive().isString())) {
       throw new IllegalArgumentException("Invalid JSON element for string-like: " + json);
+    }
+  }
+
+  private static Message.Builder getContainedResourceForMessage(MessageOrBuilder input) {
+    switch (AnnotationUtils.getFhirVersion(input.getDescriptorForType())) {
+      case R4:
+        return com.google.fhir.r4.core.ContainedResource.newBuilder();
+      default:
+        throw new IllegalArgumentException(
+            "Any packing not supported for fhir version: "
+                + AnnotationUtils.getFhirVersion(input.getDescriptorForType()));
     }
   }
 

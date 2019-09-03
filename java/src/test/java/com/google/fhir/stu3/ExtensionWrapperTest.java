@@ -18,7 +18,7 @@ import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
-import com.google.fhir.r4.proto.Extension;
+import com.google.fhir.r4.core.Extension;
 import com.google.fhir.stu3.google.EventLabel;
 import com.google.fhir.stu3.google.EventTrigger;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;

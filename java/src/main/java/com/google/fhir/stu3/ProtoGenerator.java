@@ -27,16 +27,16 @@ import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
-import com.google.fhir.r4.proto.BindingStrengthCode;
-import com.google.fhir.r4.proto.Canonical;
-import com.google.fhir.r4.proto.CodeableConcept;
-import com.google.fhir.r4.proto.Coding;
-import com.google.fhir.r4.proto.ElementDefinition;
-import com.google.fhir.r4.proto.ExtensionContextTypeCode;
-import com.google.fhir.r4.proto.StructureDefinition;
-import com.google.fhir.r4.proto.StructureDefinitionKindCode;
-import com.google.fhir.r4.proto.TypeDerivationRuleCode;
-import com.google.fhir.r4.proto.Uri;
+import com.google.fhir.r4.core.BindingStrengthCode;
+import com.google.fhir.r4.core.Canonical;
+import com.google.fhir.r4.core.CodeableConcept;
+import com.google.fhir.r4.core.Coding;
+import com.google.fhir.r4.core.ElementDefinition;
+import com.google.fhir.r4.core.ExtensionContextTypeCode;
+import com.google.fhir.r4.core.StructureDefinition;
+import com.google.fhir.r4.core.StructureDefinitionKindCode;
+import com.google.fhir.r4.core.TypeDerivationRuleCode;
+import com.google.fhir.r4.core.Uri;
 import com.google.fhir.stu3.proto.CodingWithFixedSystem;
 import com.google.fhir.stu3.proto.ElementDefinitionExplicitTypeName;
 import com.google.fhir.stu3.proto.Instant;
@@ -980,9 +980,9 @@ public class ProtoGenerator {
             ? Optional.of(stu3Regex.get(0).getValueString().getValue())
             : Optional.empty();
       case R4:
-        List<com.google.fhir.r4.proto.Regex> r4Regex =
+        List<com.google.fhir.r4.core.Regex> r4Regex =
             ExtensionWrapper.fromExtensionsIn(element.getType(0))
-                .getMatchingExtensions(com.google.fhir.r4.proto.Regex.getDefaultInstance());
+                .getMatchingExtensions(com.google.fhir.r4.core.Regex.getDefaultInstance());
         return r4Regex.size() == 1
             ? Optional.of(r4Regex.get(0).getValueString().getValue())
             : Optional.empty();

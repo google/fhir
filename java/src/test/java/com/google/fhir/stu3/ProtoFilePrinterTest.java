@@ -26,7 +26,7 @@ import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
-import com.google.fhir.r4.proto.StructureDefinition;
+import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.stu3.proto.ContactDetail;
 import com.google.fhir.stu3.proto.Extension;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;

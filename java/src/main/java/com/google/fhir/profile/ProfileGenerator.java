@@ -34,34 +34,34 @@ import com.google.fhir.proto.Profiles;
 import com.google.fhir.proto.ReferenceRestriction;
 import com.google.fhir.proto.SimpleExtension;
 import com.google.fhir.proto.SizeRestriction;
-import com.google.fhir.r4.proto.BindingStrengthCode;
-import com.google.fhir.r4.proto.Bundle;
-import com.google.fhir.r4.proto.Canonical;
-import com.google.fhir.r4.proto.Code;
-import com.google.fhir.r4.proto.CodeableConcept;
-import com.google.fhir.r4.proto.Coding;
-import com.google.fhir.r4.proto.ContactDetail;
-import com.google.fhir.r4.proto.ContactPoint;
-import com.google.fhir.r4.proto.ContactPointSystemCode;
-import com.google.fhir.r4.proto.ContainedResource;
-import com.google.fhir.r4.proto.DateTime;
-import com.google.fhir.r4.proto.DiscriminatorTypeCode;
-import com.google.fhir.r4.proto.ElementDefinition;
-import com.google.fhir.r4.proto.ElementDefinition.ElementDefinitionBinding;
-import com.google.fhir.r4.proto.ElementDefinitionOrBuilder;
-import com.google.fhir.r4.proto.Extension;
-import com.google.fhir.r4.proto.ExtensionContextTypeCode;
-import com.google.fhir.r4.proto.FHIRVersionCode;
-import com.google.fhir.r4.proto.Id;
-import com.google.fhir.r4.proto.Markdown;
-import com.google.fhir.r4.proto.SlicingRulesCode;
-import com.google.fhir.r4.proto.StructureDefinition;
-import com.google.fhir.r4.proto.StructureDefinition.Differential;
-import com.google.fhir.r4.proto.StructureDefinition.Snapshot;
-import com.google.fhir.r4.proto.StructureDefinitionKindCode;
-import com.google.fhir.r4.proto.TypeDerivationRuleCode;
-import com.google.fhir.r4.proto.UnsignedInt;
-import com.google.fhir.r4.proto.Uri;
+import com.google.fhir.r4.core.BindingStrengthCode;
+import com.google.fhir.r4.core.Bundle;
+import com.google.fhir.r4.core.Canonical;
+import com.google.fhir.r4.core.Code;
+import com.google.fhir.r4.core.CodeableConcept;
+import com.google.fhir.r4.core.Coding;
+import com.google.fhir.r4.core.ContactDetail;
+import com.google.fhir.r4.core.ContactPoint;
+import com.google.fhir.r4.core.ContactPointSystemCode;
+import com.google.fhir.r4.core.ContainedResource;
+import com.google.fhir.r4.core.DateTime;
+import com.google.fhir.r4.core.DiscriminatorTypeCode;
+import com.google.fhir.r4.core.ElementDefinition;
+import com.google.fhir.r4.core.ElementDefinition.ElementDefinitionBinding;
+import com.google.fhir.r4.core.ElementDefinitionOrBuilder;
+import com.google.fhir.r4.core.Extension;
+import com.google.fhir.r4.core.ExtensionContextTypeCode;
+import com.google.fhir.r4.core.FHIRVersionCode;
+import com.google.fhir.r4.core.Id;
+import com.google.fhir.r4.core.Markdown;
+import com.google.fhir.r4.core.SlicingRulesCode;
+import com.google.fhir.r4.core.StructureDefinition;
+import com.google.fhir.r4.core.StructureDefinition.Differential;
+import com.google.fhir.r4.core.StructureDefinition.Snapshot;
+import com.google.fhir.r4.core.StructureDefinitionKindCode;
+import com.google.fhir.r4.core.TypeDerivationRuleCode;
+import com.google.fhir.r4.core.UnsignedInt;
+import com.google.fhir.r4.core.Uri;
 import com.google.fhir.stu3.DateTimeWrapper;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -843,12 +843,12 @@ final class ProfileGenerator {
     return element.setId(fhirString(rootId + tail)).setPath(fhirString(rootPath + tail));
   }
 
-  private static com.google.fhir.r4.proto.String fhirString(String value) {
-    return com.google.fhir.r4.proto.String.newBuilder().setValue(value).build();
+  private static com.google.fhir.r4.core.String fhirString(String value) {
+    return com.google.fhir.r4.core.String.newBuilder().setValue(value).build();
   }
 
-  private static com.google.fhir.r4.proto.Boolean fhirBoolean(boolean value) {
-    return com.google.fhir.r4.proto.Boolean.newBuilder().setValue(value).build();
+  private static com.google.fhir.r4.core.Boolean fhirBoolean(boolean value) {
+    return com.google.fhir.r4.core.Boolean.newBuilder().setValue(value).build();
   }
 
   private static Uri fhirUri(String value) {
@@ -970,7 +970,7 @@ final class ProfileGenerator {
     }
   }
 
-  private static com.google.fhir.r4.proto.String maxSize(SizeRestriction size) {
+  private static com.google.fhir.r4.core.String maxSize(SizeRestriction size) {
     switch (size) {
       case ABSENT:
         return fhirString("0");

@@ -16,7 +16,7 @@ package com.google.fhir.stu3;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.fhir.common.ProtoUtils;
-import com.google.fhir.r4.proto.DateTime;
+import com.google.fhir.r4.core.DateTime;
 import com.google.protobuf.MessageOrBuilder;
 import java.time.Instant;
 import java.time.LocalDate;

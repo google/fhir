@@ -17,7 +17,7 @@ package com.google.fhir.stu3;
 import com.google.common.base.Ascii;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
-import com.google.fhir.r4.proto.Code;
+import com.google.fhir.r4.core.Code;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProtoOrBuilder;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
@@ -63,7 +63,7 @@ public class CodeWrapper extends PrimitiveWrapper<Code> {
     // Copy the Element parts.
     FieldDescriptor idField = descriptor.findFieldByName("id");
     if (code.hasField(idField)) {
-      builder.setId((com.google.fhir.r4.proto.String) code.getField(idField));
+      builder.setId((com.google.fhir.r4.core.String) code.getField(idField));
     }
     ExtensionWrapper.fromExtensionsIn(code).addToMessage(builder);
 

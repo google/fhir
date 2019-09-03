@@ -16,7 +16,7 @@ package com.google.fhir.stu3;
 
 import com.google.common.io.BaseEncoding;
 import com.google.fhir.common.ProtoUtils;
-import com.google.fhir.r4.proto.Base64Binary;
+import com.google.fhir.r4.core.Base64Binary;
 import com.google.fhir.stu3.google.Base64BinarySeparatorStride;
 import com.google.fhir.stu3.proto.PositiveInt;
 import com.google.protobuf.ByteString;

@@ -15,8 +15,8 @@
 package com.google.fhir.stu3;
 
 import com.google.fhir.common.ProtoUtils;
-import com.google.fhir.r4.proto.Element;
-import com.google.fhir.r4.proto.Extension;
+import com.google.fhir.r4.core.Element;
+import com.google.fhir.r4.core.Extension;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;
 import com.google.fhir.stu3.proto.Boolean;
 import com.google.gson.JsonPrimitive;
@@ -39,7 +39,7 @@ public abstract class PrimitiveWrapper<T extends Message> {
   private static final PrimitiveHasNoValue PRIMITIVE_HAS_NO_VALUE =
       PrimitiveHasNoValue.newBuilder().setValueBoolean(Boolean.newBuilder().setValue(true)).build();
 
-  protected static com.google.fhir.r4.proto.Extension getNoValueExtension() {
+  protected static com.google.fhir.r4.core.Extension getNoValueExtension() {
     return ExtensionWrapper.of().add(PRIMITIVE_HAS_NO_VALUE).build().get(0);
   }
 

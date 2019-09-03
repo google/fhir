@@ -17,7 +17,7 @@ package com.google.fhir.common;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.fhir.proto.Annotations;
-import com.google.fhir.r4.proto.FHIRVersionCode;
+import com.google.fhir.r4.core.FHIRVersionCode;
 import com.google.fhir.stu3.proto.AbstractTypeCode;
 import com.google.fhir.stu3.proto.AddressTypeCode;
 import com.google.fhir.stu3.proto.Decimal;

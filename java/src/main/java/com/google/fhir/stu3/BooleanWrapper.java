@@ -15,7 +15,7 @@
 package com.google.fhir.stu3;
 
 import com.google.fhir.common.ProtoUtils;
-import com.google.fhir.r4.proto.Boolean;
+import com.google.fhir.r4.core.Boolean;
 import com.google.gson.JsonPrimitive;
 import com.google.protobuf.MessageOrBuilder;
 import java.util.regex.Pattern;

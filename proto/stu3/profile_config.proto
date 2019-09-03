@@ -3,7 +3,7 @@ syntax = "proto3";
 package google.fhir.proto;
 
 import "proto/annotations.proto";
-import "proto/r4/datatypes.proto";
+import "proto/r4/core/datatypes.proto";
 
 option java_package = "com.google.fhir.proto";
 option java_multiple_files = true;
@@ -128,7 +128,7 @@ message CodeableConceptSlice {
   // Whether or not to allow Codings that do not fit into any of the above
   // slices.
   // Optional - defaults to OPEN
-  google.fhir.r4.proto.SlicingRulesCode.Value rules = 4;
+  google.fhir.r4.core.SlicingRulesCode.Value rules = 4;
 }
 
 message ComplexExtension {
@@ -201,7 +201,7 @@ message CodeData {
   // "Strength" of value set binding - i.e., whether to allow codes that
   // are not in that value set.
   // Optional - defaults to required.
-  google.fhir.r4.proto.BindingStrengthCode.Value binding_strength = 2;
+  google.fhir.r4.core.BindingStrengthCode.Value binding_strength = 2;
 
   // Optional - if set, this code will have a fixed value, and will not be
   // inlined as a field.

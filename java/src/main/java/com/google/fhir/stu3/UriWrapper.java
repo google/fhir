@@ -15,7 +15,7 @@
 package com.google.fhir.stu3;
 
 import com.google.fhir.common.ProtoUtils;
-import com.google.fhir.r4.proto.Uri;
+import com.google.fhir.r4.core.Uri;
 import com.google.protobuf.MessageOrBuilder;
 
 /** A wrapper around the Uri FHIR primitive type. */

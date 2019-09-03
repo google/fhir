@@ -17,8 +17,8 @@ package com.google.fhir.stu3;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.fhir.common.ProtoUtils;
-import com.google.fhir.r4.proto.Id;
-import com.google.fhir.r4.proto.ReferenceId;
+import com.google.fhir.r4.core.Id;
+import com.google.fhir.r4.core.ReferenceId;
 import com.google.fhir.stu3.proto.Bundle;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -66,7 +66,7 @@ public final class ResourceUtils {
     return getContainedResourceInternal(resource);
   }
 
-  public static Message getContainedResource(com.google.fhir.r4.proto.ContainedResource resource) {
+  public static Message getContainedResource(com.google.fhir.r4.core.ContainedResource resource) {
     return getContainedResourceInternal(resource);
   }
 
@@ -166,7 +166,7 @@ public final class ResourceUtils {
       FieldDescriptor fragmentField = descriptor.findFieldByName("fragment");
       Message.Builder fragmentBuilder = builder.getFieldBuilder(fragmentField);
       return ProtoUtils.fieldWiseCopy(
-              com.google.fhir.r4.proto.String.newBuilder()
+              com.google.fhir.r4.core.String.newBuilder()
                   .setValue(new IdWrapper(uriValue.substring(1)).getWrapped().getValue()),
               fragmentBuilder)
           .build();

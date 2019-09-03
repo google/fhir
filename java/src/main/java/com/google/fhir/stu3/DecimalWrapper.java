@@ -15,7 +15,7 @@
 package com.google.fhir.stu3;
 
 import com.google.fhir.common.ProtoUtils;
-import com.google.fhir.r4.proto.Decimal;
+import com.google.fhir.r4.core.Decimal;
 import com.google.protobuf.MessageOrBuilder;
 import java.math.BigDecimal;
 import java.util.regex.Pattern;

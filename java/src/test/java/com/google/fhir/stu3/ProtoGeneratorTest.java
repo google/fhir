@@ -25,7 +25,7 @@ import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
-import com.google.fhir.r4.proto.StructureDefinition;
+import com.google.fhir.r4.core.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.ExtensionRegistry;
@@ -1520,7 +1520,7 @@ public class ProtoGeneratorTest {
         new ProtoGenerator(
             PackageInfo.newBuilder()
                 .setProtoPackage("google.fhir.r4.proto")
-                .setJavaProtoPackage("com.google.fhir.r4.proto")
+                .setJavaProtoPackage("com.google.fhir.r4.core")
                 .setFhirVersion(FhirVersion.R4)
                 .build(),
             ImmutableMap.copyOf(knownStructDefs));

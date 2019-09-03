@@ -15,7 +15,7 @@
 package com.google.fhir.stu3;
 
 import com.google.fhir.common.ProtoUtils;
-import com.google.fhir.r4.proto.Integer;
+import com.google.fhir.r4.core.Integer;
 import com.google.protobuf.MessageOrBuilder;
 import java.util.regex.Pattern;
 

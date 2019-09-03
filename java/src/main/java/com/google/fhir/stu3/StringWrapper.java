@@ -15,7 +15,7 @@
 package com.google.fhir.stu3;
 
 import com.google.fhir.common.ProtoUtils;
-import com.google.fhir.r4.proto.String;
+import com.google.fhir.r4.core.String;
 import com.google.protobuf.MessageOrBuilder;
 
 /** A wrapper around the String FHIR primitive type. */

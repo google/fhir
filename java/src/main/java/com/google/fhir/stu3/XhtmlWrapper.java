@@ -15,8 +15,8 @@
 package com.google.fhir.stu3;
 
 import com.google.fhir.common.ProtoUtils;
-import com.google.fhir.r4.proto.Element;
-import com.google.fhir.r4.proto.Xhtml;
+import com.google.fhir.r4.core.Element;
+import com.google.fhir.r4.core.Xhtml;
 import com.google.protobuf.MessageOrBuilder;
 
 /** A wrapper around the Xhtml FHIR primitive type. */
