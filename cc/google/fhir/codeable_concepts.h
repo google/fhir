@@ -115,6 +115,9 @@ Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
   }
 }
 
+// Copies any codeable concept-like message into any other codeable concept-like
+// message.  An ok status guarantees that all codings present on the source will
+// be present on the target, in the correct profiled fields on the target.
 Status CopyCodeableConcept(const ::google::protobuf::Message& source,
                            ::google::protobuf::Message* target);
 

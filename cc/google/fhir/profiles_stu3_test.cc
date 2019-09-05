@@ -37,6 +37,8 @@ namespace {
 
 using ::google::fhir::stu3::proto::Observation;
 using ::google::fhir::stu3::proto::Patient;
+using ::google::fhir::stu3::testing::TestObservation;
+using ::google::fhir::stu3::testing::TestObservationLvl2;
 using ::google::fhir::testutil::EqualsProto;
 using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
 
@@ -85,9 +87,9 @@ void TestPair(const string& filename) {
   TestUpConvert<B, P>(filename);
 }
 
-TEST(ProfilesTest, InvalidInputs) {
+TEST(ProfilesTest, IncompatibleTypes) {
   Patient patient;
-  Observation observation;
+  TestObservation observation;
   ASSERT_FALSE(ConvertToProfileLenientStu3(patient, &observation).ok());
 }
 
@@ -107,12 +109,12 @@ TEST(ProfilesTest, VitalSigns) {
 }
 
 TEST(ProfilesTest, FixedSystem) {
-  TestPair<Observation, ::google::fhir::stu3::testing::TestObservation>(
+  TestPair<Observation, TestObservation>(
       "testdata/stu3/profiles/observation_fixedsystem");
 }
 
 TEST(ProfilesTest, ComplexExtension) {
-  TestPair<Observation, ::google::fhir::stu3::testing::TestObservation>(
+  TestPair<Observation, TestObservation>(
       "testdata/stu3/profiles/observation_complexextension");
 }
 
@@ -166,8 +168,7 @@ TEST(ProfilesTest, NormalizeBundle) {
 }
 
 TEST(ProfilesTest, ProfileOfProfile) {
-  TestPair<::google::fhir::stu3::testing::TestObservation,
-           ::google::fhir::stu3::testing::TestObservationLvl2>(
+  TestPair<TestObservation, TestObservationLvl2>(
       "testdata/stu3/profiles/testobservation_lvl2");
 }
 
@@ -186,13 +187,14 @@ TEST(ProfilesTest, UnableToProfile) {
 TEST(ProfilesTest, MissingRequiredFields) {
   const Observation unprofiled = ReadProto<Observation>(
       "testdata/stu3/profiles/observation_fixedsystem.prototxt");
-  ::google::fhir::stu3::testing::TestObservation profiled;
+  TestObservation profiled;
 
   auto lenient_status = ConvertToProfileLenientStu3(unprofiled, &profiled);
   ASSERT_EQ(tensorflow::error::OK, lenient_status.code());
 
   auto strict_status = ConvertToProfileStu3(unprofiled, &profiled);
-  ASSERT_EQ(tensorflow::error::FAILED_PRECONDITION, strict_status.code());
+  ASSERT_EQ(tensorflow::error::FAILED_PRECONDITION, strict_status.code())
+      << "Incorrect status: " << strict_status.error_message();
 }
 
 }  // namespace

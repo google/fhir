@@ -104,6 +104,7 @@ cc_library(
 
 cc_library(
     name = "profiles_lib",
+    srcs = ["profiles_lib.cc"],
     hdrs = ["profiles_lib.h"],
     strip_include_prefix = "//cc/",
     visibility = [
@@ -112,6 +113,7 @@ cc_library(
     ],
     deps = [
         ":annotations",
+        ":codeable_concepts",
         ":codes",
         ":extensions",
         ":proto_util",
@@ -249,6 +251,7 @@ cc_test(
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",
         "@com_google_googletest//:gtest_main",
+        "@org_tensorflow//tensorflow/core:lib",
         "@protobuf_archive//:protobuf",
     ],
 )

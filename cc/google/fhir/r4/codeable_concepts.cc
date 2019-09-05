@@ -387,10 +387,6 @@ Status ForEachCodingWithStatus(const Message& concept,
 }
 
 Status CopyCodeableConcept(const Message& source, Message* target) {
-  if (AreSameMessageType(source, *target)) {
-    target->CopyFrom(source);
-    return Status::OK();
-  }
   // Copy common fields.
   // These will fail if the field is present & populated on the source,
   // but does not have an identical field on the target.

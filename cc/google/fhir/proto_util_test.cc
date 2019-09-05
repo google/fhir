@@ -14,12 +14,15 @@
 
 #include "google/fhir/proto_util.h"
 
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/message.h"
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
+#include "tensorflow/core/lib/core/status.h"
 
 namespace google {
 namespace fhir {
@@ -30,6 +33,7 @@ using ::google::fhir::stu3::proto::Encounter;
 using ::google::fhir::stu3::proto::MedicationRequest;
 using ::google::fhir::stu3::proto::Observation;
 using ::google::fhir::testutil::EqualsProto;
+using ::google::protobuf::Message;
 
 Encounter MakeTestEncounter() {
   Encounter encounter;
@@ -55,6 +59,34 @@ Encounter MakeTestEncounter() {
     }
   )proto", &encounter);
   return encounter;
+}
+
+TEST(ForEachMessageWithStatus, Ok) {
+  const Message& encounter = MakeTestEncounter();
+  const google::protobuf::FieldDescriptor* field =
+      encounter.GetDescriptor()->FindFieldByName("location");
+
+  auto status = ForEachMessageWithStatus<Encounter::Location>(
+      encounter, field,
+      [](const Encounter::Location& location) { return Status::OK(); });
+
+  ASSERT_TRUE(status.ok());
+}
+
+TEST(ForEachMessageWithStatus, Fail) {
+  const Message& encounter = MakeTestEncounter();
+  const google::protobuf::FieldDescriptor* field =
+      encounter.GetDescriptor()->FindFieldByName("location");
+
+  auto status = ForEachMessageWithStatus<Encounter::Location>(
+      encounter, field, [](const Encounter::Location& location) {
+        return location.period().start().value_us() == 7
+                   ? tensorflow::errors::InvalidArgument("it's 7")
+                   : Status::OK();
+      });
+
+  ASSERT_TRUE(!status.ok());
+  ASSERT_EQ(status.error_message(), "it's 7");
 }
 
 TEST(GetSubmessageByPath, Valid) {

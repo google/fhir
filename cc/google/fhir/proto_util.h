@@ -180,6 +180,27 @@ void ForEachMessage(const ::google::protobuf::Message& message,
       });
 }
 
+// Performs a function once on each message within a potentially repeated field
+// on a proto.  If the function ever hits a non-OK status, halts and returns
+// that status.  Returns Status::OK if the function returned OK for all messages
+// in the field.
+template <typename FieldType>
+Status ForEachMessageWithStatus(
+    const ::google::protobuf::Message& message, const ::google::protobuf::FieldDescriptor* field,
+    std::function<Status(const FieldType& message)> func) {
+  Status status = Status::OK();
+  ForEachMessageHalting<FieldType>(message, field,
+                                   [&func, &status](const FieldType& message) {
+                                     const Status func_status = func(message);
+                                     if (!func_status.ok()) {
+                                       status = func_status;
+                                       return true;  // Halt
+                                     }
+                                     return false;
+                                   });
+  return status;
+}
+
 template <typename T>
 bool IsMessageType(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->full_name() == T::descriptor()->full_name();
