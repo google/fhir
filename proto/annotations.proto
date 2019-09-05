@@ -64,6 +64,9 @@ extend google.protobuf.MessageOptions {
   // Url for the structure definition this message was built from.
   string fhir_structure_definition_url = 207562726;
 
+  // Url for the structure definition this analytics message was built from.
+  string analytic_proto_for = 255621908;
+
   // A list of structure definitions of elements that this element is a
   // profile of.
   // In the case of a profile of a profile, this will have the Structure
