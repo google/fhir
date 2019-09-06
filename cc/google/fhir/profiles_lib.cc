@@ -39,13 +39,18 @@ const std::set<string> GetAncestorSet(const ::google::protobuf::Descriptor* desc
 }
 
 // 2d map from structure definitions to result for previously checked pairs
-static std::unordered_map<string, std::unordered_map<string, bool>>
-    share_common_ancestor_memos;
+std::unordered_map<string, std::unordered_map<string, bool>>&
+GetSharesCommonAncestorMemos() {
+  static std::unordered_map<string, std::unordered_map<string, bool>>*
+      share_common_ancestor_memos =
+          new std::unordered_map<string, std::unordered_map<string, bool>>();
+  return *share_common_ancestor_memos;
+}
 
 bool AddSharedCommonAncestorMemo(const string& first_url,
                                  const string& second_url, const bool value) {
-  share_common_ancestor_memos[first_url][second_url] = value;
-  share_common_ancestor_memos[second_url][first_url] = value;
+  GetSharesCommonAncestorMemos()[first_url][second_url] = value;
+  GetSharesCommonAncestorMemos()[second_url][first_url] = value;
 
   return value;
 }
@@ -57,7 +62,7 @@ const bool SharesCommonAncestor(const ::google::protobuf::Descriptor* first,
   const string& first_url = GetStructureDefinitionUrl(first);
   const string& second_url = GetStructureDefinitionUrl(second);
 
-  const auto& first_url_memo_entry = share_common_ancestor_memos[first_url];
+  const auto& first_url_memo_entry = GetSharesCommonAncestorMemos()[first_url];
   const auto& memo_entry = first_url_memo_entry.find(second_url);
   if (memo_entry != first_url_memo_entry.end()) {
     return memo_entry->second;
